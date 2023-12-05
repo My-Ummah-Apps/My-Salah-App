@@ -1,0 +1,40 @@
+PODS:
+  - Capacitor (5.5.1):
+    - CapacitorCordova
+  - CapacitorCordova (5.5.1)
+  - CapacitorLocalNotifications (5.0.6):
+    - Capacitor
+  - CapacitorShare (5.0.6):
+    - Capacitor
+  - CapacitorStatusBar (5.0.6):
+    - Capacitor
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
+  - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
+  - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorLocalNotifications:
+    :path: "../../node_modules/@capacitor/local-notifications"
+  CapacitorShare:
+    :path: "../../node_modules/@capacitor/share"
+  CapacitorStatusBar:
+    :path: "../../node_modules/@capacitor/status-bar"
+
+SPEC CHECKSUMS:
+  Capacitor: 9da0a2415e3b6098511f8b5ffdb578d91ee79f8f
+  CapacitorCordova: e128cc7688c070ca0bfa439898a5f609da8dbcfe
+  CapacitorLocalNotifications: c2d8b14794064fd4814b1d6c4ddbac8029afa295
+  CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
+  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
+
+PODFILE CHECKSUM: 5b6c3f1f26439dc0010f9a0ef4517171265c90cc
+
+COCOAPODS: 1.11.3
