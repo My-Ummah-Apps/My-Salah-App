@@ -5,7 +5,7 @@ useState;
 const salahObjects: any[] = [
   {
     salahName: "Fajr",
-    datesCompleted: ["01.12, 03.12, 04.12, 05.12"],
+    completedDates: ["01.12", "", "03.12", "", "05.12"],
   },
 ];
 salahObjects;
@@ -22,55 +22,72 @@ for (let i = 0; i < dates.length; i++) {
   }
 }
 
+function grabDate(e: any) {
+  const cell = e.target as HTMLTableCellElement;
+  const columnIndex = cell.cellIndex;
+  const tableHeadDate =
+    e.target.parentElement.parentElement.parentElement.children[0].children[0]
+      .cells[columnIndex].textContent;
+  console.log(tableHeadDate);
+}
+
 const HabitsView = () => {
   return (
-    <section className="">
-      <table className="">
+    <table
+      onClick={(e) => {
+        grabDate(e);
+      }}
+      className=""
+    >
+      <thead className="">
         <tr>
-          <th></th>
+          <th className=""></th>
           {dates.map((item) => {
             return <td>{item}</td>;
           })}
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>Fajr</td>
-          {dates.map((date) => {
+
+          {dates.map((date: any) => {
             date;
             return (
-              <td
-                onClick={() => {
-                  alert("Completed");
-                }}
-              >
-                {" "}
-                {completedDates.map((item) => {
-                  if (item != "") {
-                    return "T";
-                  } else {
-                    return "X";
-                  }
+              <td>
+                {salahObjects[0].completedDates.map((date: any) => {
+                  return date !== "" && date ? <td>T</td> : <td>X</td>;
                 })}
               </td>
             );
           })}
-          {/* {completedDates.map((date) => {
-            if (completedDates.includes(date)) return <td>{date}</td>;
-          })} */}
         </tr>
         <tr>
           <td>Zohar</td>
+          {completedDates.map((date) => {
+            return date !== "" ? <td>T</td> : <td>X</td>;
+          })}
         </tr>
         <tr>
           <td>Asar</td>
+          {completedDates.map((date) => {
+            return date !== "" ? <td>T</td> : <td>X</td>;
+          })}
         </tr>
         <tr>
           <td>Maghrib</td>
+          {completedDates.map((date) => {
+            return date !== "" ? <td>T</td> : <td>X</td>;
+          })}
         </tr>
         <tr>
           <td>Isha</td>
+          {completedDates.map((date) => {
+            return date !== "" ? <td>T</td> : <td>X</td>;
+          })}
         </tr>
-      </table>
-    </section>
+      </tbody>
+    </table>
   );
 };
 

@@ -18,3 +18,9 @@
 body {
   background: grey;
 }
+
+td,
+th {
+  border: 1px solid #ccc;
+  /* border-width border-style border-color */
+}
