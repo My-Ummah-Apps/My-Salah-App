@@ -1,4 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import ModalOptions from "./ModalOptions";
+import ReactModal from "react-modal";
+
 // import { v4 as uuidv4 } from "uuid";
 
 const salahObjects: any[] = [
@@ -27,7 +30,8 @@ const salahObjects: any[] = [
 const dates: any[] = ["01.12", "02.12", "03.12", "04.12", "05.12"];
 
 const HabitsView = () => {
-  // const [salahStatus, setSalahStatus] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  //   const [showModal, setShowModal] = useState(false);
 
   function grabDate(e: any) {
     const cell = e.target as HTMLTableCellElement;
@@ -48,53 +52,58 @@ const HabitsView = () => {
   }
 
   return (
-    <table
-      onClick={(e) => {
-        grabDate(e);
-      }}
-      className=""
-    >
-      <thead className="">
-        <tr>
-          <th className=""></th>
-          {dates.map((item) => {
-            return <td>{item}</td>;
-          })}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Fajr</td>
-          {salahObjects[0].completedDates.map((date: string) => {
-            return date !== "" && date ? <td>T</td> : <td>X</td>;
-          })}
-        </tr>
-        <tr>
-          <td>Zohar</td>
-          {salahObjects[1].completedDates.map((date: string) => {
-            return date !== "" && date ? <td>T</td> : <td>X</td>;
-          })}
-        </tr>
-        <tr>
-          <td>Asar</td>
-          {salahObjects[2].completedDates.map((date: string) => {
-            return date !== "" && date ? <td>T</td> : <td>X</td>;
-          })}
-        </tr>
-        <tr>
-          <td>Maghrib</td>
-          {salahObjects[3].completedDates.map((date: string) => {
-            return date !== "" && date ? <td>T</td> : <td>X</td>;
-          })}
-        </tr>
-        <tr>
-          <td>Isha</td>
-          {salahObjects[4].completedDates.map((date: string) => {
-            return date !== "" && date ? <td>T</td> : <td>X</td>;
-          })}
-        </tr>
-      </tbody>
-    </table>
+    <section>
+      <ModalOptions showModal={showModal} />
+      {/* <ReactModal ariaHideApp={false} isOpen={showModal} /> */}
+      <table
+        onClick={(e) => {
+          grabDate(e);
+          setShowModal(true);
+        }}
+        className=""
+      >
+        <thead className="">
+          <tr>
+            <th className=""></th>
+            {dates.map((item) => {
+              return <td>{item}</td>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Fajr</td>
+            {salahObjects[0].completedDates.map((date: string) => {
+              return date !== "" && date ? <td>T</td> : <td>X</td>;
+            })}
+          </tr>
+          <tr>
+            <td>Zohar</td>
+            {salahObjects[1].completedDates.map((date: string) => {
+              return date !== "" && date ? <td>T</td> : <td>X</td>;
+            })}
+          </tr>
+          <tr>
+            <td>Asar</td>
+            {salahObjects[2].completedDates.map((date: string) => {
+              return date !== "" && date ? <td>T</td> : <td>X</td>;
+            })}
+          </tr>
+          <tr>
+            <td>Maghrib</td>
+            {salahObjects[3].completedDates.map((date: string) => {
+              return date !== "" && date ? <td>T</td> : <td>X</td>;
+            })}
+          </tr>
+          <tr>
+            <td>Isha</td>
+            {salahObjects[4].completedDates.map((date: string) => {
+              return date !== "" && date ? <td>T</td> : <td>X</td>;
+            })}
+          </tr>
+        </tbody>
+      </table>
+    </section>
   );
 };
 

@@ -19,8 +19,14 @@ body {
   background: grey;
 }
 
+table {
+  border-collapse: separate;
+  border-spacing: 10px; /* Adjust the value to set the spacing */
+}
+
 td,
 th {
   border: 1px solid #ccc;
+  padding: 2px; /* Adjust the value to set the cell padding */
   /* border-width border-style border-color */
 }
