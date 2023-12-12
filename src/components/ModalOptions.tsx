@@ -7,6 +7,8 @@ interface ModalOptionsProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   salahObjects: [];
   setSalahObjects: React.Dispatch<React.SetStateAction<[]>>;
+  selectedSalah: any;
+  tableHeadDate: any;
 }
 
 const ModalOptions: React.FC<ModalOptionsProps> = ({
@@ -14,6 +16,8 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
   showModal,
   setSalahObjects,
   salahObjects,
+  selectedSalah,
+  tableHeadDate,
 }) => {
   return (
     <ReactModal
@@ -27,9 +31,8 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
         <FaMosque
           onClick={() => {
             // console.log(...salahObjects);
-            salahObjects.map((item) => {
-              console.log(item);
-            });
+
+            salahObjects.map((item) => {});
             setShowModal(false);
           }}
         />
