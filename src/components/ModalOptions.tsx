@@ -9,6 +9,7 @@ interface ModalOptionsProps {
   setSalahObjects: React.Dispatch<React.SetStateAction<[]>>;
   selectedSalah: any;
   tableHeadDate: any;
+  columnIndex: any;
 }
 
 const ModalOptions: React.FC<ModalOptionsProps> = ({
@@ -18,6 +19,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
   salahObjects,
   selectedSalah,
   tableHeadDate,
+  columnIndex,
 }) => {
   return (
     <ReactModal
@@ -31,7 +33,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
         <FaMosque
           onClick={() => {
             // console.log(...salahObjects);
-
+            alert(columnIndex);
             salahObjects.map((item) => {});
             setShowModal(false);
           }}
