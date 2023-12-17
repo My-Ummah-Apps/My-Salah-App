@@ -10,6 +10,11 @@ interface ModalOptionsProps {
   selectedSalah: any;
   tableHeadDate: any;
   columnIndex: any;
+  icon: any;
+  setIcon: any;
+  selectedSalah: any;
+  tableHeadDate: any;
+  changeSalahStatus: any;
 }
 
 const ModalOptions: React.FC<ModalOptionsProps> = ({
@@ -20,6 +25,9 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
   selectedSalah,
   tableHeadDate,
   columnIndex,
+  icon,
+  setIcon,
+  changeSalahStatus,
 }) => {
   return (
     <ReactModal
@@ -32,15 +40,20 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
       <section className="flex justify-around text-5xl ">
         <FaMosque
           onClick={() => {
-            // console.log(...salahObjects);
-            alert(columnIndex);
-            salahObjects.map((item) => {});
+            // const clickedIcon = <FaMosque />;
+            // setIcon(clickedIcon);
+            // console.log("clickedIcon before func", clickedIcon);
+            changeSalahStatus(tableHeadDate, selectedSalah, <FaMosque />);
+            // console.log("clickedIcon", clickedIcon);
+            // console.log("selectedSalah", selectedSalah);
+            // console.log("tableHeadDate", tableHeadDate);
             setShowModal(false);
           }}
         />
         <FaHome
           onClick={() => {
             setShowModal(false);
+            changeSalahStatus(tableHeadDate, selectedSalah, <FaHome />);
           }}
         />
       </section>

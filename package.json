@@ -17,6 +17,7 @@
     "@capacitor/local-notifications": "^5.0.6",
     "@capacitor/share": "^5.0.6",
     "@capacitor/status-bar": "^5.0.6",
+    "date-fns": "^2.30.0",
     "npm-watch": "^0.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
