@@ -38,31 +38,27 @@ const HabitsView = () => {
     },
     {
       salahName: "Zohar",
-      completedDates: [{ "02.12": "Masjid" }, { "04.12": "Masjid" }],
+      completedDates: [{ "19.12.23": "Masjid" }, { "18.12.23": "Masjid" }],
     },
     {
       salahName: "Asar",
       completedDates: [
-        { "01.12": "Home" },
-        { "02.12": "Masjid" },
-        { "04.12": "Masjid" },
+        { "17.12.23": "Home" },
+        { "16.12.23": "Masjid" },
+        { "15.12.23": "Masjid" },
       ],
     },
     {
       salahName: "Maghrib",
       completedDates: [
-        { "01.12": "Home" },
-        { "02.12": "Masjid" },
-        { "04.12": "Masjid" },
+        { "19.12.23": "Home" },
+        { "18.12.23": "Masjid" },
+        { "16.12.23": "Masjid" },
       ],
     },
     {
       salahName: "Isha",
-      completedDates: [
-        { "01.12": "Home" },
-        { "02.12": "Masjid" },
-        { "04.12": "Masjid" },
-      ],
+      completedDates: [{ "15.12.23": "Home" }, { "18.12.23": "Masjid" }],
     },
   ]);
   const [showModal, setShowModal] = useState(false);
