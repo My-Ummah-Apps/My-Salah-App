@@ -14,10 +14,10 @@ const today = new Date();
 // This needs to potentially be put in a useEffect so it doesn't continously rerun
 const pastDates = Array.from({ length: 5 }, (_, index) => {
   const date = subDays(today, index);
-  return format(date, "dd.MM");
+  return format(date, "dd.MM.yy");
 });
 
-console.log(pastDates);
+console.log("pasteDates array: ", pastDates);
 
 const HabitsView = () => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -29,9 +29,10 @@ const HabitsView = () => {
     {
       salahName: "Fajr",
       completedDates: [
-        { "17.12": "Home" },
-        { "14.12": "Masjid" },
-        { "13.12": "Masjid" },
+        { "17.12.23": "Masjid" },
+        { "19.12.23": "Masjid" },
+        { "18.12.23": "Home" },
+        { "15.12.23": "Masjid" },
       ],
     },
     {
@@ -155,6 +156,18 @@ const HabitsView = () => {
     // });
   }
 
+  let datesToCheckAgainsArray = [];
+
+  salahObjects[0].completedDates.forEach((date) => {
+    // console.log(date);
+    if (pastDates.includes(Object.keys(date)[0])) {
+      datesToCheckAgainsArray.push(Object.keys(date)[0]);
+      datesToCheckAgainsArray.push(date);
+    }
+  });
+  //   console.log("testArray ", testArray);
+  let returning;
+  let iconTest;
   return (
     <section>
       <ModalOptions
@@ -188,62 +201,22 @@ const HabitsView = () => {
         <tbody>
           <tr>
             <td>Fajr</td>
+
             {pastDates.map((date: any) => {
-              let returning;
-              for (let i = 0; i < salahObjects[0].completedDates.length; i++) {
-                console.log(Object.keys(salahObjects[0].completedDates[i])[0]);
+              const matchedObject = salahObjects[0].completedDates.find(
+                (obj) => date === Object.keys(obj)[0]
+              );
 
-                if (
-                  pastDates.includes(
-                    Object.keys(salahObjects[0].completedDates[i])[0]
-                  )
-                ) {
-                  console.log("Date exists: ");
-                  console.log(
-                    Object.keys(salahObjects[0].completedDates[i])[0]
-                  );
-                  //   console.log(
-                  //     Object.keys(salahObjects[0].completedDates[2])[0]
-                  //   );
-                  //   const [key, value]: any = Object.entries(date)[0];
-                  let value = "test";
-                  //   return <td>{value}</td>;
-                  returning = <td>{value}</td>;
-                } else if (
-                  !pastDates.includes(
-                    Object.keys(salahObjects[0].completedDates[i])[0]
-                  )
-                ) {
-                  console.log("date does not exist: ");
-                  console.log(
-                    Object.keys(salahObjects[0].completedDates[i])[0]
-                  );
-                  //   return <td>-</td>;
-
-                  returning = <td>-</td>;
+              if (matchedObject !== undefined) {
+                if (matchedObject[date] === "Masjid") {
                 }
+                iconTest = matchedObject[date];
+              } else if (matchedObject === undefined) {
+                iconTest = "-";
               }
-              console.log("EXITING....");
-              return returning;
-            })}
-            {/* {salahObjects[0].completedDates.map((date: any) => {
-              // What needs to be done here, is that datefns need to be brought in to populate the table headings,
-              // then, the completed dates array from each salah needs to be compared to the datefns array i.e. the table
-              // headings, if a date matches then populate the cell accordingly, if a date is missing i.e. a date in the datefns
-              // array is not available in the salah completed array, create a blank cell
-              //   if (typeof date === "object" && date !== null) {
 
-              console.log(Object.keys(date)[0]);
-              console.log(pastDates);
-              console.log(pastDates.includes(Object.keys(date)[0]));
-              if (pastDates.includes(Object.keys(date)[0])) {
-                // console.log(Object.keys(date)[0]);
-                const [key, value]: any = Object.entries(date)[0];
-                return <td>{value}</td>;
-              } else if (!pastDates.includes(Object.keys(date)[0])) {
-                return <td>-</td>;
-              }
-            })} */}
+              return <td>{iconTest}</td>;
+            })}
           </tr>
           <tr>
             <td>Zohar</td>
