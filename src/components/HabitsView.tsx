@@ -3,6 +3,7 @@ import ModalOptions from "./ModalOptions";
 import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { subDays, format } from "date-fns";
+import { render } from "react-dom";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -29,10 +30,10 @@ const HabitsView = () => {
     {
       salahName: "Fajr",
       completedDates: [
-        { "17.12.23": "Masjid" },
-        { "19.12.23": "Masjid" },
-        { "18.12.23": "Home" },
-        { "15.12.23": "Masjid" },
+        { "17.12.23": "Home" },
+        { "18.12.23": "Masjid" },
+        { "15.12.23": "Home" },
+        { "19.12.23": "Home" },
       ],
     },
     {
@@ -156,18 +157,19 @@ const HabitsView = () => {
     // });
   }
 
-  let datesToCheckAgainsArray = [];
+  function renderCells(index) {
+    return pastDates.map((date: any) => {
+      let iconTest = "-";
+      const matchedObject = salahObjects[index].completedDates.find(
+        (obj) => date === Object.keys(obj)[0]
+      );
+      if (matchedObject !== undefined) {
+        iconTest = matchedObject[date];
+      }
+      return <td>{iconTest}</td>;
+    });
+  }
 
-  salahObjects[0].completedDates.forEach((date) => {
-    // console.log(date);
-    if (pastDates.includes(Object.keys(date)[0])) {
-      datesToCheckAgainsArray.push(Object.keys(date)[0]);
-      datesToCheckAgainsArray.push(date);
-    }
-  });
-  //   console.log("testArray ", testArray);
-  let returning;
-  let iconTest;
   return (
     <section>
       <ModalOptions
@@ -201,66 +203,23 @@ const HabitsView = () => {
         <tbody>
           <tr>
             <td>Fajr</td>
-
-            {pastDates.map((date: any) => {
-              const matchedObject = salahObjects[0].completedDates.find(
-                (obj) => date === Object.keys(obj)[0]
-              );
-
-              if (matchedObject !== undefined) {
-                if (matchedObject[date] === "Masjid") {
-                }
-                iconTest = matchedObject[date];
-              } else if (matchedObject === undefined) {
-                iconTest = "-";
-              }
-
-              return <td>{iconTest}</td>;
-            })}
+            {renderCells(0)}
           </tr>
           <tr>
             <td>Zohar</td>
-            {salahObjects[1].completedDates.map((date: any) => {
-              if (typeof date === "object" && date !== null) {
-                const [key, value]: any = Object.entries(date)[0];
-                return <td>{value}</td>;
-              } else {
-                return <td>-</td>;
-              }
-            })}
+            {renderCells(1)}
           </tr>
           <tr>
             <td>Asar</td>
-            {salahObjects[2].completedDates.map((date: any) => {
-              if (typeof date === "object" && date !== null) {
-                const [key, value]: any = Object.entries(date)[0];
-                return <td>{value}</td>;
-              } else {
-                return <td>-</td>;
-              }
-            })}
+            {renderCells(2)}
           </tr>
           <tr>
             <td>Maghrib</td>
-            {salahObjects[3].completedDates.map((date: any) => {
-              if (typeof date === "object" && date !== null) {
-                const [key, value]: any = Object.entries(date)[0];
-                return <td>{value}</td>;
-              } else {
-                return <td>-</td>;
-              }
-            })}
+            {renderCells(3)}
           </tr>
           <tr>
             <td>Isha</td>
-            {salahObjects[4].completedDates.map((date: any) => {
-              if (typeof date === "object" && date !== null) {
-                const [key, value]: any = Object.entries(date)[0];
-                return <td>{value}</td>;
-              } else {
-                return <td>-</td>;
-              }
-            })}
+            {renderCells(4)}
           </tr>
         </tbody>
       </table>
