@@ -7,8 +7,6 @@ import { render } from "react-dom";
 
 // import { v4 as uuidv4 } from "uuid";
 
-// const dates: string[] = ["01.12", "02.12", "03.12", "04.12", "05.12"];
-
 const today = new Date();
 
 // Array to hold the last five dates
@@ -18,99 +16,80 @@ const pastDates = Array.from({ length: 5 }, (_, index) => {
   return format(date, "dd.MM.yy");
 });
 
-console.log("pasteDates array: ", pastDates);
-
 const HabitsView = () => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
+  //   const [salahStatus, setSalahStatus] = useState("");
 
+  let salahStatus: string;
   const [salahObjects, setSalahObjects]: any[] = useState([
     {
       salahName: "Fajr",
       completedDates: [
-        { "17.12.23": "Home" },
-        { "18.12.23": "Masjid" },
-        { "15.12.23": "Home" },
+        { "23.12.23": "Home" },
+        { "22.12.23": "Masjid" },
+        { "20.12.23": "Masjid" },
         { "19.12.23": "Home" },
       ],
     },
     {
       salahName: "Zohar",
-      completedDates: [{ "19.12.23": "Masjid" }, { "18.12.23": "Masjid" }],
+      completedDates: [
+        { "24.12.23": "Masjid" },
+        { "22.12.23": "Home" },
+        { "20.12.23": "Masjid" },
+      ],
     },
     {
       salahName: "Asar",
       completedDates: [
-        { "17.12.23": "Home" },
-        { "16.12.23": "Masjid" },
-        { "15.12.23": "Masjid" },
+        { "23.12.23": "Home" },
+        { "22.12.23": "Masjid" },
+        { "21.12.23": "Home" },
       ],
     },
     {
       salahName: "Maghrib",
       completedDates: [
-        { "19.12.23": "Home" },
-        { "18.12.23": "Masjid" },
-        { "16.12.23": "Masjid" },
+        { "24.12.23": "Masjid" },
+        { "21.12.23": "Masjid" },
+        { "18.12.23": "Home" },
       ],
     },
     {
       salahName: "Isha",
-      completedDates: [{ "15.12.23": "Home" }, { "18.12.23": "Masjid" }],
+      completedDates: [{ "23.12.23": "Home" }, { "21.12.23": "Masjid" }],
     },
   ]);
   const [showModal, setShowModal] = useState(false);
-  const [dateAndSalah, setDateAndSalah]: any = useState("");
 
-  function changeSalahStatus(tableHeadDate, selectedSalah, icon) {
+  let updatedCompletedDatesArray;
+
+  function changeSalahStatus(tableHeadDate, selectedSalah, salahStatus, icon) {
     const newSalahObjects = salahObjects.map((item) => {
       if (item.salahName == selectedSalah) {
-        // console.log(...item.completedDates, { hey: "test" });
-
-        const test = item.completedDates;
-
-        item.completedDates.map((item) => {
-          //   console.log("item is...", item);
-          if (typeof item != "object") {
-            // console.log("not an object yo");
-            // console.log(salahObjects);
-            // console.log(...test, {
-            //   tableHeadDate: icon,
-            // });
-            // console.log(...test);
-            const testing = [...test, { tableHeadDate: icon }];
-            // console.log(testing);
-          }
-
-          if (item[tableHeadDate]) {
-            console.log(item[tableHeadDate]);
-
-            if (typeof item == "object") {
-              item[tableHeadDate] = icon;
-              //   console.log(item);
-              //   console.log("item is an object");
-              setSalahObjects(salahObjects);
-              return salahObjects;
-            }
-          }
+        const doesDateExist = item.completedDates.find((date) => {
+          return Object.keys(date)[0] === tableHeadDate;
         });
+
+        if (doesDateExist === undefined) {
+          console.log("DATE DOES NOT EXIST!");
+
+          item.completedDates.push({
+            [tableHeadDate]: salahStatus,
+          });
+        } else if (doesDateExist !== undefined) {
+          item.completedDates.map((item) => {
+            item[tableHeadDate] = icon;
+          });
+        }
       }
     });
-  }
 
-  const updateClickedCellProperties = (
-    columnIndex,
-    selectedSalah,
-    tableHeadDate
-  ) => {
-    return {
-      columnIndex: columnIndex,
-      selectedSalah: selectedSalah,
-      tableHeadDate: tableHeadDate,
-    };
-  };
+    console.log(...newSalahObjects);
+  }
 
   function grabDate(e: any) {
     const cell = e.target as HTMLTableCellElement;
@@ -122,35 +101,6 @@ const HabitsView = () => {
         .cells[columnIndex].textContent;
     setSelectedSalah(selectedSalah);
     setTableHeadDate(tableHeadDate);
-    console.log(selectedSalah);
-    console.log(tableHeadDate);
-
-    updateClickedCellProperties(columnIndex, selectedSalah, tableHeadDate);
-
-    // console.log(
-    //   updateClickedCellProperties(columnIndex, selectedSalah, tableHeadDate)
-    // );
-
-    // console.log(selectedSalah, tableHeadDate);
-
-    const salahName: any = salahObjects.find(
-      (salah) => salah.salahName === selectedSalah
-    );
-
-    // changeSalahStatus(tableHeadDate, selectedSalah);
-
-    // const newSalahObjects = salahObjects.map((item) => {
-    //   if (item.salahName == selectedSalah) {
-    //     item.completedDates.map((item) => {
-    //       if (item[tableHeadDate]) {
-    //         item[tableHeadDate] = "test";
-    //       }
-    //     });
-    //     console.log("salahObjects before return:", salahObjects);
-    //     setSalahObjects(salahObjects);
-    //     return salahObjects;
-    //   }
-    // });
   }
 
   function renderCells(index) {
@@ -174,11 +124,11 @@ const HabitsView = () => {
         setSalahObjects={setSalahObjects}
         salahObjects={salahObjects}
         changeSalahStatus={changeSalahStatus}
-        updateClickedCellProperties={updateClickedCellProperties}
         icon={icon}
         setIcon={setIcon}
         selectedSalah={selectedSalah}
         tableHeadDate={tableHeadDate}
+        salahStatus={salahStatus}
       />
       <table
         onClick={(e) => {
