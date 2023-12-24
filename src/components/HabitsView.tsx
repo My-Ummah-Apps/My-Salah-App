@@ -112,12 +112,17 @@ const HabitsView = () => {
       if (matchedObject !== undefined) {
         iconTest = matchedObject[date];
       }
-      return <td>{iconTest}</td>;
+      if (iconTest == "Home") {
+        iconTest = <FaHome />;
+      } else if (iconTest == "Masjid") {
+        iconTest = <FaMosque />;
+      }
+      return <td className="border-none">{iconTest}</td>;
     });
   }
 
   return (
-    <section>
+    <>
       <ModalOptions
         setShowModal={setShowModal}
         showModal={showModal}
@@ -131,12 +136,12 @@ const HabitsView = () => {
         salahStatus={salahStatus}
       />
       <table
+        className="bg-[#f7f7f7] "
         onClick={(e) => {
           grabDate(e);
           forceUpdate();
           setShowModal(true);
         }}
-        className=""
       >
         <thead className="">
           <tr>
@@ -147,29 +152,29 @@ const HabitsView = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Fajr</td>
+          <tr className="border-blue-50 ">
+            <td className="p-5 border-none rounded-md">Fajr</td>
             {renderCells(0)}
           </tr>
           <tr>
-            <td>Zohar</td>
+            <td className="p-5 border-none rounded-md">Zohar</td>
             {renderCells(1)}
           </tr>
           <tr>
-            <td>Asar</td>
+            <td className="p-5 border-none rounded-md">Asar</td>
             {renderCells(2)}
           </tr>
           <tr>
-            <td>Maghrib</td>
+            <td className="p-5 border-none rounded-md">Maghrib</td>
             {renderCells(3)}
           </tr>
           <tr>
-            <td>Isha</td>
+            <td className="p-5 border-none rounded-md">Isha</td>
             {renderCells(4)}
           </tr>
         </tbody>
       </table>
-    </section>
+    </>
   );
 };
 
