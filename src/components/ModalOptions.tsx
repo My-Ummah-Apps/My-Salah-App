@@ -24,6 +24,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
   salahObjects,
   selectedSalah,
   tableHeadDate,
+  salahStatus,
   columnIndex,
   icon,
   setIcon,
@@ -43,7 +44,12 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
             // const clickedIcon = <FaMosque />;
             // setIcon(clickedIcon);
             // console.log("clickedIcon before func", clickedIcon);
-            changeSalahStatus(tableHeadDate, selectedSalah, <FaMosque />);
+            changeSalahStatus(
+              tableHeadDate,
+              selectedSalah,
+              "Masjid",
+              <FaMosque />
+            );
             // console.log("clickedIcon", clickedIcon);
             // console.log("selectedSalah", selectedSalah);
             // console.log("tableHeadDate", tableHeadDate);
@@ -53,7 +59,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
         <FaHome
           onClick={() => {
             setShowModal(false);
-            changeSalahStatus(tableHeadDate, selectedSalah, <FaHome />);
+            changeSalahStatus(tableHeadDate, selectedSalah, "Home", <FaHome />);
           }}
         />
       </section>
