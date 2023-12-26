@@ -83,6 +83,14 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
     });
   }
 
+  function handleForwardBtn() {
+    console.log("FORWARD");
+  }
+
+  function handleBackBtn() {
+    console.log("BACKWARD");
+  }
+
   return (
     <>
       <ModalOptions
@@ -135,6 +143,10 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
           </tr>
         </tbody>
       </table>
+      <div className="flex justify-around pt-6 ">
+        <button onClick={handleBackBtn}>BACK</button>
+        <button onClick={handleForwardBtn}>FORWARD</button>
+      </div>
     </>
   );
 };

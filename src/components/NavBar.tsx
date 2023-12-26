@@ -4,7 +4,8 @@ import { NavLink } from "react-router-dom";
 // import { IconContext } from "react-icons";
 // import { FaHome } from "react-icons/fa";
 // import { GrHomeRounded } from "react-icons/gr";
-import { BsFillHouseDoorFill, BsList, BsFillNutFill } from "react-icons/bs";
+import { BsFillHouseDoorFill, BsFillNutFill } from "react-icons/bs";
+import { MdCalendarMonth } from "react-icons/md";
 
 // import { MdSettings, MdHome, MdMenu } from "react-icons/md";
 
@@ -48,7 +49,7 @@ const NavBar = () => {
         className="nav-link px-3 py-1.5 pt-0.5"
         to="/StatsPage"
       >
-        <BsList
+        <MdCalendarMonth
           className="text-2xl nav-icon"
           //   color={activePage == "counters" ? activeBackgroundColor : "grey"}
         />
