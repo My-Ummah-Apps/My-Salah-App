@@ -9,18 +9,35 @@ import { render } from "react-dom";
 
 const today = new Date();
 
-// Array to hold the last five dates
-// This needs to potentially be put in a useEffect so it doesn't continously rerun
-const pastDates = Array.from({ length: 5 }, (_, index) => {
-  const date = subDays(today, index);
-  return format(date, "dd.MM.yy");
-});
+// // Array to hold the last five dates
+// // This needs to potentially be put in a useEffect so it doesn't continously rerun
+// const currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
+//   const date = subDays(today, index);
+//   return format(date, "dd.MM.yy");
+// });
 
 const HabitsView = ({ setSalahObjects, salahObjects }) => {
+  console.log("COMPONENT RENDERED");
   const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
-  //   const [salahStatus, setSalahStatus] = useState("");
+  const [currentStartDate, setCurrentStartDate] = useState(0);
+
+  // useEffect(() => {}, [currentStartDate]);
+
+  // Array to hold the last five dates
+  let currentDisplayedWeek;
+  function generateDisplayedWeek(currentStartDate) {
+    console.log("currentStartDate", currentStartDate);
+    currentDisplayedWeek = Array.from({ length: 5 }, (_, currentStartDate) => {
+      console.log("currentStartDate within Array.from ", currentStartDate);
+      // const date = subDays(today, index);
+      const date = subDays(today, currentStartDate);
+      return format(date, "dd.MM.yy");
+    });
+  }
+
+  generateDisplayedWeek(currentStartDate);
 
   let salahStatus: string;
 
@@ -66,7 +83,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   }
 
   function renderCells(index) {
-    return pastDates.map((date: any) => {
+    return currentDisplayedWeek.map((date: any) => {
       let iconTest = "-";
       const matchedObject = salahObjects[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
@@ -115,7 +132,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         <thead className="">
           <tr>
             <th className=""></th>
-            {pastDates.map((item) => {
+            {currentDisplayedWeek.map((item) => {
               return <td>{item}</td>;
             })}
           </tr>
@@ -144,8 +161,20 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         </tbody>
       </table>
       <div className="flex justify-around pt-6 ">
-        <button onClick={handleBackBtn}>BACK</button>
-        <button onClick={handleForwardBtn}>FORWARD</button>
+        <button
+          onClick={() => {
+            setCurrentStartDate((prevValue) => prevValue + 5);
+          }}
+        >
+          BACK
+        </button>
+        <button
+          onClick={() => {
+            setCurrentStartDate((prevValue) => prevValue - 5);
+          }}
+        >
+          FORWARD
+        </button>
       </div>
     </>
   );
