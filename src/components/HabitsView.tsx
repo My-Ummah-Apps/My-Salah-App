@@ -16,56 +16,15 @@ const pastDates = Array.from({ length: 5 }, (_, index) => {
   return format(date, "dd.MM.yy");
 });
 
-const HabitsView = () => {
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+const HabitsView = ({ setSalahObjects, salahObjects }) => {
   const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
   //   const [salahStatus, setSalahStatus] = useState("");
 
   let salahStatus: string;
-  const [salahObjects, setSalahObjects]: any[] = useState([
-    {
-      salahName: "Fajr",
-      completedDates: [
-        { "23.12.23": "Home" },
-        { "22.12.23": "Masjid" },
-        { "20.12.23": "Masjid" },
-        { "19.12.23": "Home" },
-      ],
-    },
-    {
-      salahName: "Zohar",
-      completedDates: [
-        { "24.12.23": "Masjid" },
-        { "22.12.23": "Home" },
-        { "20.12.23": "Masjid" },
-      ],
-    },
-    {
-      salahName: "Asar",
-      completedDates: [
-        { "23.12.23": "Home" },
-        { "22.12.23": "Masjid" },
-        { "21.12.23": "Home" },
-      ],
-    },
-    {
-      salahName: "Maghrib",
-      completedDates: [
-        { "24.12.23": "Masjid" },
-        { "21.12.23": "Masjid" },
-        { "18.12.23": "Home" },
-      ],
-    },
-    {
-      salahName: "Isha",
-      completedDates: [{ "23.12.23": "Home" }, { "21.12.23": "Masjid" }],
-    },
-  ]);
-  const [showModal, setShowModal] = useState(false);
 
-  let updatedCompletedDatesArray;
+  const [showModal, setShowModal] = useState(false);
 
   function changeSalahStatus(tableHeadDate, selectedSalah, salahStatus, icon) {
     const newSalahObjects = salahObjects.map((item) => {
@@ -87,8 +46,11 @@ const HabitsView = () => {
         }
       }
     });
-
-    console.log(...newSalahObjects);
+    localStorage.setItem(
+      "storedSalahTrackingData",
+      JSON.stringify(newSalahObjects)
+    );
+    console.log(salahObjects);
   }
 
   function grabDate(e: any) {
@@ -106,7 +68,7 @@ const HabitsView = () => {
   function renderCells(index) {
     return pastDates.map((date: any) => {
       let iconTest = "-";
-      const matchedObject = salahObjects[index].completedDates.find(
+      const matchedObject = salahObjects[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
       );
       if (matchedObject !== undefined) {
@@ -136,10 +98,9 @@ const HabitsView = () => {
         salahStatus={salahStatus}
       />
       <table
-        className="bg-[#f7f7f7] "
+        className="w-full bg-gray-300 rounded-md shadow-lg"
         onClick={(e) => {
           grabDate(e);
-          forceUpdate();
           setShowModal(true);
         }}
       >
