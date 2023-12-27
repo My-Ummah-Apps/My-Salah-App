@@ -2,6 +2,7 @@ import React, { useEffect, useState, useReducer } from "react";
 import ModalOptions from "./ModalOptions";
 import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
+import { LuDot } from "react-icons/lu";
 import { subDays, format } from "date-fns";
 import { render } from "react-dom";
 
@@ -22,6 +23,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
   const [currentStartDate, setCurrentStartDate] = useState(0);
+  const [dateRange, setDateRange] = useState();
 
   useEffect(() => {}, [currentStartDate]);
 
@@ -33,6 +35,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
 
     currentDisplayedWeek = Array.from({ length: 7 }, (_, index) => {
       const date = subDays(startDate, index);
+
       return format(date, "dd.MM.yy");
     });
   }
@@ -84,7 +87,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
 
   function renderCells(index) {
     return currentDisplayedWeek.map((date: any) => {
-      let iconTest = "-";
+      let iconTest = <LuDot className="text-[grey]" />;
       const matchedObject = salahObjects[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
       );
@@ -92,11 +95,11 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         iconTest = matchedObject[date];
       }
       if (iconTest == "Home") {
-        iconTest = <FaHome />;
+        iconTest = <FaHome className="text-2xl text-center" />;
       } else if (iconTest == "Masjid") {
-        iconTest = <FaMosque />;
+        iconTest = <FaMosque className="text-2xl text-center" />;
       }
-      return <td className="border-none ">{iconTest}</td>;
+      return <td className="justify-center border-none">{iconTest}</td>;
     });
   }
 
@@ -123,21 +126,21 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         salahStatus={salahStatus}
       />
       <table
-        className="w-full bg-gray-300 rounded-md shadow-lg"
+        className="w-full shadow-lg rounded-xl bg-gray-50"
         onClick={(e) => {
           grabDate(e);
           setShowModal(true);
         }}
       >
         <thead className="">
-          <tr>
-            <th className=""></th>
+          <tr className="">
+            <th className="border-none"></th>
             {currentDisplayedWeek.map((item, index) => {
               const date = subDays(new Date(), index - currentStartDate);
               const formattedDate = format(date, "EEE dd");
-              return <td className="p-5 ">{item}</td>;
+              return <td className="p-5 border-none">{item}</td>;
               // Below is causing issues since when the cell is clicked it relies on the date being in the DD.MM.YY format
-              return <td className="p-5 ">{formattedDate}</td>;
+              return <td className="p-5 border-none">{formattedDate}</td>;
             })}
           </tr>
         </thead>
@@ -172,6 +175,10 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         >
           BACK
         </button>
+        <div>
+          {currentDisplayedWeek[currentDisplayedWeek.length - 1]} -
+          {currentDisplayedWeek[0]}
+        </div>
         <button
           onClick={() => {
             setCurrentStartDate((prevValue) => prevValue - 5);
