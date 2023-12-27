@@ -3,6 +3,7 @@ import ModalOptions from "./ModalOptions";
 import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
+import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { subDays, format } from "date-fns";
 import { render } from "react-dom";
 
@@ -173,7 +174,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
             setCurrentStartDate((prevValue) => prevValue + 5);
           }}
         >
-          BACK
+          <IoChevronBackSharp />
         </button>
         <div>
           {currentDisplayedWeek[currentDisplayedWeek.length - 1]} -
@@ -184,7 +185,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
             setCurrentStartDate((prevValue) => prevValue - 5);
           }}
         >
-          FORWARD
+          <IoChevronForward />
         </button>
       </div>
     </>
