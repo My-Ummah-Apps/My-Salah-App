@@ -23,16 +23,16 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   const [tableHeadDate, setTableHeadDate] = useState("");
   const [currentStartDate, setCurrentStartDate] = useState(0);
 
-  // useEffect(() => {}, [currentStartDate]);
+  useEffect(() => {}, [currentStartDate]);
 
   // Array to hold the last five dates
   let currentDisplayedWeek;
   function generateDisplayedWeek(currentStartDate) {
-    console.log("currentStartDate", currentStartDate);
-    currentDisplayedWeek = Array.from({ length: 5 }, (_, currentStartDate) => {
-      console.log("currentStartDate within Array.from ", currentStartDate);
-      // const date = subDays(today, index);
-      const date = subDays(today, currentStartDate);
+    const today = new Date();
+    const startDate = subDays(today, currentStartDate);
+
+    currentDisplayedWeek = Array.from({ length: 7 }, (_, index) => {
+      const date = subDays(startDate, index);
       return format(date, "dd.MM.yy");
     });
   }
@@ -96,7 +96,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
       } else if (iconTest == "Masjid") {
         iconTest = <FaMosque />;
       }
-      return <td className="border-none">{iconTest}</td>;
+      return <td className="border-none ">{iconTest}</td>;
     });
   }
 
@@ -132,13 +132,17 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         <thead className="">
           <tr>
             <th className=""></th>
-            {currentDisplayedWeek.map((item) => {
-              return <td>{item}</td>;
+            {currentDisplayedWeek.map((item, index) => {
+              const date = subDays(new Date(), index - currentStartDate);
+              const formattedDate = format(date, "EEE dd");
+              return <td className="p-5 ">{item}</td>;
+              // Below is causing issues since when the cell is clicked it relies on the date being in the DD.MM.YY format
+              return <td className="p-5 ">{formattedDate}</td>;
             })}
           </tr>
         </thead>
         <tbody>
-          <tr className="border-blue-50 ">
+          <tr className="border-blue-50">
             <td className="p-5 border-none rounded-md">Fajr</td>
             {renderCells(0)}
           </tr>
