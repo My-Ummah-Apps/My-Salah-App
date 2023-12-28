@@ -11,15 +11,8 @@ import { render } from "react-dom";
 
 const today = new Date();
 
-// // Array to hold the last five dates
-// // This needs to potentially be put in a useEffect so it doesn't continously rerun
-// const currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
-//   const date = subDays(today, index);
-//   return format(date, "dd.MM.yy");
-// });
-
 const HabitsView = ({ setSalahObjects, salahObjects }) => {
-  console.log("COMPONENT RENDERED");
+  // console.log("COMPONENT RENDERED");
   const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
@@ -77,6 +70,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   function grabDate(e: any) {
     const cell = e.target as HTMLTableCellElement;
     const columnIndex = cell.cellIndex;
+    console.log(e.target);
     const selectedSalah = e.target.parentElement.cells[0].innerText;
 
     const tableHeadDate =
@@ -100,16 +94,12 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
       } else if (iconTest == "Masjid") {
         iconTest = <FaMosque className="text-2xl text-center" />;
       }
-      return <td className="justify-center border-none">{iconTest}</td>;
+      return (
+        <td className="border-none ">
+          <div className="flex justify-center align-center">{iconTest}</div>
+        </td>
+      );
     });
-  }
-
-  function handleForwardBtn() {
-    console.log("FORWARD");
-  }
-
-  function handleBackBtn() {
-    console.log("BACKWARD");
   }
 
   return (
