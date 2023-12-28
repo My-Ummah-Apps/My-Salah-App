@@ -27,7 +27,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
     const today = new Date();
     const startDate = subDays(today, currentStartDate);
 
-    currentDisplayedWeek = Array.from({ length: 7 }, (_, index) => {
+    currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
       const date = subDays(startDate, index);
 
       return format(date, "dd.MM.yy");
@@ -48,7 +48,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         });
 
         if (doesDateExist === undefined) {
-          console.log("DATE DOES NOT EXIST!");
+          // console.log("DATE DOES NOT EXIST!");
 
           item.completedDates.push({
             [tableHeadDate]: salahStatus,
@@ -64,14 +64,38 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
       "storedSalahTrackingData",
       JSON.stringify(newSalahObjects)
     );
-    console.log(salahObjects);
+    // console.log(salahObjects);
   }
 
   function grabDate(e: any) {
     const cell = e.target as HTMLTableCellElement;
     const columnIndex = cell.cellIndex;
-    console.log(e.target);
-    const selectedSalah = e.target.parentElement.cells[0].innerText;
+    console.log("COLUMN INDEX: ", columnIndex);
+
+    // const selectedSalah = e.target.parentElement.cells[0].innerText;
+    let selectedSalah;
+    let clickedElement;
+
+    if (e.target.tagName === "TD") {
+      // clickedElement = e.target;
+      selectedSalah = e.target.parentElement.cells[0].innerText;
+    }
+
+    if (
+      e.target.tagName === "svg" ||
+      e.target.tagName === "circle" ||
+      e.target.tagName === "path"
+    ) {
+      e.target.closest("td").click();
+      // clickedElement = e.target.closest("td");
+    }
+
+    console.log(
+      "e.target ",
+      e.target.parentElement.parentElement.parentElement.parentElement.children[0].children[0].cells.item(
+        columnIndex
+      )
+    );
 
     const tableHeadDate =
       e.target.parentElement.parentElement.parentElement.children[0].children[0]
@@ -82,7 +106,9 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
 
   function renderCells(index) {
     return currentDisplayedWeek.map((date: any) => {
-      let iconTest = <LuDot className="text-[grey]" />;
+      let iconTest = (
+        <LuDot className="text-[grey] flex self-center text-2xl justify-self-center w-[100%]" />
+      );
       const matchedObject = salahObjects[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
       );
@@ -90,15 +116,15 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         iconTest = matchedObject[date];
       }
       if (iconTest == "Home") {
-        iconTest = <FaHome className="text-2xl text-center" />;
+        iconTest = (
+          <FaHome className="flex self-center text-2xl justify-self-center w-[100%]" />
+        );
       } else if (iconTest == "Masjid") {
-        iconTest = <FaMosque className="text-2xl text-center" />;
+        iconTest = (
+          <FaMosque className="flex self-center text-2xl justify-self-center w-[100%]" />
+        );
       }
-      return (
-        <td className="border-none ">
-          <div className="flex justify-center align-center">{iconTest}</div>
-        </td>
-      );
+      return <td className="h-full border-none">{iconTest}</td>;
     });
   }
 
@@ -129,31 +155,31 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
             {currentDisplayedWeek.map((item, index) => {
               const date = subDays(new Date(), index - currentStartDate);
               const formattedDate = format(date, "EEE dd");
-              return <td className="p-5 border-none">{item}</td>;
+              return <td className="px-2 py-5 border-none">{item}</td>;
               // Below is causing issues since when the cell is clicked it relies on the date being in the DD.MM.YY format
-              return <td className="p-5 border-none">{formattedDate}</td>;
+              return <td className="px-5 border-none">{formattedDate}</td>;
             })}
           </tr>
         </thead>
         <tbody>
           <tr className="border-blue-50">
-            <td className="p-5 border-none rounded-md">Fajr</td>
+            <td className="py-5 border-none rounded-md">Fajr</td>
             {renderCells(0)}
           </tr>
           <tr>
-            <td className="p-5 border-none rounded-md">Zohar</td>
+            <td className="py-5 border-none rounded-md">Zohar</td>
             {renderCells(1)}
           </tr>
           <tr>
-            <td className="p-5 border-none rounded-md">Asar</td>
+            <td className="py-5 border-none rounded-md">Asar</td>
             {renderCells(2)}
           </tr>
           <tr>
-            <td className="p-5 border-none rounded-md">Maghrib</td>
+            <td className="py-5 border-none rounded-md">Maghrib</td>
             {renderCells(3)}
           </tr>
           <tr>
-            <td className="p-5 border-none rounded-md">Isha</td>
+            <td className="py-5 border-none rounded-md">Isha</td>
             {renderCells(4)}
           </tr>
         </tbody>
