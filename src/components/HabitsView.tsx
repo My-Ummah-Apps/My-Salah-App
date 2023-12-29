@@ -48,12 +48,13 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         });
 
         if (doesDateExist === undefined) {
-          // console.log("DATE DOES NOT EXIST!");
+          console.log("DATE DOES NOT EXIST!");
 
           item.completedDates.push({
             [tableHeadDate]: salahStatus,
           });
         } else if (doesDateExist !== undefined) {
+          console.log("DATE EXISTS!");
           item.completedDates.map((item) => {
             item[tableHeadDate] = icon;
           });
@@ -66,40 +67,31 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
     );
     // console.log(salahObjects);
   }
-
+  let clickedElement;
+  let columnIndex;
   function grabDate(e: any) {
     const cell = e.target as HTMLTableCellElement;
-    const columnIndex = cell.cellIndex;
-    console.log("COLUMN INDEX: ", columnIndex);
+    columnIndex = cell.cellIndex;
 
     // const selectedSalah = e.target.parentElement.cells[0].innerText;
     let selectedSalah;
-    let clickedElement;
 
     if (e.target.tagName === "TD") {
-      // clickedElement = e.target;
+      clickedElement = e.target;
       selectedSalah = e.target.parentElement.cells[0].innerText;
-    }
-
-    if (
+    } else if (
       e.target.tagName === "svg" ||
       e.target.tagName === "circle" ||
       e.target.tagName === "path"
     ) {
       e.target.closest("td").click();
-      // clickedElement = e.target.closest("td");
+      clickedElement = e.target.closest("td");
+      selectedSalah = clickedElement.parentElement.cells[0].innerText;
     }
 
-    console.log(
-      "e.target ",
-      e.target.parentElement.parentElement.parentElement.parentElement.children[0].children[0].cells.item(
-        columnIndex
-      )
-    );
-
     const tableHeadDate =
-      e.target.parentElement.parentElement.parentElement.children[0].children[0]
-        .cells[columnIndex].textContent;
+      clickedElement.parentElement.parentElement.parentElement.children[0]
+        .children[0].cells[columnIndex].textContent;
     setSelectedSalah(selectedSalah);
     setTableHeadDate(tableHeadDate);
   }
