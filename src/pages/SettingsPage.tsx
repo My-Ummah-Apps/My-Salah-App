@@ -50,14 +50,14 @@ const SettingsPage = () => {
 
       <div className="settings-page-options-and-info-wrap">
         {/* {Capacitor.getPlatform() == "ios" ? ( */}
-        <div className="individual-section-wrap">
+        <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5  ">
           <div
-            className="support-box-wrap"
+            className="flex items-center justify-between support-box-wrap mx-[0.5rem]"
             onClick={() => {
               //   handleOpenModal5();
             }}
           >
-            <div className="support-box-icon-and-text-wrap">
+            <div className="support-box-icon-and-text-wrap flex items-center justify-between mx-[0.5rem] py-[0.5rem]">
               {/* <FaJar */}
               <FaHandHoldingHeart
                 style={{
@@ -65,12 +65,16 @@ const SettingsPage = () => {
                   //   color: activeBackgroundColor,
                 }}
               />
-              <div className="support-box-text-wrap">
-                <p className="support-main-text-heading">Contribute</p>
-                <p className="support-sub-text">Support our work</p>
+              <div className="mx-2 support-box-text-wrap">
+                <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] px-2] text-lg">
+                  Contribute
+                </p>
+                <p className="support-sub-text pt-[0.3rem] px-2 pb-[0.1rem] text-[0.8rem] font-light">
+                  Support our work
+                </p>
               </div>
             </div>
-            <MdOutlineChevronRight className="chevron" />
+            <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
           </div>
 
           <Modal
@@ -168,7 +172,7 @@ const SettingsPage = () => {
         </div>
         {/* ) : null}{" "} */}
         {Capacitor.isNativePlatform() ? (
-          <div className="individual-section-wrap">
+          <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5 relative ">
             <div
               className="notifications-wrap"
               onClick={() => {
@@ -201,15 +205,18 @@ const SettingsPage = () => {
             </Modal>
           </div>
         ) : null}
-        <div className="individual-section-wrap">
+        <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5 relative ">
           <div
-            className="theme-wrap"
+            className="flex items-center justify-between py-2 mx-2 theme-wrap"
             onClick={() => {
               //   handleOpenModal();
               //   setFormTheme(true);
             }}
           >
-            <div className="text-wrap" style={{ display: "block" }}>
+            <div
+              className="self-center py-2 mx-2 text-wrap"
+              style={{ display: "block" }}
+            >
               <p>Dark Theme</p>
               <p>
                 Toggle between Light / Dark Theme
@@ -256,8 +263,8 @@ const SettingsPage = () => {
             />
           </div>
         </div>
-        <div className="individual-section-wrap">
-          <div className="individual-row-wrap haptic-wrap">
+        <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5 relative ">
+          <div className="flex items-center justify-between py-2 mx-2 individual-row-wrap haptic-wrap">
             <div className="text-wrap" style={{ display: "block" }}>
               <p>Haptic Vibration</p>
               <p>Set vibration on every increment</p>
@@ -311,7 +318,7 @@ const SettingsPage = () => {
                 ></label>
               </span> */}
           </div>
-          <div className="individual-row-wrap">
+          <div className="flex items-center justify-between py-2 mx-2 individual-row-wrap">
             <div className="text-wrap" style={{ display: "block" }}>
               <p>Auto Reset Adhkar</p>
               <p>Adhkar will be reset daily</p>
@@ -398,7 +405,7 @@ const SettingsPage = () => {
             </Modal>
           </div>
         </div>
-        <div className="individual-section-wrap">
+        <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5 relative ">
           {Capacitor.getPlatform() == "android" ? (
             <div
               className="review-wrap"
@@ -441,7 +448,7 @@ const SettingsPage = () => {
             </div>
           ) : null}
           <div
-            className="feedback-wrap"
+            className="flex items-center justify-between py-2 mx-2 feedback-wrap"
             onClick={() => {
               link(
                 "mailto: contact@myummahapps.com?subject=My Tasbeeh App Feedback"
@@ -455,7 +462,7 @@ const SettingsPage = () => {
             <MdOutlineChevronRight className="chevron" />
           </div>
           <div
-            className="website-wrap"
+            className="flex items-center justify-between py-2 mx-2 website-wrap"
             onClick={() => {
               link("https://myummahapps.com/");
             }}

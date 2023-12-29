@@ -41,18 +41,12 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
       <section className="flex justify-around text-5xl ">
         <FaMosque
           onClick={() => {
-            // const clickedIcon = <FaMosque />;
-            // setIcon(clickedIcon);
-            // console.log("clickedIcon before func", clickedIcon);
             changeSalahStatus(
               tableHeadDate,
               selectedSalah,
               "Masjid",
               <FaMosque />
             );
-            // console.log("clickedIcon", clickedIcon);
-            // console.log("selectedSalah", selectedSalah);
-            // console.log("tableHeadDate", tableHeadDate);
             setShowModal(false);
           }}
         />

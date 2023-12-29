@@ -13,7 +13,7 @@ import { MdCalendarMonth } from "react-icons/md";
 
 const NavBar = () => {
   return (
-    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full max-w-2xl bg-white navbar-wrap pb-env-safe-area-inset-bottom">
+    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full max-w-2xl p-8 bg-white navbar-wrap pb-env-safe-area-inset-bottom">
       <NavLink
         onClick={() => {
           //   setActivePage("settings");
