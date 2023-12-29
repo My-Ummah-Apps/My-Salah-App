@@ -61,11 +61,14 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         }
       }
     });
-    localStorage.setItem(
-      "storedSalahTrackingData",
-      JSON.stringify(newSalahObjects)
-    );
-    // console.log(salahObjects);
+    // localStorage.setItem(
+    //   "storedSalahTrackingData",
+    //   JSON.stringify(newSalahObjects)
+    // );
+    // console.log("salahObjects: ", salahObjects);
+    // console.log("newSalahObjects: ", newSalahObjects);
+
+    // setSalahObjects(newSalahObjects);
   }
   let clickedElement;
   let columnIndex;
@@ -133,6 +136,12 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         selectedSalah={selectedSalah}
         tableHeadDate={tableHeadDate}
         salahStatus={salahStatus}
+      />
+      <img
+        className="rounded-lg"
+        src="/src/beautiful-sunset-background-river_203633-925.jpg"
+        alt=""
+        srcset=""
       />
       <table
         className="w-full shadow-lg rounded-xl bg-gray-50"

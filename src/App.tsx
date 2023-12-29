@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 
-import "./App.css";
+// import "./App.css";
 import NavBar from "./components/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 import StatsPage from "./pages/StatsPage";
@@ -55,7 +55,7 @@ function App() {
     },
   ]);
 
-  // localStorage.setItem("storedSalahTrackingData", JSON.stringify(salahObjects));
+  localStorage.setItem("storedSalahTrackerData", JSON.stringify(salahObjects));
 
   // useEffect(() => {
   //   const storedSalahTrackingData = localStorage.getItem(
