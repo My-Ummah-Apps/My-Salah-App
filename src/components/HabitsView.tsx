@@ -50,9 +50,48 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         if (doesDateExist === undefined) {
           console.log("DATE DOES NOT EXIST!");
 
-          item.completedDates.push({
-            [tableHeadDate]: salahStatus,
+          const updatedCompletedDatesArray = [
+            ...item.completedDates,
+            { [tableHeadDate]: salahStatus },
+          ];
+          console.log(...updatedCompletedDatesArray);
+          const updatedSalahObjectsArray = {
+            ...item,
+            completedDates: updatedCompletedDatesArray,
+          };
+          // console.log(...updatedCompletedDatesArray);
+          return [...salahObjects, updatedSalahObjectsArray];
+
+          console.log({
+            ...item,
+            completedDates: [
+              ...item.completedDates,
+              { [tableHeadDate]: salahStatus },
+            ],
           });
+          return {
+            ...item,
+            completedDates: [
+              ...item.completedDates,
+              { [tableHeadDate]: salahStatus },
+            ],
+          };
+
+          const updatedSalahs = {
+            ...item,
+            completedDates: [
+              ...item.completedDates,
+              { [tableHeadDate]: salahStatus },
+            ],
+          };
+          // console.log(...salahObjects);
+          // return updatedSalahs;
+
+          // return salahObjects;
+
+          // item.completedDates.push({
+          //   [tableHeadDate]: salahStatus,
+          // });
         } else if (doesDateExist !== undefined) {
           console.log("DATE EXISTS!");
           item.completedDates.map((item) => {
@@ -61,12 +100,14 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         }
       }
     });
+    // return [...newSalahObjects, item];
+    // console.log(newSalahObjects);
+    // return newSalahObjects;
+    // return newSalahObjects;
     // localStorage.setItem(
     //   "storedSalahTrackingData",
     //   JSON.stringify(newSalahObjects)
     // );
-    // console.log("salahObjects: ", salahObjects);
-    // console.log("newSalahObjects: ", newSalahObjects);
 
     // setSalahObjects(newSalahObjects);
   }
@@ -137,12 +178,12 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         tableHeadDate={tableHeadDate}
         salahStatus={salahStatus}
       />
-      <img
+      {/* <img
         className="rounded-lg"
         src="/src/beautiful-sunset-background-river_203633-925.jpg"
         alt=""
         srcset=""
-      />
+      /> */}
       <table
         className="w-full shadow-lg rounded-xl bg-gray-50"
         onClick={(e) => {

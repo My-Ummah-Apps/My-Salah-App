@@ -55,6 +55,9 @@ function App() {
     },
   ]);
 
+  // const test = [...salahObjects];
+  // console.log(...test);
+
   localStorage.setItem("storedSalahTrackerData", JSON.stringify(salahObjects));
 
   // useEffect(() => {
