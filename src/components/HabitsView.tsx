@@ -40,7 +40,12 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
 
   const [showModal, setShowModal] = useState(false);
 
-  function changeSalahStatus(tableHeadDate, selectedSalah, salahStatus, icon) {
+  const changeSalahStatus = (
+    tableHeadDate,
+    selectedSalah,
+    salahStatus,
+    icon
+  ) => {
     const newSalahObjects = salahObjects.map((item) => {
       if (item.salahName == selectedSalah) {
         const doesDateExist = item.completedDates.find((date) => {
@@ -48,27 +53,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         });
 
         if (doesDateExist === undefined) {
-          console.log("DATE DOES NOT EXIST!");
-
-          const updatedCompletedDatesArray = [
-            ...item.completedDates,
-            { [tableHeadDate]: salahStatus },
-          ];
-          console.log(...updatedCompletedDatesArray);
-          const updatedSalahObjectsArray = {
-            ...item,
-            completedDates: updatedCompletedDatesArray,
-          };
-          // console.log(...updatedCompletedDatesArray);
-          return [...salahObjects, updatedSalahObjectsArray];
-
-          console.log({
-            ...item,
-            completedDates: [
-              ...item.completedDates,
-              { [tableHeadDate]: salahStatus },
-            ],
-          });
           return {
             ...item,
             completedDates: [
@@ -76,41 +60,32 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
               { [tableHeadDate]: salahStatus },
             ],
           };
-
-          const updatedSalahs = {
-            ...item,
-            completedDates: [
-              ...item.completedDates,
-              { [tableHeadDate]: salahStatus },
-            ],
-          };
-          // console.log(...salahObjects);
-          // return updatedSalahs;
-
-          // return salahObjects;
-
-          // item.completedDates.push({
-          //   [tableHeadDate]: salahStatus,
-          // });
         } else if (doesDateExist !== undefined) {
-          console.log("DATE EXISTS!");
-          item.completedDates.map((item) => {
-            item[tableHeadDate] = icon;
+          // ISSUE 1: ICON WONT CHANGE TO HOME FROM MASJID HOWEVER THE ARRAY DOES UPDATE, BUT FOR HOME THE ICON IN THE ARRAY IS BLANK FOR SOME REASON + ITS DUPLICATING SO YOU END UP WITH TWO SAME DATES, ALSO TAKE A LOOK AT CHANGESALAHSTATUS FUNCTION CALL IN THE MODALOPTIONS.TSX LINE 55
+          console.log("ICON IS", icon);
+          console.log({
+            ...item,
+            completedDates: [...item.completedDates, { [tableHeadDate]: icon }],
           });
+          return {
+            ...item,
+            completedDates: [...item.completedDates, { [tableHeadDate]: icon }],
+          };
         }
       }
+      return item;
     });
-    // return [...newSalahObjects, item];
-    // console.log(newSalahObjects);
-    // return newSalahObjects;
-    // return newSalahObjects;
+    console.log("newSalahObjects", newSalahObjects);
+    setSalahObjects(newSalahObjects);
+
+    // return [...newSalahObjects];
     // localStorage.setItem(
     //   "storedSalahTrackingData",
     //   JSON.stringify(newSalahObjects)
     // );
 
     // setSalahObjects(newSalahObjects);
-  }
+  };
   let clickedElement;
   let columnIndex;
   function grabDate(e: any) {
