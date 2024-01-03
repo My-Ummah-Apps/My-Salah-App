@@ -52,14 +52,8 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
         />
         <FaHome
           onClick={() => {
-            changeSalahStatus(
-              tableHeadDate,
-              selectedSalah,
-              "Home",
-              <FaMosque />
-            );
-            setShowModal(false);
             changeSalahStatus(tableHeadDate, selectedSalah, "Home", <FaHome />);
+            setShowModal(false);
           }}
         />
       </section>

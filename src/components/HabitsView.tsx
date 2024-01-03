@@ -48,11 +48,11 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   ) => {
     const newSalahObjects = salahObjects.map((item) => {
       if (item.salahName == selectedSalah) {
-        const doesDateExist = item.completedDates.find((date) => {
+        const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
         });
 
-        if (doesDateExist === undefined) {
+        if (doesDateObjectExist === undefined) {
           return {
             ...item,
             completedDates: [
@@ -60,31 +60,33 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
               { [tableHeadDate]: salahStatus },
             ],
           };
-        } else if (doesDateExist !== undefined) {
-          // ISSUE 1: ICON WONT CHANGE TO HOME FROM MASJID HOWEVER THE ARRAY DOES UPDATE, BUT FOR HOME THE ICON IN THE ARRAY IS BLANK FOR SOME REASON + ITS DUPLICATING SO YOU END UP WITH TWO SAME DATES, ALSO TAKE A LOOK AT CHANGESALAHSTATUS FUNCTION CALL IN THE MODALOPTIONS.TSX LINE 55
-          console.log("ICON IS", icon);
-          console.log({
-            ...item,
-            completedDates: [...item.completedDates, { [tableHeadDate]: icon }],
-          });
+        } else if (doesDateObjectExist !== undefined) {
+          const filteredCompletedDatesArray = item.completedDates.filter(
+            (date) => {
+              return (
+                Object.keys(doesDateObjectExist)[0] !== Object.keys(date)[0]
+              );
+            }
+          );
           return {
             ...item,
-            completedDates: [...item.completedDates, { [tableHeadDate]: icon }],
+            completedDates: [
+              ...filteredCompletedDatesArray,
+              { [tableHeadDate]: salahStatus },
+            ],
           };
         }
       }
+      console.log(item);
       return item;
     });
     console.log("newSalahObjects", newSalahObjects);
     setSalahObjects(newSalahObjects);
 
-    // return [...newSalahObjects];
-    // localStorage.setItem(
-    //   "storedSalahTrackingData",
-    //   JSON.stringify(newSalahObjects)
-    // );
-
-    // setSalahObjects(newSalahObjects);
+    localStorage.setItem(
+      "storedSalahTrackingData",
+      JSON.stringify(newSalahObjects)
+    );
   };
   let clickedElement;
   let columnIndex;

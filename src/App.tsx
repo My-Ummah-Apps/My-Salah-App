@@ -17,41 +17,23 @@ function App() {
     // const [salahObjects, setSalahObjects]: any[] = useState([
     {
       salahName: "Fajr",
-      completedDates: [
-        { "23.12.23": "Home" },
-        { "22.12.23": "Masjid" },
-        { "20.12.23": "Masjid" },
-        { "19.12.23": "Home" },
-        { "19.10.23": "Masjid" },
-      ],
+      completedDates: [],
     },
     {
       salahName: "Zohar",
-      completedDates: [
-        { "24.12.23": "Masjid" },
-        { "22.12.23": "Home" },
-        { "20.12.23": "Masjid" },
-      ],
+      completedDates: [],
     },
     {
       salahName: "Asar",
-      completedDates: [
-        { "23.12.23": "Home" },
-        { "22.12.23": "Masjid" },
-        { "21.12.23": "Home" },
-      ],
+      completedDates: [],
     },
     {
       salahName: "Maghrib",
-      completedDates: [
-        { "24.12.23": "Masjid" },
-        { "21.12.23": "Masjid" },
-        { "18.12.23": "Home" },
-      ],
+      completedDates: [],
     },
     {
       salahName: "Isha",
-      completedDates: [{ "23.12.23": "Home" }, { "21.12.23": "Masjid" }],
+      completedDates: [],
     },
   ]);
 
