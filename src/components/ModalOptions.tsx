@@ -14,7 +14,7 @@ interface ModalOptionsProps {
   setIcon: any;
   selectedSalah: any;
   tableHeadDate: any;
-  changeSalahStatus: any;
+  changePrayerStatus: any;
 }
 
 const ModalOptions: React.FC<ModalOptionsProps> = ({
@@ -28,7 +28,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
   columnIndex,
   icon,
   setIcon,
-  changeSalahStatus,
+  changePrayerStatus,
 }) => {
   return (
     <ReactModal
@@ -41,7 +41,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
       <section className="flex justify-around text-5xl ">
         <FaMosque
           onClick={() => {
-            changeSalahStatus(
+            changePrayerStatus(
               tableHeadDate,
               selectedSalah,
               "Masjid",
@@ -52,7 +52,12 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
         />
         <FaHome
           onClick={() => {
-            changeSalahStatus(tableHeadDate, selectedSalah, "Home", <FaHome />);
+            changePrayerStatus(
+              tableHeadDate,
+              selectedSalah,
+              "Home",
+              <FaHome />
+            );
             setShowModal(false);
           }}
         />

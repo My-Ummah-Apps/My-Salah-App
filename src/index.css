@@ -23,17 +23,23 @@
 }
 
 body {
-  background: #ededed;
+  /* background: #ededed; */
+  background: rgb(121, 115, 236);
 }
 
 table {
+  background-color: transparent !important;
   border-collapse: separate;
-  border-spacing: 10px; /* Adjust the value to set the spacing */
+  /* border-spacing: 10px; */
 }
 
 td,
 th {
-  border: 1px solid #ccc;
+  /* border-bottom: 1px solid #000000 !important; */
   padding: 2px; /* Adjust the value to set the cell padding */
   /* border-width border-style border-color */
+}
+
+tr {
+  margin: 3rem 0;
 }

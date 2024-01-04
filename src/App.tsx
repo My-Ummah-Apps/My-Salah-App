@@ -13,43 +13,37 @@ type salahObjectsType = {
 };
 
 function App() {
-  const [salahObjects, setSalahObjects] = useState<salahObjectsType[]>([
-    // const [salahObjects, setSalahObjects]: any[] = useState([
-    {
-      salahName: "Fajr",
-      completedDates: [],
-    },
-    {
-      salahName: "Zohar",
-      completedDates: [],
-    },
-    {
-      salahName: "Asar",
-      completedDates: [],
-    },
-    {
-      salahName: "Maghrib",
-      completedDates: [],
-    },
-    {
-      salahName: "Isha",
-      completedDates: [],
-    },
-  ]);
+  const [salahObjects, setSalahObjects] = useState<salahObjectsType[]>([]);
 
-  // const test = [...salahObjects];
-  // console.log(...test);
-
-  localStorage.setItem("storedSalahTrackerData", JSON.stringify(salahObjects));
-
-  // useEffect(() => {
-  //   const storedSalahTrackingData = localStorage.getItem(
-  //     "storedSalahTrackingData"
-  //   );
-  //   storedSalahTrackingData
-  //     ? setSalahObjects(JSON.parse(storedSalahTrackingData))
-  //     : setSalahObjects([]);
-  // }, []);
+  useEffect(() => {
+    const storedSalahTrackingData = localStorage.getItem(
+      "storedSalahTrackingData"
+    );
+    storedSalahTrackingData
+      ? setSalahObjects(JSON.parse(storedSalahTrackingData))
+      : setSalahObjects([
+          {
+            salahName: "Fajr",
+            completedDates: [],
+          },
+          {
+            salahName: "Zohar",
+            completedDates: [],
+          },
+          {
+            salahName: "Asar",
+            completedDates: [],
+          },
+          {
+            salahName: "Maghrib",
+            completedDates: [],
+          },
+          {
+            salahName: "Isha",
+            completedDates: [],
+          },
+        ]);
+  }, []);
 
   return (
     <BrowserRouter>

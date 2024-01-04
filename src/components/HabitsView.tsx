@@ -4,7 +4,7 @@ import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import { subDays, format } from "date-fns";
+import { subDays, format, parse } from "date-fns";
 import { render } from "react-dom";
 
 // import { v4 as uuidv4 } from "uuid";
@@ -17,7 +17,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
   const [currentStartDate, setCurrentStartDate] = useState(0);
-  const [dateRange, setDateRange] = useState();
+  // const [dateRange, setDateRange] = useState();
 
   useEffect(() => {}, [currentStartDate]);
 
@@ -29,7 +29,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
 
     currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
       const date = subDays(startDate, index);
-
       return format(date, "dd.MM.yy");
     });
   }
@@ -40,12 +39,14 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const changeSalahStatus = (
+  const changePrayerStatus = (
     tableHeadDate,
     selectedSalah,
     salahStatus,
     icon
   ) => {
+    // const originaldDate = format("20.12.23", "dd.MM.yy");
+    // console.log(originaldDate);
     const newSalahObjects = salahObjects.map((item) => {
       if (item.salahName == selectedSalah) {
         const doesDateObjectExist = item.completedDates.find((date) => {
@@ -77,7 +78,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
           };
         }
       }
-      console.log(item);
       return item;
     });
     console.log("newSalahObjects", newSalahObjects);
@@ -115,6 +115,16 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         .children[0].cells[columnIndex].textContent;
     setSelectedSalah(selectedSalah);
     setTableHeadDate(tableHeadDate);
+    // const formattedDate = format(
+    //   clickedElement.parentElement.parentElement.parentElement.children[0]
+    //     .children[0].cells[columnIndex].textContent,
+    //   "EEE dd"
+    // );
+
+    // console.log(
+    //   clickedElement.parentElement.parentElement.parentElement.children[0]
+    //     .children[0].cells[columnIndex].textContent
+    // );
   }
 
   function renderCells(index) {
@@ -148,7 +158,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         showModal={showModal}
         setSalahObjects={setSalahObjects}
         salahObjects={salahObjects}
-        changeSalahStatus={changeSalahStatus}
+        changePrayerStatus={changePrayerStatus}
         icon={icon}
         setIcon={setIcon}
         selectedSalah={selectedSalah}
@@ -173,10 +183,11 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
             <th className="border-none"></th>
             {currentDisplayedWeek.map((item, index) => {
               const date = subDays(new Date(), index - currentStartDate);
+              // console.log(date);
               const formattedDate = format(date, "EEE dd");
               return <td className="px-2 py-5 border-none">{item}</td>;
               // Below is causing issues since when the cell is clicked it relies on the date being in the DD.MM.YY format
-              return <td className="px-5 border-none">{formattedDate}</td>;
+              // return <td className="px-5 border-none">{formattedDate}</td>;
             })}
           </tr>
         </thead>
