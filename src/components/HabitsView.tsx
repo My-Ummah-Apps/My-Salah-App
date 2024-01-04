@@ -19,8 +19,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   const [currentStartDate, setCurrentStartDate] = useState(0);
   // const [dateRange, setDateRange] = useState();
 
-  useEffect(() => {}, [currentStartDate]);
-
   // Array to hold the last five dates
   let currentDisplayedWeek;
   function generateDisplayedWeek(currentStartDate) {
@@ -28,7 +26,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
     const startDate = subDays(today, currentStartDate);
 
     currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
-      const date = subDays(startDate, index);
+      const date = subDays(startDate, 4 - index);
       return format(date, "dd.MM.yy");
     });
   }
@@ -179,15 +177,19 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         }}
       >
         <thead className="">
+          <tr className="hidden">
+            <th className="border-none"></th>
+            {currentDisplayedWeek.map((item, index) => {
+              return <td className="px-2 py-5 border-none">{item}</td>;
+            })}
+          </tr>
           <tr className="">
             <th className="border-none"></th>
             {currentDisplayedWeek.map((item, index) => {
-              const date = subDays(new Date(), index - currentStartDate);
-              // console.log(date);
-              const formattedDate = format(date, "EEE dd");
-              return <td className="px-2 py-5 border-none">{item}</td>;
-              // Below is causing issues since when the cell is clicked it relies on the date being in the DD.MM.YY format
-              // return <td className="px-5 border-none">{formattedDate}</td>;
+              const parsedDate = parse(item, "dd.MM.yy", new Date());
+              const formattedDate = format(parsedDate, "EEE dd");
+
+              return <td className="px-2 py-5 border-none">{formattedDate}</td>;
             })}
           </tr>
         </thead>
