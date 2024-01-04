@@ -23,12 +23,12 @@
 }
 
 body {
-  /* background: #ededed; */
-  background: rgb(121, 115, 236);
+  background: #ededed;
+  /* background: rgb(121, 115, 236); */
 }
 
 table {
-  background-color: transparent !important;
+  /* background-color: transparent !important; */
   border-collapse: separate;
   /* border-spacing: 10px; */
 }
