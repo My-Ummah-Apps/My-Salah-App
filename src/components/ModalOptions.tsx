@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
+import { LuDot } from "react-icons/lu";
 
 interface ModalOptionsProps {
   showModal: boolean;
@@ -57,6 +58,17 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
               selectedSalah,
               "Home",
               <FaHome />
+            );
+            setShowModal(false);
+          }}
+        />
+        <LuDot
+          onClick={() => {
+            changePrayerStatus(
+              tableHeadDate,
+              selectedSalah,
+              "Blank",
+              <LuDot />
             );
             setShowModal(false);
           }}

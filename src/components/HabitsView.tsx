@@ -78,7 +78,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
       }
       return item;
     });
-    console.log("newSalahObjects", newSalahObjects);
     setSalahObjects(newSalahObjects);
 
     localStorage.setItem(
@@ -92,7 +91,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
     const cell = e.target as HTMLTableCellElement;
     columnIndex = cell.cellIndex;
 
-    // const selectedSalah = e.target.parentElement.cells[0].innerText;
     let selectedSalah;
 
     if (e.target.tagName === "TD") {
@@ -113,39 +111,33 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         .children[0].cells[columnIndex].textContent;
     setSelectedSalah(selectedSalah);
     setTableHeadDate(tableHeadDate);
-    // const formattedDate = format(
-    //   clickedElement.parentElement.parentElement.parentElement.children[0]
-    //     .children[0].cells[columnIndex].textContent,
-    //   "EEE dd"
-    // );
-
-    // console.log(
-    //   clickedElement.parentElement.parentElement.parentElement.children[0]
-    //     .children[0].cells[columnIndex].textContent
-    // );
   }
 
   function renderCells(index) {
     return currentDisplayedWeek.map((date: any) => {
-      let iconTest = (
+      let cellIcon = (
         <LuDot className="text-[grey] flex self-center text-2xl justify-self-center w-[100%]" />
       );
       const matchedObject = salahObjects[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
       );
       if (matchedObject !== undefined) {
-        iconTest = matchedObject[date];
+        cellIcon = matchedObject[date];
       }
-      if (iconTest === "Home") {
-        iconTest = (
+      if (cellIcon === "Home") {
+        cellIcon = (
           <FaHome className="flex self-center text-2xl justify-self-center w-[100%]" />
         );
-      } else if (iconTest === "Masjid") {
-        iconTest = (
+      } else if (cellIcon === "Masjid") {
+        cellIcon = (
           <FaMosque className="flex self-center text-2xl justify-self-center w-[100%]" />
         );
+      } else if (cellIcon === "Blank") {
+        cellIcon = (
+          <LuDot className="flex self-center text-2xl justify-self-center w-[100%]" />
+        );
       }
-      return <td className="h-full border-none">{iconTest}</td>;
+      return <td className="h-full border-none">{cellIcon}</td>;
     });
   }
 
