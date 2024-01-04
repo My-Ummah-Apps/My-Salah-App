@@ -138,11 +138,11 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
       if (matchedObject !== undefined) {
         iconTest = matchedObject[date];
       }
-      if (iconTest == "Home") {
+      if (iconTest === "Home") {
         iconTest = (
           <FaHome className="flex self-center text-2xl justify-self-center w-[100%]" />
         );
-      } else if (iconTest == "Masjid") {
+      } else if (iconTest === "Masjid") {
         iconTest = (
           <FaMosque className="flex self-center text-2xl justify-self-center w-[100%]" />
         );
@@ -192,26 +192,16 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
           </tr>
         </thead>
         <tbody>
-          <tr className="border-blue-50">
-            <td className="py-5 border-none rounded-md">Fajr</td>
-            {renderCells(0)}
-          </tr>
-          <tr>
-            <td className="py-5 border-none rounded-md">Zohar</td>
-            {renderCells(1)}
-          </tr>
-          <tr>
-            <td className="py-5 border-none rounded-md">Asar</td>
-            {renderCells(2)}
-          </tr>
-          <tr>
-            <td className="py-5 border-none rounded-md">Maghrib</td>
-            {renderCells(3)}
-          </tr>
-          <tr>
-            <td className="py-5 border-none rounded-md">Isha</td>
-            {renderCells(4)}
-          </tr>
+          {salahObjects.map((item, index) => {
+            return (
+              <tr className="border-blue-50">
+                <td className="py-5 border-none rounded-md">
+                  {item.salahName}
+                </td>
+                {renderCells(index)}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <div className="flex justify-around pt-6 ">
