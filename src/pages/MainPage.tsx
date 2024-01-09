@@ -1,4 +1,5 @@
 import HabitsView from "../components/HabitsView";
+import NextSalahTime from "../components/NextSalahTime";
 
 const MainPage = ({
   setSalahObjects: setSalahObjects,
@@ -6,7 +7,7 @@ const MainPage = ({
 }) => {
   return (
     <div className="overflow-x-auto w-5/5 main-page-wrap">
-      <h1 className="p-5 text-xl text-white">Prayer Tracker</h1>
+      <NextSalahTime />
       <HabitsView
         setSalahObjects={setSalahObjects}
         salahObjects={salahObjects}
