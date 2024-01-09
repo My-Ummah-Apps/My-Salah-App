@@ -47,7 +47,7 @@ const NavBar = () => {
           //   setActivePage("counters");
         }}
         className="nav-link px-3 py-1.5 pt-0.5"
-        to="/StatsPage"
+        to="/ResourcesPage"
       >
         <MdCalendarMonth
           className="text-2xl nav-icon"
