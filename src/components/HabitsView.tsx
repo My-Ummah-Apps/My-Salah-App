@@ -121,6 +121,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
       const matchedObject = salahObjects[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
       );
+
       if (matchedObject !== undefined) {
         cellIcon = matchedObject[date];
       }
@@ -198,7 +199,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
           })}
         </tbody>
       </table>
-      <div className="flex justify-around pt-6 ">
+      <div className="flex justify-around pt-6 pb-20 ">
         <button
           onClick={() => {
             setCurrentStartDate((prevValue) => prevValue + 5);

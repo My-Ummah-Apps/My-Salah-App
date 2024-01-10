@@ -6,6 +6,7 @@ import MainPage from "./pages/MainPage";
 import NavBar from "./components/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 import ResourcesPage from "./pages/ResourcesPage";
+import CalenderPage from "./pages/CalenderPage";
 
 type salahObjectsType = {
   salahName: string;
@@ -49,7 +50,7 @@ function App() {
     <BrowserRouter>
       <section className="App">
         <Routes>
-          <Route path="ResourcesPage" element={<ResourcesPage />} />
+          <Route path="/ResourcesPage" element={<ResourcesPage />} />
           <Route
             index
             element={
@@ -59,7 +60,8 @@ function App() {
               />
             }
           />
-          <Route path="SettingsPage" element={<SettingsPage />} />
+          <Route path="/SettingsPage" element={<SettingsPage />} />
+          <Route path="/CalenderPage" element={<CalenderPage />} />
         </Routes>
         <NavBar />
       </section>
