@@ -17,7 +17,7 @@ import {
   startOfMonth,
 } from "date-fns";
 
-const CalenderPage = () => {
+const CalenderPage = ({ salahObjects }) => {
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (this is an object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   //   const days = [""];
@@ -30,12 +30,46 @@ const CalenderPage = () => {
     // "col-start-6",
     // "col-start-7",
   ];
+  let dateColor: string;
+  const doDatesExist = (date) => {
+    // console.log("PASSED IN DATE: ", date);
+    // salahObjects?.forEach((item: string) => {
+    //   if (Object.keys(item.completedDates[0])[0] === date) {
+    //     console.log("DATE MATCHED: ", Object.keys(item.completedDates[0])[0]);
+    //     dateColor = "bg-[green]";
+    //   } else {
+    //     dateColor = "bg-[red]";
+    //   }
+    // });
+  };
+
+  //   console.log(Object.keys(salahObjects[0].completedDates[0]));
+
+  const test = salahObjects.map((item) => {
+    // console.log(item.completedDates);
+    // console.log(Object.keys(item.completedDates[0]));
+    // const testing = []
+    return Object.keys(item.completedDates[0]);
+  });
+
+  console.log(test);
+
+  const filteredDates = (day) => {
+    const filteredResult = salahObjects.filter((item: string) => {
+      //   console.log(format(day, "dd.MM.yy"));
+      //   console.log(Object.keys(item.completedDates[0])[0]);
+      return Object.keys(item.completedDates[0])[0] === format(day, "dd.MM.yy");
+      //   if (Object.keys(item.completedDates[0])[0] === format(day, "dd.MM.yy")) {
+      //     return format(day, "dd.MM.yy");
+      //   }
+    });
+    // console.log("FILTERED RESULT:", filteredResult);
+    return filteredResult;
+  };
 
   const [currentMonth, setcurrentMonth] = useState(() =>
     format(today, "MMM-yyyy")
   ); // Jan-2024 (this is a string)
-
-  //   console.log(parsedCurrentMonth);
 
   const isDayInSpecificMonth = (dayToCheck: any, currentMonth: any) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -98,9 +132,35 @@ const CalenderPage = () => {
         </div>
         <div className="grid grid-cols-7 gap-6 mt-8 sm:gap-12 place-items-center">
           {daysInMonth.map((day, index) => {
+            // let formattedDate = day format(day, "dd.MM.yy")
+            {
+              filteredDates(day);
+            }
+            // {
+            //   console.log(filteredDates(day));
+            // }
             return (
               //   <div key={index} className={colStartClasses[getDay(day)]}>
+
               <div key={index} className="">
+                {/* {salahObjects.forEach((item: string) => {
+                  if (
+                    Object.keys(item.completedDates[0])[0] ===
+                    format(day, "dd.MM.yy")
+                  ) {
+                    console.log(
+                      "DATE MATCHED: ",
+                      Object.keys(item.completedDates[0])[0]
+                    );
+                    dateColor = "bg-[blue]";
+                  } else if (
+                    Object.keys(item.completedDates[0])[0] !==
+                    format(day, "dd.MM.yy")
+                  ) {
+                    console.log("DATE NOT MATCHED");
+                    dateColor = "bg-[red]";
+                  }
+                })} */}
                 <p
                   className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
                     // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
@@ -108,12 +168,14 @@ const CalenderPage = () => {
                     isDayInSpecificMonth(day, currentMonth)
                       ? "text-gray-900"
                       : "text-gray-400"
-                  } ${!isToday(day) && "hover:bg-blue-500"} ${
-                    isToday(day) && "bg-red-500 text-white"
-                  }`}
+                  } 
+                  ${dateColor}
+                    `}
                 >
-                  {format(day, "d")}
-                  {/* {format(day, "dd.MM.yy")} */}
+                  {/* {format(day, "d")} */}
+                  {doDatesExist(format(day, "dd.MM.yy"))}
+
+                  {format(day, "dd.MM.yy")}
                 </p>
               </div>
             );
@@ -125,3 +187,6 @@ const CalenderPage = () => {
 };
 
 export default CalenderPage;
+
+//   ${isToday(day) && "bg-red-500 text-white"}
+// ${!isToday(day) && "hover:bg-blue-500"}

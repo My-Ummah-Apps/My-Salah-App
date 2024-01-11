@@ -61,7 +61,10 @@ function App() {
             }
           />
           <Route path="/SettingsPage" element={<SettingsPage />} />
-          <Route path="/CalenderPage" element={<CalenderPage />} />
+          <Route
+            path="/CalenderPage"
+            element={<CalenderPage salahObjects={salahObjects} />}
+          />
         </Routes>
         <NavBar />
       </section>
