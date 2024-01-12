@@ -31,41 +31,27 @@ const CalenderPage = ({ salahObjects }) => {
     // "col-start-7",
   ];
   let dateColor: string;
-  const doDatesExist = (date) => {
-    // console.log("PASSED IN DATE: ", date);
-    // salahObjects?.forEach((item: string) => {
-    //   if (Object.keys(item.completedDates[0])[0] === date) {
-    //     console.log("DATE MATCHED: ", Object.keys(item.completedDates[0])[0]);
-    //     dateColor = "bg-[green]";
-    //   } else {
-    //     dateColor = "bg-[red]";
-    //   }
-    // });
-  };
 
-  //   console.log(Object.keys(salahObjects[0].completedDates[0]));
-
-  const test = salahObjects.map((item) => {
-    // console.log(item.completedDates);
-    // console.log(Object.keys(item.completedDates[0]));
-    // const testing = []
-    return Object.keys(item.completedDates[0]);
-  });
-
-  console.log(test);
-
-  const filteredDates = (day) => {
-    const filteredResult = salahObjects.filter((item: string) => {
-      //   console.log(format(day, "dd.MM.yy"));
-      //   console.log(Object.keys(item.completedDates[0])[0]);
-      return Object.keys(item.completedDates[0])[0] === format(day, "dd.MM.yy");
-      //   if (Object.keys(item.completedDates[0])[0] === format(day, "dd.MM.yy")) {
-      //     return format(day, "dd.MM.yy");
-      //   }
+  let datesArray = [];
+  const allDatesArray = salahObjects.reduce((value, salah) => {
+    salah.completedDates.forEach((item) => {
+      datesArray.push(Object.keys(item)[0]);
     });
-    // console.log("FILTERED RESULT:", filteredResult);
-    return filteredResult;
-  };
+    return datesArray;
+  }, []);
+
+  function howManyDatesExist(date) {
+    allDatesArray.reduce((value, dateString) => {
+      console.log(value);
+      return value;
+    }, 0);
+  }
+
+  howManyDatesExist("01.01.24");
+
+  function doesDateExist(date) {
+    return allDatesArray.includes(format(date, "dd.MM.yy"));
+  }
 
   const [currentMonth, setcurrentMonth] = useState(() =>
     format(today, "MMM-yyyy")
@@ -133,9 +119,7 @@ const CalenderPage = ({ salahObjects }) => {
         <div className="grid grid-cols-7 gap-6 mt-8 sm:gap-12 place-items-center">
           {daysInMonth.map((day, index) => {
             // let formattedDate = day format(day, "dd.MM.yy")
-            {
-              filteredDates(day);
-            }
+
             // {
             //   console.log(filteredDates(day));
             // }
@@ -162,6 +146,9 @@ const CalenderPage = ({ salahObjects }) => {
                   }
                 })} */}
                 <p
+                  style={{
+                    backgroundColor: doesDateExist(day) ? "green" : "red",
+                  }}
                   className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
                     // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
 
@@ -169,13 +156,13 @@ const CalenderPage = ({ salahObjects }) => {
                       ? "text-gray-900"
                       : "text-gray-400"
                   } 
-                  ${dateColor}
+
                     `}
                 >
                   {/* {format(day, "d")} */}
-                  {doDatesExist(format(day, "dd.MM.yy"))}
 
                   {format(day, "dd.MM.yy")}
+                  {/* {doesDateExist(day)} */}
                 </p>
               </div>
             );
