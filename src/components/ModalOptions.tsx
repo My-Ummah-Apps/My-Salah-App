@@ -45,7 +45,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
             changePrayerStatus(
               tableHeadDate,
               selectedSalah,
-              "Masjid",
+              "masjid",
               <FaMosque />
             );
             setShowModal(false);
@@ -56,7 +56,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
             changePrayerStatus(
               tableHeadDate,
               selectedSalah,
-              "Home",
+              "home",
               <FaHome />
             );
             setShowModal(false);
@@ -67,9 +67,10 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
             changePrayerStatus(
               tableHeadDate,
               selectedSalah,
-              "Blank",
+              "blank",
               <LuDot />
             );
+
             setShowModal(false);
           }}
         />

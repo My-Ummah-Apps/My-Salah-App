@@ -17,7 +17,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
   const [currentStartDate, setCurrentStartDate] = useState(0);
-  // const [dateRange, setDateRange] = useState();
 
   // Array to hold the last five dates
   let currentDisplayedWeek;
@@ -43,15 +42,50 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
     salahStatus,
     icon
   ) => {
-    // const originaldDate = format("20.12.23", "dd.MM.yy");
-    // console.log(originaldDate);
+    console.log(salahStatus);
     const newSalahObjects = salahObjects.map((item) => {
       if (item.salahName == selectedSalah) {
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
         });
 
-        if (doesDateObjectExist === undefined) {
+        // console.log("DOES DATE OBJECT EXIST: ", doesDateObjectExist);
+
+        if (salahStatus === "blank") {
+          // console.log("SALAH STATUS IS BLANK");
+          if (doesDateObjectExist === undefined) {
+            // console.log(
+            //   "DATE OBJECT DOES NOT EXIST WITHIN SALAHSTATUS == BLANK STATEMENT"
+            // );
+            return {
+              ...item,
+              completedDates: [...item.completedDates],
+            };
+          } else if (doesDateObjectExist !== undefined) {
+            // console.log(
+            //   "DATE OBJECT DOES EXIST WITHIN SALAHSTATUS == BLANK STATEMENT"
+            // );
+
+            const filteredCompletedDatesArray = item.completedDates.filter(
+              (date) => {
+                return (
+                  Object.keys(doesDateObjectExist)[0] !== Object.keys(date)[0]
+                );
+              }
+            );
+
+            return {
+              ...item,
+              completedDates: [...filteredCompletedDatesArray],
+            };
+          }
+        }
+
+        if (doesDateObjectExist === undefined && salahStatus !== "blank") {
+          // console.log(
+          //   "(doesDateObjectExist === undefined && salahStatus !== blank)"
+          // );
+
           return {
             ...item,
             completedDates: [
@@ -59,7 +93,13 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
               { [tableHeadDate]: salahStatus },
             ],
           };
-        } else if (doesDateObjectExist !== undefined) {
+        } else if (
+          doesDateObjectExist !== undefined &&
+          salahStatus !== "blank"
+        ) {
+          // console.log(
+          //   "doesDateObjectExist !== undefined salahStatus !== blank"
+          // );
           const filteredCompletedDatesArray = item.completedDates.filter(
             (date) => {
               return (
@@ -74,6 +114,20 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
               { [tableHeadDate]: salahStatus },
             ],
           };
+          // if (icon.type.name === "LuDot") {
+          //   return {
+          //     ...item,
+          //     completedDates: [...filteredCompletedDatesArray],
+          //   };
+          // } else if (icon.type.name !== "LuDot") {
+          //   return {
+          //     ...item,
+          //     completedDates: [
+          //       ...filteredCompletedDatesArray,
+          //       { [tableHeadDate]: salahStatus },
+          //     ],
+          //   };
+          // }
         }
       }
       return item;
@@ -125,19 +179,20 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
       if (matchedObject !== undefined) {
         cellIcon = matchedObject[date];
       }
-      if (cellIcon === "Home") {
+      if (cellIcon === "home") {
         cellIcon = (
           <FaHome className="flex self-center text-2xl justify-self-center w-[100%]" />
         );
-      } else if (cellIcon === "Masjid") {
+      } else if (cellIcon === "masjid") {
         cellIcon = (
           <FaMosque className="flex self-center text-2xl justify-self-center w-[100%]" />
         );
-      } else if (cellIcon === "Blank") {
-        cellIcon = (
-          <LuDot className="flex self-center text-2xl justify-self-center w-[100%]" />
-        );
       }
+      // else if (cellIcon === "Blank") {
+      //   cellIcon = (
+      //     <LuDot className="flex self-center text-2xl justify-self-center w-[100%]" />
+      //   );
+      // }
       return <td className="h-full border-none">{cellIcon}</td>;
     });
   }

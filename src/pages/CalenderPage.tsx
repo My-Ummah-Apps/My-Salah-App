@@ -40,14 +40,41 @@ const CalenderPage = ({ salahObjects }) => {
     return datesArray;
   }, []);
 
-  function howManyDatesExist(date) {
-    allDatesArray.reduce((value, dateString) => {
-      console.log(value);
-      return value;
-    }, 0);
+  console.log(allDatesArray);
+
+  let dArray = [];
+
+  function howManyDatesExist(date: string) {
+    // allDatesArray.reduce((value, dateString) => {
+    //   console.log(value);
+    //   return value;
+    // }, 0);
+    let increment = 0;
+    allDatesArray.forEach((currentDate) => {
+      if (currentDate === date) {
+        // dArray.push(date);
+        increment++;
+        console.log(increment);
+      }
+      if (increment > 2) {
+        // dateColor = "bg-[orange]";
+        increment = 0;
+        return "bg-[orange]";
+      } else if (increment < 2) {
+        increment = 0;
+        return "bg-[red]";
+      } else if (increment === 4) {
+        increment = 0;
+        return "bg-[green]";
+      }
+    });
+
+    // return "bg-[red]";
   }
 
-  howManyDatesExist("01.01.24");
+  // console.log(dArray);
+
+  howManyDatesExist("12.01.24");
 
   function doesDateExist(date) {
     return allDatesArray.includes(format(date, "dd.MM.yy"));
@@ -147,7 +174,8 @@ const CalenderPage = ({ salahObjects }) => {
                 })} */}
                 <p
                   style={{
-                    backgroundColor: doesDateExist(day) ? "green" : "red",
+                    // backgroundColor: doesDateExist(day) ? "green" : "red",
+                    backgroundColor: howManyDatesExist(format(day, "dd.MM.yy")),
                   }}
                   className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
                     // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
@@ -159,9 +187,9 @@ const CalenderPage = ({ salahObjects }) => {
 
                     `}
                 >
-                  {/* {format(day, "d")} */}
+                  {format(day, "d")}
 
-                  {format(day, "dd.MM.yy")}
+                  {/* {format(day, "dd.MM.yy")} */}
                   {/* {doesDateExist(day)} */}
                 </p>
               </div>
