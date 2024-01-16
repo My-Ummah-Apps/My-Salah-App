@@ -120,60 +120,65 @@ const CalenderMonthly = ({ salahObjects }) => {
   };
 
   return (
-    <div className="flex items-center justify-center w-screen h-screen p-8">
-      <div className="w-[900px] h-[600px]">
-        <div className="flex items-center justify-between">
-          <p className="text-xl font-semibold">
-            {format(firstDayOfMonth, "MMMM yyyy")}
-          </p>
-          <div className="flex items-center gap-6 justify-evenly sm:gap-12">
-            <IoChevronBackSharp
-              className="w-6 h-6 cursor-pointer"
-              onClick={getPrevMonth}
-            />
-            <IoChevronForward
-              className="w-6 h-6 cursor-pointer"
-              onClick={getNextMonth}
-            />
+    <>
+      <h1 className="pt-5 text-3xl">Monthly</h1>
+      <div className="flex items-center justify-center w-screen h-screen p-8">
+        <div className="w-[900px] h-[600px]">
+          <div className="flex items-center justify-between">
+            <p className="text-xl font-semibold">
+              {format(firstDayOfMonth, "MMMM yyyy")}
+            </p>
+            <div className="flex items-center gap-6 justify-evenly sm:gap-12">
+              <IoChevronBackSharp
+                className="w-6 h-6 cursor-pointer"
+                onClick={getPrevMonth}
+              />
+              <IoChevronForward
+                className="w-6 h-6 cursor-pointer"
+                onClick={getNextMonth}
+              />
+            </div>
           </div>
-        </div>
-        <hr className="my-6" />
-        <div className="grid grid-cols-7 gap-6 sm:gap-12 place-items-center">
-          {days.map((day, index) => {
-            return (
-              <div key={index} className="font-semibold">
-                {/* {capitalizeFirstLetter(day)} */}
-                {day}
-              </div>
-            );
-          })}
-        </div>
-        <div className="grid grid-cols-7 gap-6 mt-8 sm:gap-12 place-items-center">
-          {daysInMonth.map((day, index) => {
-            return (
-              <div key={index} className="">
-                <p
-                  style={{
-                    backgroundColor: howManyDatesExist(format(day, "dd.MM.yy")),
-                  }}
-                  className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
-                    // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
+          <hr className="my-6" />
+          <div className="grid grid-cols-7 gap-6 sm:gap-12 place-items-center">
+            {days.map((day, index) => {
+              return (
+                <div key={index} className="font-semibold">
+                  {/* {capitalizeFirstLetter(day)} */}
+                  {day}
+                </div>
+              );
+            })}
+          </div>
+          <div className="grid grid-cols-7 gap-6 mt-8 sm:gap-12 place-items-center">
+            {daysInMonth.map((day, index) => {
+              return (
+                <div key={index} className="">
+                  <p
+                    style={{
+                      backgroundColor: howManyDatesExist(
+                        format(day, "dd.MM.yy")
+                      ),
+                    }}
+                    className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
+                      // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
 
-                    isDayInSpecificMonth(day, currentMonth)
-                      ? "text-gray-900"
-                      : "text-gray-400"
-                  } 
+                      isDayInSpecificMonth(day, currentMonth)
+                        ? "text-gray-900"
+                        : "text-gray-400"
+                    } 
 
                     `}
-                >
-                  {format(day, "d")}
-                </p>
-              </div>
-            );
-          })}
+                  >
+                    {format(day, "d")}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

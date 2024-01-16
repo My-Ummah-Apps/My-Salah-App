@@ -10,6 +10,7 @@ const CalenderPage = ({ salahObjects }) => {
   return (
     <>
       <button
+        className="px-5"
         onClick={() => {
           setShowMonthlyCalender(true);
           setShowYearlyCalender(false);
@@ -28,7 +29,7 @@ const CalenderPage = ({ salahObjects }) => {
       {showMonthlyCalender ? (
         <CalenderMonthly salahObjects={salahObjects} />
       ) : (
-        <CalenderYearly />
+        <CalenderYearly salahObjects={salahObjects} />
       )}
     </>
   );
