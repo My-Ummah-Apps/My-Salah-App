@@ -40,41 +40,47 @@ const CalenderPage = ({ salahObjects }) => {
     return datesArray;
   }, []);
 
-  console.log(allDatesArray);
+  // console.log(allDatesArray);
 
   let dArray = [];
 
-  function howManyDatesExist(date: string) {
+  const howManyDatesExist = (date: string) => {
     // allDatesArray.reduce((value, dateString) => {
     //   console.log(value);
     //   return value;
     // }, 0);
+
     let increment = 0;
-    allDatesArray.forEach((currentDate) => {
+    const sameDatesArray = allDatesArray.map((currentDate) => {
       if (currentDate === date) {
-        // dArray.push(date);
-        increment++;
-        console.log(increment);
+        dArray.push(date);
+        increment = dArray.length;
       }
-      if (increment > 2) {
-        // dateColor = "bg-[orange]";
-        increment = 0;
-        return "bg-[orange]";
-      } else if (increment < 2) {
-        increment = 0;
-        return "bg-[red]";
-      } else if (increment === 4) {
-        increment = 0;
-        return "bg-[green]";
-      }
+      console.log(increment);
+      console.log(dArray);
+      return dArray;
     });
 
-    // return "bg-[red]";
-  }
+    let color;
+    if (increment === 0) {
+      console.log("increment > 2");
+      color = "red";
+    } else if (increment > 0 && increment < 5) {
+      console.log("increment < 2");
 
-  // console.log(dArray);
+      color = "orange";
+    } else if (increment === 5) {
+      console.log("increment === 4");
 
-  howManyDatesExist("12.01.24");
+      color = "green";
+    } else {
+      color = "yellow";
+    }
+    dArray = [];
+    return color;
+  };
+
+  // console.log(howManyDatesExist("31.01.24"));
 
   function doesDateExist(date) {
     return allDatesArray.includes(format(date, "dd.MM.yy"));
@@ -174,7 +180,6 @@ const CalenderPage = ({ salahObjects }) => {
                 })} */}
                 <p
                   style={{
-                    // backgroundColor: doesDateExist(day) ? "green" : "red",
                     backgroundColor: howManyDatesExist(format(day, "dd.MM.yy")),
                   }}
                   className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
