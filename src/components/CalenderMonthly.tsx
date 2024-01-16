@@ -17,8 +17,8 @@ import {
   startOfMonth,
 } from "date-fns";
 
-const MonthlyCalender = ({ salahObjects }) => {
-  const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (this is an object)
+const CalenderMonthly = ({ salahObjects }) => {
+  const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   //   const days = [""];
   const colStartClasses = [
@@ -62,14 +62,14 @@ const MonthlyCalender = ({ salahObjects }) => {
 
     let color;
     if (increment === 0) {
-      console.log("increment > 2");
+      // console.log("increment > 2");
       color = "red";
     } else if (increment > 0 && increment < 5) {
-      console.log("increment < 2");
+      // console.log("increment < 2");
 
       color = "orange";
     } else if (increment === 5) {
-      console.log("increment === 4");
+      // console.log("increment === 4");
 
       color = "green";
     } else {
@@ -87,7 +87,7 @@ const MonthlyCalender = ({ salahObjects }) => {
 
   const [currentMonth, setcurrentMonth] = useState(() =>
     format(today, "MMM-yyyy")
-  ); // Jan-2024 (this is a string)
+  ); // Jan-2024 (string)
 
   const isDayInSpecificMonth = (dayToCheck: any, currentMonth: any) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -98,7 +98,7 @@ const MonthlyCalender = ({ salahObjects }) => {
     );
   };
 
-  let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (this is an object)
+  let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
 
   const daysInMonth = eachDayOfInterval({
     // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
@@ -177,7 +177,7 @@ const MonthlyCalender = ({ salahObjects }) => {
   );
 };
 
-export default MonthlyCalender;
+export default CalenderMonthly;
 
 //   ${isToday(day) && "bg-red-500 text-white"}
 // ${!isToday(day) && "hover:bg-blue-500"}
