@@ -18,22 +18,13 @@ import {
   startOfMonth,
   eachMonthOfInterval,
   endOfYear,
+  addMonths,
 } from "date-fns";
 
 const CalenderYearly = ({ salahObjects }) => {
-  //   const today = startOfToday(); // Todays date, example: Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
-  const today = startOfYear(new Date());
-  const formattedYear = format(today, "yyyy");
-  //   console.log(today);
-
-  const [currentYear, setCurrentYear] = useState();
-
-  //   console.log(format(getMonthsForYear(2023), "MMM-yyyy"));
-
-  //   setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"))
-
+  const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-
+  //   const days = [""];
   const colStartClasses = [
     // "",
     // "col-start-2",
@@ -44,6 +35,26 @@ const CalenderYearly = ({ salahObjects }) => {
     // "col-start-7",
   ];
 
+  const [currentMonth, setcurrentMonth] = useState(() =>
+    format(today, "MMM-yyyy")
+  ); // Jan-2024 (string)
+  //   const [currentYear, setCurrentYear] = useState(
+  //     format(startOfYear(new Date()), "yyyy")
+  //   ); // Returns current year in yyyy format
+  const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
+
+  //   const currentYear1 = new Date(); // Assuming today's date
+  const monthsInYear = eachMonthOfInterval({
+    start: startOfYear(currentYear),
+    end: endOfYear(currentYear),
+  });
+
+  const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
+
+  console.log(monthStrings);
+
+  let dateColor: string;
+
   let datesArray = [];
   const allDatesArray = salahObjects.reduce((value, salah) => {
     salah.completedDates.forEach((item) => {
@@ -51,6 +62,8 @@ const CalenderYearly = ({ salahObjects }) => {
     });
     return datesArray;
   }, []);
+
+  // console.log(allDatesArray);
 
   let dArray = [];
 
@@ -70,9 +83,7 @@ const CalenderYearly = ({ salahObjects }) => {
       return dArray;
     });
 
-    let dateColor: string;
     let color;
-
     if (increment === 0) {
       // console.log("increment > 2");
       color = "red";
@@ -97,9 +108,8 @@ const CalenderYearly = ({ salahObjects }) => {
     return allDatesArray.includes(format(date, "dd.MM.yy"));
   }
 
-  const [currentMonth, setcurrentMonth] = useState(() =>
-    format(today, "MMM-yyyy")
-  ); // Jan-2024 (string)
+  console.log("currentYear " + currentYear);
+  console.log("currentMonth " + currentMonth);
 
   const isDayInSpecificMonth = (dayToCheck: any, currentMonth: any) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -110,51 +120,31 @@ const CalenderYearly = ({ salahObjects }) => {
     );
   };
 
-  const getAllDatesInMonth = (monthString) => {
-    // const monthDate = parse(monthString, "MMM-yyyy", new Date());
-    const monthDate = new Date(monthString);
-    // console.log(monthString);
+  //   let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
+  let firstDayOfMonth;
+  const yearlyMonthsData = (month) => {
+    console.log(month);
+    firstDayOfMonth = parse(month, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
+    //
+    const daysInMonth = eachDayOfInterval({
+      // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
+      start: startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }), // Gives first day of month
 
-    const startOfMonthDate = startOfMonth(monthDate);
-    const endOfMonthDate = endOfMonth(monthDate);
-
-    // Get all dates of the month
-    const datesOfMonth = eachDayOfInterval({
-      start: startOfMonthDate,
-      end: endOfMonthDate,
-    });
-    // console.log(datesOfMonth);
-  };
-  //   const monthString = "Mar-2024";
-
-  const getMonthsForYear = (year) => {
-    // Get all months of the year
-    const months = eachMonthOfInterval({
-      start: startOfMonth(new Date(year, 0, 1)),
-      end: endOfYear(new Date(year, 11, 31)),
-    });
-    const dates = eachDayOfInterval({
-      start: startOfMonth(new Date(2023, 0, 1)),
-      end: endOfYear(new Date(2023, 11, 31)),
-    });
-    console.log(months[6]);
-    getAllDatesInMonth(months[6]);
-    return { months, dates };
+      end: endOfWeek(endOfMonth(firstDayOfMonth)), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
+    }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
+    return daysInMonth;
   };
 
-  const { months, dates } = getMonthsForYear(2023);
-  console.log(dates);
+  console.log(yearlyMonthsData("Jun-2024"));
 
-  let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  //   const daysInMonth = eachDayOfInterval({
+  //     // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
+  //     start: startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }), // Gives first day of month
 
-  //   console.log(dates);
+  //     end: endOfWeek(endOfMonth(firstDayOfMonth)), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
+  //   }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
 
-  const daysInMonth = eachDayOfInterval({
-    // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
-    start: startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }), // Gives first day of month
-    end: endOfWeek(endOfMonth(firstDayOfMonth)), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
-  }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
-  console.log(daysInMonth);
+  //   console.log(daysInMonth);
 
   const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
     event.preventDefault();
@@ -168,32 +158,67 @@ const CalenderYearly = ({ salahObjects }) => {
     setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
   };
 
-  const CalenderYearly = ({ salahObjects }) => {
-    const year = 2024; // Replace with the desired year
-    const months = [];
-  
-    // Generate an array of 12 months
-    for (let i = 0; i < 12; i++) {
-      const currentMonth = addMonths(new Date(year, 0, 1), i);
-      months.push(currentMonth);
-    }
-
   return (
     <>
-      <h1 className="pt-5 text-3xl">Yearly</h1>
-      <div className="grid grid-cols-2 gap-4">
-      {months.map((month, index) => {
-        const monthString = format(month, 'MMM-yyyy');
-        const datesOfMonth = getDatesOfMonth(monthString);
-
-        return (
-          <div key={index}>
-            <h2 className="text-lg font-bold">{monthString}</h2>
-            <CalenderMonthly dates={datesOfMonth} salahObjects={salahObjects} />
+      <h1 className="pt-5 text-3xl yearly-text">Yearly</h1>
+      <div className="flex items-center justify-center w-screen h-screen p-8 calender-wrap">
+        <div className="w-[900px] h-[600px]">
+          <div className="flex items-center justify-between chevrons-wrap">
+            <div className="flex items-center gap-6 justify-evenly sm:gap-12 chevrons">
+              <IoChevronBackSharp
+                className="w-6 h-6 cursor-pointer"
+                onClick={getPrevMonth}
+              />
+              <IoChevronForward
+                className="w-6 h-6 cursor-pointer"
+                onClick={getNextMonth}
+              />
+            </div>
           </div>
-        );
-      })}
-    </div>
+          <hr className="my-6" />
+
+          {/* <div className="grid grid-cols-7 gap-6 mt-8 sm:gap-12 place-items-center bg-[black]"> */}
+          <div>
+            <div className="grid grid-cols-2 gap-6 p-10 mt-8 sm:gap-12 place-items-center dates-grid-wrap">
+              {monthStrings.map((month) => (
+                <div key={month} className="grid grid-cols-7 month-container">
+                  <div className="grid grid-cols-7 gap-6 sm:gap-12 place-items-center days-row">
+                    {days.map((day, index) => {
+                      return (
+                        <div key={index} className="font-semibold ">
+                          {/* {capitalizeFirstLetter(day)} */}
+                          {day}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="absolute text-xl font-semibold month-name-text">
+                    {month}
+                  </p>
+                  {yearlyMonthsData(month).map((day, index) => (
+                    <div key={index} className="individual-date">
+                      <p
+                        style={{
+                          backgroundColor: howManyDatesExist(
+                            format(day, "dd.MM.yy")
+                          ),
+                        }}
+                        className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
+                          isDayInSpecificMonth(day, currentMonth)
+                            ? "text-gray-900"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {format(day, "d")}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
