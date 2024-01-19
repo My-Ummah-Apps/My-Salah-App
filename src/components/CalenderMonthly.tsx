@@ -104,7 +104,7 @@ const CalenderMonthly = ({ salahObjects }) => {
     // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
     start: startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }), // Gives first day of month
 
-    end: endOfWeek(endOfMonth(firstDayOfMonth)), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
+    end: endOfWeek(endOfMonth(firstDayOfMonth), { weekStartsOn: 1 }), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
   }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
 
   const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
