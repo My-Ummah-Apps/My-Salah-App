@@ -39,9 +39,7 @@ const CalenderYearly = ({ salahObjects }) => {
   const [currentMonth, setcurrentMonth] = useState(() =>
     format(today, "MMM-yyyy")
   ); // Jan-2024 (string)
-  //   const [currentYear, setCurrentYear] = useState(
-  //     format(startOfYear(new Date()), "yyyy")
-  //   ); // Returns current year in yyyy format
+
   const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
   console.log(currentYear);
 
@@ -103,8 +101,6 @@ const CalenderYearly = ({ salahObjects }) => {
     return color;
   };
 
-  // console.log(howManyDatesExist("31.01.24"));
-
   function doesDateExist(date) {
     return allDatesArray.includes(format(date, "dd.MM.yy"));
   }
@@ -121,7 +117,6 @@ const CalenderYearly = ({ salahObjects }) => {
     );
   };
 
-  //   let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   let firstDayOfMonth;
   const yearlyMonthsData = (month) => {
     console.log(month);
@@ -137,33 +132,6 @@ const CalenderYearly = ({ salahObjects }) => {
   };
 
   console.log(yearlyMonthsData("Jun-2024"));
-
-  //   const daysInMonth = eachDayOfInterval({
-  //     // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
-  //     start: startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }), // Gives first day of month
-
-  //     end: endOfWeek(endOfMonth(firstDayOfMonth)), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
-  //   }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
-
-  //   console.log(daysInMonth);
-
-  const getPrevYear = (event: React.MouseEvent<SVGSVGElement>) => {
-    // event.preventDefault();
-    // const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
-
-    // const firstDayOfPrevYear = sub(firstDayOfMonth, { years: 1 });
-    // console.log(firstDayOfPrevYear);
-    // setCurrentYear(format(firstDayOfPrevYear, "MMM-yyyy"));
-
-    // setCurrentYear(sub(new Date(), { years: 1 }));
-    setCurrentYear((prevYearValue) => sub(prevYearValue, { years: 1 }));
-  };
-
-  const getNextYear = (event: React.MouseEvent<SVGSVGElement>) => {
-    event.preventDefault();
-    const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
-    setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
-  };
 
   return (
     <>
@@ -198,44 +166,48 @@ const CalenderYearly = ({ salahObjects }) => {
             <div className="grid grid-cols-2 place-items-center dates-grid-wrap">
               {monthStrings.map((month) => (
                 <div className="single-month-wrap">
-                  <p className="text-xl font-semibold month-name-text">
+                  <p className="mt-5 mb-2 text-xl font-semibold month-name-text">
                     {month}
                   </p>
-                  <div className="single-month-days-and-dates-wrap">
-                    <div
-                      key={month}
-                      className="grid grid-cols-7 month-container"
-                    >
-                      {days.map((day, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className="font-semibold individual-day"
-                          >
-                            {day}
-                          </div>
-                        );
-                      })}
-
-                      {yearlyMonthsData(month).map((day, index) => (
-                        <div key={index} className="individual-date">
-                          <p
-                            style={{
-                              backgroundColor: howManyDatesExist(
-                                format(day, "dd.MM.yy")
-                              ),
-                            }}
-                            className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
-                              isDayInSpecificMonth(day, month)
-                                ? "text-gray-900"
-                                : "text-gray-400"
-                            }`}
-                          >
-                            {format(day, "d")}
-                          </p>
+                  <div
+                    className="single-month-days-and-dates-wrap bg-[color:var(--card-bg-color)] p-2 rounded-lg shadow-md grid grid-cols-7 month-container"
+                    key={month}
+                  >
+                    {days.map((day, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="font-semibold individual-day"
+                        >
+                          {day}
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })}
+
+                    {yearlyMonthsData(month).map((day, index) => (
+                      <div
+                        onClick={() => {
+                          alert(day);
+                        }}
+                        key={index}
+                        className="p-1 individual-date"
+                      >
+                        <p
+                          style={{
+                            backgroundColor: howManyDatesExist(
+                              format(day, "dd.MM.yy")
+                            ),
+                          }}
+                          className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
+                            isDayInSpecificMonth(day, month)
+                              ? "text-gray-900"
+                              : "text-gray-400"
+                          }`}
+                        >
+                          {format(day, "d")}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}

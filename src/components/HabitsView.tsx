@@ -218,7 +218,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         srcset=""
       /> */}
       <table
-        className="w-full shadow-lg rounded-xl bg-gray-50"
+        className="w-full shadow-lg rounded-xl bg-[color:var(--card-bg-color)]"
         onClick={(e) => {
           grabDate(e);
           setShowModal(true);
