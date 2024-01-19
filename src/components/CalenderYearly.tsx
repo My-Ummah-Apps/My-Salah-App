@@ -3,6 +3,7 @@ import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 
 import {
   add,
+  sub,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
@@ -42,8 +43,8 @@ const CalenderYearly = ({ salahObjects }) => {
   //     format(startOfYear(new Date()), "yyyy")
   //   ); // Returns current year in yyyy format
   const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
+  console.log(currentYear);
 
-  //   const currentYear1 = new Date(); // Assuming today's date
   const monthsInYear = eachMonthOfInterval({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
@@ -51,7 +52,7 @@ const CalenderYearly = ({ salahObjects }) => {
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
 
-  console.log(monthStrings);
+  // console.log(monthStrings);
 
   let dateColor: string;
 
@@ -146,13 +147,19 @@ const CalenderYearly = ({ salahObjects }) => {
 
   //   console.log(daysInMonth);
 
-  const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-    event.preventDefault();
-    const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
-    setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
+  const getPrevYear = (event: React.MouseEvent<SVGSVGElement>) => {
+    // event.preventDefault();
+    // const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
+
+    // const firstDayOfPrevYear = sub(firstDayOfMonth, { years: 1 });
+    // console.log(firstDayOfPrevYear);
+    // setCurrentYear(format(firstDayOfPrevYear, "MMM-yyyy"));
+
+    // setCurrentYear(sub(new Date(), { years: 1 }));
+    setCurrentYear((prevYearValue) => sub(prevYearValue, { years: 1 }));
   };
 
-  const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+  const getNextYear = (event: React.MouseEvent<SVGSVGElement>) => {
     event.preventDefault();
     const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
     setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
@@ -167,11 +174,21 @@ const CalenderYearly = ({ salahObjects }) => {
             <div className="flex items-center gap-6 justify-evenly chevrons">
               <IoChevronBackSharp
                 className="w-6 h-6 cursor-pointer"
-                onClick={getPrevMonth}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentYear((prevYearValue) =>
+                    sub(prevYearValue, { years: 1 })
+                  );
+                }}
               />
               <IoChevronForward
                 className="w-6 h-6 cursor-pointer"
-                onClick={getNextMonth}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentYear((prevYearValue) =>
+                    add(prevYearValue, { years: 1 })
+                  );
+                }}
               />
             </div>
           </div>
