@@ -209,7 +209,7 @@ const CalenderYearly = ({ salahObjects }) => {
                               ),
                             }}
                             className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
-                              isDayInSpecificMonth(day, currentMonth)
+                              isDayInSpecificMonth(day, month)
                                 ? "text-gray-900"
                                 : "text-gray-400"
                             }`}
