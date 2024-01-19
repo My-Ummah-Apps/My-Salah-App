@@ -161,10 +161,10 @@ const CalenderYearly = ({ salahObjects }) => {
   return (
     <>
       <h1 className="pt-5 text-3xl yearly-text">Yearly</h1>
-      <div className="flex items-center justify-center w-screen h-screen p-8 calender-wrap">
+      <div className="flex items-center justify-center w-screen h-screen calender-wrap">
         <div className="w-[900px] h-[600px]">
           <div className="flex items-center justify-between chevrons-wrap">
-            <div className="flex items-center gap-6 justify-evenly sm:gap-12 chevrons">
+            <div className="flex items-center gap-6 justify-evenly chevrons">
               <IoChevronBackSharp
                 className="w-6 h-6 cursor-pointer"
                 onClick={getPrevMonth}
@@ -177,42 +177,49 @@ const CalenderYearly = ({ salahObjects }) => {
           </div>
           <hr className="my-6" />
 
-          {/* <div className="grid grid-cols-7 gap-6 mt-8 sm:gap-12 place-items-center bg-[black]"> */}
           <div>
-            <div className="grid grid-cols-2 gap-6 p-10 mt-8 sm:gap-12 place-items-center dates-grid-wrap">
+            <div className="grid grid-cols-2 gap-6 mt-8 place-items-center dates-grid-wrap">
               {monthStrings.map((month) => (
-                <div key={month} className="grid grid-cols-7 month-container">
-                  <div className="grid grid-cols-7 gap-6 sm:gap-12 place-items-center days-row">
-                    {days.map((day, index) => {
-                      return (
-                        <div key={index} className="font-semibold ">
-                          {/* {capitalizeFirstLetter(day)} */}
-                          {day}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <p className="absolute text-xl font-semibold month-name-text">
+                <div className="single-month-wrap">
+                  <p className="text-xl font-semibold month-name-text">
                     {month}
                   </p>
-                  {yearlyMonthsData(month).map((day, index) => (
-                    <div key={index} className="individual-date">
-                      <p
-                        style={{
-                          backgroundColor: howManyDatesExist(
-                            format(day, "dd.MM.yy")
-                          ),
-                        }}
-                        className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
-                          isDayInSpecificMonth(day, currentMonth)
-                            ? "text-gray-900"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {format(day, "d")}
-                      </p>
+                  <div className="single-month-days-and-dates-wrap">
+                    <div
+                      key={month}
+                      className="grid grid-cols-7 month-container"
+                    >
+                      {days.map((day, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="font-semibold individual-day"
+                          >
+                            {day}
+                          </div>
+                        );
+                      })}
+
+                      {yearlyMonthsData(month).map((day, index) => (
+                        <div key={index} className="individual-date">
+                          <p
+                            style={{
+                              backgroundColor: howManyDatesExist(
+                                format(day, "dd.MM.yy")
+                              ),
+                            }}
+                            className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
+                              isDayInSpecificMonth(day, currentMonth)
+                                ? "text-gray-900"
+                                : "text-gray-400"
+                            }`}
+                          >
+                            {format(day, "d")}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               ))}
             </div>
