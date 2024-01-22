@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import HabitsView from "../components/PrayerView/PrayerView";
+import PrayerMainView from "../components/PrayerMainView/PrayerMainView";
 import NextSalahTime from "../components/NextSalahTime";
 import { MdCalendarMonth } from "react-icons/md";
 import CalenderPage from "./CalenderPage";
@@ -24,7 +24,7 @@ const MainPage = ({
         />
       </Link> */}
       <NextSalahTime />
-      <HabitsView
+      <PrayerMainView
         setSalahObjects={setSalahObjects}
         salahObjects={salahObjects}
       />

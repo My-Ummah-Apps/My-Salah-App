@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useReducer } from "react";
-import ModalOptions from "./ModalOptions";
+import Modal from "./Modal";
 import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
@@ -11,7 +11,7 @@ import { render } from "react-dom";
 
 const today = new Date();
 
-const HabitsView = ({ setSalahObjects, salahObjects }) => {
+const PrayerMainView = ({ setSalahObjects, salahObjects }) => {
   // console.log("COMPONENT RENDERED");
   const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
@@ -43,30 +43,19 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
     salahStatus,
     icon
   ) => {
-    console.log(salahStatus);
     const newSalahObjects = salahObjects.map((item) => {
       if (item.salahName == selectedSalah) {
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
         });
 
-        // console.log("DOES DATE OBJECT EXIST: ", doesDateObjectExist);
-
         if (salahStatus === "blank") {
-          // console.log("SALAH STATUS IS BLANK");
           if (doesDateObjectExist === undefined) {
-            // console.log(
-            //   "DATE OBJECT DOES NOT EXIST WITHIN SALAHSTATUS == BLANK STATEMENT"
-            // );
             return {
               ...item,
               completedDates: [...item.completedDates],
             };
           } else if (doesDateObjectExist !== undefined) {
-            // console.log(
-            //   "DATE OBJECT DOES EXIST WITHIN SALAHSTATUS == BLANK STATEMENT"
-            // );
-
             const filteredCompletedDatesArray = item.completedDates.filter(
               (date) => {
                 return (
@@ -83,10 +72,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
         }
 
         if (doesDateObjectExist === undefined && salahStatus !== "blank") {
-          // console.log(
-          //   "(doesDateObjectExist === undefined && salahStatus !== blank)"
-          // );
-
           return {
             ...item,
             completedDates: [
@@ -98,9 +83,6 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
           doesDateObjectExist !== undefined &&
           salahStatus !== "blank"
         ) {
-          // console.log(
-          //   "doesDateObjectExist !== undefined salahStatus !== blank"
-          // );
           const filteredCompletedDatesArray = item.completedDates.filter(
             (date) => {
               return (
@@ -200,7 +182,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
 
   return (
     <>
-      <ModalOptions
+      <Modal
         setShowModal={setShowModal}
         showModal={showModal}
         setSalahObjects={setSalahObjects}
@@ -279,4 +261,4 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   );
 };
 
-export default HabitsView;
+export default PrayerMainView;

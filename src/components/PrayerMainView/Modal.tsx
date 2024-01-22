@@ -3,7 +3,7 @@ import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 
-interface ModalOptionsProps {
+interface ModalProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   salahObjects: [];
@@ -18,7 +18,7 @@ interface ModalOptionsProps {
   changePrayerStatus: any;
 }
 
-const ModalOptions: React.FC<ModalOptionsProps> = ({
+const Modal: React.FC<ModalProps> = ({
   setShowModal,
   showModal,
   setSalahObjects,
@@ -79,7 +79,7 @@ const ModalOptions: React.FC<ModalOptionsProps> = ({
   );
 };
 
-export default ModalOptions;
+export default Modal;
 
 // <ReactModal
 

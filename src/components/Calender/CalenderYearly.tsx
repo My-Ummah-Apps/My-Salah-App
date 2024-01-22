@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import HabitsView from "../PrayerView/PrayerView";
+import HabitsView from "../PrayerMainView/PrayerMainView";
+import Modal from "../Calender/Modal";
+import ReactModal from "react-modal";
 
 import {
   add,
@@ -37,6 +39,8 @@ const CalenderYearly = ({ salahObjects }) => {
     // "col-start-7",
   ];
 
+  const [showModal, setShowModal] = useState(false);
+
   const [currentMonth, setcurrentMonth] = useState(() =>
     format(today, "MMM-yyyy")
   ); // Jan-2024 (string)
@@ -50,7 +54,8 @@ const CalenderYearly = ({ salahObjects }) => {
   });
 
   function modifySingleDaySalah(date) {
-    alert(date);
+    // alert(date);
+    setShowModal(true);
   }
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
@@ -214,6 +219,7 @@ const CalenderYearly = ({ salahObjects }) => {
                       </div>
                     ))}
                   </div>
+                  <Modal setShowModal={setShowModal} showModal={showModal} />
                 </div>
               ))}
             </div>
