@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import HabitsView from "../PrayerView/PrayerView";
 
 import {
   add,
@@ -47,6 +48,10 @@ const CalenderYearly = ({ salahObjects }) => {
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
   });
+
+  function modifySingleDaySalah(date) {
+    alert(date);
+  }
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
 
@@ -187,7 +192,7 @@ const CalenderYearly = ({ salahObjects }) => {
                     {yearlyMonthsData(month).map((day, index) => (
                       <div
                         onClick={() => {
-                          alert(day);
+                          modifySingleDaySalah(day);
                         }}
                         key={index}
                         className="p-1 individual-date"

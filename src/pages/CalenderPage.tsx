@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import CalenderMonthly from "../components/CalenderMonthly";
-import CalenderYearly from "../components/CalenderYearly";
+import CalenderMonthly from "../components/Calender/CalenderMonthly";
+import CalenderYearly from "../components/Calender/CalenderYearly";
 
 const CalenderPage = ({ salahObjects }) => {
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);

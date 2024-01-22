@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import HabitsView from "../components/HabitsView";
+import HabitsView from "../components/PrayerView/PrayerView";
 import NextSalahTime from "../components/NextSalahTime";
 import { MdCalendarMonth } from "react-icons/md";
 import CalenderPage from "./CalenderPage";

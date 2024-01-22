@@ -23,6 +23,7 @@ const HabitsView = ({ setSalahObjects, salahObjects }) => {
   function generateDisplayedWeek(currentStartDate) {
     const today = new Date();
     const startDate = subDays(today, currentStartDate);
+    console.log(startDate);
 
     currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
       const date = subDays(startDate, 4 - index);
