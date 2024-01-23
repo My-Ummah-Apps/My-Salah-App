@@ -3,7 +3,12 @@ import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import CalenderMonthly from "../components/Calender/CalenderMonthly";
 import CalenderYearly from "../components/Calender/CalenderYearly";
 
-const CalenderPage = ({ salahObjects }) => {
+const CalenderPage = ({
+  setSalahObjects,
+  salahObjects,
+  setCurrentStartDate,
+  currentStartDate,
+}) => {
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);
 
@@ -29,7 +34,12 @@ const CalenderPage = ({ salahObjects }) => {
       {showMonthlyCalender ? (
         <CalenderMonthly salahObjects={salahObjects} />
       ) : (
-        <CalenderYearly salahObjects={salahObjects} />
+        <CalenderYearly
+          setSalahObjects={setSalahObjects}
+          salahObjects={salahObjects}
+          setCurrentStartDate={setCurrentStartDate}
+          currentStartDate={currentStartDate}
+        />
       )}
     </>
   );

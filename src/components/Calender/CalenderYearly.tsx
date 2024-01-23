@@ -25,7 +25,12 @@ import {
   addMonths,
 } from "date-fns";
 
-const CalenderYearly = ({ salahObjects }) => {
+const CalenderYearly = ({
+  setSalahObjects,
+  salahObjects,
+  setCurrentStartDate,
+  currentStartDate,
+}) => {
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   //   const days = [""];
@@ -52,9 +57,11 @@ const CalenderYearly = ({ salahObjects }) => {
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
   });
-
+  // let startDate;
+  const [startDate, setStartDate] = useState();
   function modifySingleDaySalah(date) {
-    // alert(date);
+    setStartDate(date);
+    console.log("startDate", startDate);
     setShowModal(true);
   }
 
@@ -129,7 +136,7 @@ const CalenderYearly = ({ salahObjects }) => {
 
   let firstDayOfMonth;
   const yearlyMonthsData = (month) => {
-    console.log(month);
+    // console.log(month);
     firstDayOfMonth = parse(month, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
     //
     const daysInMonth = eachDayOfInterval({
@@ -141,7 +148,7 @@ const CalenderYearly = ({ salahObjects }) => {
     return daysInMonth;
   };
 
-  console.log(yearlyMonthsData("Jun-2024"));
+  // console.log(yearlyMonthsData("Jun-2024"));
 
   return (
     <>
@@ -219,7 +226,14 @@ const CalenderYearly = ({ salahObjects }) => {
                       </div>
                     ))}
                   </div>
-                  <Modal setShowModal={setShowModal} showModal={showModal} />
+                  <Modal
+                    setShowModal={setShowModal}
+                    showModal={showModal}
+                    salahObjects={salahObjects}
+                    setSalahObjects={setSalahObjects}
+                    currentStartDate={currentStartDate}
+                    startDate={startDate}
+                  />
                 </div>
               ))}
             </div>

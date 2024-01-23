@@ -16,6 +16,8 @@ type salahObjectsType = {
 function App() {
   const [salahObjects, setSalahObjects] = useState<salahObjectsType[]>([]);
 
+  const [currentStartDate, setCurrentStartDate] = useState(0);
+
   useEffect(() => {
     const storedSalahTrackingData = localStorage.getItem(
       "storedSalahTrackingData"
@@ -57,13 +59,22 @@ function App() {
               <MainPage
                 setSalahObjects={setSalahObjects}
                 salahObjects={salahObjects}
+                setCurrentStartDate={setCurrentStartDate}
+                currentStartDate={currentStartDate}
               />
             }
           />
           <Route path="/SettingsPage" element={<SettingsPage />} />
           <Route
             path="/CalenderPage"
-            element={<CalenderPage salahObjects={salahObjects} />}
+            element={
+              <CalenderPage
+                setSalahObjects={setSalahObjects}
+                salahObjects={salahObjects}
+                setCurrentStartDate={setCurrentStartDate}
+                currentStartDate={currentStartDate}
+              />
+            }
           />
         </Routes>
         <NavBar />

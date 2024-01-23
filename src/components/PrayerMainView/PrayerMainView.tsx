@@ -11,18 +11,28 @@ import { render } from "react-dom";
 
 const today = new Date();
 
-const PrayerMainView = ({ setSalahObjects, salahObjects }) => {
+const PrayerMainView = ({
+  setSalahObjects,
+  salahObjects,
+  setCurrentStartDate,
+  currentStartDate,
+  startDate,
+}) => {
   // console.log("COMPONENT RENDERED");
   const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
-  const [currentStartDate, setCurrentStartDate] = useState(0);
+  // const [currentStartDate, setCurrentStartDate] = useState(0);
+  console.log("startDate ", startDate);
 
   // Array to hold the last five dates
   let currentDisplayedWeek;
   function generateDisplayedWeek(currentStartDate) {
-    const today = new Date();
-    const startDate = subDays(today, currentStartDate);
+    // const today = new Date();
+    // const startDate = subDays(today, currentStartDate);
+    // console.log("startDate ", startDate);
+    // const dateString = "15.08.23";
+    // const specificDate = parse(dateString, "dd.MM.yy", new Date());
     console.log(startDate);
 
     currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
