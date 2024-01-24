@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import HabitsView from "../PrayerMainView/PrayerMainView";
+// import PrayerMainView from "../PrayerMainView/PrayerMainView";
 import Modal from "../Calender/Modal";
 import ReactModal from "react-modal";
 
@@ -30,6 +30,9 @@ const CalenderYearly = ({
   salahObjects,
   setCurrentStartDate,
   currentStartDate,
+  setStartDate,
+  startDate,
+  modifySingleDaySalah,
 }) => {
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
@@ -58,12 +61,12 @@ const CalenderYearly = ({
     end: endOfYear(currentYear),
   });
   // let startDate;
-  const [startDate, setStartDate] = useState();
-  function modifySingleDaySalah(date) {
-    setStartDate(date);
-    console.log("startDate", startDate);
-    setShowModal(true);
-  }
+  // const [startDate, setStartDate] = useState();
+  // function modifySingleDaySalah(date) {
+  //   setStartDate(date);
+  //   console.log("startDate", startDate);
+  //   setShowModal(true);
+  // }
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
 
@@ -205,6 +208,7 @@ const CalenderYearly = ({
                       <div
                         onClick={() => {
                           modifySingleDaySalah(day);
+                          setShowModal(true);
                         }}
                         key={index}
                         className="p-1 individual-date"

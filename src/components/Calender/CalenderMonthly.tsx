@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import Modal from "../Calender/Modal";
+import ReactModal from "react-modal";
 
 import {
   add,
@@ -17,7 +19,16 @@ import {
   startOfMonth,
 } from "date-fns";
 
-const CalenderMonthly = ({ salahObjects }) => {
+const CalenderMonthly = ({
+  setSalahObjects,
+  salahObjects,
+  setStartDate,
+  startDate,
+  modifySingleDaySalah,
+  setCurrentStartDate,
+  currentStartDate,
+}) => {
+  const [showModal, setShowModal] = useState(false);
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   //   const days = [""];
@@ -153,26 +164,43 @@ const CalenderMonthly = ({ salahObjects }) => {
           <div className="grid grid-cols-7 gap-6 mt-8 sm:gap-12 place-items-center">
             {daysInMonth.map((day, index) => {
               return (
-                <div key={index} className="">
-                  <p
-                    style={{
-                      backgroundColor: howManyDatesExist(
-                        format(day, "dd.MM.yy")
-                      ),
+                <>
+                  <div
+                    onClick={() => {
+                      modifySingleDaySalah(day);
+                      setShowModal(true);
                     }}
-                    className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
-                      // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
+                    key={index}
+                    className=""
+                  >
+                    <p
+                      style={{
+                        backgroundColor: howManyDatesExist(
+                          format(day, "dd.MM.yy")
+                        ),
+                      }}
+                      className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${
+                        // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
 
-                      isDayInSpecificMonth(day, currentMonth)
-                        ? "text-gray-900"
-                        : "text-gray-400"
-                    } 
+                        isDayInSpecificMonth(day, currentMonth)
+                          ? "text-gray-900"
+                          : "text-gray-400"
+                      } 
 
                     `}
-                  >
-                    {format(day, "d")}
-                  </p>
-                </div>
+                    >
+                      {format(day, "d")}
+                    </p>
+                  </div>
+                  <Modal
+                    setShowModal={setShowModal}
+                    showModal={showModal}
+                    salahObjects={salahObjects}
+                    setSalahObjects={setSalahObjects}
+                    currentStartDate={currentStartDate}
+                    startDate={startDate}
+                  />
+                </>
               );
             })}
           </div>
