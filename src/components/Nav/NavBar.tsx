@@ -6,6 +6,8 @@ import { NavLink } from "react-router-dom";
 // import { GrHomeRounded } from "react-icons/gr";
 import { BsFillHouseDoorFill, BsFillNutFill } from "react-icons/bs";
 import { MdCalendarMonth } from "react-icons/md";
+import { FaCompass } from "react-icons/fa";
+import { GrResources } from "react-icons/gr";
 
 // import { MdSettings, MdHome, MdMenu } from "react-icons/md";
 
@@ -49,7 +51,19 @@ const NavBar = () => {
         className="nav-link px-3 py-1.5 pt-0.5"
         to="/ResourcesPage"
       >
-        <MdCalendarMonth
+        <GrResources
+          className="text-2xl nav-icon"
+          //   color={activePage == "counters" ? activeBackgroundColor : "grey"}
+        />
+      </NavLink>
+      <NavLink
+        onClick={() => {
+          //   setActivePage("counters");
+        }}
+        className="nav-link px-3 py-1.5 pt-0.5"
+        to="/QiblahDirection"
+      >
+        <FaCompass
           className="text-2xl nav-icon"
           //   color={activePage == "counters" ? activeBackgroundColor : "grey"}
         />
