@@ -4,6 +4,7 @@ import Modal from "react-modal";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { Share } from "@capacitor/share";
+import SettingIndividual from "../components/Settings/SettingIndividual";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { MdOutlineChevronRight } from "react-icons/md";
@@ -49,127 +50,13 @@ const SettingsPage = () => {
           </Modal> */}
 
       <div className="settings-page-options-and-info-wrap">
+        <SettingIndividual
+          icon={<FaHandHoldingHeart />}
+          headingText={"Contribute"}
+          subText={"Support our work"}
+        />
         {/* {Capacitor.getPlatform() == "ios" ? ( */}
-        <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5  ">
-          <div
-            className="flex items-center justify-between support-box-wrap mx-[0.5rem]"
-            onClick={() => {
-              //   handleOpenModal5();
-            }}
-          >
-            <div className="support-box-icon-and-text-wrap flex items-center justify-between mx-[0.5rem] py-[0.5rem]">
-              {/* <FaJar */}
-              <FaHandHoldingHeart
-                style={{
-                  fontSize: "32px",
-                  //   color: activeBackgroundColor,
-                }}
-              />
-              <div className="mx-2 support-box-text-wrap">
-                <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] px-2] text-lg">
-                  Contribute
-                </p>
-                <p className="support-sub-text pt-[0.3rem] px-2 pb-[0.1rem] text-[0.8rem] font-light">
-                  Support our work
-                </p>
-              </div>
-            </div>
-            <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
-          </div>
 
-          <Modal
-            // style={modalStyles}
-            // isOpen={showModal5}
-            // onRequestClose={handleCloseModal5}
-            closeTimeoutMS={250}
-            contentLabel="Modal #2 Global Style Override Example"
-          >
-            <div className="tip-box-wrap">
-              {/* <div> */}
-              <p
-                className="tip-jar-box-first-line-of-text tip-jar-box-text"
-                style={
-                  {
-                    //   backgroundColor: activeBackgroundColor,
-                  }
-                }
-              ></p>
-
-              <p
-                className="tip-jar-box-text"
-                style={
-                  {
-                    //   backgroundColor: activeBackgroundColor,
-                  }
-                }
-              >
-                MyUmmahApps Ltd provides free, open source applications for the
-                Muslim community, these applications contain no ads.
-              </p>
-
-              <p
-                className="tip-jar-box-text"
-                style={
-                  {
-                    //   backgroundColor: activeBackgroundColor,
-                  }
-                }
-              >
-                {" "}
-                Your support will help us continue serving the Ummah in this
-                endeavor.
-              </p>
-
-              <p
-                className="tip-jar-box-text"
-                style={
-                  {
-                    //   backgroundColor: activeBackgroundColor,
-                  }
-                }
-              >
-                {" "}
-                May Allah reward you.
-              </p>
-
-              {/* </div> */}
-
-              {/* {!iapProducts ? (
-                    <p style={{ padding: "2rem" }}>Loading...</p>
-                  ) : (
-                    iapProducts.map((item) => {
-                      return (
-                        <div
-                          className="tip-wrap"
-                          onClick={() => {
-                            triggerPurchase(item.identifier);
-                            handleOpenModal6();
-                          }}
-                        >
-                          <p>{item.title}</p>
-                          <p>{item.priceString}</p>
-                        </div>
-                      );
-                    })
-                  )} */}
-              <Modal
-                // style={modalStyles}
-                // isOpen={showModal6}
-                // onRequestClose={handleCloseModal5}
-                closeTimeoutMS={250}
-                contentLabel="Modal #2 Global Style Override Example"
-              >
-                {" "}
-                <div className="lds-ellipsis">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </Modal>
-            </div>
-          </Modal>
-        </div>
         {/* ) : null}{" "} */}
         {Capacitor.isNativePlatform() ? (
           <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5 relative ">
@@ -263,148 +150,7 @@ const SettingsPage = () => {
             />
           </div>
         </div>
-        <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5 relative ">
-          <div className="flex items-center justify-between py-2 mx-2 individual-row-wrap haptic-wrap">
-            <div className="text-wrap" style={{ display: "block" }}>
-              <p>Haptic Vibration</p>
-              <p>Set vibration on every increment</p>
-            </div>
-            <Switch
-              //   checked={haptics}
-              className={undefined}
-              disabled={undefined}
-              handleColor="white"
-              name={undefined}
-              offColor="white"
-              onChange={() => {
-                if (JSON.parse("hi")) {
-                  //   setHaptics(false);
-                  localStorage.setItem("haptics", JSON.stringify(false));
-                } else if (
-                  //   JSON.parse(localStorage.getItem("haptics")) == false
-                  "hi"
-                ) {
-                  //   setHaptics(true);
-                  localStorage.setItem("haptics", JSON.stringify(true));
-                }
-              }}
-              //   onColor={activeBackgroundColor}
-              pendingOffColor={undefined}
-              pendingOnColor={undefined}
-              readOnly={undefined}
-              style={undefined}
-            />
-            {/* <span className="mt-ios">
-                <input id="1" type="checkbox" checked={haptics} />
-                <label
-                  style={
-                    {
-                      // boxShadow: `inset 0 0 0 1.5em ${activeBackgroundColor},0 0 0 .1875em ${activeBackgroundColor}`,
-                      // boxShadow: 0 0 0 .1875em transparent,0 .375em .375em rgba(0,0,0,.3),
-                    }
-                  }
-                  for="1"
-                  onClick={(e) => {
-                    if (JSON.parse(localStorage.getItem("haptics")) == true) {
-                      setHaptics(false);
-                      localStorage.setItem("haptics", JSON.stringify(false));
-                    } else if (
-                      JSON.parse(localStorage.getItem("haptics")) == false
-                    ) {
-                      setHaptics(true);
-                      localStorage.setItem("haptics", JSON.stringify(true));
-                    }
-                  }}
-                ></label>
-              </span> */}
-          </div>
-          <div className="flex items-center justify-between py-2 mx-2 individual-row-wrap">
-            <div className="text-wrap" style={{ display: "block" }}>
-              <p>Auto Reset Adhkar</p>
-              <p>Adhkar will be reset daily</p>
-            </div>
-            <Switch
-              //   checked={dailyCounterReset}
-              className={undefined}
-              disabled={undefined}
-              handleColor="white"
-              name={undefined}
-              offColor="white"
-              onChange={() => {
-                if (
-                  //   JSON.parse(localStorage.getItem("dailyCounterReset")) == true
-                  "hello"
-                ) {
-                  //   setDailyCounterReset(false);
-                  localStorage.setItem(
-                    "dailyCounterReset",
-                    JSON.stringify(false)
-                  );
-                } else if (
-                  "bye"
-                  //   JSON.parse(localStorage.getItem("dailyCounterReset")) == false
-                ) {
-                  //   setDailyCounterReset(true);
-                  localStorage.setItem(
-                    "dailyCounterReset",
-                    JSON.stringify(true)
-                  );
-                }
-              }}
-              //   onColor={activeBackgroundColor}
-              pendingOffColor={undefined}
-              pendingOnColor={undefined}
-              readOnly={undefined}
-              style={undefined}
-            />
-            {/* <span className="mt-ios">
-                <input id="2" type="checkbox" checked={dailyCounterReset} />
-                <label
-                  for="2"
-                  onClick={(e) => {
-                    if (
-                      JSON.parse(localStorage.getItem("dailyCounterReset")) == true
-                    ) {
-                      setDailyCounterReset(false);
-                      localStorage.setItem(
-                        "dailyCounterReset",
-                        JSON.stringify(false)
-                      );
-                    } else if (
-                      JSON.parse(localStorage.getItem("dailyCounterReset")) == false
-                    ) {
-                      setDailyCounterReset(true);
-                      localStorage.setItem(
-                        "dailyCounterReset",
-                        JSON.stringify(true)
-                      );
-                    }
-                  }}
-                ></label>
-              </span> */}
-          </div>
-          <div className="reset-adkhar-text-wrap">
-            <p
-              onClick={() => {
-                // handleOpenModal3();
-              }}
-            >
-              Clear all Adhkar
-            </p>
-            <Modal
-              //   style={modalStyles}
-              //   isOpen={showModal3}
-              //   onRequestClose={handleCloseModal3}
-              closeTimeoutMS={250}
-              contentLabel="Modal #2 Global Style Override Example"
-            >
-              {/* <ResetAllCountersAlert
-                    resetAllCounters={resetAllCounters}
-                    handleCloseModal3={handleCloseModal3}
-                  /> */}
-            </Modal>
-          </div>
-        </div>
+
         <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5 relative ">
           {Capacitor.getPlatform() == "android" ? (
             <div
