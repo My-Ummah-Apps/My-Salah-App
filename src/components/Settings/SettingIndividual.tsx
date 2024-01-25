@@ -1,49 +1,46 @@
-// import { FaHandHoldingHeart } from "react-icons/fa";
+import React, { useState } from "react";
 import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Modal from "react-modal";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { Share } from "@capacitor/share";
+import { FaHandHoldingHeart } from "react-icons/fa";
 
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { MdOutlineChevronRight } from "react-icons/md";
 
-interface ChildComponentProps {
-  icon: React.ReactNode;
-}
-
 const SettingIndividual: React.FC<ChildComponentProps> = ({
-  icon,
   headingText,
   subText,
+  className,
 }) => {
-  console.log(icon);
   return (
     <>
-      <div className="rounded-md shadow-md individual-section-wrap bg-slate-500 my-[1rem] w-[90%] mx-auto p-0.5">
+      <div
+        className={`shadow-md individual-setting-wrap bg-slate-500 mx-auto p-0.5 ${className}`}
+      >
         <div
-          className="flex items-center justify-between support-box-wrap mx-[0.5rem]"
+          className="flex items-center justify-between support-box-wrap mx-[0.5rem] py-1"
           onClick={() => {
             //   handleOpenModal5();
           }}
         >
-          <div className="support-box-icon-and-text-wrap flex items-center justify-between mx-[0.5rem] py-[0.5rem]">
-            <icon
+          {/* {headingText === "Contribute" ? (
+            <FaHandHoldingHeart
               style={{
                 fontSize: "32px",
-                //   color: activeBackgroundColor,
               }}
             />
-            <div className="mx-2 support-box-text-wrap">
-              <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] px-2] text-lg">
-                {headingText}
-              </p>
-              <p className="support-sub-text pt-[0.3rem] px-2 pb-[0.1rem] text-[0.8rem] font-light">
-                {subText}
-              </p>
-            </div>
+          ) : null} */}
+          <div className="mx-2 support-box-text-wrap">
+            <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] text-lg">
+              {headingText}
+            </p>
+            <p className="support-sub-text pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+              {subText}
+            </p>
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
         </div>
@@ -146,3 +143,40 @@ const SettingIndividual: React.FC<ChildComponentProps> = ({
 };
 
 export default SettingIndividual;
+
+// <Switch
+// //   checked={theme == "light" ? false : true}
+// className={undefined}
+// disabled={undefined}
+// handleColor="white"
+// name={undefined}
+// offColor="white"
+// onChange={() => {
+//   // if (theme == "light") {
+//   if (false) {
+//     //   setTheme("dark");
+//     if (Capacitor.isNativePlatform()) {
+//       StatusBar.setBackgroundColor({ color: "#242424" });
+//       StatusBar.setStyle({ style: Style.Dark });
+//     }
+
+//     localStorage.setItem("theme", JSON.stringify("dark"));
+//     document.body.classList.add("dark");
+//     // } else if (theme == "dark") {
+//   } else if (false) {
+//     //   setTheme("light");
+//     if (Capacitor.isNativePlatform()) {
+//       StatusBar.setBackgroundColor({ color: "#EDEDED" });
+//       StatusBar.setStyle({ style: Style.Light });
+//     }
+
+//     localStorage.setItem("theme", JSON.stringify("light"));
+//     document.body.classList.remove("dark");
+//   }
+// }}
+// //   onColor={activeBackgroundColor}
+// pendingOffColor={undefined}
+// pendingOnColor={undefined}
+// readOnly={undefined}
+// style={undefined}
+// />

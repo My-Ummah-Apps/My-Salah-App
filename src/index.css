@@ -11,8 +11,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 1rem;
   --primary-color: #fff;
   --card-bg-color: rgb(249 250 251);
 }
