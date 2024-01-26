@@ -19,90 +19,87 @@ const SettingIndividual: React.FC<ChildComponentProps> = ({
   return (
     <>
       <div
-        className={`shadow-md individual-setting-wrap bg-slate-500 mx-auto p-0.5 ${className}`}
+        className={`flex items-center justify-between mx-[0.5rem] py-1 shadow-md individual-setting-wrap bg-slate-500 mx-auto p-0.5 ${className}`}
+        onClick={() => {
+          //   handleOpenModal5();
+        }}
       >
-        <div
-          className="flex items-center justify-between support-box-wrap mx-[0.5rem] py-1"
-          onClick={() => {
-            //   handleOpenModal5();
-          }}
-        >
-          {/* {headingText === "Contribute" ? (
+        {/* {headingText === "Contribute" ? (
             <FaHandHoldingHeart
               style={{
                 fontSize: "32px",
               }}
             />
           ) : null} */}
-          <div className="mx-2 support-box-text-wrap">
-            <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] text-lg">
-              {headingText}
-            </p>
-            <p className="support-sub-text pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {subText}
-            </p>
-          </div>
-          <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
+        <div className="mx-2">
+          <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] text-lg">
+            {headingText}
+          </p>
+          <p className="support-sub-text pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+            {subText}
+          </p>
         </div>
+        <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
+      </div>
 
-        <Modal
-          // style={modalStyles}
-          // isOpen={showModal5}
-          // onRequestClose={handleCloseModal5}
-          closeTimeoutMS={250}
-          contentLabel="Modal #2 Global Style Override Example"
-        >
-          <div className="tip-box-wrap">
-            {/* <div> */}
-            <p
-              className="tip-jar-box-first-line-of-text tip-jar-box-text"
-              style={
-                {
-                  //   backgroundColor: activeBackgroundColor,
-                }
+      <Modal
+        // style={modalStyles}
+        // isOpen={showModal5}
+        // onRequestClose={handleCloseModal5}
+        closeTimeoutMS={250}
+        contentLabel="Modal #2 Global Style Override Example"
+      >
+        <div className="tip-box-wrap">
+          {/* <div> */}
+          <p
+            className="tip-jar-box-first-line-of-text tip-jar-box-text"
+            style={
+              {
+                //   backgroundColor: activeBackgroundColor,
               }
-            ></p>
+            }
+          ></p>
 
-            <p
-              className="tip-jar-box-text"
-              style={
-                {
-                  //   backgroundColor: activeBackgroundColor,
-                }
+          <p
+            className="tip-jar-box-text"
+            style={
+              {
+                //   backgroundColor: activeBackgroundColor,
               }
-            >
-              MyUmmahApps Ltd provides free, open source applications for the
-              Muslim community, these applications contain no ads.
-            </p>
+            }
+          >
+            MyUmmahApps Ltd provides free, open source applications for the
+            Muslim community, these applications contain no ads.
+          </p>
 
-            <p
-              className="tip-jar-box-text"
-              style={
-                {
-                  //   backgroundColor: activeBackgroundColor,
-                }
+          <p
+            className="tip-jar-box-text"
+            style={
+              {
+                //   backgroundColor: activeBackgroundColor,
               }
-            >
-              {" "}
-              Your support will help us continue serving the Ummah in this
-              endeavor.
-            </p>
+            }
+          >
+            {" "}
+            Your support will help us continue serving the Ummah in this
+            endeavor.
+          </p>
 
-            <p
-              className="tip-jar-box-text"
-              style={
-                {
-                  //   backgroundColor: activeBackgroundColor,
-                }
+          <p
+            className="tip-jar-box-text"
+            style={
+              {
+                //   backgroundColor: activeBackgroundColor,
               }
-            >
-              {" "}
-              May Allah reward you.
-            </p>
+            }
+          >
+            {" "}
+            May Allah reward you.
+          </p>
 
-            {/* </div> */}
+          {/* </div> */}
 
-            {/* {!iapProducts ? (
+          {/* {!iapProducts ? (
                     <p style={{ padding: "2rem" }}>Loading...</p>
                   ) : (
                     iapProducts.map((item) => {
@@ -120,24 +117,23 @@ const SettingIndividual: React.FC<ChildComponentProps> = ({
                       );
                     })
                   )} */}
-            <Modal
-              // style={modalStyles}
-              // isOpen={showModal6}
-              // onRequestClose={handleCloseModal5}
-              closeTimeoutMS={250}
-              contentLabel="Modal #2 Global Style Override Example"
-            >
-              {" "}
-              <div className="lds-ellipsis">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            </Modal>
-          </div>
-        </Modal>
-      </div>
+          <Modal
+            // style={modalStyles}
+            // isOpen={showModal6}
+            // onRequestClose={handleCloseModal5}
+            closeTimeoutMS={250}
+            contentLabel="Modal #2 Global Style Override Example"
+          >
+            {" "}
+            <div className="lds-ellipsis">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </Modal>
+        </div>
+      </Modal>
     </>
   );
 };

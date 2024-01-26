@@ -200,18 +200,19 @@ const PrayerMainView = ({
         alt=""
         srcset=""
       /> */}
+      {/* bg-[color:var(--card-bg-color)] */}
       <table
-        className="w-full shadow-lg rounded-xl bg-[color:var(--card-bg-color)]"
+        className="w-full shadow-lg "
         onClick={(e) => {
           grabDate(e);
           setShowModal(true);
         }}
       >
         <thead className="">
-          <tr className="hidden">
+          <tr className="hidden ">
             <th className="border-none"></th>
             {currentDisplayedWeek.map((item, index) => {
-              return <td className="px-2 py-5 border-none">{item}</td>;
+              return <td className="px-2 py-5 text-xs border-none">{item}</td>;
             })}
           </tr>
           <tr className="">
@@ -220,17 +221,17 @@ const PrayerMainView = ({
               const parsedDate = parse(item, "dd.MM.yy", new Date());
               const formattedDate = format(parsedDate, "EEE dd");
 
-              return <td className="px-2 py-5 border-none">{formattedDate}</td>;
+              return (
+                <td className="px-2 py-5 border-none ">{formattedDate}</td>
+              );
             })}
           </tr>
         </thead>
         <tbody>
           {salahObjects.map((item, index) => {
             return (
-              <tr className="border-blue-50">
-                <td className="py-5 border-none rounded-md">
-                  {item.salahName}
-                </td>
+              <tr className="bg-[color:var(--card-bg-color)]">
+                <td className="py-5 border-none">{item.salahName}</td>
                 {renderCells(index)}
               </tr>
             );
