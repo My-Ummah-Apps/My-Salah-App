@@ -19,7 +19,7 @@ const SettingIndividual: React.FC<ChildComponentProps> = ({
   return (
     <>
       <div
-        className={`flex items-center justify-between mx-[0.5rem] py-1 shadow-md individual-setting-wrap bg-slate-500 mx-auto p-0.5 ${className}`}
+        className={`flex items-center justify-between mx-[0.5rem] py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 ${className}`}
         onClick={() => {
           //   handleOpenModal5();
         }}

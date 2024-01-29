@@ -34,7 +34,7 @@ body {
 
 table {
   border-collapse: separate;
-  border-spacing: 0 10px;
+  border-spacing: 0 15px;
   margin-top: -10px; /* correct offset on first border spacing if desired */
 }
 
@@ -46,6 +46,7 @@ td {
   border: solid 1px var(--primary-color);
   border-style: solid none;
   padding: 10px;
+  vertical-align: top;
 }
 
 td:first-child {
@@ -73,3 +74,19 @@ td {
   border-style: none solid solid none;
   padding: 10px;
 } */
+
+tr:nth-child(1) {
+  color: #0369a1;
+}
+tr:nth-child(2) {
+  color: #ca8a04;
+}
+tr:nth-child(3) {
+  color: #9333ea;
+}
+tr:nth-child(4) {
+  color: #9d174d;
+}
+tr:nth-child(5) {
+  color: #047857;
+}

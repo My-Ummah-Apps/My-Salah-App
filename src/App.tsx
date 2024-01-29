@@ -12,6 +12,7 @@ import QiblahDirection from "./pages/QiblahDirection";
 type salahObjectsType = {
   salahName: string;
   completedDates: { [date: string]: string }[];
+  color: string;
 };
 
 function App() {
@@ -29,22 +30,27 @@ function App() {
           {
             salahName: "Fajr",
             completedDates: [],
+            color: "blue",
           },
           {
             salahName: "Zohar",
             completedDates: [],
+            color: "yellow",
           },
           {
             salahName: "Asar",
             completedDates: [],
+            color: "red",
           },
           {
             salahName: "Maghrib",
             completedDates: [],
+            color: "green",
           },
           {
             salahName: "Isha",
             completedDates: [],
+            color: "purple",
           },
         ]);
   }, []);

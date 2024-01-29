@@ -4,6 +4,8 @@ import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import { RiSunFill } from "react-icons/ri";
+import { FaMoon } from "react-icons/fa";
 import { subDays, format, parse } from "date-fns";
 import { render } from "react-dom";
 
@@ -21,6 +23,8 @@ const PrayerMainView = ({
   const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
+
+  const SalahIcons: string[] = ["<RiSunFill />", "<FaMoon />"];
 
   // Array to hold the last five dates
   let currentDisplayedWeek;
@@ -44,6 +48,7 @@ const PrayerMainView = ({
     icon
   ) => {
     const newSalahObjects = salahObjects.map((item) => {
+      console.log(item.salahName);
       if (item.salahName == selectedSalah) {
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
@@ -151,9 +156,14 @@ const PrayerMainView = ({
   }
 
   function renderCells(index) {
+    console.log(selectedSalah);
+    let test;
+    // if (selectedSalah == "Zohar") {
+    //   test = "text-amber-300";
+    // }
     return currentDisplayedWeek.map((date: any) => {
       let cellIcon = (
-        <LuDot className="text-[grey] flex self-center text-2xl justify-self-center w-[100%]" />
+        <LuDot className="flex self-center justify-self-center w-[100%]" />
       );
       const matchedObject = salahObjects[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
@@ -164,11 +174,14 @@ const PrayerMainView = ({
       }
       if (cellIcon === "home") {
         cellIcon = (
-          <FaHome className="flex self-center text-2xl justify-self-center w-[100%]" />
+          <FaHome className={`flex self-center justify-self-center w-[100%]`} />
         );
       } else if (cellIcon === "masjid") {
+        // test = "text-red-300";
         cellIcon = (
-          <FaMosque className="flex self-center text-2xl justify-self-center w-[100%]" />
+          <FaMosque
+            className={`flex self-center justify-self-center w-[100%]`}
+          />
         );
       }
       // else if (cellIcon === "Blank") {
@@ -222,7 +235,9 @@ const PrayerMainView = ({
               const formattedDate = format(parsedDate, "EEE dd");
 
               return (
-                <td className="px-2 py-5 border-none ">{formattedDate}</td>
+                <td className="px-2 py-5 border-none text-[#c4c4c4]">
+                  {formattedDate}
+                </td>
               );
             })}
           </tr>
@@ -231,7 +246,18 @@ const PrayerMainView = ({
           {salahObjects.map((item, index) => {
             return (
               <tr className="bg-[color:var(--card-bg-color)]">
-                <td className="py-5 border-none">{item.salahName}</td>
+                <td className="py-5 border-none">
+                  <div className="flex flex-row items-center">
+                    {/* <img
+                      className="w-8 mr-4"
+                      src="/src/assets/icons/night.png"
+                      alt=""
+                      srcset=""
+                    /> */}
+                    {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
+                    <p className="text-[#c4c4c4]">{item.salahName}</p>
+                  </div>
+                </td>
                 {renderCells(index)}
               </tr>
             );
