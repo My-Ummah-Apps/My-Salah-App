@@ -6,8 +6,7 @@ import Switch from "react-ios-switch";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 // import { LocalNotifications } from "@capacitor/local-notifications";
-import { StatusBar, Style } from "@capacitor/status-bar";
-import { MdOutlineChevronRight } from "react-icons/md";
+// import { StatusBar, Style } from "@capacitor/status-bar";
 
 const SettingsPage = () => {
   let link: any;

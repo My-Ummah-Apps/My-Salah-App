@@ -26,8 +26,8 @@ import {
 } from "date-fns";
 
 const CalenderYearly = ({
-  setSalahObjects,
-  salahObjects,
+  setSalahTrackingArray,
+  salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
   setStartDate,
@@ -75,7 +75,7 @@ const CalenderYearly = ({
   let dateColor: string;
 
   let datesArray = [];
-  const allDatesArray = salahObjects.reduce((value, salah) => {
+  const allDatesArray = salahTrackingArray.reduce((value, salah) => {
     salah.completedDates.forEach((item) => {
       datesArray.push(Object.keys(item)[0]);
     });
@@ -233,8 +233,8 @@ const CalenderYearly = ({
                   <Modal
                     setShowModal={setShowModal}
                     showModal={showModal}
-                    salahObjects={salahObjects}
-                    setSalahObjects={setSalahObjects}
+                    salahTrackingArray={salahTrackingArray}
+                    setSalahTrackingArray={setSalahTrackingArray}
                     currentStartDate={currentStartDate}
                     startDate={startDate}
                   />

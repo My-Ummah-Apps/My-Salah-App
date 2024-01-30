@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Capacitor } from "@capacitor/core";
+// import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Modal from "react-modal";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { Share } from "@capacitor/share";
-import { FaHandHoldingHeart } from "react-icons/fa";
+// import { FaHandHoldingHeart } from "react-icons/fa";
 
 // import { LocalNotifications } from "@capacitor/local-notifications";
-import { StatusBar, Style } from "@capacitor/status-bar";
+// import { StatusBar, Style } from "@capacitor/status-bar";
 import { MdOutlineChevronRight } from "react-icons/md";
 
 const SettingIndividual: React.FC<ChildComponentProps> = ({

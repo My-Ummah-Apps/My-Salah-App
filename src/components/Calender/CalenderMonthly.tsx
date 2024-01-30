@@ -20,8 +20,8 @@ import {
 } from "date-fns";
 
 const CalenderMonthly = ({
-  setSalahObjects,
-  salahObjects,
+  setSalahTrackingArray,
+  salahTrackingArray,
   setStartDate,
   startDate,
   modifySingleDaySalah,
@@ -44,7 +44,7 @@ const CalenderMonthly = ({
   let dateColor: string;
 
   let datesArray = [];
-  const allDatesArray = salahObjects.reduce((value, salah) => {
+  const allDatesArray = salahTrackingArray.reduce((value, salah) => {
     salah.completedDates.forEach((item) => {
       datesArray.push(Object.keys(item)[0]);
     });
@@ -195,8 +195,8 @@ const CalenderMonthly = ({
                   <Modal
                     setShowModal={setShowModal}
                     showModal={showModal}
-                    salahObjects={salahObjects}
-                    setSalahObjects={setSalahObjects}
+                    salahTrackingArray={salahTrackingArray}
+                    setSalahTrackingArray={setSalahTrackingArray}
                     currentStartDate={currentStartDate}
                     startDate={startDate}
                   />

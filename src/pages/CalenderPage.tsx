@@ -4,8 +4,8 @@ import CalenderMonthly from "../components/Calender/CalenderMonthly";
 import CalenderYearly from "../components/Calender/CalenderYearly";
 
 const CalenderPage = ({
-  setSalahObjects,
-  salahObjects,
+  setSalahTrackingArray,
+  salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
 }) => {
@@ -39,8 +39,8 @@ const CalenderPage = ({
       </button>
       {showMonthlyCalender ? (
         <CalenderMonthly
-          setSalahObjects={setSalahObjects}
-          salahObjects={salahObjects}
+          setSalahTrackingArray={setSalahTrackingArray}
+          salahTrackingArray={salahTrackingArray}
           setStartDate={setStartDate}
           startDate={startDate}
           setCurrentStartDate={setCurrentStartDate}
@@ -49,8 +49,8 @@ const CalenderPage = ({
         />
       ) : (
         <CalenderYearly
-          setSalahObjects={setSalahObjects}
-          salahObjects={salahObjects}
+          setSalahTrackingArray={setSalahTrackingArray}
+          salahTrackingArray={salahTrackingArray}
           setCurrentStartDate={setCurrentStartDate}
           currentStartDate={currentStartDate}
           setStartDate={setStartDate}

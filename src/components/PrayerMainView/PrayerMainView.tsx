@@ -14,8 +14,8 @@ import { render } from "react-dom";
 const today = new Date();
 
 const PrayerMainView = ({
-  setSalahObjects,
-  salahObjects,
+  setSalahTrackingArray,
+  salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
   startDate,
@@ -47,7 +47,7 @@ const PrayerMainView = ({
     salahStatus,
     icon
   ) => {
-    const newSalahObjects = salahObjects.map((item) => {
+    const newSalahTrackingArray = salahTrackingArray.map((item) => {
       console.log(item.salahName);
       if (item.salahName == selectedSalah) {
         const doesDateObjectExist = item.completedDates.find((date) => {
@@ -120,11 +120,11 @@ const PrayerMainView = ({
       }
       return item;
     });
-    setSalahObjects(newSalahObjects);
+    setSalahTrackingArray(newSalahTrackingArray);
 
     localStorage.setItem(
       "storedSalahTrackingData",
-      JSON.stringify(newSalahObjects)
+      JSON.stringify(newSalahTrackingArray)
     );
   };
   let clickedElement;
@@ -156,8 +156,6 @@ const PrayerMainView = ({
   }
 
   function renderCells(index) {
-    console.log(selectedSalah);
-    let test;
     // if (selectedSalah == "Zohar") {
     //   test = "text-amber-300";
     // }
@@ -165,7 +163,7 @@ const PrayerMainView = ({
       let cellIcon = (
         <LuDot className="flex self-center justify-self-center w-[100%]" />
       );
-      const matchedObject = salahObjects[index]?.completedDates.find(
+      const matchedObject = salahTrackingArray[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
       );
 
@@ -198,8 +196,8 @@ const PrayerMainView = ({
       <Modal
         setShowModal={setShowModal}
         showModal={showModal}
-        setSalahObjects={setSalahObjects}
-        salahObjects={salahObjects}
+        setSalahTrackingArray={setSalahTrackingArray}
+        salahTrackingArray={salahTrackingArray}
         changePrayerStatus={changePrayerStatus}
         icon={icon}
         setIcon={setIcon}
@@ -243,7 +241,7 @@ const PrayerMainView = ({
           </tr>
         </thead>
         <tbody>
-          {salahObjects.map((item, index) => {
+          {salahTrackingArray?.map((item, index) => {
             return (
               <tr className="bg-[color:var(--card-bg-color)]">
                 <td className="py-5 border-none">

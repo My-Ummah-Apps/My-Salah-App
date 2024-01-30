@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
 import PrayerMainView from "../components/PrayerMainView/PrayerMainView";
 import NextSalahTime from "../components/NextSalahTime";
-import { MdCalendarMonth } from "react-icons/md";
-import CalenderPage from "./CalenderPage";
-import { parse, subDays } from "date-fns";
+
+import { subDays } from "date-fns";
+
+// interface MainPageProps {
+//   setSalahObjects: setSalahObjects;
+// }
 
 const MainPage = ({
-  setSalahObjects: setSalahObjects,
-  salahObjects: salahObjects,
+  // setSalahObjects: setSalahObjects,
+  setSalahTrackingArray,
+  // salahTrackingArray: salahTrackingArray,
+  salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
 }) => {
@@ -30,8 +35,8 @@ const MainPage = ({
       </Link> */}
       <NextSalahTime />
       <PrayerMainView
-        setSalahObjects={setSalahObjects}
-        salahObjects={salahObjects}
+        setSalahTrackingArray={setSalahTrackingArray}
+        salahTrackingArray={salahTrackingArray}
         setCurrentStartDate={setCurrentStartDate}
         currentStartDate={currentStartDate}
         startDate={startDate}

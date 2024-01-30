@@ -10,8 +10,8 @@ import ReactModal from "react-modal";
 const Modal: React.FC<ModalProps> = ({
   setShowModal,
   showModal,
-  setSalahObjects,
-  salahObjects,
+  setSalahTrackingArray,
+  salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
   startDate,
@@ -29,8 +29,8 @@ const Modal: React.FC<ModalProps> = ({
     >
       <div>
         <PrayerMainView
-          setSalahObjects={setSalahObjects}
-          salahObjects={salahObjects}
+          setSalahTrackingArray={setSalahTrackingArray}
+          salahTrackingArray={salahTrackingArray}
           setCurrentStartDate={setCurrentStartDate}
           currentStartDate={currentStartDate}
           startDate={startDate}
