@@ -1,12 +1,9 @@
 import { Link } from "react-router-dom";
 import PrayerMainView from "../components/PrayerMainView/PrayerMainView";
 import NextSalahTime from "../components/NextSalahTime";
+import { salahTrackingArrayType } from "../types/types";
 
 import { subDays } from "date-fns";
-
-// interface MainPageProps {
-//   setSalahObjects: setSalahObjects;
-// }
 
 const MainPage = ({
   // setSalahObjects: setSalahObjects,
@@ -15,7 +12,15 @@ const MainPage = ({
   salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
+}: {
+  setCurrentStartDate: number;
+  currentStartDate: number;
+  setSalahTrackingArray: React.Dispatch<
+    React.SetStateAction<salahTrackingArrayType[]>
+  >;
+  salahTrackingArray: salahTrackingArrayType;
 }) => {
+  console.log(currentStartDate);
   const today = new Date();
   const startDate = subDays(today, currentStartDate);
   return (

@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import { useState } from "react";
+// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import { salahTrackingArrayType } from "../types/types";
+
 import CalenderMonthly from "../components/Calender/CalenderMonthly";
 import CalenderYearly from "../components/Calender/CalenderYearly";
 
@@ -8,14 +10,20 @@ const CalenderPage = ({
   salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
+}: {
+  setCurrentStartDate: number;
+  currentStartDate: number;
+  setSalahTrackingArray: React.Dispatch<
+    React.SetStateAction<salahTrackingArrayType[]>
+  >;
+  salahTrackingArray: salahTrackingArrayType;
 }) => {
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);
-  const [startDate, setStartDate] = useState();
+  const [startDate, setStartDate] = useState({});
 
-  function modifySingleDaySalah(date) {
+  function modifySingleDaySalah(date: object) {
     setStartDate(date);
-    console.log("startDate", startDate);
   }
 
   return (
@@ -48,15 +56,17 @@ const CalenderPage = ({
           modifySingleDaySalah={modifySingleDaySalah}
         />
       ) : (
-        <CalenderYearly
-          setSalahTrackingArray={setSalahTrackingArray}
-          salahTrackingArray={salahTrackingArray}
-          setCurrentStartDate={setCurrentStartDate}
-          currentStartDate={currentStartDate}
-          setStartDate={setStartDate}
-          startDate={startDate}
-          modifySingleDaySalah={modifySingleDaySalah}
-        />
+        showYearlyCalender && (
+          <CalenderYearly
+            setSalahTrackingArray={setSalahTrackingArray}
+            salahTrackingArray={salahTrackingArray}
+            setCurrentStartDate={setCurrentStartDate}
+            currentStartDate={currentStartDate}
+            setStartDate={setStartDate}
+            startDate={startDate}
+            modifySingleDaySalah={modifySingleDaySalah}
+          />
+        )
       )}
     </>
   );

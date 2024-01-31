@@ -11,18 +11,22 @@ import { Share } from "@capacitor/share";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 import { MdOutlineChevronRight } from "react-icons/md";
 
-const SettingIndividual: React.FC<ChildComponentProps> = ({
+const SettingIndividual = ({
   headingText,
   subText,
-  className,
+  indvidualStyles,
+  onClick,
+}: {
+  headingText: string;
+  subText: string;
+  indvidualStyles: string;
+  onClick: () => void;
 }) => {
   return (
     <>
       <div
-        className={`flex items-center justify-between mx-[0.5rem] py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 ${className}`}
-        onClick={() => {
-          //   handleOpenModal5();
-        }}
+        className={`flex items-center justify-between mx-[0.5rem] py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 ${indvidualStyles}`}
+        onClick={onClick}
       >
         {/* {headingText === "Contribute" ? (
             <FaHandHoldingHeart

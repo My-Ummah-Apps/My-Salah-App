@@ -32,12 +32,12 @@ const SettingsPage = () => {
       </div>
       <div className="settings-page-options-wrap">
         <SettingIndividual
-          className="my-[1rem] rounded-md"
+          indvidualStyles="my-[1rem] rounded-md"
           headingText={"Contribute"}
           subText={"Support our work"}
         />
         <SettingIndividual
-          className="my-[1rem] rounded-md"
+          indvidualStyles="my-[1rem] rounded-md"
           headingText={"Notifications"}
           subText={"Set Notifications"}
           onClick={() => {
@@ -47,7 +47,7 @@ const SettingsPage = () => {
           }}
         />
         <SettingIndividual
-          className="rounded-t-md"
+          indvidualStyles="rounded-t-md"
           headingText={"Review"}
           subText={"Rate us on the App Store"}
           onClick={() => {
@@ -79,7 +79,7 @@ const SettingsPage = () => {
           }}
         />
         <SettingIndividual
-          className="rounded-b-md"
+          indvidualStyles="rounded-b-md"
           headingText={"About"}
           subText={"About us"}
           onClick={() => {
