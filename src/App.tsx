@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-import { salahTrackingArrayType } from "./types/types";
+// import { salahTrackingArrayType } from "./types/types";
+
+interface salahTrackingEntryType {
+  salahName: string;
+  completedDates: { [date: string]: string }[] | [];
+}
 
 // import "./App.css";
 import NavBar from "./components/Nav/NavBar";
@@ -16,10 +21,10 @@ const App = () => {
   //   salahTrackingArrayType[]
   // >([]);
   const [salahTrackingArray, setSalahTrackingArray] = useState<
-    salahTrackingArrayType[]
+    salahTrackingEntryType[]
   >([]);
 
-  const [currentStartDate, setCurrentStartDate] = useState<number>(0);
+  const [currentStartDate, setCurrentStartDate] = useState(0);
 
   useEffect(() => {
     const storedSalahTrackingData = localStorage.getItem(
@@ -51,6 +56,7 @@ const App = () => {
         ]);
   }, []);
 
+  console.log(salahTrackingArray);
   return (
     <BrowserRouter>
       <section className="App">

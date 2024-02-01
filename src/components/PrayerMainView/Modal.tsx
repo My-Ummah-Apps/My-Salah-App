@@ -11,7 +11,7 @@ interface ModalProps {
   selectedSalah: any;
   tableHeadDate: any;
   columnIndex: any;
-  icon: any;
+  // icon: any;
   setIcon: any;
   selectedSalah: any;
   tableHeadDate: any;
@@ -27,7 +27,7 @@ const Modal: React.FC<ModalProps> = ({
   tableHeadDate,
   salahStatus,
   columnIndex,
-  icon,
+  // icon,
   setIcon,
   changePrayerStatus,
 }) => {

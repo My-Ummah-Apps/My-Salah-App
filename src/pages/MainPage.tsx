@@ -13,16 +13,17 @@ const MainPage = ({
   setCurrentStartDate,
   currentStartDate,
 }: {
-  setCurrentStartDate: number;
+  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingArrayType[]>
   >;
-  salahTrackingArray: salahTrackingArrayType;
+  salahTrackingArray: salahTrackingArrayType[];
 }) => {
   console.log(currentStartDate);
-  const today = new Date();
+  const today: Date = new Date();
   const startDate = subDays(today, currentStartDate);
+  console.log(startDate);
   return (
     <div className="overflow-x-auto w-5/5 main-page-wrap">
       <Link to="/CalenderPage">Calender</Link>

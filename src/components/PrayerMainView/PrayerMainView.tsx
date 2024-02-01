@@ -1,51 +1,57 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useState } from "react";
 import Modal from "./Modal";
 import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import { RiSunFill } from "react-icons/ri";
-import { FaMoon } from "react-icons/fa";
+// import { RiSunFill } from "react-icons/ri";
+// import { FaMoon } from "react-icons/fa";
 import { subDays, format, parse } from "date-fns";
-import { render } from "react-dom";
+// import { render } from "react-dom";
+import { salahTrackingArrayType } from "../../types/types";
 
 // import { v4 as uuidv4 } from "uuid";
-
-const today = new Date();
 
 const PrayerMainView = ({
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentStartDate,
-  currentStartDate,
+  // currentStartDate,
   startDate,
+}: {
+  setSalahTrackingArray: React.Dispatch<React.SetStateAction<number>>;
+  salahTrackingArray: salahTrackingArrayType[];
+  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
+  // currentStartDate: number;
+  startDate: Date;
 }) => {
-  const [icon, setIcon] = useState("");
+  // const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
 
-  const SalahIcons: string[] = ["<RiSunFill />", "<FaMoon />"];
+  // const SalahIcons: string[] = ["<RiSunFill />", "<FaMoon />"];
 
   // Array to hold the last five dates
-  let currentDisplayedWeek;
-  function generateDisplayedWeek(currentStartDate) {
+  let currentDisplayedWeek: string[];
+  function generateDisplayedWeek() {
     currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
       const date = subDays(startDate, 4 - index);
       return format(date, "dd.MM.yy");
     });
   }
 
-  generateDisplayedWeek(currentStartDate);
+  // generateDisplayedWeek(currentStartDate);
+  generateDisplayedWeek();
 
   let salahStatus: string;
 
   const [showModal, setShowModal] = useState(false);
 
   const changePrayerStatus = (
-    tableHeadDate,
-    selectedSalah,
-    salahStatus,
-    icon
+    tableHeadDate: string,
+    selectedSalah: string,
+    salahStatus: string
+    // icon
   ) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
       console.log(item.salahName);
@@ -199,8 +205,8 @@ const PrayerMainView = ({
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         changePrayerStatus={changePrayerStatus}
-        icon={icon}
-        setIcon={setIcon}
+        // icon={icon}
+        // setIcon={setIcon}
         selectedSalah={selectedSalah}
         tableHeadDate={tableHeadDate}
         salahStatus={salahStatus}

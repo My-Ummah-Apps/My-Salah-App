@@ -19,7 +19,7 @@ const SettingIndividual = ({
 }: {
   headingText: string;
   subText: string;
-  indvidualStyles: string;
+  indvidualStyles?: string;
   onClick: () => void;
 }) => {
   return (

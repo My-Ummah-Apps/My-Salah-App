@@ -11,12 +11,12 @@ const CalenderPage = ({
   setCurrentStartDate,
   currentStartDate,
 }: {
-  setCurrentStartDate: number;
+  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingArrayType[]>
   >;
-  salahTrackingArray: salahTrackingArrayType;
+  salahTrackingArray: salahTrackingArrayType[];
 }) => {
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);
