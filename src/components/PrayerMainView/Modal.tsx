@@ -3,33 +3,27 @@ import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 
-interface ModalProps {
-  showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  salahObjects: [];
-  setSalahObjects: React.Dispatch<React.SetStateAction<[]>>;
-  selectedSalah: any;
-  tableHeadDate: any;
-  columnIndex: any;
-  // icon: any;
-  setIcon: any;
-  selectedSalah: any;
-  tableHeadDate: any;
-  changePrayerStatus: any;
-}
-
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
   setShowModal,
   showModal,
-  setSalahObjects,
-  salahObjects,
   selectedSalah,
   tableHeadDate,
-  salahStatus,
-  columnIndex,
+  // salahStatus,
+  // columnIndex,
   // icon,
-  setIcon,
+  // setIcon,
   changePrayerStatus,
+}: {
+  showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  // columnIndex: number;
+  selectedSalah: string;
+  tableHeadDate: string;
+  changePrayerStatus: (
+    tableHeadDate: string,
+    selectedSalah: string,
+    salahStatus: string
+  ) => void;
 }) => {
   return (
     <ReactModal
@@ -45,8 +39,8 @@ const Modal: React.FC<ModalProps> = ({
             changePrayerStatus(
               tableHeadDate,
               selectedSalah,
-              "masjid",
-              <FaMosque />
+              "masjid"
+              // <FaMosque />
             );
             setShowModal(false);
           }}
@@ -56,8 +50,8 @@ const Modal: React.FC<ModalProps> = ({
             changePrayerStatus(
               tableHeadDate,
               selectedSalah,
-              "home",
-              <FaHome />
+              "home"
+              // <FaHome />
             );
             setShowModal(false);
           }}
@@ -67,8 +61,8 @@ const Modal: React.FC<ModalProps> = ({
             changePrayerStatus(
               tableHeadDate,
               selectedSalah,
-              "blank",
-              <LuDot />
+              "blank"
+              // <LuDot />
             );
 
             setShowModal(false);

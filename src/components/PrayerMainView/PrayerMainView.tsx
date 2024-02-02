@@ -8,7 +8,11 @@ import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 // import { FaMoon } from "react-icons/fa";
 import { subDays, format, parse } from "date-fns";
 // import { render } from "react-dom";
-import { salahTrackingArrayType } from "../../types/types";
+import { salahTrackingEntryType } from "../../types/types";
+// interface salahTrackingEntryType {
+//   salahName: string;
+//   completedDates: { [date: string]: string }[] | [];
+// }
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -19,8 +23,10 @@ const PrayerMainView = ({
   // currentStartDate,
   startDate,
 }: {
-  setSalahTrackingArray: React.Dispatch<React.SetStateAction<number>>;
-  salahTrackingArray: salahTrackingArrayType[];
+  setSalahTrackingArray: React.Dispatch<
+    React.SetStateAction<salahTrackingEntryType[]>
+  >;
+  salahTrackingArray: salahTrackingEntryType[];
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   // currentStartDate: number;
   startDate: Date;
@@ -32,7 +38,7 @@ const PrayerMainView = ({
   // const SalahIcons: string[] = ["<RiSunFill />", "<FaMoon />"];
 
   // Array to hold the last five dates
-  let currentDisplayedWeek: string[];
+  let currentDisplayedWeek: string[] = [];
   function generateDisplayedWeek() {
     currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
       const date = subDays(startDate, 4 - index);
@@ -43,16 +49,16 @@ const PrayerMainView = ({
   // generateDisplayedWeek(currentStartDate);
   generateDisplayedWeek();
 
-  let salahStatus: string;
+  let salahStatus: string = "";
 
   const [showModal, setShowModal] = useState(false);
 
-  const changePrayerStatus = (
+  const changePrayerStatus: (
     tableHeadDate: string,
     selectedSalah: string,
     salahStatus: string
     // icon
-  ) => {
+  ) => void = (tableHeadDate, selectedSalah, salahStatus) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
       console.log(item.salahName);
       if (item.salahName == selectedSalah) {
@@ -133,8 +139,8 @@ const PrayerMainView = ({
       JSON.stringify(newSalahTrackingArray)
     );
   };
-  let clickedElement;
-  let columnIndex;
+  let clickedElement: any;
+  let columnIndex: number;
   function grabDate(e: any) {
     const cell = e.target as HTMLTableCellElement;
     columnIndex = cell.cellIndex;
@@ -161,12 +167,12 @@ const PrayerMainView = ({
     setTableHeadDate(tableHeadDate);
   }
 
-  function renderCells(index) {
+  function renderCells(index: number) {
     // if (selectedSalah == "Zohar") {
     //   test = "text-amber-300";
     // }
     return currentDisplayedWeek.map((date: any) => {
-      let cellIcon = (
+      let cellIcon: string | JSX.Element = (
         <LuDot className="flex self-center justify-self-center w-[100%]" />
       );
       const matchedObject = salahTrackingArray[index]?.completedDates.find(
@@ -202,14 +208,11 @@ const PrayerMainView = ({
       <Modal
         setShowModal={setShowModal}
         showModal={showModal}
-        setSalahTrackingArray={setSalahTrackingArray}
-        salahTrackingArray={salahTrackingArray}
         changePrayerStatus={changePrayerStatus}
         // icon={icon}
         // setIcon={setIcon}
         selectedSalah={selectedSalah}
         tableHeadDate={tableHeadDate}
-        salahStatus={salahStatus}
       />
       {/* <img
         className="rounded-lg"

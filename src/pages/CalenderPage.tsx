@@ -1,6 +1,6 @@
 import { useState } from "react";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import { salahTrackingArrayType } from "../types/types";
+import { salahTrackingEntryType } from "../types/types";
 
 import CalenderMonthly from "../components/Calender/CalenderMonthly";
 import CalenderYearly from "../components/Calender/CalenderYearly";
@@ -14,9 +14,9 @@ const CalenderPage = ({
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingArrayType[]>
+    React.SetStateAction<salahTrackingEntryType[]>
   >;
-  salahTrackingArray: salahTrackingArrayType[];
+  salahTrackingArray: salahTrackingEntryType[];
 }) => {
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);

@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import PrayerMainView from "../components/PrayerMainView/PrayerMainView";
 import NextSalahTime from "../components/NextSalahTime";
-import { salahTrackingArrayType } from "../types/types";
+import { salahTrackingEntryType } from "../types/types";
 
 import { subDays } from "date-fns";
+// interface salahTrackingEntryType {
+//   salahName: string;
+//   completedDates: { [date: string]: string }[] | [];
+// }
 
 const MainPage = ({
   // setSalahObjects: setSalahObjects,
@@ -16,9 +20,9 @@ const MainPage = ({
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingArrayType[]>
+    React.SetStateAction<salahTrackingEntryType[]>
   >;
-  salahTrackingArray: salahTrackingArrayType[];
+  salahTrackingArray: salahTrackingEntryType[];
 }) => {
   console.log(currentStartDate);
   const today: Date = new Date();
@@ -44,7 +48,7 @@ const MainPage = ({
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         setCurrentStartDate={setCurrentStartDate}
-        currentStartDate={currentStartDate}
+        // currentStartDate={currentStartDate}
         startDate={startDate}
       />
     </div>

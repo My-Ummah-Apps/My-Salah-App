@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-// import { salahTrackingArrayType } from "./types/types";
+import { salahTrackingEntryType } from "./types/types";
 
-interface salahTrackingEntryType {
-  salahName: string;
-  completedDates: { [date: string]: string }[] | [];
-}
+// interface salahTrackingEntryType {
+//   salahName: string;
+//   completedDates: { [date: string]: string }[] | [];
+// }
 
 // import "./App.css";
 import NavBar from "./components/Nav/NavBar";

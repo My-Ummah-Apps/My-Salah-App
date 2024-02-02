@@ -2,7 +2,8 @@ import { useState } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 // import PrayerMainView from "../PrayerMainView/PrayerMainView";
 import Modal from "../Calender/Modal";
-import ReactModal from "react-modal";
+// import ReactModal from "react-modal";
+import { salahTrackingEntryType } from "../../types/types";
 
 import {
   add,
@@ -11,41 +12,49 @@ import {
   endOfMonth,
   endOfWeek,
   format,
-  getDay,
-  isSameMonth,
-  isToday,
+  // getDay,
+  // isSameMonth,
+  // isToday,
   parse,
   startOfToday,
   startOfYear,
   startOfWeek,
-  startOfISOWeek,
+  // startOfISOWeek,
   startOfMonth,
   eachMonthOfInterval,
   endOfYear,
-  addMonths,
+  // addMonths,
 } from "date-fns";
 
 const CalenderYearly = ({
   setSalahTrackingArray,
   salahTrackingArray,
-  setCurrentStartDate,
+  // setCurrentStartDate,
   currentStartDate,
-  setStartDate,
+  // setStartDate,
   startDate,
   modifySingleDaySalah,
+}: {
+  setSalahTrackingArray: React.Dispatch<
+    React.SetStateAction<salahTrackingEntryType[]>
+  >;
+  salahTrackingArray: salahTrackingEntryType[];
+  currentStartDate: number;
+  startDate: Date;
+  modifySingleDaySalah: (date: object) => void;
 }) => {
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   //   const days = [""];
-  const colStartClasses = [
-    // "",
-    // "col-start-2",
-    // "col-start-3",
-    // "col-start-4",
-    // "col-start-5",
-    // "col-start-6",
-    // "col-start-7",
-  ];
+  // const colStartClasses = [
+  //   // "",
+  //   // "col-start-2",
+  //   // "col-start-3",
+  //   // "col-start-4",
+  //   // "col-start-5",
+  //   // "col-start-6",
+  //   // "col-start-7",
+  // ];
 
   const [showModal, setShowModal] = useState(false);
 
@@ -54,7 +63,7 @@ const CalenderYearly = ({
   ); // Jan-2024 (string)
 
   const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
-  console.log(currentYear);
+  // console.log(currentYear);
 
   const monthsInYear = eachMonthOfInterval({
     start: startOfYear(currentYear),
@@ -72,10 +81,8 @@ const CalenderYearly = ({
 
   // console.log(monthStrings);
 
-  let dateColor: string;
-
-  let datesArray = [];
-  const allDatesArray = salahTrackingArray.reduce((value, salah) => {
+  let datesArray: string[] = [];
+  const allDatesArray = salahTrackingArray.reduce((value: string[], salah) => {
     salah.completedDates.forEach((item) => {
       datesArray.push(Object.keys(item)[0]);
     });
@@ -84,7 +91,7 @@ const CalenderYearly = ({
 
   // console.log(allDatesArray);
 
-  let dArray = [];
+  let dArray: string[] = [];
 
   const howManyDatesExist = (date: string) => {
     // allDatesArray.reduce((value, dateString) => {
@@ -121,16 +128,17 @@ const CalenderYearly = ({
     return color;
   };
 
-  function doesDateExist(date) {
-    return allDatesArray.includes(format(date, "dd.MM.yy"));
-  }
+  // function doesDateExist(date) {
+  //   return allDatesArray.includes(format(date, "dd.MM.yy"));
+  // }
 
-  console.log("currentYear " + currentYear);
-  console.log("currentMonth " + currentMonth);
+  // console.log("currentYear " + currentYear);
+  // console.log("currentMonth " + currentMonth);
 
-  const isDayInSpecificMonth = (dayToCheck: any, currentMonth: any) => {
+  const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
     const dayMonth = startOfMonth(dayToCheck);
+
     return (
       dayMonth.getMonth() === parsedCurrentMonth.getMonth() &&
       dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
@@ -138,8 +146,7 @@ const CalenderYearly = ({
   };
 
   let firstDayOfMonth;
-  const yearlyMonthsData = (month) => {
-    // console.log(month);
+  const yearlyMonthsData = (month: string) => {
     firstDayOfMonth = parse(month, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
     //
     const daysInMonth = eachDayOfInterval({
@@ -162,7 +169,7 @@ const CalenderYearly = ({
             <div className="flex items-center gap-6 justify-evenly chevrons">
               <IoChevronBackSharp
                 className="w-6 h-6 cursor-pointer"
-                onClick={(e) => {
+                onClick={(e: any) => {
                   e.preventDefault();
                   setCurrentYear((prevYearValue) =>
                     sub(prevYearValue, { years: 1 })
@@ -171,7 +178,7 @@ const CalenderYearly = ({
               />
               <IoChevronForward
                 className="w-6 h-6 cursor-pointer"
-                onClick={(e) => {
+                onClick={(e: any) => {
                   e.preventDefault();
                   setCurrentYear((prevYearValue) =>
                     add(prevYearValue, { years: 1 })
