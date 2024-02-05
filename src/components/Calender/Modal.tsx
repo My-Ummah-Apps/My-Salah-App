@@ -1,4 +1,4 @@
-import { parse } from "date-fns";
+// import { parse } from "date-fns";
 import PrayerMainView from "../PrayerMainView/PrayerMainView";
 import { salahTrackingEntryType } from "../../types/types";
 

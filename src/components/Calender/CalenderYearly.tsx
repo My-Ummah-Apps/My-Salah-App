@@ -16,7 +16,7 @@ import {
   // isSameMonth,
   // isToday,
   parse,
-  startOfToday,
+  // startOfToday,
   startOfYear,
   startOfWeek,
   // startOfISOWeek,
@@ -29,7 +29,7 @@ import {
 const CalenderYearly = ({
   setSalahTrackingArray,
   salahTrackingArray,
-  // setCurrentStartDate,
+  setCurrentStartDate,
   currentStartDate,
   // setStartDate,
   startDate,
@@ -39,11 +39,12 @@ const CalenderYearly = ({
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   salahTrackingArray: salahTrackingEntryType[];
-  currentStartDate: number;
   startDate: Date;
-  modifySingleDaySalah: (date: object) => void;
+  modifySingleDaySalah: (date: Date) => void;
+  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
+  currentStartDate: number;
 }) => {
-  const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
+  // const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   //   const days = [""];
   // const colStartClasses = [
@@ -58,9 +59,11 @@ const CalenderYearly = ({
 
   const [showModal, setShowModal] = useState(false);
 
-  const [currentMonth, setcurrentMonth] = useState(() =>
-    format(today, "MMM-yyyy")
-  ); // Jan-2024 (string)
+  // const [currentMonth, setcurrentMonth] = useState(() =>
+  //   format(today, "MMM-yyyy")
+  // ); // Jan-2024 (string)
+
+  // const currentMonth: () => string = () => format(today, "MMM-yyyy");
 
   const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
   // console.log(currentYear);
@@ -81,17 +84,29 @@ const CalenderYearly = ({
 
   // console.log(monthStrings);
 
-  let datesArray: string[] = [];
-  const allDatesArray = salahTrackingArray.reduce((value: string[], salah) => {
-    salah.completedDates.forEach((item) => {
-      datesArray.push(Object.keys(item)[0]);
-    });
-    return datesArray;
-  }, []);
+  // let datesArray: string[] = [];
+  // const allDatesArray = salahTrackingArray.reduce((value: string[], salah) => {
+  //   salah.completedDates.forEach((item) => {
+  //     datesArray.push(Object.keys(item)[0]);
+  //   });
+  //   return datesArray;
+  // }, []);
+
+  const allDatesArray = salahTrackingArray.reduce<string[]>(
+    (accumulatorArray, salah) => {
+      salah.completedDates.forEach((item) => {
+        // datesArray.push(Object.keys(item)[0]);
+        accumulatorArray.push(Object.keys(item)[0]);
+      });
+      // return datesArray;
+      return accumulatorArray;
+    },
+    []
+  );
 
   // console.log(allDatesArray);
 
-  let dArray: string[] = [];
+  // let dArray: string[] = [];
 
   const howManyDatesExist = (date: string) => {
     // allDatesArray.reduce((value, dateString) => {
@@ -99,32 +114,39 @@ const CalenderYearly = ({
     //   return value;
     // }, 0);
 
-    let increment = 0;
-    const sameDatesArray = allDatesArray.map((currentDate) => {
-      if (currentDate === date) {
-        dArray.push(date);
-        increment = dArray.length;
-      }
+    // let increment = 0;
+    // const sameDatesArray = allDatesArray.map((currentDate) => {
+    //   if (currentDate === date) {
+    //     dArray.push(date);
+    //     increment = dArray.length;
+    //   }
 
-      return dArray;
-    });
+    //   return dArray;
+    // });
+
+    let sameDatesArray = allDatesArray.filter(
+      (currentDate) => currentDate === date
+    );
+
+    let sameDatesArrayLength = sameDatesArray.length;
 
     let color;
-    if (increment === 0) {
+    if (sameDatesArrayLength === 0) {
       // console.log("increment > 2");
       color = "red";
-    } else if (increment > 0 && increment < 5) {
+    } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
       // console.log("increment < 2");
 
       color = "orange";
-    } else if (increment === 5) {
+    } else if (sameDatesArrayLength === 5) {
       // console.log("increment === 4");
 
       color = "green";
     } else {
       color = "yellow";
     }
-    dArray = [];
+    // dArray = [];
+    sameDatesArray = [];
     return color;
   };
 
@@ -134,6 +156,9 @@ const CalenderYearly = ({
 
   // console.log("currentYear " + currentYear);
   // console.log("currentMonth " + currentMonth);
+
+  // const currentMonth: string = format(today, "MMM-yyyy");
+  // console.log("Current Month outside ", currentMonth);
 
   const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -242,6 +267,7 @@ const CalenderYearly = ({
                     showModal={showModal}
                     salahTrackingArray={salahTrackingArray}
                     setSalahTrackingArray={setSalahTrackingArray}
+                    setCurrentStartDate={setCurrentStartDate}
                     currentStartDate={currentStartDate}
                     startDate={startDate}
                   />

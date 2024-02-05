@@ -20,11 +20,13 @@ const CalenderPage = ({
 }) => {
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);
-  const [startDate, setStartDate] = useState({});
+  const [startDate, setStartDate] = useState<Date>(new Date());
 
-  function modifySingleDaySalah(date: object) {
+  function modifySingleDaySalah(date: Date) {
     setStartDate(date);
   }
+
+  console.log(startDate);
 
   return (
     <>
@@ -49,7 +51,7 @@ const CalenderPage = ({
         <CalenderMonthly
           setSalahTrackingArray={setSalahTrackingArray}
           salahTrackingArray={salahTrackingArray}
-          setStartDate={setStartDate}
+          // setStartDate={setStartDate}
           startDate={startDate}
           setCurrentStartDate={setCurrentStartDate}
           currentStartDate={currentStartDate}
@@ -62,7 +64,7 @@ const CalenderPage = ({
             salahTrackingArray={salahTrackingArray}
             setCurrentStartDate={setCurrentStartDate}
             currentStartDate={currentStartDate}
-            setStartDate={setStartDate}
+            // setStartDate={setStartDate}
             startDate={startDate}
             modifySingleDaySalah={modifySingleDaySalah}
           />

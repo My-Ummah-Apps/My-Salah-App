@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
-import ReactModal from "react-modal";
+// import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
@@ -49,7 +49,7 @@ const PrayerMainView = ({
   // generateDisplayedWeek(currentStartDate);
   generateDisplayedWeek();
 
-  let salahStatus: string = "";
+  // let salahStatus: string = "";
 
   const [showModal, setShowModal] = useState(false);
 
@@ -231,13 +231,13 @@ const PrayerMainView = ({
         <thead className="">
           <tr className="hidden ">
             <th className="border-none"></th>
-            {currentDisplayedWeek.map((item, index) => {
+            {currentDisplayedWeek.map((item) => {
               return <td className="px-2 py-5 text-xs border-none">{item}</td>;
             })}
           </tr>
           <tr className="">
             <th className="border-none"></th>
-            {currentDisplayedWeek.map((item, index) => {
+            {currentDisplayedWeek.map((item) => {
               const parsedDate = parse(item, "dd.MM.yy", new Date());
               const formattedDate = format(parsedDate, "EEE dd");
 

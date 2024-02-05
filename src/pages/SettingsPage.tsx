@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Modal from "react-modal";
@@ -25,6 +26,9 @@ const SettingsPage = () => {
       dialogTitle: "",
     });
   };
+  const [showModal, setShowModal] = useState(false);
+  setShowModal;
+
   return (
     <div className="settings-page-wrap">
       <div className="text-center settings-page-header">
@@ -89,7 +93,7 @@ const SettingsPage = () => {
         />
         <Modal
           //   style={modalStyles}
-          //   isOpen={showModal2}
+          isOpen={showModal}
           //   onRequestClose={handleCloseModal2}
           closeTimeoutMS={250}
           contentLabel="Modal #2 Global Style Override Example"

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Modal from "react-modal";
 // @ts-ignore
 import Switch from "react-ios-switch";
-import { Share } from "@capacitor/share";
+// import { Share } from "@capacitor/share";
 // import { FaHandHoldingHeart } from "react-icons/fa";
 
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -22,6 +22,8 @@ const SettingIndividual = ({
   indvidualStyles?: string;
   onClick: () => void;
 }) => {
+  const [showModal, setShowModal] = useState(false);
+  setShowModal;
   return (
     <>
       <div
@@ -48,7 +50,7 @@ const SettingIndividual = ({
 
       <Modal
         // style={modalStyles}
-        // isOpen={showModal5}
+        isOpen={showModal}
         // onRequestClose={handleCloseModal5}
         closeTimeoutMS={250}
         contentLabel="Modal #2 Global Style Override Example"
@@ -123,8 +125,8 @@ const SettingIndividual = ({
                   )} */}
           <Modal
             // style={modalStyles}
-            // isOpen={showModal6}
-            // onRequestClose={handleCloseModal5}
+            isOpen={showModal}
+            // onRequestClose={handleCloseModal
             closeTimeoutMS={250}
             contentLabel="Modal #2 Global Style Override Example"
           >

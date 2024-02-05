@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import Modal from "../Calender/Modal";
-import ReactModal from "react-modal";
+// import ReactModal from "react-modal";
+import { salahTrackingEntryType } from "../../types/types";
 
 import {
   add,
@@ -9,51 +10,63 @@ import {
   endOfMonth,
   endOfWeek,
   format,
-  getDay,
-  isSameMonth,
-  isToday,
+  // getDay,
+  // isSameMonth,
+  // isToday,
   parse,
   startOfToday,
   startOfWeek,
-  startOfISOWeek,
+  // startOfISOWeek,
   startOfMonth,
 } from "date-fns";
 
 const CalenderMonthly = ({
   setSalahTrackingArray,
   salahTrackingArray,
-  setStartDate,
+  // setStartDate,
   startDate,
   modifySingleDaySalah,
   setCurrentStartDate,
   currentStartDate,
+}: {
+  setSalahTrackingArray: React.Dispatch<
+    React.SetStateAction<salahTrackingEntryType[]>
+  >;
+  salahTrackingArray: salahTrackingEntryType[];
+  startDate: Date;
+  modifySingleDaySalah: (date: Date) => void;
+  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
+  currentStartDate: number;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   //   const days = [""];
-  const colStartClasses = [
-    // "",
-    // "col-start-2",
-    // "col-start-3",
-    // "col-start-4",
-    // "col-start-5",
-    // "col-start-6",
-    // "col-start-7",
-  ];
-  let dateColor: string;
+  // const colStartClasses = [
+  //   // "",
+  //   // "col-start-2",
+  //   // "col-start-3",
+  //   // "col-start-4",
+  //   // "col-start-5",
+  //   // "col-start-6",
+  //   // "col-start-7",
+  // ];
+  // let dateColor: string;
 
-  let datesArray = [];
-  const allDatesArray = salahTrackingArray.reduce((value, salah) => {
-    salah.completedDates.forEach((item) => {
-      datesArray.push(Object.keys(item)[0]);
-    });
-    return datesArray;
-  }, []);
+  // const datesArray: string[] = [];
+  const allDatesArray = salahTrackingArray.reduce<string[]>(
+    (accumulatorArray, salah) => {
+      salah.completedDates.forEach((item) => {
+        // datesArray.push(Object.keys(item)[0]);
+        accumulatorArray.push(Object.keys(item)[0]);
+      });
+      // return datesArray;
+      return accumulatorArray;
+    },
+    []
+  );
 
-  // console.log(allDatesArray);
-
-  let dArray = [];
+  // let dArray = [];
 
   const howManyDatesExist = (date: string) => {
     // allDatesArray.reduce((value, dateString) => {
@@ -61,40 +74,47 @@ const CalenderMonthly = ({
     //   return value;
     // }, 0);
 
-    let increment = 0;
-    const sameDatesArray = allDatesArray.map((currentDate) => {
-      if (currentDate === date) {
-        dArray.push(date);
-        increment = dArray.length;
-      }
+    // let increment = 0;
+    // let sameDatesArray = allDatesArray.map((currentDate) => {
+    //   if (currentDate === date) {
+    //     dArray.push(date);
+    //     increment = dArray.length;
+    //   }
 
-      return dArray;
-    });
+    //   return dArray;
+    // });
+
+    let sameDatesArray = allDatesArray.filter(
+      (currentDate) => currentDate === date
+    );
+
+    let sameDatesArrayLength = sameDatesArray.length;
 
     let color;
-    if (increment === 0) {
+    if (sameDatesArrayLength === 0) {
       // console.log("increment > 2");
       color = "red";
-    } else if (increment > 0 && increment < 5) {
+    } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
       // console.log("increment < 2");
 
       color = "orange";
-    } else if (increment === 5) {
+    } else if (sameDatesArrayLength === 5) {
       // console.log("increment === 4");
 
       color = "green";
     } else {
       color = "yellow";
     }
-    dArray = [];
+    // dArray = [];
+    sameDatesArray = [];
     return color;
   };
 
   // console.log(howManyDatesExist("31.01.24"));
 
-  function doesDateExist(date) {
-    return allDatesArray.includes(format(date, "dd.MM.yy"));
-  }
+  // function doesDateExist(date) {
+  //   return allDatesArray.includes(format(date, "dd.MM.yy"));
+  // }
 
   const [currentMonth, setcurrentMonth] = useState(() =>
     format(today, "MMM-yyyy")
@@ -197,6 +217,7 @@ const CalenderMonthly = ({
                     showModal={showModal}
                     salahTrackingArray={salahTrackingArray}
                     setSalahTrackingArray={setSalahTrackingArray}
+                    setCurrentStartDate={setCurrentStartDate}
                     currentStartDate={currentStartDate}
                     startDate={startDate}
                   />
