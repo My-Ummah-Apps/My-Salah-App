@@ -4,6 +4,7 @@ import { salahTrackingEntryType } from "../types/types";
 
 import CalenderMonthly from "../components/Calender/CalenderMonthly";
 import CalenderYearly from "../components/Calender/CalenderYearly";
+// import CalenderMonthlyPerPrayer from "../components/Calender/CalenderMonthlyPerPrayer";
 
 const CalenderPage = ({
   setSalahTrackingArray,
