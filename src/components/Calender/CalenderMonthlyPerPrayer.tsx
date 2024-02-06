@@ -28,6 +28,7 @@ const CalenderMonthlyPerPrayer = ({
   modifySingleDaySalah,
   setCurrentStartDate,
   currentStartDate,
+  salahName,
 }: {
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
@@ -37,6 +38,7 @@ const CalenderMonthlyPerPrayer = ({
   modifySingleDaySalah: (date: Date) => void;
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
+  salahName: string;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
@@ -56,10 +58,14 @@ const CalenderMonthlyPerPrayer = ({
   // const datesArray: string[] = [];
   const allDatesArray = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
-      salah.completedDates.forEach((item) => {
-        // datesArray.push(Object.keys(item)[0]);
-        accumulatorArray.push(Object.keys(item)[0]);
-      });
+      if (salah.salahName === salahName) {
+        salah.completedDates.forEach((item) => {
+          // datesArray.push(Object.keys(item)[0]);
+
+          accumulatorArray.push(Object.keys(item)[0]);
+        });
+      }
+
       // return datesArray;
       return accumulatorArray;
     },
@@ -152,12 +158,14 @@ const CalenderMonthlyPerPrayer = ({
 
   return (
     <>
-      <h1 className="pt-5 text-3xl">Monthly</h1>
+      {/* <h1 className="pt-5 text-3xl">Monthly</h1> */}
+      <h1 className="pt-5 text-3xl">{format(firstDayOfMonth, "MMMM yyyy")}</h1>
       <div className="flex items-center justify-center w-screen h-screen p-8">
-        <div className="w-[900px] h-[600px]">
+        <div className="w-[900px] ">
           <div className="flex items-center justify-between">
             <p className="text-xl font-semibold">
-              {format(firstDayOfMonth, "MMMM yyyy")}
+              {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
+              {salahName}
             </p>
             <div className="flex items-center gap-6 justify-evenly sm:gap-12">
               <IoChevronBackSharp

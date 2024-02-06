@@ -4,7 +4,7 @@ import { salahTrackingEntryType } from "../types/types";
 
 import CalenderMonthly from "../components/Calender/CalenderMonthly";
 import CalenderYearly from "../components/Calender/CalenderYearly";
-// import CalenderMonthlyPerPrayer from "../components/Calender/CalenderMonthlyPerPrayer";
+import CalenderMonthlyPerPrayer from "../components/Calender/CalenderMonthlyPerPrayer";
 
 const CalenderPage = ({
   setSalahTrackingArray,
@@ -27,11 +27,59 @@ const CalenderPage = ({
     setStartDate(date);
   }
 
-  console.log(startDate);
-
   return (
     <>
-      <button
+      <CalenderMonthlyPerPrayer
+        salahName={"Fajr"}
+        setSalahTrackingArray={setSalahTrackingArray}
+        salahTrackingArray={salahTrackingArray}
+        // setStartDate={setStartDate}
+        startDate={startDate}
+        setCurrentStartDate={setCurrentStartDate}
+        currentStartDate={currentStartDate}
+        modifySingleDaySalah={modifySingleDaySalah}
+      />
+      <CalenderMonthlyPerPrayer
+        salahName={"Zohar"}
+        setSalahTrackingArray={setSalahTrackingArray}
+        salahTrackingArray={salahTrackingArray}
+        // setStartDate={setStartDate}
+        startDate={startDate}
+        setCurrentStartDate={setCurrentStartDate}
+        currentStartDate={currentStartDate}
+        modifySingleDaySalah={modifySingleDaySalah}
+      />
+      <CalenderMonthlyPerPrayer
+        salahName={"Asar"}
+        setSalahTrackingArray={setSalahTrackingArray}
+        salahTrackingArray={salahTrackingArray}
+        // setStartDate={setStartDate}
+        startDate={startDate}
+        setCurrentStartDate={setCurrentStartDate}
+        currentStartDate={currentStartDate}
+        modifySingleDaySalah={modifySingleDaySalah}
+      />
+      <CalenderMonthlyPerPrayer
+        salahName={"Maghrib"}
+        setSalahTrackingArray={setSalahTrackingArray}
+        salahTrackingArray={salahTrackingArray}
+        // setStartDate={setStartDate}
+        startDate={startDate}
+        setCurrentStartDate={setCurrentStartDate}
+        currentStartDate={currentStartDate}
+        modifySingleDaySalah={modifySingleDaySalah}
+      />
+      <CalenderMonthlyPerPrayer
+        salahName={"Isha"}
+        setSalahTrackingArray={setSalahTrackingArray}
+        salahTrackingArray={salahTrackingArray}
+        // setStartDate={setStartDate}
+        startDate={startDate}
+        setCurrentStartDate={setCurrentStartDate}
+        currentStartDate={currentStartDate}
+        modifySingleDaySalah={modifySingleDaySalah}
+      />
+      {/* <button
         className="px-5"
         onClick={() => {
           setShowMonthlyCalender(true);
@@ -70,7 +118,7 @@ const CalenderPage = ({
             modifySingleDaySalah={modifySingleDaySalah}
           />
         )
-      )}
+      )} */}
     </>
   );
 };

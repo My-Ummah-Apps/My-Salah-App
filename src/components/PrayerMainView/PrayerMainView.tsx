@@ -242,7 +242,7 @@ const PrayerMainView = ({
               const formattedDate = format(parsedDate, "EEE dd");
 
               return (
-                <td className="px-2 py-5 border-none text-[#c4c4c4]">
+                <td className="px-2 py-5 border-none text-[#c4c4c4] text-center">
                   {formattedDate}
                 </td>
               );

@@ -30,12 +30,6 @@ const MainPage = ({
   console.log(startDate);
   return (
     <div className="overflow-x-auto w-5/5 main-page-wrap">
-      <Link
-        className="px-5"
-        to="../components/Calender/CalenderMonthlyPerPrayer"
-      >
-        Calender Per Prayer
-      </Link>
       <Link to="/CalenderPage">Calender</Link>
       {/* <Link
         onClick={() => {
