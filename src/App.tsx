@@ -12,7 +12,7 @@ import { salahTrackingEntryType } from "./types/types";
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 import ResourcesPage from "./pages/ResourcesPage";
-import CalenderPage from "./pages/CalenderPage";
+import CalenderPage from "./pages/StatsPage";
 import QiblahDirection from "./pages/QiblahDirection";
 
 const App = () => {

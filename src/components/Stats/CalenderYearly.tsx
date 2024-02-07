@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 // import PrayerMainView from "../PrayerMainView/PrayerMainView";
-import Modal from "../Calender/Modal";
+import Modal from "./Modal";
 // import ReactModal from "react-modal";
 import { salahTrackingEntryType } from "../../types/types";
 
