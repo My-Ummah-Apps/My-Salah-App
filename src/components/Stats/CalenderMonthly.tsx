@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import Modal from "./Modal";
 // import ReactModal from "react-modal";
 import { salahTrackingEntryType } from "../../types/types";
@@ -20,7 +19,7 @@ import {
   startOfMonth,
 } from "date-fns";
 
-const CalenderMonthlyPerPrayer = ({
+const CalenderMonthly = ({
   setSalahTrackingArray,
   salahTrackingArray,
   // setStartDate,
@@ -29,18 +28,18 @@ const CalenderMonthlyPerPrayer = ({
   setCurrentStartDate,
   currentStartDate,
   salahName,
-  setcurrentMonthHeading,
+  currentMonth,
 }: {
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
-  setcurrentMonthHeading: React.Dispatch<React.SetStateAction<string>>;
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
   modifySingleDaySalah: (date: Date) => void;
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
-  salahName: string | null;
+  salahName: string;
+  currentMonth: string;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
@@ -61,14 +60,14 @@ const CalenderMonthlyPerPrayer = ({
   // const datesArray: string[] = [];
   const allDatesArray = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
-      if (salahName !== null) {
+      if (salahName !== "Overall") {
         if (salah.salahName === salahName) {
           salah.completedDates.forEach((item) => {
             // datesArray.push(Object.keys(item)[0]);
             accumulatorArray.push(Object.keys(item)[0]);
           });
         }
-      } else if (salahName === null) {
+      } else if (salahName == "Overall") {
         // if (salah.salahName === salahName) {
         salah.completedDates.forEach((item) => {
           // datesArray.push(Object.keys(item)[0]);
@@ -128,15 +127,13 @@ const CalenderMonthlyPerPrayer = ({
     return color;
   };
 
-  // console.log(howManyDatesExist("31.01.24"));
-
   // function doesDateExist(date) {
   //   return allDatesArray.includes(format(date, "dd.MM.yy"));
   // }
 
-  const [currentMonth, setcurrentMonth] = useState(() =>
-    format(today, "MMM-yyyy")
-  ); // Jan-2024 (string)
+  // const [currentMonth, setcurrentMonth] = useState(() =>
+  //   format(today, "MMM-yyyy")
+  // ); // Jan-2024 (string)
 
   const isDayInSpecificMonth = (dayToCheck: any, currentMonth: any) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -156,27 +153,19 @@ const CalenderMonthlyPerPrayer = ({
     end: endOfWeek(endOfMonth(firstDayOfMonth), { weekStartsOn: 1 }), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
   }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
 
-  // setcurrentMonthHeading(format(firstDayOfMonth, "MMMM yyyy"));
-
-  const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-    event.preventDefault();
-    const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
-    setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
-    setcurrentMonthHeading(format(firstDayOfMonth, "MMMM yyyy"));
-  };
-
-  const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-    event.preventDefault();
-    const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
-    setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
-    setcurrentMonthHeading(format(firstDayOfMonth, "MMMM yyyy"));
-  };
-
   return (
     <>
       {/* <h1 className="pt-5 text-3xl">Monthly</h1> */}
 
       <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap my-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3">
+        {/* <IoChevronBackSharp
+          className="w-6 h-6 cursor-pointer"
+          onClick={getPrevMonth}
+        />
+        <IoChevronForward
+          className="w-6 h-6 cursor-pointer"
+          onClick={getNextMonth}
+        /> */}
         {/* <div className="flex items-center justify-between"> */}
         <div className="">
           <p className="text-xl font-semibold text-center">
@@ -184,14 +173,14 @@ const CalenderMonthlyPerPrayer = ({
             {salahName}
           </p>
           <div className="flex items-center gap-6 justify-evenly sm:gap-12">
-            <IoChevronBackSharp
+            {/* <IoChevronBackSharp
               className="w-6 h-6 cursor-pointer"
               onClick={getPrevMonth}
             />
             <IoChevronForward
               className="w-6 h-6 cursor-pointer"
               onClick={getNextMonth}
-            />
+            /> */}
           </div>
         </div>
         <hr className="my-6" />
@@ -258,7 +247,7 @@ const CalenderMonthlyPerPrayer = ({
   );
 };
 
-export default CalenderMonthlyPerPrayer;
+export default CalenderMonthly;
 
 //   ${isToday(day) && "bg-red-500 text-white"}
 // ${!isToday(day) && "hover:bg-blue-500"}

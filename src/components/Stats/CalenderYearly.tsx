@@ -27,6 +27,8 @@ import {
 } from "date-fns";
 
 const CalenderYearly = ({
+  setCurrentYear,
+  currentYear,
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentStartDate,
@@ -35,6 +37,8 @@ const CalenderYearly = ({
   startDate,
   modifySingleDaySalah,
 }: {
+  setCurrentYear: React.Dispatch<React.SetStateAction<Date>>;
+  currentYear: string;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
@@ -65,13 +69,14 @@ const CalenderYearly = ({
 
   // const currentMonth: () => string = () => format(today, "MMM-yyyy");
 
-  const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
-  // console.log(currentYear);
+  // const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
+  // // console.log(currentYear);
 
   const monthsInYear = eachMonthOfInterval({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
   });
+  console.log(monthsInYear);
   // let startDate;
   // const [startDate, setStartDate] = useState();
   // function modifySingleDaySalah(date) {
