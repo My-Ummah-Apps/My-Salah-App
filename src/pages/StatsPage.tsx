@@ -1,9 +1,6 @@
-import { useState } from "react";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { salahTrackingEntryType } from "../types/types";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-
-import { format } from "date-fns";
 
 // import CalenderYearly from "../components/Stats/CalenderYearly";
 // import CalenderMonthly from "../components/Stats/CalenderMonthly";
@@ -22,10 +19,10 @@ const StatsPage = ({
   >;
   salahTrackingArray: salahTrackingEntryType[];
 }) => {
-  const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
-  const [showYearlyCalender, setShowYearlyCalender] = useState(false);
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [currentMonthHeading, setCurrentMonthHeading] = useState<string>("");
+  // const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
+  // const [showYearlyCalender, setShowYearlyCalender] = useState(false);
+  // const [startDate, setStartDate] = useState<Date>(new Date());
+  // const [currentMonthHeading, setCurrentMonthHeading] = useState<string>("");
 
   // function modifySingleDaySalah(date: Date) {
   //   setStartDate(date);
@@ -34,11 +31,11 @@ const StatsPage = ({
   return (
     <>
       <Calender
-        setCurrentMonthHeading={setCurrentMonthHeading}
+        // setCurrentMonthHeading={setCurrentMonthHeading}
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         // setStartDate={setStartDate}
-        startDate={startDate}
+        // startDate={startDate}
         setCurrentStartDate={setCurrentStartDate}
         currentStartDate={currentStartDate}
         // modifySingleDaySalah={modifySingleDaySalah}

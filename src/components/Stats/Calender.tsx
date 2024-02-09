@@ -21,7 +21,7 @@ const Calender = ({
   >;
 
   salahTrackingArray: salahTrackingEntryType[];
-  startDate: Date;
+  //   startDate: Date;
   //   modifySingleDaySalah: (date: Date) => void;
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;

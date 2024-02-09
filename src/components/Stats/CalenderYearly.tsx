@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+
 // import PrayerMainView from "../PrayerMainView/PrayerMainView";
 import Modal from "./Modal";
 // import ReactModal from "react-modal";
@@ -21,7 +21,6 @@ const CalenderYearly = ({
   days,
   isDayInSpecificMonth,
   currentYear,
-  salahName,
   howManyDatesExistWithinSalahTrackingArray,
   setSalahTrackingArray,
   salahTrackingArray,
@@ -85,18 +84,12 @@ const CalenderYearly = ({
       <div className="flex items-center justify-center w-screen h-screen calender-wrap">
         <div className="w-[900px] h-[600px]">
           <div className="flex items-center justify-between chevrons-wrap"></div>
-
           <div>
             <div className="grid grid-cols-2 place-items-center dates-grid-wrap">
               {monthStrings.map((month) => (
-                <div className="single-month-wrap">
-                  <p className="mt-5 mb-2 text-xl font-semibold month-name-text">
-                    {month}
-                  </p>
-                  <div
-                    className="single-month-days-and-dates-wrap bg-[color:var(--card-bg-color)] p-2 rounded-lg shadow-md grid grid-cols-7 month-container"
-                    key={month}
-                  >
+                <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap my-5 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap">
+                  <p className="text-xl font-semibold text-center">{month}</p>
+                  <div className="grid grid-cols-7 gap-6 mb-3 place-items-center days-row-wrap">
                     {days.map((day, index) => {
                       return (
                         <div
@@ -107,7 +100,11 @@ const CalenderYearly = ({
                         </div>
                       );
                     })}
-
+                  </div>
+                  <div
+                    className="grid grid-cols-7 gap-1 place-items-center month-dates-wrap"
+                    key={month}
+                  >
                     {yearlyMonthsData(month).map((day, index) => (
                       <div
                         onClick={() => {
@@ -115,7 +112,7 @@ const CalenderYearly = ({
                           setShowModal(true);
                         }}
                         key={index}
-                        className="p-1 individual-date"
+                        className="individual-date"
                       >
                         <p
                           style={{
@@ -124,10 +121,10 @@ const CalenderYearly = ({
                                 format(day, "dd.MM.yy")
                               ),
                           }}
-                          className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
+                          className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-md  hover:text-white text-sm ${
                             isDayInSpecificMonth(day, month)
-                              ? "text-gray-900"
-                              : "text-gray-400"
+                              ? "text-gray-400"
+                              : "text-gray-900"
                           }`}
                         >
                           {format(day, "d")}

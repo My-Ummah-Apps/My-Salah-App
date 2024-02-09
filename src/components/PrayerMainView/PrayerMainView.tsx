@@ -280,8 +280,8 @@ const PrayerMainView = ({
           <IoChevronBackSharp />
         </button>
         <div>
-          {currentDisplayedWeek[currentDisplayedWeek.length - 1]} -
-          {currentDisplayedWeek[0]}
+          {currentDisplayedWeek[0]} -{" "}
+          {currentDisplayedWeek[currentDisplayedWeek.length - 1]}
         </div>
         <button
           onClick={() => {

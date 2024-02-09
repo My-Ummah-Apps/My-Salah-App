@@ -64,13 +64,13 @@ const CalenderMonthly = ({
 
   return (
     <>
-      <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap my-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3">
-        <div className="">
-          <p className="text-xl font-semibold text-center">
+      <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap my-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
+        <div className="monthly-heading-text-wrap">
+          <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
             {salahName}
           </p>
-          <div className="flex items-center gap-6 justify-evenly sm:gap-12"></div>
+          {/* <div className="flex items-center gap-6 justify-evenly sm:gap-12"></div> */}
         </div>
         <hr className="my-6" />
         <div className="grid grid-cols-7 gap-6 mb-3 place-items-center days-row-wrap">
@@ -83,7 +83,7 @@ const CalenderMonthly = ({
           })}
         </div>
 
-        <div className="grid grid-cols-7 gap-1 place-items-center">
+        <div className="grid grid-cols-7 gap-1 place-items-center month-dates-wrap">
           {daysInMonth.map((day, index) => {
             return (
               <>
