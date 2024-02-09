@@ -27,9 +27,9 @@ const StatsPage = ({
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [currentMonthHeading, setCurrentMonthHeading] = useState<string>("");
 
-  function modifySingleDaySalah(date: Date) {
-    setStartDate(date);
-  }
+  // function modifySingleDaySalah(date: Date) {
+  //   setStartDate(date);
+  // }
 
   return (
     <>
@@ -41,7 +41,7 @@ const StatsPage = ({
         startDate={startDate}
         setCurrentStartDate={setCurrentStartDate}
         currentStartDate={currentStartDate}
-        modifySingleDaySalah={modifySingleDaySalah}
+        // modifySingleDaySalah={modifySingleDaySalah}
       />{" "}
     </>
   );

@@ -6,29 +6,23 @@ import Modal from "./Modal";
 import { salahTrackingEntryType } from "../../types/types";
 
 import {
-  add,
-  sub,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
   format,
-  // getDay,
-  // isSameMonth,
-  // isToday,
   parse,
-  // startOfToday,
   startOfYear,
   startOfWeek,
-  // startOfISOWeek,
-  startOfMonth,
   eachMonthOfInterval,
   endOfYear,
-  // addMonths,
 } from "date-fns";
 
 const CalenderYearly = ({
-  setCurrentYear,
+  days,
+  isDayInSpecificMonth,
   currentYear,
+  salahName,
+  howManyDatesExistWithinSalahTrackingArray,
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentStartDate,
@@ -37,11 +31,14 @@ const CalenderYearly = ({
   startDate,
   modifySingleDaySalah,
 }: {
-  setCurrentYear: React.Dispatch<React.SetStateAction<Date>>;
-  currentYear: string;
+  days: string[];
+  isDayInSpecificMonth: (dayToCheck: Date, currentMonth: string) => boolean;
+  currentYear: Date;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
+  howManyDatesExistWithinSalahTrackingArray: (date: string) => string;
+  salahName: string;
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
   modifySingleDaySalah: (date: Date) => void;
@@ -49,7 +46,7 @@ const CalenderYearly = ({
   currentStartDate: number;
 }) => {
   // const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
-  const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+
   //   const days = [""];
   // const colStartClasses = [
   //   // "",
@@ -62,118 +59,13 @@ const CalenderYearly = ({
   // ];
 
   const [showModal, setShowModal] = useState(false);
-
-  // const [currentMonth, setcurrentMonth] = useState(() =>
-  //   format(today, "MMM-yyyy")
-  // ); // Jan-2024 (string)
-
-  // const currentMonth: () => string = () => format(today, "MMM-yyyy");
-
-  // const [currentYear, setCurrentYear] = useState(new Date()); // Returns current year in yyyy format
-  // // console.log(currentYear);
-
+  console.log(currentYear);
   const monthsInYear = eachMonthOfInterval({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
   });
-  console.log(monthsInYear);
-  // let startDate;
-  // const [startDate, setStartDate] = useState();
-  // function modifySingleDaySalah(date) {
-  //   setStartDate(date);
-  //   console.log("startDate", startDate);
-  //   setShowModal(true);
-  // }
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
-
-  // console.log(monthStrings);
-
-  // let datesArray: string[] = [];
-  // const allDatesArray = salahTrackingArray.reduce((value: string[], salah) => {
-  //   salah.completedDates.forEach((item) => {
-  //     datesArray.push(Object.keys(item)[0]);
-  //   });
-  //   return datesArray;
-  // }, []);
-
-  const allDatesArray = salahTrackingArray.reduce<string[]>(
-    (accumulatorArray, salah) => {
-      salah.completedDates.forEach((item) => {
-        // datesArray.push(Object.keys(item)[0]);
-        accumulatorArray.push(Object.keys(item)[0]);
-      });
-      // return datesArray;
-      return accumulatorArray;
-    },
-    []
-  );
-
-  // console.log(allDatesArray);
-
-  // let dArray: string[] = [];
-
-  const howManyDatesExist = (date: string) => {
-    // allDatesArray.reduce((value, dateString) => {
-    //   console.log(value);
-    //   return value;
-    // }, 0);
-
-    // let increment = 0;
-    // const sameDatesArray = allDatesArray.map((currentDate) => {
-    //   if (currentDate === date) {
-    //     dArray.push(date);
-    //     increment = dArray.length;
-    //   }
-
-    //   return dArray;
-    // });
-
-    let sameDatesArray = allDatesArray.filter(
-      (currentDate) => currentDate === date
-    );
-
-    let sameDatesArrayLength = sameDatesArray.length;
-
-    let color;
-    if (sameDatesArrayLength === 0) {
-      // console.log("increment > 2");
-      color = "red";
-    } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-      // console.log("increment < 2");
-
-      color = "orange";
-    } else if (sameDatesArrayLength === 5) {
-      // console.log("increment === 4");
-
-      color = "green";
-    } else {
-      color = "yellow";
-    }
-    // dArray = [];
-    sameDatesArray = [];
-    return color;
-  };
-
-  // function doesDateExist(date) {
-  //   return allDatesArray.includes(format(date, "dd.MM.yy"));
-  // }
-
-  // console.log("currentYear " + currentYear);
-  // console.log("currentMonth " + currentMonth);
-
-  // const currentMonth: string = format(today, "MMM-yyyy");
-  // console.log("Current Month outside ", currentMonth);
-
-  const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
-    const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
-    const dayMonth = startOfMonth(dayToCheck);
-
-    return (
-      dayMonth.getMonth() === parsedCurrentMonth.getMonth() &&
-      dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
-    );
-  };
 
   let firstDayOfMonth;
   const yearlyMonthsData = (month: string) => {
@@ -188,36 +80,11 @@ const CalenderYearly = ({
     return daysInMonth;
   };
 
-  // console.log(yearlyMonthsData("Jun-2024"));
-
   return (
     <>
-      <h1 className="pt-5 text-3xl yearly-text">Yearly</h1>
       <div className="flex items-center justify-center w-screen h-screen calender-wrap">
         <div className="w-[900px] h-[600px]">
-          <div className="flex items-center justify-between chevrons-wrap">
-            <div className="flex items-center gap-6 justify-evenly chevrons">
-              <IoChevronBackSharp
-                className="w-6 h-6 cursor-pointer"
-                onClick={(e: any) => {
-                  e.preventDefault();
-                  setCurrentYear((prevYearValue) =>
-                    sub(prevYearValue, { years: 1 })
-                  );
-                }}
-              />
-              <IoChevronForward
-                className="w-6 h-6 cursor-pointer"
-                onClick={(e: any) => {
-                  e.preventDefault();
-                  setCurrentYear((prevYearValue) =>
-                    add(prevYearValue, { years: 1 })
-                  );
-                }}
-              />
-            </div>
-          </div>
-          <hr className="my-6" />
+          <div className="flex items-center justify-between chevrons-wrap"></div>
 
           <div>
             <div className="grid grid-cols-2 place-items-center dates-grid-wrap">
@@ -252,9 +119,10 @@ const CalenderYearly = ({
                       >
                         <p
                           style={{
-                            backgroundColor: howManyDatesExist(
-                              format(day, "dd.MM.yy")
-                            ),
+                            backgroundColor:
+                              howManyDatesExistWithinSalahTrackingArray(
+                                format(day, "dd.MM.yy")
+                              ),
                           }}
                           className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full hover:text-white ${
                             isDayInSpecificMonth(day, month)
