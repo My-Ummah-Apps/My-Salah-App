@@ -1,4 +1,4 @@
-const StatsPage = () => {
+const ResourcesPage = () => {
   return (
     <section>
       <h1>Resources Page</h1>
@@ -28,4 +28,4 @@ const StatsPage = () => {
   );
 };
 
-export default StatsPage;
+export default ResourcesPage;

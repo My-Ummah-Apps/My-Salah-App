@@ -20,7 +20,6 @@ const PrayerMainView = ({
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentStartDate,
-  // currentStartDate,
   startDate,
 }: {
   setSalahTrackingArray: React.Dispatch<
@@ -28,9 +27,9 @@ const PrayerMainView = ({
   >;
   salahTrackingArray: salahTrackingEntryType[];
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
-  // currentStartDate: number;
   startDate: Date;
 }) => {
+  console.log("PRAYER MAIN VIEW RENDERED");
   // const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
@@ -242,7 +241,7 @@ const PrayerMainView = ({
               const formattedDate = format(parsedDate, "EEE dd");
 
               return (
-                <td className="px-2 py-5 border-none text-[#c4c4c4] text-center">
+                <td className="px-2 py-5 border-none text-[#c4c4c4] text-center ">
                   {formattedDate}
                 </td>
               );
@@ -253,7 +252,7 @@ const PrayerMainView = ({
           {salahTrackingArray?.map((item, index) => {
             return (
               <tr className="bg-[color:var(--card-bg-color)]">
-                <td className="py-5 border-none">
+                <td className="py-5 border-none table-salah-name-td">
                   <div className="flex flex-row items-center">
                     {/* <img
                       className="w-8 mr-4"
@@ -262,7 +261,9 @@ const PrayerMainView = ({
                       srcset=""
                     /> */}
                     {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
-                    <p className="text-[#c4c4c4]">{item.salahName}</p>
+                    <p className="text-[#c4c4c4] table-salah-name">
+                      {item.salahName}
+                    </p>
                   </div>
                 </td>
                 {renderCells(index)}

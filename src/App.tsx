@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import { salahTrackingEntryType } from "./types/types";
+import { subDays } from "date-fns";
 
 // interface salahTrackingEntryType {
 //   salahName: string;
@@ -12,7 +13,7 @@ import { salahTrackingEntryType } from "./types/types";
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 import ResourcesPage from "./pages/ResourcesPage";
-import CalenderPage from "./pages/StatsPage";
+import StatsPage from "./pages/StatsPage";
 import QiblahDirection from "./pages/QiblahDirection";
 
 const App = () => {
@@ -25,6 +26,8 @@ const App = () => {
   >([]);
 
   const [currentStartDate, setCurrentStartDate] = useState(0);
+  const today: Date = new Date();
+  const startDate: Date = subDays(today, currentStartDate);
 
   useEffect(() => {
     const storedSalahTrackingData = localStorage.getItem(
@@ -56,7 +59,6 @@ const App = () => {
         ]);
   }, []);
 
-  console.log(salahTrackingArray);
   return (
     <BrowserRouter>
       <section className="App">
@@ -66,6 +68,7 @@ const App = () => {
             index
             element={
               <MainPage
+                startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
                 setCurrentStartDate={setCurrentStartDate}
@@ -75,12 +78,13 @@ const App = () => {
           />
           <Route path="/SettingsPage" element={<SettingsPage />} />
           <Route
-            path="/CalenderPage"
+            path="/StatsPage"
             element={
-              <CalenderPage
+              <StatsPage
+                setCurrentStartDate={setCurrentStartDate}
+                startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
-                setCurrentStartDate={setCurrentStartDate}
                 currentStartDate={currentStartDate}
               />
             }

@@ -11,6 +11,7 @@ const Modal = ({
   salahTrackingArray,
   setCurrentStartDate,
   // currentStartDate,
+  // selectedDay,
   startDate,
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +22,7 @@ const Modal = ({
   salahTrackingArray: salahTrackingEntryType[];
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
+  // selectedDay: Date;
   startDate: Date;
 }) => {
   //   const dateString = selectedDate;
@@ -28,6 +30,7 @@ const Modal = ({
 
   return (
     <ReactModal
+      style={{ content: { background: "rgb(33, 36, 38)" } }}
       ariaHideApp={false}
       isOpen={showModal}
       onRequestClose={() => {
@@ -40,6 +43,7 @@ const Modal = ({
           salahTrackingArray={salahTrackingArray}
           setCurrentStartDate={setCurrentStartDate}
           // currentStartDate={currentStartDate}
+          // selectedDay={selectedDay}
           startDate={startDate}
         />
       </div>{" "}

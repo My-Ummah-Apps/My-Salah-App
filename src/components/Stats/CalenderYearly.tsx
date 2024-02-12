@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// import PrayerMainView from "../PrayerMainView/PrayerMainView";
 import Modal from "./Modal";
 // import ReactModal from "react-modal";
 import { salahTrackingEntryType } from "../../types/types";
@@ -28,6 +27,7 @@ const CalenderYearly = ({
   currentStartDate,
   // setStartDate,
   startDate,
+  // selectedDay,
   modifySingleDaySalah,
 }: {
   days: string[];
@@ -42,6 +42,7 @@ const CalenderYearly = ({
   startDate: Date;
   modifySingleDaySalah: (date: Date) => void;
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
+  // selectedDay: Date;
   currentStartDate: number;
 }) => {
   // const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
@@ -140,6 +141,7 @@ const CalenderYearly = ({
                     setCurrentStartDate={setCurrentStartDate}
                     currentStartDate={currentStartDate}
                     startDate={startDate}
+                    // selectedDay={selectedDay}
                   />
                 </div>
               ))}

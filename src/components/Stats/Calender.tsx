@@ -11,7 +11,7 @@ const Calender = ({
   setSalahTrackingArray,
   salahTrackingArray,
   // setStartDate,
-  //   startDate,
+  startDate,
   //   modifySingleDaySalah,
   setCurrentStartDate,
   currentStartDate,
@@ -21,14 +21,14 @@ const Calender = ({
   >;
 
   salahTrackingArray: salahTrackingEntryType[];
-  //   startDate: Date;
+  startDate: Date;
   //   modifySingleDaySalah: (date: Date) => void;
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
 }) => {
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);
-  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
   const [currentYear, setCurrentYear] = useState(new Date());
 
   const today = startOfToday(); // Will return todays date details
@@ -39,7 +39,7 @@ const Calender = ({
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
   function modifySingleDaySalah(date: Date) {
-    setStartDate(date);
+    setSelectedDay(date);
   }
 
   let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());

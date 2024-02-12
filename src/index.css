@@ -96,3 +96,11 @@ tr:nth-child(4) {
 tr:nth-child(5) {
   color: #047857;
 }
+
+.table-salah-name-td:nth-child(1) {
+  /* background-color: #0369a1; */
+}
+
+.table-salah-name-td:nth-child(2) {
+  /* background-color: #ca8a04; */
+}

@@ -7,11 +7,13 @@ import { salahTrackingEntryType } from "../types/types";
 import Calender from "../components/Stats/Calender";
 
 const StatsPage = ({
+  startDate,
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
 }: {
+  startDate: Date;
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
@@ -19,6 +21,7 @@ const StatsPage = ({
   >;
   salahTrackingArray: salahTrackingEntryType[];
 }) => {
+  console.log("STATS PAGE RENDERED");
   // const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   // const [showYearlyCalender, setShowYearlyCalender] = useState(false);
   // const [startDate, setStartDate] = useState<Date>(new Date());
@@ -35,7 +38,7 @@ const StatsPage = ({
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         // setStartDate={setStartDate}
-        // startDate={startDate}
+        startDate={startDate}
         setCurrentStartDate={setCurrentStartDate}
         currentStartDate={currentStartDate}
         // modifySingleDaySalah={modifySingleDaySalah}
