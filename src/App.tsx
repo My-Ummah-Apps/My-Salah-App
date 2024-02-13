@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import { salahTrackingEntryType } from "./types/types";
-import { subDays } from "date-fns";
+import { startOfDay, subDays } from "date-fns";
 
 // interface salahTrackingEntryType {
 //   salahName: string;
@@ -25,9 +25,9 @@ const App = () => {
     salahTrackingEntryType[]
   >([]);
 
-  const [currentStartDate, setCurrentStartDate] = useState(0);
+  const [currentWeek, setCurrentWeek] = useState(0);
   const today: Date = new Date();
-  const startDate: Date = subDays(today, currentStartDate);
+  const startDate: Date = subDays(today, currentWeek);
 
   useEffect(() => {
     const storedSalahTrackingData = localStorage.getItem(
@@ -71,8 +71,8 @@ const App = () => {
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
-                setCurrentStartDate={setCurrentStartDate}
-                currentStartDate={currentStartDate}
+                setCurrentWeek={setCurrentWeek}
+                currentWeek={currentWeek}
               />
             }
           />
@@ -81,11 +81,11 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
-                setCurrentStartDate={setCurrentStartDate}
+                setCurrentWeek={setCurrentWeek}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
-                currentStartDate={currentStartDate}
+                currentWeek={currentWeek}
               />
             }
           />

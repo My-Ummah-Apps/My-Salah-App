@@ -12,6 +12,8 @@ const StatsPage = ({
   salahTrackingArray,
   setCurrentStartDate,
   currentStartDate,
+  setCurrentWeek,
+  currentWeek,
 }: {
   startDate: Date;
   setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
@@ -20,6 +22,8 @@ const StatsPage = ({
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   salahTrackingArray: salahTrackingEntryType[];
+  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  currentWeek: number;
 }) => {
   console.log("STATS PAGE RENDERED");
   // const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
@@ -39,8 +43,8 @@ const StatsPage = ({
         salahTrackingArray={salahTrackingArray}
         // setStartDate={setStartDate}
         startDate={startDate}
-        setCurrentStartDate={setCurrentStartDate}
-        currentStartDate={currentStartDate}
+        setCurrentWeek={setCurrentWeek}
+        currentWeek={currentWeek}
         // modifySingleDaySalah={modifySingleDaySalah}
       />{" "}
     </>

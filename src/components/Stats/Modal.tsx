@@ -9,9 +9,8 @@ const Modal = ({
   showModal,
   setSalahTrackingArray,
   salahTrackingArray,
-  setCurrentStartDate,
-  // currentStartDate,
-  // selectedDay,
+  setCurrentWeek,
+  // currentWeek,
   startDate,
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,9 +19,9 @@ const Modal = ({
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   salahTrackingArray: salahTrackingEntryType[];
-  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
-  currentStartDate: number;
-  // selectedDay: Date;
+  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  currentWeek: number;
+
   startDate: Date;
 }) => {
   //   const dateString = selectedDate;
@@ -41,9 +40,8 @@ const Modal = ({
         <PrayerMainView
           setSalahTrackingArray={setSalahTrackingArray}
           salahTrackingArray={salahTrackingArray}
-          setCurrentStartDate={setCurrentStartDate}
-          // currentStartDate={currentStartDate}
-          // selectedDay={selectedDay}
+          setCurrentWeek={setCurrentWeek}
+          // currentWeek={currentWeek}
           startDate={startDate}
         />
       </div>{" "}

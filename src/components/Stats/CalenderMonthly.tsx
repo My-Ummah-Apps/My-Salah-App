@@ -13,6 +13,7 @@ import {
 } from "date-fns";
 
 const CalenderMonthly = ({
+  salah,
   days,
   setSalahTrackingArray,
   isDayInSpecificMonth,
@@ -20,11 +21,12 @@ const CalenderMonthly = ({
   howManyDatesExistWithinSalahTrackingArray,
   startDate,
   modifySingleDaySalah,
-  setCurrentStartDate,
-  currentStartDate,
-  salahName,
+  setCurrentWeek,
+  currentWeek,
+  // salahName,
   currentMonth,
 }: {
+  salah: object;
   days: string[];
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
@@ -34,9 +36,9 @@ const CalenderMonthly = ({
   howManyDatesExistWithinSalahTrackingArray: (date: string) => string;
   startDate: Date;
   modifySingleDaySalah: (date: Date) => void;
-  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
-  currentStartDate: number;
-  salahName: string;
+  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  currentWeek: number;
+  // salahName: string;
   currentMonth: string;
 }) => {
   const [showModal, setShowModal] = useState(false);
@@ -68,7 +70,7 @@ const CalenderMonthly = ({
         <div className="monthly-heading-text-wrap">
           <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
-            {salahName}
+            {salah.salahName}
           </p>
           {/* <div className="flex items-center gap-6 justify-evenly sm:gap-12"></div> */}
         </div>
@@ -87,6 +89,7 @@ const CalenderMonthly = ({
           {daysInMonth.map((day, index) => {
             return (
               <>
+                {/* Need to add logic here, as each date is painted, check...does this date exist in the current salahs array? if so how many? and color it accordingly, before moving onto the next date and doing the same */}
                 <div
                   onClick={() => {
                     modifySingleDaySalah(day);
@@ -120,8 +123,8 @@ const CalenderMonthly = ({
                   showModal={showModal}
                   salahTrackingArray={salahTrackingArray}
                   setSalahTrackingArray={setSalahTrackingArray}
-                  setCurrentStartDate={setCurrentStartDate}
-                  currentStartDate={currentStartDate}
+                  setCurrentWeek={setCurrentWeek}
+                  currentWeek={currentWeek}
                   startDate={startDate}
                 />
               </>

@@ -45,7 +45,7 @@ table {
 }
 
 td:not(:first-child) {
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 td {

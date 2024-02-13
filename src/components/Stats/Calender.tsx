@@ -3,7 +3,16 @@ import { salahTrackingEntryType } from "../../types/types";
 import CalenderMonthly from "./CalenderMonthly";
 import CalenderYearly from "./CalenderYearly";
 
-import { add, sub, format, parse, startOfToday, startOfMonth } from "date-fns";
+import {
+  add,
+  sub,
+  format,
+  parse,
+  startOfToday,
+  startOfMonth,
+  subDays,
+  differenceInDays,
+} from "date-fns";
 
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 
@@ -13,8 +22,8 @@ const Calender = ({
   // setStartDate,
   startDate,
   //   modifySingleDaySalah,
-  setCurrentStartDate,
-  currentStartDate,
+  setCurrentWeek,
+  currentWeek,
 }: {
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
@@ -23,12 +32,13 @@ const Calender = ({
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
   //   modifySingleDaySalah: (date: Date) => void;
-  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
-  currentStartDate: number;
+  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  currentWeek: number;
 }) => {
+  console.log(salahTrackingArray);
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
+
   const [currentYear, setCurrentYear] = useState(new Date());
 
   const today = startOfToday(); // Will return todays date details
@@ -39,7 +49,15 @@ const Calender = ({
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
   function modifySingleDaySalah(date: Date) {
-    setSelectedDay(date);
+    const today: Date = new Date();
+    setCurrentWeek(
+      today > date
+        ? differenceInDays(today, date)
+        : differenceInDays(today, date) - 1
+    );
+    // setCurrentWeek(differenceInDays(today, date) - 1);
+    console.log(date);
+    console.log(differenceInDays(today, date));
   }
 
   let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -67,6 +85,7 @@ const Calender = ({
 
   const calenderHeadings: string[] = [
     "Overall",
+    "Fajr",
     "Zohar",
     "Asar",
     "Maghrib",
@@ -82,7 +101,7 @@ const Calender = ({
     },
     []
   );
-
+  // Need to modify the below so depending on the month being rendered, it either shows the overall statuses for each date for every salah or shows the status for the particular date for one salah only
   const howManyDatesExistWithinSalahTrackingArray = (date: string) => {
     let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
       (currentDate) => currentDate === date
@@ -156,20 +175,21 @@ const Calender = ({
       </div>
       {showMonthlyCalender ? (
         <>
-          {calenderHeadings.map((heading) => (
+          {salahTrackingArray.map((salah) => (
             <CalenderMonthly
+              salah={salah}
               days={days}
               currentMonth={currentMonth}
               isDayInSpecificMonth={isDayInSpecificMonth}
-              salahName={heading}
+              // salahName={salah.salahName}
               howManyDatesExistWithinSalahTrackingArray={
                 howManyDatesExistWithinSalahTrackingArray
               }
               setSalahTrackingArray={setSalahTrackingArray}
               salahTrackingArray={salahTrackingArray}
               startDate={startDate}
-              setCurrentStartDate={setCurrentStartDate}
-              currentStartDate={currentStartDate}
+              setCurrentWeek={setCurrentWeek}
+              currentWeek={currentWeek}
               modifySingleDaySalah={modifySingleDaySalah}
             />
           ))}
@@ -186,8 +206,8 @@ const Calender = ({
             salahName={"Overall"}
             setSalahTrackingArray={setSalahTrackingArray}
             salahTrackingArray={salahTrackingArray}
-            setCurrentStartDate={setCurrentStartDate}
-            currentStartDate={currentStartDate}
+            setCurrentWeek={setCurrentWeek}
+            currentWeek={currentWeek}
             startDate={startDate}
             modifySingleDaySalah={modifySingleDaySalah}
           />

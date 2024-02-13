@@ -14,15 +14,17 @@ const MainPage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray,
-  setCurrentStartDate,
+  setCurrentWeek,
+  currentWeek,
 }: {
   startDate: Date;
-  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   salahTrackingArray: salahTrackingEntryType[];
+  currentWeek: number;
 }) => {
   // const today: Date = new Date();
   // const startDate = subDays(today, currentStartDate);
@@ -33,7 +35,7 @@ const MainPage = ({
       <PrayerMainView
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
-        setCurrentStartDate={setCurrentStartDate}
+        setCurrentWeek={setCurrentWeek}
         startDate={startDate}
       />
     </div>

@@ -23,11 +23,11 @@ const CalenderYearly = ({
   howManyDatesExistWithinSalahTrackingArray,
   setSalahTrackingArray,
   salahTrackingArray,
-  setCurrentStartDate,
-  currentStartDate,
+  setCurrentWeek,
+  currentWeek,
   // setStartDate,
   startDate,
-  // selectedDay,
+
   modifySingleDaySalah,
 }: {
   days: string[];
@@ -41,9 +41,9 @@ const CalenderYearly = ({
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
   modifySingleDaySalah: (date: Date) => void;
-  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
-  // selectedDay: Date;
-  currentStartDate: number;
+  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+
+  currentWeek: number;
 }) => {
   // const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
 
@@ -138,10 +138,9 @@ const CalenderYearly = ({
                     showModal={showModal}
                     salahTrackingArray={salahTrackingArray}
                     setSalahTrackingArray={setSalahTrackingArray}
-                    setCurrentStartDate={setCurrentStartDate}
-                    currentStartDate={currentStartDate}
+                    setCurrentWeek={setCurrentWeek}
+                    currentWeek={currentWeek}
                     startDate={startDate}
-                    // selectedDay={selectedDay}
                   />
                 </div>
               ))}

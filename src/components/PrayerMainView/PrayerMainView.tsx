@@ -19,17 +19,17 @@ import { salahTrackingEntryType } from "../../types/types";
 const PrayerMainView = ({
   setSalahTrackingArray,
   salahTrackingArray,
-  setCurrentStartDate,
+  setCurrentWeek,
   startDate,
 }: {
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   salahTrackingArray: salahTrackingEntryType[];
-  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   startDate: Date;
 }) => {
-  console.log("PRAYER MAIN VIEW RENDERED");
+  // console.log("PRAYER MAIN VIEW RENDERED");
   // const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
@@ -45,7 +45,7 @@ const PrayerMainView = ({
     });
   }
 
-  // generateDisplayedWeek(currentStartDate);
+  // generateDisplayedWeek(currentWeek);
   generateDisplayedWeek();
 
   // let salahStatus: string = "";
@@ -251,8 +251,8 @@ const PrayerMainView = ({
         <tbody>
           {salahTrackingArray?.map((item, index) => {
             return (
-              <tr className="bg-[color:var(--card-bg-color)]">
-                <td className="py-5 border-none table-salah-name-td">
+              <tr className="bg-[color:var(--card-bg-color)] ">
+                <td className="border-none py-7 table-salah-name-td">
                   <div className="flex flex-row items-center">
                     {/* <img
                       className="w-8 mr-4"
@@ -275,7 +275,7 @@ const PrayerMainView = ({
       <div className="flex justify-around pt-6 pb-20 ">
         <button
           onClick={() => {
-            setCurrentStartDate((prevValue) => prevValue + 5);
+            setCurrentWeek((prevValue) => prevValue + 5);
           }}
         >
           <IoChevronBackSharp />
@@ -286,7 +286,7 @@ const PrayerMainView = ({
         </div>
         <button
           onClick={() => {
-            setCurrentStartDate((prevValue) => prevValue - 5);
+            setCurrentWeek((prevValue) => prevValue - 5);
           }}
         >
           <IoChevronForward />
