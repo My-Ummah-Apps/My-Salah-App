@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import { salahTrackingEntryType } from "./types/types";
-import { startOfDay, subDays } from "date-fns";
+import { subDays } from "date-fns";
 
 // interface salahTrackingEntryType {
 //   salahName: string;
@@ -72,7 +72,7 @@ const App = () => {
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
                 setCurrentWeek={setCurrentWeek}
-                currentWeek={currentWeek}
+                // currentWeek={currentWeek}
               />
             }
           />

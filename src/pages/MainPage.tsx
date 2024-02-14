@@ -14,17 +14,16 @@ const MainPage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray,
-  setCurrentWeek,
-  currentWeek,
+  setCurrentWeek, // currentWeek,
 }: {
   startDate: Date;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  currentStartDate: number;
+  // currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   salahTrackingArray: salahTrackingEntryType[];
-  currentWeek: number;
+  // currentWeek: number;
 }) => {
   // const today: Date = new Date();
   // const startDate = subDays(today, currentStartDate);

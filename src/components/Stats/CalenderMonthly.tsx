@@ -13,12 +13,12 @@ import {
 } from "date-fns";
 
 const CalenderMonthly = ({
-  salah,
+  salahName,
   days,
   setSalahTrackingArray,
   isDayInSpecificMonth,
   salahTrackingArray,
-  howManyDatesExistWithinSalahTrackingArray,
+  countCompletedDates,
   startDate,
   modifySingleDaySalah,
   setCurrentWeek,
@@ -26,14 +26,14 @@ const CalenderMonthly = ({
   // salahName,
   currentMonth,
 }: {
-  salah: object;
+  salahName: string;
   days: string[];
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   isDayInSpecificMonth: (dayToCheck: Date, currentMonth: string) => boolean;
   salahTrackingArray: salahTrackingEntryType[];
-  howManyDatesExistWithinSalahTrackingArray: (date: string) => string;
+  countCompletedDates: (date: string, salah: string) => string;
   startDate: Date;
   modifySingleDaySalah: (date: Date) => void;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
@@ -41,6 +41,7 @@ const CalenderMonthly = ({
   // salahName: string;
   currentMonth: string;
 }) => {
+  console.log(salahName);
   const [showModal, setShowModal] = useState(false);
   // const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
 
@@ -66,11 +67,11 @@ const CalenderMonthly = ({
 
   return (
     <>
-      <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap my-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
+      <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap pb-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
         <div className="monthly-heading-text-wrap">
           <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
-            {salah.salahName}
+            {salahName}
           </p>
           {/* <div className="flex items-center gap-6 justify-evenly sm:gap-12"></div> */}
         </div>
@@ -100,10 +101,10 @@ const CalenderMonthly = ({
                 >
                   <p
                     style={{
-                      backgroundColor:
-                        howManyDatesExistWithinSalahTrackingArray(
-                          format(day, "dd.MM.yy")
-                        ),
+                      backgroundColor: countCompletedDates(
+                        format(day, "dd.MM.yy"),
+                        salahName
+                      ),
                     }}
                     className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-md  hover:text-white text-sm ${
                       // isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"

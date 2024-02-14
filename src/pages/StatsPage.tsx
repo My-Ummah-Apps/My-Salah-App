@@ -10,14 +10,14 @@ const StatsPage = ({
   startDate,
   setSalahTrackingArray,
   salahTrackingArray,
-  setCurrentStartDate,
-  currentStartDate,
+  // setCurrentStartDate,
+  // currentStartDate,
   setCurrentWeek,
   currentWeek,
 }: {
   startDate: Date;
-  setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
-  currentStartDate: number;
+  // setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
+  // currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;

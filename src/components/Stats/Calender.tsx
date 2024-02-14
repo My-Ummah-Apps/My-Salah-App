@@ -10,7 +10,6 @@ import {
   parse,
   startOfToday,
   startOfMonth,
-  subDays,
   differenceInDays,
 } from "date-fns";
 
@@ -83,26 +82,32 @@ const Calender = ({
     setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
   };
 
-  const calenderHeadings: string[] = [
-    "Overall",
-    "Fajr",
-    "Zohar",
-    "Asar",
-    "Maghrib",
-    "Isha",
-  ];
-
-  const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<string[]>(
-    (accumulatorArray, salah) => {
-      salah.completedDates.forEach((item) => {
-        accumulatorArray.push(Object.keys(item)[0]);
-      });
-      return accumulatorArray;
-    },
-    []
-  );
+  // const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<string[]>(
+  //   (accumulatorArray, salah) => {
+  //     salah.completedDates.forEach((item) => {
+  //       accumulatorArray.push(Object.keys(item)[0]);
+  //     });
+  //     return accumulatorArray;
+  //   },
+  //   []
+  // );
   // Need to modify the below so depending on the month being rendered, it either shows the overall statuses for each date for every salah or shows the status for the particular date for one salah only
-  const howManyDatesExistWithinSalahTrackingArray = (date: string) => {
+  const countCompletedDates = (date: string, salahName?: string) => {
+    const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
+      string[]
+    >((accumulatorArray, salah) => {
+      if (salah.salahName === salahName) {
+        salah.completedDates.forEach((item) => {
+          accumulatorArray.push(Object.keys(item)[0]);
+        });
+      } else if (!salahName) {
+        salah.completedDates.forEach((item) => {
+          accumulatorArray.push(Object.keys(item)[0]);
+        });
+      }
+      return accumulatorArray;
+    }, []);
+
     let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
       (currentDate) => currentDate === date
     );
@@ -154,7 +159,7 @@ const Calender = ({
           }
         />
       </div>
-      <div className="text-center monthly-yearly-btn-wrap">
+      <div className="text-center mb-9 monthly-yearly-btn-wrap">
         <button
           className="px-5"
           onClick={() => {
@@ -177,14 +182,12 @@ const Calender = ({
         <>
           {salahTrackingArray.map((salah) => (
             <CalenderMonthly
-              salah={salah}
+              salahName={salah.salahName}
               days={days}
               currentMonth={currentMonth}
               isDayInSpecificMonth={isDayInSpecificMonth}
               // salahName={salah.salahName}
-              howManyDatesExistWithinSalahTrackingArray={
-                howManyDatesExistWithinSalahTrackingArray
-              }
+              countCompletedDates={countCompletedDates}
               setSalahTrackingArray={setSalahTrackingArray}
               salahTrackingArray={salahTrackingArray}
               startDate={startDate}
@@ -200,9 +203,7 @@ const Calender = ({
             days={days}
             isDayInSpecificMonth={isDayInSpecificMonth}
             currentYear={currentYear}
-            howManyDatesExistWithinSalahTrackingArray={
-              howManyDatesExistWithinSalahTrackingArray
-            }
+            countCompletedDates={countCompletedDates}
             salahName={"Overall"}
             setSalahTrackingArray={setSalahTrackingArray}
             salahTrackingArray={salahTrackingArray}

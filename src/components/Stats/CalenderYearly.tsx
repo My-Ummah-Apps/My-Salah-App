@@ -20,7 +20,7 @@ const CalenderYearly = ({
   days,
   isDayInSpecificMonth,
   currentYear,
-  howManyDatesExistWithinSalahTrackingArray,
+  countCompletedDates,
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentWeek,
@@ -36,7 +36,7 @@ const CalenderYearly = ({
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
-  howManyDatesExistWithinSalahTrackingArray: (date: string) => string;
+  countCompletedDates: (date: string) => string;
   salahName: string;
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
@@ -82,72 +82,71 @@ const CalenderYearly = ({
 
   return (
     <>
-      <div className="flex items-center justify-center w-screen h-screen calender-wrap">
-        <div className="w-[900px] h-[600px]">
-          <div className="flex items-center justify-between chevrons-wrap"></div>
-          <div>
-            <div className="grid grid-cols-2 place-items-center dates-grid-wrap">
-              {monthStrings.map((month) => (
-                <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap my-5 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap">
-                  <p className="text-xl font-semibold text-center">{month}</p>
-                  <div className="grid grid-cols-7 gap-6 mb-3 place-items-center days-row-wrap">
-                    {days.map((day, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="font-semibold individual-day"
-                        >
-                          {day}
-                        </div>
-                      );
-                    })}
-                  </div>
+      <div className="flex items-center justify-center calender-wrap">
+        {/* <div className="w-[900px] h-[600px]"> */}
+        <div className="flex items-center justify-between chevrons-wrap"></div>
+        {/* <div> */}
+        <div className="grid w-full grid-cols-2 gap-3 months-wrap">
+          {monthStrings.map((month) => (
+            <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap p-2">
+              <p className="py-4 font-semibold text-center">{month}</p>
+              <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap">
+                {days.map((day, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="w-5 h-5 text-xs font-semibold individual-day"
+                    >
+                      {day}
+                    </div>
+                  );
+                })}
+              </div>
+              <div
+                className="grid grid-cols-7 place-items-center month-dates-wrap"
+                key={month}
+              >
+                {yearlyMonthsData(month).map((day, index) => (
                   <div
-                    className="grid grid-cols-7 gap-1 place-items-center month-dates-wrap"
-                    key={month}
+                    onClick={() => {
+                      modifySingleDaySalah(day);
+                      setShowModal(true);
+                    }}
+                    key={index}
+                    className="individual-date"
                   >
-                    {yearlyMonthsData(month).map((day, index) => (
-                      <div
-                        onClick={() => {
-                          modifySingleDaySalah(day);
-                          setShowModal(true);
-                        }}
-                        key={index}
-                        className="individual-date"
-                      >
-                        <p
-                          style={{
-                            backgroundColor:
-                              howManyDatesExistWithinSalahTrackingArray(
-                                format(day, "dd.MM.yy")
-                              ),
-                          }}
-                          className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-md  hover:text-white text-sm ${
-                            isDayInSpecificMonth(day, month)
-                              ? "text-gray-400"
-                              : "text-gray-900"
-                          }`}
-                        >
-                          {format(day, "d")}
-                        </p>
-                      </div>
-                    ))}
+                    <p
+                      style={{
+                        backgroundColor: countCompletedDates(
+                          format(day, "dd.MM.yy")
+                        ),
+                      }}
+                      className={`text-xs cursor-pointer flex items-center justify-center font-semibold h-5 w-5 rounded-md  hover:text-white  ${
+                        isDayInSpecificMonth(day, month)
+                          ? "text-gray-400"
+                          : "text-gray-900"
+                      }`}
+                    >
+                      {format(day, "d")}
+                    </p>
                   </div>
-                  <Modal
-                    setShowModal={setShowModal}
-                    showModal={showModal}
-                    salahTrackingArray={salahTrackingArray}
-                    setSalahTrackingArray={setSalahTrackingArray}
-                    setCurrentWeek={setCurrentWeek}
-                    currentWeek={currentWeek}
-                    startDate={startDate}
-                  />
-                </div>
-              ))}
+                ))}
+              </div>
+              <Modal
+                setShowModal={setShowModal}
+                showModal={showModal}
+                salahTrackingArray={salahTrackingArray}
+                setSalahTrackingArray={setSalahTrackingArray}
+                setCurrentWeek={setCurrentWeek}
+                currentWeek={currentWeek}
+                startDate={startDate}
+              />
             </div>
-          </div>
+          ))}
         </div>
       </div>
+      {/* </div> */}
+      {/* </div> */}
     </>
   );
 };
