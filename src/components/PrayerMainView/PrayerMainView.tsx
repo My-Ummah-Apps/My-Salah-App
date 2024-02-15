@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Modal from "./Modal";
+// import Modal from "./Modal";
+import Sheet from "react-modal-sheet";
 // import ReactModal from "react-modal";
 import { FaMosque, FaHome } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
@@ -50,7 +51,8 @@ const PrayerMainView = ({
 
   // let salahStatus: string = "";
 
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
+  const [isOpen, setOpen] = useState(false);
 
   const changePrayerStatus: (
     tableHeadDate: string,
@@ -172,7 +174,12 @@ const PrayerMainView = ({
     // }
     return currentDisplayedWeek.map((date: any) => {
       let cellIcon: string | JSX.Element = (
-        <LuDot className="flex self-center justify-self-center w-[100%]" />
+        <LuDot
+          onClick={() => {
+            setOpen(true);
+          }}
+          className="flex self-center justify-self-center w-[100%]"
+        />
       );
       const matchedObject = salahTrackingArray[index]?.completedDates.find(
         (obj) => date === Object.keys(obj)[0]
@@ -183,12 +190,20 @@ const PrayerMainView = ({
       }
       if (cellIcon === "home") {
         cellIcon = (
-          <FaHome className={`flex self-center justify-self-center w-[100%]`} />
+          <FaHome
+            onClick={() => {
+              setOpen(true);
+            }}
+            className={`flex self-center justify-self-center w-[100%]`}
+          />
         );
       } else if (cellIcon === "masjid") {
         // test = "text-red-300";
         cellIcon = (
           <FaMosque
+            onClick={() => {
+              setOpen(true);
+            }}
             className={`flex self-center justify-self-center w-[100%]`}
           />
         );
@@ -198,13 +213,13 @@ const PrayerMainView = ({
       //     <LuDot className="flex self-center text-2xl justify-self-center w-[100%]" />
       //   );
       // }
-      return <td className="h-full border-none">{cellIcon}</td>;
+      return <td className="h-full pt-3 border-none">{cellIcon}</td>;
     });
   }
 
   return (
     <>
-      <Modal
+      {/* <Modal
         setShowModal={setShowModal}
         showModal={showModal}
         changePrayerStatus={changePrayerStatus}
@@ -212,7 +227,7 @@ const PrayerMainView = ({
         // setIcon={setIcon}
         selectedSalah={selectedSalah}
         tableHeadDate={tableHeadDate}
-      />
+      /> */}
       {/* <img
         className="rounded-lg"
         src="/src/beautiful-sunset-background-river_203633-925.jpg"
@@ -220,28 +235,82 @@ const PrayerMainView = ({
         srcset=""
       /> */}
       {/* bg-[color:var(--card-bg-color)] */}
+      {/* <button onClick={() => setOpen(true)}>Open sheet</button> */}
+
+      <Sheet
+        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        detent="content-height"
+      >
+        <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+          <Sheet.Header />
+          <Sheet.Content>
+            {" "}
+            <section className="flex justify-around text-5xl h-[200px]">
+              <FaMosque
+                onClick={() => {
+                  changePrayerStatus(
+                    tableHeadDate,
+                    selectedSalah,
+                    "masjid"
+                    // <FaMosque />
+                  );
+                  // setShowModal(false);
+                  setOpen(false);
+                }}
+              />
+              <FaHome
+                onClick={() => {
+                  changePrayerStatus(
+                    tableHeadDate,
+                    selectedSalah,
+                    "home"
+                    // <FaHome />
+                  );
+                  // setShowModal(true);
+                  setOpen(false);
+                }}
+              />
+              <LuDot
+                onClick={() => {
+                  changePrayerStatus(
+                    tableHeadDate,
+                    selectedSalah,
+                    "blank"
+                    // <LuDot />
+                  );
+                  setOpen(false);
+                  // setShowModal(true);
+                }}
+              />
+            </section>
+          </Sheet.Content>
+        </Sheet.Container>
+        <Sheet.Backdrop />
+      </Sheet>
       <table
-        className="w-full shadow-lg "
+        className="w-full shadow-lg"
         onClick={(e) => {
           grabDate(e);
-          setShowModal(true);
+          // setShowModal(true);
+          // setOpen(true);
         }}
       >
         <thead className="">
           <tr className="hidden ">
             <th className="border-none"></th>
             {currentDisplayedWeek.map((item) => {
-              return <td className="px-2 py-5 text-xs border-none">{item}</td>;
+              return <td className="text-xs border-none">{item}</td>;
             })}
           </tr>
-          <tr className="">
+          <tr className="h-12">
             <th className="border-none"></th>
             {currentDisplayedWeek.map((item) => {
               const parsedDate = parse(item, "dd.MM.yy", new Date());
               const formattedDate = format(parsedDate, "EEE dd");
 
               return (
-                <td className="px-2 py-5 border-none text-[#c4c4c4] text-center ">
+                <td className="border-none text-[#c4c4c4] text-center ">
                   {formattedDate}
                 </td>
               );
@@ -251,7 +320,7 @@ const PrayerMainView = ({
         <tbody>
           {salahTrackingArray?.map((item, index) => {
             return (
-              <tr className="bg-[color:var(--card-bg-color)] ">
+              <tr className="bg-[color:var(--card-bg-color)]">
                 <td className="border-none py-7 table-salah-name-td">
                   <div className="flex flex-row items-center">
                     {/* <img

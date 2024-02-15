@@ -10,8 +10,9 @@
 
 :root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 1rem;
+  /* margin: 0 auto; */
+  /* padding: 1rem; */
+  margin: 1rem;
 
   /* --primary-color: rgb(41, 41, 41);
   --secondary-color: rgb(27, 27, 27);

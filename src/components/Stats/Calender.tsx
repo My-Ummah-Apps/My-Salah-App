@@ -115,14 +115,21 @@ const Calender = ({
     let sameDatesArrayLength = sameDatesArray.length;
 
     let color;
-    if (sameDatesArrayLength === 0) {
-      color = "transparent";
-    } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-      color = "orange";
-    } else if (sameDatesArrayLength === 5) {
-      color = "green";
-    } else {
-      color = "yellow";
+
+    if (salahName) {
+      if (sameDatesArrayLength === 0) {
+        color = "transparent";
+      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+        color = "green";
+      }
+    } else if (!salahName) {
+      if (sameDatesArrayLength === 0) {
+        color = "transparent";
+      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+        color = "orange";
+      } else if (sameDatesArrayLength === 5) {
+        color = "green";
+      }
     }
 
     sameDatesArray = [];

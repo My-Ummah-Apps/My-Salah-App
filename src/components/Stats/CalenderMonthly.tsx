@@ -67,7 +67,7 @@ const CalenderMonthly = ({
 
   return (
     <>
-      <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap pb-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
+      <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap mb-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
         <div className="monthly-heading-text-wrap">
           <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
@@ -132,7 +132,7 @@ const CalenderMonthly = ({
             );
           })}
         </div>
-        <div className="flex justify-between p-1 mt-5 border-[1px] border-solid rounded-lg border-lime-400 streak-and-strength-wrap">
+        <div className="flex justify-between p-1 mt-5 border-[1px] border-solid rounded-lg border-lime-400 streak-and-strength-wrap text-sm">
           <p>Streak: L - 5D C - 0D</p>
           <p>Strength: 75%</p>
         </div>
