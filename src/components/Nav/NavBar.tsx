@@ -16,7 +16,7 @@ import { IoIosStats } from "react-icons/io";
 
 const NavBar = () => {
   return (
-    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full max-w-2xl  bg-[var(--secondary-color)] navbar-wrap pb-env-safe-area-inset-bottom rounded-t-2xl">
+    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full max-w-2xl  bg-[var(--secondary-color)] navbar-wrap pb-env-safe-area-inset-bottom rounded-t-2xl ">
       <NavLink
         onClick={() => {
           //   setActivePage("settings");

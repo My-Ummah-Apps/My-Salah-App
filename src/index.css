@@ -52,12 +52,13 @@ td:not(:first-child) {
 td {
   border: solid 1px var(--primary-color);
   border-style: solid none;
-  padding: 10px;
+  /* padding: 10px; */
   vertical-align: top;
 }
 
 td:first-child {
   width: 50%;
+  padding-left: 0.5rem;
   border-left-style: solid;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;

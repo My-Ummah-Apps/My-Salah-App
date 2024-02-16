@@ -16,6 +16,7 @@ import { salahTrackingEntryType } from "../../types/types";
 // }
 
 // import { v4 as uuidv4 } from "uuid";
+import CalenderMonthly from "../Stats/CalenderMonthly";
 
 const PrayerMainView = ({
   setSalahTrackingArray,
@@ -53,6 +54,9 @@ const PrayerMainView = ({
 
   // const [showModal, setShowModal] = useState(false);
   const [isOpen, setOpen] = useState(false);
+  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+  const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
+    useState(false);
 
   const changePrayerStatus: (
     tableHeadDate: string,
@@ -175,10 +179,15 @@ const PrayerMainView = ({
     return currentDisplayedWeek.map((date: any) => {
       let cellIcon: string | JSX.Element = (
         <LuDot
-          onClick={() => {
-            setOpen(true);
+          onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+            // e.stopPropagation();
+            console.log(e.target);
+            if (e.currentTarget.tagName === "svg") {
+              setShowUpdateStatusModal(true);
+              alert(true);
+            }
           }}
-          className="flex self-center justify-self-center w-[100%]"
+          className="flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]"
         />
       );
       const matchedObject = salahTrackingArray[index]?.completedDates.find(
@@ -191,20 +200,27 @@ const PrayerMainView = ({
       if (cellIcon === "home") {
         cellIcon = (
           <FaHome
-            onClick={() => {
-              setOpen(true);
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+              if (e.currentTarget.tagName === "svg") {
+                setShowUpdateStatusModal(true);
+              }
+              // setShowUpdateStatusModal(true);
             }}
-            className={`flex self-center justify-self-center w-[100%]`}
+            className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           />
         );
       } else if (cellIcon === "masjid") {
-        // test = "text-red-300";
         cellIcon = (
           <FaMosque
-            onClick={() => {
-              setOpen(true);
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+              if (e.currentTarget.tagName === "svg") {
+                setShowUpdateStatusModal(true);
+              }
+              // setShowUpdateStatusModal(true);
             }}
-            className={`flex self-center justify-self-center w-[100%]`}
+            className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           />
         );
       }
@@ -213,7 +229,7 @@ const PrayerMainView = ({
       //     <LuDot className="flex self-center text-2xl justify-self-center w-[100%]" />
       //   );
       // }
-      return <td className="h-full pt-3 border-none">{cellIcon}</td>;
+      return <td className="h-full border-none">{cellIcon}</td>;
     });
   }
 
@@ -238,8 +254,8 @@ const PrayerMainView = ({
       {/* <button onClick={() => setOpen(true)}>Open sheet</button> */}
 
       <Sheet
-        isOpen={isOpen}
-        onClose={() => setOpen(false)}
+        isOpen={showUpdateStatusModal}
+        onClose={() => setShowUpdateStatusModal(false)}
         detent="content-height"
       >
         <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
@@ -249,40 +265,55 @@ const PrayerMainView = ({
             <section className="flex justify-around text-5xl h-[200px]">
               <FaMosque
                 onClick={() => {
-                  changePrayerStatus(
-                    tableHeadDate,
-                    selectedSalah,
-                    "masjid"
-                    // <FaMosque />
-                  );
-                  // setShowModal(false);
-                  setOpen(false);
+                  changePrayerStatus(tableHeadDate, selectedSalah, "masjid");
+
+                  setShowUpdateStatusModal(false);
                 }}
               />
               <FaHome
                 onClick={() => {
-                  changePrayerStatus(
-                    tableHeadDate,
-                    selectedSalah,
-                    "home"
-                    // <FaHome />
-                  );
-                  // setShowModal(true);
-                  setOpen(false);
+                  changePrayerStatus(tableHeadDate, selectedSalah, "home");
+                  setShowUpdateStatusModal(false);
                 }}
               />
               <LuDot
                 onClick={() => {
-                  changePrayerStatus(
-                    tableHeadDate,
-                    selectedSalah,
-                    "blank"
-                    // <LuDot />
-                  );
-                  setOpen(false);
-                  // setShowModal(true);
+                  changePrayerStatus(tableHeadDate, selectedSalah, "blank");
+                  // setOpen(false);
+                  setShowUpdateStatusModal(false);
                 }}
               />
+            </section>
+          </Sheet.Content>
+        </Sheet.Container>
+        <Sheet.Backdrop />
+        <Sheet.Backdrop />
+      </Sheet>
+      <Sheet
+        isOpen={showMonthlyCalenderModal}
+        onClose={() => setShowMonthlyCalenderModal(false)}
+        detent="content-height"
+      >
+        <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+          <Sheet.Header />
+          <Sheet.Content>
+            {" "}
+            <section className="flex justify-around text-5xl h-[200px]">
+              <h1>Hello</h1>
+              {/* <CalenderMonthly
+              salahName={salah.salahName}
+              days={days}
+              currentMonth={currentMonth}
+              isDayInSpecificMonth={isDayInSpecificMonth}
+              // salahName={salah.salahName}
+              countCompletedDates={countCompletedDates}
+              setSalahTrackingArray={setSalahTrackingArray}
+              salahTrackingArray={salahTrackingArray}
+              startDate={startDate}
+              setCurrentWeek={setCurrentWeek}
+              currentWeek={currentWeek}
+              modifySingleDaySalah={modifySingleDaySalah}
+            /> */}
             </section>
           </Sheet.Content>
         </Sheet.Container>
@@ -292,12 +323,15 @@ const PrayerMainView = ({
         className="w-full shadow-lg"
         onClick={(e) => {
           grabDate(e);
-          // setShowModal(true);
-          // setOpen(true);
+          // setShowUpdateStatusModal(true);
+          // e.preventDefault();
+          if (e.currentTarget.tagName !== "svg") {
+            // setShowMonthlyCalenderModal(true);
+          }
         }}
       >
         <thead className="">
-          <tr className="hidden ">
+          <tr className="hidden">
             <th className="border-none"></th>
             {currentDisplayedWeek.map((item) => {
               return <td className="text-xs border-none">{item}</td>;
@@ -308,10 +342,14 @@ const PrayerMainView = ({
             {currentDisplayedWeek.map((item) => {
               const parsedDate = parse(item, "dd.MM.yy", new Date());
               const formattedDate = format(parsedDate, "EEE dd");
+              const splitFormattedDate: string[] = formattedDate.split(" ");
+              console.log(splitFormattedDate);
 
               return (
-                <td className="border-none text-[#c4c4c4] text-center ">
-                  {formattedDate}
+                <td className="border-none text-[#c4c4c4] text-center">
+                  {/* {formattedDate} */}
+                  <p>{splitFormattedDate[0]}</p>
+                  <p>{splitFormattedDate[1]}</p>
                 </td>
               );
             })}
@@ -320,8 +358,16 @@ const PrayerMainView = ({
         <tbody>
           {salahTrackingArray?.map((item, index) => {
             return (
-              <tr className="bg-[color:var(--card-bg-color)]">
-                <td className="border-none py-7 table-salah-name-td">
+              <tr
+                onClick={(e) => {
+                  // setShowMonthlyCalenderModal(true);
+                  if (e.currentTarget.tagName !== "svg") {
+                    setShowMonthlyCalenderModal(true);
+                  }
+                }}
+                className="bg-[color:var(--card-bg-color)]"
+              >
+                <td className="border-none table-salah-name-td py-7">
                   <div className="flex flex-row items-center">
                     {/* <img
                       className="w-8 mr-4"
