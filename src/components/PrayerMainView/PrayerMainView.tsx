@@ -16,7 +16,7 @@ import { salahTrackingEntryType } from "../../types/types";
 // }
 
 // import { v4 as uuidv4 } from "uuid";
-import CalenderMonthly from "../Stats/CalenderMonthly";
+// import CalenderMonthly from "../Stats/CalenderMonthly";
 
 const PrayerMainView = ({
   setSalahTrackingArray,
@@ -53,7 +53,7 @@ const PrayerMainView = ({
   // let salahStatus: string = "";
 
   // const [showModal, setShowModal] = useState(false);
-  const [isOpen, setOpen] = useState(false);
+  // const [isOpen, setOpen] = useState(false);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
     useState(false);
@@ -65,7 +65,9 @@ const PrayerMainView = ({
     // icon
   ) => void = (tableHeadDate, selectedSalah, salahStatus) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
-      console.log(item.salahName);
+      // console.log("tableHeadDate", tableHeadDate);
+      // console.log("selectedSalah", selectedSalah);
+      // console.log("salahStatus", salahStatus);
       if (item.salahName == selectedSalah) {
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
@@ -119,22 +121,9 @@ const PrayerMainView = ({
               { [tableHeadDate]: salahStatus },
             ],
           };
-          // if (icon.type.name === "LuDot") {
-          //   return {
-          //     ...item,
-          //     completedDates: [...filteredCompletedDatesArray],
-          //   };
-          // } else if (icon.type.name !== "LuDot") {
-          //   return {
-          //     ...item,
-          //     completedDates: [
-          //       ...filteredCompletedDatesArray,
-          //       { [tableHeadDate]: salahStatus },
-          //     ],
-          //   };
-          // }
         }
       }
+      // console.log("item is ", item);
       return item;
     });
     setSalahTrackingArray(newSalahTrackingArray);
@@ -145,46 +134,57 @@ const PrayerMainView = ({
     );
   };
   let clickedElement: any;
-  let columnIndex: number;
+  // let columnIndex: number;
   function grabDate(e: any) {
-    const cell = e.target as HTMLTableCellElement;
-    columnIndex = cell.cellIndex;
+    console.log("GRABDATE TRIGGERED");
+    // const cell = e.target as HTMLTableCellElement;
 
     let selectedSalah;
 
-    if (e.target.tagName === "TD") {
-      clickedElement = e.target;
-      selectedSalah = e.target.parentElement.cells[0].innerText;
-    } else if (
-      e.target.tagName === "svg" ||
-      e.target.tagName === "circle" ||
-      e.target.tagName === "path"
-    ) {
-      e.target.closest("td").click();
-      clickedElement = e.target.closest("td");
-      selectedSalah = clickedElement.parentElement.cells[0].innerText;
-    }
+    clickedElement = e.target.closest("#icon-wrap");
+    const columnIndex: any = clickedElement.parentElement
+      .cellIndex as HTMLTableCellElement;
+    // columnIndex = cell.cellIndex;
+    // clickedElement = e.target;
+
+    selectedSalah =
+      clickedElement.parentElement.parentElement.cells[0].innerText;
+
+    // if (e.target.tagName === "TD") {
+    //   clickedElement = e.target;
+    //   selectedSalah = e.target.parentElement.cells[0].innerText;
+    // } else if (
+    //   e.target.tagName === "svg" ||
+    //   e.target.tagName === "circle" ||
+    //   e.target.tagName === "path"
+    // ) {
+    //   // e.target.closest("td").click();
+    //   clickedElement = e.target.closest("td");
+    //   selectedSalah = clickedElement.parentElement.cells[0].innerText;
+    // }
+
+    console.log(
+      clickedElement.parentElement.parentElement.parentElement.parentElement
+        .children[0].children[0].cells[columnIndex]
+    );
 
     const tableHeadDate =
-      clickedElement.parentElement.parentElement.parentElement.children[0]
-        .children[0].cells[columnIndex].textContent;
+      clickedElement.parentElement.parentElement.parentElement.parentElement
+        .children[0].children[0].cells[columnIndex].textContent;
+
     setSelectedSalah(selectedSalah);
     setTableHeadDate(tableHeadDate);
   }
 
   function renderCells(index: number) {
-    // if (selectedSalah == "Zohar") {
-    //   test = "text-amber-300";
-    // }
     return currentDisplayedWeek.map((date: any) => {
       let cellIcon: string | JSX.Element = (
         <LuDot
           onClick={(e: React.TouchEvent<HTMLDivElement>) => {
             // e.stopPropagation();
-            console.log(e.target);
+
             if (e.currentTarget.tagName === "svg") {
-              setShowUpdateStatusModal(true);
-              alert(true);
+              // setShowUpdateStatusModal(true);
             }
           }}
           className="flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]"
@@ -202,10 +202,10 @@ const PrayerMainView = ({
           <FaHome
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
+
               if (e.currentTarget.tagName === "svg") {
-                setShowUpdateStatusModal(true);
+                // setShowUpdateStatusModal(true);
               }
-              // setShowUpdateStatusModal(true);
             }}
             className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           />
@@ -215,21 +215,36 @@ const PrayerMainView = ({
           <FaMosque
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
+
               if (e.currentTarget.tagName === "svg") {
-                setShowUpdateStatusModal(true);
+                // setShowUpdateStatusModal(true);
               }
-              // setShowUpdateStatusModal(true);
             }}
             className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           />
         );
       }
+
       // else if (cellIcon === "Blank") {
       //   cellIcon = (
       //     <LuDot className="flex self-center text-2xl justify-self-center w-[100%]" />
       //   );
       // }
-      return <td className="h-full border-none">{cellIcon}</td>;
+      return (
+        <td className="h-full border-none">
+          <div
+            id="icon-wrap"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowUpdateStatusModal(true);
+              grabDate(e);
+              console.log("grabDate clicked");
+            }}
+          >
+            {cellIcon}
+          </div>
+        </td>
+      );
     });
   }
 
@@ -265,6 +280,8 @@ const PrayerMainView = ({
             <section className="flex justify-around text-5xl h-[200px]">
               <FaMosque
                 onClick={() => {
+                  console.log(tableHeadDate);
+                  console.log(selectedSalah);
                   changePrayerStatus(tableHeadDate, selectedSalah, "masjid");
 
                   setShowUpdateStatusModal(false);
@@ -273,6 +290,7 @@ const PrayerMainView = ({
               <FaHome
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "home");
+
                   setShowUpdateStatusModal(false);
                 }}
               />
@@ -280,6 +298,7 @@ const PrayerMainView = ({
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "blank");
                   // setOpen(false);
+
                   setShowUpdateStatusModal(false);
                 }}
               />
@@ -322,10 +341,10 @@ const PrayerMainView = ({
       <table
         className="w-full shadow-lg"
         onClick={(e) => {
-          grabDate(e);
+          // grabDate(e);
           // setShowUpdateStatusModal(true);
           // e.preventDefault();
-          if (e.currentTarget.tagName !== "svg") {
+          if (e.isTrusted && e.currentTarget.tagName !== "svg") {
             // setShowMonthlyCalenderModal(true);
           }
         }}
@@ -343,7 +362,6 @@ const PrayerMainView = ({
               const parsedDate = parse(item, "dd.MM.yy", new Date());
               const formattedDate = format(parsedDate, "EEE dd");
               const splitFormattedDate: string[] = formattedDate.split(" ");
-              console.log(splitFormattedDate);
 
               return (
                 <td className="border-none text-[#c4c4c4] text-center">
@@ -361,6 +379,8 @@ const PrayerMainView = ({
               <tr
                 onClick={(e) => {
                   // setShowMonthlyCalenderModal(true);
+                  // e.stopPropagation();
+
                   if (e.currentTarget.tagName !== "svg") {
                     setShowMonthlyCalenderModal(true);
                   }

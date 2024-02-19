@@ -36,7 +36,7 @@ const CalenderYearly = ({
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
-  countCompletedDates: (date: string) => string;
+  countCompletedDates: (date: string) => any;
   salahName: string;
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;

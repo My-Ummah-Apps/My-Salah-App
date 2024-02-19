@@ -33,7 +33,7 @@ const CalenderMonthly = ({
   >;
   isDayInSpecificMonth: (dayToCheck: Date, currentMonth: string) => boolean;
   salahTrackingArray: salahTrackingEntryType[];
-  countCompletedDates: (date: string, salah: string) => string;
+  countCompletedDates: (date: string, salah: string) => any;
   startDate: Date;
   modifySingleDaySalah: (date: Date) => void;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
