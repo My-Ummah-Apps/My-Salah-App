@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 // import { GrHomeRounded } from "react-icons/gr";
 import { BsFillHouseDoorFill, BsFillNutFill } from "react-icons/bs";
 // import { MdCalendarMonth } from "react-icons/md";
-import { FaCompass } from "react-icons/fa";
+// import { FaCompass } from "react-icons/fa";
 import { GrResources } from "react-icons/gr";
 import { IoIosStats } from "react-icons/io";
 
@@ -69,7 +69,7 @@ const NavBar = () => {
           //   color={activePage == "counters" ? activeBackgroundColor : "grey"}
         />
       </NavLink>
-      <NavLink
+      {/* <NavLink
         onClick={() => {
           //   setActivePage("counters");
         }}
@@ -80,7 +80,7 @@ const NavBar = () => {
           className="text-2xl nav-icon"
           //   color={activePage == "counters" ? activeBackgroundColor : "grey"}
         />
-      </NavLink>
+      </NavLink> */}
     </div>
   );
 };

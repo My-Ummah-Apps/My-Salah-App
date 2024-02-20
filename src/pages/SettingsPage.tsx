@@ -1,31 +1,33 @@
 import { useState } from "react";
 import { Capacitor } from "@capacitor/core";
-// @ts-ignore
 import Modal from "react-modal";
-// @ts-ignore
-import Switch from "react-ios-switch";
+// import Switch from "react-ios-switch";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
 const SettingsPage = () => {
-  let link: any;
+  let appLink: string;
   const shareThisAppLink = async () => {
-    let link;
     if (Capacitor.getPlatform() == "ios") {
-      link = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
+      appLink = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
     } else if (Capacitor.getPlatform() == "android") {
-      link = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
+      appLink = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
     }
 
     await Share.share({
       title: "",
       text: "",
-      url: link,
+      url: appLink,
       dialogTitle: "",
     });
   };
+
+  const link = (url: string) => {
+    window.location.href = url;
+  };
+
   const [showModal, setShowModal] = useState(false);
   setShowModal;
 
@@ -51,16 +53,30 @@ const SettingsPage = () => {
             alert("Notifications clicked");
           }}
         />
-        <SettingIndividual
-          indvidualStyles={"rounded-t-md"}
-          headingText={"Review"}
-          subText={"Rate us on the App Store"}
-          onClick={() => {
-            link(
-              "https://play.google.com/store/apps/details?id=com.tasbeeh.my"
-            );
-          }}
-        />
+        {Capacitor.getPlatform() === "android" ? (
+          <SettingIndividual
+            indvidualStyles={"rounded-t-md"}
+            headingText={"Review"}
+            subText={"Rate us on the Google Play Store"}
+            onClick={() => {
+              link(
+                "https://play.google.com/store/apps/details?id=com.tasbeeh.my"
+              );
+            }}
+          />
+        ) : null}
+        {Capacitor.getPlatform() === "ios" ? (
+          <SettingIndividual
+            indvidualStyles={"rounded-t-md"}
+            headingText={"Review"}
+            subText={"Rate us on the App Store"}
+            onClick={() => {
+              link(
+                "https://play.google.com/store/apps/details?id=com.tasbeeh.my"
+              );
+            }}
+          />
+        ) : null}
         {/* {Capacitor.getPlatform() === "android" ? ( */}
         <SettingIndividual
           headingText={"Share"}
