@@ -7,7 +7,7 @@ import SettingIndividual from "../components/Settings/SettingIndividual";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
-const SettingsPage = () => {
+const SettingsPage = ({ title }: { title: React.ReactNode }) => {
   let appLink: string;
   const shareThisAppLink = async () => {
     if (Capacitor.getPlatform() == "ios") {
@@ -34,11 +34,11 @@ const SettingsPage = () => {
   return (
     <div className="settings-page-wrap">
       <div className="text-center settings-page-header">
-        <p>Settings</p>
+        <h1>{title}</h1>
       </div>
       <div className="settings-page-options-wrap">
         <SettingIndividual
-          indvidualStyles={"my-[1rem] rounded-md"}
+          indvidualStyles={"mb-[1rem] rounded-md"}
           headingText={"Contribute"}
           subText={"Support our work"}
           onClick={() => {}}

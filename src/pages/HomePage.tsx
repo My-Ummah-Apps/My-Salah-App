@@ -8,7 +8,8 @@ import { salahTrackingEntryType } from "../types/types";
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
-const MainPage = ({
+const HomePage = ({
+  title,
   startDate,
   // setSalahObjects: setSalahObjects,
   setSalahTrackingArray,
@@ -16,6 +17,7 @@ const MainPage = ({
   salahTrackingArray,
   setCurrentWeek, // currentWeek,
 }: {
+  title: React.ReactNode;
   startDate: Date;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   // currentStartDate: number;
@@ -30,6 +32,7 @@ const MainPage = ({
 
   return (
     <div className="overflow-x-auto w-5/5 main-page-wrap">
+      {title}
       <NextSalahTime />
       <PrayerMainView
         setSalahTrackingArray={setSalahTrackingArray}
@@ -41,4 +44,4 @@ const MainPage = ({
   );
 };
 
-export default MainPage;
+export default HomePage;

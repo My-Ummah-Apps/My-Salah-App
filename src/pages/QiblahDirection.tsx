@@ -1,7 +1,7 @@
-const QiblahDirection = () => {
+const QiblahDirection = ({ title }: { title: React.ReactNode }) => {
   return (
     <div>
-      <p>Qiblah Direction</p>
+      <h1>{title}</h1>
     </div>
   );
 };

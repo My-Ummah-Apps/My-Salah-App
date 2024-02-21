@@ -27,7 +27,7 @@ const SettingIndividual = ({
   return (
     <>
       <div
-        className={`flex items-center justify-between mx-[0.5rem] py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 ${indvidualStyles}`}
+        className={`flex items-center justify-between py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 ${indvidualStyles}`}
         onClick={onClick}
       >
         {/* {headingText === "Contribute" ? (

@@ -1,28 +1,31 @@
-const ResourcesPage = () => {
+import { FaBookOpen } from "react-icons/fa";
+import { GiArabicDoor } from "react-icons/gi";
+
+const ResourcesPage = ({ title }: { title: React.ReactNode }) => {
   return (
     <section>
-      <h1>Resources Page</h1>
-      <div className="grid grid-cols-2 gap-6 cards-wrap ">
-        <div className="rounded-lg shadow-md w-44 h-28 bg-amber-800">
-          <p>Icon</p>
+      {title}
+      <div className="grid grid-cols-2 gap-10 cards-wrap">
+        <div className="flex flex-col items-center justify-center shadow-md w-36 h-28 bg-[var(--card-bg-color)] rounded-md gap-2">
+          <FaBookOpen style={{ fontSize: "2rem" }} />
+          <p>Quran Verses</p>
+        </div>
+        <div className="flex flex-col items-center justify-center shadow-md w-36 h-28 bg-[var(--card-bg-color)] rounded-md gap-2">
+          <FaBookOpen style={{ fontSize: "2rem" }} />
           <p>Ahadeeth</p>
         </div>
-        <div className="rounded-lg shadow-md w-44 h-28 bg-amber-800">
-          <p>Icon</p>
-          <p>Verses</p>
+        <div className="flex flex-col items-center justify-center shadow-md w-36 h-28 bg-[var(--card-bg-color)] rounded-md gap-2">
+          <FaBookOpen style={{ fontSize: "2rem" }} />
+          <p>Guide</p>
         </div>
-        <div className="rounded-lg shadow-md w-44 h-28 bg-amber-800">
-          <p>Icon</p>
-          <p>Salah Guide</p>
+        <div className="flex flex-col items-center justify-center shadow-md w-36 h-28 bg-[var(--card-bg-color)] rounded-md gap-2">
+          <GiArabicDoor style={{ fontSize: "2rem" }} />
+          <p>Meanings</p>
         </div>
-        <div className="rounded-lg shadow-md w-44 h-28 bg-amber-800">
-          <p>Icon</p>
-          <p>Meanings of what is prayed within salah</p>
-        </div>
-        <div className="rounded-lg shadow-md w-44 h-28 bg-amber-800">
+        {/* <div className="flex flex-col items-center justify-center shadow-md w-36 h-28 bg-[var(--card-bg-color)] rounded-md gap-2">
           <p>Icon</p>
           <p>Text</p>
-        </div>
+        </div> */}
       </div>
     </section>
   );

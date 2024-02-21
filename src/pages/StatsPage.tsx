@@ -7,6 +7,7 @@ import { salahTrackingEntryType } from "../types/types";
 import Calender from "../components/Stats/Calender";
 
 const StatsPage = ({
+  title,
   startDate,
   setSalahTrackingArray,
   salahTrackingArray,
@@ -15,6 +16,7 @@ const StatsPage = ({
   setCurrentWeek,
   currentWeek,
 }: {
+  title: React.ReactNode;
   startDate: Date;
   // setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   // currentStartDate: number;
@@ -37,6 +39,7 @@ const StatsPage = ({
 
   return (
     <>
+      <h1>{title}</h1>
       <Calender
         // setCurrentMonthHeading={setCurrentMonthHeading}
         setSalahTrackingArray={setSalahTrackingArray}

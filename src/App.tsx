@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainPage from "./pages/MainPage";
+import HomePage from "./pages/HomePage";
 import { salahTrackingEntryType } from "./types/types";
 import { subDays } from "date-fns";
 
@@ -8,7 +8,7 @@ import { subDays } from "date-fns";
 //   salahName: string;
 //   completedDates: { [date: string]: string }[] | [];
 // }
-
+HomePage;
 // import "./App.css";
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
@@ -59,15 +59,25 @@ const App = () => {
         ]);
   }, []);
 
+  const h1ClassStyles: any = `mb-10 text-center`;
+
   return (
     <BrowserRouter>
       <section className="App">
         <Routes>
-          <Route path="/ResourcesPage" element={<ResourcesPage />} />
+          <Route
+            path="/ResourcesPage"
+            element={
+              <ResourcesPage
+                title={<h1 className={h1ClassStyles}>{"Resources"}</h1>}
+              />
+            }
+          />
           <Route
             index
             element={
-              <MainPage
+              <HomePage
+                title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
@@ -76,11 +86,19 @@ const App = () => {
               />
             }
           />
-          <Route path="/SettingsPage" element={<SettingsPage />} />
+          <Route
+            path="/SettingsPage"
+            element={
+              <SettingsPage
+                title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
+              />
+            }
+          />
           <Route
             path="/StatsPage"
             element={
               <StatsPage
+                title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 setCurrentWeek={setCurrentWeek}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
@@ -89,7 +107,14 @@ const App = () => {
               />
             }
           />
-          <Route path="/QiblahDirection" element={<QiblahDirection />} />
+          <Route
+            path="/QiblahDirection"
+            element={
+              <QiblahDirection
+                title={<h1 className={h1ClassStyles}>{"Qibla Direction"}</h1>}
+              />
+            }
+          />
         </Routes>
 
         <NavBar />

@@ -272,6 +272,7 @@ const PrayerMainView = ({
         isOpen={showUpdateStatusModal}
         onClose={() => setShowUpdateStatusModal(false)}
         detent="content-height"
+        // tweenConfig = { ease: 'easeOut', duration: 0.2 }
       >
         <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Header />
