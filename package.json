@@ -11,12 +11,12 @@
     "watch": "watch 'npm run build' ./src"
   },
   "dependencies": {
-    "@capacitor/android": "^5.5.1",
-    "@capacitor/core": "^5.5.1",
-    "@capacitor/ios": "^5.5.1",
-    "@capacitor/local-notifications": "^5.0.6",
-    "@capacitor/share": "^5.0.6",
-    "@capacitor/status-bar": "^5.0.6",
+    "@capacitor/android": "^5.7.0",
+    "@capacitor/core": "^5.7.0",
+    "@capacitor/ios": "^5.7.0",
+    "@capacitor/local-notifications": "^5.0.7",
+    "@capacitor/share": "^5.0.7",
+    "@capacitor/status-bar": "^5.0.7",
     "date-fns": "^2.30.0",
     "framer-motion": "^11.0.5",
     "npm-watch": "^0.11.0",
