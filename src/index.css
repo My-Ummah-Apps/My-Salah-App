@@ -30,6 +30,8 @@
 }
 
 body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
   /* background: #ededed; */
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);

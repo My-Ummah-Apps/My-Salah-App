@@ -319,7 +319,7 @@ const PrayerMainView = ({
           <Sheet.Content>
             {" "}
             <section className="flex justify-around text-5xl h-[200px]">
-              <h1>Hello</h1>
+              <h1>Hello2</h1>
               {/* <CalenderMonthly
               salahName={salah.salahName}
               days={days}

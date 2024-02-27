@@ -77,7 +77,7 @@ const App = () => {
             index
             element={
               <HomePage
-                title={<h1 className={h1ClassStyles}>{"Home1"}</h1>}
+                title={<h1 className={h1ClassStyles}>{"Home34"}</h1>}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
