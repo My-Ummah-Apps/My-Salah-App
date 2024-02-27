@@ -59,7 +59,8 @@ const App = () => {
         ]);
   }, []);
 
-  const h1ClassStyles: any = `mb-10 text-center`;
+  const h1ClassStyles: string = `mb-10 text-center relative`;
+  const pageStyles: string = `pb-[10vh]`;
 
   return (
     <BrowserRouter>
@@ -70,6 +71,7 @@ const App = () => {
             element={
               <ResourcesPage
                 title={<h1 className={h1ClassStyles}>{"Resources"}</h1>}
+                pageStyles={pageStyles}
               />
             }
           />
@@ -77,7 +79,8 @@ const App = () => {
             index
             element={
               <HomePage
-                title={<h1 className={h1ClassStyles}>{"Home34"}</h1>}
+                title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
+                pageStyles={pageStyles}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
@@ -91,6 +94,7 @@ const App = () => {
             element={
               <SettingsPage
                 title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
+                pageStyles={pageStyles}
               />
             }
           />
@@ -99,6 +103,7 @@ const App = () => {
             element={
               <StatsPage
                 title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
+                pageStyles={pageStyles}
                 setCurrentWeek={setCurrentWeek}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
@@ -112,6 +117,7 @@ const App = () => {
             element={
               <QiblahDirection
                 title={<h1 className={h1ClassStyles}>{"Qibla Direction"}</h1>}
+                pageStyles={pageStyles}
               />
             }
           />

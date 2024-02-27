@@ -16,16 +16,16 @@ import { IoIosStats } from "react-icons/io";
 
 const NavBar = () => {
   return (
-    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full max-w-2xl  bg-[var(--secondary-color)] navbar-wrap pb-env-safe-area-inset-bottom rounded-t-2xl ">
+    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full bg-[var(--secondary-color)] navbar-wrap pb-env-safe-area-inset-bottom rounded-t-2xl">
       <NavLink
         onClick={() => {
           //   setActivePage("settings");
         }}
-        className="nav-link px-3 py-1.5 pt-0.5"
+        className="nav-link px-3  pt-0.5"
         to="/SettingsPage"
       >
         <BsFillNutFill
-          className="text-2xl nav-icon"
+          className="m-4 text-2xl nav-icon"
           //   color={activePage == "settings" ? activeBackgroundColor : "grey"}
         />
       </NavLink>
@@ -33,12 +33,12 @@ const NavBar = () => {
         onClick={() => {
           //   setActivePage("home");
         }}
-        className="nav-link px-3 py-1.5 pt-0.5"
+        className="nav-link px-3  pt-0.5"
         to="/StatsPage"
       >
         <div>
           <IoIosStats
-            className="text-2xl nav-icon"
+            className="m-4 text-2xl nav-icon"
             // color={activePage == "home" ? activeBackgroundColor : "grey"}
           />
         </div>
@@ -47,12 +47,12 @@ const NavBar = () => {
         onClick={() => {
           //   setActivePage("home");
         }}
-        className="nav-link px-3 py-1.5 pt-0.5"
+        className="nav-link px-3  pt-0.5"
         to="/"
       >
         <div>
           <BsFillHouseDoorFill
-            className="text-2xl nav-icon"
+            className="m-4 text-2xl nav-icon"
             // color={activePage == "home" ? activeBackgroundColor : "grey"}
           />
         </div>
@@ -61,11 +61,11 @@ const NavBar = () => {
         onClick={() => {
           //   setActivePage("counters");
         }}
-        className="nav-link px-3 py-1.5 pt-0.5"
+        className="nav-link px-3 pt-0.5"
         to="/ResourcesPage"
       >
         <GrResources
-          className="text-2xl nav-icon"
+          className="m-4 text-2xl nav-icon"
           //   color={activePage == "counters" ? activeBackgroundColor : "grey"}
         />
       </NavLink>
@@ -73,7 +73,7 @@ const NavBar = () => {
         onClick={() => {
           //   setActivePage("counters");
         }}
-        className="nav-link px-3 py-1.5 pt-0.5"
+        className="nav-link px-3 pt-0.5"
         to="/QiblahDirection"
       >
         <FaCompass

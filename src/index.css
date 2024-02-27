@@ -26,7 +26,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  /* user-select: none; */
+  user-select: none;
 }
 
 body {
@@ -122,4 +122,17 @@ tr:nth-child(5) {
 
 .table-salah-name-td:nth-child(2) {
   /* background-color: #ca8a04; */
+}
+
+/* .settings-page-wrap {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+} */
+
+@supports not (-webkit-touch-callout: none) {
+  /* CSS for other than iOS devices */
+  .navbar-wrap {
+    /* padding-bottom: 0; */
+    padding-bottom: 0.5rem;
+  }
 }

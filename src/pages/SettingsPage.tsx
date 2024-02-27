@@ -7,7 +7,13 @@ import SettingIndividual from "../components/Settings/SettingIndividual";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
-const SettingsPage = ({ title }: { title: React.ReactNode }) => {
+const SettingsPage = ({
+  title,
+  pageStyles,
+}: {
+  title: React.ReactNode;
+  pageStyles: string;
+}) => {
   let appLink: string;
   const shareThisAppLink = async () => {
     if (Capacitor.getPlatform() == "ios") {
@@ -32,8 +38,8 @@ const SettingsPage = ({ title }: { title: React.ReactNode }) => {
   setShowModal;
 
   return (
-    <div className="settings-page-wrap">
-      <div className="text-center settings-page-header">
+    <section className={pageStyles}>
+      <div className="text-center settings-page-header ">
         <h1>{title}</h1>
       </div>
       <div className="settings-page-options-wrap">
@@ -124,7 +130,7 @@ const SettingsPage = ({ title }: { title: React.ReactNode }) => {
                     activeBackgroundColor={activeBackgroundColor}
                   /> */}
       </div>
-    </div>
+    </section>
   );
 };
 

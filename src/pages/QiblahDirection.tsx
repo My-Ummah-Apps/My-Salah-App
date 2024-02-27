@@ -1,8 +1,14 @@
-const QiblahDirection = ({ title }: { title: React.ReactNode }) => {
+const QiblahDirection = ({
+  title,
+  pageStyles,
+}: {
+  title: React.ReactNode;
+  pageStyles: string;
+}) => {
   return (
-    <div>
+    <section className={pageStyles}>
       <h1>{title}</h1>
-    </div>
+    </section>
   );
 };
 

@@ -8,6 +8,7 @@ import Calender from "../components/Stats/Calender";
 
 const StatsPage = ({
   title,
+  pageStyles,
   startDate,
   setSalahTrackingArray,
   salahTrackingArray,
@@ -17,6 +18,7 @@ const StatsPage = ({
   currentWeek,
 }: {
   title: React.ReactNode;
+  pageStyles: string;
   startDate: Date;
   // setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
   // currentStartDate: number;
@@ -38,8 +40,7 @@ const StatsPage = ({
   // }
 
   return (
-    <>
-      <h1>{title}</h1>
+    <section className={`${pageStyles} settings-page-wrap`}>
       <Calender
         // setCurrentMonthHeading={setCurrentMonthHeading}
         setSalahTrackingArray={setSalahTrackingArray}
@@ -50,7 +51,7 @@ const StatsPage = ({
         currentWeek={currentWeek}
         // modifySingleDaySalah={modifySingleDaySalah}
       />{" "}
-    </>
+    </section>
   );
 };
 
