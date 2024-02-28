@@ -24,6 +24,7 @@ const App = () => {
   const [salahTrackingArray, setSalahTrackingArray] = useState<
     salahTrackingEntryType[]
   >([]);
+  const [heading, setHeading] = useState("");
 
   const [currentWeek, setCurrentWeek] = useState(0);
   const today: Date = new Date();
@@ -59,18 +60,19 @@ const App = () => {
         ]);
   }, []);
 
-  const h1ClassStyles: string = `mb-10 text-center relative`;
   const pageStyles: string = `pb-[10vh]`;
 
   return (
     <BrowserRouter>
       <section className="App">
+        <h1 className="relative mb-10 text-center">{heading}</h1>
         <Routes>
           <Route
             path="/ResourcesPage"
             element={
               <ResourcesPage
-                title={<h1 className={h1ClassStyles}>{"Resources"}</h1>}
+                // title={<h1 className={h1ClassStyles}>{"Resources"}</h1>}
+                setHeading={setHeading}
                 pageStyles={pageStyles}
               />
             }
@@ -79,7 +81,9 @@ const App = () => {
             index
             element={
               <HomePage
-                title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
+                // title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
+                // title={heading}
+                setHeading={setHeading}
                 pageStyles={pageStyles}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
@@ -93,7 +97,8 @@ const App = () => {
             path="/SettingsPage"
             element={
               <SettingsPage
-                title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
+                setHeading={setHeading}
+                // title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
                 pageStyles={pageStyles}
               />
             }
@@ -102,8 +107,9 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
-                title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
+                // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
+                setHeading={setHeading}
                 setCurrentWeek={setCurrentWeek}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
@@ -116,13 +122,13 @@ const App = () => {
             path="/QiblahDirection"
             element={
               <QiblahDirection
-                title={<h1 className={h1ClassStyles}>{"Qibla Direction"}</h1>}
+                setHeading={setHeading}
+                // title={<h1 className={h1ClassStyles}>{"Qibla Direction"}</h1>}
                 pageStyles={pageStyles}
               />
             }
           />
         </Routes>
-
         <NavBar />
       </section>
     </BrowserRouter>

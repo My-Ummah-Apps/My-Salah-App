@@ -7,7 +7,8 @@ import { salahTrackingEntryType } from "../types/types";
 import Calender from "../components/Stats/Calender";
 
 const StatsPage = ({
-  title,
+  // title,
+  setHeading,
   pageStyles,
   startDate,
   setSalahTrackingArray,
@@ -17,7 +18,8 @@ const StatsPage = ({
   setCurrentWeek,
   currentWeek,
 }: {
-  title: React.ReactNode;
+  // title: React.ReactNode;
+  setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
   startDate: Date;
   // setCurrentStartDate: React.Dispatch<React.SetStateAction<number>>;
@@ -38,9 +40,10 @@ const StatsPage = ({
   // function modifySingleDaySalah(date: Date) {
   //   setStartDate(date);
   // }
-
+  setHeading("Stats");
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
+      {/* {title} */}
       <Calender
         // setCurrentMonthHeading={setCurrentMonthHeading}
         setSalahTrackingArray={setSalahTrackingArray}

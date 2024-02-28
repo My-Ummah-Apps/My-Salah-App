@@ -8,10 +8,12 @@ import SettingIndividual from "../components/Settings/SettingIndividual";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
 const SettingsPage = ({
-  title,
+  // title,
+  setHeading,
   pageStyles,
 }: {
-  title: React.ReactNode;
+  // title: React.ReactNode;
+  setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
 }) => {
   let appLink: string;
@@ -37,10 +39,12 @@ const SettingsPage = ({
   const [showModal, setShowModal] = useState(false);
   setShowModal;
 
+  setHeading("Settings");
+
   return (
     <section className={pageStyles}>
       <div className="text-center settings-page-header ">
-        <h1>{title}</h1>
+        {/* <h1>{title}</h1> */}
       </div>
       <div className="settings-page-options-wrap">
         <SettingIndividual
