@@ -4,17 +4,70 @@ import HomePage from "./pages/HomePage";
 import { salahTrackingEntryType } from "./types/types";
 import { subDays } from "date-fns";
 
+import { StatusBar, Style } from "@capacitor/status-bar";
+// import { LocalNotifications } from "@capacitor/local-notifications";
+import { SplashScreen } from "@capacitor/splash-screen";
+import { Capacitor } from "@capacitor/core";
+
 // interface salahTrackingEntryType {
 //   salahName: string;
 //   completedDates: { [date: string]: string }[] | [];
 // }
-HomePage;
-// import "./App.css";
+
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
 import QiblahDirection from "./pages/QiblahDirection";
+
+window.addEventListener("DOMContentLoaded", () => {
+  if (Capacitor.isNativePlatform()) {
+    // STATUS BAR FUNCTIONALITY
+
+    // const setStatusBarStyleDark = async () => {
+    //   await StatusBar.setStyle({ style: Style.Dark });
+    // };
+
+    // const setStatusBarStyleLight = async () => {
+    //   await StatusBar.setStyle({ style: Style.Light });
+    // };
+
+    // let statusBarThemeColor;
+    // if (localStorage.getItem("theme") == null) {
+    //   localStorage.setItem("theme", JSON.stringify("light"));
+    //   setStatusBarStyleLight();
+    //   statusBarThemeColor = "#EDEDED";
+    // } else if (JSON.parse(localStorage.getItem("theme")) == "dark") {
+    //   setStatusBarStyleDark();
+    //   statusBarThemeColor = "#242424";
+    //   document.body.classList.add("dark");
+    // } else if (JSON.parse(localStorage.getItem("theme")) == "light") {
+    //   setStatusBarStyleLight();
+    //   statusBarThemeColor = "#EDEDED";
+    //   document.body.classList.remove("dark");
+    // }
+
+    setTimeout(() => {
+      SplashScreen.hide({
+        fadeOutDuration: 250,
+      });
+    }, 500);
+
+    if (Capacitor.getPlatform() === "ios") {
+      return;
+    } else if (Capacitor.getPlatform() === "android") {
+      setTimeout(() => {
+        // StatusBar.setStyle({ style: Style.Light });
+        // if (statusBarThemeColor == "#EDEDED") {
+        //   StatusBar.setStyle({ style: Style.Light });
+        // } else if (statusBarThemeColor == "#242424") {
+        //   StatusBar.setStyle({ style: Style.Dark });
+        // }
+        // StatusBar.setBackgroundColor({ color: statusBarThemeColor });
+      }, 1000);
+    }
+  }
+});
 
 const App = () => {
   //
@@ -60,12 +113,15 @@ const App = () => {
         ]);
   }, []);
 
-  const pageStyles: string = `pb-[10vh]`;
+  const pageStyles: string = `pb-[15vh] pt-[15vh] mx-3`;
 
   return (
     <BrowserRouter>
       <section className="App">
-        <h1 className="relative mb-10 text-center">{heading}</h1>
+        <div className="fixed w-full bg-black h-[7vh] z-20"></div>
+        <h1 className="fixed w-full bg-black text-center mt-[6vh]">
+          {heading}
+        </h1>
         <Routes>
           <Route
             path="/ResourcesPage"

@@ -16,6 +16,7 @@
     "@capacitor/ios": "^5.7.0",
     "@capacitor/local-notifications": "^5.0.7",
     "@capacitor/share": "^5.0.7",
+    "@capacitor/splash-screen": "^5.0.7",
     "@capacitor/status-bar": "^5.0.7",
     "date-fns": "^2.30.0",
     "framer-motion": "^11.0.5",

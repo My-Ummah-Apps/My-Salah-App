@@ -12,7 +12,7 @@
   max-width: 1280px;
   /* margin: 0 auto; */
   /* padding: 1rem; */
-  margin: 1rem;
+  /* margin: 1rem; */
   /* --primary-color: rgb(41, 41, 41);
   --secondary-color: rgb(27, 27, 27);
   --card-bg-color: rgb(51, 51, 51); */
@@ -30,8 +30,8 @@
 }
 
 body {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left); */
   /* background: #ededed; */
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);
