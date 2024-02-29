@@ -36,7 +36,8 @@ const HomePage = ({
   // const startDate = subDays(today, currentStartDate);
 
   return (
-    <section className={`overflow-x-auto w-5/5 main-page-wrap ${pageStyles}`}>
+    <section className={`home-page-wrap ${pageStyles}`}>
+      {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
       <NextSalahTime />
       <PrayerMainView

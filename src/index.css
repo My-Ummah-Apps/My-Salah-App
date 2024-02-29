@@ -30,12 +30,17 @@
 }
 
 body {
-  /* padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left); */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
   /* background: #ededed; */
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);
   color: rgb(184, 184, 184);
+  overflow-y: hidden;
+}
+
+.header-wrap {
+  background: var(--primary-color);
 }
 
 table {
@@ -136,3 +141,11 @@ tr:nth-child(5) {
     padding-bottom: 0.5rem;
   }
 }
+
+/* Apply the background color to the safe areas for iOS devices
+@supports (padding-top: constant(safe-area-inset-top)) or
+  (padding-top: env(safe-area-inset-top)) {
+  .header-wrap {
+    margin-top: 6vh;
+  }
+} */

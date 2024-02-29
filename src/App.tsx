@@ -4,7 +4,7 @@ import HomePage from "./pages/HomePage";
 import { salahTrackingEntryType } from "./types/types";
 import { subDays } from "date-fns";
 
-import { StatusBar, Style } from "@capacitor/status-bar";
+// import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
@@ -113,15 +113,18 @@ const App = () => {
         ]);
   }, []);
 
-  const pageStyles: string = `pb-[15vh] pt-[15vh] mx-3`;
+  const pageStyles: string = `px-2 py-[10vh] h-[95vh] overflow-x-hidden overflow-y-scroll w-full`;
 
   return (
     <BrowserRouter>
       <section className="App">
-        <div className="fixed w-full bg-black h-[7vh] z-20"></div>
-        <h1 className="fixed w-full bg-black text-center mt-[6vh]">
+        <div className="fixed z-20 w-full p-5 text-center header-wrap">
+          {" "}
+          <h1 className="">{heading}</h1>
+        </div>
+        {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
           {heading}
-        </h1>
+        </h1> */}
         <Routes>
           <Route
             path="/ResourcesPage"
