@@ -2,8 +2,12 @@ import React, { useState } from "react";
 // import Modal from "./Modal";
 import Sheet from "react-modal-sheet";
 // import ReactModal from "react-modal";
-import { FaMosque, FaHome } from "react-icons/fa";
+// import { FaMosque, FaHome } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+
+import { MdGroups } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
+import { BsPersonStanding } from "react-icons/bs";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
@@ -197,9 +201,9 @@ const PrayerMainView = ({
       if (matchedObject !== undefined) {
         cellIcon = matchedObject[date];
       }
-      if (cellIcon === "home") {
+      if (cellIcon === "alone") {
         cellIcon = (
-          <FaHome
+          <BsPersonStanding
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
@@ -210,9 +214,9 @@ const PrayerMainView = ({
             className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           />
         );
-      } else if (cellIcon === "masjid") {
+      } else if (cellIcon === "group") {
         cellIcon = (
-          <FaMosque
+          <MdGroups
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
@@ -279,18 +283,18 @@ const PrayerMainView = ({
           <Sheet.Content>
             {" "}
             <section className="flex justify-around text-5xl h-[200px]">
-              <FaMosque
+              <MdGroups
                 onClick={() => {
                   console.log(tableHeadDate);
                   console.log(selectedSalah);
-                  changePrayerStatus(tableHeadDate, selectedSalah, "masjid");
+                  changePrayerStatus(tableHeadDate, selectedSalah, "group");
 
                   setShowUpdateStatusModal(false);
                 }}
               />
-              <FaHome
+              <BsPersonStanding
                 onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "home");
+                  changePrayerStatus(tableHeadDate, selectedSalah, "alone");
 
                   setShowUpdateStatusModal(false);
                 }}
@@ -298,6 +302,15 @@ const PrayerMainView = ({
               <LuDot
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "blank");
+                  // setOpen(false);
+
+                  setShowUpdateStatusModal(false);
+                }}
+              />
+              {/* CONTINUE FROM HERE */}
+              <ImCross
+                onClick={() => {
+                  changePrayerStatus(tableHeadDate, selectedSalah, "missed");
                   // setOpen(false);
 
                   setShowUpdateStatusModal(false);
