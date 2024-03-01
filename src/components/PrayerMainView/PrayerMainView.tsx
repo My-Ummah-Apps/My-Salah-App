@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 // import Modal from "./Modal";
+import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
 // import ReactModal from "react-modal";
 // import { FaMosque, FaHome } from "react-icons/fa";
@@ -243,7 +244,7 @@ const PrayerMainView = ({
         );
       }
       return (
-        <td className="h-full border-none">
+        <td key={uuidv4()} className="h-full border-none">
           <div
             id="icon-wrap"
             onClick={(e) => {
@@ -356,7 +357,15 @@ const PrayerMainView = ({
           <tr className="hidden">
             <th className="border-none"></th>
             {currentDisplayedWeek.map((item) => {
-              return <td className="text-xs border-none">{item}</td>;
+              return (
+                <td
+                  key={uuidv4()}
+                  // key={"invisible td: " + item}
+                  className="text-xs border-none"
+                >
+                  {item}
+                </td>
+              );
             })}
           </tr>
           <tr className="h-12">
@@ -367,7 +376,11 @@ const PrayerMainView = ({
               const splitFormattedDate: string[] = formattedDate.split(" ");
 
               return (
-                <td className="border-none text-[#c4c4c4] text-center">
+                <td
+                  key={uuidv4()}
+                  // key={"visible td: " + item}
+                  className="border-none text-[#c4c4c4] text-center"
+                >
                   {/* {formattedDate} */}
                   <p>{splitFormattedDate[0]}</p>
                   <p>{splitFormattedDate[1]}</p>
@@ -380,6 +393,8 @@ const PrayerMainView = ({
           {salahTrackingArray?.map((item, index) => {
             return (
               <tr
+                key={uuidv4()}
+                // key={"table row: " + item.salahName}
                 onClick={(e) => {
                   // setShowMonthlyCalenderModal(true);
                   // e.stopPropagation();

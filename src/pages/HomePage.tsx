@@ -43,7 +43,7 @@ const HomePage = ({
     <section className={`home-page-wrap ${pageStyles}`}>
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
-      <NextSalahTime />
+      {/* <NextSalahTime /> */}
       <PrayerMainView
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
