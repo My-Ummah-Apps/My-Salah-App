@@ -37,7 +37,6 @@ const PrayerMainView = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   startDate: Date;
 }) => {
-  // console.log("PRAYER MAIN VIEW RENDERED");
   // const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
@@ -71,10 +70,9 @@ const PrayerMainView = ({
     // icon
   ) => void = (tableHeadDate, selectedSalah, salahStatus) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
-      // console.log("tableHeadDate", tableHeadDate);
-      // console.log("selectedSalah", selectedSalah);
-      // console.log("salahStatus", salahStatus);
-      if (item.salahName == selectedSalah) {
+      console.log("item.salahName " + item.salahName);
+      console.log("selectedSalah " + selectedSalah);
+      if (item.salahName === selectedSalah) {
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
         });
@@ -102,6 +100,7 @@ const PrayerMainView = ({
         }
 
         if (doesDateObjectExist === undefined && salahStatus !== "blank") {
+          console.log("triggered");
           return {
             ...item,
             completedDates: [
@@ -129,7 +128,7 @@ const PrayerMainView = ({
           };
         }
       }
-      // console.log("item is ", item);
+
       return item;
     });
     setSalahTrackingArray(newSalahTrackingArray);
@@ -142,7 +141,6 @@ const PrayerMainView = ({
   let clickedElement: any;
   // let columnIndex: number;
   function grabDate(e: any) {
-    console.log("GRABDATE TRIGGERED");
     // const cell = e.target as HTMLTableCellElement;
 
     let selectedSalah;
@@ -168,11 +166,6 @@ const PrayerMainView = ({
     //   clickedElement = e.target.closest("td");
     //   selectedSalah = clickedElement.parentElement.cells[0].innerText;
     // }
-
-    console.log(
-      clickedElement.parentElement.parentElement.parentElement.parentElement
-        .children[0].children[0].cells[columnIndex]
-    );
 
     const tableHeadDate =
       clickedElement.parentElement.parentElement.parentElement.parentElement
@@ -251,7 +244,6 @@ const PrayerMainView = ({
               e.stopPropagation();
               setShowUpdateStatusModal(true);
               grabDate(e);
-              console.log("grabDate clicked");
             }}
           >
             {cellIcon}
@@ -276,8 +268,6 @@ const PrayerMainView = ({
             <section className="flex justify-around text-5xl h-[200px]">
               <MdGroups
                 onClick={() => {
-                  console.log(tableHeadDate);
-                  console.log(selectedSalah);
                   changePrayerStatus(tableHeadDate, selectedSalah, "group");
 
                   setShowUpdateStatusModal(false);
