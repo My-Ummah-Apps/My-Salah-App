@@ -1,6 +1,7 @@
 import PrayerMainView from "../components/PrayerMainView/PrayerMainView";
 import NextSalahTime from "../components/NextSalahTime";
 import { salahTrackingEntryType } from "../types/types";
+import { useEffect } from "react";
 
 // import { subDays } from "date-fns";
 // interface salahTrackingEntryType {
@@ -31,7 +32,10 @@ const HomePage = ({
   salahTrackingArray: salahTrackingEntryType[];
   // currentWeek: number;
 }) => {
-  setHeading("Home");
+  useEffect(() => {
+    setHeading("Home");
+  }, []);
+
   // const today: Date = new Date();
   // const startDate = subDays(today, currentStartDate);
 

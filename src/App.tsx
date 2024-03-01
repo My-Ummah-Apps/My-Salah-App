@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+// import Notifications from "./utils/notifications";
 import { salahTrackingEntryType } from "./types/types";
 import { subDays } from "date-fns";
 

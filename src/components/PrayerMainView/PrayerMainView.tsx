@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import Sheet from "react-modal-sheet";
 // import ReactModal from "react-modal";
 // import { FaMosque, FaHome } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
+// import { ImCross } from "react-icons/im";
 
 import { MdGroups } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import { AiOutlineStop } from "react-icons/ai";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
 import { subDays, format, parse } from "date-fns";
@@ -227,13 +228,20 @@ const PrayerMainView = ({
             className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           />
         );
-      }
+      } else if (cellIcon === "missed") {
+        cellIcon = (
+          <AiOutlineStop
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
 
-      // else if (cellIcon === "Blank") {
-      //   cellIcon = (
-      //     <LuDot className="flex self-center text-2xl justify-self-center w-[100%]" />
-      //   );
-      // }
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
+            }}
+            className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
+          />
+        );
+      }
       return (
         <td className="h-full border-none">
           <div
@@ -254,24 +262,6 @@ const PrayerMainView = ({
 
   return (
     <>
-      {/* <Modal
-        setShowModal={setShowModal}
-        showModal={showModal}
-        changePrayerStatus={changePrayerStatus}
-        // icon={icon}
-        // setIcon={setIcon}
-        selectedSalah={selectedSalah}
-        tableHeadDate={tableHeadDate}
-      /> */}
-      {/* <img
-        className="rounded-lg"
-        src="/src/beautiful-sunset-background-river_203633-925.jpg"
-        alt=""
-        srcset=""
-      /> */}
-      {/* bg-[color:var(--card-bg-color)] */}
-      {/* <button onClick={() => setOpen(true)}>Open sheet</button> */}
-
       <Sheet
         isOpen={showUpdateStatusModal}
         onClose={() => setShowUpdateStatusModal(false)}
@@ -307,8 +297,7 @@ const PrayerMainView = ({
                   setShowUpdateStatusModal(false);
                 }}
               />
-              {/* CONTINUE FROM HERE */}
-              <ImCross
+              <AiOutlineStop
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "missed");
                   // setOpen(false);
