@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
+import CalenderMonthly from "../Stats/CalenderMonthly";
 // import ReactModal from "react-modal";
 // import { FaMosque, FaHome } from "react-icons/fa";
 // import { ImCross } from "react-icons/im";
@@ -22,12 +23,13 @@ import { salahTrackingEntryType } from "../../types/types";
 // }
 
 // import { v4 as uuidv4 } from "uuid";
-// import CalenderMonthly from "../Stats/CalenderMonthly";
+import Calender from "../Stats/Calender";
 
 const PrayerMainView = ({
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentWeek,
+  currentWeek,
   startDate,
 }: {
   setSalahTrackingArray: React.Dispatch<
@@ -35,11 +37,37 @@ const PrayerMainView = ({
   >;
   salahTrackingArray: salahTrackingEntryType[];
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  currentWeek: number;
   startDate: Date;
 }) => {
   // const [icon, setIcon] = useState("");
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
+
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+
+  const handleTouchStart = (event) => {
+    console.log("touchevent STARTED " + event.changedTouches[0].screenX);
+    setTouchStartX(event.changedTouches[0].screenX);
+  };
+
+  const handleTouchEnd = (event) => {
+    console.log("touchevent ENDED " + event.changedTouches[0].screenX);
+    setTouchEndX(event.changedTouches[0].screenX);
+    handleGesture();
+  };
+
+  const handleGesture = () => {
+    const threshold = window.innerWidth / 20;
+    const swipeDistance = touchEndX - touchStartX;
+
+    if (threshold < Math.abs(swipeDistance)) {
+      setCurrentWeek((prevValue) => prevValue + 5);
+    } else if (Math.abs(swipeDistance) > threshold) {
+      setCurrentWeek((prevValue) => prevValue - 5);
+    }
+  };
 
   // const SalahIcons: string[] = ["<RiSunFill />", "<FaMoon />"];
 
@@ -262,7 +290,7 @@ const PrayerMainView = ({
   }
 
   return (
-    <>
+    <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <Sheet
         isOpen={showUpdateStatusModal}
         onClose={() => setShowUpdateStatusModal(false)}
@@ -319,22 +347,28 @@ const PrayerMainView = ({
           <Sheet.Header />
           <Sheet.Content>
             {" "}
-            <section className="flex justify-around text-5xl h-[200px]">
-              <h1>Hello2</h1>
+            <section className="flex justify-around ">
               {/* <CalenderMonthly
-              salahName={salah.salahName}
-              days={days}
-              currentMonth={currentMonth}
-              isDayInSpecificMonth={isDayInSpecificMonth}
-              // salahName={salah.salahName}
-              countCompletedDates={countCompletedDates}
-              setSalahTrackingArray={setSalahTrackingArray}
-              salahTrackingArray={salahTrackingArray}
-              startDate={startDate}
-              setCurrentWeek={setCurrentWeek}
-              currentWeek={currentWeek}
-              modifySingleDaySalah={modifySingleDaySalah}
-            /> */}
+                salahName={"Fajr"}
+                days={days}
+                currentMonth={currentMonth}
+                isDayInSpecificMonth={isDayInSpecificMonth}
+                // salahName={salah.salahName}
+                countCompletedDates={countCompletedDates}
+                setSalahTrackingArray={setSalahTrackingArray}
+                salahTrackingArray={salahTrackingArray}
+                startDate={startDate}
+                setCurrentWeek={setCurrentWeek}
+                currentWeek={currentWeek}
+                modifySingleDaySalah={modifySingleDaySalah}
+              /> */}
+              <Calender
+                setSalahTrackingArray={setSalahTrackingArray}
+                salahTrackingArray={salahTrackingArray}
+                startDate={startDate}
+                setCurrentWeek={setCurrentWeek}
+                currentWeek={currentWeek}
+              />
             </section>
           </Sheet.Content>
         </Sheet.Container>
@@ -443,7 +477,7 @@ const PrayerMainView = ({
           <IoChevronForward />
         </button>
       </div>
-    </>
+    </section>
   );
 };
 

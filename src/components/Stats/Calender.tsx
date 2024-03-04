@@ -18,9 +18,7 @@ import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 const Calender = ({
   setSalahTrackingArray,
   salahTrackingArray,
-  // setStartDate,
   startDate,
-  //   modifySingleDaySalah,
   setCurrentWeek,
   currentWeek,
 }: {
@@ -55,8 +53,6 @@ const Calender = ({
         : differenceInDays(today, date) - 1
     );
     // setCurrentWeek(differenceInDays(today, date) - 1);
-    console.log(date);
-    console.log(differenceInDays(today, date));
   }
 
   let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());

@@ -16,6 +16,8 @@ import { Capacitor } from "@capacitor/core";
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
+// const days = ["M", "T", "W", "T", "F", "S", "S"];
+
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 import ResourcesPage from "./pages/ResourcesPage";
@@ -150,7 +152,7 @@ const App = () => {
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
                 setCurrentWeek={setCurrentWeek}
-                // currentWeek={currentWeek}
+                currentWeek={currentWeek}
               />
             }
           />

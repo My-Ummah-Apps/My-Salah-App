@@ -45,14 +45,11 @@ const StatsPage = ({
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* {title} */}
       <Calender
-        // setCurrentMonthHeading={setCurrentMonthHeading}
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
-        // setStartDate={setStartDate}
         startDate={startDate}
         setCurrentWeek={setCurrentWeek}
         currentWeek={currentWeek}
-        // modifySingleDaySalah={modifySingleDaySalah}
       />{" "}
     </section>
   );
