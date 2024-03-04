@@ -70,20 +70,22 @@ const PrayerMainView = ({
     // icon
   ) => void = (tableHeadDate, selectedSalah, salahStatus) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
-      console.log("item.salahName " + item.salahName);
-      console.log("selectedSalah " + selectedSalah);
-      if (item.salahName === selectedSalah) {
+      // if (item.salahName === selectedSalah) {
+      if (item.salahName === selectedSalah.replace(/\s/g, "")) {
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
         });
+        console.log("doesDateObjectExist: " + doesDateObjectExist);
 
         if (salahStatus === "blank") {
+          console.log("salahStatus === blank");
           if (doesDateObjectExist === undefined) {
             return {
               ...item,
               completedDates: [...item.completedDates],
             };
           } else if (doesDateObjectExist !== undefined) {
+            console.log("doesDateObjectExist !== undefined");
             const filteredCompletedDatesArray = item.completedDates.filter(
               (date) => {
                 return (
@@ -100,7 +102,9 @@ const PrayerMainView = ({
         }
 
         if (doesDateObjectExist === undefined && salahStatus !== "blank") {
-          console.log("triggered");
+          console.log(
+            "doesDateObjectExist === undefined && salahStatus !== blank"
+          );
           return {
             ...item,
             completedDates: [
@@ -112,6 +116,9 @@ const PrayerMainView = ({
           doesDateObjectExist !== undefined &&
           salahStatus !== "blank"
         ) {
+          console.log(
+            "doesDateObjectExist !== undefined && salahStatus !== blank"
+          );
           const filteredCompletedDatesArray = item.completedDates.filter(
             (date) => {
               return (
@@ -137,6 +144,7 @@ const PrayerMainView = ({
       "storedSalahTrackingData",
       JSON.stringify(newSalahTrackingArray)
     );
+    console.log(newSalahTrackingArray);
   };
   let clickedElement: any;
   // let columnIndex: number;
