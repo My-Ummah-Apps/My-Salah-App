@@ -14,13 +14,24 @@ import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
-import { subDays, format, parse } from "date-fns";
+
 // import { render } from "react-dom";
 import { salahTrackingEntryType } from "../../types/types";
 // interface salahTrackingEntryType {
 //   salahName: string;
 //   completedDates: { [date: string]: string }[] | [];
 // }
+
+import {
+  add,
+  sub,
+  subDays,
+  format,
+  parse,
+  startOfToday,
+  startOfMonth,
+  differenceInDays,
+} from "date-fns";
 
 // import { v4 as uuidv4 } from "uuid";
 import Calender from "../Stats/Calender";
@@ -40,7 +51,80 @@ const PrayerMainView = ({
   currentWeek: number;
   startDate: Date;
 }) => {
+  // let monthlyCalenderToShow = "";
+  const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
+  // BELOW CODE IS FROM CALENDER.TSX TO MAKE MONTHLY CALENDER FUNCTIONALITY WORK WHEN A TABLE ROW IS CLICKED
+  // THIS IS ALL DUPLICATE CODE FROM CALENDER.TSX AND NEED TO FIND A MORE EFFICIENT WAY OF DOING THIS
+  //  ----------------------------------------------
+
+  function modifySingleDaySalah(date: Date) {
+    const today: Date = new Date();
+    setCurrentWeek(
+      today > date
+        ? differenceInDays(today, date)
+        : differenceInDays(today, date) - 1
+    );
+    // setCurrentWeek(differenceInDays(today, date) - 1);
+  }
+
+  const days = ["M", "T", "W", "T", "F", "S", "S"];
+  const today = startOfToday();
+  const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
+    const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+    const dayMonth = startOfMonth(dayToCheck);
+    return (
+      dayMonth.getMonth() === parsedCurrentMonth.getMonth() &&
+      dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
+    );
+  };
+
+  const countCompletedDates = (date: string, salahName?: string) => {
+    const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
+      string[]
+    >((accumulatorArray, salah) => {
+      if (salah.salahName === salahName) {
+        salah.completedDates.forEach((item) => {
+          accumulatorArray.push(Object.keys(item)[0]);
+        });
+      } else if (!salahName) {
+        salah.completedDates.forEach((item) => {
+          accumulatorArray.push(Object.keys(item)[0]);
+        });
+      }
+      return accumulatorArray;
+    }, []);
+
+    let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
+      (currentDate) => currentDate === date
+    );
+
+    let sameDatesArrayLength = sameDatesArray.length;
+
+    let color;
+
+    if (salahName) {
+      if (sameDatesArrayLength === 0) {
+        color = "transparent";
+      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+        color = "green";
+      }
+    } else if (!salahName) {
+      if (sameDatesArrayLength === 0) {
+        color = "transparent";
+      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+        color = "orange";
+      } else if (sameDatesArrayLength === 5) {
+        color = "green";
+      }
+    }
+
+    sameDatesArray = [];
+    return color;
+  };
+  // TESTING ----------------------------------------------
+
   // const [icon, setIcon] = useState("");
+  const [showCalenderOneMonth, setShowCalenderOneMonth] = useState(false);
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
 
@@ -59,13 +143,13 @@ const PrayerMainView = ({
   };
 
   const handleGesture = () => {
-    const threshold = window.innerWidth / 20;
+    const threshold = window.innerWidth / 5;
     const swipeDistance = touchEndX - touchStartX;
 
     if (threshold < Math.abs(swipeDistance)) {
-      setCurrentWeek((prevValue) => prevValue + 5);
+      // setCurrentWeek((prevValue) => prevValue + 5);
     } else if (Math.abs(swipeDistance) > threshold) {
-      setCurrentWeek((prevValue) => prevValue - 5);
+      // setCurrentWeek((prevValue) => prevValue - 5);
     }
   };
 
@@ -178,7 +262,6 @@ const PrayerMainView = ({
   // let columnIndex: number;
   function grabDate(e: any) {
     // const cell = e.target as HTMLTableCellElement;
-
     let selectedSalah;
 
     clickedElement = e.target.closest("#icon-wrap");
@@ -305,14 +388,12 @@ const PrayerMainView = ({
               <MdGroups
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "group");
-
                   setShowUpdateStatusModal(false);
                 }}
               />
               <BsPersonStanding
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "alone");
-
                   setShowUpdateStatusModal(false);
                 }}
               />
@@ -347,13 +428,13 @@ const PrayerMainView = ({
           <Sheet.Header />
           <Sheet.Content>
             {" "}
-            <section className="flex justify-around ">
-              {/* <CalenderMonthly
-                salahName={"Fajr"}
+            <section className="p-5">
+              <h1 className="m-5 text-center">STREAK</h1>
+              <CalenderMonthly
+                salahName={monthlyCalenderToShow}
                 days={days}
-                currentMonth={currentMonth}
+                currentMonth={format(today, "MMM-yyyy")}
                 isDayInSpecificMonth={isDayInSpecificMonth}
-                // salahName={salah.salahName}
                 countCompletedDates={countCompletedDates}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
@@ -361,14 +442,16 @@ const PrayerMainView = ({
                 setCurrentWeek={setCurrentWeek}
                 currentWeek={currentWeek}
                 modifySingleDaySalah={modifySingleDaySalah}
-              /> */}
-              <Calender
+              />
+              {/* <Calender
+                // setShowCalenderOneMonth={setShowCalenderOneMonth}
+                showCalenderOneMonth={showCalenderOneMonth}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
                 startDate={startDate}
                 setCurrentWeek={setCurrentWeek}
                 currentWeek={currentWeek}
-              />
+              /> */}
             </section>
           </Sheet.Content>
         </Sheet.Container>
@@ -431,8 +514,18 @@ const PrayerMainView = ({
                   // setShowMonthlyCalenderModal(true);
                   // e.stopPropagation();
 
+                  // monthlyCalenderToShow =
+                  //   e.currentTarget.querySelector("td")?.textContent;
+                  setMonthlyCalenderToShow(
+                    e.currentTarget.querySelector("td")?.textContent
+                  );
                   if (e.currentTarget.tagName !== "svg") {
                     setShowMonthlyCalenderModal(true);
+                    setShowCalenderOneMonth(true);
+
+                    console.log(
+                      "monthlyCalenderToShow is: " + monthlyCalenderToShow
+                    );
                   }
                 }}
                 className="bg-[color:var(--card-bg-color)]"

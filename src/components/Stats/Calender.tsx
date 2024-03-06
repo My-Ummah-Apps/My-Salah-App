@@ -16,23 +16,26 @@ import {
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 
 const Calender = ({
+  // setShowCalenderOneMonth,
+  showCalenderOneMonth,
   setSalahTrackingArray,
   salahTrackingArray,
   startDate,
   setCurrentWeek,
   currentWeek,
 }: {
+  // setShowCalenderOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
+  showCalenderOneMonth: boolean;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
-
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
   //   modifySingleDaySalah: (date: Date) => void;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  console.log(salahTrackingArray);
+  console.log(showCalenderOneMonth);
   const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
   const [showYearlyCalender, setShowYearlyCalender] = useState(false);
 

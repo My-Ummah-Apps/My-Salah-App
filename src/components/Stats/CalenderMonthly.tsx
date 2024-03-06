@@ -41,7 +41,7 @@ const CalenderMonthly = ({
   // salahName: string;
   currentMonth: string;
 }) => {
-  console.log(salahName);
+  console.log("salahName in CalenderMonthly.tsx is: " + salahName);
   const [showModal, setShowModal] = useState(false);
   // const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
 
