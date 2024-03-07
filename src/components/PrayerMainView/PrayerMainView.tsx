@@ -78,6 +78,24 @@ const PrayerMainView = ({
     );
   };
 
+  const [currentMonth, setcurrentMonth] = useState(() =>
+    format(today, "MMM-yyyy")
+  ); // Jan-2024 (string)
+
+  let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
+
+  const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+    event.preventDefault();
+    const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
+    setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
+  };
+
+  const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+    event.preventDefault();
+    const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
+    setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
+  };
+
   const countCompletedDates = (date: string, salahName?: string) => {
     const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
       string[]
@@ -121,7 +139,7 @@ const PrayerMainView = ({
     sameDatesArray = [];
     return color;
   };
-  // TESTING ----------------------------------------------
+  // END OF CODE FROM CALENDER.TSX ----------------------------------------------
 
   // const [icon, setIcon] = useState("");
   const [showCalenderOneMonth, setShowCalenderOneMonth] = useState(false);
@@ -132,12 +150,12 @@ const PrayerMainView = ({
   const [touchEndX, setTouchEndX] = useState(0);
 
   const handleTouchStart = (event) => {
-    console.log("touchevent STARTED " + event.changedTouches[0].screenX);
+    // console.log("touchevent STARTED " + event.changedTouches[0].screenX);
     setTouchStartX(event.changedTouches[0].screenX);
   };
 
   const handleTouchEnd = (event) => {
-    console.log("touchevent ENDED " + event.changedTouches[0].screenX);
+    // console.log("touchevent ENDED " + event.changedTouches[0].screenX);
     setTouchEndX(event.changedTouches[0].screenX);
     handleGesture();
   };
@@ -431,6 +449,8 @@ const PrayerMainView = ({
             <section className="p-5">
               <h1 className="m-5 text-center">STREAK</h1>
               <CalenderMonthly
+                // getNextMonth={getNextMonth}
+                // getPrevMonth={getPrevMonth}
                 salahName={monthlyCalenderToShow}
                 days={days}
                 currentMonth={format(today, "MMM-yyyy")}

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 import CalenderMonthly from "./CalenderMonthly";
 import CalenderYearly from "./CalenderYearly";
-
+import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import {
   add,
   sub,
@@ -12,8 +12,6 @@ import {
   startOfMonth,
   differenceInDays,
 } from "date-fns";
-
-import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 
 const Calender = ({
   // setShowCalenderOneMonth,
@@ -70,12 +68,14 @@ const Calender = ({
   };
 
   const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+    console.log("getPrevMonth triggered");
     event.preventDefault();
     const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
     setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
   };
 
   const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+    console.log("getNextMonth triggered");
     event.preventDefault();
     const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
     setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));

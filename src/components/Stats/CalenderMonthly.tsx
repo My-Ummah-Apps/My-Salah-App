@@ -2,6 +2,7 @@ import { useState } from "react";
 import Modal from "./Modal";
 // import ReactModal from "react-modal";
 import { salahTrackingEntryType } from "../../types/types";
+import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 
 import {
   eachDayOfInterval,
@@ -10,9 +11,13 @@ import {
   format,
   parse,
   startOfWeek,
+  add,
+  startOfToday,
 } from "date-fns";
 
 const CalenderMonthly = ({
+  // getPrevMonth,
+  // getNextMonth,
   salahName,
   days,
   setSalahTrackingArray,
@@ -22,10 +27,11 @@ const CalenderMonthly = ({
   startDate,
   modifySingleDaySalah,
   setCurrentWeek,
-  currentWeek,
-  // salahName,
-  currentMonth,
+  currentWeek, // salahName,
+  // currentMonth,
 }: {
+  // getPrevMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
+  // getNextMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   salahName: string;
   days: string[];
   setSalahTrackingArray: React.Dispatch<
@@ -41,8 +47,24 @@ const CalenderMonthly = ({
   // salahName: string;
   currentMonth: string;
 }) => {
-  console.log("salahName in CalenderMonthly.tsx is: " + salahName);
   const [showModal, setShowModal] = useState(false);
+
+  const today = startOfToday(); // Will return todays date details
+  const [currentMonth, setcurrentMonth] = useState(() =>
+    format(today, "MMM-yyyy")
+  ); // Jan-2024 (string)
+
+  const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+    event.preventDefault();
+    const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if first DayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
+    setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
+  };
+
+  const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+    event.preventDefault();
+    const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
+    setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
+  };
   // const today = startOfToday(); // Wed Jan 10 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
 
   //   const days = [""];
@@ -68,11 +90,30 @@ const CalenderMonthly = ({
   return (
     <>
       <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap mb-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
-        <div className="monthly-heading-text-wrap">
+        {salahName}
+        <div className="flex items-center justify-between monthly-heading-text-wrap">
           <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
-            {salahName}
+            {currentMonth.replace("-", " ")}
           </p>
+          <div className="flex chevron-wrap">
+            <button
+              onClick={(event) => {
+                getPrevMonth(event);
+              }}
+              className="p-3 m-1 bg-gray-700 rounded-md bg-opacity-40"
+            >
+              <IoChevronBackSharp />{" "}
+            </button>
+            <button
+              onClick={(event) => {
+                getNextMonth(event);
+              }}
+              className="p-3 m-1 bg-gray-700 rounded-md bg-opacity-40"
+            >
+              <IoChevronForward />
+            </button>
+          </div>
           {/* <div className="flex items-center gap-6 justify-evenly sm:gap-12"></div> */}
         </div>
         <hr className="my-6" />
