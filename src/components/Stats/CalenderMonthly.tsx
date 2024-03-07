@@ -18,6 +18,7 @@ import {
 const CalenderMonthly = ({
   // getPrevMonth,
   // getNextMonth,
+  setShowUpdateStatusModal,
   salahName,
   days,
   setSalahTrackingArray,
@@ -28,10 +29,11 @@ const CalenderMonthly = ({
   modifySingleDaySalah,
   setCurrentWeek,
   currentWeek, // salahName,
-  // currentMonth,
-}: {
+} // currentMonth,
+: {
   // getPrevMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   // getNextMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
+  setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   salahName: string;
   days: string[];
   setSalahTrackingArray: React.Dispatch<
@@ -90,7 +92,6 @@ const CalenderMonthly = ({
   return (
     <>
       <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap mb-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
-        {salahName}
         <div className="flex items-center justify-between monthly-heading-text-wrap">
           <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
@@ -134,8 +135,10 @@ const CalenderMonthly = ({
                 {/* Need to add logic here, as each date is painted, check...does this date exist in the current salahs array? if so how many? and color it accordingly, before moving onto the next date and doing the same */}
                 <div
                   onClick={() => {
-                    modifySingleDaySalah(day);
-                    setShowModal(true);
+                    // modifySingleDaySalah(day);
+                    setShowUpdateStatusModal(true);
+                    console.log(format(day, "dd.MM.yy"));
+                    // setShowModal(true);
                   }}
                   key={index}
                   className=""

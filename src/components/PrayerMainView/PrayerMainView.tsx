@@ -82,19 +82,7 @@ const PrayerMainView = ({
     format(today, "MMM-yyyy")
   ); // Jan-2024 (string)
 
-  let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
-
-  const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-    event.preventDefault();
-    const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
-    setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
-  };
-
-  const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-    event.preventDefault();
-    const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
-    setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
-  };
+  // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
   const countCompletedDates = (date: string, salahName?: string) => {
     const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
@@ -278,36 +266,26 @@ const PrayerMainView = ({
   };
   let clickedElement: any;
   // let columnIndex: number;
-  function grabDate(e: any) {
+  function grabDate(e: any, date?: string, salahName?: string) {
     // const cell = e.target as HTMLTableCellElement;
-    let selectedSalah;
+    // let selectedSalah;
+
+    // if () {
+
+    // }
 
     clickedElement = e.target.closest("#icon-wrap");
     const columnIndex: any = clickedElement.parentElement
       .cellIndex as HTMLTableCellElement;
-    // columnIndex = cell.cellIndex;
-    // clickedElement = e.target;
 
-    selectedSalah =
+    let selectedSalah =
       clickedElement.parentElement.parentElement.cells[0].innerText;
-
-    // if (e.target.tagName === "TD") {
-    //   clickedElement = e.target;
-    //   selectedSalah = e.target.parentElement.cells[0].innerText;
-    // } else if (
-    //   e.target.tagName === "svg" ||
-    //   e.target.tagName === "circle" ||
-    //   e.target.tagName === "path"
-    // ) {
-    //   // e.target.closest("td").click();
-    //   clickedElement = e.target.closest("td");
-    //   selectedSalah = clickedElement.parentElement.cells[0].innerText;
-    // }
 
     const tableHeadDate =
       clickedElement.parentElement.parentElement.parentElement.parentElement
         .children[0].children[0].cells[columnIndex].textContent;
 
+    console.log(tableHeadDate);
     setSelectedSalah(selectedSalah);
     setTableHeadDate(tableHeadDate);
   }
@@ -447,10 +425,14 @@ const PrayerMainView = ({
           <Sheet.Content>
             {" "}
             <section className="p-5">
-              <h1 className="m-5 text-center">STREAK</h1>
+              <h1 className="m-5 text-2xl text-center">
+                {monthlyCalenderToShow}
+              </h1>
+              <h2 className="m-5 text-center text-1xl">Streak</h2>
               <CalenderMonthly
                 // getNextMonth={getNextMonth}
                 // getPrevMonth={getPrevMonth}
+                setShowUpdateStatusModal={setShowUpdateStatusModal}
                 salahName={monthlyCalenderToShow}
                 days={days}
                 currentMonth={format(today, "MMM-yyyy")}
