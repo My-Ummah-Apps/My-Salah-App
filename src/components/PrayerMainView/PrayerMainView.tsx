@@ -34,7 +34,7 @@ import {
 } from "date-fns";
 
 // import { v4 as uuidv4 } from "uuid";
-import Calender from "../Stats/Calender";
+import Calender from "../Stats/CalenderYearly";
 
 const PrayerMainView = ({
   setSalahTrackingArray,

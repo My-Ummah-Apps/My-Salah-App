@@ -4,7 +4,8 @@ import { salahTrackingEntryType } from "../types/types";
 
 // import CalenderYearly from "../components/Stats/CalenderYearly";
 // import CalenderMonthly from "../components/Stats/CalenderMonthly";
-import Calender from "../components/Stats/Calender";
+
+import CalenderYearly from "../components/Stats/CalenderYearly";
 
 const StatsPage = ({
   // title,
@@ -44,7 +45,7 @@ const StatsPage = ({
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* {title} */}
-      <Calender
+      <CalenderYearly
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         startDate={startDate}
