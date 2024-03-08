@@ -22,7 +22,7 @@ import {
 
 const CalenderYearly = ({
   // setShowCalenderOneMonth,
-  showCalenderOneMonth,
+  // showCalenderOneMonth,
   setSalahTrackingArray,
   salahTrackingArray,
   startDate,
@@ -30,7 +30,7 @@ const CalenderYearly = ({
   currentWeek,
 }: {
   // setShowCalenderOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
-  showCalenderOneMonth: boolean;
+  // showCalenderOneMonth: boolean;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
