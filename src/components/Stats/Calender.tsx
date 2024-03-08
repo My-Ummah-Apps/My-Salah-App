@@ -34,8 +34,8 @@ const Calender = ({
   currentWeek: number;
 }) => {
   console.log(showCalenderOneMonth);
-  const [showMonthlyCalender, setShowMonthlyCalender] = useState(true);
-  const [showYearlyCalender, setShowYearlyCalender] = useState(false);
+  const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
+  const [showYearlyCalender, setShowYearlyCalender] = useState(true);
 
   const [currentYear, setCurrentYear] = useState(new Date());
 
@@ -165,7 +165,7 @@ const Calender = ({
           }
         />
       </div>
-      <div className="text-center mb-9 monthly-yearly-btn-wrap">
+      {/* <div className="text-center mb-9 monthly-yearly-btn-wrap">
         <button
           className="px-5"
           onClick={() => {
@@ -183,7 +183,7 @@ const Calender = ({
         >
           Yearly
         </button>
-      </div>
+      </div> */}
       {showMonthlyCalender ? (
         <>
           {salahTrackingArray.map((salah) => (

@@ -193,17 +193,17 @@ const PrayerMainView = ({
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
         });
-        console.log("doesDateObjectExist: " + doesDateObjectExist);
+        // console.log("doesDateObjectExist: " + doesDateObjectExist);
 
         if (salahStatus === "blank") {
-          console.log("salahStatus === blank");
+          // console.log("salahStatus === blank");
           if (doesDateObjectExist === undefined) {
             return {
               ...item,
               completedDates: [...item.completedDates],
             };
           } else if (doesDateObjectExist !== undefined) {
-            console.log("doesDateObjectExist !== undefined");
+            // console.log("doesDateObjectExist !== undefined");
             const filteredCompletedDatesArray = item.completedDates.filter(
               (date) => {
                 return (
@@ -220,9 +220,9 @@ const PrayerMainView = ({
         }
 
         if (doesDateObjectExist === undefined && salahStatus !== "blank") {
-          console.log(
-            "doesDateObjectExist === undefined && salahStatus !== blank"
-          );
+          // console.log(
+          //   "doesDateObjectExist === undefined && salahStatus !== blank"
+          // );
           return {
             ...item,
             completedDates: [
@@ -234,9 +234,9 @@ const PrayerMainView = ({
           doesDateObjectExist !== undefined &&
           salahStatus !== "blank"
         ) {
-          console.log(
-            "doesDateObjectExist !== undefined && salahStatus !== blank"
-          );
+          // console.log(
+          //   "doesDateObjectExist !== undefined && salahStatus !== blank"
+          // );
           const filteredCompletedDatesArray = item.completedDates.filter(
             (date) => {
               return (
@@ -262,32 +262,30 @@ const PrayerMainView = ({
       "storedSalahTrackingData",
       JSON.stringify(newSalahTrackingArray)
     );
-    console.log(newSalahTrackingArray);
   };
-  let clickedElement: any;
-  // let columnIndex: number;
+
   function grabDate(e: any, date?: string, salahName?: string) {
-    // const cell = e.target as HTMLTableCellElement;
-    // let selectedSalah;
+    let clickedElement: any;
+    if (!salahName && !date) {
+      // console.log("!salahName && !date do not exist");
+      clickedElement = e.target.closest("#icon-wrap");
+      const columnIndex: any = clickedElement.parentElement
+        .cellIndex as HTMLTableCellElement;
 
-    // if () {
+      let selectedSalah =
+        clickedElement.parentElement.parentElement.cells[0].innerText;
 
-    // }
+      const tableHeadDate =
+        clickedElement.parentElement.parentElement.parentElement.parentElement
+          .children[0].children[0].cells[columnIndex].textContent;
 
-    clickedElement = e.target.closest("#icon-wrap");
-    const columnIndex: any = clickedElement.parentElement
-      .cellIndex as HTMLTableCellElement;
-
-    let selectedSalah =
-      clickedElement.parentElement.parentElement.cells[0].innerText;
-
-    const tableHeadDate =
-      clickedElement.parentElement.parentElement.parentElement.parentElement
-        .children[0].children[0].cells[columnIndex].textContent;
-
-    console.log(tableHeadDate);
-    setSelectedSalah(selectedSalah);
-    setTableHeadDate(tableHeadDate);
+      setSelectedSalah(selectedSalah);
+      setTableHeadDate(tableHeadDate);
+    } else if (salahName && date) {
+      // console.log("salahName && date exists");
+      setSelectedSalah(salahName);
+      setTableHeadDate(date);
+    }
   }
 
   function renderCells(index: number) {
@@ -432,6 +430,7 @@ const PrayerMainView = ({
               <CalenderMonthly
                 // getNextMonth={getNextMonth}
                 // getPrevMonth={getPrevMonth}
+                grabDate={grabDate}
                 setShowUpdateStatusModal={setShowUpdateStatusModal}
                 salahName={monthlyCalenderToShow}
                 days={days}
@@ -524,10 +523,6 @@ const PrayerMainView = ({
                   if (e.currentTarget.tagName !== "svg") {
                     setShowMonthlyCalenderModal(true);
                     setShowCalenderOneMonth(true);
-
-                    console.log(
-                      "monthlyCalenderToShow is: " + monthlyCalenderToShow
-                    );
                   }
                 }}
                 className="bg-[color:var(--card-bg-color)]"
