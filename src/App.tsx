@@ -78,6 +78,8 @@ const App = () => {
   // const [salahTrackingArray, setSalahTrackingArray] = useState<
   //   salahTrackingArrayType[]
   // >([]);
+  const [streakCounter, setStreakCounter] = useState(0);
+  setStreakCounter;
   const [salahTrackingArray, setSalahTrackingArray] = useState<
     salahTrackingEntryType[]
   >([]);
@@ -117,6 +119,39 @@ const App = () => {
         ]);
   }, []);
 
+  const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
+    (accumulatorArray, salah) => {
+      for (let i = 0; i < salah.completedDates.length; i++) {
+        if (
+          Object.values(salah.completedDates[i])[0] !== "missed" &&
+          Object.values(salah.completedDates[i])[0] !== "blank"
+        ) {
+          accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
+        }
+      }
+      return accumulatorArray;
+    },
+    []
+  );
+  console.log(salahFulfilledDates);
+
+  // const test = salahFulfilledDates.reduce<string[]>((preValue, currentValue) => {
+
+  // }, []);
+
+  // THE BELOW IS TO TRY AND SIMPLIFY THE ABOVE VERSION
+  // const salahFulfilledDates = salahTrackingArray.map((salah) => {
+  //   for (let i = 0; i < salah.completedDates.length; i++) {
+  //     if (
+  //       Object.values(salah.completedDates[i])[0] !== "missed" &&
+  //       Object.values(salah.completedDates[i])[0] !== "blank"
+  //     ) {
+  //       return Object.keys(salah.completedDates[i])[0];
+  //     }
+  //   }
+  //   // return accumulatorArray;
+  // }, []);
+
   const pageStyles: string = `px-2 py-[10vh] h-[95vh] overflow-x-hidden overflow-y-scroll w-full`;
 
   return (
@@ -125,6 +160,7 @@ const App = () => {
         <div className="fixed z-20 w-full p-5 text-center header-wrap">
           {" "}
           <h1 className="">{heading}</h1>
+          <p>{streakCounter}</p>
         </div>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
           {heading}

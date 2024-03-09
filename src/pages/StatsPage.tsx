@@ -26,7 +26,7 @@ const StatsPage = ({
   setHeading("Stats");
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
-      {/* {title} */}
+      <div className="streak-counter">Streak: </div>
       <CalenderYearly
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
