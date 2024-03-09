@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
-import CalenderMonthly from "./CalenderMonthly";
+// import CalenderMonthly from "./CalenderMonthly";
 import Modal from "./Modal";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import {
@@ -8,7 +8,7 @@ import {
   sub,
   format,
   parse,
-  startOfToday,
+  // startOfToday,
   startOfMonth,
   differenceInDays,
   eachDayOfInterval,
@@ -40,15 +40,15 @@ const CalenderYearly = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
-  const [showYearlyCalender, setShowYearlyCalender] = useState(true);
+  // const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
+  // const [showYearlyCalender, setShowYearlyCalender] = useState(true);
 
   const [currentYear, setCurrentYear] = useState(new Date());
 
-  const today = startOfToday(); // Will return todays date details
-  const [currentMonth, setcurrentMonth] = useState(() =>
-    format(today, "MMM-yyyy")
-  ); // Jan-2024 (string)
+  // const today = startOfToday(); // Will return todays date details
+  // const [currentMonth, setcurrentMonth] = useState(() =>
+  //   format(today, "MMM-yyyy")
+  // ); // Jan-2024 (string)
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
@@ -62,7 +62,7 @@ const CalenderYearly = ({
     // setCurrentWeek(differenceInDays(today, date) - 1);
   }
 
-  let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
   const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -73,19 +73,19 @@ const CalenderYearly = ({
     );
   };
 
-  const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-    console.log("getPrevMonth triggered");
-    event.preventDefault();
-    const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
-    setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
-  };
+  // const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+  //   console.log("getPrevMonth triggered");
+  //   event.preventDefault();
+  //   const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
+  //   setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
+  // };
 
-  const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-    console.log("getNextMonth triggered");
-    event.preventDefault();
-    const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
-    setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
-  };
+  // const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
+  //   console.log("getNextMonth triggered");
+  //   event.preventDefault();
+  //   const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
+  //   setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
+  // };
 
   // const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<string[]>(
   //   (accumulatorArray, salah) => {
@@ -169,28 +169,27 @@ const CalenderYearly = ({
         {" "}
         <IoChevronBackSharp
           className="w-6 h-6 cursor-pointer"
-          onClick={
-            showMonthlyCalender
-              ? getPrevMonth
-              : () =>
-                  setCurrentYear((prevYearValue) =>
-                    sub(prevYearValue, { years: 1 })
-                  )
-          }
+          // onClick={setCurrentYear((prevYearValue) =>
+          //   sub(prevYearValue, { years: 1 })
+          // )}
+          onClick={() => {
+            setCurrentYear((prevYearValue) => sub(prevYearValue, { years: 1 }));
+          }}
         />
-        <h1>
-          {showMonthlyCalender ? currentMonth : format(currentYear, "yyyy")}
-        </h1>
+        <h1>{format(currentYear, "yyyy")}</h1>
         <IoChevronForward
           className="w-6 h-6 cursor-pointer"
-          onClick={
-            showMonthlyCalender
-              ? getNextMonth
-              : () =>
-                  setCurrentYear((prevYearValue) =>
-                    add(prevYearValue, { years: 1 })
-                  )
-          }
+          onClick={() => {
+            setCurrentYear((prevYearValue) => add(prevYearValue, { years: 1 }));
+          }}
+          // onClick={
+          //   showMonthlyCalender
+          //     ? getNextMonth
+          //     : () =>
+          //         setCurrentYear((prevYearValue) =>
+          //           add(prevYearValue, { years: 1 })
+          //         )
+          // }
         />
       </div>
       <>

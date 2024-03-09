@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
 import CalenderMonthly from "../Stats/CalenderMonthly";
+import StatCard from "../Stats/StatCard";
 // import ReactModal from "react-modal";
 // import { FaMosque, FaHome } from "react-icons/fa";
 // import { ImCross } from "react-icons/im";
@@ -23,18 +24,15 @@ import { salahTrackingEntryType } from "../../types/types";
 // }
 
 import {
-  add,
-  sub,
   subDays,
   format,
   parse,
   startOfToday,
   startOfMonth,
-  differenceInDays,
+  // differenceInDays,
 } from "date-fns";
 
 // import { v4 as uuidv4 } from "uuid";
-import Calender from "../Stats/CalenderYearly";
 
 const PrayerMainView = ({
   setSalahTrackingArray,
@@ -51,21 +49,10 @@ const PrayerMainView = ({
   currentWeek: number;
   startDate: Date;
 }) => {
-  // let monthlyCalenderToShow = "";
   const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
   // BELOW CODE IS FROM CALENDER.TSX TO MAKE MONTHLY CALENDER FUNCTIONALITY WORK WHEN A TABLE ROW IS CLICKED
   // THIS IS ALL DUPLICATE CODE FROM CALENDER.TSX AND NEED TO FIND A MORE EFFICIENT WAY OF DOING THIS
   //  ----------------------------------------------
-
-  function modifySingleDaySalah(date: Date) {
-    const today: Date = new Date();
-    setCurrentWeek(
-      today > date
-        ? differenceInDays(today, date)
-        : differenceInDays(today, date) - 1
-    );
-    // setCurrentWeek(differenceInDays(today, date) - 1);
-  }
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
   const today = startOfToday();
@@ -77,12 +64,6 @@ const PrayerMainView = ({
       dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
     );
   };
-
-  const [currentMonth, setcurrentMonth] = useState(() =>
-    format(today, "MMM-yyyy")
-  ); // Jan-2024 (string)
-
-  // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
   const countCompletedDates = (date: string, salahName?: string) => {
     const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
@@ -130,19 +111,19 @@ const PrayerMainView = ({
   // END OF CODE FROM CALENDER.TSX ----------------------------------------------
 
   // const [icon, setIcon] = useState("");
-  const [showCalenderOneMonth, setShowCalenderOneMonth] = useState(false);
+  // const [showCalenderOneMonth, setShowCalenderOneMonth] = useState(false);
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
 
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
 
-  const handleTouchStart = (event) => {
+  const handleTouchStart = (event: any) => {
     // console.log("touchevent STARTED " + event.changedTouches[0].screenX);
     setTouchStartX(event.changedTouches[0].screenX);
   };
 
-  const handleTouchEnd = (event) => {
+  const handleTouchEnd = (event: any) => {
     // console.log("touchevent ENDED " + event.changedTouches[0].screenX);
     setTouchEndX(event.changedTouches[0].screenX);
     handleGesture();
@@ -188,22 +169,18 @@ const PrayerMainView = ({
     // icon
   ) => void = (tableHeadDate, selectedSalah, salahStatus) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
-      // if (item.salahName === selectedSalah) {
       if (item.salahName === selectedSalah.replace(/\s/g, "")) {
         const doesDateObjectExist = item.completedDates.find((date) => {
           return Object.keys(date)[0] === tableHeadDate;
         });
-        // console.log("doesDateObjectExist: " + doesDateObjectExist);
 
         if (salahStatus === "blank") {
-          // console.log("salahStatus === blank");
           if (doesDateObjectExist === undefined) {
             return {
               ...item,
               completedDates: [...item.completedDates],
             };
           } else if (doesDateObjectExist !== undefined) {
-            // console.log("doesDateObjectExist !== undefined");
             const filteredCompletedDatesArray = item.completedDates.filter(
               (date) => {
                 return (
@@ -220,9 +197,6 @@ const PrayerMainView = ({
         }
 
         if (doesDateObjectExist === undefined && salahStatus !== "blank") {
-          // console.log(
-          //   "doesDateObjectExist === undefined && salahStatus !== blank"
-          // );
           return {
             ...item,
             completedDates: [
@@ -421,30 +395,37 @@ const PrayerMainView = ({
         <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Header />
           <Sheet.Content>
-            {" "}
-            <section className="p-5">
-              <h1 className="m-5 text-2xl text-center">
-                {monthlyCalenderToShow}
-              </h1>
-              <h2 className="m-5 text-center text-1xl">Streak</h2>
-              <CalenderMonthly
-                // getNextMonth={getNextMonth}
-                // getPrevMonth={getPrevMonth}
-                grabDate={grabDate}
-                setShowUpdateStatusModal={setShowUpdateStatusModal}
-                salahName={monthlyCalenderToShow}
-                days={days}
-                currentMonth={format(today, "MMM-yyyy")}
-                isDayInSpecificMonth={isDayInSpecificMonth}
-                countCompletedDates={countCompletedDates}
-                setSalahTrackingArray={setSalahTrackingArray}
-                salahTrackingArray={salahTrackingArray}
-                startDate={startDate}
-                setCurrentWeek={setCurrentWeek}
-                currentWeek={currentWeek}
-                modifySingleDaySalah={modifySingleDaySalah}
-              />
-              {/* <Calender
+            <Sheet.Scroller>
+              {" "}
+              <section className="p-5">
+                <h1 className="m-5 text-2xl text-center">
+                  {monthlyCalenderToShow}
+                </h1>
+                <h2 className="m-5 text-center text-1xl">Streak</h2>
+                <CalenderMonthly
+                  // getNextMonth={getNextMonth}
+                  // getPrevMonth={getPrevMonth}
+                  grabDate={grabDate}
+                  setShowUpdateStatusModal={setShowUpdateStatusModal}
+                  salahName={monthlyCalenderToShow}
+                  days={days}
+                  currentMonth={format(today, "MMM-yyyy")}
+                  isDayInSpecificMonth={isDayInSpecificMonth}
+                  countCompletedDates={countCompletedDates}
+                  setSalahTrackingArray={setSalahTrackingArray}
+                  salahTrackingArray={salahTrackingArray}
+                  startDate={startDate}
+                  setCurrentWeek={setCurrentWeek}
+                  currentWeek={currentWeek}
+                  // modifySingleDaySalah={modifySingleDaySalah}
+                />
+                <div className="grid grid-cols-2">
+                  <StatCard />
+                  <StatCard />
+                  <StatCard />
+                  <StatCard />
+                </div>
+                {/* <Calender
                 // setShowCalenderOneMonth={setShowCalenderOneMonth}
                 showCalenderOneMonth={showCalenderOneMonth}
                 setSalahTrackingArray={setSalahTrackingArray}
@@ -453,7 +434,8 @@ const PrayerMainView = ({
                 setCurrentWeek={setCurrentWeek}
                 currentWeek={currentWeek}
               /> */}
-            </section>
+              </section>
+            </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />
@@ -518,11 +500,12 @@ const PrayerMainView = ({
                   // monthlyCalenderToShow =
                   //   e.currentTarget.querySelector("td")?.textContent;
                   setMonthlyCalenderToShow(
-                    e.currentTarget.querySelector("td")?.textContent
+                    // e.currentTarget.querySelector("td")?.textContent || ""
+                    e.currentTarget.querySelector("td")?.textContent || ""
                   );
                   if (e.currentTarget.tagName !== "svg") {
                     setShowMonthlyCalenderModal(true);
-                    setShowCalenderOneMonth(true);
+                    // setShowCalenderOneMonth(true);
                   }
                 }}
                 className="bg-[color:var(--card-bg-color)]"

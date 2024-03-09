@@ -27,7 +27,7 @@ const CalenderMonthly = ({
   salahTrackingArray,
   countCompletedDates,
   startDate,
-  modifySingleDaySalah,
+  // modifySingleDaySalah,
   setCurrentWeek,
   currentWeek, // salahName,
   // currentMonth,
@@ -45,7 +45,7 @@ const CalenderMonthly = ({
   salahTrackingArray: salahTrackingEntryType[];
   countCompletedDates: (date: string, salah: string) => any;
   startDate: Date;
-  modifySingleDaySalah: (date: Date) => void;
+  // modifySingleDaySalah: (date: Date) => void;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
   // salahName: string;
@@ -100,22 +100,20 @@ const CalenderMonthly = ({
             {currentMonth.replace("-", " ")}
           </p>
           <div className="flex chevron-wrap">
-            <button
-              onClick={(event) => {
-                getPrevMonth(event);
-              }}
-              className="p-3 m-1 bg-gray-700 rounded-md bg-opacity-40"
-            >
-              <IoChevronBackSharp />{" "}
-            </button>
-            <button
-              onClick={(event) => {
-                getNextMonth(event);
-              }}
-              className="p-3 m-1 bg-gray-700 rounded-md bg-opacity-40"
-            >
-              <IoChevronForward />
-            </button>
+            <div className="p-3 m-1 bg-gray-700 rounded-md bg-opacity-40">
+              <IoChevronBackSharp
+                onClick={(event: React.MouseEvent<SVGSVGElement>) => {
+                  getPrevMonth(event);
+                }}
+              />{" "}
+            </div>
+            <div className="p-3 m-1 bg-gray-700 rounded-md bg-opacity-40">
+              <IoChevronForward
+                onClick={(event: React.MouseEvent<SVGSVGElement>) => {
+                  getNextMonth(event);
+                }}
+              />
+            </div>
           </div>
           {/* <div className="flex items-center gap-6 justify-evenly sm:gap-12"></div> */}
         </div>

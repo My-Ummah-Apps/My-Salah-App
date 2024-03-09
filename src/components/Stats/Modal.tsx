@@ -10,7 +10,7 @@ const Modal = ({
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentWeek,
-  // currentWeek,
+  currentWeek,
   startDate,
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,7 +41,7 @@ const Modal = ({
           setSalahTrackingArray={setSalahTrackingArray}
           salahTrackingArray={salahTrackingArray}
           setCurrentWeek={setCurrentWeek}
-          // currentWeek={currentWeek}
+          currentWeek={currentWeek}
           startDate={startDate}
         />
       </div>{" "}
