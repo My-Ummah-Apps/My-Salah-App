@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 // import Notifications from "./utils/notifications";
 import { salahTrackingEntryType } from "./types/types";
-import { subDays } from "date-fns";
+import { subDays, format } from "date-fns";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -78,6 +78,7 @@ const App = () => {
   // const [salahTrackingArray, setSalahTrackingArray] = useState<
   //   salahTrackingArrayType[]
   // >([]);
+
   const [streakCounter, setStreakCounter] = useState(0);
   setStreakCounter;
   const [salahTrackingArray, setSalahTrackingArray] = useState<
@@ -129,28 +130,31 @@ const App = () => {
           accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
         }
       }
+
       return accumulatorArray;
     },
     []
   );
-  console.log(salahFulfilledDates);
 
-  // const test = salahFulfilledDates.reduce<string[]>((preValue, currentValue) => {
+  let datesFrequency: { [date: string]: number } = {};
+  salahFulfilledDates.forEach((date) => {
+    datesFrequency[date] = (datesFrequency[date] || 0) + 1;
+  });
 
-  // }, []);
+  const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
+    datesFrequency[date] === 5 ? true : false
+  );
 
-  // THE BELOW IS TO TRY AND SIMPLIFY THE ABOVE VERSION
-  // const salahFulfilledDates = salahTrackingArray.map((salah) => {
-  //   for (let i = 0; i < salah.completedDates.length; i++) {
-  //     if (
-  //       Object.values(salah.completedDates[i])[0] !== "missed" &&
-  //       Object.values(salah.completedDates[i])[0] !== "blank"
-  //     ) {
-  //       return Object.keys(salah.completedDates[i])[0];
-  //     }
-  //   }
-  //   // return accumulatorArray;
-  // }, []);
+  console.log(datesFrequencyReduced);
+
+  const todaysDate = new Date();
+  const previousDate = subDays(todaysDate, 1);
+
+  console.log(subDays(todaysDate, 1));
+  const previousDateFormatted = format(todaysDate, "dd.MM.yy");
+  console.log(previousDateFormatted);
+
+  function checkStreak() {}
 
   const pageStyles: string = `px-2 py-[10vh] h-[95vh] overflow-x-hidden overflow-y-scroll w-full`;
 
