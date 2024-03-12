@@ -145,24 +145,34 @@ const App = () => {
     datesFrequency[date] === 5 ? true : false
   );
 
-  console.log(datesFrequencyReduced);
+  let streakCount = 0;
+  function checkStreak() {
+    const todaysDate = new Date();
 
-  const todaysDate = new Date();
-  const previousDate = subDays(todaysDate, 1);
+    for (let i = 0; i < datesFrequencyReduced.length; i++) {
+      let formattedDate = subDays(todaysDate, i);
 
-  console.log(subDays(todaysDate, 1));
-  const previousDateFormatted = format(todaysDate, "dd.MM.yy");
-  console.log(previousDateFormatted);
+      if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {
+        streakCount += 1;
+      } else {
+        break;
+      }
+    }
+    setStreakCounter(streakCount);
+  }
 
-  function checkStreak() {}
+  useEffect(() => {
+    checkStreak();
+  }, [datesFrequencyReduced]);
 
   const pageStyles: string = `px-2 py-[10vh] h-[95vh] overflow-x-hidden overflow-y-scroll w-full`;
 
   return (
     <BrowserRouter>
       <section className="App">
-        <div className="fixed z-20 w-full p-5 text-center header-wrap">
+        <div className="fixed z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
+          <div></div>
           <h1 className="">{heading}</h1>
           <p>{streakCounter}</p>
         </div>
