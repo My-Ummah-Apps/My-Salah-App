@@ -401,7 +401,7 @@ const PrayerMainView = ({
                 <h1 className="m-5 text-2xl text-center">
                   {monthlyCalenderToShow}
                 </h1>
-                <h2 className="m-5 text-center text-1xl">Streak</h2>
+                {/* <h2 className="m-5 text-center text-1xl">Streak</h2> */}
                 <CalenderMonthly
                   // getNextMonth={getNextMonth}
                   // getPrevMonth={getPrevMonth}

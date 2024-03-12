@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./Modal";
 // import ReactModal from "react-modal";
 import { salahTrackingEntryType } from "../../types/types";
@@ -13,6 +13,7 @@ import {
   startOfWeek,
   add,
   startOfToday,
+  subDays,
 } from "date-fns";
 
 const CalenderMonthly = ({
@@ -30,8 +31,8 @@ const CalenderMonthly = ({
   // modifySingleDaySalah,
   setCurrentWeek,
   currentWeek, // salahName,
-  // currentMonth,
-}: {
+} // currentMonth,
+: {
   // getPrevMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   // getNextMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   grabDate: (e: any, date?: string, salahName?: string) => void;
@@ -48,10 +49,10 @@ const CalenderMonthly = ({
   // modifySingleDaySalah: (date: Date) => void;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
-  // salahName: string;
   currentMonth: string;
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [streakCounter, setStreakCounter] = useState(0);
 
   const today = startOfToday(); // Will return todays date details
   const [currentMonth, setcurrentMonth] = useState(() =>
@@ -91,12 +92,65 @@ const CalenderMonthly = ({
     end: endOfWeek(endOfMonth(firstDayOfMonth), { weekStartsOn: 1 }), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
   }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
 
+  // Below code for collecting dates and determining streak is a repeat from app.tsx, might be an idea to just pass down some props from app.tsx and remove the below
+
+  const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
+    (accumulatorArray, salah) => {
+      if (salah.salahName === salahName) {
+        for (let i = 0; i < salah.completedDates.length; i++) {
+          if (
+            Object.values(salah.completedDates[i])[0] !== "missed" &&
+            Object.values(salah.completedDates[i])[0] !== "blank"
+          ) {
+            accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
+          }
+        }
+      }
+
+      return accumulatorArray;
+    },
+    []
+  );
+
+  let datesFrequency: { [date: string]: number } = {};
+  salahFulfilledDates.forEach((date) => {
+    datesFrequency[date] = (datesFrequency[date] || 0) + 1;
+  });
+  console.log(datesFrequency);
+
+  const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
+    datesFrequency[date] === 1 ? true : false
+  );
+
+  let streakCount = 0;
+  function checkStreak() {
+    const todaysDate = new Date();
+    console.log("checkStreak()");
+    console.log(datesFrequencyReduced);
+    for (let i = 0; i < datesFrequencyReduced.length; i++) {
+      let formattedDate = subDays(todaysDate, i);
+
+      if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {
+        streakCount += 1;
+      } else {
+        break;
+      }
+    }
+    setStreakCounter(streakCount);
+  }
+
+  useEffect(() => {
+    checkStreak();
+  }, [datesFrequencyReduced]);
+
   return (
     <>
+      <h1 className="m-6 text-center">Streak: {streakCounter}</h1>
       <div className="justify-between bg-[color:var(--card-bg-color)] flex-column card-wrap mb-10 rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) p-3 single-month-wrap">
         <div className="flex items-center justify-between monthly-heading-text-wrap">
           <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
+
             {currentMonth.replace("-", " ")}
           </p>
           <div className="flex chevron-wrap">
@@ -138,8 +192,6 @@ const CalenderMonthly = ({
                     // modifySingleDaySalah(day);
                     grabDate(e, format(day, "dd.MM.yy"), salahName);
                     setShowUpdateStatusModal(true);
-                    console.log("date clicked: " + format(day, "dd.MM.yy"));
-                    console.log("salah to update: " + salahName);
                     // setShowModal(true);
                   }}
                   key={index}

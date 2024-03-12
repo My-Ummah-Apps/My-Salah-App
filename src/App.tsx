@@ -80,7 +80,7 @@ const App = () => {
   // >([]);
 
   const [streakCounter, setStreakCounter] = useState(0);
-  setStreakCounter;
+
   const [salahTrackingArray, setSalahTrackingArray] = useState<
     salahTrackingEntryType[]
   >([]);
