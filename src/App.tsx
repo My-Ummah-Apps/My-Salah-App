@@ -120,6 +120,8 @@ const App = () => {
         ]);
   }, []);
 
+  // function calculateStats() {}
+
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
       for (let i = 0; i < salah.completedDates.length; i++) {
@@ -130,7 +132,6 @@ const App = () => {
           accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
         }
       }
-
       return accumulatorArray;
     },
     []
@@ -140,6 +141,8 @@ const App = () => {
   salahFulfilledDates.forEach((date) => {
     datesFrequency[date] = (datesFrequency[date] || 0) + 1;
   });
+
+  console.log(salahFulfilledDates);
 
   const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
     datesFrequency[date] === 5 ? true : false

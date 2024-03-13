@@ -44,12 +44,16 @@ const PrayerMainView = ({
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
+
   salahTrackingArray: salahTrackingEntryType[];
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
   startDate: Date;
 }) => {
   const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
+
+  const [streakCounter, setStreakCounter] = useState(0);
+
   // BELOW CODE IS FROM CALENDER.TSX TO MAKE MONTHLY CALENDER FUNCTIONALITY WORK WHEN A TABLE ROW IS CLICKED
   // THIS IS ALL DUPLICATE CODE FROM CALENDER.TSX AND NEED TO FIND A MORE EFFICIENT WAY OF DOING THIS
   //  ----------------------------------------------
@@ -401,7 +405,6 @@ const PrayerMainView = ({
                 <h1 className="m-5 text-2xl text-center">
                   {monthlyCalenderToShow}
                 </h1>
-                {/* <h2 className="m-5 text-center text-1xl">Streak</h2> */}
                 <CalenderMonthly
                   // getNextMonth={getNextMonth}
                   // getPrevMonth={getPrevMonth}

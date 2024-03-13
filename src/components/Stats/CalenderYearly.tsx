@@ -195,7 +195,7 @@ const CalenderYearly = ({
       <>
         <div className="flex items-center justify-center calender-wrap">
           <div className="flex items-center justify-between chevrons-wrap"></div>
-          <div className="flex w-full overflow-scroll months-wrap">
+          <div className="flex w-full gap-5 overflow-scroll months-wrap">
             {monthStrings.map((month) => (
               <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap p-2">
                 <p className="py-4 font-semibold text-center">{month}</p>

@@ -128,6 +128,7 @@ const CalenderMonthly = ({
     console.log("checkStreak()");
     console.log(datesFrequencyReduced);
     for (let i = 0; i < datesFrequencyReduced.length; i++) {
+      console.log("for");
       let formattedDate = subDays(todaysDate, i);
 
       if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {

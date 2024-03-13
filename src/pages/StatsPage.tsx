@@ -23,7 +23,7 @@ const StatsPage = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  setHeading("Stats");
+  setHeading("Overall Stats");
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       <div className="streak-counter">Streak: </div>
