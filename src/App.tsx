@@ -142,8 +142,6 @@ const App = () => {
     datesFrequency[date] = (datesFrequency[date] || 0) + 1;
   });
 
-  console.log(salahFulfilledDates);
-
   const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
     datesFrequency[date] === 5 ? true : false
   );
@@ -225,7 +223,7 @@ const App = () => {
               <StatsPage
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
-                setHeading={setHeading}
+                // setHeading={setHeading}
                 setCurrentWeek={setCurrentWeek}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}

@@ -142,7 +142,7 @@ const CalenderYearly = ({
   };
 
   const [showModal, setShowModal] = useState(false);
-  console.log(currentYear);
+  // console.log(currentYear);
   const monthsInYear = eachMonthOfInterval({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
@@ -195,9 +195,9 @@ const CalenderYearly = ({
       <>
         <div className="flex items-center justify-center calender-wrap">
           <div className="flex items-center justify-between chevrons-wrap"></div>
-          <div className="flex w-full gap-5 overflow-scroll months-wrap">
+          <div className="flex w-full gap-5 mb-6 overflow-scroll months-wrap">
             {monthStrings.map((month) => (
-              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap p-2">
+              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-5">
                 <p className="py-4 font-semibold text-center">{month}</p>
                 <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap">
                   {days.map((day, index) => {
@@ -212,7 +212,7 @@ const CalenderYearly = ({
                   })}
                 </div>
                 <div
-                  className="grid grid-cols-7 place-items-center month-dates-wrap"
+                  className="grid grid-cols-7 gap-x-6 gap-y-1 place-items-center month-dates-wrap"
                   key={month}
                 >
                   {yearlyMonthsData(month).map((day, index) => (

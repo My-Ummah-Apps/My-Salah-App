@@ -31,6 +31,7 @@ import {
   startOfMonth,
   // differenceInDays,
 } from "date-fns";
+import StreakCount from "../Stats/StreakCount";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -52,7 +53,7 @@ const PrayerMainView = ({
 }) => {
   const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
 
-  const [streakCounter, setStreakCounter] = useState(0);
+  // const [streakCounter, setStreakCounter] = useState(0);
 
   // BELOW CODE IS FROM CALENDER.TSX TO MAKE MONTHLY CALENDER FUNCTIONALITY WORK WHEN A TABLE ROW IS CLICKED
   // THIS IS ALL DUPLICATE CODE FROM CALENDER.TSX AND NEED TO FIND A MORE EFFICIENT WAY OF DOING THIS
@@ -290,6 +291,7 @@ const PrayerMainView = ({
       if (cellIcon === "alone") {
         cellIcon = (
           <BsPersonStanding
+            style={{ color: "blue" }}
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
@@ -344,6 +346,11 @@ const PrayerMainView = ({
     });
   }
 
+  // const wreathStyles = {
+  //   // height: "30%",
+  //   width: "35%",
+  // };
+
   return (
     <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <Sheet
@@ -364,6 +371,7 @@ const PrayerMainView = ({
                 }}
               />
               <BsPersonStanding
+                style={{ color: "yellow" }}
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "alone");
                   setShowUpdateStatusModal(false);
@@ -378,6 +386,7 @@ const PrayerMainView = ({
                 }}
               />
               <AiOutlineStop
+                style={{ color: "red" }}
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "missed");
                   // setOpen(false);
@@ -405,6 +414,30 @@ const PrayerMainView = ({
                 <h1 className="m-5 text-2xl text-center">
                   {monthlyCalenderToShow}
                 </h1>
+                <StreakCount />
+                {/* <div className="mb-10 streak-wrap">
+                  <div className="relative flex items-center justify-center wreath-and-text-wrap">
+                    <img
+                      style={{ width: "150px", marginRight: "-4rem" }}
+                      src="/src/assets/icons/wreath-left.png"
+                      alt=""
+                      srcSet=""
+                    />
+                    <div className="absolute">
+                      <h1 className="mb-1 text-4xl font-extrabold text-center">
+                        {"1 Days"}
+                      </h1>
+                      <h2 className="text-xs text-center">Current Streak</h2>
+                    </div>
+                    <img
+                      style={{ width: "150px", marginLeft: "7rem" }}
+                      src="/src/assets/icons/wreath-right.png"
+                      alt=""
+                      srcSet=""
+                    />
+                  </div>
+                </div> */}
+
                 <CalenderMonthly
                   // getNextMonth={getNextMonth}
                   // getPrevMonth={getPrevMonth}
@@ -423,10 +456,10 @@ const PrayerMainView = ({
                   // modifySingleDaySalah={modifySingleDaySalah}
                 />
                 <div className="grid grid-cols-2">
-                  <StatCard />
-                  <StatCard />
-                  <StatCard />
-                  <StatCard />
+                  <StatCard statName={"In jamaah"} />
+                  <StatCard statName={"On time"} />
+                  <StatCard statName={"Late"} />
+                  <StatCard statName={"Not Prayed"} />
                 </div>
                 {/* <Calender
                 // setShowCalenderOneMonth={setShowCalenderOneMonth}
