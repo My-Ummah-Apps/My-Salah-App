@@ -105,21 +105,22 @@ td {
   padding: 10px;
 } */
 
-/* tr:nth-child(1) {
-  color: #0369a1;
+tr:nth-child(1) {
+  color: #e49759;
 }
 tr:nth-child(2) {
-  color: #ca8a04;
+  /* color: #ca8a04; */
+  color: yellow;
 }
 tr:nth-child(3) {
-  color: #9333ea;
+  color: #c2410c;
 }
 tr:nth-child(4) {
-  color: #9d174d;
+  color: #4e5482;
 }
 tr:nth-child(5) {
-  color: #047857;
-} */
+  color: #855988;
+}
 
 .table-salah-name-td:nth-child(1) {
   /* background-color: #0369a1; */

@@ -32,6 +32,7 @@ import {
   // differenceInDays,
 } from "date-fns";
 import StreakCount from "../Stats/StreakCount";
+import FajrSvg from "../SvgIcons/FajrSvg";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -291,7 +292,6 @@ const PrayerMainView = ({
       if (cellIcon === "alone") {
         cellIcon = (
           <BsPersonStanding
-            style={{ color: "blue" }}
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
@@ -303,6 +303,7 @@ const PrayerMainView = ({
           />
         );
       } else if (cellIcon === "group") {
+        console.log("group");
         cellIcon = (
           <MdGroups
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -363,37 +364,69 @@ const PrayerMainView = ({
           <Sheet.Header />
           <Sheet.Content>
             {" "}
-            <section className="flex justify-around text-5xl h-[200px]">
-              <MdGroups
-                onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "group");
-                  setShowUpdateStatusModal(false);
-                }}
-              />
-              <BsPersonStanding
-                style={{ color: "yellow" }}
-                onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "alone");
-                  setShowUpdateStatusModal(false);
-                }}
-              />
-              <LuDot
-                onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "blank");
-                  // setOpen(false);
-
-                  setShowUpdateStatusModal(false);
-                }}
-              />
-              <AiOutlineStop
-                style={{ color: "red" }}
-                onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "missed");
-                  // setOpen(false);
-
-                  setShowUpdateStatusModal(false);
-                }}
-              />
+            <section className="mx-auto my-10">
+              <div className="my-4 icon-and-text-wrap">
+                <MdGroups
+                  className="inline mr-4 text-3xl"
+                  // style={{
+                  //   fontSize: "2rem",
+                  //   marginRight: "1rem",
+                  //   display: "inline",
+                  // }}
+                  onClick={() => {
+                    changePrayerStatus(tableHeadDate, selectedSalah, "group");
+                    setShowUpdateStatusModal(false);
+                  }}
+                />
+                <p className="inline">Prayed In Jamaah</p>
+              </div>
+              <div className="my-4 icon-and-text-wrap">
+                <BsPersonStanding
+                  className="inline mr-4 text-3xl"
+                  style={
+                    {
+                      // fontSize: "2rem",
+                      // marginRight: "1rem",
+                      // display: "inline",
+                    }
+                  }
+                  onClick={() => {
+                    changePrayerStatus(tableHeadDate, selectedSalah, "alone");
+                    setShowUpdateStatusModal(false);
+                  }}
+                />
+                <p className="inline">Prayed On Time</p>
+              </div>
+              <div className="my-4 icon-and-text-wrap">
+                <LuDot
+                  className="inline mr-4 text-3xl"
+                  // style={{
+                  //   fontSize: "2rem",
+                  //   marginRight: "1rem",
+                  //   display: "inline",
+                  // }}
+                  onClick={() => {
+                    changePrayerStatus(tableHeadDate, selectedSalah, "blank");
+                    setShowUpdateStatusModal(false);
+                  }}
+                />
+                <p className="inline">Blank</p>
+              </div>
+              <div className="my-4 icon-and-text-wrap">
+                <AiOutlineStop
+                  className="inline mr-4 text-3xl"
+                  // style={{
+                  //   fontSize: "2rem",
+                  //   marginRight: "1rem",
+                  //   display: "inline",
+                  // }}
+                  onClick={() => {
+                    changePrayerStatus(tableHeadDate, selectedSalah, "missed");
+                    setShowUpdateStatusModal(false);
+                  }}
+                />
+                <p className="inline">Missed</p>
+              </div>
             </section>
           </Sheet.Content>
         </Sheet.Container>
@@ -548,12 +581,18 @@ const PrayerMainView = ({
               >
                 <td className="border-none table-salah-name-td py-7">
                   <div className="flex flex-row items-center">
-                    {/* <img
-                      className="w-8 mr-4"
-                      src="/src/assets/icons/night.png"
-                      alt=""
-                      srcset=""
-                    /> */}
+                    {item.salahName === "Fajr" ? (
+                      <FajrSvg color={"#E49759"} />
+                    ) : item.salahName === "Zohar" ? (
+                      <FajrSvg color={"yellow"} />
+                    ) : item.salahName === "Asar" ? (
+                      <FajrSvg color={"#c2410c"} />
+                    ) : item.salahName === "Maghrib" ? (
+                      <FajrSvg color={"#4E5482"} />
+                    ) : item.salahName === "Isha" ? (
+                      <FajrSvg color={"#855988"} />
+                    ) : null}
+
                     {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
                     <p className="text-[#c4c4c4] table-salah-name">
                       {item.salahName}
