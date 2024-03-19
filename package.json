@@ -18,8 +18,12 @@
     "@capacitor/share": "^5.0.7",
     "@capacitor/splash-screen": "^5.0.7",
     "@capacitor/status-bar": "^5.0.7",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
     "date-fns": "^2.30.0",
     "framer-motion": "^11.0.5",
+    "lucide-react": "^0.359.0",
     "npm-watch": "^0.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,7 +32,10 @@
     "react-modal": "^3.16.1",
     "react-modal-sheet": "^2.2.0",
     "react-router-dom": "^6.20.1",
-    "uuid": "^9.0.1"
+    "tailwind-merge": "^2.2.2",
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^9.0.1",
+    "vaul": "^0.9.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^5.5.1",

@@ -23,6 +23,17 @@ import { salahTrackingEntryType } from "../../types/types";
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
+// import {
+//   Drawer,
+//   DrawerClose,
+//   DrawerContent,
+//   DrawerDescription,
+//   DrawerFooter,
+//   DrawerHeader,
+//   DrawerTitle,
+//   DrawerTrigger,
+// } from "@/components/ui/drawer";
+
 import {
   subDays,
   format,
@@ -31,8 +42,13 @@ import {
   startOfMonth,
   // differenceInDays,
 } from "date-fns";
+
 import StreakCount from "../Stats/StreakCount";
-import FajrSvg from "../SvgIcons/FajrSvg";
+import MoonNightSvg from "../SvgIcons/MoonNightSvg";
+import DuskSvg from "../SvgIcons/DuskSvg";
+import MoonMorningSvg from "../SvgIcons/MoonMorningSvg";
+import SunMiddaySvg from "../SvgIcons/SunMiddaySvg";
+import SunAfternoonSvg from "../SvgIcons/SunAfternoonSvg";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -579,22 +595,23 @@ const PrayerMainView = ({
                 }}
                 className="bg-[color:var(--card-bg-color)]"
               >
-                <td className="border-none table-salah-name-td py-7">
+                <td className="py-5 border-none table-salah-name-td">
                   <div className="flex flex-row items-center">
                     {item.salahName === "Fajr" ? (
-                      <FajrSvg color={"#E49759"} />
+                      // <MoonMorningSvg color={"#2563eb"} size={"35%"} />
+                      <MoonMorningSvg color={"#2563eb"} size={"35%"} />
                     ) : item.salahName === "Zohar" ? (
-                      <FajrSvg color={"yellow"} />
+                      <SunMiddaySvg color={"#2563eb"} size={"35%"} />
                     ) : item.salahName === "Asar" ? (
-                      <FajrSvg color={"#c2410c"} />
+                      <SunAfternoonSvg color={"#2563eb"} size={"35%"} />
                     ) : item.salahName === "Maghrib" ? (
-                      <FajrSvg color={"#4E5482"} />
+                      <DuskSvg color={"#2563eb"} size={"35%"} />
                     ) : item.salahName === "Isha" ? (
-                      <FajrSvg color={"#855988"} />
+                      <MoonNightSvg color={"#2563eb"} size={"35%"} />
                     ) : null}
 
                     {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
-                    <p className="text-[#c4c4c4] table-salah-name">
+                    <p className="text-[#c4c4c4] table-salah-name ml-5">
                       {item.salahName}
                     </p>
                   </div>
