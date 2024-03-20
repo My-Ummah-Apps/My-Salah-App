@@ -183,23 +183,24 @@ td {
 } */
 
 /* tr:nth-child(1) {
-  color: #ef5350;
+  color: #ec1254;
 }
 tr:nth-child(2) {
-  color: #5c6bc0;
+  color: #f5e31d;
 }
 tr:nth-child(3) {
-  color: #26c6da;
+  color: #1ee8b6;
 }
 tr:nth-child(4) {
-  color: #9ccc65;
+  color: #f27c14;
 }
 tr:nth-child(5) {
-  color: #ff7043;
+  color: #26a1d5;
 } */
 
 tr {
-  color: white;
+  /* color: #2563eb; */
+  /* color: #fff; */
 }
 
 .table-salah-name {

@@ -11,7 +11,7 @@ import StatCard from "../Stats/StatCard";
 import { MdGroups } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
-import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
@@ -380,8 +380,14 @@ const PrayerMainView = ({
           <Sheet.Header />
           <Sheet.Content>
             {" "}
-            <section className="mx-auto my-10">
-              <div className="my-4 icon-and-text-wrap">
+            <section className="w-[80%] mx-auto my-20 border border-gray-600 rounded-lg ">
+              <div
+                onClick={() => {
+                  changePrayerStatus(tableHeadDate, selectedSalah, "group");
+                  setShowUpdateStatusModal(false);
+                }}
+                className="px-5 py-3 border-b border-gray-600 icon-and-text-wrap"
+              >
                 <MdGroups
                   className="inline mr-4 text-3xl"
                   // style={{
@@ -389,14 +395,16 @@ const PrayerMainView = ({
                   //   marginRight: "1rem",
                   //   display: "inline",
                   // }}
-                  onClick={() => {
-                    changePrayerStatus(tableHeadDate, selectedSalah, "group");
-                    setShowUpdateStatusModal(false);
-                  }}
                 />
                 <p className="inline">Prayed In Jamaah</p>
               </div>
-              <div className="my-4 icon-and-text-wrap">
+              <div
+                onClick={() => {
+                  changePrayerStatus(tableHeadDate, selectedSalah, "alone");
+                  setShowUpdateStatusModal(false);
+                }}
+                className="px-5 py-3 border-b border-gray-600 icon-and-text-wrap"
+              >
                 <BsPersonStanding
                   className="inline mr-4 text-3xl"
                   style={
@@ -406,14 +414,16 @@ const PrayerMainView = ({
                       // display: "inline",
                     }
                   }
-                  onClick={() => {
-                    changePrayerStatus(tableHeadDate, selectedSalah, "alone");
-                    setShowUpdateStatusModal(false);
-                  }}
                 />
                 <p className="inline">Prayed On Time</p>
               </div>
-              <div className="my-4 icon-and-text-wrap">
+              <div
+                onClick={() => {
+                  changePrayerStatus(tableHeadDate, selectedSalah, "blank");
+                  setShowUpdateStatusModal(false);
+                }}
+                className="px-5 py-3 border-b border-gray-600 icon-and-text-wrap"
+              >
                 <LuDot
                   className="inline mr-4 text-3xl"
                   // style={{
@@ -421,14 +431,16 @@ const PrayerMainView = ({
                   //   marginRight: "1rem",
                   //   display: "inline",
                   // }}
-                  onClick={() => {
-                    changePrayerStatus(tableHeadDate, selectedSalah, "blank");
-                    setShowUpdateStatusModal(false);
-                  }}
                 />
                 <p className="inline">Blank</p>
               </div>
-              <div className="my-4 icon-and-text-wrap">
+              <div
+                onClick={() => {
+                  changePrayerStatus(tableHeadDate, selectedSalah, "missed");
+                  setShowUpdateStatusModal(false);
+                }}
+                className="px-5 py-3 icon-and-text-wrap"
+              >
                 <AiOutlineStop
                   className="inline mr-4 text-3xl"
                   // style={{
@@ -436,10 +448,6 @@ const PrayerMainView = ({
                   //   marginRight: "1rem",
                   //   display: "inline",
                   // }}
-                  onClick={() => {
-                    changePrayerStatus(tableHeadDate, selectedSalah, "missed");
-                    setShowUpdateStatusModal(false);
-                  }}
                 />
                 <p className="inline">Missed</p>
               </div>
@@ -598,20 +606,20 @@ const PrayerMainView = ({
                 <td className="py-5 border-none table-salah-name-td">
                   <div className="flex flex-row items-center">
                     {item.salahName === "Fajr" ? (
-                      // <MoonMorningSvg color={"#2563eb"} size={"35%"} />
-                      <MoonMorningSvg color={"#2563eb"} size={"35%"} />
+                      // <MoonMorningSvg color={"#0c72ff"} size={"35%"} />
+                      <MoonMorningSvg color={"#0c72ff"} size={"35%"} />
                     ) : item.salahName === "Zohar" ? (
-                      <SunMiddaySvg color={"#2563eb"} size={"35%"} />
+                      <SunMiddaySvg color={"#0c72ff"} size={"35%"} />
                     ) : item.salahName === "Asar" ? (
-                      <SunAfternoonSvg color={"#2563eb"} size={"35%"} />
+                      <SunAfternoonSvg color={"#0c72ff"} size={"35%"} />
                     ) : item.salahName === "Maghrib" ? (
-                      <DuskSvg color={"#2563eb"} size={"35%"} />
+                      <DuskSvg color={"#0c72ff"} size={"35%"} />
                     ) : item.salahName === "Isha" ? (
-                      <MoonNightSvg color={"#2563eb"} size={"35%"} />
+                      <MoonNightSvg color={"#0c72ff"} size={"35%"} />
                     ) : null}
 
                     {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
-                    <p className="text-[#c4c4c4] table-salah-name ml-5">
+                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-[1.3rem] font-light">
                       {item.salahName}
                     </p>
                   </div>
@@ -622,7 +630,7 @@ const PrayerMainView = ({
           })}
         </tbody>
       </table>
-      <div className="flex justify-around pt-6 pb-20 ">
+      {/* <div className="flex justify-around pt-6 pb-20 ">
         <button
           onClick={() => {
             setCurrentWeek((prevValue) => prevValue + 5);
@@ -641,7 +649,7 @@ const PrayerMainView = ({
         >
           <IoChevronForward />
         </button>
-      </div>
+      </div> */}
     </section>
   );
 };
