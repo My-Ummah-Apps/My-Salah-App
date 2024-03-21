@@ -23,6 +23,7 @@ import {
 const CalenderYearly = ({
   // setShowCalenderOneMonth,
   // showCalenderOneMonth,
+  userStartDate,
   setSalahTrackingArray,
   salahTrackingArray,
   startDate,
@@ -31,6 +32,7 @@ const CalenderYearly = ({
 }: {
   // setShowCalenderOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalenderOneMonth: boolean;
+  userStartDate: string;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
@@ -143,6 +145,11 @@ const CalenderYearly = ({
 
   const [showModal, setShowModal] = useState(false);
   // console.log(currentYear);
+  // const monthsInYear = eachMonthOfInterval({
+  //   start: startOfYear(currentYear),
+  //   end: endOfYear(currentYear),
+  // });
+
   const monthsInYear = eachMonthOfInterval({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
@@ -150,15 +157,15 @@ const CalenderYearly = ({
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
 
-  let firstDayOfMonth1;
+  let firstDayOfMonth;
   const yearlyMonthsData = (month: string) => {
-    firstDayOfMonth1 = parse(month, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
+    firstDayOfMonth = parse(month, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
     //
     const daysInMonth = eachDayOfInterval({
       // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
-      start: startOfWeek(firstDayOfMonth1, { weekStartsOn: 1 }), // Gives first day of month
+      start: startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }), // Gives first day of month
 
-      end: endOfWeek(endOfMonth(firstDayOfMonth1), { weekStartsOn: 1 }), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
+      end: endOfWeek(endOfMonth(firstDayOfMonth), { weekStartsOn: 1 }), // Once we have the first day of the month, endOfMonth calculates the last day of the month, then, endOfWeek is used to find the end of the week for that particular date
     }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
     return daysInMonth;
   };

@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 // import Notifications from "./utils/notifications";
 import { salahTrackingEntryType } from "./types/types";
-import { subDays, format } from "date-fns";
+import { subDays, format, getMonth } from "date-fns";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -23,6 +23,7 @@ import SettingsPage from "./pages/SettingsPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
 import QiblahDirection from "./pages/QiblahDirection";
+import StreakCount from "./components/Stats/StreakCount";
 
 window.addEventListener("DOMContentLoaded", () => {
   if (Capacitor.isNativePlatform()) {
@@ -78,6 +79,18 @@ const App = () => {
   // const [salahTrackingArray, setSalahTrackingArray] = useState<
   //   salahTrackingArrayType[]
   // >([]);
+  const todaysDate = new Date();
+  let userStartDate: string | null;
+  localStorage.clear();
+  userStartDate = localStorage.getItem("userStartDate")
+    ? localStorage.getItem("userStartDate")
+    : localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
+  // if (!localStorage.getItem("userStartDate")) {
+  //   userStartDate = format(todaysDate, "dd.MM.yy");
+  //   localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
+  // } else if (localStorage.getItem("userStartDate")) {
+  //   userStartDate = localStorage.getItem("userStartDate");
+  // }
 
   const [streakCounter, setStreakCounter] = useState(0);
 
@@ -148,7 +161,7 @@ const App = () => {
 
   let streakCount = 0;
   function checkStreak() {
-    const todaysDate = new Date();
+    // const todaysDate = new Date();
 
     for (let i = 0; i < datesFrequencyReduced.length; i++) {
       let formattedDate = subDays(todaysDate, i);
@@ -175,7 +188,8 @@ const App = () => {
           {" "}
           <div></div>
           <h1 className="">{heading}</h1>
-          <p>{streakCounter}</p>
+          <p>0</p>
+          {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
         </div>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
           {heading}
@@ -221,6 +235,7 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
+                userStartDate={userStartDate}
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
                 // setHeading={setHeading}

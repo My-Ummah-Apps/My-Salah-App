@@ -7,6 +7,7 @@ import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
   // setHeading,
+  userStartDate,
   pageStyles,
   startDate,
   setSalahTrackingArray,
@@ -15,6 +16,7 @@ const StatsPage = ({
   currentWeek,
 }: {
   // setHeading: React.Dispatch<React.SetStateAction<string>>;
+  userStartDate: string;
   pageStyles: string;
   startDate: Date;
   setSalahTrackingArray: React.Dispatch<
@@ -29,6 +31,7 @@ const StatsPage = ({
     <section className={`${pageStyles} settings-page-wrap`}>
       <StreakCount />
       <CalenderYearly
+        userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         startDate={startDate}

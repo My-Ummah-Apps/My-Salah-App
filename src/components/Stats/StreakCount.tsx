@@ -1,6 +1,8 @@
-const StreakCount = () => {
+import { CSSProperties } from "react";
+
+const StreakCount = ({ styles }: { styles: CSSProperties }) => {
   return (
-    <div className="mb-10 streak-wrap">
+    <div className={`mb-10 streak-wrap ${styles}`}>
       <div className="relative flex items-center justify-center wreath-and-text-wrap">
         <img
           style={{ width: "150px", marginRight: "-4rem" }}
