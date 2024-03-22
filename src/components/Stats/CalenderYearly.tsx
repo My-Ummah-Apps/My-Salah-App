@@ -18,6 +18,9 @@ import {
   startOfWeek,
   eachMonthOfInterval,
   endOfYear,
+  addMonths,
+  isBefore,
+  isAfter,
 } from "date-fns";
 
 const CalenderYearly = ({
@@ -144,18 +147,24 @@ const CalenderYearly = ({
   };
 
   const [showModal, setShowModal] = useState(false);
-  // console.log(currentYear);
-  // const monthsInYear = eachMonthOfInterval({
-  //   start: startOfYear(currentYear),
-  //   end: endOfYear(currentYear),
-  // });
 
-  const monthsInYear = eachMonthOfInterval({
+  let monthsInYear: Date[] = eachMonthOfInterval({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
   });
+  let p = new Date();
+
+  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  console.log(isAfter(p, userStartDateFormatted));
+  if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
+    // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
+    monthsInYear = monthsInYear.filter(
+      (month) => month >= userStartDateFormatted && isAfter(month, p)
+    );
+  }
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
+  console.log(monthStrings);
 
   let firstDayOfMonth;
   const yearlyMonthsData = (month: string) => {

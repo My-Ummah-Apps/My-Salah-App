@@ -79,18 +79,14 @@ const App = () => {
   // const [salahTrackingArray, setSalahTrackingArray] = useState<
   //   salahTrackingArrayType[]
   // >([]);
+  // localStorage.clear();
   const todaysDate = new Date();
-  let userStartDate: string | null;
-  localStorage.clear();
-  userStartDate = localStorage.getItem("userStartDate")
-    ? localStorage.getItem("userStartDate")
-    : localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
-  // if (!localStorage.getItem("userStartDate")) {
-  //   userStartDate = format(todaysDate, "dd.MM.yy");
-  //   localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
-  // } else if (localStorage.getItem("userStartDate")) {
-  //   userStartDate = localStorage.getItem("userStartDate");
-  // }
+  let userStartDate: string | null = localStorage.getItem("userStartDate");
+
+  if (!userStartDate) {
+    userStartDate = format(todaysDate, "dd.MM.yy");
+    localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
+  }
 
   const [streakCounter, setStreakCounter] = useState(0);
 
