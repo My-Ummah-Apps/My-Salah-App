@@ -2,6 +2,11 @@ import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import CalenderMonthly from "./CalenderMonthly";
 import Modal from "./Modal";
+// Change below so that entire module isn't being imported
+// import Swiper from "swiper/bundle";
+// import "swiper/css/navigation";
+// import Swiper styles
+import "swiper/css";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import {
   add,
@@ -18,10 +23,9 @@ import {
   startOfWeek,
   eachMonthOfInterval,
   endOfYear,
-  addMonths,
-  isBefore,
-  isAfter,
 } from "date-fns";
+
+// const todaysDate = new Date();
 
 const CalenderYearly = ({
   // setShowCalenderOneMonth,
@@ -152,20 +156,20 @@ const CalenderYearly = ({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
   });
-  let p = new Date();
+  let todaysDate = new Date();
 
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  console.log(isAfter(p, userStartDateFormatted));
+
   if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
     // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
     monthsInYear = monthsInYear.filter(
-      (month) => month >= userStartDateFormatted && isAfter(month, p)
+      (month) => month > userStartDateFormatted
+      // && isAfter(month, p)
     );
   }
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
-  console.log(monthStrings);
-
+  // console.log(monthStrings);
   let firstDayOfMonth;
   const yearlyMonthsData = (month: string) => {
     firstDayOfMonth = parse(month, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
@@ -178,6 +182,8 @@ const CalenderYearly = ({
     }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
     return daysInMonth;
   };
+  // console.log("currentYear: " + currentYear.getFullYear());
+  // console.log("This year: " + todaysDate.getFullYear());
 
   return (
     <div className="calender-page-wrap">
@@ -189,14 +195,25 @@ const CalenderYearly = ({
           //   sub(prevYearValue, { years: 1 })
           // )}
           onClick={() => {
-            setCurrentYear((prevYearValue) => sub(prevYearValue, { years: 1 }));
+            if (
+              currentYear.getFullYear() > userStartDateFormatted.getFullYear()
+            ) {
+              setCurrentYear((prevYearValue) =>
+                sub(prevYearValue, { years: 1 })
+              );
+            }
           }}
         />
         <h1>{format(currentYear, "yyyy")}</h1>
         <IoChevronForward
           className="w-6 h-6 cursor-pointer"
           onClick={() => {
-            setCurrentYear((prevYearValue) => add(prevYearValue, { years: 1 }));
+            if (todaysDate.getFullYear() < currentYear.getFullYear()) {
+              console.log("true");
+              setCurrentYear((prevYearValue) =>
+                add(prevYearValue, { years: 1 })
+              );
+            }
           }}
           // onClick={
           //   showMonthlyCalender
@@ -234,8 +251,10 @@ const CalenderYearly = ({
                   {yearlyMonthsData(month).map((day, index) => (
                     <div
                       onClick={() => {
-                        modifySingleDaySalah(day);
-                        setShowModal(true);
+                        if (day <= todaysDate) {
+                          modifySingleDaySalah(day);
+                          setShowModal(true);
+                        }
                       }}
                       key={index}
                       className="individual-date"

@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 // import Notifications from "./utils/notifications";
 import { salahTrackingEntryType } from "./types/types";
-import { subDays, format, getMonth } from "date-fns";
+import { subDays, format } from "date-fns";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -23,7 +23,7 @@ import SettingsPage from "./pages/SettingsPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
 import QiblahDirection from "./pages/QiblahDirection";
-import StreakCount from "./components/Stats/StreakCount";
+// import StreakCount from "./components/Stats/StreakCount";
 
 window.addEventListener("DOMContentLoaded", () => {
   if (Capacitor.isNativePlatform()) {
@@ -89,7 +89,7 @@ const App = () => {
   }
 
   const [streakCounter, setStreakCounter] = useState(0);
-
+  streakCounter;
   const [salahTrackingArray, setSalahTrackingArray] = useState<
     salahTrackingEntryType[]
   >([]);

@@ -53,7 +53,7 @@ const CalenderMonthly = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [streakCounter, setStreakCounter] = useState(0);
-
+  streakCounter;
   const today = startOfToday(); // Will return todays date details
   const [currentMonth, setcurrentMonth] = useState(() =>
     format(today, "MMM-yyyy")
@@ -116,7 +116,7 @@ const CalenderMonthly = ({
   salahFulfilledDates.forEach((date) => {
     datesFrequency[date] = (datesFrequency[date] || 0) + 1;
   });
-  console.log(datesFrequency);
+  // console.log(datesFrequency);
 
   const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
     datesFrequency[date] === 1 ? true : false
@@ -125,10 +125,9 @@ const CalenderMonthly = ({
   let streakCount = 0;
   function checkStreak() {
     const todaysDate = new Date();
-    console.log("checkStreak()");
-    console.log(datesFrequencyReduced);
+    // console.log("checkStreak()");
+    // console.log(datesFrequencyReduced);
     for (let i = 0; i < datesFrequencyReduced.length; i++) {
-      console.log("for");
       let formattedDate = subDays(todaysDate, i);
 
       if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {

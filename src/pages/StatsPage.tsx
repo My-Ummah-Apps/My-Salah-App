@@ -29,7 +29,7 @@ const StatsPage = ({
   // setHeading("Overall Stats");
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
-      <StreakCount />
+      <StreakCount styles={{}} />
       <CalenderYearly
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}

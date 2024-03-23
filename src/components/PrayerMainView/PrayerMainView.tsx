@@ -288,7 +288,7 @@ const PrayerMainView = ({
     return currentDisplayedWeek.map((date: any) => {
       let cellIcon: string | JSX.Element = (
         <LuDot
-          onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+          onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
             // e.stopPropagation();
 
             if (e.currentTarget.tagName === "svg") {
@@ -308,7 +308,7 @@ const PrayerMainView = ({
       if (cellIcon === "alone") {
         cellIcon = (
           <BsPersonStanding
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+            onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
               if (e.currentTarget.tagName === "svg") {
@@ -319,10 +319,9 @@ const PrayerMainView = ({
           />
         );
       } else if (cellIcon === "group") {
-        console.log("group");
         cellIcon = (
           <MdGroups
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+            onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
               if (e.currentTarget.tagName === "svg") {
@@ -335,7 +334,7 @@ const PrayerMainView = ({
       } else if (cellIcon === "missed") {
         cellIcon = (
           <AiOutlineStop
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+            onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
               if (e.currentTarget.tagName === "svg") {
@@ -351,6 +350,7 @@ const PrayerMainView = ({
           <div
             id="icon-wrap"
             onClick={(e) => {
+              console.log("clicked");
               e.stopPropagation();
               setShowUpdateStatusModal(true);
               grabDate(e);
@@ -382,7 +382,7 @@ const PrayerMainView = ({
             {" "}
             <section className="w-[80%] mx-auto my-20 border border-gray-600 rounded-lg ">
               <div
-                onClick={() => {
+                onTouchStart={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "group");
                   setShowUpdateStatusModal(false);
                 }}
@@ -399,7 +399,7 @@ const PrayerMainView = ({
                 <p className="inline">Prayed In Jamaah</p>
               </div>
               <div
-                onClick={() => {
+                onTouchStart={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "alone");
                   setShowUpdateStatusModal(false);
                 }}
@@ -418,7 +418,7 @@ const PrayerMainView = ({
                 <p className="inline">Prayed On Time</p>
               </div>
               <div
-                onClick={() => {
+                onTouchStart={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "blank");
                   setShowUpdateStatusModal(false);
                 }}
@@ -435,7 +435,7 @@ const PrayerMainView = ({
                 <p className="inline">Blank</p>
               </div>
               <div
-                onClick={() => {
+                onTouchStart={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "missed");
                   setShowUpdateStatusModal(false);
                 }}
@@ -471,7 +471,7 @@ const PrayerMainView = ({
                 <h1 className="m-5 text-2xl text-center">
                   {monthlyCalenderToShow}
                 </h1>
-                <StreakCount />
+                <StreakCount styles={{}} />
                 {/* <div className="mb-10 streak-wrap">
                   <div className="relative flex items-center justify-center wreath-and-text-wrap">
                     <img
@@ -535,7 +535,7 @@ const PrayerMainView = ({
       </Sheet>
       <table
         className="w-full shadow-lg"
-        onClick={(e) => {
+        onTouchStart={(e) => {
           // grabDate(e);
           // setShowUpdateStatusModal(true);
           // e.preventDefault();
@@ -584,6 +584,7 @@ const PrayerMainView = ({
           {salahTrackingArray?.map((item, index) => {
             return (
               <tr
+                // role="button"
                 key={uuidv4()}
                 // key={"table row: " + item.salahName}
                 onClick={(e) => {
@@ -632,7 +633,7 @@ const PrayerMainView = ({
       </table>
       {/* <div className="flex justify-around pt-6 pb-20 ">
         <button
-          onClick={() => {
+          onTouchStart={() => {
             setCurrentWeek((prevValue) => prevValue + 5);
           }}
         >
@@ -643,7 +644,7 @@ const PrayerMainView = ({
           {currentDisplayedWeek[currentDisplayedWeek.length - 1]}
         </div>
         <button
-          onClick={() => {
+          onTouchStart={() => {
             setCurrentWeek((prevValue) => prevValue - 5);
           }}
         >
