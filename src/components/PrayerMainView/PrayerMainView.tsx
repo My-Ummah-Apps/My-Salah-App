@@ -11,7 +11,7 @@ import StatCard from "../Stats/StatCard";
 import { MdGroups } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
-// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
@@ -44,11 +44,11 @@ import {
 } from "date-fns";
 
 import StreakCount from "../Stats/StreakCount";
-import MoonNightSvg from "../SvgIcons/MoonNightSvg";
-import DuskSvg from "../SvgIcons/DuskSvg";
-import MoonMorningSvg from "../SvgIcons/MoonMorningSvg";
-import SunMiddaySvg from "../SvgIcons/SunMiddaySvg";
-import SunAfternoonSvg from "../SvgIcons/SunAfternoonSvg";
+// import MoonNightSvg from "../SvgIcons/MoonNightSvg";
+// import DuskSvg from "../SvgIcons/DuskSvg";
+// import MoonMorningSvg from "../SvgIcons/MoonMorningSvg";
+// import SunMiddaySvg from "../SvgIcons/SunMiddaySvg";
+// import SunAfternoonSvg from "../SvgIcons/SunAfternoonSvg";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -69,6 +69,12 @@ const PrayerMainView = ({
   startDate: Date;
 }) => {
   const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
+
+  // const redColor = "red";
+  // const blueColor = "blue";
+  // const greenColor = "green";
+  // const yellowColor = "yellow";
+  // const orangeColor = "orange";
 
   // const [streakCounter, setStreakCounter] = useState(0);
 
@@ -196,29 +202,29 @@ const PrayerMainView = ({
           return Object.keys(date)[0] === tableHeadDate;
         });
 
-        if (salahStatus === "blank") {
-          if (doesDateObjectExist === undefined) {
-            return {
-              ...item,
-              completedDates: [...item.completedDates],
-            };
-          } else if (doesDateObjectExist !== undefined) {
-            const filteredCompletedDatesArray = item.completedDates.filter(
-              (date) => {
-                return (
-                  Object.keys(doesDateObjectExist)[0] !== Object.keys(date)[0]
-                );
-              }
-            );
+        // if (salahStatus === "late") {
+        // if (doesDateObjectExist === undefined) {
+        //   return {
+        //     ...item,
+        //     completedDates: [...item.completedDates],
+        //   };
+        // } else if (doesDateObjectExist !== undefined) {
+        //   const filteredCompletedDatesArray = item.completedDates.filter(
+        //     (date) => {
+        //       return (
+        //         Object.keys(doesDateObjectExist)[0] !== Object.keys(date)[0]
+        //       );
+        //     }
+        //   );
 
-            return {
-              ...item,
-              completedDates: [...filteredCompletedDatesArray],
-            };
-          }
-        }
+        //   return {
+        //     ...item,
+        //     completedDates: [...filteredCompletedDatesArray],
+        //   };
+        // }
+        // }
 
-        if (doesDateObjectExist === undefined && salahStatus !== "blank") {
+        if (doesDateObjectExist === undefined) {
           return {
             ...item,
             completedDates: [
@@ -226,10 +232,7 @@ const PrayerMainView = ({
               { [tableHeadDate]: salahStatus },
             ],
           };
-        } else if (
-          doesDateObjectExist !== undefined &&
-          salahStatus !== "blank"
-        ) {
+        } else if (doesDateObjectExist !== undefined) {
           // console.log(
           //   "doesDateObjectExist !== undefined && salahStatus !== blank"
           // );
@@ -288,14 +291,14 @@ const PrayerMainView = ({
     return currentDisplayedWeek.map((date: any) => {
       let cellIcon: string | JSX.Element = (
         <LuDot
-          onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
+          onClick={(e: React.TouchEvent<HTMLDivElement>) => {
             // e.stopPropagation();
 
             if (e.currentTarget.tagName === "svg") {
               // setShowUpdateStatusModal(true);
             }
           }}
-          className="flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]"
+          className="flex self-center justify-self-center px-3 pb-4 w-[40px] h-[40px]"
         />
       );
       const matchedObject = salahTrackingArray[index]?.completedDates.find(
@@ -307,46 +310,114 @@ const PrayerMainView = ({
       }
       if (cellIcon === "alone") {
         cellIcon = (
-          <BsPersonStanding
-            onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
+          // <BsPersonStanding
+          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+          //     // e.stopPropagation();
 
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
-          />
+          //     if (e.currentTarget.tagName === "svg") {
+          //       // setShowUpdateStatusModal(true);
+          //     }
+          //   }}
+          //   className={`text-[#d4ba13] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
+          // />
+          // <div className="yellow-block w-[20px] h-[20px] rounded-md inline-block">
+          <div className="inline-block rounded-md yellow-block">
+            {" "}
+            <BsPersonStanding
+              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+                // e.stopPropagation();
+
+                if (e.currentTarget.tagName === "svg") {
+                  // setShowUpdateStatusModal(true);
+                }
+              }}
+              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            />
+          </div>
         );
       } else if (cellIcon === "group") {
         cellIcon = (
-          <MdGroups
-            onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
+          // <MdGroups
+          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+          //     // e.stopPropagation();
 
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
-          />
+          //     if (e.currentTarget.tagName === "svg") {
+          //       // setShowUpdateStatusModal(true);
+          //     }
+          //   }}
+          //   className={`text-[#2ecc40] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
+          // />
+          <div className="inline-block rounded-md green-block">
+            {" "}
+            <MdGroups
+              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+                // e.stopPropagation();
+
+                if (e.currentTarget.tagName === "svg") {
+                  // setShowUpdateStatusModal(true);
+                }
+              }}
+              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            />
+          </div>
+        );
+      } else if (cellIcon === "late") {
+        cellIcon = (
+          // <MdGroups
+          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+          //     // e.stopPropagation();
+
+          //     if (e.currentTarget.tagName === "svg") {
+          //       // setShowUpdateStatusModal(true);
+          //     }
+          //   }}
+          //   className={`text-[#ff851b] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
+          // />
+          <div className="inline-block rounded-md orange-block">
+            <MdGroups
+              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+                // e.stopPropagation();
+
+                if (e.currentTarget.tagName === "svg") {
+                  // setShowUpdateStatusModal(true);
+                }
+              }}
+              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            />
+          </div>
         );
       } else if (cellIcon === "missed") {
         cellIcon = (
-          <AiOutlineStop
-            onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
+          // <AiOutlineStop
+          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+          //     // e.stopPropagation();
 
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
-          />
+          //     if (e.currentTarget.tagName === "svg") {
+          //       // setShowUpdateStatusModal(true);
+          //     }
+          //   }}
+          //   className={`text-[#ff4136] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
+          // />
+          // p-1 w-[20px] h-[20px]
+          <div className="inline-block rounded-md red-block">
+            {" "}
+            <AiOutlineStop
+              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+                // e.stopPropagation();
+
+                if (e.currentTarget.tagName === "svg") {
+                  // setShowUpdateStatusModal(true);
+                }
+              }}
+              // className={`text-[#ff4136] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
+              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            />
+          </div>
         );
       }
       return (
-        <td key={uuidv4()} className="h-full border-none">
+        // pt-2
+        <td key={uuidv4()} className="h-full py-5 text-center border-none">
           <div
             id="icon-wrap"
             onClick={(e) => {
@@ -382,7 +453,7 @@ const PrayerMainView = ({
             {" "}
             <section className="w-[80%] mx-auto my-20 border border-gray-600 rounded-lg ">
               <div
-                onTouchStart={() => {
+                onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "group");
                   setShowUpdateStatusModal(false);
                 }}
@@ -399,7 +470,7 @@ const PrayerMainView = ({
                 <p className="inline">Prayed In Jamaah</p>
               </div>
               <div
-                onTouchStart={() => {
+                onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "alone");
                   setShowUpdateStatusModal(false);
                 }}
@@ -418,8 +489,8 @@ const PrayerMainView = ({
                 <p className="inline">Prayed On Time</p>
               </div>
               <div
-                onTouchStart={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "blank");
+                onClick={() => {
+                  changePrayerStatus(tableHeadDate, selectedSalah, "late");
                   setShowUpdateStatusModal(false);
                 }}
                 className="px-5 py-3 border-b border-gray-600 icon-and-text-wrap"
@@ -432,10 +503,10 @@ const PrayerMainView = ({
                   //   display: "inline",
                   // }}
                 />
-                <p className="inline">Blank</p>
+                <p className="inline">Late</p>
               </div>
               <div
-                onTouchStart={() => {
+                onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "missed");
                   setShowUpdateStatusModal(false);
                 }}
@@ -535,7 +606,7 @@ const PrayerMainView = ({
       </Sheet>
       <table
         className="w-full shadow-lg"
-        onTouchStart={(e) => {
+        onClick={(e) => {
           // grabDate(e);
           // setShowUpdateStatusModal(true);
           // e.preventDefault();
@@ -598,7 +669,7 @@ const PrayerMainView = ({
                     e.currentTarget.querySelector("td")?.textContent || ""
                   );
                   if (e.currentTarget.tagName !== "svg") {
-                    setShowMonthlyCalenderModal(true);
+                    // setShowMonthlyCalenderModal(true);
                     // setShowCalenderOneMonth(true);
                   }
                 }}
@@ -606,7 +677,7 @@ const PrayerMainView = ({
               >
                 <td className="py-5 border-none table-salah-name-td">
                   <div className="flex flex-row items-center">
-                    {item.salahName === "Fajr" ? (
+                    {/* {item.salahName === "Fajr" ? (
                       // <MoonMorningSvg color={"#0c72ff"} size={"35%"} />
                       <MoonMorningSvg color={"#0c72ff"} size={"35%"} />
                     ) : item.salahName === "Zohar" ? (
@@ -617,10 +688,10 @@ const PrayerMainView = ({
                       <DuskSvg color={"#0c72ff"} size={"35%"} />
                     ) : item.salahName === "Isha" ? (
                       <MoonNightSvg color={"#0c72ff"} size={"35%"} />
-                    ) : null}
+                    ) : null} */}
 
                     {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
-                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-[1.3rem] font-light">
+                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-[1rem] font-light">
                       {item.salahName}
                     </p>
                   </div>
@@ -631,9 +702,9 @@ const PrayerMainView = ({
           })}
         </tbody>
       </table>
-      {/* <div className="flex justify-around pt-6 pb-20 ">
+      <div className="flex justify-around pt-6 pb-20 ">
         <button
-          onTouchStart={() => {
+          onClick={() => {
             setCurrentWeek((prevValue) => prevValue + 5);
           }}
         >
@@ -644,13 +715,13 @@ const PrayerMainView = ({
           {currentDisplayedWeek[currentDisplayedWeek.length - 1]}
         </div>
         <button
-          onTouchStart={() => {
+          onClick={() => {
             setCurrentWeek((prevValue) => prevValue - 5);
           }}
         >
           <IoChevronForward />
         </button>
-      </div> */}
+      </div>
     </section>
   );
 };

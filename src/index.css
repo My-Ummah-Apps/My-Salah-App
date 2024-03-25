@@ -220,6 +220,22 @@ tr {
     env(safe-area-inset-bottom) env(safe-area-inset-left);
 } */
 
+.orange-block {
+  background: #ff851b;
+}
+
+.green-block {
+  background: #2ecc40;
+}
+
+.red-block {
+  background: #ff4136;
+}
+
+.yellow-block {
+  background: #d4ba13;
+}
+
 @supports not (-webkit-touch-callout: none) {
   /* CSS for other than iOS devices */
   .navbar-wrap {
