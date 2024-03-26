@@ -13,6 +13,10 @@ import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
+import { IoPersonOutline } from "react-icons/io5";
+import { GoPerson } from "react-icons/go";
+import { GoPeople } from "react-icons/go";
+import { PiClockCounterClockwise } from "react-icons/pi";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
 
@@ -323,7 +327,7 @@ const PrayerMainView = ({
           // <div className="yellow-block w-[20px] h-[20px] rounded-md inline-block">
           <div className="inline-block rounded-md yellow-block">
             {" "}
-            <BsPersonStanding
+            <GoPerson
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -349,7 +353,7 @@ const PrayerMainView = ({
           // />
           <div className="inline-block rounded-md green-block">
             {" "}
-            <MdGroups
+            <GoPeople
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -374,7 +378,7 @@ const PrayerMainView = ({
           //   className={`text-[#ff851b] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           // />
           <div className="inline-block rounded-md orange-block">
-            <MdGroups
+            <PiClockCounterClockwise
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -611,7 +615,7 @@ const PrayerMainView = ({
           // setShowUpdateStatusModal(true);
           // e.preventDefault();
           if (e.isTrusted && e.currentTarget.tagName !== "svg") {
-            // setShowMonthlyCalenderModal(true);
+            setShowMonthlyCalenderModal(true);
           }
         }}
       >

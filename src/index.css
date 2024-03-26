@@ -220,20 +220,25 @@ tr {
     env(safe-area-inset-bottom) env(safe-area-inset-left);
 } */
 
+.monthly-calender-single-date {
+  line-height: 0.5;
+}
+
 .orange-block {
-  background: #ff851b;
+  background: #ea580c;
 }
 
 .green-block {
-  background: #2ecc40;
+  /* background: #2ecc40; */
+  background: #16a34a;
 }
 
 .red-block {
-  background: #ff4136;
+  background: #dc2626;
 }
 
 .yellow-block {
-  background: #d4ba13;
+  background: #65a30d;
 }
 
 @supports not (-webkit-touch-callout: none) {
