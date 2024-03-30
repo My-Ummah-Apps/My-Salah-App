@@ -139,7 +139,7 @@ td {
 
 td:first-child {
   position: relative;
-  width: 50%;
+  width: 40%;
   padding-left: 0.5rem;
   border-left-style: solid;
   border-top-left-radius: 10px;
@@ -225,20 +225,48 @@ tr {
 }
 
 .orange-block {
-  background: #ea580c;
+  background: #e3590ecd;
 }
 
 .green-block {
-  /* background: #2ecc40; */
-  background: #16a34a;
+  background: #448b75;
 }
 
 .red-block {
-  background: #dc2626;
+  background: #c15f5f;
 }
 
 .yellow-block {
-  background: #65a30d;
+  background: #bcaa4b;
+}
+
+.multi-colored-circle {
+  margin: 5px 0;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  background-size:
+    100% 100%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(var(--card-bg-color), var(--card-bg-color)),
+    linear-gradient(30deg, #e3590ecd 80%, grey 80%),
+    linear-gradient(120deg, red 80%, grey 80%),
+    linear-gradient(300deg, #bcaa4b 80%, grey 80%),
+    linear-gradient(210deg, #448b75 80%, grey 80%);
+  background-position:
+    center center,
+    left top,
+    right top,
+    left bottom,
+    right bottom;
+  background-origin: content-box, border-box, border-box, border-box, border-box;
+  background-clip: content-box, border-box, border-box, border-box, border-box;
+  transform: rotate(30deg);
 }
 
 @supports not (-webkit-touch-callout: none) {

@@ -13,10 +13,10 @@ import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
-import { IoPersonOutline } from "react-icons/io5";
-import { GoPerson } from "react-icons/go";
-import { GoPeople } from "react-icons/go";
-import { PiClockCounterClockwise } from "react-icons/pi";
+// import { IoPersonOutline } from "react-icons/io5";
+// import { GoPerson } from "react-icons/go";
+// import { GoPeople } from "react-icons/go";
+// import { PiClockCounterClockwise } from "react-icons/pi";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
 
@@ -325,9 +325,9 @@ const PrayerMainView = ({
           //   className={`text-[#d4ba13] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           // />
           // <div className="yellow-block w-[20px] h-[20px] rounded-md inline-block">
-          <div className="inline-block rounded-md yellow-block">
+          <div className="inline-block rounded-md yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
-            <GoPerson
+            {/* <GoPerson
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -336,7 +336,7 @@ const PrayerMainView = ({
                 }
               }}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            />
+            /> */}
           </div>
         );
       } else if (cellIcon === "group") {
@@ -351,9 +351,9 @@ const PrayerMainView = ({
           //   }}
           //   className={`text-[#2ecc40] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           // />
-          <div className="inline-block rounded-md green-block">
+          <div className="inline-block rounded-md green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
-            <GoPeople
+            {/* <GoPeople
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -362,7 +362,7 @@ const PrayerMainView = ({
                 }
               }}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            />
+            /> */}
           </div>
         );
       } else if (cellIcon === "late") {
@@ -377,8 +377,8 @@ const PrayerMainView = ({
           //   }}
           //   className={`text-[#ff851b] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           // />
-          <div className="inline-block rounded-md orange-block">
-            <PiClockCounterClockwise
+          <div className="inline-block rounded-md orange-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+            {/* <PiClockCounterClockwise
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -387,7 +387,7 @@ const PrayerMainView = ({
                 }
               }}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            />
+            /> */}
           </div>
         );
       } else if (cellIcon === "missed") {
@@ -403,9 +403,9 @@ const PrayerMainView = ({
           //   className={`text-[#ff4136] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           // />
           // p-1 w-[20px] h-[20px]
-          <div className="inline-block rounded-md red-block">
+          <div className="inline-block rounded-md red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
-            <AiOutlineStop
+            {/* <AiOutlineStop
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -415,13 +415,13 @@ const PrayerMainView = ({
               }}
               // className={`text-[#ff4136] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            />
+            /> */}
           </div>
         );
       }
       return (
         // pt-2
-        <td key={uuidv4()} className="h-full py-5 text-center border-none">
+        <td key={uuidv4()} className="h-full pt-2 pb-5 text-center border-none">
           <div
             id="icon-wrap"
             onClick={(e) => {

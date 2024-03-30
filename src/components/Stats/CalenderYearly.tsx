@@ -230,14 +230,14 @@ const CalenderYearly = ({
           <div className="flex items-center justify-between chevrons-wrap"></div>
           <div className="flex w-full gap-5 mb-6 overflow-scroll months-wrap">
             {monthStrings.map((month) => (
-              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-5">
+              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9">
                 <p className="py-4 font-semibold text-center">{month}</p>
                 <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap">
                   {days.map((day, index) => {
                     return (
                       <div
                         key={index}
-                        className="w-5 h-5 text-xs font-semibold individual-day"
+                        className="w-5 h-5 text-sm font-semibold individual-day"
                       >
                         {day}
                       </div>
@@ -245,7 +245,7 @@ const CalenderYearly = ({
                   })}
                 </div>
                 <div
-                  className="grid grid-cols-7 gap-x-6 gap-y-1 place-items-center month-dates-wrap"
+                  className="grid grid-cols-7 gap-x-12 gap-y-1 place-items-center month-dates-wrap"
                   key={month}
                 >
                   {yearlyMonthsData(month).map((day, index) => (
@@ -257,15 +257,17 @@ const CalenderYearly = ({
                         }
                       }}
                       key={index}
-                      className="individual-date"
+                      className="flex items-center justify-center individual-date multi-colored-circle"
                     >
                       <p
                         style={{
+                          transform: "rotate(-30deg)",
                           backgroundColor: countCompletedDates(
                             format(day, "dd.MM.yy")
                           ),
                         }}
-                        className={`text-xs cursor-pointer flex items-center justify-center font-semibold h-5 w-5 rounded-md  hover:text-white  ${
+                        // rounded-md
+                        className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
                           isDayInSpecificMonth(day, month)
                             ? "text-gray-400"
                             : "text-gray-900"
