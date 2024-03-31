@@ -129,8 +129,6 @@ const App = () => {
         ]);
   }, []);
 
-  // function calculateStats() {}
-
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
       for (let i = 0; i < salah.completedDates.length; i++) {

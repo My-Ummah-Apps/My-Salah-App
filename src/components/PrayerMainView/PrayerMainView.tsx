@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
 import CalenderMonthly from "../Stats/CalenderMonthly";
-import StatCard from "../Stats/StatCard";
+// import StatCard from "../Stats/StatCard";
 // import ReactModal from "react-modal";
 // import { FaMosque, FaHome } from "react-icons/fa";
 // import { ImCross } from "react-icons/im";
@@ -141,30 +141,30 @@ const PrayerMainView = ({
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableHeadDate, setTableHeadDate] = useState("");
 
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchEndX, setTouchEndX] = useState(0);
+  // const [touchStartX, setTouchStartX] = useState(0);
+  // const [touchEndX, setTouchEndX] = useState(0);
 
-  const handleTouchStart = (event: any) => {
-    // console.log("touchevent STARTED " + event.changedTouches[0].screenX);
-    setTouchStartX(event.changedTouches[0].screenX);
-  };
+  // const handleTouchStart = (event: any) => {
+  //   // console.log("touchevent STARTED " + event.changedTouches[0].screenX);
+  //   setTouchStartX(event.changedTouches[0].screenX);
+  // };
 
-  const handleTouchEnd = (event: any) => {
-    // console.log("touchevent ENDED " + event.changedTouches[0].screenX);
-    setTouchEndX(event.changedTouches[0].screenX);
-    handleGesture();
-  };
+  // const handleTouchEnd = (event: any) => {
+  //   // console.log("touchevent ENDED " + event.changedTouches[0].screenX);
+  //   setTouchEndX(event.changedTouches[0].screenX);
+  //   handleGesture();
+  // };
 
-  const handleGesture = () => {
-    const threshold = window.innerWidth / 5;
-    const swipeDistance = touchEndX - touchStartX;
+  // const handleGesture = () => {
+  //   const threshold = window.innerWidth / 5;
+  //   const swipeDistance = touchEndX - touchStartX;
 
-    if (threshold < Math.abs(swipeDistance)) {
-      // setCurrentWeek((prevValue) => prevValue + 5);
-    } else if (Math.abs(swipeDistance) > threshold) {
-      // setCurrentWeek((prevValue) => prevValue - 5);
-    }
-  };
+  //   if (threshold < Math.abs(swipeDistance)) {
+  //     // setCurrentWeek((prevValue) => prevValue + 5);
+  //   } else if (Math.abs(swipeDistance) > threshold) {
+  //     // setCurrentWeek((prevValue) => prevValue - 5);
+  //   }
+  // };
 
   // const SalahIcons: string[] = ["<RiSunFill />", "<FaMoon />"];
 
@@ -584,10 +584,10 @@ const PrayerMainView = ({
                   // modifySingleDaySalah={modifySingleDaySalah}
                 />
                 <div className="grid grid-cols-2">
-                  <StatCard statName={"In jamaah"} />
+                  {/* <StatCard statName={"In jamaah"} />
                   <StatCard statName={"On time"} />
                   <StatCard statName={"Late"} />
-                  <StatCard statName={"Not Prayed"} />
+                  <StatCard statName={"Not Prayed"} /> */}
                 </div>
                 {/* <Calender
                 // setShowCalenderOneMonth={setShowCalenderOneMonth}
