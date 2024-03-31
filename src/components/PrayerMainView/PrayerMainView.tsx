@@ -74,12 +74,6 @@ const PrayerMainView = ({
 }) => {
   const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
 
-  // const redColor = "red";
-  // const blueColor = "blue";
-  // const greenColor = "green";
-  // const yellowColor = "yellow";
-  // const orangeColor = "orange";
-
   // const [streakCounter, setStreakCounter] = useState(0);
 
   // BELOW CODE IS FROM CALENDER.TSX TO MAKE MONTHLY CALENDER FUNCTIONALITY WORK WHEN A TABLE ROW IS CLICKED
@@ -426,7 +420,7 @@ const PrayerMainView = ({
             id="icon-wrap"
             onClick={(e) => {
               console.log("clicked");
-              e.stopPropagation();
+              // e.stopPropagation();
               setShowUpdateStatusModal(true);
               grabDate(e);
             }}
@@ -444,7 +438,9 @@ const PrayerMainView = ({
   // };
 
   return (
-    <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    // Below touchevents cause an issue with onclicks further down the DOM tree not working
+    // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <section>
       <Sheet
         isOpen={showUpdateStatusModal}
         onClose={() => setShowUpdateStatusModal(false)}
@@ -615,7 +611,7 @@ const PrayerMainView = ({
           // setShowUpdateStatusModal(true);
           // e.preventDefault();
           if (e.isTrusted && e.currentTarget.tagName !== "svg") {
-            setShowMonthlyCalenderModal(true);
+            // setShowMonthlyCalenderModal(true);
           }
         }}
       >
@@ -674,7 +670,6 @@ const PrayerMainView = ({
                   );
                   if (e.currentTarget.tagName !== "svg") {
                     // setShowMonthlyCalenderModal(true);
-                    // setShowCalenderOneMonth(true);
                   }
                 }}
                 className="bg-[color:var(--card-bg-color)]"

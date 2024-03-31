@@ -254,10 +254,11 @@ tr {
     50% 50%;
   background-repeat: no-repeat;
   background-image: linear-gradient(var(--card-bg-color), var(--card-bg-color)),
-    linear-gradient(30deg, #e3590ecd 80%, grey 80%),
-    linear-gradient(120deg, red 80%, grey 80%),
-    linear-gradient(300deg, #bcaa4b 80%, grey 80%),
-    linear-gradient(210deg, #448b75 80%, grey 80%);
+    linear-gradient(30deg, grey 80%, grey 90%),
+    linear-gradient(120deg, #0eff01b6 80%, grey 90%),
+    linear-gradient(300deg, #f40303 80%, grey 90%),
+    linear-gradient(210deg, #f30606 80%, grey 90%),
+    linear-gradient(210deg, grey 80%, grey 90%);
   background-position:
     center center,
     left top,
