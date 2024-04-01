@@ -14,9 +14,9 @@ import { BsPersonStanding } from "react-icons/bs";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
 // import { IoPersonOutline } from "react-icons/io5";
-// import { GoPerson } from "react-icons/go";
-// import { GoPeople } from "react-icons/go";
-// import { PiClockCounterClockwise } from "react-icons/pi";
+import { GoPerson } from "react-icons/go";
+import { GoPeople } from "react-icons/go";
+import { PiClockCounterClockwise } from "react-icons/pi";
 // import { RiSunFill } from "react-icons/ri";
 // import { FaMoon } from "react-icons/fa";
 
@@ -48,11 +48,11 @@ import {
 } from "date-fns";
 
 import StreakCount from "../Stats/StreakCount";
-// import MoonNightSvg from "../SvgIcons/MoonNightSvg";
-// import DuskSvg from "../SvgIcons/DuskSvg";
-// import MoonMorningSvg from "../SvgIcons/MoonMorningSvg";
-// import SunMiddaySvg from "../SvgIcons/SunMiddaySvg";
-// import SunAfternoonSvg from "../SvgIcons/SunAfternoonSvg";
+import MoonNightSvg from "../SvgIcons/MoonNightSvg";
+import DuskSvg from "../SvgIcons/DuskSvg";
+import MoonMorningSvg from "../SvgIcons/MoonMorningSvg";
+import SunMiddaySvg from "../SvgIcons/SunMiddaySvg";
+import SunAfternoonSvg from "../SvgIcons/SunAfternoonSvg";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -321,7 +321,7 @@ const PrayerMainView = ({
           // <div className="yellow-block w-[20px] h-[20px] rounded-md inline-block">
           <div className="inline-block rounded-md yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
-            {/* <GoPerson
+            <GoPerson
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -330,7 +330,7 @@ const PrayerMainView = ({
                 }
               }}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            /> */}
+            />
           </div>
         );
       } else if (cellIcon === "group") {
@@ -347,7 +347,7 @@ const PrayerMainView = ({
           // />
           <div className="inline-block rounded-md green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
-            {/* <GoPeople
+            <GoPeople
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -356,7 +356,7 @@ const PrayerMainView = ({
                 }
               }}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            /> */}
+            />
           </div>
         );
       } else if (cellIcon === "late") {
@@ -372,7 +372,7 @@ const PrayerMainView = ({
           //   className={`text-[#ff851b] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
           // />
           <div className="inline-block rounded-md orange-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
-            {/* <PiClockCounterClockwise
+            <PiClockCounterClockwise
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -381,7 +381,7 @@ const PrayerMainView = ({
                 }
               }}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            /> */}
+            />
           </div>
         );
       } else if (cellIcon === "missed") {
@@ -399,7 +399,7 @@ const PrayerMainView = ({
           // p-1 w-[20px] h-[20px]
           <div className="inline-block rounded-md red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
-            {/* <AiOutlineStop
+            <AiOutlineStop
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
 
@@ -409,13 +409,13 @@ const PrayerMainView = ({
               }}
               // className={`text-[#ff4136] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            /> */}
+            />
           </div>
         );
       }
       return (
         // pt-2
-        <td key={uuidv4()} className="h-full pt-2 pb-5 text-center border-none">
+        <td key={uuidv4()} className="h-full pt-6 pb-5 text-center border-none">
           <div
             id="icon-wrap"
             onClick={(e) => {
@@ -438,7 +438,7 @@ const PrayerMainView = ({
   // };
 
   return (
-    // Below touchevents cause an issue with onclicks further down the DOM tree not working
+    // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
     <section>
       <Sheet
@@ -451,13 +451,13 @@ const PrayerMainView = ({
           <Sheet.Header />
           <Sheet.Content>
             {" "}
-            <section className="w-[80%] mx-auto my-20 border border-gray-600 rounded-lg ">
+            <section className="w-[80%] mx-auto my-20 rounded-lg text-white">
               <div
                 onClick={() => {
                   changePrayerStatus(tableHeadDate, selectedSalah, "group");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 border-b border-gray-600 icon-and-text-wrap"
+                className="px-5 py-3 mb-4 bg-green-800 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <MdGroups
                   className="inline mr-4 text-3xl"
@@ -474,7 +474,7 @@ const PrayerMainView = ({
                   changePrayerStatus(tableHeadDate, selectedSalah, "alone");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 border-b border-gray-600 icon-and-text-wrap"
+                className="px-5 py-3 mb-4 bg-yellow-500 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <BsPersonStanding
                   className="inline mr-4 text-3xl"
@@ -493,7 +493,7 @@ const PrayerMainView = ({
                   changePrayerStatus(tableHeadDate, selectedSalah, "late");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 border-b border-gray-600 icon-and-text-wrap"
+                className="px-5 py-3 mb-4 bg-orange-600 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <LuDot
                   className="inline mr-4 text-3xl"
@@ -510,7 +510,7 @@ const PrayerMainView = ({
                   changePrayerStatus(tableHeadDate, selectedSalah, "missed");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 icon-and-text-wrap"
+                className="px-5 py-3 mb-4 bg-red-800 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <AiOutlineStop
                   className="inline mr-4 text-3xl"
@@ -674,23 +674,23 @@ const PrayerMainView = ({
                 }}
                 className="bg-[color:var(--card-bg-color)]"
               >
-                <td className="py-5 border-none table-salah-name-td">
+                <td className="border-none py-7 table-salah-name-td">
                   <div className="flex flex-row items-center">
-                    {/* {item.salahName === "Fajr" ? (
+                    {item.salahName === "Fajr" ? (
                       // <MoonMorningSvg color={"#0c72ff"} size={"35%"} />
-                      <MoonMorningSvg color={"#0c72ff"} size={"35%"} />
+                      <MoonMorningSvg color={"#FAF9F6"} size={"20%"} />
                     ) : item.salahName === "Zohar" ? (
-                      <SunMiddaySvg color={"#0c72ff"} size={"35%"} />
+                      <SunMiddaySvg color={"#FAF9F6"} size={"20%"} />
                     ) : item.salahName === "Asar" ? (
-                      <SunAfternoonSvg color={"#0c72ff"} size={"35%"} />
+                      <SunAfternoonSvg color={"#FAF9F6"} size={"20%"} />
                     ) : item.salahName === "Maghrib" ? (
-                      <DuskSvg color={"#0c72ff"} size={"35%"} />
+                      <DuskSvg color={"#FAF9F6"} size={"20%"} />
                     ) : item.salahName === "Isha" ? (
-                      <MoonNightSvg color={"#0c72ff"} size={"35%"} />
-                    ) : null} */}
+                      <MoonNightSvg color={"#FAF9F6"} size={"20%"} />
+                    ) : null}
 
                     {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
-                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-[1rem] font-light">
+                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-lg font-light">
                       {item.salahName}
                     </p>
                   </div>

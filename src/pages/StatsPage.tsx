@@ -27,6 +27,16 @@ const StatsPage = ({
   currentWeek: number;
 }) => {
   // setHeading("Overall Stats");
+  let jamaahStat = 0;
+  let aloneStat = 0;
+  let lateStat = 0;
+  let missedStat = 0;
+
+  let salahInJamaahDatesOverall: string[] = [];
+  let salahAloneDatesOverall: string[] = [];
+  let salahLateDatesOverall: string[] = [];
+  let salahMissedDatesOverall: string[] = [];
+
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
       for (let i = 0; i < salah.completedDates.length; i++) {
@@ -36,25 +46,36 @@ const StatsPage = ({
     },
     []
   );
-  let salahInJamaahDatesOverall: string[] = [];
-  salahTrackingArray.forEach((salah) => {
-    for (let i = 0; i < salah.completedDates.length; i++) {
-      if (Object.values(salah.completedDates[i])[0] === "group") {
-        salahInJamaahDatesOverall.push(Object.keys(salah.completedDates[i])[0]);
+
+  function getSalahStatusDates(status: string, array: string[]) {
+    let statToUpdate = 0;
+    salahTrackingArray.forEach((salah) => {
+      for (let i = 0; i < salah.completedDates.length; i++) {
+        if (Object.values(salah.completedDates[i])[0] === status) {
+          array.push(Object.keys(salah.completedDates[i])[0]);
+        }
       }
+    });
+    if (array.length > 0) {
+      statToUpdate = Math.round(
+        (array.length / (salahFulfilledDates.length + array.length)) * 100
+      );
     }
-  });
-  let jamaahStat = 0;
-  if (salahInJamaahDatesOverall.length > 0) {
-    jamaahStat = Math.round(
-      (salahInJamaahDatesOverall.length /
-        (salahFulfilledDates.length + salahInJamaahDatesOverall.length)) *
-        100
-    );
+    status === "group"
+      ? (jamaahStat = statToUpdate)
+      : status === "alone"
+      ? (aloneStat = statToUpdate)
+      : status === "late"
+      ? (lateStat = statToUpdate)
+      : status === "missed"
+      ? (missedStat = statToUpdate)
+      : null;
   }
 
-  console.log(salahInJamaahDatesOverall);
-  console.log(salahFulfilledDates);
+  getSalahStatusDates("group", salahInJamaahDatesOverall);
+  getSalahStatusDates("alone", salahAloneDatesOverall);
+  getSalahStatusDates("late", salahLateDatesOverall);
+  getSalahStatusDates("missed", salahMissedDatesOverall);
 
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
@@ -76,19 +97,19 @@ const StatsPage = ({
         />
         <StatCard
           statName={"On time"}
-          stat={1}
+          stat={aloneStat}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
         <StatCard
           statName={"Late"}
-          stat={1}
+          stat={lateStat}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
         <StatCard
-          statName={"Not Prayed"}
-          stat={1}
+          statName={"Missed"}
+          stat={missedStat}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
