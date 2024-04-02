@@ -13,7 +13,6 @@ import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
-// import { IoPersonOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { PiClockCounterClockwise } from "react-icons/pi";
@@ -308,18 +307,7 @@ const PrayerMainView = ({
       }
       if (cellIcon === "alone") {
         cellIcon = (
-          // <BsPersonStanding
-          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-          //     // e.stopPropagation();
-
-          //     if (e.currentTarget.tagName === "svg") {
-          //       // setShowUpdateStatusModal(true);
-          //     }
-          //   }}
-          //   className={`text-[#d4ba13] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
-          // />
-          // <div className="yellow-block w-[20px] h-[20px] rounded-md inline-block">
-          <div className="inline-block rounded-md yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          <div className="inline-block rounded-3xl yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
             <GoPerson
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -335,17 +323,7 @@ const PrayerMainView = ({
         );
       } else if (cellIcon === "group") {
         cellIcon = (
-          // <MdGroups
-          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-          //     // e.stopPropagation();
-
-          //     if (e.currentTarget.tagName === "svg") {
-          //       // setShowUpdateStatusModal(true);
-          //     }
-          //   }}
-          //   className={`text-[#2ecc40] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
-          // />
-          <div className="inline-block rounded-md green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          <div className="inline-block rounded-3xl green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
             <GoPeople
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -361,17 +339,7 @@ const PrayerMainView = ({
         );
       } else if (cellIcon === "late") {
         cellIcon = (
-          // <MdGroups
-          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-          //     // e.stopPropagation();
-
-          //     if (e.currentTarget.tagName === "svg") {
-          //       // setShowUpdateStatusModal(true);
-          //     }
-          //   }}
-          //   className={`text-[#ff851b] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
-          // />
-          <div className="inline-block rounded-md orange-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          <div className="inline-block rounded-3xl orange-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             <PiClockCounterClockwise
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
@@ -386,18 +354,7 @@ const PrayerMainView = ({
         );
       } else if (cellIcon === "missed") {
         cellIcon = (
-          // <AiOutlineStop
-          //   onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-          //     // e.stopPropagation();
-
-          //     if (e.currentTarget.tagName === "svg") {
-          //       // setShowUpdateStatusModal(true);
-          //     }
-          //   }}
-          //   className={`text-[#ff4136] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
-          // />
-          // p-1 w-[20px] h-[20px]
-          <div className="inline-block rounded-md red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          <div className="inline-block rounded-3xl red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
             <AiOutlineStop
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -407,7 +364,6 @@ const PrayerMainView = ({
                   // setShowUpdateStatusModal(true);
                 }
               }}
-              // className={`text-[#ff4136] flex self-center justify-self-center pt-2 px-3 pb-4 w-[40px] h-[40px]`}
               className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
             />
           </div>

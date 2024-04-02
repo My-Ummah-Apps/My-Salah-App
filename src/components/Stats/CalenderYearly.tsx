@@ -2,6 +2,15 @@ import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import CalenderMonthly from "./CalenderMonthly";
 import Modal from "./Modal";
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+// import RadialSeparators from "./RadialSeparators";
+
+import "react-circular-progressbar/dist/styles.css";
 // Change below so that entire module isn't being imported
 // import Swiper from "swiper/bundle";
 // import "swiper/css/navigation";
@@ -24,6 +33,7 @@ import {
   eachMonthOfInterval,
   endOfYear,
 } from "date-fns";
+// import CircleSegment from "./CircleSegment";
 
 // const todaysDate = new Date();
 
@@ -187,6 +197,25 @@ const CalenderYearly = ({
 
   return (
     <div className="calender-page-wrap">
+      {/* <CircleSegment /> */}
+      <CircularProgressbarWithChildren
+        value={80}
+        text={`${80}%`}
+        strokeWidth={10}
+        styles={buildStyles({
+          strokeLinecap: "butt",
+        })}
+      >
+        <RadialSeparators
+          count={12}
+          style={{
+            background: "#fff",
+            width: "2px",
+            // This needs to be equal to props.strokeWidth
+            height: `${10}%`,
+          }}
+        />
+      </CircularProgressbarWithChildren>
       <div className="sticky flex justify-around mb-10 calender-component-header">
         {" "}
         <IoChevronBackSharp
