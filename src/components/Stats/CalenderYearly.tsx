@@ -2,13 +2,14 @@ import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import CalenderMonthly from "./CalenderMonthly";
 import Modal from "./Modal";
+import _ from "lodash";
 import {
   CircularProgressbar,
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-// import RadialSeparators from "./RadialSeparators";
+// import RadialSeparators from "react-circular-progressbar/dist/RadialSeparators.tsx";
 
 import "react-circular-progressbar/dist/styles.css";
 // Change below so that entire module isn't being imported
@@ -59,6 +60,26 @@ const CalenderYearly = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
+  function Separator(props) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          height: "100%",
+          transform: `rotate(${props.turns}turn)`,
+        }}
+      >
+        <div style={props.style} />
+      </div>
+    );
+  }
+
+  function RadialSeparators(props) {
+    const turns = 1 / props.count;
+    return _.range(props.count).map((index) => (
+      <Separator turns={index * turns} style={props.style} />
+    ));
+  }
   // const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
   // const [showYearlyCalender, setShowYearlyCalender] = useState(true);
 
@@ -195,6 +216,8 @@ const CalenderYearly = ({
   // console.log("currentYear: " + currentYear.getFullYear());
   // console.log("This year: " + todaysDate.getFullYear());
 
+  const isComplete = false;
+
   return (
     <div className="calender-page-wrap">
       {/* <CircleSegment /> */}
@@ -204,10 +227,12 @@ const CalenderYearly = ({
         strokeWidth={10}
         styles={buildStyles({
           strokeLinecap: "butt",
+          pathColor: "#FF5733",
+          // trailColor: "darkgray",
         })}
       >
         <RadialSeparators
-          count={12}
+          count={5}
           style={{
             background: "#fff",
             width: "2px",
@@ -274,7 +299,8 @@ const CalenderYearly = ({
                   })}
                 </div>
                 <div
-                  className="grid grid-cols-7 gap-x-12 gap-y-1 place-items-center month-dates-wrap"
+                  // grid grid-cols-7
+                  className=" gap-x-12 gap-y-1 place-items-center month-dates-wrap"
                   key={month}
                 >
                   {yearlyMonthsData(month).map((day, index) => (
@@ -286,11 +312,32 @@ const CalenderYearly = ({
                         }
                       }}
                       key={index}
-                      className="flex items-center justify-center individual-date multi-colored-circle"
+                      className="flex items-center justify-center individual-date"
                     >
+                      <CircularProgressbarWithChildren
+                        value={60}
+                        text={`${format(day, "dd.MM.yy")}`}
+                        strokeWidth={10}
+                        styles={buildStyles({
+                          strokeLinecap: "butt",
+                          pathColor: isComplete ? "#4CAF50" : "#FF5722",
+                          // pathColor: pathColor,
+                          // pathColor: pathColor,
+                          // trailColor: "red",
+                        })}
+                      >
+                        <RadialSeparators
+                          count={5}
+                          style={{
+                            background: "#fff",
+                            width: "2px",
+                            // This needs to be equal to props.strokeWidth
+                            height: `${10}%`,
+                          }}
+                        />
+                      </CircularProgressbarWithChildren>
                       <p
                         style={{
-                          transform: "rotate(-30deg)",
                           backgroundColor: countCompletedDates(
                             format(day, "dd.MM.yy")
                           ),
@@ -302,7 +349,7 @@ const CalenderYearly = ({
                             : "text-gray-900"
                         }`}
                       >
-                        {format(day, "d")}
+                        {/* {format(day, "d")} */}
                       </p>
                     </div>
                   ))}
