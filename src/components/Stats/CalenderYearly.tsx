@@ -1,22 +1,17 @@
+import React, { PureComponent } from "react";
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
+
 import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import CalenderMonthly from "./CalenderMonthly";
 import Modal from "./Modal";
 import _ from "lodash";
-import {
-  CircularProgressbar,
-  CircularProgressbarWithChildren,
-  buildStyles,
-} from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
-// import RadialSeparators from "react-circular-progressbar/dist/RadialSeparators.tsx";
 
-import "react-circular-progressbar/dist/styles.css";
 // Change below so that entire module isn't being imported
 // import Swiper from "swiper/bundle";
 // import "swiper/css/navigation";
 // import Swiper styles
-import "swiper/css";
+// import "swiper/css";
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import {
   add,
@@ -60,26 +55,13 @@ const CalenderYearly = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  function Separator(props) {
-    return (
-      <div
-        style={{
-          position: "absolute",
-          height: "100%",
-          transform: `rotate(${props.turns}turn)`,
-        }}
-      >
-        <div style={props.style} />
-      </div>
-    );
-  }
-
-  function RadialSeparators(props) {
-    const turns = 1 / props.count;
-    return _.range(props.count).map((index) => (
-      <Separator turns={index * turns} style={props.style} />
-    ));
-  }
+  const data = [
+    { name: "Group A", value: 400 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   // const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
   // const [showYearlyCalender, setShowYearlyCalender] = useState(true);
 
@@ -216,31 +198,10 @@ const CalenderYearly = ({
   // console.log("currentYear: " + currentYear.getFullYear());
   // console.log("This year: " + todaysDate.getFullYear());
 
-  const isComplete = false;
+  const isComplete = true;
 
   return (
     <div className="calender-page-wrap">
-      {/* <CircleSegment /> */}
-      <CircularProgressbarWithChildren
-        value={80}
-        text={`${80}%`}
-        strokeWidth={10}
-        styles={buildStyles({
-          strokeLinecap: "butt",
-          pathColor: "#FF5733",
-          // trailColor: "darkgray",
-        })}
-      >
-        <RadialSeparators
-          count={5}
-          style={{
-            background: "#fff",
-            width: "2px",
-            // This needs to be equal to props.strokeWidth
-            height: `${10}%`,
-          }}
-        />
-      </CircularProgressbarWithChildren>
       <div className="sticky flex justify-around mb-10 calender-component-header">
         {" "}
         <IoChevronBackSharp
@@ -314,28 +275,30 @@ const CalenderYearly = ({
                       key={index}
                       className="flex items-center justify-center individual-date"
                     >
-                      <CircularProgressbarWithChildren
-                        value={60}
-                        text={`${format(day, "dd.MM.yy")}`}
-                        strokeWidth={10}
-                        styles={buildStyles({
-                          strokeLinecap: "butt",
-                          pathColor: isComplete ? "#4CAF50" : "#FF5722",
-                          // pathColor: pathColor,
-                          // pathColor: pathColor,
-                          // trailColor: "red",
-                        })}
+                      {/* <PieChart
+                        width={400}
+                        height={200}
+                        // onMouseEnter={this.onPieEnter}
                       >
-                        <RadialSeparators
-                          count={5}
-                          style={{
-                            background: "#fff",
-                            width: "2px",
-                            // This needs to be equal to props.strokeWidth
-                            height: `${10}%`,
-                          }}
-                        />
-                      </CircularProgressbarWithChildren>
+                        <Pie
+                          isAnimationActive={false}
+                          data={data}
+                          cx={120}
+                          cy={200}
+                          innerRadius={65}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {data.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS[index % COLORS.length]}
+                            />
+                          ))}
+                        </Pie>
+                      </PieChart> */}
                       <p
                         style={{
                           backgroundColor: countCompletedDates(
@@ -349,7 +312,7 @@ const CalenderYearly = ({
                             : "text-gray-900"
                         }`}
                       >
-                        {/* {format(day, "d")} */}
+                        {format(day, "d")}
                       </p>
                     </div>
                   ))}
