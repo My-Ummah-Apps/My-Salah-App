@@ -261,7 +261,7 @@ const CalenderYearly = ({
                 </div>
                 <div
                   // grid grid-cols-7
-                  className=" gap-x-12 gap-y-1 place-items-center month-dates-wrap"
+                  className="grid grid-cols-7 gap-x-12 gap-y-5 place-items-center month-dates-wrap"
                   key={month}
                 >
                   {yearlyMonthsData(month).map((day, index) => (
@@ -273,32 +273,63 @@ const CalenderYearly = ({
                         }
                       }}
                       key={index}
-                      className="flex items-center justify-center individual-date"
+                      className="relative flex items-center justify-center individual-date"
                     >
-                      {/* <PieChart
-                        width={400}
-                        height={200}
-                        // onMouseEnter={this.onPieEnter}
+                      <svg
+                        className="absolute"
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="svg"
+                        viewBox="0 0 150 150"
+                        style={{ height: "30px", width: "30px" }}
                       >
-                        <Pie
-                          isAnimationActive={false}
-                          data={data}
-                          cx={120}
-                          cy={200}
-                          innerRadius={65}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {data.map((entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={COLORS[index % COLORS.length]}
-                            />
-                          ))}
-                        </Pie>
-                      </PieChart> */}
+                        <desc>Created with Snap</desc>
+                        <defs />
+                        <path
+                          d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                          style={{
+                            strokeWidth: "13px",
+                            strokeLinecap: "round",
+                          }}
+                          fill="none"
+                          stroke="green"
+                        />
+                        <path
+                          d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                          style={{
+                            strokeWidth: "13px",
+                            strokeLinecap: "round",
+                          }}
+                          fill="none"
+                          stroke="green"
+                        />
+                        <path
+                          d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                          style={{
+                            strokeWidth: "13px",
+                            strokeLinecap: "round",
+                          }}
+                          fill="none"
+                          stroke="green"
+                        />
+                        <path
+                          d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                          style={{
+                            strokeWidth: "13px",
+                            strokeLinecap: "round",
+                          }}
+                          fill="none"
+                          stroke="green"
+                        />
+                        <path
+                          d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                          style={{
+                            strokeWidth: "13px",
+                            strokeLinecap: "round",
+                          }}
+                          fill="none"
+                          stroke="black"
+                        />
+                      </svg>
                       <p
                         style={{
                           backgroundColor: countCompletedDates(
