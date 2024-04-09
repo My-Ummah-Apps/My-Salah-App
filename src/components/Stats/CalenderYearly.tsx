@@ -339,8 +339,8 @@ const CalenderYearly = ({
                         // rounded-md
                         className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
                           isDayInSpecificMonth(day, month)
-                            ? "text-gray-400"
-                            : "text-gray-900"
+                            ? "text-gray-900"
+                            : "text-gray-400"
                         }`}
                       >
                         {format(day, "d")}

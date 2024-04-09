@@ -97,6 +97,12 @@
   --secondary-color: rgb(27, 27, 27);
   --card-bg-color: rgb(42, 47, 50);
   --card-shadow-color: rgb(31, 35, 36);
+  --missed-status-color: #c15f5f;
+  --jamaah-status-color: #448b75;
+  --late-status-color: #c15f5f;
+  --alone-male-status-color: #bcaa4b;
+  --alone-female-status-color: #448b75;
+  --excused-status-color: #c15f5f;
 }
 
 * {
@@ -181,27 +187,6 @@ td {
   border-style: none solid solid none;
   padding: 10px;
 } */
-
-/* tr:nth-child(1) {
-  color: #ec1254;
-}
-tr:nth-child(2) {
-  color: #f5e31d;
-}
-tr:nth-child(3) {
-  color: #1ee8b6;
-}
-tr:nth-child(4) {
-  color: #f27c14;
-}
-tr:nth-child(5) {
-  color: #26a1d5;
-} */
-
-tr {
-  /* color: #2563eb; */
-  /* color: #fff; */
-}
 
 .table-salah-name {
   color: white;

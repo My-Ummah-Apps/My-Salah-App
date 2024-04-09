@@ -305,6 +305,7 @@ const PrayerMainView = ({
       if (matchedObject !== undefined) {
         cellIcon = matchedObject[date];
       }
+
       if (cellIcon === "alone") {
         cellIcon = (
           <div className="inline-block rounded-3xl yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
@@ -333,13 +334,13 @@ const PrayerMainView = ({
                   // setShowUpdateStatusModal(true);
                 }
               }}
-              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+              className={`text-white w-[15px] h-[15px]  flex self-center justify-self-center m-1`}
             />
           </div>
         );
       } else if (cellIcon === "late") {
         cellIcon = (
-          <div className="inline-block rounded-3xl orange-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          <div className="inline-block rounded-3xl bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             <PiClockCounterClockwise
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
                 // e.stopPropagation();
@@ -354,7 +355,7 @@ const PrayerMainView = ({
         );
       } else if (cellIcon === "missed") {
         cellIcon = (
-          <div className="inline-block rounded-3xl red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          <div className="inline-block rounded-3xl bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
             {" "}
             <AiOutlineStop
               onClick={(e: React.TouchEvent<HTMLDivElement>) => {
