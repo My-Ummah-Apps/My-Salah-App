@@ -120,6 +120,7 @@ body {
   background: var(--primary-color);
   color: rgb(184, 184, 184);
   overflow-y: hidden;
+  overflow-x: scroll;
 }
 
 .header-wrap {

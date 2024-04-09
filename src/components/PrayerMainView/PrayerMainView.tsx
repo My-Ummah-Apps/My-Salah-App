@@ -47,11 +47,6 @@ import {
 } from "date-fns";
 
 import StreakCount from "../Stats/StreakCount";
-import MoonNightSvg from "../SvgIcons/MoonNightSvg";
-import DuskSvg from "../SvgIcons/DuskSvg";
-import MoonMorningSvg from "../SvgIcons/MoonMorningSvg";
-import SunMiddaySvg from "../SvgIcons/SunMiddaySvg";
-import SunAfternoonSvg from "../SvgIcons/SunAfternoonSvg";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -170,8 +165,8 @@ const PrayerMainView = ({
   // Array to hold the last five dates
   let currentDisplayedWeek: string[] = [];
   function generateDisplayedWeek() {
-    currentDisplayedWeek = Array.from({ length: 5 }, (_, index) => {
-      const date = subDays(startDate, 4 - index);
+    currentDisplayedWeek = Array.from({ length: 25 }, (_, index) => {
+      const date = subDays(startDate, index - 4);
       return format(date, "dd.MM.yy");
     });
   }
@@ -283,10 +278,12 @@ const PrayerMainView = ({
       setTableHeadDate(date);
     }
   }
+  let cellIcon: string | JSX.Element;
+  function populateCells(index: Date) {
+    console.log(salahTrackingArray);
 
-  function renderCells(index: number) {
     return currentDisplayedWeek.map((date: any) => {
-      let cellIcon: string | JSX.Element = (
+      cellIcon = (
         <LuDot
           onClick={(e: React.TouchEvent<HTMLDivElement>) => {
             // e.stopPropagation();
@@ -573,45 +570,11 @@ const PrayerMainView = ({
         }}
       >
         <thead className="">
-          <tr className="hidden">
-            <th className="border-none"></th>
-            {currentDisplayedWeek.map((item) => {
-              return (
-                <td
-                  key={uuidv4()}
-                  // key={"invisible td: " + item}
-                  className="text-xs border-none"
-                >
-                  {item}
-                </td>
-              );
-            })}
-          </tr>
-          <tr className="h-12">
-            <th className="border-none"></th>
-            {currentDisplayedWeek.map((item) => {
-              const parsedDate = parse(item, "dd.MM.yy", new Date());
-              const formattedDate = format(parsedDate, "EEE dd");
-              const splitFormattedDate: string[] = formattedDate.split(" ");
-
-              return (
-                <td
-                  key={uuidv4()}
-                  // key={"visible td: " + item}
-                  className="border-none text-[#c4c4c4] text-center"
-                >
-                  {/* {formattedDate} */}
-                  <p>{splitFormattedDate[0]}</p>
-                  <p>{splitFormattedDate[1]}</p>
-                </td>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
+          <th className="border-none"></th>
           {salahTrackingArray?.map((item, index) => {
             return (
-              <tr
+              // <tr>
+              <th
                 // role="button"
                 key={uuidv4()}
                 // key={"table row: " + item.salahName}
@@ -629,30 +592,47 @@ const PrayerMainView = ({
                     // setShowMonthlyCalenderModal(true);
                   }
                 }}
-                className="bg-[color:var(--card-bg-color)]"
+                className=""
               >
-                <td className="border-none py-7 table-salah-name-td">
+                <td className="border-none table-salah-name-td">
                   <div className="flex flex-row items-center">
-                    {item.salahName === "Fajr" ? (
-                      // <MoonMorningSvg color={"#0c72ff"} size={"35%"} />
-                      <MoonMorningSvg color={"#FAF9F6"} size={"20%"} />
-                    ) : item.salahName === "Zohar" ? (
-                      <SunMiddaySvg color={"#FAF9F6"} size={"20%"} />
-                    ) : item.salahName === "Asar" ? (
-                      <SunAfternoonSvg color={"#FAF9F6"} size={"20%"} />
-                    ) : item.salahName === "Maghrib" ? (
-                      <DuskSvg color={"#FAF9F6"} size={"20%"} />
-                    ) : item.salahName === "Isha" ? (
-                      <MoonNightSvg color={"#FAF9F6"} size={"20%"} />
-                    ) : null}
-
-                    {/* <RiSunFill className="mr-4 text-4xl text-amber-300" /> */}
-                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-lg font-light">
+                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-xs font-light">
                       {item.salahName}
                     </p>
                   </div>
                 </td>
-                {renderCells(index)}
+              </th>
+              // </tr>
+            );
+          })}
+        </thead>
+        <tbody>
+          {/* <tr className="hidden">
+            {currentDisplayedWeek.map((item) => {
+              return (
+                <td key={uuidv4()} className="text-xs border-none">
+                  {item}
+                </td>
+              );
+            })}
+          </tr> */}
+          {currentDisplayedWeek.map((item) => {
+            const parsedDate = parse(item, "dd.MM.yy", new Date());
+            // const formattedDate = format(parsedDate, "EEE dd");
+            const formattedDate = format(parsedDate, "dd/MM/yyyy");
+            const formattedDay = format(parsedDate, "EEEE");
+            // const splitFormattedDate: string[] = formattedDate.split(" ");
+
+            return (
+              <tr className="h-12">
+                <td
+                  key={uuidv4()}
+                  className="align-middle border-none text-[#c4c4c4] text-xs"
+                >
+                  <p className="mb-1">{formattedDate}</p>
+                  <p>{formattedDay}</p>
+                </td>
+                {populateCells(parsedDate)}
               </tr>
             );
           })}
