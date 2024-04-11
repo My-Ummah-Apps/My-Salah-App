@@ -278,112 +278,113 @@ const PrayerMainView = ({
       setTableHeadDate(date);
     }
   }
+
   let cellIcon: string | JSX.Element;
   function populateCells(index: Date) {
-    console.log(salahTrackingArray);
+    console.log("populateCells has run");
 
-    return currentDisplayedWeek.map((date: any) => {
+    // return currentDisplayedWeek.map((date: any) => {
+    cellIcon = (
+      <LuDot
+        onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+          // e.stopPropagation();
+
+          if (e.currentTarget.tagName === "svg") {
+            // setShowUpdateStatusModal(true);
+          }
+        }}
+        className="flex self-center justify-self-center px-3 pb-4 w-[40px] h-[40px]"
+      />
+    );
+    const matchedObject = salahTrackingArray[index]?.completedDates.find(
+      (obj) => date === Object.keys(obj)[0]
+    );
+
+    if (matchedObject !== undefined) {
+      cellIcon = matchedObject[date];
+    }
+
+    if (cellIcon === "alone") {
       cellIcon = (
-        <LuDot
-          onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-            // e.stopPropagation();
-
-            if (e.currentTarget.tagName === "svg") {
-              // setShowUpdateStatusModal(true);
-            }
-          }}
-          className="flex self-center justify-self-center px-3 pb-4 w-[40px] h-[40px]"
-        />
-      );
-      const matchedObject = salahTrackingArray[index]?.completedDates.find(
-        (obj) => date === Object.keys(obj)[0]
-      );
-
-      if (matchedObject !== undefined) {
-        cellIcon = matchedObject[date];
-      }
-
-      if (cellIcon === "alone") {
-        cellIcon = (
-          <div className="inline-block rounded-3xl yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
-            {" "}
-            <GoPerson
-              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-                // e.stopPropagation();
-
-                if (e.currentTarget.tagName === "svg") {
-                  // setShowUpdateStatusModal(true);
-                }
-              }}
-              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            />
-          </div>
-        );
-      } else if (cellIcon === "group") {
-        cellIcon = (
-          <div className="inline-block rounded-3xl green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
-            {" "}
-            <GoPeople
-              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-                // e.stopPropagation();
-
-                if (e.currentTarget.tagName === "svg") {
-                  // setShowUpdateStatusModal(true);
-                }
-              }}
-              className={`text-white w-[15px] h-[15px]  flex self-center justify-self-center m-1`}
-            />
-          </div>
-        );
-      } else if (cellIcon === "late") {
-        cellIcon = (
-          <div className="inline-block rounded-3xl bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
-            <PiClockCounterClockwise
-              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-                // e.stopPropagation();
-
-                if (e.currentTarget.tagName === "svg") {
-                  // setShowUpdateStatusModal(true);
-                }
-              }}
-              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            />
-          </div>
-        );
-      } else if (cellIcon === "missed") {
-        cellIcon = (
-          <div className="inline-block rounded-3xl bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
-            {" "}
-            <AiOutlineStop
-              onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-                // e.stopPropagation();
-
-                if (e.currentTarget.tagName === "svg") {
-                  // setShowUpdateStatusModal(true);
-                }
-              }}
-              className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-            />
-          </div>
-        );
-      }
-      return (
-        // pt-2
-        <td key={uuidv4()} className="h-full pt-6 pb-5 text-center border-none">
-          <div
-            id="icon-wrap"
-            onClick={(e) => {
-              console.log("clicked");
+        <div className="inline-block rounded-3xl yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          {" "}
+          <GoPerson
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
-              setShowUpdateStatusModal(true);
-              grabDate(e);
+
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
             }}
-          >
-            {cellIcon}
-          </div>
-        </td>
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+          />
+        </div>
       );
-    });
+    } else if (cellIcon === "group") {
+      cellIcon = (
+        <div className="inline-block rounded-3xl green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          {" "}
+          <GoPeople
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
+            }}
+            className={`text-white w-[15px] h-[15px]  flex self-center justify-self-center m-1`}
+          />
+        </div>
+      );
+    } else if (cellIcon === "late") {
+      cellIcon = (
+        <div className="inline-block rounded-3xl bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          <PiClockCounterClockwise
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
+            }}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+          />
+        </div>
+      );
+    } else if (cellIcon === "missed") {
+      cellIcon = (
+        <div className="inline-block rounded-3xl bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          {" "}
+          <AiOutlineStop
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
+            }}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+          />
+        </div>
+      );
+    }
+    return (
+      // pt-2
+      <td key={uuidv4()} className="h-full pt-6 pb-5 text-center border-none">
+        <div
+          id="icon-wrap"
+          onClick={(e) => {
+            console.log("clicked");
+            // e.stopPropagation();
+            setShowUpdateStatusModal(true);
+            grabDate(e);
+          }}
+        >
+          {cellIcon}
+        </div>
+      </td>
+    );
+    // });
   }
 
   // const wreathStyles = {
@@ -617,10 +618,10 @@ const PrayerMainView = ({
             })}
           </tr> */}
           {currentDisplayedWeek.map((item) => {
-            const parsedDate = parse(item, "dd.MM.yy", new Date());
+            const dateObject = parse(item, "dd.MM.yy", new Date());
             // const formattedDate = format(parsedDate, "EEE dd");
-            const formattedDate = format(parsedDate, "dd/MM/yyyy");
-            const formattedDay = format(parsedDate, "EEEE");
+            const formattedDate = format(dateObject, "dd/MM/yyyy");
+            const formattedDay = format(dateObject, "EEEE");
             // const splitFormattedDate: string[] = formattedDate.split(" ");
 
             return (
@@ -632,13 +633,16 @@ const PrayerMainView = ({
                   <p className="mb-1">{formattedDate}</p>
                   <p>{formattedDay}</p>
                 </td>
-                {populateCells(parsedDate)}
+                {Array.from({ length: 5 }).map((_, index) =>
+                  populateCells(dateObject)
+                )}
+                {/* {populateCells(dateObject)} */}
               </tr>
             );
           })}
         </tbody>
       </table>
-      <div className="flex justify-around pt-6 pb-20 ">
+      {/* <div className="flex justify-around pt-6 pb-20 ">
         <button
           onClick={() => {
             setCurrentWeek((prevValue) => prevValue + 5);
@@ -657,7 +661,7 @@ const PrayerMainView = ({
         >
           <IoChevronForward />
         </button>
-      </div>
+      </div> */}
     </section>
   );
 };

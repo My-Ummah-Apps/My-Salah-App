@@ -147,7 +147,7 @@ const CalenderYearly = ({
       if (sameDatesArrayLength === 0) {
         color = "transparent";
       } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-        color = "green";
+        color = { fajrColor };
       }
     } else if (!salahName) {
       if (sameDatesArrayLength === 0) {
@@ -155,7 +155,7 @@ const CalenderYearly = ({
       } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
         color = "orange";
       } else if (sameDatesArrayLength === 5) {
-        color = "green";
+        color = { fajrColor };
       }
     }
 
@@ -199,6 +199,13 @@ const CalenderYearly = ({
   // console.log("This year: " + todaysDate.getFullYear());
 
   const isComplete = true;
+  let fajrColor = "green";
+  let zoharColor = "green";
+  let asarColor = "green";
+  let maghribColor = "green";
+  let ishaColor = "green";
+
+  function setRadialColor(date: Date) {}
 
   return (
     <div className="calender-page-wrap">
@@ -243,9 +250,11 @@ const CalenderYearly = ({
       <>
         <div className="flex items-center justify-center calender-wrap">
           <div className="flex items-center justify-between chevrons-wrap"></div>
-          <div className="flex w-full gap-5 mb-6 overflow-scroll months-wrap">
+          {/* gap-5 */}
+          <div className="flex w-full mb-6 overflow-scroll months-wrap">
             {monthStrings.map((month) => (
-              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap rounded-2xl box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9">
+              // rounded-2xl
+              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-100">
                 <p className="py-4 font-semibold text-center">{month}</p>
                 <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap">
                   {days.map((day, index) => {
@@ -268,8 +277,8 @@ const CalenderYearly = ({
                     <div
                       onClick={() => {
                         if (day <= todaysDate) {
-                          modifySingleDaySalah(day);
-                          setShowModal(true);
+                          // modifySingleDaySalah(day);
+                          // setShowModal(true);
                         }
                       }}
                       key={index}
@@ -291,7 +300,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke="green"
+                          stroke={fajrColor}
                         />
                         <path
                           d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
@@ -300,7 +309,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke="green"
+                          stroke={zoharColor}
                         />
                         <path
                           d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
@@ -309,7 +318,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke="green"
+                          stroke={asarColor}
                         />
                         <path
                           d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
@@ -318,7 +327,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke="green"
+                          stroke={maghribColor}
                         />
                         <path
                           d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
@@ -327,7 +336,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke="black"
+                          stroke={ishaColor}
                         />
                       </svg>
                       <p
