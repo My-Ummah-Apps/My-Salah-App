@@ -144,14 +144,14 @@ td {
   vertical-align: top;
 }
 
-td:first-child {
+/* td:first-child {
   position: relative;
   width: 40%;
   padding-left: 0.5rem;
   border-left-style: solid;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-}
+} */
 
 /* td:first-child::before {
   content: "";
@@ -193,11 +193,11 @@ td {
   color: white;
 }
 
-.table-salah-name-td:nth-child(1) {
+.table-salah-name-th:nth-child(1) {
   /* background-color: #0369a1; */
 }
 
-.table-salah-name-td:nth-child(2) {
+.table-salah-name-th:nth-child(2) {
   /* background-color: #ca8a04; */
 }
 

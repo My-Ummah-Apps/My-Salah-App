@@ -256,19 +256,30 @@ const PrayerMainView = ({
   };
 
   function grabDate(e: any, date?: string, salahName?: string) {
+    console.log("grabDate has run");
     let clickedElement: any;
     if (!salahName && !date) {
       // console.log("!salahName && !date do not exist");
       clickedElement = e.target.closest("#icon-wrap");
+      console.log(clickedElement);
       const columnIndex: any = clickedElement.parentElement
         .cellIndex as HTMLTableCellElement;
 
-      let selectedSalah =
+      let tableHeadDate =
         clickedElement.parentElement.parentElement.cells[0].innerText;
+      console.log("tableHeadDate:");
+      console.log(tableHeadDate);
 
-      const tableHeadDate =
-        clickedElement.parentElement.parentElement.parentElement.parentElement
-          .children[0].children[0].cells[columnIndex].textContent;
+      // const selectedSalah =
+      //   clickedElement.parentElement.parentElement.parentElement.parentElement
+      //     .children[0].children[0].cells[columnIndex].textContent;
+      let clickedElement2 = e.target.closest(".table-row");
+      const selectedSalah =
+        clickedElement2.parentElement.parentElement.children[0].children[
+          columnIndex
+        ].textContent;
+      console.log("selectedSalah:");
+      console.log(selectedSalah);
 
       setSelectedSalah(selectedSalah);
       setTableHeadDate(tableHeadDate);
@@ -280,9 +291,11 @@ const PrayerMainView = ({
   }
 
   let cellIcon: string | JSX.Element;
-  function populateCells(index: Date) {
-    console.log("populateCells has run");
-
+  function populateCells(formattedDate: string, index: number) {
+    // console.log(salahTrackingArray[index]);
+    // console.log(salahTrackingArray[index]?.completedDates);
+    // console.log(Object.values(Object.values(salahTrackingArray[index])[1])[0]);
+    // console.log(formattedDate);
     // return currentDisplayedWeek.map((date: any) => {
     cellIcon = (
       <LuDot
@@ -297,11 +310,13 @@ const PrayerMainView = ({
       />
     );
     const matchedObject = salahTrackingArray[index]?.completedDates.find(
-      (obj) => date === Object.keys(obj)[0]
+      (obj) => {
+        return formattedDate === Object.keys(obj)[0];
+      }
     );
 
     if (matchedObject !== undefined) {
-      cellIcon = matchedObject[date];
+      cellIcon = matchedObject[formattedDate];
     }
 
     if (cellIcon === "alone") {
@@ -374,7 +389,6 @@ const PrayerMainView = ({
         <div
           id="icon-wrap"
           onClick={(e) => {
-            console.log("clicked");
             // e.stopPropagation();
             setShowUpdateStatusModal(true);
             grabDate(e);
@@ -571,41 +585,37 @@ const PrayerMainView = ({
         }}
       >
         <thead className="">
-          <th className="border-none"></th>
-          {salahTrackingArray?.map((item, index) => {
-            return (
-              // <tr>
-              <th
-                // role="button"
-                key={uuidv4()}
-                // key={"table row: " + item.salahName}
-                onClick={(e) => {
-                  // setShowMonthlyCalenderModal(true);
-                  // e.stopPropagation();
+          {/* <tr>
+            <th className="border-none"></th>
+          </tr> */}
+          <tr // role="button"
+            key={uuidv4()}
+            // key={"table row: " + item.salahName}
+            onClick={(e) => {
+              // setShowMonthlyCalenderModal(true);
+              // e.stopPropagation();
 
-                  // monthlyCalenderToShow =
-                  //   e.currentTarget.querySelector("td")?.textContent;
-                  setMonthlyCalenderToShow(
-                    // e.currentTarget.querySelector("td")?.textContent || ""
-                    e.currentTarget.querySelector("td")?.textContent || ""
-                  );
-                  if (e.currentTarget.tagName !== "svg") {
-                    // setShowMonthlyCalenderModal(true);
-                  }
-                }}
-                className=""
-              >
-                <td className="border-none table-salah-name-td">
-                  <div className="flex flex-row items-center">
-                    <p className="text-[#c4c4c4] table-salah-name ml-3 text-xs font-light">
-                      {item.salahName}
-                    </p>
-                  </div>
-                </td>
-              </th>
-              // </tr>
-            );
-          })}
+              // monthlyCalenderToShow =
+              //   e.currentTarget.querySelector("td")?.textContent;
+              setMonthlyCalenderToShow(
+                // e.currentTarget.querySelector("td")?.textContent || ""
+                e.currentTarget.querySelector("td")?.textContent || ""
+              );
+              if (e.currentTarget.tagName !== "svg") {
+                // setShowMonthlyCalenderModal(true);
+              }
+            }}
+            className=""
+          >
+            <th></th>
+            {salahTrackingArray?.map((item, index) => {
+              return (
+                <th className="text-xs font-light border-none table-salah-name-th text-[#c4c4c4]">
+                  {item.salahName}
+                </th>
+              );
+            })}
+          </tr>
         </thead>
         <tbody>
           {/* <tr className="hidden">
@@ -620,12 +630,12 @@ const PrayerMainView = ({
           {currentDisplayedWeek.map((item) => {
             const dateObject = parse(item, "dd.MM.yy", new Date());
             // const formattedDate = format(parsedDate, "EEE dd");
-            const formattedDate = format(dateObject, "dd/MM/yyyy");
+            const formattedDate = format(dateObject, "dd.MM.yy");
             const formattedDay = format(dateObject, "EEEE");
             // const splitFormattedDate: string[] = formattedDate.split(" ");
 
             return (
-              <tr className="h-12">
+              <tr className="table-row h-12">
                 <td
                   key={uuidv4()}
                   className="align-middle border-none text-[#c4c4c4] text-xs"
@@ -634,7 +644,7 @@ const PrayerMainView = ({
                   <p>{formattedDay}</p>
                 </td>
                 {Array.from({ length: 5 }).map((_, index) =>
-                  populateCells(dateObject)
+                  populateCells(formattedDate, index)
                 )}
                 {/* {populateCells(dateObject)} */}
               </tr>
