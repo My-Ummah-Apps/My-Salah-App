@@ -133,7 +133,7 @@ const PrayerMainView = ({
   // const [icon, setIcon] = useState("");
   // const [showCalenderOneMonth, setShowCalenderOneMonth] = useState(false);
   const [selectedSalah, setSelectedSalah] = useState("");
-  const [tableHeadDate, setTableHeadDate] = useState("");
+  const [tableRowDate, settableRowDate] = useState("");
 
   // const [touchStartX, setTouchStartX] = useState(0);
   // const [touchEndX, setTouchEndX] = useState(0);
@@ -183,15 +183,15 @@ const PrayerMainView = ({
     useState(false);
 
   const changePrayerStatus: (
-    tableHeadDate: string,
+    tableRowDate: string,
     selectedSalah: string,
     salahStatus: string
     // icon
-  ) => void = (tableHeadDate, selectedSalah, salahStatus) => {
+  ) => void = (tableRowDate, selectedSalah, salahStatus) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
       if (item.salahName === selectedSalah.replace(/\s/g, "")) {
         const doesDateObjectExist = item.completedDates.find((date) => {
-          return Object.keys(date)[0] === tableHeadDate;
+          return Object.keys(date)[0] === tableRowDate;
         });
 
         // if (salahStatus === "late") {
@@ -221,7 +221,7 @@ const PrayerMainView = ({
             ...item,
             completedDates: [
               ...item.completedDates,
-              { [tableHeadDate]: salahStatus },
+              { [tableRowDate]: salahStatus },
             ],
           };
         } else if (doesDateObjectExist !== undefined) {
@@ -239,7 +239,7 @@ const PrayerMainView = ({
             ...item,
             completedDates: [
               ...filteredCompletedDatesArray,
-              { [tableHeadDate]: salahStatus },
+              { [tableRowDate]: salahStatus },
             ],
           };
         }
@@ -257,36 +257,28 @@ const PrayerMainView = ({
 
   function grabDate(e: any, date?: string, salahName?: string) {
     console.log("grabDate has run");
-    let clickedElement: any;
+
     if (!salahName && !date) {
-      // console.log("!salahName && !date do not exist");
-      clickedElement = e.target.closest("#icon-wrap");
-      console.log(clickedElement);
-      const columnIndex: any = clickedElement.parentElement
+      let tableRowDate = e.target.closest(".table-row").cells[0].innerText;
+      console.log("tableRowDate:");
+      console.log(tableRowDate);
+
+      const columnIndex: any = e.target.closest("#icon-wrap").parentElement
         .cellIndex as HTMLTableCellElement;
 
-      let tableHeadDate =
-        clickedElement.parentElement.parentElement.cells[0].innerText;
-      console.log("tableHeadDate:");
-      console.log(tableHeadDate);
-
-      // const selectedSalah =
-      //   clickedElement.parentElement.parentElement.parentElement.parentElement
-      //     .children[0].children[0].cells[columnIndex].textContent;
-      let clickedElement2 = e.target.closest(".table-row");
       const selectedSalah =
-        clickedElement2.parentElement.parentElement.children[0].children[
-          columnIndex
-        ].textContent;
+        e.target.closest(".table").children[0].children[0].cells[columnIndex]
+          .innerText;
+
       console.log("selectedSalah:");
       console.log(selectedSalah);
 
       setSelectedSalah(selectedSalah);
-      setTableHeadDate(tableHeadDate);
+      settableRowDate(tableRowDate);
     } else if (salahName && date) {
       // console.log("salahName && date exists");
       setSelectedSalah(salahName);
-      setTableHeadDate(date);
+      settableRowDate(date);
     }
   }
 
@@ -385,7 +377,10 @@ const PrayerMainView = ({
     }
     return (
       // pt-2
-      <td key={uuidv4()} className="h-full pt-6 pb-5 text-center border-none">
+      <td
+        key={uuidv4()}
+        className="h-full pt-6 pb-5 text-center border-none td-element"
+      >
         <div
           id="icon-wrap"
           onClick={(e) => {
@@ -423,7 +418,7 @@ const PrayerMainView = ({
             <section className="w-[80%] mx-auto my-20 rounded-lg text-white">
               <div
                 onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "group");
+                  changePrayerStatus(tableRowDate, selectedSalah, "group");
                   setShowUpdateStatusModal(false);
                 }}
                 className="px-5 py-3 mb-4 bg-green-800 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
@@ -440,7 +435,7 @@ const PrayerMainView = ({
               </div>
               <div
                 onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "alone");
+                  changePrayerStatus(tableRowDate, selectedSalah, "alone");
                   setShowUpdateStatusModal(false);
                 }}
                 className="px-5 py-3 mb-4 bg-yellow-500 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
@@ -459,7 +454,7 @@ const PrayerMainView = ({
               </div>
               <div
                 onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "late");
+                  changePrayerStatus(tableRowDate, selectedSalah, "late");
                   setShowUpdateStatusModal(false);
                 }}
                 className="px-5 py-3 mb-4 bg-orange-600 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
@@ -476,7 +471,7 @@ const PrayerMainView = ({
               </div>
               <div
                 onClick={() => {
-                  changePrayerStatus(tableHeadDate, selectedSalah, "missed");
+                  changePrayerStatus(tableRowDate, selectedSalah, "missed");
                   setShowUpdateStatusModal(false);
                 }}
                 className="px-5 py-3 mb-4 bg-red-800 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
@@ -574,7 +569,7 @@ const PrayerMainView = ({
         <Sheet.Backdrop />
       </Sheet>
       <table
-        className="w-full shadow-lg"
+        className="table w-full shadow-lg"
         onClick={(e) => {
           // grabDate(e);
           // setShowUpdateStatusModal(true);
@@ -584,7 +579,7 @@ const PrayerMainView = ({
           }
         }}
       >
-        <thead className="">
+        <thead className="thead">
           {/* <tr>
             <th className="border-none"></th>
           </tr> */}
