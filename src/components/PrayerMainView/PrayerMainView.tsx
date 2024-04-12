@@ -62,6 +62,8 @@ const PrayerMainView = ({
   currentWeek: number;
   startDate: Date;
 }) => {
+  console.log("salahTrackingArray");
+  console.log(salahTrackingArray);
   const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
 
   // const [streakCounter, setStreakCounter] = useState(0);
@@ -220,12 +222,15 @@ const PrayerMainView = ({
   };
 
   function grabDate(e: any, date?: string, salahName?: string) {
-    console.log("grabDate has run");
+    // console.log("grabDate has run");
 
     if (!salahName && !date) {
-      let tableRowDate = e.target.closest(".table-row").cells[0].innerText;
+      let tableRowDate =
+        e.target.closest(".table-row").cells[0].children[0].innerText;
       console.log("tableRowDate:");
-      console.log(tableRowDate);
+      console.log(
+        e.target.closest(".table-row").cells[0].children[0].innerText
+      );
 
       const columnIndex: any = e.target.closest("#icon-wrap").parentElement
         .cellIndex as HTMLTableCellElement;
@@ -234,8 +239,8 @@ const PrayerMainView = ({
         e.target.closest(".table").children[0].children[0].cells[columnIndex]
           .innerText;
 
-      console.log("selectedSalah:");
-      console.log(selectedSalah);
+      // console.log("selectedSalah:");
+      // console.log(selectedSalah);
 
       setSelectedSalah(selectedSalah);
       settableRowDate(tableRowDate);
@@ -606,26 +611,6 @@ const PrayerMainView = ({
           })}
         </tbody>
       </table>
-      {/* <div className="flex justify-around pt-6 pb-20 ">
-        <button
-          onClick={() => {
-            setCurrentWeek((prevValue) => prevValue + 5);
-          }}
-        >
-          <IoChevronBackSharp />
-        </button>
-        <div>
-          {currentDisplayedWeek[0]} -{" "}
-          {currentDisplayedWeek[currentDisplayedWeek.length - 1]}
-        </div>
-        <button
-          onClick={() => {
-            setCurrentWeek((prevValue) => prevValue - 5);
-          }}
-        >
-          <IoChevronForward />
-        </button>
-      </div> */}
     </section>
   );
 };
