@@ -138,73 +138,11 @@ td:not(:first-child) {
 }
 
 td {
-  border: solid 1px var(--primary-color);
+  border-bottom: solid 1px var(--primary-color);
   border-style: solid none;
   /* padding: 10px; */
   vertical-align: top;
 }
-
-/* td:first-child {
-  position: relative;
-  width: 40%;
-  padding-left: 0.5rem;
-  border-left-style: solid;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-} */
-
-/* td:first-child::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  background-color: blue;
-  transform: skewY(5deg);
-  transform-origin: top left;
-}
-
-.salah-name-td {
-  z-index: 3;
-} */
-
-td:last-child {
-  border-right-style: solid;
-  border-bottom-right-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-/* tr {
-
-  border: 10px solid rgb(26, 26, 26);
-  border-radius: 10px;
-}
-
-td {
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  border-style: none solid solid none;
-  padding: 10px;
-} */
-
-.table-salah-name {
-  color: white;
-}
-
-.table-salah-name-th:nth-child(1) {
-  /* background-color: #0369a1; */
-}
-
-.table-salah-name-th:nth-child(2) {
-  /* background-color: #ca8a04; */
-}
-
-/* .settings-page-wrap {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
-} */
 
 .monthly-calender-single-date {
   line-height: 0.5;
