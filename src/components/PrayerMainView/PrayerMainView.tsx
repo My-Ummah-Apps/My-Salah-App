@@ -11,15 +11,11 @@ import CalenderMonthly from "../Stats/CalenderMonthly";
 import { MdGroups } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
-import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { AiOutlineStop } from "react-icons/ai";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { PiClockCounterClockwise } from "react-icons/pi";
-// import { RiSunFill } from "react-icons/ri";
-// import { FaMoon } from "react-icons/fa";
 
-// import { render } from "react-dom";
 import { salahTrackingEntryType } from "../../types/types";
 // interface salahTrackingEntryType {
 //   salahName: string;
@@ -135,33 +131,6 @@ const PrayerMainView = ({
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableRowDate, settableRowDate] = useState("");
 
-  // const [touchStartX, setTouchStartX] = useState(0);
-  // const [touchEndX, setTouchEndX] = useState(0);
-
-  // const handleTouchStart = (event: any) => {
-  //   // console.log("touchevent STARTED " + event.changedTouches[0].screenX);
-  //   setTouchStartX(event.changedTouches[0].screenX);
-  // };
-
-  // const handleTouchEnd = (event: any) => {
-  //   // console.log("touchevent ENDED " + event.changedTouches[0].screenX);
-  //   setTouchEndX(event.changedTouches[0].screenX);
-  //   handleGesture();
-  // };
-
-  // const handleGesture = () => {
-  //   const threshold = window.innerWidth / 5;
-  //   const swipeDistance = touchEndX - touchStartX;
-
-  //   if (threshold < Math.abs(swipeDistance)) {
-  //     // setCurrentWeek((prevValue) => prevValue + 5);
-  //   } else if (Math.abs(swipeDistance) > threshold) {
-  //     // setCurrentWeek((prevValue) => prevValue - 5);
-  //   }
-  // };
-
-  // const SalahIcons: string[] = ["<RiSunFill />", "<FaMoon />"];
-
   // Array to hold the last five dates
   let currentDisplayedWeek: string[] = [];
   function generateDisplayedWeek() {
@@ -171,13 +140,8 @@ const PrayerMainView = ({
     });
   }
 
-  // generateDisplayedWeek(currentWeek);
   generateDisplayedWeek();
 
-  // let salahStatus: string = "";
-
-  // const [showModal, setShowModal] = useState(false);
-  // const [isOpen, setOpen] = useState(false);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
     useState(false);
@@ -284,11 +248,6 @@ const PrayerMainView = ({
 
   let cellIcon: string | JSX.Element;
   function populateCells(formattedDate: string, index: number) {
-    // console.log(salahTrackingArray[index]);
-    // console.log(salahTrackingArray[index]?.completedDates);
-    // console.log(Object.values(Object.values(salahTrackingArray[index])[1])[0]);
-    // console.log(formattedDate);
-    // return currentDisplayedWeek.map((date: any) => {
     cellIcon = (
       <LuDot
         onClick={(e: React.TouchEvent<HTMLDivElement>) => {
