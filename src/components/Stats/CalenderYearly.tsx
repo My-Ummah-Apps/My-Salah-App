@@ -119,6 +119,13 @@ const CalenderYearly = ({
   //   []
   // );
   // Need to modify the below so depending on the month being rendered, it either shows the overall statuses for each date for every salah or shows the status for the particular date for one salah only
+
+  let fajrColor = "green";
+  let zoharColor = "blue";
+  let asarColor = "red";
+  let maghribColor = "yellow";
+  let ishaColor = "orange";
+
   const countCompletedDates = (date: string, salahName?: string) => {
     const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
       string[]
@@ -151,11 +158,11 @@ const CalenderYearly = ({
       }
     } else if (!salahName) {
       if (sameDatesArrayLength === 0) {
-        color = "transparent";
+        color = { asarColor };
       } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-        color = "orange";
+        color = { zoharColor };
       } else if (sameDatesArrayLength === 5) {
-        color = { fajrColor };
+        color = { ishaColor };
       }
     }
 
@@ -199,13 +206,107 @@ const CalenderYearly = ({
   // console.log("This year: " + todaysDate.getFullYear());
 
   const isComplete = true;
-  let fajrColor = "green";
-  let zoharColor = "green";
-  let asarColor = "green";
-  let maghribColor = "green";
-  let ishaColor = "green";
 
-  function setRadialColor(date: Date) {}
+  function determineRadialColors(date: Date) {
+    // console.log(salahTrackingArray);
+    salahTrackingArray.forEach((item) => {
+      let formattedDate = format(date, "dd.MM.yy");
+      let completedDates = item.completedDates;
+
+      for (let key in completedDates) {
+        // console.log(formattedDate);
+        // console.log(Object.values(completedDates[key])[0]);
+        // NEED TO FIGURE OUT HOW TO PAINT A RADIAL GREY IF DATE DOES NOT EXIST ON THAT PARTICULAR SALAH
+        if (
+          Object.keys(completedDates[key])[0] === formattedDate &&
+          Object.keys(completedDates[key])[0]
+        ) {
+          if (item.salahName === "Fajr") {
+            fajrColor =
+              Object.values(completedDates[key])[0] === "alone"
+                ? "yellow"
+                : Object.values(completedDates[key])[0] === "group"
+                ? "green"
+                : Object.values(completedDates[key])[0] === "missed"
+                ? "red"
+                : Object.values(completedDates[key])[0] === "late"
+                ? "orange"
+                : "pink";
+            // switch (Object.values(completedDates[key])[0]) {
+            //   case "alone":
+            //     fajrColor = "yellow";
+            //     break;
+            //   case "group":
+            //     fajrColor = "green";
+            //     break;
+            //   case "missed":
+            //     fajrColor = "red";
+            //     break;
+            //   case "late":
+            //     fajrColor = "orange";
+            //     break;
+            //   default:
+            //     fajrColor = "pink";
+            // }
+          }
+          if (item.salahName === "Zohar") {
+            zoharColor =
+              Object.values(completedDates[key])[0] === "alone"
+                ? "yellow"
+                : Object.values(completedDates[key])[0] === "group"
+                ? "green"
+                : Object.values(completedDates[key])[0] === "missed"
+                ? "red"
+                : Object.values(completedDates[key])[0] === "late"
+                ? "orange"
+                : "pink";
+          }
+          if (item.salahName === "Asar") {
+            asarColor =
+              Object.values(completedDates[key])[0] === "alone"
+                ? "yellow"
+                : Object.values(completedDates[key])[0] === "group"
+                ? "green"
+                : Object.values(completedDates[key])[0] === "missed"
+                ? "red"
+                : Object.values(completedDates[key])[0] === "late"
+                ? "orange"
+                : "pink";
+          }
+          if (item.salahName === "Maghrib") {
+            maghribColor =
+              Object.values(completedDates[key])[0] === "alone"
+                ? "yellow"
+                : Object.values(completedDates[key])[0] === "group"
+                ? "green"
+                : Object.values(completedDates[key])[0] === "missed"
+                ? "red"
+                : Object.values(completedDates[key])[0] === "late"
+                ? "orange"
+                : "pink";
+          }
+          if (item.salahName === "Isha") {
+            ishaColor =
+              Object.values(completedDates[key])[0] === "alone"
+                ? "yellow"
+                : Object.values(completedDates[key])[0] === "group"
+                ? "green"
+                : Object.values(completedDates[key])[0] === "missed"
+                ? "red"
+                : Object.values(completedDates[key])[0] === "late"
+                ? "orange"
+                : "pink";
+          }
+        } else {
+          fajrColor = "gray";
+        }
+      }
+
+      // console.log(formattedDate);
+      // console.log(item.salahName);
+      // console.log(item.completedDates);
+    });
+  }
 
   return (
     <div className="calender-page-wrap">
@@ -251,10 +352,10 @@ const CalenderYearly = ({
         <div className="flex items-center justify-center calender-wrap">
           <div className="flex items-center justify-between chevrons-wrap"></div>
           {/* gap-5 */}
-          <div className="flex w-full mb-6 overflow-scroll months-wrap">
+          <div className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap">
             {monthStrings.map((month) => (
               // rounded-2xl
-              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-100">
+              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700">
                 <p className="py-4 font-semibold text-center">{month}</p>
                 <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap">
                   {days.map((day, index) => {
@@ -284,6 +385,7 @@ const CalenderYearly = ({
                       key={index}
                       className="relative flex items-center justify-center individual-date"
                     >
+                      {determineRadialColors(day)}
                       <svg
                         className="absolute"
                         xmlns="http://www.w3.org/2000/svg"
@@ -300,7 +402,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke={fajrColor}
+                          stroke={zoharColor}
                         />
                         <path
                           d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
@@ -309,7 +411,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke={zoharColor}
+                          stroke={asarColor}
                         />
                         <path
                           d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
@@ -318,7 +420,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke={asarColor}
+                          stroke={maghribColor}
                         />
                         <path
                           d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
@@ -327,7 +429,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke={maghribColor}
+                          stroke={ishaColor}
                         />
                         <path
                           d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
@@ -336,7 +438,7 @@ const CalenderYearly = ({
                             strokeLinecap: "round",
                           }}
                           fill="none"
-                          stroke={ishaColor}
+                          stroke={fajrColor}
                         />
                       </svg>
                       <p
@@ -348,8 +450,8 @@ const CalenderYearly = ({
                         // rounded-md
                         className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
                           isDayInSpecificMonth(day, month)
-                            ? "text-gray-900"
-                            : "text-gray-400"
+                            ? "text-gray-400"
+                            : "text-gray-900"
                         }`}
                       >
                         {format(day, "d")}

@@ -127,20 +127,8 @@ body {
   background: var(--primary-color);
 }
 
-table {
-  border-collapse: separate;
-  border-spacing: 0 15px;
-  margin-top: -10px; /* correct offset on first border spacing if desired */
-}
-
-td:not(:first-child) {
-  font-size: 0.8rem;
-}
-
 td {
-  border-bottom: solid 1px var(--primary-color);
-  border-style: solid none;
-  /* padding: 10px; */
+  border-bottom: 1px solid rgb(54, 49, 49);
   vertical-align: top;
 }
 
@@ -162,36 +150,6 @@ td {
 
 .yellow-block {
   background: #bcaa4b;
-}
-
-.multi-colored-circle {
-  margin: 5px 0;
-  width: 37px;
-  height: 37px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  background-size:
-    100% 100%,
-    50% 50%,
-    50% 50%,
-    50% 50%,
-    50% 50%;
-  background-repeat: no-repeat;
-  background-image: linear-gradient(var(--card-bg-color), var(--card-bg-color)),
-    linear-gradient(30deg, grey 80%, grey 90%),
-    linear-gradient(120deg, #0eff01b6 80%, grey 90%),
-    linear-gradient(300deg, #f40303 80%, grey 90%),
-    linear-gradient(210deg, #f30606 80%, grey 90%),
-    linear-gradient(210deg, grey 80%, grey 90%);
-  background-position:
-    center center,
-    left top,
-    right top,
-    left bottom,
-    right bottom;
-  background-origin: content-box, border-box, border-box, border-box, border-box;
-  background-clip: content-box, border-box, border-box, border-box, border-box;
-  transform: rotate(30deg);
 }
 
 @supports not (-webkit-touch-callout: none) {

@@ -262,7 +262,7 @@ const PrayerMainView = ({
             // setShowUpdateStatusModal(true);
           }
         }}
-        className="flex self-center justify-self-center px-3 pb-4 w-[40px] h-[40px]"
+        className="inline-block rounded-md   w-[24px] h-[24px]  self-center justify-self-center m-1"
       />
     );
     const matchedObject = salahTrackingArray[index]?.completedDates.find(
@@ -277,7 +277,7 @@ const PrayerMainView = ({
 
     if (cellIcon === "alone") {
       cellIcon = (
-        <div className="inline-block rounded-3xl yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
           <GoPerson
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -293,7 +293,7 @@ const PrayerMainView = ({
       );
     } else if (cellIcon === "group") {
       cellIcon = (
-        <div className="inline-block rounded-3xl green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md  green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
           <GoPeople
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -309,7 +309,7 @@ const PrayerMainView = ({
       );
     } else if (cellIcon === "late") {
       cellIcon = (
-        <div className="inline-block rounded-3xl bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md  bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           <PiClockCounterClockwise
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
@@ -324,7 +324,7 @@ const PrayerMainView = ({
       );
     } else if (cellIcon === "missed") {
       cellIcon = (
-        <div className="inline-block rounded-3xl bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md  bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
           <AiOutlineStop
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -341,10 +341,7 @@ const PrayerMainView = ({
     }
     return (
       // pt-2
-      <td
-        key={uuidv4()}
-        className="h-full pt-6 pb-5 text-center border-none td-element"
-      >
+      <td key={uuidv4()} className="h-full pt-6 pb-5 text-center td-element">
         <div
           id="icon-wrap"
           onClick={(e) => {
@@ -569,7 +566,7 @@ const PrayerMainView = ({
             <th></th>
             {salahTrackingArray?.map((item, index) => {
               return (
-                <th className="text-xs font-light border-none table-salah-name-th text-[#c4c4c4]">
+                <th className="text-xs font-light  table-salah-name-th text-[#c4c4c4]">
                   {item.salahName}
                 </th>
               );
@@ -597,7 +594,7 @@ const PrayerMainView = ({
               <tr className="table-row h-12">
                 <td
                   key={uuidv4()}
-                  className="align-middle border-none text-[#c4c4c4] text-xs"
+                  className="align-middle text-[#c4c4c4] text-xs"
                 >
                   <p className="mb-1">{formattedDate}</p>
                   <p>{formattedDay}</p>

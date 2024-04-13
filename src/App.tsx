@@ -144,6 +144,8 @@ const App = () => {
     []
   );
 
+  console.log(salahFulfilledDates);
+
   let datesFrequency: { [date: string]: number } = {};
   salahFulfilledDates.forEach((date) => {
     datesFrequency[date] = (datesFrequency[date] || 0) + 1;
