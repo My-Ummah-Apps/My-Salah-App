@@ -1,6 +1,3 @@
-import React, { PureComponent } from "react";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
-
 import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import CalenderMonthly from "./CalenderMonthly";
@@ -20,7 +17,7 @@ import {
   parse,
   // startOfToday,
   startOfMonth,
-  differenceInDays,
+  // differenceInDays,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
@@ -55,13 +52,13 @@ const CalenderYearly = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  const data = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  // const data = [
+  //   { name: "Group A", value: 400 },
+  //   { name: "Group B", value: 300 },
+  //   { name: "Group C", value: 300 },
+  //   { name: "Group D", value: 200 },
+  // ];
+  // const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   // const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
   // const [showYearlyCalender, setShowYearlyCalender] = useState(true);
 
@@ -74,15 +71,15 @@ const CalenderYearly = ({
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
-  function modifySingleDaySalah(date: Date) {
-    const today: Date = new Date();
-    setCurrentWeek(
-      today > date
-        ? differenceInDays(today, date)
-        : differenceInDays(today, date) - 1
-    );
-    // setCurrentWeek(differenceInDays(today, date) - 1);
-  }
+  // function modifySingleDaySalah(date: Date) {
+  //   const today: Date = new Date();
+  //   setCurrentWeek(
+  //     today > date
+  //       ? differenceInDays(today, date)
+  //       : differenceInDays(today, date) - 1
+  //   );
+  //   // setCurrentWeek(differenceInDays(today, date) - 1);
+  // }
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
@@ -126,49 +123,49 @@ const CalenderYearly = ({
   let maghribColor = "yellow";
   let ishaColor = "orange";
 
-  const countCompletedDates = (date: string, salahName?: string) => {
-    const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
-      string[]
-    >((accumulatorArray, salah) => {
-      if (salah.salahName === salahName) {
-        salah.completedDates.forEach((item) => {
-          accumulatorArray.push(Object.keys(item)[0]);
-        });
-      } else if (!salahName) {
-        salah.completedDates.forEach((item) => {
-          accumulatorArray.push(Object.keys(item)[0]);
-        });
-      }
-      return accumulatorArray;
-    }, []);
+  // const countCompletedDates = (date: string, salahName?: string) => {
+  //   const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
+  //     string[]
+  //   >((accumulatorArray, salah) => {
+  //     if (salah.salahName === salahName) {
+  //       salah.completedDates.forEach((item) => {
+  //         accumulatorArray.push(Object.keys(item)[0]);
+  //       });
+  //     } else if (!salahName) {
+  //       salah.completedDates.forEach((item) => {
+  //         accumulatorArray.push(Object.keys(item)[0]);
+  //       });
+  //     }
+  //     return accumulatorArray;
+  //   }, []);
 
-    let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
-      (currentDate) => currentDate === date
-    );
+  //   // let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
+  //   //   (currentDate) => currentDate === date
+  //   // );
 
-    let sameDatesArrayLength = sameDatesArray.length;
+  //   // let sameDatesArrayLength = sameDatesArray.length;
 
-    let color;
+  //   let color;
 
-    if (salahName) {
-      if (sameDatesArrayLength === 0) {
-        color = "transparent";
-      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-        color = { fajrColor };
-      }
-    } else if (!salahName) {
-      if (sameDatesArrayLength === 0) {
-        color = { asarColor };
-      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-        color = { zoharColor };
-      } else if (sameDatesArrayLength === 5) {
-        color = { ishaColor };
-      }
-    }
+  //   // if (salahName) {
+  //   //   if (sameDatesArrayLength === 0) {
+  //   //     color = "transparent";
+  //   //   } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+  //   //     color = { fajrColor };
+  //   //   }
+  //   // } else if (!salahName) {
+  //   //   if (sameDatesArrayLength === 0) {
+  //   //     color = { asarColor };
+  //   //   } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+  //   //     color = { zoharColor };
+  //   //   } else if (sameDatesArrayLength === 5) {
+  //   //     color = { ishaColor };
+  //   //   }
+  //   // }
 
-    sameDatesArray = [];
-    return color;
-  };
+  //   // sameDatesArray = [];
+  //   return color;
+  // };
 
   const [showModal, setShowModal] = useState(false);
 
@@ -205,107 +202,98 @@ const CalenderYearly = ({
   // console.log("currentYear: " + currentYear.getFullYear());
   // console.log("This year: " + todaysDate.getFullYear());
 
-  const isComplete = true;
-
+  // switch (Object.values(completedDates[key])[0]) {
+  //   case "alone":
+  //     fajrColor = "yellow";
+  //     break;
+  //   case "group":
+  //     fajrColor = "green";
+  //     break;
+  //   case "missed":
+  //     fajrColor = "red";
+  //     break;
+  //   case "late":
+  //     fajrColor = "orange";
+  //     break;
+  //   default:
+  //     fajrColor = "pink";
+  // }
+  console.log(salahTrackingArray);
   function determineRadialColors(date: Date) {
-    // console.log(salahTrackingArray);
+    fajrColor = "gray";
+    zoharColor = "gray";
+    asarColor = "gray";
+    maghribColor = "gray";
+    ishaColor = "gray";
+
     salahTrackingArray.forEach((item) => {
       let formattedDate = format(date, "dd.MM.yy");
       let completedDates = item.completedDates;
 
       for (let key in completedDates) {
-        // console.log(formattedDate);
-        // console.log(Object.values(completedDates[key])[0]);
-        // NEED TO FIGURE OUT HOW TO PAINT A RADIAL GREY IF DATE DOES NOT EXIST ON THAT PARTICULAR SALAH
-        if (
-          Object.keys(completedDates[key])[0] === formattedDate &&
-          Object.keys(completedDates[key])[0]
-        ) {
-          if (item.salahName === "Fajr") {
-            fajrColor =
-              Object.values(completedDates[key])[0] === "alone"
-                ? "yellow"
-                : Object.values(completedDates[key])[0] === "group"
-                ? "green"
-                : Object.values(completedDates[key])[0] === "missed"
-                ? "red"
-                : Object.values(completedDates[key])[0] === "late"
-                ? "orange"
-                : "pink";
-            // switch (Object.values(completedDates[key])[0]) {
-            //   case "alone":
-            //     fajrColor = "yellow";
-            //     break;
-            //   case "group":
-            //     fajrColor = "green";
-            //     break;
-            //   case "missed":
-            //     fajrColor = "red";
-            //     break;
-            //   case "late":
-            //     fajrColor = "orange";
-            //     break;
-            //   default:
-            //     fajrColor = "pink";
-            // }
+        if (completedDates[key].hasOwnProperty(formattedDate)) {
+          if (Object.keys(completedDates[key])[0] === formattedDate) {
+            if (item.salahName === "Fajr") {
+              fajrColor =
+                Object.values(completedDates[key])[0] === "alone"
+                  ? "yellow"
+                  : Object.values(completedDates[key])[0] === "group"
+                  ? "green"
+                  : Object.values(completedDates[key])[0] === "missed"
+                  ? "red"
+                  : Object.values(completedDates[key])[0] === "late"
+                  ? "orange"
+                  : "pink";
+            } else if (item.salahName === "Zohar") {
+              zoharColor =
+                Object.values(completedDates[key])[0] === "alone"
+                  ? "yellow"
+                  : Object.values(completedDates[key])[0] === "group"
+                  ? "green"
+                  : Object.values(completedDates[key])[0] === "missed"
+                  ? "red"
+                  : Object.values(completedDates[key])[0] === "late"
+                  ? "orange"
+                  : "pink";
+            } else if (item.salahName === "Asar") {
+              asarColor =
+                Object.values(completedDates[key])[0] === "alone"
+                  ? "yellow"
+                  : Object.values(completedDates[key])[0] === "group"
+                  ? "green"
+                  : Object.values(completedDates[key])[0] === "missed"
+                  ? "red"
+                  : Object.values(completedDates[key])[0] === "late"
+                  ? "orange"
+                  : "pink";
+            } else if (item.salahName === "Maghrib") {
+              maghribColor =
+                Object.values(completedDates[key])[0] === "alone"
+                  ? "yellow"
+                  : Object.values(completedDates[key])[0] === "group"
+                  ? "green"
+                  : Object.values(completedDates[key])[0] === "missed"
+                  ? "red"
+                  : Object.values(completedDates[key])[0] === "late"
+                  ? "orange"
+                  : "pink";
+            } else if (item.salahName === "Isha") {
+              ishaColor =
+                Object.values(completedDates[key])[0] === "alone"
+                  ? "yellow"
+                  : Object.values(completedDates[key])[0] === "group"
+                  ? "green"
+                  : Object.values(completedDates[key])[0] === "missed"
+                  ? "red"
+                  : Object.values(completedDates[key])[0] === "late"
+                  ? "purple"
+                  : "pink";
+            }
           }
-          if (item.salahName === "Zohar") {
-            zoharColor =
-              Object.values(completedDates[key])[0] === "alone"
-                ? "yellow"
-                : Object.values(completedDates[key])[0] === "group"
-                ? "green"
-                : Object.values(completedDates[key])[0] === "missed"
-                ? "red"
-                : Object.values(completedDates[key])[0] === "late"
-                ? "orange"
-                : "pink";
-          }
-          if (item.salahName === "Asar") {
-            asarColor =
-              Object.values(completedDates[key])[0] === "alone"
-                ? "yellow"
-                : Object.values(completedDates[key])[0] === "group"
-                ? "green"
-                : Object.values(completedDates[key])[0] === "missed"
-                ? "red"
-                : Object.values(completedDates[key])[0] === "late"
-                ? "orange"
-                : "pink";
-          }
-          if (item.salahName === "Maghrib") {
-            maghribColor =
-              Object.values(completedDates[key])[0] === "alone"
-                ? "yellow"
-                : Object.values(completedDates[key])[0] === "group"
-                ? "green"
-                : Object.values(completedDates[key])[0] === "missed"
-                ? "red"
-                : Object.values(completedDates[key])[0] === "late"
-                ? "orange"
-                : "pink";
-          }
-          if (item.salahName === "Isha") {
-            ishaColor =
-              Object.values(completedDates[key])[0] === "alone"
-                ? "yellow"
-                : Object.values(completedDates[key])[0] === "group"
-                ? "green"
-                : Object.values(completedDates[key])[0] === "missed"
-                ? "red"
-                : Object.values(completedDates[key])[0] === "late"
-                ? "orange"
-                : "pink";
-          }
-        } else {
-          fajrColor = "gray";
         }
       }
-
-      // console.log(formattedDate);
-      // console.log(item.salahName);
-      // console.log(item.completedDates);
     });
+    return null;
   }
 
   return (
@@ -332,7 +320,6 @@ const CalenderYearly = ({
           className="w-6 h-6 cursor-pointer"
           onClick={() => {
             if (todaysDate.getFullYear() < currentYear.getFullYear()) {
-              console.log("true");
               setCurrentYear((prevYearValue) =>
                 add(prevYearValue, { years: 1 })
               );
@@ -442,11 +429,11 @@ const CalenderYearly = ({
                         />
                       </svg>
                       <p
-                        style={{
-                          backgroundColor: countCompletedDates(
-                            format(day, "dd.MM.yy")
-                          ),
-                        }}
+                        // style={{
+                        //   backgroundColor: countCompletedDates(
+                        //     format(day, "dd.MM.yy")
+                        //   ),
+                        // }}
                         // rounded-md
                         className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
                           isDayInSpecificMonth(day, month)

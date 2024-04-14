@@ -564,7 +564,7 @@ const PrayerMainView = ({
             className=""
           >
             <th></th>
-            {salahTrackingArray?.map((item, index) => {
+            {salahTrackingArray?.map((item) => {
               return (
                 <th className="text-xs font-light  table-salah-name-th text-[#c4c4c4]">
                   {item.salahName}
