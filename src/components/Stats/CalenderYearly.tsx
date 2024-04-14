@@ -199,25 +199,7 @@ const CalenderYearly = ({
     }); // The result here is an array of objects, object at 0 position is Sun Dec 31 2023 00:00:00 GMT+0000 (Greenwich Mean Time), array ends at index 34, which is Sat Feb 03 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
     return daysInMonth;
   };
-  // console.log("currentYear: " + currentYear.getFullYear());
-  // console.log("This year: " + todaysDate.getFullYear());
 
-  // switch (Object.values(completedDates[key])[0]) {
-  //   case "alone":
-  //     fajrColor = "yellow";
-  //     break;
-  //   case "group":
-  //     fajrColor = "green";
-  //     break;
-  //   case "missed":
-  //     fajrColor = "red";
-  //     break;
-  //   case "late":
-  //     fajrColor = "orange";
-  //     break;
-  //   default:
-  //     fajrColor = "pink";
-  // }
   console.log(salahTrackingArray);
   function determineRadialColors(date: Date) {
     fajrColor = "gray";
