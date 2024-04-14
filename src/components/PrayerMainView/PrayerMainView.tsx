@@ -12,9 +12,9 @@ import { MdGroups } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
 import { AiOutlineStop } from "react-icons/ai";
-import { GoPerson } from "react-icons/go";
-import { GoPeople } from "react-icons/go";
-import { PiClockCounterClockwise } from "react-icons/pi";
+// import { GoPerson } from "react-icons/go";
+// import { GoPeople } from "react-icons/go";
+// import { PiClockCounterClockwise } from "react-icons/pi";
 
 import { salahTrackingEntryType } from "../../types/types";
 // interface salahTrackingEntryType {
@@ -262,7 +262,7 @@ const PrayerMainView = ({
             // setShowUpdateStatusModal(true);
           }
         }}
-        className="inline-block rounded-md   w-[24px] h-[24px]  self-center justify-self-center m-1"
+        className="inline-block rounded-md w-[24px] h-[24px] self-center justify-self-center m-1"
       />
     );
     const matchedObject = salahTrackingArray[index]?.completedDates.find(
@@ -277,9 +277,9 @@ const PrayerMainView = ({
 
     if (cellIcon === "alone") {
       cellIcon = (
-        <div className="inline-block rounded-md yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md bg-[color:var(--alone-male-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
-          <GoPerson
+          {/* <GoPerson
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
@@ -288,29 +288,14 @@ const PrayerMainView = ({
               }
             }}
             className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-          />
+          /> */}
         </div>
       );
     } else if (cellIcon === "group") {
       cellIcon = (
-        <div className="inline-block rounded-md  green-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md  bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
-          <GoPeople
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
-
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`text-white w-[15px] h-[15px]  flex self-center justify-self-center m-1`}
-          />
-        </div>
-      );
-    } else if (cellIcon === "late") {
-      cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
-          <PiClockCounterClockwise
+          {/* <GoPeople
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
@@ -319,14 +304,29 @@ const PrayerMainView = ({
               }
             }}
             className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-          />
+          /> */}
+        </div>
+      );
+    } else if (cellIcon === "late") {
+      cellIcon = (
+        <div className="inline-block rounded-md bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          {/* <PiClockCounterClockwise
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
+            }}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+          /> */}
         </div>
       );
     } else if (cellIcon === "missed") {
       cellIcon = (
         <div className="inline-block rounded-md  bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
-          <AiOutlineStop
+          {/* <AiOutlineStop
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
@@ -335,7 +335,7 @@ const PrayerMainView = ({
               }
             }}
             className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
-          />
+          /> */}
         </div>
       );
     }
@@ -382,7 +382,7 @@ const PrayerMainView = ({
                   changePrayerStatus(tableRowDate, selectedSalah, "group");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 mb-4 bg-green-800 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                className="px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <MdGroups
                   className="inline mr-4 text-3xl"
@@ -399,7 +399,7 @@ const PrayerMainView = ({
                   changePrayerStatus(tableRowDate, selectedSalah, "alone");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 mb-4 bg-yellow-500 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                className="px-5 py-3 mb-4 bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <BsPersonStanding
                   className="inline mr-4 text-3xl"
@@ -418,7 +418,7 @@ const PrayerMainView = ({
                   changePrayerStatus(tableRowDate, selectedSalah, "late");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 mb-4 bg-orange-600 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                className="px-5 py-3 mb-4 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <LuDot
                   className="inline mr-4 text-3xl"
@@ -435,7 +435,7 @@ const PrayerMainView = ({
                   changePrayerStatus(tableRowDate, selectedSalah, "missed");
                   setShowUpdateStatusModal(false);
                 }}
-                className="px-5 py-3 mb-4 bg-red-800 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                className="px-5 py-3 mb-4 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
               >
                 <AiOutlineStop
                   className="inline mr-4 text-3xl"

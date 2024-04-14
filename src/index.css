@@ -97,7 +97,7 @@
   --secondary-color: rgb(27, 27, 27);
   --card-bg-color: rgb(42, 47, 50);
   --card-shadow-color: rgb(31, 35, 36);
-  --missed-status-color: #c15f5f;
+  --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
   --late-status-color: #c15f5f;
   --alone-male-status-color: #bcaa4b;
@@ -134,22 +134,6 @@ td {
 
 .monthly-calender-single-date {
   line-height: 0.5;
-}
-
-.orange-block {
-  background: #e3590ecd;
-}
-
-.green-block {
-  background: #448b75;
-}
-
-.red-block {
-  background: #c15f5f;
-}
-
-.yellow-block {
-  background: #bcaa4b;
 }
 
 @supports not (-webkit-touch-callout: none) {

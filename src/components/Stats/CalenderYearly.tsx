@@ -218,57 +218,57 @@ const CalenderYearly = ({
             if (item.salahName === "Fajr") {
               fajrColor =
                 Object.values(completedDates[key])[0] === "alone"
-                  ? "yellow"
+                  ? "var(--alone-male-status-color)"
                   : Object.values(completedDates[key])[0] === "group"
-                  ? "green"
+                  ? "var(--jamaah-status-color)"
                   : Object.values(completedDates[key])[0] === "missed"
-                  ? "red"
+                  ? "var(--missed-status-color)"
                   : Object.values(completedDates[key])[0] === "late"
-                  ? "orange"
+                  ? "var(--late-status-color)"
                   : "pink";
             } else if (item.salahName === "Zohar") {
               zoharColor =
                 Object.values(completedDates[key])[0] === "alone"
-                  ? "yellow"
+                  ? "var(--alone-male-status-color)"
                   : Object.values(completedDates[key])[0] === "group"
-                  ? "green"
+                  ? "var(--jamaah-status-color)"
                   : Object.values(completedDates[key])[0] === "missed"
-                  ? "red"
+                  ? "var(--missed-status-color)"
                   : Object.values(completedDates[key])[0] === "late"
-                  ? "orange"
+                  ? "var(--late-status-color)"
                   : "pink";
             } else if (item.salahName === "Asar") {
               asarColor =
                 Object.values(completedDates[key])[0] === "alone"
-                  ? "yellow"
+                  ? "var(--alone-male-status-color)"
                   : Object.values(completedDates[key])[0] === "group"
-                  ? "green"
+                  ? "var(--jamaah-status-color)"
                   : Object.values(completedDates[key])[0] === "missed"
-                  ? "red"
+                  ? "var(--missed-status-color)"
                   : Object.values(completedDates[key])[0] === "late"
-                  ? "orange"
+                  ? "var(--late-status-color)"
                   : "pink";
             } else if (item.salahName === "Maghrib") {
               maghribColor =
                 Object.values(completedDates[key])[0] === "alone"
-                  ? "yellow"
+                  ? "var(--alone-male-status-color)"
                   : Object.values(completedDates[key])[0] === "group"
-                  ? "green"
+                  ? "var(--jamaah-status-color)"
                   : Object.values(completedDates[key])[0] === "missed"
-                  ? "red"
+                  ? "var(--missed-status-color)"
                   : Object.values(completedDates[key])[0] === "late"
-                  ? "orange"
+                  ? "var(--late-status-color)"
                   : "pink";
             } else if (item.salahName === "Isha") {
               ishaColor =
                 Object.values(completedDates[key])[0] === "alone"
-                  ? "yellow"
+                  ? "var(--alone-male-status-color)"
                   : Object.values(completedDates[key])[0] === "group"
-                  ? "green"
+                  ? "var(--jamaah-status-color)"
                   : Object.values(completedDates[key])[0] === "missed"
-                  ? "red"
+                  ? "var(--missed-status-color)"
                   : Object.values(completedDates[key])[0] === "late"
-                  ? "purple"
+                  ? "var(--late-status-color)"
                   : "pink";
             }
           }
@@ -419,8 +419,8 @@ const CalenderYearly = ({
                         // rounded-md
                         className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
                           isDayInSpecificMonth(day, month)
-                            ? "text-gray-400"
-                            : "text-gray-900"
+                            ? "white"
+                            : "text-gray-600"
                         }`}
                       >
                         {format(day, "d")}
