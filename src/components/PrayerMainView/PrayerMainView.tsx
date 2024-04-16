@@ -552,7 +552,8 @@ const PrayerMainView = ({
           }
         }}
       >
-        <thead className="thead">
+        {/* sticky top-0 bg-[color:var(--primary-color)] */}
+        <thead className="thead ">
           {/* <tr>
             <th className="border-none"></th>
           </tr> */}
@@ -578,7 +579,7 @@ const PrayerMainView = ({
             <th></th>
             {salahTrackingArray?.map((item) => {
               return (
-                <th className="text-xs font-light  table-salah-name-th text-[#c4c4c4]">
+                <th className=" text-sm font-light  table-salah-name-th text-[#c4c4c4]">
                   {item.salahName}
                 </th>
               );
@@ -606,7 +607,7 @@ const PrayerMainView = ({
               <tr className="table-row h-12">
                 <td
                   key={uuidv4()}
-                  className="align-middle text-[#c4c4c4] text-xs"
+                  className="align-middle text-[#c4c4c4] text-sm"
                 >
                   <p className="mb-1">{formattedDate}</p>
                   <p>{formattedDay}</p>
