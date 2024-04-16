@@ -18,6 +18,8 @@ import {
   // startOfToday,
   startOfMonth,
   // differenceInDays,
+  isAfter,
+  isBefore,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
@@ -28,7 +30,7 @@ import {
 } from "date-fns";
 // import CircleSegment from "./CircleSegment";
 
-// const todaysDate = new Date();
+const todaysDate = new Date();
 
 const CalenderYearly = ({
   // setShowCalenderOneMonth,
@@ -84,7 +86,8 @@ const CalenderYearly = ({
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
   const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
-    const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+    // console.log(currentMonth);
+    const parsedCurrentMonth = parse(currentMonth, "MMMM yyyy", new Date());
     const dayMonth = startOfMonth(dayToCheck);
     return (
       dayMonth.getMonth() === parsedCurrentMonth.getMonth() &&
@@ -174,22 +177,35 @@ const CalenderYearly = ({
     end: endOfYear(currentYear),
   });
   let todaysDate = new Date();
-
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  const endDate = new Date();
 
-  if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
-    // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
-    monthsInYear = monthsInYear.filter(
-      (month) => month > userStartDateFormatted
-      // && isAfter(month, p)
-    );
-  }
+  // Generate an array of all the months between the start and end dates
+  const monthsBetween = eachMonthOfInterval({
+    start: userStartDateFormatted,
+    end: endDate,
+  });
+
+  // Format the months
+  const formattedMonths = monthsBetween.map((month) =>
+    format(month, "MMMM yyyy")
+  );
+
+  // console.log(formattedMonths);
+
+  // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
+  //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
+  //   monthsInYear = monthsInYear.filter(
+  //     // (month) => month < userStartDateFormatted
+  //      isAfter(month, p)
+  //   );
+  // }
 
   const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
   // console.log(monthStrings);
   let firstDayOfMonth;
-  const yearlyMonthsData = (month: string) => {
-    firstDayOfMonth = parse(month, "MMM-yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
+  const monthlyDates = (month: string) => {
+    firstDayOfMonth = parse(month, "MMMM yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
     //
     const daysInMonth = eachDayOfInterval({
       // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
@@ -200,13 +216,24 @@ const CalenderYearly = ({
     return daysInMonth;
   };
 
-  console.log(salahTrackingArray);
+  // console.log(monthlyDates);
+
+  // console.log(salahTrackingArray);
   function determineRadialColors(date: Date) {
-    fajrColor = "gray";
-    zoharColor = "gray";
-    asarColor = "gray";
-    maghribColor = "gray";
-    ishaColor = "gray";
+    if (date < userStartDateFormatted) {
+      console.log(date);
+      fajrColor = "transparent";
+      zoharColor = "transparent";
+      asarColor = "transparent";
+      maghribColor = "transparent";
+      ishaColor = "transparent";
+      return;
+    }
+    fajrColor = "#585858";
+    zoharColor = "#585858";
+    asarColor = "#585858";
+    maghribColor = "#585858";
+    ishaColor = "#585858";
 
     salahTrackingArray.forEach((item) => {
       let formattedDate = format(date, "dd.MM.yy");
@@ -282,7 +309,7 @@ const CalenderYearly = ({
     <div className="calender-page-wrap">
       <div className="sticky flex justify-around mb-10 calender-component-header">
         {" "}
-        <IoChevronBackSharp
+        {/* <IoChevronBackSharp
           className="w-6 h-6 cursor-pointer"
           // onClick={setCurrentYear((prevYearValue) =>
           //   sub(prevYearValue, { years: 1 })
@@ -315,14 +342,14 @@ const CalenderYearly = ({
           //           add(prevYearValue, { years: 1 })
           //         )
           // }
-        />
+        /> */}
       </div>
       <>
         <div className="flex items-center justify-center calender-wrap">
           <div className="flex items-center justify-between chevrons-wrap"></div>
           {/* gap-5 */}
           <div className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap">
-            {monthStrings.map((month) => (
+            {formattedMonths.map((month) => (
               // rounded-2xl
               <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700">
                 <p className="py-4 font-semibold text-center">{month}</p>
@@ -343,7 +370,7 @@ const CalenderYearly = ({
                   className="grid grid-cols-7 gap-x-12 gap-y-5 place-items-center month-dates-wrap"
                   key={month}
                 >
-                  {yearlyMonthsData(month).map((day, index) => (
+                  {monthlyDates(month).map((day, index) => (
                     <div
                       onClick={() => {
                         if (day <= todaysDate) {
@@ -421,7 +448,8 @@ const CalenderYearly = ({
                           isDayInSpecificMonth(day, month)
                             ? "white"
                             : "text-gray-600"
-                        }`}
+                        }
+                      `}
                       >
                         {format(day, "d")}
                       </p>

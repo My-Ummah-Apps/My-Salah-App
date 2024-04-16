@@ -79,7 +79,7 @@ const StatsPage = ({
 
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
-      <StreakCount styles={{}} />
+      {/* <StreakCount styles={{}} /> */}
       <CalenderYearly
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
