@@ -207,6 +207,7 @@ const App = () => {
               <HomePage
                 // title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
                 // title={heading}
+                userStartDate={userStartDate}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
                 startDate={startDate}

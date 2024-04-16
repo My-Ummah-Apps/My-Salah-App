@@ -12,6 +12,7 @@ import { useEffect } from "react";
 const HomePage = ({
   // title,
   setHeading,
+  userStartDate,
   pageStyles,
   startDate,
   // setSalahObjects: setSalahObjects,
@@ -23,6 +24,7 @@ const HomePage = ({
 }: {
   // title: React.ReactNode;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
+  userStartDate: string;
   pageStyles: string;
   startDate: Date;
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
@@ -47,6 +49,7 @@ const HomePage = ({
       {/* {title} */}
       {/* <NextSalahTime /> */}
       <PrayerMainView
+        userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         setCurrentWeek={setCurrentWeek}

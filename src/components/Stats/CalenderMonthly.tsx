@@ -22,7 +22,7 @@ const CalenderMonthly = ({
   grabDate,
   setShowUpdateStatusModal,
   salahName,
-  days,
+  // days,
   setSalahTrackingArray,
   isDayInSpecificMonth,
   salahTrackingArray,
@@ -38,7 +38,7 @@ const CalenderMonthly = ({
   grabDate: (e: any, date?: string, salahName?: string) => void;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   salahName: string;
-  days: string[];
+  // days: string[];
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
@@ -51,6 +51,7 @@ const CalenderMonthly = ({
   currentWeek: number;
   currentMonth: string;
 }) => {
+  // const days = ["M", "T", "W", "T", "F", "S", "S"];
   const [showModal, setShowModal] = useState(false);
   const [streakCounter, setStreakCounter] = useState(0);
   streakCounter;

@@ -221,7 +221,6 @@ const CalenderYearly = ({
   // console.log(salahTrackingArray);
   function determineRadialColors(date: Date) {
     if (date < userStartDateFormatted) {
-      console.log(date);
       fajrColor = "transparent";
       zoharColor = "transparent";
       asarColor = "transparent";

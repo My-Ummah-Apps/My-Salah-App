@@ -39,6 +39,7 @@ import {
   parse,
   startOfToday,
   startOfMonth,
+  eachDayOfInterval,
   // differenceInDays,
 } from "date-fns";
 
@@ -47,6 +48,7 @@ import StreakCount from "../Stats/StreakCount";
 // import { v4 as uuidv4 } from "uuid";
 
 const PrayerMainView = ({
+  userStartDate,
   setSalahTrackingArray,
   salahTrackingArray,
   setCurrentWeek,
@@ -56,14 +58,14 @@ const PrayerMainView = ({
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
-
+  userStartDate: string;
   salahTrackingArray: salahTrackingEntryType[];
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
   startDate: Date;
 }) => {
-  console.log("salahTrackingArray");
-  console.log(salahTrackingArray);
+  // console.log("salahTrackingArray");
+  // console.log(salahTrackingArray);
   const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
 
   // const [streakCounter, setStreakCounter] = useState(0);
@@ -72,7 +74,7 @@ const PrayerMainView = ({
   // THIS IS ALL DUPLICATE CODE FROM CALENDER.TSX AND NEED TO FIND A MORE EFFICIENT WAY OF DOING THIS
   //  ----------------------------------------------
 
-  const days = ["M", "T", "W", "T", "F", "S", "S"];
+  // const days = ["M", "T", "W", "T", "F", "S", "S"];
   const today = startOfToday();
   const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
     const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
@@ -134,12 +136,22 @@ const PrayerMainView = ({
   const [tableRowDate, settableRowDate] = useState("");
 
   // Array to hold the last five dates
+  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  const endDate = new Date(); // Current date
+  const datesBetween = eachDayOfInterval({
+    start: userStartDateFormatted,
+    end: endDate,
+  });
+  console.log(datesBetween.length);
   let currentDisplayedWeek: string[] = [];
   function generateDisplayedWeek() {
-    currentDisplayedWeek = Array.from({ length: 25 }, (_, index) => {
-      const date = subDays(startDate, index - 4);
-      return format(date, "dd.MM.yy");
-    });
+    currentDisplayedWeek = Array.from(
+      { length: datesBetween.length },
+      (_, index) => {
+        const date = subDays(startDate, index);
+        return format(date, "dd.MM.yy");
+      }
+    );
   }
 
   generateDisplayedWeek();
@@ -497,7 +509,7 @@ const PrayerMainView = ({
                   grabDate={grabDate}
                   setShowUpdateStatusModal={setShowUpdateStatusModal}
                   salahName={monthlyCalenderToShow}
-                  days={days}
+                  // days={days}
                   currentMonth={format(today, "MMM-yyyy")}
                   isDayInSpecificMonth={isDayInSpecificMonth}
                   countCompletedDates={countCompletedDates}
