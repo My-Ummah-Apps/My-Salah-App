@@ -3,7 +3,7 @@ import { salahTrackingEntryType } from "../types/types";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import CalenderYearly from "../components/Stats/CalenderYearly";
 import StatCard from "../components/Stats/StatCard";
-import StreakCount from "../components/Stats/StreakCount";
+// import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
   // setHeading,
@@ -77,11 +77,6 @@ const StatsPage = ({
   getSalahStatusDates("late", salahLateDatesOverall);
   getSalahStatusDates("missed", salahMissedDatesOverall);
 
-  const inJamaahBoxColor = "var(--jamaah-status-color)";
-  const onTimeMaleBoxColor = "var(--alone-male-status-color)";
-  const lateBoxColor = "var(--late-status-color)";
-  const missedBoxColor = "var(--missed-status-color)";
-  //
   const inJamaahBoxStyling = {
     borderTopRightRadius: "0rem",
     borderTopLeftRadius: "2rem",

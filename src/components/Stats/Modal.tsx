@@ -1,5 +1,5 @@
 // import { parse } from "date-fns";
-import PrayerMainView from "../PrayerMainView/PrayerMainView";
+// import PrayerMainView from "../PrayerMainView/PrayerMainView";
 import { salahTrackingEntryType } from "../../types/types";
 
 import ReactModal from "react-modal";
@@ -7,12 +7,12 @@ import ReactModal from "react-modal";
 const Modal = ({
   setShowModal,
   showModal,
-  setSalahTrackingArray,
-  salahTrackingArray,
-  setCurrentWeek,
-  currentWeek,
-  startDate,
-}: {
+} // setSalahTrackingArray,
+// salahTrackingArray,
+// setCurrentWeek,
+// currentWeek,
+// startDate,
+: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   showModal: boolean;
   setSalahTrackingArray: React.Dispatch<
@@ -36,7 +36,7 @@ const Modal = ({
         setShowModal(false);
       }}
     >
-      <div>
+      {/* <div>
         <PrayerMainView
           setSalahTrackingArray={setSalahTrackingArray}
           salahTrackingArray={salahTrackingArray}
@@ -44,7 +44,7 @@ const Modal = ({
           currentWeek={currentWeek}
           startDate={startDate}
         />
-      </div>{" "}
+      </div>{" "} */}
     </ReactModal>
   );
 };

@@ -9,28 +9,28 @@ import _ from "lodash";
 // import "swiper/css/navigation";
 // import Swiper styles
 // import "swiper/css";
-import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import {
-  add,
-  sub,
+  // add,
+  // sub,
   format,
   parse,
   // startOfToday,
   startOfMonth,
   // differenceInDays,
-  isAfter,
-  isBefore,
+  // isAfter,
+  // isBefore,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
-  startOfYear,
+  // startOfYear,
   startOfWeek,
   eachMonthOfInterval,
-  endOfYear,
+  // endOfYear,
 } from "date-fns";
 // import CircleSegment from "./CircleSegment";
 
-const todaysDate = new Date();
+// const todaysDate = new Date();
 
 const CalenderYearly = ({
   // setShowCalenderOneMonth,
@@ -64,7 +64,7 @@ const CalenderYearly = ({
   // const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
   // const [showYearlyCalender, setShowYearlyCalender] = useState(true);
 
-  const [currentYear, setCurrentYear] = useState(new Date());
+  // const [currentYear, setCurrentYear] = useState(new Date());
 
   // const today = startOfToday(); // Will return todays date details
   // const [currentMonth, setcurrentMonth] = useState(() =>
@@ -172,12 +172,15 @@ const CalenderYearly = ({
 
   const [showModal, setShowModal] = useState(false);
 
-  let monthsInYear: Date[] = eachMonthOfInterval({
-    start: startOfYear(currentYear),
-    end: endOfYear(currentYear),
-  });
+  // let monthsInYear: Date[] = eachMonthOfInterval({
+  //   start: startOfYear(currentYear),
+  //   end: endOfYear(currentYear),
+  // });
   let todaysDate = new Date();
+  userStartDate = "17.05.21";
+  console.log(userStartDate);
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+
   const endDate = new Date();
 
   // Generate an array of all the months between the start and end dates
@@ -201,7 +204,7 @@ const CalenderYearly = ({
   //   );
   // }
 
-  const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
+  // const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
   // console.log(monthStrings);
   let firstDayOfMonth;
   const monthlyDates = (month: string) => {
@@ -305,7 +308,7 @@ const CalenderYearly = ({
   }
 
   return (
-    <div className="calender-page-wrap">
+    <div className="calender-wrap">
       <div className="sticky flex justify-around mb-10 calender-component-header">
         {" "}
         {/* <IoChevronBackSharp
@@ -345,19 +348,19 @@ const CalenderYearly = ({
       </div>
       <>
         <div className="flex items-center justify-center calender-wrap">
-          <div className="flex items-center justify-between chevrons-wrap"></div>
+          {/* <div className="flex items-center justify-between chevrons-wrap"></div> */}
           {/* gap-5 */}
           <div className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap">
             {formattedMonths.map((month) => (
               // rounded-2xl
-              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700">
+              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5">
                 <p className="py-4 font-semibold text-center">{month}</p>
-                <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap">
+                <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
                   {days.map((day, index) => {
                     return (
                       <div
                         key={index}
-                        className="w-5 h-5 text-sm font-semibold individual-day"
+                        className="w-5 h-5 text-sm font-semibold text-center individual-day"
                       >
                         {day}
                       </div>
@@ -366,7 +369,7 @@ const CalenderYearly = ({
                 </div>
                 <div
                   // grid grid-cols-7
-                  className="grid grid-cols-7 gap-x-12 gap-y-5 place-items-center month-dates-wrap"
+                  className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
                   key={month}
                 >
                   {monthlyDates(month).map((day, index) => (
