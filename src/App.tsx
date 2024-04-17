@@ -184,7 +184,7 @@ const App = () => {
           {" "}
           <div></div>
           <h1 className="">{heading}</h1>
-          <p>0</p>
+          <p></p>
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
         </div>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">

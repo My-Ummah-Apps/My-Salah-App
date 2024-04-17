@@ -7,30 +7,49 @@ import { GoPeople } from "react-icons/go";
 
 const StatCard = ({
   statName,
+  styles,
   // salahTrackingArray,
   // salahFulfilledDates,
   stat,
 }: {
   statName: string;
+  styles: {
+    borderTopRightRadius: string;
+    borderTopLeftRadius: string;
+    borderBottomLeftRadius: string;
+    borderBottomRightRadius: string;
+    bgColor: string;
+  };
   salahTrackingArray: salahTrackingEntryType[];
   salahFulfilledDates: string[];
   stat: number;
 }) => {
   // salahFulfilledDates;
   // salahTrackingArray;
-
+  // bg-[color:var(--card-bg-color)]
+  console.log(styles.bgColor);
   return (
-    <div className="m-2 rounded-lg bg-[color:var(--card-bg-color)] p-3">
+    <div
+      // style={{ backgroundColor: bgColor }}
+      style={{
+        backgroundColor: styles.bgColor,
+        borderTopRightRadius: styles.borderTopRightRadius,
+        borderTopLeftRadius: styles.borderTopLeftRadius,
+        borderBottomLeftRadius: styles.borderBottomLeftRadius,
+        borderBottomRightRadius: styles.borderBottomRightRadius,
+      }}
+      className={`${styles.bgColor} p-3 m-2 text-white rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl `}
+    >
       <div className="flex items-center mb-1 stat-name-and-icon-wrap">
-        <p className="inline-block rounded-3xl yellow-block text-white w-[24px] h-[24px]  self-center justify-self-center mr-2">
+        <p className="inline-block rounded-3xl yellow-block w-[24px] h-[24px]  self-center justify-self-center">
           {statName === "In jamaah" ? (
-            <GoPeople className="text-white w-[15px] h-[15px] flex self-center justify-self-center m-1" />
+            <GoPeople className="w-[15px] h-[15px] flex self-center justify-self-center m-1" />
           ) : statName === "On time" ? (
-            <GoPerson className="text-white w-[15px] h-[15px] flex self-center justify-self-center m-1" />
+            <GoPerson className=" w-[15px] h-[15px] flex self-center justify-self-center m-1" />
           ) : statName === "Late" ? (
-            <PiClockCounterClockwise className="text-white w-[15px] h-[15px] flex self-center justify-self-center m-1" />
+            <PiClockCounterClockwise className=" w-[15px] h-[15px] flex self-center justify-self-center m-1" />
           ) : statName === "Missed" ? (
-            <AiOutlineStop className="text-white w-[15px] h-[15px] flex self-center justify-self-center m-1" />
+            <AiOutlineStop className=" w-[15px] h-[15px] flex self-center justify-self-center m-1" />
           ) : null}
         </p>
         <h1>{statName}</h1>

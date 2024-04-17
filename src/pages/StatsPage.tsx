@@ -77,6 +77,42 @@ const StatsPage = ({
   getSalahStatusDates("late", salahLateDatesOverall);
   getSalahStatusDates("missed", salahMissedDatesOverall);
 
+  const inJamaahBoxColor = "var(--jamaah-status-color)";
+  const onTimeMaleBoxColor = "var(--alone-male-status-color)";
+  const lateBoxColor = "var(--late-status-color)";
+  const missedBoxColor = "var(--missed-status-color)";
+  //
+  const inJamaahBoxStyling = {
+    borderTopRightRadius: "0rem",
+    borderTopLeftRadius: "2rem",
+    borderBottomLeftRadius: "1.4rem",
+    borderBottomRightRadius: "1.4rem",
+    bgColor: "var(--jamaah-status-color)",
+  };
+  const onTimeBoxStyling = {
+    borderTopRightRadius: "1.4rem",
+    borderTopLeftRadius: "1.4rem",
+    borderBottomLeftRadius: "1.4rem",
+    borderBottomRightRadius: "0rem",
+    bgColor: "var(--alone-male-status-color)",
+  };
+  const lateBoxStyling = {
+    borderTopRightRadius: "1.4rem",
+    borderTopLeftRadius: "0rem",
+    borderBottomLeftRadius: "1.4rem",
+    borderBottomRightRadius: "1.4rem",
+    bgColor: "var(--late-status-color)",
+  };
+  const missedBoxStyling = {
+    borderTopRightRadius: "1.4rem",
+    borderTopLeftRadius: "1.4rem",
+    borderBottomLeftRadius: "0rem",
+    borderBottomRightRadius: "1.4rem",
+    bgColor: "var(--missed-status-color)",
+  };
+
+  //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
+
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
@@ -88,9 +124,10 @@ const StatsPage = ({
         setCurrentWeek={setCurrentWeek}
         currentWeek={currentWeek}
       />{" "}
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 mb-5">
         <StatCard
           statName={"In jamaah"}
+          styles={inJamaahBoxStyling}
           stat={jamaahStat}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
@@ -98,18 +135,21 @@ const StatsPage = ({
         <StatCard
           statName={"On time"}
           stat={aloneStat}
+          styles={onTimeBoxStyling}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
         <StatCard
           statName={"Late"}
           stat={lateStat}
+          styles={lateBoxStyling}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
         <StatCard
           statName={"Missed"}
           stat={missedStat}
+          styles={missedBoxStyling}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
