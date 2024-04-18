@@ -27,7 +27,7 @@ const StatCard = ({
   // salahFulfilledDates;
   // salahTrackingArray;
   // bg-[color:var(--card-bg-color)]
-  console.log(styles.bgColor);
+
   return (
     <div
       // style={{ backgroundColor: bgColor }}

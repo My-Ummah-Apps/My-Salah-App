@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { salahTrackingEntryType } from "../../types/types";
-// import CalenderMonthly from "./CalenderMonthly";
+// import CalendarMonthly from "./CalendarMonthly";
 import Modal from "./Modal";
 import _ from "lodash";
 
@@ -32,9 +32,9 @@ import {
 
 // const todaysDate = new Date();
 
-const Calender = ({
-  // setShowCalenderOneMonth,
-  // showCalenderOneMonth,
+const Calendar = ({
+  // setShowCalendarOneMonth,
+  // showCalendarOneMonth,
   userStartDate,
   setSalahTrackingArray,
   salahTrackingArray,
@@ -42,8 +42,8 @@ const Calender = ({
   setCurrentWeek,
   currentWeek,
 }: {
-  // setShowCalenderOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
-  // showCalenderOneMonth: boolean;
+  // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
+  // showCalendarOneMonth: boolean;
   userStartDate: string;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
@@ -54,43 +54,20 @@ const Calender = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  const calenderElementRef = useRef<HTMLDivElement>(null);
+  const CalendarElementRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (calenderElementRef.current) {
-      calenderElementRef.current.scrollLeft =
-        calenderElementRef.current.scrollWidth -
-        calenderElementRef.current.clientWidth;
+    if (CalendarElementRef.current) {
+      CalendarElementRef.current.scrollLeft =
+        CalendarElementRef.current.scrollWidth -
+        CalendarElementRef.current.clientWidth;
     }
   }, []);
 
-  const [calenderDivs, setCalenderDivs] = useState(
-    Array.from({ length: 10 }, (_, i) => i + 1)
-  );
+  // const [CalendarDivs, setCalendarDivs] = useState(
+  //   Array.from({ length: 10 }, (_, i) => i + 1)
+  // );
 
-  console.log(calenderDivs);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerWidth + window.scrollX >=
-        document.body.offsetWidth - 200
-      ) {
-        // Load more divs
-        const newCalenderDivs = Array.from(
-          { length: 10 },
-          (_, i) => calenderDivs.length + i + 1
-        );
-        setCalenderDivs((prevDivs) => [...prevDivs, ...newCalenderDivs]);
-      }
-    };
-    if (calenderElementRef.current) {
-      calenderElementRef.current.addEventListener("scroll", handleScroll);
-
-      return () => {
-        calenderElementRef.current.removeEventListener("scroll", handleScroll);
-      };
-    }
-  }, [calenderDivs]);
+  // console.log(CalendarDivs);
 
   // const data = [
   //   { name: "Group A", value: 400 },
@@ -99,8 +76,8 @@ const Calender = ({
   //   { name: "Group D", value: 200 },
   // ];
   // const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-  // const [showMonthlyCalender, setShowMonthlyCalender] = useState(false);
-  // const [showYearlyCalender, setShowYearlyCalender] = useState(true);
+  // const [showMonthlyCalendar, setShowMonthlyCalendar] = useState(false);
+  // const [showYearlyCalendar, setShowYearlyCalendar] = useState(true);
 
   // const [currentYear, setCurrentYear] = useState(new Date());
 
@@ -232,7 +209,43 @@ const Calender = ({
     format(month, "MMMM yyyy")
   );
 
-  console.log(formattedMonths);
+  // const [formattedMonths, setFormattedMonths] = useState(
+  //   monthsBetween.map((month) => format(month, "MMMM yyyy"))
+  // );
+
+  // console.log(formattedMonths);
+
+  const [showMonthsAmount, setShowMonthsAmount] = useState(-5);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      console.log("window.innerWidth: " + window.innerWidth);
+      console.log("window.scrollX: " + window.scrollX);
+      console.log("document.body.offsetWidth: " + document.body.offsetWidth);
+      if (
+        window.innerWidth + window.scrollX >=
+        document.body.offsetWidth - 200
+      ) {
+        setShowMonthsAmount((number) => number - 5);
+        formattedMonths.slice[showMonthsAmount];
+        console.log(showMonthsAmount);
+        // setFormattedMonths((monthsArray) => [...monthsArray.splice(-5)]);
+        // Load more divs
+        // const newCalendarDivs = Array.from(
+        //   { length: 10 },
+        //   (_, i) => CalendarDivs.length + i + 1
+        // );
+        // setCalendarDivs((prevDivs) => [...prevDivs, ...newCalendarDivs]);
+      }
+    };
+    if (CalendarElementRef.current) {
+      CalendarElementRef.current.addEventListener("scroll", handleScroll);
+
+      return () => {
+        CalendarElementRef.current?.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [showMonthsAmount]);
 
   // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
   //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
@@ -346,16 +359,16 @@ const Calender = ({
   }
 
   return (
-    <div className="calender-wrap">
-      <div className="sticky flex justify-around mb-10 calender-component-header">
+    <div className="Calendar-wrap">
+      <div className="sticky flex justify-around mb-10 Calendar-component-header">
         {" "}
       </div>
       <>
-        <div className="flex items-center justify-center calender-wrap">
+        <div className="flex items-center justify-center Calendar-wrap">
           {/* <div className="flex items-center justify-between chevrons-wrap"></div> */}
           {/* gap-5 */}
           <div
-            ref={calenderElementRef}
+            ref={CalendarElementRef}
             // onScroll={handleScroll}
             className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap"
           >
@@ -484,4 +497,4 @@ const Calender = ({
   );
 };
 
-export default Calender;
+export default Calendar;
