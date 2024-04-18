@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import CalenderMonthly from "./CalenderMonthly";
 import Modal from "./Modal";
@@ -32,7 +32,7 @@ import {
 
 // const todaysDate = new Date();
 
-const CalenderYearly = ({
+const Calender = ({
   // setShowCalenderOneMonth,
   // showCalenderOneMonth,
   userStartDate,
@@ -54,6 +54,15 @@ const CalenderYearly = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
+  const calenderElementRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (calenderElementRef.current) {
+      calenderElementRef.current.scrollLeft =
+        calenderElementRef.current.scrollWidth -
+        calenderElementRef.current.clientWidth;
+    }
+  }, []);
+
   // const data = [
   //   { name: "Group A", value: 400 },
   //   { name: "Group B", value: 300 },
@@ -350,7 +359,10 @@ const CalenderYearly = ({
         <div className="flex items-center justify-center calender-wrap">
           {/* <div className="flex items-center justify-between chevrons-wrap"></div> */}
           {/* gap-5 */}
-          <div className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap">
+          <div
+            ref={calenderElementRef}
+            className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap"
+          >
             {formattedMonths.map((month) => (
               // rounded-2xl
               <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5">
@@ -476,4 +488,4 @@ const CalenderYearly = ({
   );
 };
 
-export default CalenderYearly;
+export default Calender;

@@ -1,7 +1,7 @@
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { salahTrackingEntryType } from "../types/types";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import CalenderYearly from "../components/Stats/CalenderYearly";
+import Calender from "../components/Stats/Calender";
 import StatCard from "../components/Stats/StatCard";
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -111,7 +111,7 @@ const StatsPage = ({
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
-      <CalenderYearly
+      <Calender
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}

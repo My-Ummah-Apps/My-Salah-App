@@ -128,8 +128,8 @@ body {
 }
 
 td {
-  border-bottom: 1px solid rgb(54, 49, 49);
-  vertical-align: top;
+  border-bottom: 1px solid rgb(54, 49, 49) !important;
+  /* vertical-align: top; */
 }
 
 .monthly-calender-single-date {
