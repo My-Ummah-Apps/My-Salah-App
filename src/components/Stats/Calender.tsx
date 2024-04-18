@@ -63,6 +63,35 @@ const Calender = ({
     }
   }, []);
 
+  const [calenderDivs, setCalenderDivs] = useState(
+    Array.from({ length: 10 }, (_, i) => i + 1)
+  );
+
+  console.log(calenderDivs);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerWidth + window.scrollX >=
+        document.body.offsetWidth - 200
+      ) {
+        // Load more divs
+        const newCalenderDivs = Array.from(
+          { length: 10 },
+          (_, i) => calenderDivs.length + i + 1
+        );
+        setCalenderDivs((prevDivs) => [...prevDivs, ...newCalenderDivs]);
+      }
+    };
+    if (calenderElementRef.current) {
+      calenderElementRef.current.addEventListener("scroll", handleScroll);
+
+      return () => {
+        calenderElementRef.current.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [calenderDivs]);
+
   // const data = [
   //   { name: "Group A", value: 400 },
   //   { name: "Group B", value: 300 },
@@ -187,7 +216,7 @@ const Calender = ({
   // });
   let todaysDate = new Date();
   userStartDate = "17.05.21";
-  console.log(userStartDate);
+  // console.log(userStartDate);
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
 
   const endDate = new Date();
@@ -203,7 +232,7 @@ const Calender = ({
     format(month, "MMMM yyyy")
   );
 
-  // console.log(formattedMonths);
+  console.log(formattedMonths);
 
   // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
   //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
@@ -320,40 +349,6 @@ const Calender = ({
     <div className="calender-wrap">
       <div className="sticky flex justify-around mb-10 calender-component-header">
         {" "}
-        {/* <IoChevronBackSharp
-          className="w-6 h-6 cursor-pointer"
-          // onClick={setCurrentYear((prevYearValue) =>
-          //   sub(prevYearValue, { years: 1 })
-          // )}
-          onClick={() => {
-            if (
-              currentYear.getFullYear() > userStartDateFormatted.getFullYear()
-            ) {
-              setCurrentYear((prevYearValue) =>
-                sub(prevYearValue, { years: 1 })
-              );
-            }
-          }}
-        />
-        <h1>{format(currentYear, "yyyy")}</h1>
-        <IoChevronForward
-          className="w-6 h-6 cursor-pointer"
-          onClick={() => {
-            if (todaysDate.getFullYear() < currentYear.getFullYear()) {
-              setCurrentYear((prevYearValue) =>
-                add(prevYearValue, { years: 1 })
-              );
-            }
-          }}
-          // onClick={
-          //   showMonthlyCalender
-          //     ? getNextMonth
-          //     : () =>
-          //         setCurrentYear((prevYearValue) =>
-          //           add(prevYearValue, { years: 1 })
-          //         )
-          // }
-        /> */}
       </div>
       <>
         <div className="flex items-center justify-center calender-wrap">
@@ -361,6 +356,7 @@ const Calender = ({
           {/* gap-5 */}
           <div
             ref={calenderElementRef}
+            // onScroll={handleScroll}
             className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap"
           >
             {formattedMonths.map((month) => (
