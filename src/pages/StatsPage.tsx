@@ -124,12 +124,14 @@ const StatsPage = ({
           statName={"In jamaah"}
           styles={inJamaahBoxStyling}
           stat={jamaahStat}
+          amountTimesStat={salahInJamaahDatesOverall.length}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
         <StatCard
           statName={"On time"}
           stat={aloneStat}
+          amountTimesStat={salahAloneDatesOverall.length}
           styles={onTimeBoxStyling}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
@@ -137,6 +139,7 @@ const StatsPage = ({
         <StatCard
           statName={"Late"}
           stat={lateStat}
+          amountTimesStat={salahLateDatesOverall.length}
           styles={lateBoxStyling}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
@@ -144,6 +147,7 @@ const StatsPage = ({
         <StatCard
           statName={"Missed"}
           stat={missedStat}
+          amountTimesStat={salahMissedDatesOverall.length}
           styles={missedBoxStyling}
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}

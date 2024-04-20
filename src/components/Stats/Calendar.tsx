@@ -1,15 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import CalendarMonthly from "./CalendarMonthly";
 import Modal from "./Modal";
 import _ from "lodash";
 
-// Change below so that entire module isn't being imported
-// import Swiper from "swiper/bundle";
-// import "swiper/css/navigation";
-// import Swiper styles
-// import "swiper/css";
-// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import {
   // add,
   // sub,
@@ -28,9 +22,6 @@ import {
   eachMonthOfInterval,
   // endOfYear,
 } from "date-fns";
-// import CircleSegment from "./CircleSegment";
-
-// const todaysDate = new Date();
 
 const Calendar = ({
   // setShowCalendarOneMonth,

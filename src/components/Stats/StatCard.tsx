@@ -8,11 +8,13 @@ import { GoPeople } from "react-icons/go";
 const StatCard = ({
   statName,
   styles,
+  amountTimesStat,
   // salahTrackingArray,
   // salahFulfilledDates,
   stat,
 }: {
   statName: string;
+  amountTimesStat: number;
   styles: {
     borderTopRightRadius: string;
     borderTopLeftRadius: string;
@@ -55,7 +57,7 @@ const StatCard = ({
         <h1>{statName}</h1>
       </div>
       <h2 className="my-3 text-4xl">{stat}%</h2>
-      <p>0 times</p>
+      <p>{amountTimesStat + " times"}</p>
     </div>
   );
 };
