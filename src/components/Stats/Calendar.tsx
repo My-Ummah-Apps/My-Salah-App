@@ -54,29 +54,6 @@ const Calendar = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  // const [CalendarDivs, setCalendarDivs] = useState(
-  //   Array.from({ length: 10 }, (_, i) => i + 1)
-  // );
-
-  // console.log(CalendarDivs);
-
-  // const data = [
-  //   { name: "Group A", value: 400 },
-  //   { name: "Group B", value: 300 },
-  //   { name: "Group C", value: 300 },
-  //   { name: "Group D", value: 200 },
-  // ];
-  // const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-  // const [showMonthlyCalendar, setShowMonthlyCalendar] = useState(false);
-  // const [showYearlyCalendar, setShowYearlyCalendar] = useState(true);
-
-  // const [currentYear, setCurrentYear] = useState(new Date());
-
-  // const today = startOfToday(); // Will return todays date details
-  // const [currentMonth, setcurrentMonth] = useState(() =>
-  //   format(today, "MMM-yyyy")
-  // ); // Jan-2024 (string)
-
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
   // function modifySingleDaySalah(date: Date) {
@@ -100,20 +77,6 @@ const Calendar = ({
       dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
     );
   };
-
-  // const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-  //   console.log("getPrevMonth triggered");
-  //   event.preventDefault();
-  //   const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 }); // Take the first day of the month, and substract one month from it, example: if firstDayOfMonth represents March 1st, 2023, this line of code would calculate February 1st, 2023.
-  //   setcurrentMonth(format(firstDayOfPrevMonth, "MMM-yyyy"));
-  // };
-
-  // const getNextMonth = (event: React.MouseEvent<SVGSVGElement>) => {
-  //   console.log("getNextMonth triggered");
-  //   event.preventDefault();
-  //   const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
-  //   setcurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
-  // };
 
   // const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<string[]>(
   //   (accumulatorArray, salah) => {
@@ -178,13 +141,9 @@ const Calendar = ({
 
   const [showModal, setShowModal] = useState(false);
 
-  // let monthsInYear: Date[] = eachMonthOfInterval({
-  //   start: startOfYear(currentYear),
-  //   end: endOfYear(currentYear),
-  // });
   let todaysDate = new Date();
   userStartDate = "17.05.21";
-  // console.log(userStartDate);
+
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
 
   const endDate = new Date();
@@ -199,55 +158,6 @@ const Calendar = ({
   const formattedMonths = monthsBetween.map((month) =>
     format(month, "MMMM yyyy")
   );
-
-  // const [formattedMonths, setFormattedMonths] = useState(
-  //   monthsBetween.map((month) => format(month, "MMMM yyyy"))
-  // );
-
-  // console.log(formattedMonths);
-
-  // const [defaultCalenderScrollLeftPos, setDefaultCalenderScrollLeftPos] =
-  //   useState<number>();
-
-  // const CalendarElementRef = useRef<HTMLDivElement>(null);
-  // Set Calendar scroll position to right
-  // useEffect(() => {
-  //   if (CalendarElementRef.current) {
-  //     // console.log("CalendarElementRef.current exists");
-  //     setDefaultCalenderScrollLeftPos(
-  //       CalendarElementRef.current.scrollWidth -
-  //         CalendarElementRef.current.clientWidth
-  //     );
-  //     CalendarElementRef.current.scrollLeft = defaultCalenderScrollLeftPos;
-  //   }
-  // }, [CalendarElementRef.current, defaultCalenderScrollLeftPos]);
-
-  // const [calenderScrollLeft, setCalenderScrollLeft] = useState<number>(0);
-  // const [numberOfMonthsToShow, setNumberOfMonthsToShow] = useState(0);
-
-  // useEffect(() => {
-  //   if (CalendarElementRef.current) {
-  //     // console.log("CalendarElementRef.current exists");
-  //     setCalenderScrollLeft(CalendarElementRef.current.scrollLeft);
-  //     console.log(CalendarElementRef.current.scrollLeft);
-  //   }
-  //   setNumberOfMonthsToShow(3);
-  // }, [CalendarElementRef.current]);
-
-  // console.log("component rendered");
-
-  // const handleScroll = (e) => {
-  //   console.log("calenderScrollLeft " + calenderScrollLeft);
-  //   // setCalenderScrollLeft(e.target.scrollLeft);
-  //   // if (calenderScrollLeft) {
-  //   if (e.target.scrollLeft < calenderScrollLeft - 200) {
-  //     console.log("passed");
-  //     setNumberOfMonthsToShow((prevNumber) => prevNumber + 2);
-  //     console.log("numberOfMonthsToShow " + numberOfMonthsToShow);
-  //     setCalenderScrollLeft(e.target.scrollLeft);
-  //   }
-  //   // }
-  // };
 
   // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
   //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
@@ -272,9 +182,6 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  // console.log(monthlyDates);
-
-  // console.log(salahTrackingArray);
   function determineRadialColors(date: Date) {
     if (date < userStartDateFormatted) {
       fajrColor = "transparent";
@@ -362,22 +269,10 @@ const Calendar = ({
 
   return (
     <div className="Calendar-wrap h-[50vh]">
-      {/* <div className="sticky flex justify-around mb-10 Calendar-component-header">
-        {" "}
-      </div> */}
-
       <div className="flex items-center justify-center calendar-wrap">
         {/* <div className="flex items-center justify-between chevrons-wrap"></div> */}
         {/* gap-5 */}
-        <div
-          // ref={CalendarElementRef}
-          // onScroll={handleScroll}
-          className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap"
-        >
-          {/* // rounded-2xl */}
-          {/* {formattedMonths
-            .slice(formattedMonths.length - numberOfMonthsToShow)
-            .map((month) => ( */}
+        <div className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap">
           {formattedMonths.map((month) => (
             <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5 ">
               <p className="py-4 font-semibold text-center">{month}</p>
@@ -397,12 +292,8 @@ const Calendar = ({
                 // grid grid-cols-7
                 className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
                 key={month}
-                // ref={CalendarElementRef}
-                // onScroll={handleScroll}
               >
                 {monthlyDates(month).map((day, index) => (
-                  // .slice(monthlyDates.length - numberOfMonthsToShow)
-
                   <div
                     onClick={() => {
                       if (day <= todaysDate) {
