@@ -206,47 +206,48 @@ const Calendar = ({
 
   // console.log(formattedMonths);
 
-  const [defaultCalenderScrollLeftPos, setDefaultCalenderScrollLeftPos] =
-    useState<number>();
+  // const [defaultCalenderScrollLeftPos, setDefaultCalenderScrollLeftPos] =
+  //   useState<number>();
 
-  const CalendarElementRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (CalendarElementRef.current) {
-      console.log("true");
-      setDefaultCalenderScrollLeftPos(
-        CalendarElementRef.current.scrollWidth -
-          CalendarElementRef.current.clientWidth
-      );
-      CalendarElementRef.current.scrollLeft = defaultCalenderScrollLeftPos;
-    }
-  }, [defaultCalenderScrollLeftPos]);
+  // const CalendarElementRef = useRef<HTMLDivElement>(null);
+  // Set Calendar scroll position to right
+  // useEffect(() => {
+  //   if (CalendarElementRef.current) {
+  //     // console.log("CalendarElementRef.current exists");
+  //     setDefaultCalenderScrollLeftPos(
+  //       CalendarElementRef.current.scrollWidth -
+  //         CalendarElementRef.current.clientWidth
+  //     );
+  //     CalendarElementRef.current.scrollLeft = defaultCalenderScrollLeftPos;
+  //   }
+  // }, [CalendarElementRef.current, defaultCalenderScrollLeftPos]);
 
-  const [showMonthsAmount, setShowMonthsAmount] = useState(-5);
+  // const [calenderScrollLeft, setCalenderScrollLeft] = useState<number>(0);
+  // const [numberOfMonthsToShow, setNumberOfMonthsToShow] = useState(0);
 
-  const [calenderScrollLeft, setCalenderScrollLeft] = useState<number>(0);
-  const [numberOfMonthsToShow, setNumberOfMonthsToShow] = useState(0);
+  // useEffect(() => {
+  //   if (CalendarElementRef.current) {
+  //     // console.log("CalendarElementRef.current exists");
+  //     setCalenderScrollLeft(CalendarElementRef.current.scrollLeft);
+  //     console.log(CalendarElementRef.current.scrollLeft);
+  //   }
+  //   setNumberOfMonthsToShow(3);
+  // }, [CalendarElementRef.current]);
 
-  useEffect(() => {
-    if (CalendarElementRef.current) {
-      setCalenderScrollLeft(CalendarElementRef.current.scrollLeft);
-    }
-    setNumberOfMonthsToShow(5);
-  }, []);
+  // console.log("component rendered");
 
-  console.log("component rendered");
-
-  const handleScroll = (e) => {
-    console.log(calenderScrollLeft);
-    setCalenderScrollLeft(e.target.scrollLeft);
-    // if (calenderScrollLeft) {
-    if (e.target.scrollLeft < calenderScrollLeft - 100) {
-      console.log("passed");
-      setNumberOfMonthsToShow((preNumber) => preNumber + 30);
-      console.log(numberOfMonthsToShow);
-      setCalenderScrollLeft(e.target.scrollLeft);
-    }
-    // }
-  };
+  // const handleScroll = (e) => {
+  //   console.log("calenderScrollLeft " + calenderScrollLeft);
+  //   // setCalenderScrollLeft(e.target.scrollLeft);
+  //   // if (calenderScrollLeft) {
+  //   if (e.target.scrollLeft < calenderScrollLeft - 200) {
+  //     console.log("passed");
+  //     setNumberOfMonthsToShow((prevNumber) => prevNumber + 2);
+  //     console.log("numberOfMonthsToShow " + numberOfMonthsToShow);
+  //     setCalenderScrollLeft(e.target.scrollLeft);
+  //   }
+  //   // }
+  // };
 
   // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
   //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
@@ -360,147 +361,146 @@ const Calendar = ({
   }
 
   return (
-    <div className="Calendar-wrap">
-      <div className="sticky flex justify-around mb-10 Calendar-component-header">
+    <div className="Calendar-wrap h-[50vh]">
+      {/* <div className="sticky flex justify-around mb-10 Calendar-component-header">
         {" "}
-      </div>
-      <>
-        <div className="flex items-center justify-center Calendar-wrap">
-          {/* <div className="flex items-center justify-between chevrons-wrap"></div> */}
-          {/* gap-5 */}
-          <div
-            // ref={CalendarElementRef}
-            // onScroll={handleScroll}
-            className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap"
-          >
-            {/* {formattedMonths
-              .slice(formattedMonths.length - numberOfMonthsToShow)
-              .map((month) => ( */}
-            {formattedMonths.map((month) => (
-              // rounded-2xl
-              <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5 h-[100%]">
-                <p className="py-4 font-semibold text-center">{month}</p>
-                <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
-                  {days.map((day, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="w-5 h-5 text-sm font-semibold text-center individual-day"
-                      >
-                        {day}
-                      </div>
-                    );
-                  })}
-                </div>
-                <div
-                  // grid grid-cols-7
-                  className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
-                  key={month}
-                  ref={CalendarElementRef}
-                  onScroll={handleScroll}
-                >
-                  {monthlyDates(month)
-                    .slice(monthlyDates.length - numberOfMonthsToShow)
-                    .map((day, index) => (
-                      <div
-                        onClick={() => {
-                          if (day <= todaysDate) {
-                            // modifySingleDaySalah(day);
-                            // setShowModal(true);
-                          }
-                        }}
-                        key={index}
-                        className="relative flex items-center justify-center individual-date"
-                      >
-                        {determineRadialColors(day)}
-                        <svg
-                          className="absolute"
-                          xmlns="http://www.w3.org/2000/svg"
-                          id="svg"
-                          viewBox="0 0 150 150"
-                          style={{ height: "30px", width: "30px" }}
-                        >
-                          <desc>Created with Snap</desc>
-                          <defs />
-                          <path
-                            d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
-                            style={{
-                              strokeWidth: "13px",
-                              strokeLinecap: "round",
-                            }}
-                            fill="none"
-                            stroke={zoharColor}
-                          />
-                          <path
-                            d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
-                            style={{
-                              strokeWidth: "13px",
-                              strokeLinecap: "round",
-                            }}
-                            fill="none"
-                            stroke={asarColor}
-                          />
-                          <path
-                            d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
-                            style={{
-                              strokeWidth: "13px",
-                              strokeLinecap: "round",
-                            }}
-                            fill="none"
-                            stroke={maghribColor}
-                          />
-                          <path
-                            d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
-                            style={{
-                              strokeWidth: "13px",
-                              strokeLinecap: "round",
-                            }}
-                            fill="none"
-                            stroke={ishaColor}
-                          />
-                          <path
-                            d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
-                            style={{
-                              strokeWidth: "13px",
-                              strokeLinecap: "round",
-                            }}
-                            fill="none"
-                            stroke={fajrColor}
-                          />
-                        </svg>
-                        <p
-                          // style={{
-                          //   backgroundColor: countCompletedDates(
-                          //     format(day, "dd.MM.yy")
-                          //   ),
-                          // }}
-                          // rounded-md
-                          className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
-                            isDayInSpecificMonth(day, month)
-                              ? "white"
-                              : "text-gray-600"
-                          }
-                      `}
-                        >
-                          {format(day, "d")}
-                        </p>
-                      </div>
-                    ))}
-                </div>
-                <Modal
-                  setShowModal={setShowModal}
-                  showModal={showModal}
-                  salahTrackingArray={salahTrackingArray}
-                  setSalahTrackingArray={setSalahTrackingArray}
-                  setCurrentWeek={setCurrentWeek}
-                  currentWeek={currentWeek}
-                  startDate={startDate}
-                />
+      </div> */}
+
+      <div className="flex items-center justify-center calendar-wrap">
+        {/* <div className="flex items-center justify-between chevrons-wrap"></div> */}
+        {/* gap-5 */}
+        <div
+          // ref={CalendarElementRef}
+          // onScroll={handleScroll}
+          className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap"
+        >
+          {/* // rounded-2xl */}
+          {/* {formattedMonths
+            .slice(formattedMonths.length - numberOfMonthsToShow)
+            .map((month) => ( */}
+          {formattedMonths.map((month) => (
+            <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5 ">
+              <p className="py-4 font-semibold text-center">{month}</p>
+              <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
+                {days.map((day, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="w-5 h-5 text-sm font-semibold text-center individual-day"
+                    >
+                      {day}
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+              <div
+                // grid grid-cols-7
+                className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
+                key={month}
+                // ref={CalendarElementRef}
+                // onScroll={handleScroll}
+              >
+                {monthlyDates(month).map((day, index) => (
+                  // .slice(monthlyDates.length - numberOfMonthsToShow)
+
+                  <div
+                    onClick={() => {
+                      if (day <= todaysDate) {
+                        // modifySingleDaySalah(day);
+                        // setShowModal(true);
+                      }
+                    }}
+                    key={index}
+                    className="relative flex items-center justify-center individual-date"
+                  >
+                    {determineRadialColors(day)}
+                    <svg
+                      className="absolute"
+                      xmlns="http://www.w3.org/2000/svg"
+                      id="svg"
+                      viewBox="0 0 150 150"
+                      style={{ height: "30px", width: "30px" }}
+                    >
+                      <desc>Created with Snap</desc>
+                      <defs />
+                      <path
+                        d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                        style={{
+                          strokeWidth: "13px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={zoharColor}
+                      />
+                      <path
+                        d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                        style={{
+                          strokeWidth: "13px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={asarColor}
+                      />
+                      <path
+                        d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                        style={{
+                          strokeWidth: "13px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={maghribColor}
+                      />
+                      <path
+                        d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                        style={{
+                          strokeWidth: "13px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={ishaColor}
+                      />
+                      <path
+                        d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                        style={{
+                          strokeWidth: "13px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={fajrColor}
+                      />
+                    </svg>
+                    <p
+                      // style={{
+                      //   backgroundColor: countCompletedDates(
+                      //     format(day, "dd.MM.yy")
+                      //   ),
+                      // }}
+                      // rounded-md
+                      className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
+                        isDayInSpecificMonth(day, month)
+                          ? "white"
+                          : "text-gray-600"
+                      }
+                      `}
+                    >
+                      {format(day, "d")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <Modal
+                setShowModal={setShowModal}
+                showModal={showModal}
+                salahTrackingArray={salahTrackingArray}
+                setSalahTrackingArray={setSalahTrackingArray}
+                setCurrentWeek={setCurrentWeek}
+                currentWeek={currentWeek}
+                startDate={startDate}
+              />
+            </div>
+          ))}
         </div>
-      </>
+      </div>
     </div>
   );
 };
