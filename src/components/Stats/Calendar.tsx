@@ -142,7 +142,7 @@ const Calendar = ({
   const [showModal, setShowModal] = useState(false);
 
   let todaysDate = new Date();
-  userStartDate = "17.05.21";
+  userStartDate = "17.05.11";
 
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
 
@@ -183,7 +183,7 @@ const Calendar = ({
   };
 
   function determineRadialColors(date: Date) {
-    if (date < userStartDateFormatted) {
+    if (date < userStartDateFormatted || date > todaysDate) {
       fajrColor = "transparent";
       zoharColor = "transparent";
       asarColor = "transparent";
@@ -268,130 +268,122 @@ const Calendar = ({
   }
 
   return (
-    <div className="Calendar-wrap h-[50vh]">
-      <div className="flex items-center justify-center calendar-wrap">
-        {/* <div className="flex items-center justify-between chevrons-wrap"></div> */}
-        {/* gap-5 */}
-        <div className="flex w-full mb-6 overflow-scroll rounded-lg months-wrap">
-          {formattedMonths.map((month) => (
-            <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5 ">
-              <p className="py-4 font-semibold text-center">{month}</p>
-              <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
-                {days.map((day, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="w-5 h-5 text-sm font-semibold text-center individual-day"
-                    >
-                      {day}
-                    </div>
-                  );
-                })}
-              </div>
+    <div className="flex justify-center mb-6 overflow-scroll calendar-wrap ">
+      {formattedMonths.map((month) => (
+        <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5 ">
+          <p className="py-4 font-semibold text-center">{month}</p>
+          <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
+            {days.map((day, index) => {
+              return (
+                <div
+                  key={index}
+                  className="w-5 h-5 text-sm font-semibold text-center individual-day"
+                >
+                  {day}
+                </div>
+              );
+            })}
+          </div>
+          <div
+            // grid grid-cols-7
+            className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
+            key={month}
+          >
+            {monthlyDates(month).map((day, index) => (
               <div
-                // grid grid-cols-7
-                className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
-                key={month}
+                onClick={() => {
+                  if (day <= todaysDate) {
+                    // modifySingleDaySalah(day);
+                    // setShowModal(true);
+                  }
+                }}
+                key={index}
+                className="relative flex items-center justify-center individual-date"
               >
-                {monthlyDates(month).map((day, index) => (
-                  <div
-                    onClick={() => {
-                      if (day <= todaysDate) {
-                        // modifySingleDaySalah(day);
-                        // setShowModal(true);
-                      }
+                {determineRadialColors(day)}
+                <svg
+                  className="absolute"
+                  xmlns="http://www.w3.org/2000/svg"
+                  id="svg"
+                  viewBox="0 0 150 150"
+                  style={{ height: "30px", width: "30px" }}
+                >
+                  <desc>Created with Snap</desc>
+                  <defs />
+                  <path
+                    d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                    style={{
+                      strokeWidth: "13px",
+                      strokeLinecap: "round",
                     }}
-                    key={index}
-                    className="relative flex items-center justify-center individual-date"
-                  >
-                    {determineRadialColors(day)}
-                    <svg
-                      className="absolute"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="svg"
-                      viewBox="0 0 150 150"
-                      style={{ height: "30px", width: "30px" }}
-                    >
-                      <desc>Created with Snap</desc>
-                      <defs />
-                      <path
-                        d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
-                        style={{
-                          strokeWidth: "13px",
-                          strokeLinecap: "round",
-                        }}
-                        fill="none"
-                        stroke={zoharColor}
-                      />
-                      <path
-                        d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
-                        style={{
-                          strokeWidth: "13px",
-                          strokeLinecap: "round",
-                        }}
-                        fill="none"
-                        stroke={asarColor}
-                      />
-                      <path
-                        d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
-                        style={{
-                          strokeWidth: "13px",
-                          strokeLinecap: "round",
-                        }}
-                        fill="none"
-                        stroke={maghribColor}
-                      />
-                      <path
-                        d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
-                        style={{
-                          strokeWidth: "13px",
-                          strokeLinecap: "round",
-                        }}
-                        fill="none"
-                        stroke={ishaColor}
-                      />
-                      <path
-                        d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
-                        style={{
-                          strokeWidth: "13px",
-                          strokeLinecap: "round",
-                        }}
-                        fill="none"
-                        stroke={fajrColor}
-                      />
-                    </svg>
-                    <p
-                      // style={{
-                      //   backgroundColor: countCompletedDates(
-                      //     format(day, "dd.MM.yy")
-                      //   ),
-                      // }}
-                      // rounded-md
-                      className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
-                        isDayInSpecificMonth(day, month)
-                          ? "white"
-                          : "text-gray-600"
-                      }
+                    fill="none"
+                    stroke={zoharColor}
+                  />
+                  <path
+                    d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                    style={{
+                      strokeWidth: "13px",
+                      strokeLinecap: "round",
+                    }}
+                    fill="none"
+                    stroke={asarColor}
+                  />
+                  <path
+                    d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                    style={{
+                      strokeWidth: "13px",
+                      strokeLinecap: "round",
+                    }}
+                    fill="none"
+                    stroke={maghribColor}
+                  />
+                  <path
+                    d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                    style={{
+                      strokeWidth: "13px",
+                      strokeLinecap: "round",
+                    }}
+                    fill="none"
+                    stroke={ishaColor}
+                  />
+                  <path
+                    d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                    style={{
+                      strokeWidth: "13px",
+                      strokeLinecap: "round",
+                    }}
+                    fill="none"
+                    stroke={fajrColor}
+                  />
+                </svg>
+                <p
+                  // style={{
+                  //   backgroundColor: countCompletedDates(
+                  //     format(day, "dd.MM.yy")
+                  //   ),
+                  // }}
+                  // rounded-md
+                  className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
+                    isDayInSpecificMonth(day, month) ? "white" : "text-gray-600"
+                  }
                       `}
-                    >
-                      {format(day, "d")}
-                    </p>
-                  </div>
-                ))}
+                >
+                  {format(day, "d")}
+                </p>
               </div>
-              <Modal
-                setShowModal={setShowModal}
-                showModal={showModal}
-                salahTrackingArray={salahTrackingArray}
-                setSalahTrackingArray={setSalahTrackingArray}
-                setCurrentWeek={setCurrentWeek}
-                currentWeek={currentWeek}
-                startDate={startDate}
-              />
-            </div>
-          ))}
+            ))}
+          </div>
+          <Modal
+            setShowModal={setShowModal}
+            showModal={showModal}
+            salahTrackingArray={salahTrackingArray}
+            setSalahTrackingArray={setSalahTrackingArray}
+            setCurrentWeek={setCurrentWeek}
+            currentWeek={currentWeek}
+            startDate={startDate}
+          />
         </div>
-      </div>
+      ))}
     </div>
   );
 };
