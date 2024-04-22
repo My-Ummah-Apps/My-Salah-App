@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Capacitor } from "@capacitor/core";
 import Modal from "react-modal";
 // import Switch from "react-ios-switch";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
+import Switch from "rc-switch";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
@@ -16,6 +17,9 @@ const SettingsPage = ({
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
 }) => {
+  // useEffect(() => {
+  //   setHeading("Settings");
+  // }, []);
   let appLink: string;
   const shareThisAppLink = async () => {
     if (Capacitor.getPlatform() == "ios") {
@@ -47,22 +51,24 @@ const SettingsPage = ({
         {/* <h1>{title}</h1> */}
       </div>
       <div className="settings-page-options-wrap">
-        <SettingIndividual
+        {/* <SettingIndividual
           indvidualStyles={"mb-[1rem] rounded-md"}
           headingText={"Contribute"}
           subText={"Support our work"}
           onClick={() => {}}
-        />
-        <SettingIndividual
-          indvidualStyles={"my-[1rem] rounded-md"}
-          headingText={"Notifications"}
-          subText={"Set Notifications"}
-          onClick={() => {
-            // checkNotificationPermissions();
-            // handleOpenModal2();
-            alert("Notifications clicked");
-          }}
-        />
+        /> */}
+
+        {/* <SettingIndividual
+            indvidualStyles={"my-[1rem] rounded-md"}
+            headingText={"Notifications"}
+            subText={"Set Notifications"}
+            onClick={() => {
+              // checkNotificationPermissions();
+              // handleOpenModal2();
+              alert("Notifications clicked");
+            }}
+          /> */}
+
         {Capacitor.getPlatform() === "android" ? (
           <SettingIndividual
             indvidualStyles={"rounded-t-md"}

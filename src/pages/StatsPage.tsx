@@ -6,7 +6,7 @@ import StatCard from "../components/Stats/StatCard";
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
-  // setHeading,
+  setHeading,
   userStartDate,
   pageStyles,
   startDate,
@@ -15,7 +15,7 @@ const StatsPage = ({
   setCurrentWeek,
   currentWeek,
 }: {
-  // setHeading: React.Dispatch<React.SetStateAction<string>>;
+  setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
   startDate: Date;
@@ -26,7 +26,7 @@ const StatsPage = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  // setHeading("Overall Stats");
+  setHeading("Stats");
   let jamaahStat = 0;
   let aloneStat = 0;
   let lateStat = 0;

@@ -3,13 +3,14 @@ import { useState } from "react";
 // @ts-ignore
 import Modal from "react-modal";
 // @ts-ignore
-import Switch from "react-ios-switch";
+// import Switch from "react-ios-switch";
 // import { Share } from "@capacitor/share";
 // import { FaHandHoldingHeart } from "react-icons/fa";
 
 // import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 import { MdOutlineChevronRight } from "react-icons/md";
+import Switch from "rc-switch";
 
 const SettingIndividual = ({
   headingText,

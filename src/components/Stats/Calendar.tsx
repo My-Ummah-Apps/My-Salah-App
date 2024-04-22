@@ -3,6 +3,7 @@ import { salahTrackingEntryType } from "../../types/types";
 // import CalendarMonthly from "./CalendarMonthly";
 import Modal from "./Modal";
 import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   // add,
@@ -133,7 +134,7 @@ const Calendar = ({
   const [showModal, setShowModal] = useState(false);
 
   let todaysDate = new Date();
-  userStartDate = "17.05.11";
+  userStartDate = "17.01.24";
 
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
 
@@ -261,13 +262,16 @@ const Calendar = ({
   return (
     <div className="flex justify-center mb-6 overflow-scroll calendar-wrap ">
       {formattedMonths.map((month) => (
-        <div className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5 ">
+        <div
+          className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5"
+          key={uuidv4()}
+        >
           <p className="py-4 font-semibold text-center">{month}</p>
           <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
             {days.map((day, index) => {
               return (
                 <div
-                  key={index}
+                  key={uuidv4()}
                   className="w-5 h-5 text-sm font-semibold text-center individual-day"
                 >
                   {day}
@@ -278,7 +282,7 @@ const Calendar = ({
           <div
             // grid grid-cols-7
             className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
-            key={month}
+            key={uuidv4()}
           >
             {monthlyDates(month).map((day, index) => (
               <div
@@ -288,7 +292,7 @@ const Calendar = ({
                     // setShowModal(true);
                   }
                 }}
-                key={index}
+                key={uuidv4()}
                 className="relative flex items-center justify-center individual-date"
               >
                 {determineRadialColors(day)}

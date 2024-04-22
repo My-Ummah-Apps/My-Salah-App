@@ -142,7 +142,7 @@ const PrayerMainView = ({
     start: userStartDateFormatted,
     end: endDate,
   });
-  console.log(datesBetween.length);
+  // console.log(datesBetween.length);
   let currentDisplayedWeek: string[] = [];
   function generateDisplayedWeek() {
     currentDisplayedWeek = Array.from(
@@ -558,7 +558,7 @@ const PrayerMainView = ({
             <th className="border-none"></th>
           </tr> */}
           <tr // role="button"
-            key={uuidv4()}
+            // key={uuidv4()}
             // key={"table row: " + item.salahName}
             onClick={(e) => {
               // setShowMonthlyCalenderModal(true);
@@ -576,10 +576,13 @@ const PrayerMainView = ({
             }}
             className=""
           >
-            <th></th>
+            <th className="w-1/6"></th>
             {salahTrackingArray?.map((item) => {
               return (
-                <th className=" text-sm font-light  table-salah-name-th text-[#c4c4c4]">
+                <th
+                  key={uuidv4()}
+                  className=" text-sm font-light table-salah-name-th text-[#c4c4c4] w-1/6"
+                >
                   {item.salahName}
                 </th>
               );
@@ -604,11 +607,8 @@ const PrayerMainView = ({
             // const splitFormattedDate: string[] = formattedDate.split(" ");
 
             return (
-              <tr className="table-row h-12">
-                <td
-                  key={uuidv4()}
-                  className="align-middle text-[#c4c4c4] text-sm"
-                >
+              <tr className="table-row h-12" key={uuidv4()}>
+                <td className="align-middle text-[#c4c4c4] text-sm pr-4">
                   <p className="mb-1">{formattedDate}</p>
                   <p>{formattedDay}</p>
                 </td>

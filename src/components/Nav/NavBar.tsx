@@ -7,6 +7,9 @@ import { BsFillHouseDoorFill, BsFillNutFill } from "react-icons/bs";
 // import { FaCompass } from "react-icons/fa";
 // import { GrResources } from "react-icons/gr";
 import { RiBarChart2Fill } from "react-icons/ri";
+import { RiBarChart2Line } from "react-icons/ri";
+import { BsHouseDoor } from "react-icons/bs";
+import { BsNut } from "react-icons/bs";
 
 // import { BiSolidBarChartAlt2 } from "react-icons/bi";
 // import { MdSettings, MdHome, MdMenu } from "react-icons/md";
@@ -14,7 +17,8 @@ import { RiBarChart2Fill } from "react-icons/ri";
 const NavBar = () => {
   const [activePage, setActivePage] = useState("home");
 
-  const activeBackgroundColor = "#0c72ff";
+  // const activeBackgroundColor = "#0c72ff";
+  const activeBackgroundColor = "grey";
 
   return (
     <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full bg-[var(--secondary-color)] navbar-wrap pb-env-safe-area-inset-bottom rounded-t-2xl">
@@ -25,10 +29,17 @@ const NavBar = () => {
         className="nav-link px-3  pt-0.5"
         to="/SettingsPage"
       >
-        <BsFillNutFill
-          className="m-4 text-2xl nav-icon"
-          color={activePage === "settings" ? activeBackgroundColor : "grey"}
-        />
+        {activePage === "settings" ? (
+          <BsFillNutFill
+            className="m-4 text-2xl nav-icon"
+            color={activePage === "settings" ? activeBackgroundColor : "grey"}
+          />
+        ) : (
+          <BsNut
+            className="m-4 text-2xl nav-icon"
+            color={activePage === "settings" ? activeBackgroundColor : "grey"}
+          />
+        )}
       </NavLink>
       <NavLink
         onClick={() => {
@@ -38,10 +49,17 @@ const NavBar = () => {
         to="/"
       >
         <div>
-          <BsFillHouseDoorFill
-            className="m-4 text-2xl nav-icon"
-            color={activePage === "home" ? activeBackgroundColor : "grey"}
-          />
+          {activePage === "home" ? (
+            <BsFillHouseDoorFill
+              className="m-4 text-2xl nav-icon"
+              color={activePage === "home" ? activeBackgroundColor : "grey"}
+            />
+          ) : (
+            <BsHouseDoor
+              className="m-4 text-2xl nav-icon"
+              color={activePage === "home" ? activeBackgroundColor : "grey"}
+            />
+          )}
         </div>
       </NavLink>
       <NavLink
@@ -52,10 +70,17 @@ const NavBar = () => {
         to="/StatsPage"
       >
         <div>
-          <RiBarChart2Fill
-            className="m-4 text-2xl nav-icon"
-            color={activePage === "stats" ? activeBackgroundColor : "grey"}
-          />
+          {activePage === "stats" ? (
+            <RiBarChart2Fill
+              className="m-4 text-2xl nav-icon"
+              color={activePage === "stats" ? activeBackgroundColor : "grey"}
+            />
+          ) : (
+            <RiBarChart2Line
+              className="m-4 text-2xl nav-icon"
+              color={activePage === "stats" ? activeBackgroundColor : "grey"}
+            />
+          )}
         </div>
       </NavLink>
 

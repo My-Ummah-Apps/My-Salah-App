@@ -80,7 +80,8 @@ const App = () => {
   //   salahTrackingArrayType[]
   // >([]);
   // localStorage.clear();
-  const todaysDate = new Date();
+  // const todaysDate = new Date();
+  const todaysDate = new Date("2024-01-01");
   let userStartDate: string | null = localStorage.getItem("userStartDate");
 
   if (!userStartDate) {
@@ -111,7 +112,7 @@ const App = () => {
             completedDates: [],
           },
           {
-            salahName: "Zohar",
+            salahName: "Dhuhr",
             completedDates: [],
           },
           {
@@ -191,7 +192,7 @@ const App = () => {
           {heading}
         </h1> */}
         <Routes>
-          <Route
+          {/* <Route
             path="/ResourcesPage"
             element={
               <ResourcesPage
@@ -200,7 +201,7 @@ const App = () => {
                 pageStyles={pageStyles}
               />
             }
-          />
+          /> */}
           <Route
             index
             element={
@@ -235,7 +236,7 @@ const App = () => {
                 userStartDate={userStartDate}
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
-                // setHeading={setHeading}
+                setHeading={setHeading}
                 setCurrentWeek={setCurrentWeek}
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
