@@ -183,9 +183,9 @@ const App = () => {
       <section className="App">
         <div className="fixed z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
-          <div></div>
-          <h1 className="">{heading}</h1>
-          <p></p>
+          {/* <div></div> */}
+          <h1 className="text-center w-[100%]">{heading}</h1>
+          {/* <p></p> */}
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
         </div>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">

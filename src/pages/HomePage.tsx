@@ -40,6 +40,8 @@ const HomePage = ({
     setHeading("Home");
   }, []);
 
+  // setHeading("Home");
+
   // const today: Date = new Date();
   // const startDate = subDays(today, currentStartDate);
 

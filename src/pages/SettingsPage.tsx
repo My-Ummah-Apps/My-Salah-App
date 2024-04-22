@@ -17,9 +17,9 @@ const SettingsPage = ({
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
 }) => {
-  // useEffect(() => {
-  //   setHeading("Settings");
-  // }, []);
+  useEffect(() => {
+    setHeading("Settings");
+  }, []);
   let appLink: string;
   const shareThisAppLink = async () => {
     if (Capacitor.getPlatform() == "ios") {
@@ -42,8 +42,6 @@ const SettingsPage = ({
 
   const [showModal, setShowModal] = useState(false);
   setShowModal;
-
-  setHeading("Settings");
 
   return (
     <section className={pageStyles}>

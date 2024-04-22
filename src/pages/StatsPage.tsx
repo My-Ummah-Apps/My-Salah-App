@@ -1,8 +1,10 @@
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+import { useEffect } from "react";
 import { salahTrackingEntryType } from "../types/types";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import Calendar from "../components/Stats/Calendar";
 import StatCard from "../components/Stats/StatCard";
+
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
@@ -26,7 +28,10 @@ const StatsPage = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  setHeading("Stats");
+  // setHeading("Stats");
+  useEffect(() => {
+    setHeading("Stats");
+  }, []);
   let jamaahStat = 0;
   let aloneStat = 0;
   let lateStat = 0;
