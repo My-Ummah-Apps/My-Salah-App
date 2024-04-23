@@ -132,6 +132,14 @@ td {
   /* vertical-align: top; */
 }
 
+.calendar-wrap {
+  direction: rtl;
+}
+
+.single-month {
+  direction: ltr;
+}
+
 .monthly-calender-single-date {
   line-height: 0.5;
 }

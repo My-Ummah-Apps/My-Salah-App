@@ -20,7 +20,7 @@ import { Capacitor } from "@capacitor/core";
 
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
-import ResourcesPage from "./pages/ResourcesPage";
+// import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
 import QiblahDirection from "./pages/QiblahDirection";
 // import StreakCount from "./components/Stats/StreakCount";

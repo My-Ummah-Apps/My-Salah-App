@@ -10,7 +10,7 @@ import Modal from "react-modal";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 import { MdOutlineChevronRight } from "react-icons/md";
-import Switch from "rc-switch";
+// import Switch from "rc-switch";
 
 const SettingIndividual = ({
   headingText,

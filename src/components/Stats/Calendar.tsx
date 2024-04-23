@@ -47,7 +47,7 @@ const Calendar = ({
   currentWeek: number;
 }) => {
   const days = ["M", "T", "W", "T", "F", "S", "S"];
-
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // function modifySingleDaySalah(date: Date) {
   //   const today: Date = new Date();
   //   setCurrentWeek(
@@ -150,6 +150,7 @@ const Calendar = ({
   const formattedMonths = monthsBetween.map((month) =>
     format(month, "MMMM yyyy")
   );
+  formattedMonths.reverse();
 
   // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
   //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
@@ -260,15 +261,16 @@ const Calendar = ({
   }
 
   return (
-    <div className="flex justify-center mb-6 overflow-scroll calendar-wrap ">
+    // justify-center
+    <div className="flex mb-6 overflow-x-auto calendar-wrap whitespace-nowrap">
       {formattedMonths.map((month) => (
         <div
-          className="bg-[color:var(--card-bg-color)] flex-column card-wrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month-wrap px-9 border-r border-gray-700 pb-5"
+          className="bg-[color:var(--card-bg-color)]  box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month px-9 border-r border-gray-700 pb-5"
           key={uuidv4()}
         >
           <p className="py-4 font-semibold text-center">{month}</p>
           <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
-            {days.map((day, index) => {
+            {days.map((day) => {
               return (
                 <div
                   key={uuidv4()}
@@ -284,7 +286,7 @@ const Calendar = ({
             className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
             key={uuidv4()}
           >
-            {monthlyDates(month).map((day, index) => (
+            {monthlyDates(month).map((day) => (
               <div
                 onClick={() => {
                   if (day <= todaysDate) {

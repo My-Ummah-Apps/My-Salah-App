@@ -43,7 +43,7 @@ const StatCard = ({
       className={`${styles.bgColor} p-3 m-2 text-white rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl `}
     >
       <div className="flex items-center mb-1 stat-name-and-icon-wrap">
-        <p className="inline-block rounded-3xl yellow-block w-[24px] h-[24px]  self-center justify-self-center">
+        <p className="inline-block rounded-3xl yellow-block w-[24px] h-[24px] self-center justify-self-center">
           {statName === "In jamaah" ? (
             <GoPeople className="w-[15px] h-[15px] flex self-center justify-self-center m-1" />
           ) : statName === "On time" ? (

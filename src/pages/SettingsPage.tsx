@@ -4,7 +4,7 @@ import Modal from "react-modal";
 // import Switch from "react-ios-switch";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
-import Switch from "rc-switch";
+// import Switch from "rc-switch";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 

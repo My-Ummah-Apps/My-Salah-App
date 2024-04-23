@@ -87,28 +87,36 @@ const StatsPage = ({
     borderTopLeftRadius: "2rem",
     borderBottomLeftRadius: "1.4rem",
     borderBottomRightRadius: "1.4rem",
-    bgColor: "var(--jamaah-status-color)",
+    iconBgColor: "var(--jamaah-status-color)",
+    bgColor: "var(--card-bg-color)",
+    // bgColor: "var(--jamaah-status-color)",
   };
   const onTimeBoxStyling = {
     borderTopRightRadius: "1.4rem",
     borderTopLeftRadius: "1.4rem",
     borderBottomLeftRadius: "1.4rem",
     borderBottomRightRadius: "0rem",
-    bgColor: "var(--alone-male-status-color)",
+    iconBgColor: "var(--alone-male-status-color)",
+    bgColor: "var(--card-bg-color)",
+    // bgColor: "var(--alone-male-status-color)",
   };
   const lateBoxStyling = {
     borderTopRightRadius: "1.4rem",
     borderTopLeftRadius: "0rem",
     borderBottomLeftRadius: "1.4rem",
     borderBottomRightRadius: "1.4rem",
-    bgColor: "var(--late-status-color)",
+    iconBgColor: "var(--late-status-color)",
+    bgColor: "var(--card-bg-color)",
+    // bgColor: "var(--late-status-color)",
   };
   const missedBoxStyling = {
     borderTopRightRadius: "1.4rem",
     borderTopLeftRadius: "1.4rem",
     borderBottomLeftRadius: "0rem",
     borderBottomRightRadius: "1.4rem",
-    bgColor: "var(--missed-status-color)",
+    iconBgColor: "var(--missed-status-color)",
+    bgColor: "var(--card-bg-color)",
+    // bgColor: "var(--missed-status-color)",
   };
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
