@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
@@ -8,7 +8,7 @@ import CalenderMonthly from "../Stats/CalenderMonthly";
 // import { FaMosque, FaHome } from "react-icons/fa";
 // import { ImCross } from "react-icons/im";
 
-import { MdGroups } from "react-icons/md";
+import { MdGroups, MdPerson } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
 import { AiOutlineStop } from "react-icons/ai";
@@ -44,10 +44,12 @@ import {
 } from "date-fns";
 
 import StreakCount from "../Stats/StreakCount";
+import { PiFlower } from "react-icons/pi";
 
 // import { v4 as uuidv4 } from "uuid";
 
 const PrayerMainView = ({
+  userGender,
   userStartDate,
   setSalahTrackingArray,
   salahTrackingArray,
@@ -55,6 +57,7 @@ const PrayerMainView = ({
   currentWeek,
   startDate,
 }: {
+  userGender: string;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
@@ -373,6 +376,14 @@ const PrayerMainView = ({
   //   // height: "30%",
   //   width: "35%",
   // };
+  let excusedColor;
+
+  if (userGender === "female") {
+    excusedColor = "purple";
+    console.log("trigger");
+  } else if (userGender === "male") {
+    excusedColor = "var(--alone-male-status-color)";
+  }
 
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
@@ -389,42 +400,74 @@ const PrayerMainView = ({
           <Sheet.Content>
             {" "}
             <section className="w-[80%] mx-auto my-20 rounded-lg text-white">
-              <div
-                onClick={() => {
-                  changePrayerStatus(tableRowDate, selectedSalah, "group");
-                  setShowUpdateStatusModal(false);
-                }}
-                className="px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
-              >
-                <MdGroups
-                  className="inline mr-4 text-3xl"
-                  // style={{
-                  //   fontSize: "2rem",
-                  //   marginRight: "1rem",
-                  //   display: "inline",
-                  // }}
-                />
-                <p className="inline">Prayed In Jamaah</p>
-              </div>
-              <div
-                onClick={() => {
-                  changePrayerStatus(tableRowDate, selectedSalah, "alone");
-                  setShowUpdateStatusModal(false);
-                }}
-                className="px-5 py-3 mb-4 bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
-              >
-                <BsPersonStanding
-                  className="inline mr-4 text-3xl"
-                  style={
-                    {
-                      // fontSize: "2rem",
-                      // marginRight: "1rem",
-                      // display: "inline",
-                    }
-                  }
-                />
-                <p className="inline">Prayed On Time</p>
-              </div>
+              {userGender === "male" ? (
+                <>
+                  <div
+                    onClick={() => {
+                      changePrayerStatus(tableRowDate, selectedSalah, "group");
+                      setShowUpdateStatusModal(false);
+                    }}
+                    className="px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                  >
+                    {" "}
+                    <MdPerson className="inline mr-4 text-3xl" />
+                    <p className="inline">Prayed In Jamaah</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div
+                    onClick={() => {
+                      changePrayerStatus(
+                        tableRowDate,
+                        selectedSalah,
+                        "female-alone"
+                      );
+                      setShowUpdateStatusModal(false);
+                    }}
+                    className="px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                  >
+                    {" "}
+                    <MdPerson className="inline mr-4 text-3xl" />
+                    <p className="inline">Prayed</p>
+                  </div>
+                </>
+              )}
+              {userGender === "male" ? (
+                <>
+                  <div
+                    onClick={() => {
+                      changePrayerStatus(
+                        tableRowDate,
+                        selectedSalah,
+                        "male-alone"
+                      );
+                      setShowUpdateStatusModal(false);
+                    }}
+                    className="bg-[color:var(--alone-male-status-color)] px-5 py-3 mb-4 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                  >
+                    <BsPersonStanding className="inline mr-4 text-3xl" />
+                    <p className="inline">Prayed On Time</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div
+                    onClick={() => {
+                      changePrayerStatus(
+                        tableRowDate,
+                        selectedSalah,
+                        "excused"
+                      );
+                      setShowUpdateStatusModal(false);
+                    }}
+                    className="bg-[color:var(--excused-status-color)] px-5 py-3 mb-4 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                  >
+                    <PiFlower className="inline mr-4 text-3xl" />
+                    <p className="inline">Excused</p>
+                  </div>{" "}
+                </>
+              )}
               <div
                 onClick={() => {
                   changePrayerStatus(tableRowDate, selectedSalah, "late");

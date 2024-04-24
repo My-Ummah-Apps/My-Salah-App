@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import { v4 as uuidv4 } from "uuid";
 import HomePage from "./pages/HomePage";
+import Sheet from "react-modal-sheet";
 // import Notifications from "./utils/notifications";
 import { salahTrackingEntryType } from "./types/types";
 import { subDays, format } from "date-fns";
@@ -75,19 +76,44 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const App = () => {
-  //
-  // const [salahTrackingArray, setSalahTrackingArray] = useState<
-  //   salahTrackingArrayType[]
-  // >([]);
-  // localStorage.clear();
-  // const todaysDate = new Date();
+  const [showIntroModal, setShowIntroModal] = useState(false);
+  // let launchCount: number | null = localStorage.getItem("launch-count");
+  // useEffect(() => {
+  //   if (launchCount > 14) {
+  //     launchCount = 0;
+  //   } else if (launchCount == null) {
+  //     launchCount = 1;
+  //   } else if (launchCount != null) {
+  //     let launchCountNumber = Number(launchCount);
+  //     launchCount = launchCountNumber + 1;
+  //   }
+  //   localStorage.setItem("launch-count", JSON.stringify(launchCount));
+
+  //   if (launchCount == 3 || launchCount == 8 || launchCount == 14) {
+  //     showReviewPrompt(true);
+  //   }
+  // });
+
+  let userGender: string | null = localStorage.getItem("userGender");
+  useEffect(() => {
+    if (!userGender) {
+      setShowIntroModal(true);
+    }
+  }, []);
+
   const todaysDate = new Date("2024-01-01");
   let userStartDate: string | null = localStorage.getItem("userStartDate");
-
   if (!userStartDate) {
     userStartDate = format(todaysDate, "dd.MM.yy");
     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
   }
+  // useEffect(() => {
+  //   console.log("trrue");
+  //   if (!userStartDate) {
+  //     userStartDate = format(todaysDate, "dd.MM.yy");
+  //     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
+  //   }
+  // }, []);
 
   const [streakCounter, setStreakCounter] = useState(0);
   streakCounter;
@@ -208,6 +234,7 @@ const App = () => {
               <HomePage
                 // title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
                 // title={heading}
+                userGender={userGender}
                 userStartDate={userStartDate}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
@@ -256,6 +283,41 @@ const App = () => {
             }
           />
         </Routes>
+        <Sheet
+          isOpen={showIntroModal}
+          onClose={() => setShowIntroModal(false)}
+          detent="full-height"
+          disableDrag={true}
+        >
+          <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+            <Sheet.Header />
+            <Sheet.Content>
+              {" "}
+              <section className="p-5 text-center">
+                <h1 className="text-4xl">Select your gender</h1>
+                <p
+                  onClick={() => {
+                    localStorage.setItem("userGender", "male");
+                    setShowIntroModal(false);
+                  }}
+                  className="p-2 m-4 text-2xl text-white bg-blue-800 rounded-2xl"
+                >
+                  Male
+                </p>
+                <p
+                  onClick={() => {
+                    localStorage.setItem("userGender", "female");
+                    setShowIntroModal(false);
+                  }}
+                  className="p-2 m-4 text-2xl text-white bg-pink-400 rounded-2xl"
+                >
+                  Female
+                </p>
+              </section>
+            </Sheet.Content>
+          </Sheet.Container>
+          <Sheet.Backdrop />
+        </Sheet>
         <NavBar />
       </section>
     </BrowserRouter>

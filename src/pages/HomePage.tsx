@@ -11,6 +11,7 @@ import { useEffect } from "react";
 
 const HomePage = ({
   // title,
+  userGender,
   setHeading,
   userStartDate,
   pageStyles,
@@ -23,6 +24,7 @@ const HomePage = ({
   currentWeek,
 }: {
   // title: React.ReactNode;
+  userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
@@ -51,6 +53,7 @@ const HomePage = ({
       {/* {title} */}
       {/* <NextSalahTime /> */}
       <PrayerMainView
+        userGender={userGender}
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
