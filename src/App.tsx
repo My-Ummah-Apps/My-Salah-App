@@ -101,7 +101,8 @@ const App = () => {
     }
   }, []);
 
-  const todaysDate = new Date("2024-01-01");
+  // const todaysDate = new Date("2024-01-01");
+  const todaysDate = new Date();
   let userStartDate: string | null = localStorage.getItem("userStartDate");
   if (!userStartDate) {
     userStartDate = format(todaysDate, "dd.MM.yy");
@@ -260,6 +261,7 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
+                userGender={userGender}
                 userStartDate={userStartDate}
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}

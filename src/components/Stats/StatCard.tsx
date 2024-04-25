@@ -4,6 +4,7 @@ import { AiOutlineStop } from "react-icons/ai";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
+import { PiFlower } from "react-icons/pi";
 
 const StatCard = ({
   statName,
@@ -26,6 +27,7 @@ const StatCard = ({
   salahFulfilledDates: string[];
   stat: number;
 }) => {
+  console.log("statName: " + statName);
   // salahFulfilledDates;
   // salahTrackingArray;
   // bg-[color:var(--card-bg-color)]
@@ -46,6 +48,8 @@ const StatCard = ({
         <p className="inline-block rounded-3xl yellow-block w-[24px] h-[24px] self-center justify-self-center">
           {statName === "In jamaah" ? (
             <GoPeople className="w-[15px] h-[15px] flex self-center justify-self-center m-1" />
+          ) : statName === "Excused" ? (
+            <PiFlower className="w-[15px] h-[15px] flex self-center justify-self-center m-1" />
           ) : statName === "On time" ? (
             <GoPerson className=" w-[15px] h-[15px] flex self-center justify-self-center m-1" />
           ) : statName === "Late" ? (

@@ -8,6 +8,7 @@ import StatCard from "../components/Stats/StatCard";
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
+  userGender,
   setHeading,
   userStartDate,
   pageStyles,
@@ -17,6 +18,7 @@ const StatsPage = ({
   setCurrentWeek,
   currentWeek,
 }: {
+  userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
@@ -36,9 +38,12 @@ const StatsPage = ({
   let aloneStat = 0;
   let lateStat = 0;
   let missedStat = 0;
+  let excusedStat = 0;
 
   let salahInJamaahDatesOverall: string[] = [];
-  let salahAloneDatesOverall: string[] = [];
+  let salahMaleAloneDatesOverall: string[] = [];
+  let salahFemaleAloneDatesOverall: string[] = [];
+  let salahExcusedDatesOverall: string[] = [];
   let salahLateDatesOverall: string[] = [];
   let salahMissedDatesOverall: string[] = [];
 
@@ -66,21 +71,27 @@ const StatsPage = ({
         (array.length / (salahFulfilledDates.length + array.length)) * 100
       );
     }
+
     status === "group"
       ? (jamaahStat = statToUpdate)
-      : status === "alone"
+      : status === "male-alone" || status === "female-alone"
       ? (aloneStat = statToUpdate)
       : status === "late"
       ? (lateStat = statToUpdate)
       : status === "missed"
       ? (missedStat = statToUpdate)
+      : status === "excused"
+      ? (excusedStat = statToUpdate)
       : null;
   }
 
   getSalahStatusDates("group", salahInJamaahDatesOverall);
-  getSalahStatusDates("alone", salahAloneDatesOverall);
+  userGender === "male"
+    ? getSalahStatusDates("male-alone", salahMaleAloneDatesOverall)
+    : getSalahStatusDates("female-alone", salahFemaleAloneDatesOverall);
   getSalahStatusDates("late", salahLateDatesOverall);
   getSalahStatusDates("missed", salahMissedDatesOverall);
+  getSalahStatusDates("excused", salahExcusedDatesOverall);
 
   const inJamaahBoxStyling = {
     borderTopRightRadius: "0rem",
@@ -118,6 +129,15 @@ const StatsPage = ({
     bgColor: "var(--card-bg-color)",
     // bgColor: "var(--missed-status-color)",
   };
+  const excusedBoxStyling = {
+    borderTopRightRadius: "1.4rem",
+    borderTopLeftRadius: "1.4rem",
+    borderBottomLeftRadius: "0rem",
+    borderBottomRightRadius: "1.4rem",
+    iconBgColor: "var(--missed-status-color)",
+    bgColor: "var(--card-bg-color)",
+    // bgColor: "var(--missed-status-color)",
+  };
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
@@ -133,22 +153,39 @@ const StatsPage = ({
         currentWeek={currentWeek}
       />{" "}
       <div className="grid grid-cols-2 mb-5">
-        <StatCard
-          statName={"In jamaah"}
-          styles={inJamaahBoxStyling}
-          stat={jamaahStat}
-          amountTimesStat={salahInJamaahDatesOverall.length}
-          salahFulfilledDates={salahFulfilledDates}
-          salahTrackingArray={salahTrackingArray}
-        />
+        {userGender === "male" && (
+          <StatCard
+            statName={"In jamaah"}
+            styles={inJamaahBoxStyling}
+            stat={jamaahStat}
+            amountTimesStat={salahInJamaahDatesOverall.length}
+            salahFulfilledDates={salahFulfilledDates}
+            salahTrackingArray={salahTrackingArray}
+          />
+        )}
+
         <StatCard
           statName={"On time"}
-          stat={aloneStat}
-          amountTimesStat={salahAloneDatesOverall.length}
           styles={onTimeBoxStyling}
+          stat={aloneStat}
+          amountTimesStat={
+            userGender === "male"
+              ? salahMaleAloneDatesOverall.length
+              : salahFemaleAloneDatesOverall.length
+          }
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
+        {userGender === "female" && (
+          <StatCard
+            statName={"Excused"}
+            styles={excusedBoxStyling}
+            stat={excusedStat}
+            amountTimesStat={salahExcusedDatesOverall.length}
+            salahFulfilledDates={salahFulfilledDates}
+            salahTrackingArray={salahTrackingArray}
+          />
+        )}
         <StatCard
           statName={"Late"}
           stat={lateStat}

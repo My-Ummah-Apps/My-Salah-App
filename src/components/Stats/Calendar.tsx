@@ -134,7 +134,7 @@ const Calendar = ({
   const [showModal, setShowModal] = useState(false);
 
   let todaysDate = new Date();
-  userStartDate = "17.01.24";
+  // userStartDate = "17.01.24";
 
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
 
@@ -213,7 +213,6 @@ const Calendar = ({
       for (let key in completedDates) {
         if (completedDates[key].hasOwnProperty(formattedDate)) {
           if (Object.keys(completedDates[key])[0] === formattedDate) {
-            console.log(completedDates[key]);
             if (item.salahName === "Fajr") {
               fajrColor = generateRadialColor(completedDates[key]);
             } else if (item.salahName === "Dhuhr") {
