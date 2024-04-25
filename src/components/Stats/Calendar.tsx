@@ -175,6 +175,22 @@ const Calendar = ({
     return daysInMonth;
   };
 
+  function generateRadialColor(status: { [date: string]: string }) {
+    return Object.values(status)[0] === "male-alone"
+      ? "var(--alone-male-status-color)"
+      : Object.values(status)[0] === "group"
+      ? "var(--jamaah-status-color)"
+      : Object.values(status)[0] === "female-alone"
+      ? "var(--alone-female-status-color)"
+      : Object.values(status)[0] === "excused"
+      ? "var(--excused-status-color)"
+      : Object.values(status)[0] === "missed"
+      ? "var(--missed-status-color)"
+      : Object.values(status)[0] === "late"
+      ? "var(--late-status-color)"
+      : "";
+  }
+
   function determineRadialColors(date: Date) {
     if (date < userStartDateFormatted || date > todaysDate) {
       fajrColor = "transparent";
@@ -197,61 +213,17 @@ const Calendar = ({
       for (let key in completedDates) {
         if (completedDates[key].hasOwnProperty(formattedDate)) {
           if (Object.keys(completedDates[key])[0] === formattedDate) {
+            console.log(completedDates[key]);
             if (item.salahName === "Fajr") {
-              fajrColor =
-                Object.values(completedDates[key])[0] === "alone"
-                  ? "var(--alone-male-status-color)"
-                  : Object.values(completedDates[key])[0] === "group"
-                  ? "var(--jamaah-status-color)"
-                  : Object.values(completedDates[key])[0] === "missed"
-                  ? "var(--missed-status-color)"
-                  : Object.values(completedDates[key])[0] === "late"
-                  ? "var(--late-status-color)"
-                  : "pink";
-            } else if (item.salahName === "Zohar") {
-              zoharColor =
-                Object.values(completedDates[key])[0] === "alone"
-                  ? "var(--alone-male-status-color)"
-                  : Object.values(completedDates[key])[0] === "group"
-                  ? "var(--jamaah-status-color)"
-                  : Object.values(completedDates[key])[0] === "missed"
-                  ? "var(--missed-status-color)"
-                  : Object.values(completedDates[key])[0] === "late"
-                  ? "var(--late-status-color)"
-                  : "pink";
+              fajrColor = generateRadialColor(completedDates[key]);
+            } else if (item.salahName === "Dhuhr") {
+              zoharColor = generateRadialColor(completedDates[key]);
             } else if (item.salahName === "Asar") {
-              asarColor =
-                Object.values(completedDates[key])[0] === "alone"
-                  ? "var(--alone-male-status-color)"
-                  : Object.values(completedDates[key])[0] === "group"
-                  ? "var(--jamaah-status-color)"
-                  : Object.values(completedDates[key])[0] === "missed"
-                  ? "var(--missed-status-color)"
-                  : Object.values(completedDates[key])[0] === "late"
-                  ? "var(--late-status-color)"
-                  : "pink";
+              asarColor = generateRadialColor(completedDates[key]);
             } else if (item.salahName === "Maghrib") {
-              maghribColor =
-                Object.values(completedDates[key])[0] === "alone"
-                  ? "var(--alone-male-status-color)"
-                  : Object.values(completedDates[key])[0] === "group"
-                  ? "var(--jamaah-status-color)"
-                  : Object.values(completedDates[key])[0] === "missed"
-                  ? "var(--missed-status-color)"
-                  : Object.values(completedDates[key])[0] === "late"
-                  ? "var(--late-status-color)"
-                  : "pink";
+              maghribColor = generateRadialColor(completedDates[key]);
             } else if (item.salahName === "Isha") {
-              ishaColor =
-                Object.values(completedDates[key])[0] === "alone"
-                  ? "var(--alone-male-status-color)"
-                  : Object.values(completedDates[key])[0] === "group"
-                  ? "var(--jamaah-status-color)"
-                  : Object.values(completedDates[key])[0] === "missed"
-                  ? "var(--missed-status-color)"
-                  : Object.values(completedDates[key])[0] === "late"
-                  ? "var(--late-status-color)"
-                  : "pink";
+              ishaColor = generateRadialColor(completedDates[key]);
             }
           }
         }

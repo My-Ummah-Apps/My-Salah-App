@@ -290,7 +290,7 @@ const PrayerMainView = ({
       cellIcon = matchedObject[formattedDate];
     }
 
-    if (cellIcon === "alone") {
+    if (cellIcon === "male-alone") {
       cellIcon = (
         <div className="inline-block rounded-md bg-[color:var(--alone-male-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
@@ -311,6 +311,37 @@ const PrayerMainView = ({
         <div className="inline-block rounded-md  bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
           {" "}
           {/* <GoPeople
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
+            }}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+          /> */}
+        </div>
+      );
+    } else if (cellIcon === "female-alone") {
+      cellIcon = (
+        <div className="inline-block rounded-md  bg-[color:var(--alone-female-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          {" "}
+          {/* <GoPeople
+            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+              // e.stopPropagation();
+
+              if (e.currentTarget.tagName === "svg") {
+                // setShowUpdateStatusModal(true);
+              }
+            }}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+          /> */}
+        </div>
+      );
+    } else if (cellIcon === "excused") {
+      cellIcon = (
+        <div className="inline-block rounded-md bg-[color:var(--excused-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+          {/* <PiClockCounterClockwise
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
 
