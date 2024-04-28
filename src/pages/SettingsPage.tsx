@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Capacitor } from "@capacitor/core";
 import Modal from "react-modal";
 // import Switch from "react-ios-switch";
-import { Share } from "@capacitor/share";
+// import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 // import Switch from "rc-switch";
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -20,21 +20,21 @@ const SettingsPage = ({
   useEffect(() => {
     setHeading("Settings");
   }, []);
-  let appLink: string;
-  const shareThisAppLink = async () => {
-    if (Capacitor.getPlatform() == "ios") {
-      appLink = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
-    } else if (Capacitor.getPlatform() == "android") {
-      appLink = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
-    }
+  // let appLink: string;
+  // const shareThisAppLink = async () => {
+  //   if (Capacitor.getPlatform() == "ios") {
+  //     appLink = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
+  //   } else if (Capacitor.getPlatform() == "android") {
+  //     appLink = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
+  //   }
 
-    await Share.share({
-      title: "",
-      text: "",
-      url: appLink,
-      dialogTitle: "",
-    });
-  };
+  //   await Share.share({
+  //     title: "",
+  //     text: "",
+  //     url: appLink,
+  //     dialogTitle: "",
+  //   });
+  // };
 
   const link = (url: string) => {
     window.location.href = url;
@@ -92,35 +92,35 @@ const SettingsPage = ({
           />
         ) : null}
         {/* {Capacitor.getPlatform() === "android" ? ( */}
-        <SettingIndividual
+        {/* <SettingIndividual
           headingText={"Share"}
           subText={"Share application"}
           onClick={shareThisAppLink}
-        />
+        /> */}
         <SettingIndividual
           headingText={"Feedback"}
-          subText={"Send us your feedback"}
+          subText={"Report Bugs"}
           onClick={() => {
             link(
-              "mailto: contact@myummahapps.com?subject=My Tasbeeh App Feedback"
+              "mailto: contact@myummahapps.com?subject=My Salah App (Beta) Feedback"
             );
           }}
         />
-        <SettingIndividual
+        {/* <SettingIndividual
           headingText={"Website"}
           subText={"Visit our website"}
           onClick={() => {
             link("https://myummahapps.com/");
           }}
-        />
-        <SettingIndividual
+        /> */}
+        {/* <SettingIndividual
           indvidualStyles="rounded-b-md"
           headingText={"About"}
           subText={"About us"}
           onClick={() => {
             // handleOpenModal4();
           }}
-        />
+        /> */}
         <Modal
           //   style={modalStyles}
           isOpen={showModal}

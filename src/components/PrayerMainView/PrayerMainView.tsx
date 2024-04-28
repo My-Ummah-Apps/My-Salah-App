@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
@@ -8,7 +8,8 @@ import CalenderMonthly from "../Stats/CalenderMonthly";
 // import { FaMosque, FaHome } from "react-icons/fa";
 // import { ImCross } from "react-icons/im";
 
-import { MdGroups, MdPerson } from "react-icons/md";
+// import { MdGroups, MdPerson } from "react-icons/md";
+import { MdPerson } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
 import { BsPersonStanding } from "react-icons/bs";
 import { AiOutlineStop } from "react-icons/ai";
@@ -407,14 +408,14 @@ const PrayerMainView = ({
   //   // height: "30%",
   //   width: "35%",
   // };
-  let excusedColor;
+  // let excusedColor;
 
-  if (userGender === "female") {
-    excusedColor = "purple";
-    console.log("trigger");
-  } else if (userGender === "male") {
-    excusedColor = "var(--alone-male-status-color)";
-  }
+  // if (userGender === "female") {
+  //   excusedColor = "purple";
+  //   console.log("trigger");
+  // } else if (userGender === "male") {
+  //   excusedColor = "var(--alone-male-status-color)";
+  // }
 
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices

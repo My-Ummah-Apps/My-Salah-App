@@ -95,6 +95,7 @@ const App = () => {
   // });
 
   let userGender: string | null = localStorage.getItem("userGender");
+
   useEffect(() => {
     if (!userGender) {
       setShowIntroModal(true);

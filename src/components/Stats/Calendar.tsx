@@ -47,7 +47,7 @@ const Calendar = ({
   currentWeek: number;
 }) => {
   const days = ["M", "T", "W", "T", "F", "S", "S"];
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // function modifySingleDaySalah(date: Date) {
   //   const today: Date = new Date();
   //   setCurrentWeek(

@@ -4,6 +4,7 @@ import { salahTrackingEntryType } from "../types/types";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import Calendar from "../components/Stats/Calendar";
 import StatCard from "../components/Stats/StatCard";
+import { eachDayOfInterval, parse } from "date-fns";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -30,7 +31,6 @@ const StatsPage = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  // setHeading("Stats");
   useEffect(() => {
     setHeading("Stats");
   }, []);
@@ -46,6 +46,15 @@ const StatsPage = ({
   let salahExcusedDatesOverall: string[] = [];
   let salahLateDatesOverall: string[] = [];
   let salahMissedDatesOverall: string[] = [];
+
+  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  let todaysDate = new Date();
+  let amountOfDaysBetweenStartDateAndToday = eachDayOfInterval({
+    start: userStartDateFormatted,
+    end: todaysDate,
+  });
+  let totalPossibleSalah = amountOfDaysBetweenStartDateAndToday.length * 5;
+  console.log(totalPossibleSalah);
 
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
@@ -66,11 +75,18 @@ const StatsPage = ({
         }
       }
     });
-    if (array.length > 0) {
-      statToUpdate = Math.round(
-        (array.length / (salahFulfilledDates.length + array.length)) * 100
-      );
-    }
+
+    statToUpdate = Math.round(
+      (salahFulfilledDates.length / totalPossibleSalah) * 100
+    );
+
+    console.log(totalPossibleSalah);
+    // Below will potentially be useful when adding individual salah stats
+    // if (array.length > 0) {
+    //   statToUpdate = Math.round(
+    //     (array.length / (salahFulfilledDates.length + array.length)) * 100
+    //   );
+    // }
 
     status === "group"
       ? (jamaahStat = statToUpdate)
@@ -99,8 +115,8 @@ const StatsPage = ({
     borderBottomLeftRadius: "1.4rem",
     borderBottomRightRadius: "1.4rem",
     iconBgColor: "var(--jamaah-status-color)",
-    bgColor: "var(--card-bg-color)",
-    // bgColor: "var(--jamaah-status-color)",
+    // bgColor: "var(--card-bg-color)",
+    bgColor: "var(--jamaah-status-color)",
   };
   const onTimeBoxStyling = {
     borderTopRightRadius: "1.4rem",
@@ -108,8 +124,8 @@ const StatsPage = ({
     borderBottomLeftRadius: "1.4rem",
     borderBottomRightRadius: "0rem",
     iconBgColor: "var(--alone-male-status-color)",
-    bgColor: "var(--card-bg-color)",
-    // bgColor: "var(--alone-male-status-color)",
+    // bgColor: "var(--card-bg-color)",
+    bgColor: "var(--alone-male-status-color)",
   };
   const lateBoxStyling = {
     borderTopRightRadius: "1.4rem",
@@ -117,8 +133,8 @@ const StatsPage = ({
     borderBottomLeftRadius: "1.4rem",
     borderBottomRightRadius: "1.4rem",
     iconBgColor: "var(--late-status-color)",
-    bgColor: "var(--card-bg-color)",
-    // bgColor: "var(--late-status-color)",
+    // bgColor: "var(--card-bg-color)",
+    bgColor: "var(--late-status-color)",
   };
   const missedBoxStyling = {
     borderTopRightRadius: "1.4rem",
@@ -126,17 +142,17 @@ const StatsPage = ({
     borderBottomLeftRadius: "0rem",
     borderBottomRightRadius: "1.4rem",
     iconBgColor: "var(--missed-status-color)",
-    bgColor: "var(--card-bg-color)",
-    // bgColor: "var(--missed-status-color)",
+    // bgColor: "var(--card-bg-color)",
+    bgColor: "var(--missed-status-color)",
   };
   const excusedBoxStyling = {
     borderTopRightRadius: "1.4rem",
     borderTopLeftRadius: "1.4rem",
     borderBottomLeftRadius: "0rem",
     borderBottomRightRadius: "1.4rem",
-    iconBgColor: "var(--missed-status-color)",
-    bgColor: "var(--card-bg-color)",
-    // bgColor: "var(--missed-status-color)",
+    iconBgColor: "var(--excused-status-color)",
+    // bgColor: "var(--card-bg-color)",
+    bgColor: "var(--excused-status-color)",
   };
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
