@@ -6,8 +6,8 @@ import { BsFillHouseDoorFill, BsFillNutFill } from "react-icons/bs";
 // import { MdCalendarMonth } from "react-icons/md";
 // import { FaCompass } from "react-icons/fa";
 // import { GrResources } from "react-icons/gr";
-// import { RiBarChart2Fill } from "react-icons/ri";
-// import { RiBarChart2Line } from "react-icons/ri";
+import { RiBarChart2Fill } from "react-icons/ri";
+import { RiBarChart2Line } from "react-icons/ri";
 import { BsHouseDoor } from "react-icons/bs";
 import { BsNut } from "react-icons/bs";
 
@@ -62,7 +62,7 @@ const NavBar = () => {
           )}
         </div>
       </NavLink>
-      {/* <NavLink
+      <NavLink
         onClick={() => {
           setActivePage("stats");
         }}
@@ -82,7 +82,7 @@ const NavBar = () => {
             />
           )}
         </div>
-      </NavLink> */}
+      </NavLink>
 
       {/* <NavLink
         onClick={() => {

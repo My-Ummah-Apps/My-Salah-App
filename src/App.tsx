@@ -94,7 +94,8 @@ const App = () => {
   //   }
   // });
 
-  let userGender: string | null = localStorage.getItem("userGender");
+  // let userGender: string | null = localStorage.getItem("userGender");
+  let userGender: any = localStorage.getItem("userGender");
 
   useEffect(() => {
     if (!userGender) {
@@ -204,12 +205,12 @@ const App = () => {
     checkStreak();
   }, [datesFrequencyReduced]);
 
-  const pageStyles: string = `px-2 py-[10vh] h-[95vh] overflow-x-hidden overflow-y-scroll w-full`;
+  const pageStyles: string = `px-2 py-[8vh] bg-[color:var(--primary-color)] h-[95vh] overflow-x-hidden overflow-y-auto w-full`;
 
   return (
     <BrowserRouter>
       <section className="App">
-        <div className="fixed z-20 flex justify-between w-full p-5 text-center header-wrap">
+        <div className="fixed h-[8vh]  z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
           {/* <div></div> */}
           <h1 className="text-center w-[100%]">{heading}</h1>

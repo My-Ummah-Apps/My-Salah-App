@@ -49,7 +49,7 @@ import { PiFlower } from "react-icons/pi";
 
 // import { v4 as uuidv4 } from "uuid";
 
-const PrayerMainView = ({
+const PrayerTableDisplay = ({
   userGender,
   userStartDate,
   setSalahTrackingArray,
@@ -140,6 +140,7 @@ const PrayerMainView = ({
   const [tableRowDate, settableRowDate] = useState("");
 
   // Array to hold the last five dates
+  // userStartDate = "01.01.10";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
   const datesBetween = eachDayOfInterval({
@@ -147,9 +148,9 @@ const PrayerMainView = ({
     end: endDate,
   });
   // console.log(datesBetween.length);
-  let currentDisplayedWeek: string[] = [];
+  let currentDisplayedDates: string[] = [];
   function generateDisplayedWeek() {
-    currentDisplayedWeek = Array.from(
+    currentDisplayedDates = Array.from(
       { length: datesBetween.length },
       (_, index) => {
         const date = subDays(startDate, index);
@@ -628,7 +629,7 @@ const PrayerMainView = ({
         }}
       >
         {/* sticky top-0 bg-[color:var(--primary-color)] */}
-        <thead className="thead ">
+        <thead className="sticky top-0 bg-[color:var(--primary-color)] thead">
           {/* <tr>
             <th className="border-none"></th>
           </tr> */}
@@ -651,7 +652,7 @@ const PrayerMainView = ({
             }}
             className=""
           >
-            <th className="w-1/6"></th>
+            <th className="w-1/6 "></th>
             {salahTrackingArray?.map((item) => {
               return (
                 <th
@@ -665,16 +666,7 @@ const PrayerMainView = ({
           </tr>
         </thead>
         <tbody>
-          {/* <tr className="hidden">
-            {currentDisplayedWeek.map((item) => {
-              return (
-                <td key={uuidv4()} className="text-xs border-none">
-                  {item}
-                </td>
-              );
-            })}
-          </tr> */}
-          {currentDisplayedWeek.map((item) => {
+          {currentDisplayedDates.map((item) => {
             const dateObject = parse(item, "dd.MM.yy", new Date());
             // const formattedDate = format(parsedDate, "EEE dd");
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -700,4 +692,4 @@ const PrayerMainView = ({
   );
 };
 
-export default PrayerMainView;
+export default PrayerTableDisplay;

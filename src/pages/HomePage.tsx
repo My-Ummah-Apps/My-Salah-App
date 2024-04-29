@@ -1,4 +1,4 @@
-import PrayerMainView from "../components/PrayerMainView/PrayerMainView";
+import PrayerTableDisplay from "../components/PrayerTable/PrayerTableDisplay";
 // import NextSalahTime from "../components/NextSalahTime";
 import { salahTrackingEntryType } from "../types/types";
 import { useEffect } from "react";
@@ -52,7 +52,7 @@ const HomePage = ({
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
       {/* <NextSalahTime /> */}
-      <PrayerMainView
+      <PrayerTableDisplay
         userGender={userGender}
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
