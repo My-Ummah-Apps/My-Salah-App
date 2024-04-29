@@ -205,12 +205,12 @@ const App = () => {
     checkStreak();
   }, [datesFrequencyReduced]);
 
-  const pageStyles: string = `px-2 py-[8vh] bg-[color:var(--primary-color)] h-[95vh] overflow-x-hidden overflow-y-auto w-full`;
+  const pageStyles: string = `px-2 py-[9vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-full`;
 
   return (
     <BrowserRouter>
       <section className="App">
-        <div className="fixed h-[8vh]  z-20 flex justify-between w-full p-5 text-center header-wrap">
+        <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
           {/* <div></div> */}
           <h1 className="text-center w-[100%]">{heading}</h1>
