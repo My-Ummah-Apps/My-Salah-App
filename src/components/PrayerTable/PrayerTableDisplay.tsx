@@ -137,7 +137,7 @@ const PrayerTableDisplay = ({
   // const [icon, setIcon] = useState("");
   // const [showCalenderOneMonth, setShowCalenderOneMonth] = useState(false);
   const [selectedSalah, setSelectedSalah] = useState("");
-  const [tableRowDate, settableRowDate] = useState("");
+  const [tableRowDate, setTableRowDate] = useState("");
 
   // Array to hold the last five dates
   // userStartDate = "01.01.10";
@@ -260,13 +260,38 @@ const PrayerTableDisplay = ({
       // console.log(selectedSalah);
 
       setSelectedSalah(selectedSalah);
-      settableRowDate(tableRowDate);
+      setTableRowDate(tableRowDate);
     } else if (salahName && date) {
       // console.log("salahName && date exists");
       setSelectedSalah(salahName);
-      settableRowDate(date);
+      setTableRowDate(date);
     }
   }
+
+  let missedReasonsArray = [
+    "Alarm",
+    "Family",
+    "Guests",
+    "Friends",
+    "Movies",
+    "Sleep",
+  ];
+  let lateReasonsArray = [
+    "Alarm",
+    "Family",
+    "Friends",
+    "Guests",
+    "Movies",
+    "Sleep",
+  ];
+  let prayedAloneReasonsArray = [
+    "Family",
+    "Friends",
+    "Guests",
+    "Movies",
+    "Sleep",
+    "Alarm",
+  ];
 
   let cellIcon: string | JSX.Element;
   function populateCells(formattedDate: string, index: number) {
@@ -418,6 +443,12 @@ const PrayerTableDisplay = ({
   //   excusedColor = "var(--alone-male-status-color)";
   // }
 
+  // let tableRowDate;
+  // let selectedSalah
+  // tableRowDate, selectedSalah, "missed"
+  // let salahStatus: string;
+  const [salahStatus, setSalahStatus] = useState("");
+
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
@@ -437,10 +468,14 @@ const PrayerTableDisplay = ({
                 <>
                   <div
                     onClick={() => {
-                      changePrayerStatus(tableRowDate, selectedSalah, "group");
-                      setShowUpdateStatusModal(false);
+                      setSalahStatus("group");
                     }}
-                    className="px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                    // style={{
+                    //   border: salahStatus === "group" ? "1px solid blue" : "",
+                    // }}
+                    className={`${
+                      salahStatus === "group" ? "border border-white" : ""
+                    } px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
                   >
                     {" "}
                     <MdPerson className="inline mr-4 text-3xl" />
@@ -451,14 +486,13 @@ const PrayerTableDisplay = ({
                 <>
                   <div
                     onClick={() => {
-                      changePrayerStatus(
-                        tableRowDate,
-                        selectedSalah,
-                        "female-alone"
-                      );
-                      setShowUpdateStatusModal(false);
+                      setSalahStatus("female-alone");
                     }}
-                    className="px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                    className={`${
+                      salahStatus === "female-alone"
+                        ? "border border-white"
+                        : ""
+                    } px-5 py-3 mb-4 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
                   >
                     {" "}
                     <MdPerson className="inline mr-4 text-3xl" />
@@ -470,14 +504,11 @@ const PrayerTableDisplay = ({
                 <>
                   <div
                     onClick={() => {
-                      changePrayerStatus(
-                        tableRowDate,
-                        selectedSalah,
-                        "male-alone"
-                      );
-                      setShowUpdateStatusModal(false);
+                      setSalahStatus("male-alone");
                     }}
-                    className="bg-[color:var(--alone-male-status-color)] px-5 py-3 mb-4 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                    className={`${
+                      salahStatus === "male-alone" ? "border border-white" : ""
+                    } px-5 py-3 mb-4 bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
                   >
                     <BsPersonStanding className="inline mr-4 text-3xl" />
                     <p className="inline">Prayed On Time</p>
@@ -487,14 +518,11 @@ const PrayerTableDisplay = ({
                 <>
                   <div
                     onClick={() => {
-                      changePrayerStatus(
-                        tableRowDate,
-                        selectedSalah,
-                        "excused"
-                      );
-                      setShowUpdateStatusModal(false);
+                      setSalahStatus("excused");
                     }}
-                    className="bg-[color:var(--excused-status-color)] px-5 py-3 mb-4 icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                    className={`${
+                      salahStatus === "excused" ? "border border-white" : ""
+                    } px-5 py-3 mb-4 bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
                   >
                     <PiFlower className="inline mr-4 text-3xl" />
                     <p className="inline">Excused</p>
@@ -503,10 +531,11 @@ const PrayerTableDisplay = ({
               )}
               <div
                 onClick={() => {
-                  changePrayerStatus(tableRowDate, selectedSalah, "late");
-                  setShowUpdateStatusModal(false);
+                  setSalahStatus("late");
                 }}
-                className="px-5 py-3 mb-4 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                className={`${
+                  salahStatus === "late" ? "border border-white" : ""
+                } px-5 py-3 mb-4 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
               >
                 <LuDot
                   className="inline mr-4 text-3xl"
@@ -520,10 +549,11 @@ const PrayerTableDisplay = ({
               </div>
               <div
                 onClick={() => {
-                  changePrayerStatus(tableRowDate, selectedSalah, "missed");
-                  setShowUpdateStatusModal(false);
+                  setSalahStatus("missed");
                 }}
-                className="px-5 py-3 mb-4 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto"
+                className={`${
+                  salahStatus === "missed" ? "border border-white" : ""
+                } px-5 py-3 mb-4 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
               >
                 <AiOutlineStop
                   className="inline mr-4 text-3xl"
@@ -535,6 +565,19 @@ const PrayerTableDisplay = ({
                 />
                 <p className="inline">Missed</p>
               </div>
+              <div>
+                <p>Reason:</p>
+              </div>
+              <button
+                onClick={() => {
+                  changePrayerStatus(tableRowDate, selectedSalah, salahStatus);
+                  setShowUpdateStatusModal(false);
+                  setSalahStatus("");
+                }}
+                className="w-full p-4 mt-5 bg-blue-600 rounded-2xl"
+              >
+                Save
+              </button>
             </section>
           </Sheet.Content>
         </Sheet.Container>
