@@ -20,17 +20,17 @@ const HomePage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray,
-  setCurrentWeek,
-  currentWeek,
-}: {
+} // setCurrentWeek,
+// currentWeek,
+: {
   // title: React.ReactNode;
   userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
   startDate: Date;
-  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  currentWeek: number;
+  // setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  // currentWeek: number;
   // currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
@@ -57,8 +57,8 @@ const HomePage = ({
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
-        setCurrentWeek={setCurrentWeek}
-        currentWeek={currentWeek}
+        // setCurrentWeek={setCurrentWeek}
+        // currentWeek={currentWeek}
         startDate={startDate}
       />
     </section>

@@ -157,6 +157,7 @@ const App = () => {
             completedDates: [],
           },
         ]);
+    console.log(storedSalahTrackingData);
   }, []);
 
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
@@ -244,8 +245,8 @@ const App = () => {
                 startDate={startDate}
                 setSalahTrackingArray={setSalahTrackingArray}
                 salahTrackingArray={salahTrackingArray}
-                setCurrentWeek={setCurrentWeek}
-                currentWeek={currentWeek}
+                // setCurrentWeek={setCurrentWeek}
+                // currentWeek={currentWeek}
               />
             }
           />

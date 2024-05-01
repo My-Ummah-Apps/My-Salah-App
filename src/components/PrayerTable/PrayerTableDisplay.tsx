@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
-import CalenderMonthly from "../Stats/CalenderMonthly";
+// import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
 // import ReactModal from "react-modal";
 // import { FaMosque, FaHome } from "react-icons/fa";
@@ -15,7 +15,7 @@ import { BsPersonStanding } from "react-icons/bs";
 import { AiOutlineStop } from "react-icons/ai";
 // import { GoPerson } from "react-icons/go";
 // import { GoPeople } from "react-icons/go";
-// import { PiClockCounterClockwise } from "react-icons/pi";
+import { PiClockCounterClockwise } from "react-icons/pi";
 
 import { salahTrackingEntryType } from "../../types/types";
 // interface salahTrackingEntryType {
@@ -38,13 +38,13 @@ import {
   subDays,
   format,
   parse,
-  startOfToday,
-  startOfMonth,
+  // startOfToday,
+  // startOfMonth,
   eachDayOfInterval,
   // differenceInDays,
 } from "date-fns";
 
-import StreakCount from "../Stats/StreakCount";
+// import StreakCount from "../Stats/StreakCount";
 import { PiFlower } from "react-icons/pi";
 
 // import { v4 as uuidv4 } from "uuid";
@@ -54,8 +54,8 @@ const PrayerTableDisplay = ({
   userStartDate,
   setSalahTrackingArray,
   salahTrackingArray,
-  setCurrentWeek,
-  currentWeek,
+  // setCurrentWeek,
+  // currentWeek,
   startDate,
 }: {
   userGender: string;
@@ -64,13 +64,13 @@ const PrayerTableDisplay = ({
   >;
   userStartDate: string;
   salahTrackingArray: salahTrackingEntryType[];
-  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  currentWeek: number;
+  // setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  // currentWeek: number;
   startDate: Date;
 }) => {
   // console.log("salahTrackingArray");
   // console.log(salahTrackingArray);
-  const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
+  // const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
 
   // const [streakCounter, setStreakCounter] = useState(0);
 
@@ -79,59 +79,59 @@ const PrayerTableDisplay = ({
   //  ----------------------------------------------
 
   // const days = ["M", "T", "W", "T", "F", "S", "S"];
-  const today = startOfToday();
-  const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
-    const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
-    const dayMonth = startOfMonth(dayToCheck);
-    return (
-      dayMonth.getMonth() === parsedCurrentMonth.getMonth() &&
-      dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
-    );
-  };
+  // const today = startOfToday();
+  // const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
+  //   const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  //   const dayMonth = startOfMonth(dayToCheck);
+  //   return (
+  //     dayMonth.getMonth() === parsedCurrentMonth.getMonth() &&
+  //     dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
+  //   );
+  // };
 
-  const countCompletedDates = (date: string, salahName?: string) => {
-    const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
-      string[]
-    >((accumulatorArray, salah) => {
-      if (salah.salahName === salahName) {
-        salah.completedDates.forEach((item) => {
-          accumulatorArray.push(Object.keys(item)[0]);
-        });
-      } else if (!salahName) {
-        salah.completedDates.forEach((item) => {
-          accumulatorArray.push(Object.keys(item)[0]);
-        });
-      }
-      return accumulatorArray;
-    }, []);
+  // const countCompletedDates = (date: string, salahName?: string) => {
+  //   const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
+  //     string[]
+  //   >((accumulatorArray, salah) => {
+  //     if (salah.salahName === salahName) {
+  //       salah.completedDates.forEach((item) => {
+  //         accumulatorArray.push(Object.keys(item)[0]);
+  //       });
+  //     } else if (!salahName) {
+  //       salah.completedDates.forEach((item) => {
+  //         accumulatorArray.push(Object.keys(item)[0]);
+  //       });
+  //     }
+  //     return accumulatorArray;
+  //   }, []);
 
-    let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
-      (currentDate) => currentDate === date
-    );
+  //   let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
+  //     (currentDate) => currentDate === date
+  //   );
 
-    let sameDatesArrayLength = sameDatesArray.length;
+  //   let sameDatesArrayLength = sameDatesArray.length;
 
-    let color;
+  //   let color;
 
-    if (salahName) {
-      if (sameDatesArrayLength === 0) {
-        color = "transparent";
-      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-        color = "green";
-      }
-    } else if (!salahName) {
-      if (sameDatesArrayLength === 0) {
-        color = "transparent";
-      } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-        color = "orange";
-      } else if (sameDatesArrayLength === 5) {
-        color = "green";
-      }
-    }
+  //   if (salahName) {
+  //     if (sameDatesArrayLength === 0) {
+  //       color = "transparent";
+  //     } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+  //       color = "green";
+  //     }
+  //   } else if (!salahName) {
+  //     if (sameDatesArrayLength === 0) {
+  //       color = "transparent";
+  //     } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
+  //       color = "orange";
+  //     } else if (sameDatesArrayLength === 5) {
+  //       color = "green";
+  //     }
+  //   }
 
-    sameDatesArray = [];
-    return color;
-  };
+  //   sameDatesArray = [];
+  //   return color;
+  // };
   // END OF CODE FROM CALENDER.TSX ----------------------------------------------
 
   // const [icon, setIcon] = useState("");
@@ -162,8 +162,8 @@ const PrayerTableDisplay = ({
   generateDisplayedWeek();
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
-    useState(false);
+  // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
+  //   useState(false);
 
   const changePrayerStatus: (
     tableRowDate: string,
@@ -275,23 +275,41 @@ const PrayerTableDisplay = ({
     "Friends",
     "Movies",
     "Sleep",
-  ];
-  let lateReasonsArray = [
     "Alarm",
     "Family",
-    "Friends",
     "Guests",
+    "Friends",
     "Movies",
     "Sleep",
   ];
-  let prayedAloneReasonsArray = [
-    "Family",
-    "Friends",
-    "Guests",
-    "Movies",
-    "Sleep",
-    "Alarm",
-  ];
+  // let lateReasonsArray = [
+  //   "Alarm",
+  //   "Family",
+  //   "Friends",
+  //   "Guests",
+  //   "Movies",
+  //   "Sleep",
+  //   "Alarm",
+  //   "Family",
+  //   "Friends",
+  //   "Guests",
+  //   "Movies",
+  //   "Sleep",
+  // ];
+  // let prayedAloneReasonsArray = [
+  //   "Family",
+  //   "Friends",
+  //   "Guests",
+  //   "Movies",
+  //   "Sleep",
+  //   "Alarm",
+  //   "Family",
+  //   "Friends",
+  //   "Guests",
+  //   "Movies",
+  //   "Sleep",
+  //   "Alarm",
+  // ];
 
   let cellIcon: string | JSX.Element;
   function populateCells(formattedDate: string, index: number) {
@@ -462,123 +480,140 @@ const PrayerTableDisplay = ({
         <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Header />
           <Sheet.Content>
-            {" "}
-            <section className="w-[80%] mx-auto my-20 rounded-lg text-white">
-              {userGender === "male" ? (
-                <>
+            <Sheet.Scroller>
+              {" "}
+              <section className="w-[80%] mx-auto mt-5 mb-20 rounded-lg text-white">
+                <h1 className="mb-5 text-3xl text-center">
+                  How did you pray {selectedSalah}?
+                </h1>
+                <div className="grid grid-cols-2 salah-statuses-wrap">
+                  {userGender === "male" ? (
+                    <>
+                      <div
+                        onClick={() => {
+                          setSalahStatus("group");
+                        }}
+                        className={`${
+                          salahStatus === "group" ? "border border-white" : ""
+                        } px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-xl w-[80%] mx-auto text-center`}
+                      >
+                        {" "}
+                        <MdPerson className="w-full mb-1 text-3xl" />
+                        <p className="inline">Prayed In Jamaah</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        onClick={() => {
+                          setSalahStatus("female-alone");
+                        }}
+                        className={`${
+                          salahStatus === "female-alone"
+                            ? "border border-white"
+                            : ""
+                        } px-5 py-3 mb-4 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-xl w-[80%] mx-auto text-center`}
+                      >
+                        {" "}
+                        <MdPerson className="w-full mb-1 text-3xl" />
+                        <p className="inline">Prayed</p>
+                      </div>
+                    </>
+                  )}
+                  {userGender === "male" ? (
+                    <>
+                      <div
+                        onClick={() => {
+                          setSalahStatus("male-alone");
+                        }}
+                        className={`${
+                          salahStatus === "male-alone"
+                            ? "border border-white"
+                            : ""
+                        } px-5 py-3 mb-4 bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
+                      >
+                        <BsPersonStanding className="w-full mb-1 text-3xl" />
+                        <p className="inline">Prayed On Time</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        onClick={() => {
+                          setSalahStatus("excused");
+                        }}
+                        className={`${
+                          salahStatus === "excused" ? "border border-white" : ""
+                        } px-5 py-3 mb-4 bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
+                      >
+                        <PiFlower className="w-full mb-1 text-3xl" />
+                        <p className="inline">Excused</p>
+                      </div>{" "}
+                    </>
+                  )}
                   <div
                     onClick={() => {
-                      setSalahStatus("group");
+                      setSalahStatus("late");
                     }}
-                    // style={{
-                    //   border: salahStatus === "group" ? "1px solid blue" : "",
-                    // }}
                     className={`${
-                      salahStatus === "group" ? "border border-white" : ""
-                    } px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
+                      salahStatus === "late" ? "border border-white" : ""
+                    } px-5 py-3 mb-4 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
                   >
-                    {" "}
-                    <MdPerson className="inline mr-4 text-3xl" />
-                    <p className="inline">Prayed In Jamaah</p>
+                    <PiClockCounterClockwise
+                      className="w-full mb-1 text-3xl"
+                      // style={{
+                      //   fontSize: "2rem",
+                      //   marginRight: "1rem",
+                      //   display: "inline",
+                      // }}
+                    />
+                    <p className="inline">Late</p>
                   </div>
-                </>
-              ) : (
-                <>
                   <div
                     onClick={() => {
-                      setSalahStatus("female-alone");
+                      setSalahStatus("missed");
                     }}
                     className={`${
-                      salahStatus === "female-alone"
-                        ? "border border-white"
-                        : ""
-                    } px-5 py-3 mb-4 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
+                      salahStatus === "missed" ? "border border-white" : ""
+                    } px-5 py-3 mb-4 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
                   >
-                    {" "}
-                    <MdPerson className="inline mr-4 text-3xl" />
-                    <p className="inline">Prayed</p>
+                    <AiOutlineStop
+                      className="w-full mb-1 text-3xl"
+                      // style={{
+                      //   fontSize: "2rem",
+                      //   marginRight: "1rem",
+                      //   display: "inline",
+                      // }}
+                    />
+                    <p className="inline">Missed</p>
                   </div>
-                </>
-              )}
-              {userGender === "male" ? (
-                <>
-                  <div
-                    onClick={() => {
-                      setSalahStatus("male-alone");
-                    }}
-                    className={`${
-                      salahStatus === "male-alone" ? "border border-white" : ""
-                    } px-5 py-3 mb-4 bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
-                  >
-                    <BsPersonStanding className="inline mr-4 text-3xl" />
-                    <p className="inline">Prayed On Time</p>
+                </div>
+                <div>
+                  <p className="my-3 text-sm">Reason (Optional): </p>
+                  <div className="flex flex-wrap ">
+                    {missedReasonsArray.map((item) => (
+                      <p className="p-2 m-1 text-sm border border-blue-400 rounded-xl">
+                        {item}
+                      </p>
+                    ))}
                   </div>
-                </>
-              ) : (
-                <>
-                  <div
-                    onClick={() => {
-                      setSalahStatus("excused");
-                    }}
-                    className={`${
-                      salahStatus === "excused" ? "border border-white" : ""
-                    } px-5 py-3 mb-4 bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
-                  >
-                    <PiFlower className="inline mr-4 text-3xl" />
-                    <p className="inline">Excused</p>
-                  </div>{" "}
-                </>
-              )}
-              <div
-                onClick={() => {
-                  setSalahStatus("late");
-                }}
-                className={`${
-                  salahStatus === "late" ? "border border-white" : ""
-                } px-5 py-3 mb-4 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
-              >
-                <LuDot
-                  className="inline mr-4 text-3xl"
-                  // style={{
-                  //   fontSize: "2rem",
-                  //   marginRight: "1rem",
-                  //   display: "inline",
-                  // }}
-                />
-                <p className="inline">Late</p>
-              </div>
-              <div
-                onClick={() => {
-                  setSalahStatus("missed");
-                }}
-                className={`${
-                  salahStatus === "missed" ? "border border-white" : ""
-                } px-5 py-3 mb-4 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto`}
-              >
-                <AiOutlineStop
-                  className="inline mr-4 text-3xl"
-                  // style={{
-                  //   fontSize: "2rem",
-                  //   marginRight: "1rem",
-                  //   display: "inline",
-                  // }}
-                />
-                <p className="inline">Missed</p>
-              </div>
-              <div>
-                <p>Reason:</p>
-              </div>
-              <button
-                onClick={() => {
-                  changePrayerStatus(tableRowDate, selectedSalah, salahStatus);
-                  setShowUpdateStatusModal(false);
-                  setSalahStatus("");
-                }}
-                className="w-full p-4 mt-5 bg-blue-600 rounded-2xl"
-              >
-                Save
-              </button>
-            </section>
+                </div>
+                <button
+                  onClick={() => {
+                    changePrayerStatus(
+                      tableRowDate,
+                      selectedSalah,
+                      salahStatus
+                    );
+                    setShowUpdateStatusModal(false);
+                    setSalahStatus("");
+                  }}
+                  className="w-full p-4 mt-5 bg-blue-600 rounded-2xl"
+                >
+                  Save
+                </button>
+              </section>
+            </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />
@@ -610,10 +645,10 @@ const PrayerTableDisplay = ({
 
               // monthlyCalenderToShow =
               //   e.currentTarget.querySelector("td")?.textContent;
-              setMonthlyCalenderToShow(
-                // e.currentTarget.querySelector("td")?.textContent || ""
-                e.currentTarget.querySelector("td")?.textContent || ""
-              );
+              // setMonthlyCalenderToShow(
+              //   // e.currentTarget.querySelector("td")?.textContent || ""
+              //   e.currentTarget.querySelector("td")?.textContent || ""
+              // );
               if (e.currentTarget.tagName !== "svg") {
                 // setShowMonthlyCalenderModal(true);
               }
