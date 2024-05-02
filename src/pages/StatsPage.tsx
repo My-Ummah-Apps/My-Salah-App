@@ -54,7 +54,7 @@ const StatsPage = ({
     end: todaysDate,
   });
   let totalPossibleSalah = amountOfDaysBetweenStartDateAndToday.length * 5;
-  console.log(totalPossibleSalah);
+  // console.log(totalPossibleSalah);
 
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
@@ -70,7 +70,7 @@ const StatsPage = ({
     let statToUpdate = 0;
     salahTrackingArray.forEach((salah) => {
       for (let i = 0; i < salah.completedDates.length; i++) {
-        if (Object.values(salah.completedDates[i])[0] === status) {
+        if (Object.values(salah.completedDates[i])[0].status === status) {
           array.push(Object.keys(salah.completedDates[i])[0]);
         }
       }
@@ -80,7 +80,7 @@ const StatsPage = ({
       (salahFulfilledDates.length / totalPossibleSalah) * 100
     );
 
-    console.log(totalPossibleSalah);
+    // console.log(totalPossibleSalah);
     // Below will potentially be useful when adding individual salah stats
     // if (array.length > 0) {
     //   statToUpdate = Math.round(

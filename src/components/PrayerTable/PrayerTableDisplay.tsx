@@ -9,14 +9,17 @@ import Sheet from "react-modal-sheet";
 // import { ImCross } from "react-icons/im";
 
 // import { MdGroups, MdPerson } from "react-icons/md";
-import { MdPerson } from "react-icons/md";
+// import { MdPerson } from "react-icons/md";
 import { LuDot } from "react-icons/lu";
-import { BsPersonStanding } from "react-icons/bs";
-import { AiOutlineStop } from "react-icons/ai";
-// import { GoPerson } from "react-icons/go";
-// import { GoPeople } from "react-icons/go";
-import { PiClockCounterClockwise } from "react-icons/pi";
+// import { BsPersonStanding } from "react-icons/bs";
+// import { AiOutlineStop } from "react-icons/ai";
+// import { GoCircleSlash } from "react-icons/go";
+import { GoPerson } from "react-icons/go";
+import { GoPeople } from "react-icons/go";
+import { GoSkip } from "react-icons/go";
+import { GoClock } from "react-icons/go";
 
+import { PiClockCounterClockwise } from "react-icons/pi";
 import { salahTrackingEntryType } from "../../types/types";
 // interface salahTrackingEntryType {
 //   salahName: string;
@@ -280,12 +283,6 @@ const PrayerTableDisplay = ({
     "Friends",
     "Movies",
     "Sleep",
-    "Alarm",
-    "Family",
-    "Guests",
-    "Friends",
-    "Movies",
-    "Sleep",
   ];
   // let lateReasonsArray = [
   //   "Alarm",
@@ -471,6 +468,9 @@ const PrayerTableDisplay = ({
   // tableRowDate, selectedSalah, "missed"
   // let salahStatus: string;
   const [salahStatus, setSalahStatus] = useState("");
+  const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
+  console.log(selectedReasons);
+  let arr = selectedReasons;
 
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
@@ -503,7 +503,7 @@ const PrayerTableDisplay = ({
                         } px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-xl w-[80%] mx-auto text-center`}
                       >
                         {" "}
-                        <MdPerson className="w-full mb-1 text-3xl" />
+                        <GoPeople className="w-full mb-1 text-3xl" />
                         <p className="inline">Prayed In Jamaah</p>
                       </div>
                     </>
@@ -520,7 +520,7 @@ const PrayerTableDisplay = ({
                         } px-5 py-3 mb-4 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-xl w-[80%] mx-auto text-center`}
                       >
                         {" "}
-                        <MdPerson className="w-full mb-1 text-3xl" />
+                        <GoPerson className="w-full mb-1 text-3xl" />
                         <p className="inline">Prayed</p>
                       </div>
                     </>
@@ -537,7 +537,7 @@ const PrayerTableDisplay = ({
                             : ""
                         } px-5 py-3 mb-4 bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
                       >
-                        <BsPersonStanding className="w-full mb-1 text-3xl" />
+                        <GoPerson className="w-full mb-1 text-3xl" />
                         <p className="inline">Prayed On Time</p>
                       </div>
                     </>
@@ -564,7 +564,7 @@ const PrayerTableDisplay = ({
                       salahStatus === "late" ? "border border-white" : ""
                     } px-5 py-3 mb-4 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
                   >
-                    <PiClockCounterClockwise
+                    <GoClock
                       className="w-full mb-1 text-3xl"
                       // style={{
                       //   fontSize: "2rem",
@@ -582,7 +582,7 @@ const PrayerTableDisplay = ({
                       salahStatus === "missed" ? "border border-white" : ""
                     } px-5 py-3 mb-4 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
                   >
-                    <AiOutlineStop
+                    <GoSkip
                       className="w-full mb-1 text-3xl"
                       // style={{
                       //   fontSize: "2rem",
@@ -593,15 +593,47 @@ const PrayerTableDisplay = ({
                     <p className="inline">Missed</p>
                   </div>
                 </div>
-                <div>
-                  <p className="my-3 text-sm">Reason (Optional): </p>
+                <div className="reasons-wrap">
+                  <h2 className="my-3 text-sm">Reason (Optional): </h2>
                   <div className="flex flex-wrap ">
                     {missedReasonsArray.map((item) => (
-                      <p className="p-2 m-1 text-sm border border-blue-400 rounded-xl">
+                      <p
+                        style={{
+                          backgroundColor: selectedReasons.includes(item)
+                            ? "blue"
+                            : "",
+                        }}
+                        onClick={() => {
+                          if (!arr.includes(item)) {
+                            arr = [...selectedReasons, item];
+                          } else if (arr.includes(item)) {
+                            console.log(item);
+                            let indexToRemove = selectedReasons.indexOf(item);
+                            arr = selectedReasons.filter((item, index) => {
+                              return (
+                                selectedReasons.indexOf(item) !== indexToRemove
+                              );
+                            });
+                          }
+
+                          setSelectedReasons(arr);
+                        }}
+                        className="p-2 m-1 text-sm border border-blue-400 rounded-xl"
+                      >
                         {item}
                       </p>
                     ))}
                   </div>
+                </div>
+                <div className="text-sm notes-wrap">
+                  <h2 className="mt-3">Notes (Optional)</h2>
+                  <textarea
+                    style={{ resize: "vertical" }}
+                    // wrap="hard"
+                    rows={3}
+                    // cols={1}
+                    className="w-full mt-3 bg-transparent border rounded-md border-amber-600"
+                  />
                 </div>
                 <button
                   onClick={() => {
