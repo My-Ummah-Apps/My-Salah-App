@@ -105,7 +105,8 @@ const App = () => {
 
   // const todaysDate = new Date("2024-01-01");
   const todaysDate = new Date();
-  let userStartDate: string | null = localStorage.getItem("userStartDate");
+  // let userStartDate: string | null = localStorage.getItem("userStartDate");
+  let userStartDate: string | null = "01.01.24";
   if (!userStartDate) {
     userStartDate = format(todaysDate, "dd.MM.yy");
     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
@@ -163,9 +164,10 @@ const App = () => {
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
     (accumulatorArray, salah) => {
       for (let i = 0; i < salah.completedDates.length; i++) {
+        Object.values(salah.completedDates[i]);
         if (
-          Object.values(salah.completedDates[i])[0] !== "missed" &&
-          Object.values(salah.completedDates[i])[0] !== "blank"
+          Object.values(salah.completedDates[i])[0].status !== "missed" &&
+          Object.values(salah.completedDates[i])[0].status !== "blank"
         ) {
           accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
         }

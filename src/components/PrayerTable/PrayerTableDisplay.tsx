@@ -204,7 +204,9 @@ const PrayerTableDisplay = ({
             ...item,
             completedDates: [
               ...item.completedDates,
-              { [tableRowDate]: salahStatus },
+              {
+                [tableRowDate]: { status: salahStatus, reasons: [], notes: "" },
+              },
             ],
           };
         } else if (doesDateObjectExist !== undefined) {
@@ -218,11 +220,14 @@ const PrayerTableDisplay = ({
               );
             }
           );
+
           return {
             ...item,
             completedDates: [
               ...filteredCompletedDatesArray,
-              { [tableRowDate]: salahStatus },
+              {
+                [tableRowDate]: { status: salahStatus, reasons: [], notes: "" },
+              },
             ],
           };
         }
@@ -244,10 +249,10 @@ const PrayerTableDisplay = ({
     if (!salahName && !date) {
       let tableRowDate =
         e.target.closest(".table-row").cells[0].children[0].innerText;
-      console.log("tableRowDate:");
-      console.log(
-        e.target.closest(".table-row").cells[0].children[0].innerText
-      );
+      // console.log("tableRowDate:");
+      // console.log(
+      //   e.target.closest(".table-row").cells[0].children[0].innerText
+      // );
 
       const columnIndex: any = e.target.closest("#icon-wrap").parentElement
         .cellIndex as HTMLTableCellElement;
@@ -332,7 +337,7 @@ const PrayerTableDisplay = ({
     );
 
     if (matchedObject !== undefined) {
-      cellIcon = matchedObject[formattedDate];
+      cellIcon = matchedObject[formattedDate].status;
     }
 
     if (cellIcon === "male-alone") {

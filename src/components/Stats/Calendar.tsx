@@ -214,15 +214,25 @@ const Calendar = ({
         if (completedDates[key].hasOwnProperty(formattedDate)) {
           if (Object.keys(completedDates[key])[0] === formattedDate) {
             if (item.salahName === "Fajr") {
-              fajrColor = generateRadialColor(completedDates[key]);
+              fajrColor = generateRadialColor({
+                formattedDate: completedDates[key][formattedDate].status,
+              });
             } else if (item.salahName === "Dhuhr") {
-              zoharColor = generateRadialColor(completedDates[key]);
+              zoharColor = generateRadialColor({
+                formattedDate: completedDates[key][formattedDate].status,
+              });
             } else if (item.salahName === "Asar") {
-              asarColor = generateRadialColor(completedDates[key]);
+              asarColor = generateRadialColor({
+                formattedDate: completedDates[key][formattedDate].status,
+              });
             } else if (item.salahName === "Maghrib") {
-              maghribColor = generateRadialColor(completedDates[key]);
+              maghribColor = generateRadialColor({
+                formattedDate: completedDates[key][formattedDate].status,
+              });
             } else if (item.salahName === "Isha") {
-              ishaColor = generateRadialColor(completedDates[key]);
+              ishaColor = generateRadialColor({
+                formattedDate: completedDates[key][formattedDate].status,
+              });
             }
           }
         }
