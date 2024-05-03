@@ -134,6 +134,7 @@ const App = () => {
     const storedSalahTrackingData = localStorage.getItem(
       "storedSalahTrackingData"
     );
+
     storedSalahTrackingData
       ? setSalahTrackingArray(JSON.parse(storedSalahTrackingData))
       : setSalahTrackingArray([
@@ -158,7 +159,7 @@ const App = () => {
             completedDates: [],
           },
         ]);
-    console.log(storedSalahTrackingData);
+    console.log(salahTrackingArray);
   }, []);
 
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(

@@ -5,9 +5,9 @@
 
 export interface salahTrackingEntryType {
   salahName: string;
-  completedDates:
-    | { [date: string]: { status: string; reasons: string[]; notes: string } }[]
-    | [];
+  completedDates: {
+    [date: string]: { status: string; reasons: string[]; notes: string };
+  }[];
 }
 
 // [tableRowDate]: { status: salahStatus, reasons: [], notes: "" }

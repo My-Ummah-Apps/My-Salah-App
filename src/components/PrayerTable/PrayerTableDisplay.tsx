@@ -19,7 +19,7 @@ import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
 import { GoClock } from "react-icons/go";
 
-import { PiClockCounterClockwise } from "react-icons/pi";
+// import { PiClockCounterClockwise } from "react-icons/pi";
 import { salahTrackingEntryType } from "../../types/types";
 // interface salahTrackingEntryType {
 //   salahName: string;
@@ -165,14 +165,22 @@ const PrayerTableDisplay = ({
   generateDisplayedWeek();
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+  const [salahStatus, setSalahStatus] = useState("");
+  const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
+  let arr = selectedReasons;
+  const [notes, setNotes] = useState("");
+  const handleNotes = (e) => {
+    setNotes(e.target.value);
+  };
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
   //   useState(false);
 
   const changePrayerStatus: (
     tableRowDate: string,
     selectedSalah: string,
-    salahStatus: string
-    // icon
+    salahStatus: string,
+    selectedReasons: string[],
+    notes: string
   ) => void = (tableRowDate, selectedSalah, salahStatus) => {
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
       if (item.salahName === selectedSalah.replace(/\s/g, "")) {
@@ -208,7 +216,11 @@ const PrayerTableDisplay = ({
             completedDates: [
               ...item.completedDates,
               {
-                [tableRowDate]: { status: salahStatus, reasons: [], notes: "" },
+                [tableRowDate]: {
+                  status: salahStatus,
+                  reasons: selectedReasons,
+                  notes: notes,
+                },
               },
             ],
           };
@@ -229,7 +241,11 @@ const PrayerTableDisplay = ({
             completedDates: [
               ...filteredCompletedDatesArray,
               {
-                [tableRowDate]: { status: salahStatus, reasons: [], notes: "" },
+                [tableRowDate]: {
+                  status: salahStatus,
+                  reasons: selectedReasons,
+                  notes: notes,
+                },
               },
             ],
           };
@@ -244,36 +260,64 @@ const PrayerTableDisplay = ({
       "storedSalahTrackingData",
       JSON.stringify(newSalahTrackingArray)
     );
+    console.log(JSON.stringify(newSalahTrackingArray));
   };
 
-  function grabDate(e: any, date?: string, salahName?: string) {
-    // console.log("grabDate has run");
+  function grabDate(e: any) {
+    console.log(salahTrackingArray);
 
-    if (!salahName && !date) {
-      let tableRowDate =
-        e.target.closest(".table-row").cells[0].children[0].innerText;
-      // console.log("tableRowDate:");
-      // console.log(
-      //   e.target.closest(".table-row").cells[0].children[0].innerText
-      // );
+    let tableRowDate =
+      e.target.closest(".table-row").cells[0].children[0].innerText;
+    // console.log("tableRowDate:");
+    // console.log(
+    //   e.target.closest(".table-row").cells[0].children[0].innerText
+    // );
 
-      const columnIndex: any = e.target.closest("#icon-wrap").parentElement
-        .cellIndex as HTMLTableCellElement;
+    const columnIndex: any = e.target.closest("#icon-wrap").parentElement
+      .cellIndex as HTMLTableCellElement;
 
-      const selectedSalah =
-        e.target.closest(".table").children[0].children[0].cells[columnIndex]
-          .innerText;
+    const selectedSalah =
+      e.target.closest(".table").children[0].children[0].cells[columnIndex]
+        .innerText;
+    // Users clicked on a td, now see if date already exists, if it does fill the reasons, notes etc accordingly in the modal, otherwise leave blank
+    salahTrackingArray.forEach((item) => {
+      if (item.salahName === selectedSalah) {
+        console.log([item.completedDates]);
+        if (item.completedDates.find(tableRowDate)) {
+          setSalahStatus(item.completedDates[tableRowDate].status);
+          setSelectedReasons(item.completedDates[tableRowDate].reasons);
+        }
+      }
+    });
 
-      // console.log("selectedSalah:");
-      // console.log(selectedSalah);
+    setSelectedSalah(selectedSalah);
+    setTableRowDate(tableRowDate);
 
-      setSelectedSalah(selectedSalah);
-      setTableRowDate(tableRowDate);
-    } else if (salahName && date) {
-      // console.log("salahName && date exists");
-      setSelectedSalah(salahName);
-      setTableRowDate(date);
-    }
+    // if (!salahName && !date) {
+    //   let tableRowDate =
+    //     e.target.closest(".table-row").cells[0].children[0].innerText;
+    //   // console.log("tableRowDate:");
+    //   // console.log(
+    //   //   e.target.closest(".table-row").cells[0].children[0].innerText
+    //   // );
+
+    //   const columnIndex: any = e.target.closest("#icon-wrap").parentElement
+    //     .cellIndex as HTMLTableCellElement;
+
+    //   const selectedSalah =
+    //     e.target.closest(".table").children[0].children[0].cells[columnIndex]
+    //       .innerText;
+
+    //   // console.log("selectedSalah:");
+    //   // console.log(selectedSalah);
+
+    //   setSelectedSalah(selectedSalah);
+    //   setTableRowDate(tableRowDate);
+    // } else if (salahName && date) {
+    //   console.log("salahName && date exists");
+    //   setSelectedSalah(salahName);
+    //   setTableRowDate(date);
+    // }
   }
 
   let missedReasonsArray = [
@@ -439,8 +483,8 @@ const PrayerTableDisplay = ({
           id="icon-wrap"
           onClick={(e) => {
             // e.stopPropagation();
-            setShowUpdateStatusModal(true);
             grabDate(e);
+            setShowUpdateStatusModal(true);
           }}
         >
           {cellIcon}
@@ -467,10 +511,6 @@ const PrayerTableDisplay = ({
   // let selectedSalah
   // tableRowDate, selectedSalah, "missed"
   // let salahStatus: string;
-  const [salahStatus, setSalahStatus] = useState("");
-  const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  console.log(selectedReasons);
-  let arr = selectedReasons;
 
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
@@ -598,6 +638,7 @@ const PrayerTableDisplay = ({
                   <div className="flex flex-wrap ">
                     {missedReasonsArray.map((item) => (
                       <p
+                        key={uuidv4()}
                         style={{
                           backgroundColor: selectedReasons.includes(item)
                             ? "blue"
@@ -628,6 +669,8 @@ const PrayerTableDisplay = ({
                 <div className="text-sm notes-wrap">
                   <h2 className="mt-3">Notes (Optional)</h2>
                   <textarea
+                    value={notes}
+                    onChange={handleNotes}
                     style={{ resize: "vertical" }}
                     // wrap="hard"
                     rows={3}
@@ -640,7 +683,9 @@ const PrayerTableDisplay = ({
                     changePrayerStatus(
                       tableRowDate,
                       selectedSalah,
-                      salahStatus
+                      salahStatus,
+                      selectedReasons,
+                      notes
                     );
                     setShowUpdateStatusModal(false);
                     setSalahStatus("");
