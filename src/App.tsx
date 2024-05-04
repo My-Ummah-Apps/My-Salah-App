@@ -159,7 +159,6 @@ const App = () => {
             completedDates: [],
           },
         ]);
-    console.log(salahTrackingArray);
   }, []);
 
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(

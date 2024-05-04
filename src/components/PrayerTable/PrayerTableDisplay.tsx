@@ -167,9 +167,10 @@ const PrayerTableDisplay = ({
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
+  const [reasonsArray, setReasonsArray] = useState<string[]>();
   let arr = selectedReasons;
   const [notes, setNotes] = useState("");
-  const handleNotes = (e) => {
+  const handleNotes = (e: any) => {
     setNotes(e.target.value);
   };
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
@@ -260,7 +261,6 @@ const PrayerTableDisplay = ({
       "storedSalahTrackingData",
       JSON.stringify(newSalahTrackingArray)
     );
-    console.log(JSON.stringify(newSalahTrackingArray));
   };
 
   function grabDate(e: any) {
@@ -326,6 +326,7 @@ const PrayerTableDisplay = ({
   }
 
   let missedReasonsArray = [
+    "missedArray:",
     "Alarm",
     "Family",
     "Guests",
@@ -333,34 +334,36 @@ const PrayerTableDisplay = ({
     "Movies",
     "Sleep",
   ];
-  // let lateReasonsArray = [
-  //   "Alarm",
-  //   "Family",
-  //   "Friends",
-  //   "Guests",
-  //   "Movies",
-  //   "Sleep",
-  //   "Alarm",
-  //   "Family",
-  //   "Friends",
-  //   "Guests",
-  //   "Movies",
-  //   "Sleep",
-  // ];
-  // let prayedAloneReasonsArray = [
-  //   "Family",
-  //   "Friends",
-  //   "Guests",
-  //   "Movies",
-  //   "Sleep",
-  //   "Alarm",
-  //   "Family",
-  //   "Friends",
-  //   "Guests",
-  //   "Movies",
-  //   "Sleep",
-  //   "Alarm",
-  // ];
+  let lateReasonsArray = [
+    "lateArray:",
+    "Alarm",
+    "Family",
+    "Friends",
+    "Guests",
+    "Movies",
+    "Sleep",
+    "Alarm",
+    "Family",
+    "Friends",
+    "Guests",
+    "Movies",
+    "Sleep",
+  ];
+  let prayedAloneReasonsArray = [
+    "alonearray: ",
+    "Family",
+    "Friends",
+    "Guests",
+    "Movies",
+    "Sleep",
+    "Alarm",
+    "Family",
+    "Friends",
+    "Guests",
+    "Movies",
+    "Sleep",
+    "Alarm",
+  ];
 
   let cellIcon: string | JSX.Element;
   function populateCells(formattedDate: string, index: number) {
@@ -532,24 +535,25 @@ const PrayerTableDisplay = ({
           <Sheet.Content>
             <Sheet.Scroller>
               {" "}
-              <section className="w-[80%] mx-auto mt-5 mb-20 rounded-lg text-white">
+              <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
                 <h1 className="mb-5 text-3xl text-center">
                   How did you pray {selectedSalah}?
                 </h1>
-                <div className="grid grid-cols-2 salah-statuses-wrap">
+                <div className="grid grid-cols-4 grid-rows-1 gap-2 text-xs salah-statuses-wrap">
                   {userGender === "male" ? (
                     <>
                       <div
                         onClick={() => {
                           setSalahStatus("group");
+                          setReasonsArray([]);
                         }}
                         className={`${
                           salahStatus === "group" ? "border border-white" : ""
-                        } px-5 py-3 mb-4 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-xl w-[80%] mx-auto text-center`}
+                        } px-5 py-3  bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         {" "}
                         <GoPeople className="w-full mb-1 text-3xl" />
-                        <p className="inline">Prayed In Jamaah</p>
+                        <p className="inline"> In Jamaah</p>
                       </div>
                     </>
                   ) : (
@@ -557,12 +561,13 @@ const PrayerTableDisplay = ({
                       <div
                         onClick={() => {
                           setSalahStatus("female-alone");
+                          setReasonsArray([]);
                         }}
                         className={`${
                           salahStatus === "female-alone"
                             ? "border border-white"
                             : ""
-                        } px-5 py-3 mb-4 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-xl w-[80%] mx-auto text-center`}
+                        } px-5 py-3 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         {" "}
                         <GoPerson className="w-full mb-1 text-3xl" />
@@ -575,15 +580,16 @@ const PrayerTableDisplay = ({
                       <div
                         onClick={() => {
                           setSalahStatus("male-alone");
+                          setReasonsArray(prayedAloneReasonsArray);
                         }}
                         className={`${
                           salahStatus === "male-alone"
                             ? "border border-white"
                             : ""
-                        } px-5 py-3 mb-4 bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
+                        } px-5 py-3  bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         <GoPerson className="w-full mb-1 text-3xl" />
-                        <p className="inline">Prayed On Time</p>
+                        <p className="inline">On Time</p>
                       </div>
                     </>
                   ) : (
@@ -591,10 +597,11 @@ const PrayerTableDisplay = ({
                       <div
                         onClick={() => {
                           setSalahStatus("excused");
+                          setReasonsArray([]);
                         }}
                         className={`${
                           salahStatus === "excused" ? "border border-white" : ""
-                        } px-5 py-3 mb-4 bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
+                        } px-5 py-3  bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         <PiFlower className="w-full mb-1 text-3xl" />
                         <p className="inline">Excused</p>
@@ -604,10 +611,11 @@ const PrayerTableDisplay = ({
                   <div
                     onClick={() => {
                       setSalahStatus("late");
+                      setReasonsArray(lateReasonsArray);
                     }}
                     className={`${
                       salahStatus === "late" ? "border border-white" : ""
-                    } px-5 py-3 mb-4 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
+                    } px-5 py-3 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
                     <GoClock
                       className="w-full mb-1 text-3xl"
@@ -622,10 +630,11 @@ const PrayerTableDisplay = ({
                   <div
                     onClick={() => {
                       setSalahStatus("missed");
+                      setReasonsArray(missedReasonsArray);
                     }}
                     className={`${
                       salahStatus === "missed" ? "border border-white" : ""
-                    } px-5 py-3 mb-4 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl w-[80%] mx-auto text-center`}
+                    } px-5 py-3 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
                     <GoSkip
                       className="w-full mb-1 text-3xl"
@@ -641,7 +650,8 @@ const PrayerTableDisplay = ({
                 <div className="reasons-wrap">
                   <h2 className="my-3 text-sm">Reason (Optional): </h2>
                   <div className="flex flex-wrap ">
-                    {missedReasonsArray.map((item) => (
+                    {/* {missedReasonsArray.map((item) => ( */}
+                    {reasonsArray?.map((item) => (
                       <p
                         key={uuidv4()}
                         style={{
@@ -655,7 +665,7 @@ const PrayerTableDisplay = ({
                           } else if (arr.includes(item)) {
                             console.log(item);
                             let indexToRemove = selectedReasons.indexOf(item);
-                            arr = selectedReasons.filter((item, index) => {
+                            arr = selectedReasons.filter((item) => {
                               return (
                                 selectedReasons.indexOf(item) !== indexToRemove
                               );

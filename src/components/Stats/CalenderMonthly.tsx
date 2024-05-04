@@ -31,8 +31,8 @@ const CalenderMonthly = ({
   // modifySingleDaySalah,
   setCurrentWeek,
   currentWeek, // salahName,
-  // currentMonth,
-}: {
+} // currentMonth,
+: {
   // getPrevMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   // getNextMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   grabDate: (e: any, date?: string, salahName?: string) => void;
@@ -100,8 +100,8 @@ const CalenderMonthly = ({
       if (salah.salahName === salahName) {
         for (let i = 0; i < salah.completedDates.length; i++) {
           if (
-            Object.values(salah.completedDates[i])[0] !== "missed" &&
-            Object.values(salah.completedDates[i])[0] !== "blank"
+            Object.values(salah.completedDates[i])[0].status !== "missed" &&
+            Object.values(salah.completedDates[i])[0].status !== "blank"
           ) {
             accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
           }
