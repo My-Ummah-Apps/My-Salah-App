@@ -264,7 +264,10 @@ const PrayerTableDisplay = ({
   };
 
   function grabDate(e: any) {
-    console.log(salahTrackingArray);
+    setSalahStatus("");
+    setSelectedReasons([]);
+    setNotes("");
+    // console.log(salahTrackingArray);
 
     let tableRowDate =
       e.target.closest(".table-row").cells[0].children[0].innerText;
@@ -279,13 +282,15 @@ const PrayerTableDisplay = ({
     const selectedSalah =
       e.target.closest(".table").children[0].children[0].cells[columnIndex]
         .innerText;
-    // Users clicked on a td, now see if date already exists, if it does fill the reasons, notes etc accordingly in the modal, otherwise leave blank
+
     salahTrackingArray.forEach((item) => {
       if (item.salahName === selectedSalah) {
-        console.log([item.completedDates]);
-        if (item.completedDates.find(tableRowDate)) {
-          setSalahStatus(item.completedDates[tableRowDate].status);
-          setSelectedReasons(item.completedDates[tableRowDate].reasons);
+        for (let i = 0; i < item.completedDates.length; i++) {
+          if (item.completedDates[i][tableRowDate]) {
+            setSalahStatus(item.completedDates[i][tableRowDate].status);
+            setSelectedReasons(item.completedDates[i][tableRowDate].reasons);
+            setNotes(item.completedDates[i][tableRowDate].notes);
+          }
         }
       }
     });
@@ -361,7 +366,7 @@ const PrayerTableDisplay = ({
   function populateCells(formattedDate: string, index: number) {
     cellIcon = (
       <LuDot
-        onClick={(e: React.TouchEvent<HTMLDivElement>) => {
+        onClick={(e: React.MouseEvent<SVGElement>) => {
           // e.stopPropagation();
 
           if (e.currentTarget.tagName === "svg") {
@@ -680,17 +685,20 @@ const PrayerTableDisplay = ({
                 </div>
                 <button
                   onClick={() => {
-                    changePrayerStatus(
-                      tableRowDate,
-                      selectedSalah,
-                      salahStatus,
-                      selectedReasons,
-                      notes
-                    );
-                    setShowUpdateStatusModal(false);
-                    setSalahStatus("");
+                    if (salahStatus) {
+                      changePrayerStatus(
+                        tableRowDate,
+                        selectedSalah,
+                        salahStatus,
+                        selectedReasons,
+                        notes
+                      );
+                      setShowUpdateStatusModal(false);
+                    }
                   }}
-                  className="w-full p-4 mt-5 bg-blue-600 rounded-2xl"
+                  className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
+                    salahStatus ? "opacity-100" : "opacity-20"
+                  }`}
                 >
                   Save
                 </button>
