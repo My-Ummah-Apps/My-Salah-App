@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
+import { FixedSizeList as List } from "react-window";
 import Sheet from "react-modal-sheet";
 // import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
@@ -143,14 +144,16 @@ const PrayerTableDisplay = ({
   const [tableRowDate, setTableRowDate] = useState("");
 
   // Array to hold the last five dates
-  userStartDate = "01.01.10";
+  userStartDate = "05.05.22";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
   const datesBetween = eachDayOfInterval({
     start: userStartDateFormatted,
     end: endDate,
   });
-  console.log(datesBetween);
+  // console.log(datesBetween);
+  const datesFormatted = datesBetween.map((date) => format(date, "dd.MM.yy"));
+  datesFormatted.reverse();
   let currentDisplayedDates: string[] = [];
   function generateDisplayedWeek() {
     currentDisplayedDates = Array.from(
@@ -521,6 +524,19 @@ const PrayerTableDisplay = ({
   // tableRowDate, selectedSalah, "missed"
   // let salahStatus: string;
 
+  const Row = ({ index, style }) => (
+    <tr className={index % 2 ? "ListItemOdd" : "ListItemEven"} style={style}>
+      <td className="align-middle text-[#c4c4c4] text-sm pr-4">
+        <p className="mb-1">{"formattedDate"}</p>
+        <p>{"formattedDay"}</p>
+      </td>
+      {/* Row {index} */}
+      {Array.from({ length: 5 }).map((_, index) =>
+        populateCells("formattedDate", index)
+      )}
+    </tr>
+  );
+
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
@@ -777,17 +793,47 @@ const PrayerTableDisplay = ({
             const formattedDay = format(dateObject, "EEEE");
             // const splitFormattedDate: string[] = formattedDate.split(" ");
 
+            // return (
+            //   <tr className="table-row h-12" key={uuidv4()}>
+            //     <td className="align-middle text-[#c4c4c4] text-sm pr-4">
+            //       <p className="mb-1">{formattedDate}</p>
+            //       <p>{formattedDay}</p>
+            //     </td>
+            //     {Array.from({ length: 5 }).map((_, index) =>
+            //       populateCells(formattedDate, index)
+            //     )}
+            //   </tr>
+            // );
             return (
-              <tr className="table-row h-12" key={uuidv4()}>
-                <td className="align-middle text-[#c4c4c4] text-sm pr-4">
-                  <p className="mb-1">{formattedDate}</p>
-                  <p>{formattedDay}</p>
-                </td>
-                {Array.from({ length: 5 }).map((_, index) =>
-                  populateCells(formattedDate, index)
-                )}
-                {/* {populateCells(dateObject)} */}
-              </tr>
+              <List
+                className="List"
+                height={1000}
+                itemCount={datesBetween.length}
+                itemSize={35}
+                width={600}
+              >
+                {({ index, style }) => {
+                  return (
+                    <>
+                      {/* <tr style={style}>{index}</tr> */}
+                      <tr
+                        style={style}
+                        className="table-row h-12"
+                        key={uuidv4()}
+                      >
+                        <td className="align-middle text-[#c4c4c4] text-sm pr-4">
+                          <p className="mb-1">{datesFormatted[index]}</p>
+                          <p>{formattedDay}</p>
+                        </td>
+                      </tr>
+                    </>
+                    /* //   {Array.from({ length: 5 }).map((_, index) =>
+                    //     populateCells(formattedDate, index)
+                    //   )}
+                    // </tr> */
+                  );
+                }}
+              </List>
             );
           })}
         </tbody>
