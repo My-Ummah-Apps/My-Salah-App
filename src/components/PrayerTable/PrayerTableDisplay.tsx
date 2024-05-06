@@ -143,17 +143,18 @@ const PrayerTableDisplay = ({
   const [tableRowDate, setTableRowDate] = useState("");
 
   // Array to hold the last five dates
-  // userStartDate = "01.01.10";
+  userStartDate = "01.01.10";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
   const datesBetween = eachDayOfInterval({
     start: userStartDateFormatted,
     end: endDate,
   });
-  // console.log(datesBetween.length);
+  console.log(datesBetween);
   let currentDisplayedDates: string[] = [];
   function generateDisplayedWeek() {
     currentDisplayedDates = Array.from(
+      // { length: datesBetween.length },
       { length: datesBetween.length },
       (_, index) => {
         const date = subDays(startDate, index);
@@ -656,7 +657,7 @@ const PrayerTableDisplay = ({
                         key={uuidv4()}
                         style={{
                           backgroundColor: selectedReasons.includes(item)
-                            ? "blue"
+                            ? "#2563eb"
                             : "",
                         }}
                         onClick={() => {
@@ -674,7 +675,7 @@ const PrayerTableDisplay = ({
 
                           setSelectedReasons(arr);
                         }}
-                        className="p-2 m-1 text-sm border border-blue-400 rounded-xl"
+                        className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
                       >
                         {item}
                       </p>
