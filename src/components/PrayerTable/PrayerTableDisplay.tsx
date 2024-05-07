@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
-import { FixedSizeList as List } from "react-window";
+// import { FixedSizeList as List } from "react-window";
+import "react-virtualized/styles.css";
+import { Column, Table } from "react-virtualized";
 import Sheet from "react-modal-sheet";
 // import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
@@ -151,7 +153,7 @@ const PrayerTableDisplay = ({
     start: userStartDateFormatted,
     end: endDate,
   });
-  // console.log(datesBetween);
+  // console.log(datesBetween.length);
   const datesFormatted = datesBetween.map((date) => format(date, "dd.MM.yy"));
   datesFormatted.reverse();
   let currentDisplayedDates: string[] = [];
@@ -524,18 +526,73 @@ const PrayerTableDisplay = ({
   // tableRowDate, selectedSalah, "missed"
   // let salahStatus: string;
 
-  const Row = ({ index, style }) => (
-    <tr className={index % 2 ? "ListItemOdd" : "ListItemEven"} style={style}>
-      <td className="align-middle text-[#c4c4c4] text-sm pr-4">
-        <p className="mb-1">{"formattedDate"}</p>
-        <p>{"formattedDay"}</p>
-      </td>
-      {/* Row {index} */}
-      {Array.from({ length: 5 }).map((_, index) =>
-        populateCells("formattedDate", index)
-      )}
-    </tr>
-  );
+  // const Row = ({ index, style }) => (
+  //   {currentDisplayedDates.map((item) => {
+  //     const dateObject = parse(item, "dd.MM.yy", new Date());
+  //     // const formattedDate = format(parsedDate, "EEE dd");
+  //     const formattedDate = format(dateObject, "dd.MM.yy");
+  //     const formattedDay = format(dateObject, "EEEE");
+  //     // const splitFormattedDate: string[] = formattedDate.split(" ");
+
+  //     return (
+  //       <tr className="table-row h-12" key={uuidv4()}>
+  //         <td className="align-middle text-[#c4c4c4] text-sm pr-4">
+  //           <p className="mb-1">{formattedDate}</p>
+  //           <p>{formattedDay}</p>
+  //         </td>
+  //         {Array.from({ length: 5 }).map((_, index) =>
+  //           populateCells(formattedDate, index)
+  //         )}
+  //         {/* {populateCells(dateObject)} */}
+  //       </tr>
+  //     );
+  //   })}
+  // );
+
+  // const Row = ({ index, style }) => {
+  //   const item = currentDisplayedDates[index];
+  //   const dateObject = parse(item, "dd.MM.yy", new Date());
+  //   const formattedDate = format(dateObject, "dd.MM.yy");
+  //   const formattedDay = format(dateObject, "EEEE");
+  //   return (
+  //     <tr className="table-row h-12" style={style}>
+  //       <td className="align-middle text-[#c4c4c4] text-sm pr-4">
+  //         <p className="mb-1">{formattedDate}</p>
+  //         <p>{formattedDay}</p>
+  //       </td>
+  //       {Array.from({ length: 5 }).map((_, index) =>
+  //         populateCells(formattedDate, index)
+  //       )}
+  //     </tr>
+  //   );
+  // };
+
+  // const rowRenderer = ({ index, style }) => {
+  //   const item = currentDisplayedDates[index];
+  //   const dateObject = parse(item, "dd.MM.yy", new Date());
+  //   const formattedDate = format(dateObject, "dd.MM.yy");
+  //   const formattedDay = format(dateObject, "EEEE");
+
+  //   return (
+  //     <div style={style}>
+  //       <p>{formattedDate}</p>
+  //       <p>{formattedDay}</p>
+  //     </div>
+  //   );
+  // };
+
+  const list = [
+    { name: "Brian Vaughn", description: "Software engineer" },
+    { name: "Brian Vaughn", description: "Software engineer" },
+    { name: "Brian Vaughn", description: "Software engineer" },
+    { name: "Brian Vaughn", description: "Software engineer" },
+    { name: "Brian Vaughn", description: "Software engineer" },
+    // And so on...
+  ];
+
+  const rowGetter = ({ index }) => {
+    return currentDisplayedDates[index]; // Return data for the row at the specified index
+  };
 
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
@@ -737,107 +794,38 @@ const PrayerTableDisplay = ({
         <Sheet.Backdrop />
       </Sheet>
 
-      <table
-        className="table w-full shadow-lg"
-        onClick={(e) => {
-          // grabDate(e);
-          // setShowUpdateStatusModal(true);
-          // e.preventDefault();
-          if (e.isTrusted && e.currentTarget.tagName !== "svg") {
-            // setShowMonthlyCalenderModal(true);
-          }
-        }}
+      <Table
+        rowCount={currentDisplayedDates.length}
+        rowGetter={rowGetter}
+        rowHeight={60}
+        headerHeight={40}
+        height={500}
+        width={1000}
       >
-        {/* sticky top-0 bg-[color:var(--primary-color)] */}
-        <thead className="sticky top-0 bg-[color:var(--primary-color)] thead">
-          {/* <tr>
-            <th className="border-none"></th>
-          </tr> */}
-          <tr // role="button"
-            // key={uuidv4()}
-            // key={"table row: " + item.salahName}
-            onClick={(e) => {
-              // setShowMonthlyCalenderModal(true);
-              // e.stopPropagation();
-
-              // monthlyCalenderToShow =
-              //   e.currentTarget.querySelector("td")?.textContent;
-              // setMonthlyCalenderToShow(
-              //   // e.currentTarget.querySelector("td")?.textContent || ""
-              //   e.currentTarget.querySelector("td")?.textContent || ""
-              // );
-              if (e.currentTarget.tagName !== "svg") {
-                // setShowMonthlyCalenderModal(true);
-              }
-            }}
-            className=""
-          >
-            <th className="w-1/6 "></th>
-            {salahTrackingArray?.map((item) => {
-              return (
-                <th
-                  key={uuidv4()}
-                  className=" text-sm font-light table-salah-name-th text-[#c4c4c4] w-1/6"
-                >
-                  {item.salahName}
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {currentDisplayedDates.map((item) => {
-            const dateObject = parse(item, "dd.MM.yy", new Date());
-            // const formattedDate = format(parsedDate, "EEE dd");
+        <Column
+          label="Date"
+          dataKey="date"
+          width={200}
+          cellRenderer={({ rowData }) => {
+            const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
             const formattedDay = format(dateObject, "EEEE");
-            // const splitFormattedDate: string[] = formattedDate.split(" ");
 
-            // return (
-            //   <tr className="table-row h-12" key={uuidv4()}>
-            //     <td className="align-middle text-[#c4c4c4] text-sm pr-4">
-            //       <p className="mb-1">{formattedDate}</p>
-            //       <p>{formattedDay}</p>
-            //     </td>
-            //     {Array.from({ length: 5 }).map((_, index) =>
-            //       populateCells(formattedDate, index)
-            //     )}
-            //   </tr>
-            // );
             return (
-              <List
-                className="List"
-                height={1000}
-                itemCount={datesBetween.length}
-                itemSize={35}
-                width={600}
-              >
-                {({ index, style }) => {
-                  return (
-                    <>
-                      {/* <tr style={style}>{index}</tr> */}
-                      <tr
-                        style={style}
-                        className="table-row h-12"
-                        key={uuidv4()}
-                      >
-                        <td className="align-middle text-[#c4c4c4] text-sm pr-4">
-                          <p className="mb-1">{datesFormatted[index]}</p>
-                          <p>{formattedDay}</p>
-                        </td>
-                      </tr>
-                    </>
-                    /* //   {Array.from({ length: 5 }).map((_, index) =>
-                    //     populateCells(formattedDate, index)
-                    //   )}
-                    // </tr> */
-                  );
-                }}
-              </List>
+              <>
+                <td>
+                  <p>{formattedDate}</p>
+                  <p>{formattedDay}</p>
+                </td>
+                {Array.from({ length: 5 }).map((_, index) =>
+                  populateCells(formattedDate, index)
+                )}
+              </>
             );
-          })}
-        </tbody>
-      </table>
+          }}
+        />
+        {/* Add more columns here if needed */}
+      </Table>
     </section>
   );
 };
