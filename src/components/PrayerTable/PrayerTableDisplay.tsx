@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 // import { FixedSizeList as List } from "react-window";
 import "react-virtualized/styles.css";
-import { Column, Table } from "react-virtualized";
+import { Column, Table, AutoSizer } from "react-virtualized";
+AutoSizer;
 import Sheet from "react-modal-sheet";
 // import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
@@ -195,28 +196,6 @@ const PrayerTableDisplay = ({
           return Object.keys(date)[0] === tableRowDate;
         });
 
-        // if (salahStatus === "late") {
-        // if (doesDateObjectExist === undefined) {
-        //   return {
-        //     ...item,
-        //     completedDates: [...item.completedDates],
-        //   };
-        // } else if (doesDateObjectExist !== undefined) {
-        //   const filteredCompletedDatesArray = item.completedDates.filter(
-        //     (date) => {
-        //       return (
-        //         Object.keys(doesDateObjectExist)[0] !== Object.keys(date)[0]
-        //       );
-        //     }
-        //   );
-
-        //   return {
-        //     ...item,
-        //     completedDates: [...filteredCompletedDatesArray],
-        //   };
-        // }
-        // }
-
         if (doesDateObjectExist === undefined) {
           return {
             ...item,
@@ -232,9 +211,6 @@ const PrayerTableDisplay = ({
             ],
           };
         } else if (doesDateObjectExist !== undefined) {
-          // console.log(
-          //   "doesDateObjectExist !== undefined && salahStatus !== blank"
-          // );
           const filteredCompletedDatesArray = item.completedDates.filter(
             (date) => {
               return (
@@ -269,30 +245,19 @@ const PrayerTableDisplay = ({
     );
   };
 
-  function grabDate(e: any) {
+  function grabDate(salah: string, formattedDate: string) {
     setSalahStatus("");
     setSelectedReasons([]);
     setNotes("");
-    // console.log(salahTrackingArray);
 
-    let tableRowDate =
-      e.target.closest(".table-row").cells[0].children[0].innerText;
-    // console.log("tableRowDate:");
-    // console.log(
-    //   e.target.closest(".table-row").cells[0].children[0].innerText
-    // );
-
-    const columnIndex: any = e.target.closest("#icon-wrap").parentElement
-      .cellIndex as HTMLTableCellElement;
-
-    const selectedSalah =
-      e.target.closest(".table").children[0].children[0].cells[columnIndex]
-        .innerText;
+    let tableRowDate = formattedDate;
 
     salahTrackingArray.forEach((item) => {
-      if (item.salahName === selectedSalah) {
+      if (item.salahName === salah) {
         for (let i = 0; i < item.completedDates.length; i++) {
+          // console.log(item.completedDates[i]);
           if (item.completedDates[i][tableRowDate]) {
+            // console.log("TRUE");
             setSalahStatus(item.completedDates[i][tableRowDate].status);
             setSelectedReasons(item.completedDates[i][tableRowDate].reasons);
             setNotes(item.completedDates[i][tableRowDate].notes);
@@ -301,34 +266,10 @@ const PrayerTableDisplay = ({
       }
     });
 
-    setSelectedSalah(selectedSalah);
+    setSelectedSalah(salah);
     setTableRowDate(tableRowDate);
-
-    // if (!salahName && !date) {
-    //   let tableRowDate =
-    //     e.target.closest(".table-row").cells[0].children[0].innerText;
-    //   // console.log("tableRowDate:");
-    //   // console.log(
-    //   //   e.target.closest(".table-row").cells[0].children[0].innerText
-    //   // );
-
-    //   const columnIndex: any = e.target.closest("#icon-wrap").parentElement
-    //     .cellIndex as HTMLTableCellElement;
-
-    //   const selectedSalah =
-    //     e.target.closest(".table").children[0].children[0].cells[columnIndex]
-    //       .innerText;
-
-    //   // console.log("selectedSalah:");
-    //   // console.log(selectedSalah);
-
-    //   setSelectedSalah(selectedSalah);
-    //   setTableRowDate(tableRowDate);
-    // } else if (salahName && date) {
-    //   console.log("salahName && date exists");
-    //   setSelectedSalah(salahName);
-    //   setTableRowDate(date);
-    // }
+    console.log(selectedSalah);
+    console.log(tableRowDate);
   }
 
   let missedReasonsArray = [
@@ -372,19 +313,18 @@ const PrayerTableDisplay = ({
   ];
 
   let cellIcon: string | JSX.Element;
-  function populateCells(formattedDate: string, index: number) {
+  function populateCells(formattedDate: string, salah: string, index: number) {
     cellIcon = (
       <LuDot
+        className="inline-block rounded-md w-[24px] h-[24px] self-center justify-self-center m-1"
         onClick={(e: React.MouseEvent<SVGElement>) => {
-          // e.stopPropagation();
-
           if (e.currentTarget.tagName === "svg") {
             // setShowUpdateStatusModal(true);
           }
         }}
-        className="inline-block rounded-md w-[24px] h-[24px] self-center justify-self-center m-1"
       />
     );
+
     const matchedObject = salahTrackingArray[index]?.completedDates.find(
       (obj) => {
         return formattedDate === Object.keys(obj)[0];
@@ -491,20 +431,35 @@ const PrayerTableDisplay = ({
       );
     }
     return (
-      // pt-2
-      <td key={uuidv4()} className="h-full pt-6 pb-5 text-center td-element">
-        <div
-          id="icon-wrap"
-          onClick={(e) => {
-            // e.stopPropagation();
-            grabDate(e);
-            setShowUpdateStatusModal(true);
-          }}
-        >
-          {cellIcon}
-        </div>
-      </td>
+      <div
+        id="icon-wrap"
+        // className="h-full pt-6 pb-5 text-center td-element"
+        key={uuidv4()}
+        onClick={() => {
+          grabDate(salah, formattedDate);
+          setShowUpdateStatusModal(true);
+        }}
+      >
+        {cellIcon}
+      </div>
     );
+
+    // pt-2
+    // <div key={uuidv4()} className="h-full pt-6 pb-5 text-center td-element">
+    // <div
+    //   id="icon-wrap"
+    //   // className="h-full pt-6 pb-5 text-center td-element"
+    //   key={uuidv4()}
+    //   onClick={(e) => {
+    //     // e.stopPropagation();
+    //     grabDate(e);
+    //     setShowUpdateStatusModal(true);
+    //   }}
+    // >
+    //   {cellIcon}
+    // </div>
+    // {/* </div> */}
+
     // });
   }
 
@@ -526,71 +481,7 @@ const PrayerTableDisplay = ({
   // tableRowDate, selectedSalah, "missed"
   // let salahStatus: string;
 
-  // const Row = ({ index, style }) => (
-  //   {currentDisplayedDates.map((item) => {
-  //     const dateObject = parse(item, "dd.MM.yy", new Date());
-  //     // const formattedDate = format(parsedDate, "EEE dd");
-  //     const formattedDate = format(dateObject, "dd.MM.yy");
-  //     const formattedDay = format(dateObject, "EEEE");
-  //     // const splitFormattedDate: string[] = formattedDate.split(" ");
-
-  //     return (
-  //       <tr className="table-row h-12" key={uuidv4()}>
-  //         <td className="align-middle text-[#c4c4c4] text-sm pr-4">
-  //           <p className="mb-1">{formattedDate}</p>
-  //           <p>{formattedDay}</p>
-  //         </td>
-  //         {Array.from({ length: 5 }).map((_, index) =>
-  //           populateCells(formattedDate, index)
-  //         )}
-  //         {/* {populateCells(dateObject)} */}
-  //       </tr>
-  //     );
-  //   })}
-  // );
-
-  // const Row = ({ index, style }) => {
-  //   const item = currentDisplayedDates[index];
-  //   const dateObject = parse(item, "dd.MM.yy", new Date());
-  //   const formattedDate = format(dateObject, "dd.MM.yy");
-  //   const formattedDay = format(dateObject, "EEEE");
-  //   return (
-  //     <tr className="table-row h-12" style={style}>
-  //       <td className="align-middle text-[#c4c4c4] text-sm pr-4">
-  //         <p className="mb-1">{formattedDate}</p>
-  //         <p>{formattedDay}</p>
-  //       </td>
-  //       {Array.from({ length: 5 }).map((_, index) =>
-  //         populateCells(formattedDate, index)
-  //       )}
-  //     </tr>
-  //   );
-  // };
-
-  // const rowRenderer = ({ index, style }) => {
-  //   const item = currentDisplayedDates[index];
-  //   const dateObject = parse(item, "dd.MM.yy", new Date());
-  //   const formattedDate = format(dateObject, "dd.MM.yy");
-  //   const formattedDay = format(dateObject, "EEEE");
-
-  //   return (
-  //     <div style={style}>
-  //       <p>{formattedDate}</p>
-  //       <p>{formattedDay}</p>
-  //     </div>
-  //   );
-  // };
-
-  const list = [
-    { name: "Brian Vaughn", description: "Software engineer" },
-    { name: "Brian Vaughn", description: "Software engineer" },
-    { name: "Brian Vaughn", description: "Software engineer" },
-    { name: "Brian Vaughn", description: "Software engineer" },
-    { name: "Brian Vaughn", description: "Software engineer" },
-    // And so on...
-  ];
-
-  const rowGetter = ({ index }) => {
+  const rowGetter = ({ index }: any) => {
     return currentDisplayedDates[index]; // Return data for the row at the specified index
   };
 
@@ -797,15 +688,15 @@ const PrayerTableDisplay = ({
       <Table
         rowCount={currentDisplayedDates.length}
         rowGetter={rowGetter}
-        rowHeight={60}
+        rowHeight={100}
         headerHeight={40}
-        height={500}
+        height={600}
         width={1000}
       >
         <Column
-          label="Date"
+          label=""
           dataKey="date"
-          width={200}
+          width={75}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -813,17 +704,68 @@ const PrayerTableDisplay = ({
 
             return (
               <>
-                <td>
-                  <p>{formattedDate}</p>
-                  <p>{formattedDay}</p>
-                </td>
-                {Array.from({ length: 5 }).map((_, index) =>
-                  populateCells(formattedDate, index)
-                )}
+                <p>{formattedDate}</p>
+                <p>{formattedDay}</p>
               </>
             );
           }}
         />
+        <Column
+          label="Fajr"
+          dataKey="date"
+          width={75}
+          cellRenderer={({ rowData }) => {
+            const dateObject = parse(rowData, "dd.MM.yy", new Date());
+            const formattedDate = format(dateObject, "dd.MM.yy");
+
+            return <>{populateCells(formattedDate, "Fajr", 0)}</>;
+          }}
+        />
+        <Column
+          label="Dhuhr"
+          dataKey="date"
+          width={75}
+          cellRenderer={({ rowData }) => {
+            const dateObject = parse(rowData, "dd.MM.yy", new Date());
+            const formattedDate = format(dateObject, "dd.MM.yy");
+
+            return <>{populateCells(formattedDate, "Dhuhr", 1)}</>;
+          }}
+        />
+        <Column
+          label="Asar"
+          dataKey="date"
+          width={75}
+          cellRenderer={({ rowData }) => {
+            const dateObject = parse(rowData, "dd.MM.yy", new Date());
+            const formattedDate = format(dateObject, "dd.MM.yy");
+
+            return <>{populateCells(formattedDate, "Asar", 2)}</>;
+          }}
+        />
+        <Column
+          label="Maghrib"
+          dataKey="date"
+          width={75}
+          cellRenderer={({ rowData }) => {
+            const dateObject = parse(rowData, "dd.MM.yy", new Date());
+            const formattedDate = format(dateObject, "dd.MM.yy");
+
+            return <>{populateCells(formattedDate, "Maghrib", 3)}</>;
+          }}
+        />
+        <Column
+          label="Isha"
+          dataKey="date"
+          width={75}
+          cellRenderer={({ rowData }) => {
+            const dateObject = parse(rowData, "dd.MM.yy", new Date());
+            const formattedDate = format(dateObject, "dd.MM.yy");
+
+            return <>{populateCells(formattedDate, "Isha", 4)}</>;
+          }}
+        />
+
         {/* Add more columns here if needed */}
       </Table>
     </section>
