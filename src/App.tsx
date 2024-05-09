@@ -208,7 +208,7 @@ const App = () => {
     checkStreak();
   }, [datesFrequencyReduced]);
 
-  const pageStyles: string = `py-[9vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[95vw] mx-auto`;
+  const pageStyles: string = `py-[9vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
 
   return (
     <BrowserRouter>

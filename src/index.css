@@ -149,11 +149,11 @@ td {
 .ReactVirtualized__Grid__innerScrollContainerm,
 .ReactVirtualized__Table__row,
 .ReactVirtualized__Table__headerRow {
-  width: 100vw !important;
+  width: 97vw !important;
 }
 
 .ReactVirtualized__Grid__innerScrollContainer {
-  max-width: 100vw !important;
+  max-width: 97vw !important;
 }
 
 .ReactVirtualized__Table__headerRow {
