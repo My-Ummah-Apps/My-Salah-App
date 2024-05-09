@@ -685,18 +685,26 @@ const PrayerTableDisplay = ({
         <Sheet.Backdrop />
       </Sheet>
 
+      {/* <div style={{ width: "100vw !important" }}> */}
       <Table
+        style={{
+          textTransform: "none",
+        }}
+        className="text-center "
         rowCount={currentDisplayedDates.length}
         rowGetter={rowGetter}
         rowHeight={100}
         headerHeight={40}
         height={600}
-        width={1000}
+        width={500}
       >
         <Column
+          style={{ marginLeft: "0" }}
+          className="text-xs text-left "
           label=""
           dataKey="date"
-          width={75}
+          width={110}
+          flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -710,10 +718,13 @@ const PrayerTableDisplay = ({
             );
           }}
         />
+
         <Column
+          className="text-center"
           label="Fajr"
           dataKey="date"
-          width={75}
+          width={78}
+          flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -722,9 +733,11 @@ const PrayerTableDisplay = ({
           }}
         />
         <Column
+          className="text-center"
           label="Dhuhr"
           dataKey="date"
-          width={75}
+          width={78}
+          flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -733,9 +746,11 @@ const PrayerTableDisplay = ({
           }}
         />
         <Column
+          className="text-center"
           label="Asar"
           dataKey="date"
-          width={75}
+          width={78}
+          flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -744,9 +759,11 @@ const PrayerTableDisplay = ({
           }}
         />
         <Column
+          className="text-center"
           label="Maghrib"
           dataKey="date"
-          width={75}
+          width={78}
+          flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -755,9 +772,11 @@ const PrayerTableDisplay = ({
           }}
         />
         <Column
+          className="text-center"
           label="Isha"
           dataKey="date"
-          width={75}
+          width={78}
+          flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
@@ -768,6 +787,7 @@ const PrayerTableDisplay = ({
 
         {/* Add more columns here if needed */}
       </Table>
+      {/* </div> */}
     </section>
   );
 };
