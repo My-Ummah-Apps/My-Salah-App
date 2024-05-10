@@ -149,25 +149,35 @@ td {
 .ReactVirtualized__Grid__innerScrollContainerm,
 .ReactVirtualized__Table__row,
 .ReactVirtualized__Table__headerRow {
-  width: 97vw !important;
+  width: 95vw !important;
 }
 
 .ReactVirtualized__Grid__innerScrollContainer {
-  max-width: 97vw !important;
+  max-width: 95vw !important;
 }
 
 .ReactVirtualized__Table__headerRow {
   text-transform: none;
   font-weight: 300;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  /* margin-right: 10px; */
+  /* text-align: left; */
 }
 
 .ReactVirtualized__Table__headerColumn:first-of-type {
   margin-left: 0;
 }
 
+.ReactVirtualized__Table__headerColumn {
+  margin-right: 0;
+}
+
 .ReactVirtualized__Table__row {
   border-bottom: 1px solid rgb(54, 54, 54);
+}
+
+.ReactVirtualized__Table__rowColumn {
+  margin-right: 0;
 }
 
 @supports not (-webkit-touch-callout: none) {

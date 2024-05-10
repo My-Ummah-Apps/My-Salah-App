@@ -316,7 +316,7 @@ const PrayerTableDisplay = ({
   function populateCells(formattedDate: string, salah: string, index: number) {
     cellIcon = (
       <LuDot
-        className="inline-block rounded-md w-[24px] h-[24px] self-center justify-self-center m-1"
+        className="inline-block rounded-md w-[24px] h-[24px]"
         onClick={(e: React.MouseEvent<SVGElement>) => {
           if (e.currentTarget.tagName === "svg") {
             // setShowUpdateStatusModal(true);
@@ -337,7 +337,7 @@ const PrayerTableDisplay = ({
 
     if (cellIcon === "male-alone") {
       cellIcon = (
-        <div className="inline-block rounded-md bg-[color:var(--alone-male-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md bg-[color:var(--alone-male-status-color)] text-white w-[24px] h-[24px]">
           {" "}
           {/* <GoPerson
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -347,13 +347,13 @@ const PrayerTableDisplay = ({
                 // setShowUpdateStatusModal(true);
               }
             }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
           /> */}
         </div>
       );
     } else if (cellIcon === "group") {
       cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md  bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]">
           {" "}
           {/* <GoPeople
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -363,13 +363,13 @@ const PrayerTableDisplay = ({
                 // setShowUpdateStatusModal(true);
               }
             }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
           /> */}
         </div>
       );
     } else if (cellIcon === "female-alone") {
       cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--alone-female-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md  bg-[color:var(--alone-female-status-color)] text-white w-[24px] h-[24px]">
           {" "}
           {/* <GoPeople
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -379,13 +379,13 @@ const PrayerTableDisplay = ({
                 // setShowUpdateStatusModal(true);
               }
             }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
           /> */}
         </div>
       );
     } else if (cellIcon === "excused") {
       cellIcon = (
-        <div className="inline-block rounded-md bg-[color:var(--excused-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md bg-[color:var(--excused-status-color)] text-white w-[24px] h-[24px]">
           {/* <PiClockCounterClockwise
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
@@ -394,13 +394,13 @@ const PrayerTableDisplay = ({
                 // setShowUpdateStatusModal(true);
               }
             }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
           /> */}
         </div>
       );
     } else if (cellIcon === "late") {
       cellIcon = (
-        <div className="inline-block rounded-md bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px] ">
           {/* <PiClockCounterClockwise
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
               // e.stopPropagation();
@@ -409,13 +409,13 @@ const PrayerTableDisplay = ({
                 // setShowUpdateStatusModal(true);
               }
             }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
           /> */}
         </div>
       );
     } else if (cellIcon === "missed") {
       cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px]  self-center justify-self-center m-1">
+        <div className="inline-block rounded-md bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px] ">
           {" "}
           {/* <AiOutlineStop
             onClick={(e: React.TouchEvent<HTMLDivElement>) => {
@@ -425,7 +425,7 @@ const PrayerTableDisplay = ({
                 // setShowUpdateStatusModal(true);
               }
             }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center m-1`}
+            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
           /> */}
         </div>
       );
@@ -433,7 +433,7 @@ const PrayerTableDisplay = ({
     return (
       <div
         id="icon-wrap"
-        // className="h-full pt-6 pb-5 text-center td-element"
+        className="flex items-center justify-center h-full pt-6 pb-5 text-center td-element"
         key={uuidv4()}
         onClick={() => {
           grabDate(salah, formattedDate);
@@ -695,15 +695,15 @@ const PrayerTableDisplay = ({
         rowGetter={rowGetter}
         rowHeight={100}
         headerHeight={40}
-        height={600}
-        width={500}
+        height={800}
+        width={510}
       >
         <Column
           style={{ marginLeft: "0" }}
-          className="text-xs text-left "
+          className="text-sm text-left "
           label=""
           dataKey="date"
-          width={110}
+          width={120}
           flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
@@ -723,12 +723,11 @@ const PrayerTableDisplay = ({
           className="text-center"
           label="Fajr"
           dataKey="date"
-          width={78}
+          width={80}
           flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-
             return <>{populateCells(formattedDate, "Fajr", 0)}</>;
           }}
         />
@@ -736,12 +735,11 @@ const PrayerTableDisplay = ({
           className="text-center"
           label="Dhuhr"
           dataKey="date"
-          width={78}
+          width={80}
           flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-
             return <>{populateCells(formattedDate, "Dhuhr", 1)}</>;
           }}
         />
@@ -749,12 +747,11 @@ const PrayerTableDisplay = ({
           className="text-center"
           label="Asar"
           dataKey="date"
-          width={78}
+          width={80}
           flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-
             return <>{populateCells(formattedDate, "Asar", 2)}</>;
           }}
         />
@@ -762,12 +759,11 @@ const PrayerTableDisplay = ({
           className="text-center"
           label="Maghrib"
           dataKey="date"
-          width={78}
+          width={80}
           flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-
             return <>{populateCells(formattedDate, "Maghrib", 3)}</>;
           }}
         />
@@ -775,12 +771,11 @@ const PrayerTableDisplay = ({
           className="text-center"
           label="Isha"
           dataKey="date"
-          width={78}
+          width={80}
           flexGrow={1}
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-
             return <>{populateCells(formattedDate, "Isha", 4)}</>;
           }}
         />
