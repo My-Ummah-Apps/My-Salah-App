@@ -168,7 +168,7 @@ const StatsPage = ({
         setCurrentWeek={setCurrentWeek}
         currentWeek={currentWeek}
       />{" "}
-      <div className="grid grid-cols-2 mb-5">
+      {/* <div className="grid grid-cols-2 mb-5">
         {userGender === "male" && (
           <StatCard
             statName={"In jamaah"}
@@ -218,7 +218,7 @@ const StatsPage = ({
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
-      </div>
+      </div> */}
     </section>
   );
 };

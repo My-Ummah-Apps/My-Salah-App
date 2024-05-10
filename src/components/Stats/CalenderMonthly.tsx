@@ -31,8 +31,8 @@ const CalenderMonthly = ({
   // modifySingleDaySalah,
   setCurrentWeek,
   currentWeek, // salahName,
-} // currentMonth,
-: {
+  // currentMonth,
+}: {
   // getPrevMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   // getNextMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   grabDate: (e: any, date?: string, salahName?: string) => void;
@@ -151,32 +151,8 @@ const CalenderMonthly = ({
         <div className="flex items-center justify-between monthly-heading-text-wrap">
           <p className="text-xl font-semibold text-center month-name-text">
             {/* {format(firstDayOfMonth, "MMMM yyyy")} */}
-
             {currentMonth.replace("-", " ")}
           </p>
-          <div className="flex chevron-wrap">
-            <div
-              style={{ backgroundColor: "rgba(31, 35, 36, 0.4)" }}
-              className="p-3 m-1 rounded-md monthly-calender-chevron-wrap"
-            >
-              <IoChevronBackSharp
-                onClick={(event: React.MouseEvent<SVGSVGElement>) => {
-                  getPrevMonth(event);
-                }}
-              />{" "}
-            </div>
-            <div
-              style={{ backgroundColor: "rgba(31, 35, 36, 0.4)" }}
-              className="p-3 m-1 rounded-md "
-            >
-              <IoChevronForward
-                onClick={(event: React.MouseEvent<SVGSVGElement>) => {
-                  getNextMonth(event);
-                }}
-              />
-            </div>
-          </div>
-          {/* <div className="flex items-center gap-6 justify-evenly sm:gap-12"></div> */}
         </div>
         <hr className="my-6" />
         <div className="grid grid-cols-7 gap-6 mb-3 place-items-center days-row-wrap">

@@ -709,7 +709,6 @@ const PrayerTableDisplay = ({
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
             const formattedDay = format(dateObject, "EEEE");
-
             return (
               <>
                 <p>{formattedDate}</p>

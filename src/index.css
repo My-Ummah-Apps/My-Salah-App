@@ -180,6 +180,10 @@ td {
   margin-right: 0;
 }
 
+.ReactVirtualized__Grid__innerScrollContainer {
+  /* overflow-x: scroll !important; */
+}
+
 @supports not (-webkit-touch-callout: none) {
   /* CSS for other than iOS devices */
   .navbar-wrap {
