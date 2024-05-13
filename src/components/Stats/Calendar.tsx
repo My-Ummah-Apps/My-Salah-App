@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { salahTrackingEntryType } from "../../types/types";
-import { List, Grid } from "react-virtualized";
+// import { List, Grid } from "react-virtualized";
 // import CalendarMonthly from "./CalendarMonthly";
+
+import { FixedSizeList as List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
+
 import Modal from "./Modal";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
@@ -165,8 +169,8 @@ const Calendar = ({
   // console.log(monthStrings);
   let firstDayOfMonth;
   const monthlyDates = (month: string) => {
-    firstDayOfMonth = parse(month, "MMMM yyyy", new Date()); // Returns Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time) (object)
-    //
+    firstDayOfMonth = parse(month, "MMMM yyyy", new Date()); // Returns the following type of object: Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time)
+
     const daysInMonth = eachDayOfInterval({
       // The eachDayOfInterval function gives dates between (and including) the two dates that are passed in.
       start: startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }), // Gives first day of month
@@ -242,149 +246,146 @@ const Calendar = ({
     return null;
   }
 
-  const cellRenderer = ({ columnIndex, key, rowIndex, style }) => (
-    // <div key={key} style={{ ...style, border: "1px solid #ccc", padding: 10 }}>
-    //   {`Row ${rowIndex}, Column ${columnIndex}`}
-    // </div>
+  // const Column = ({ index, style }) => <div style={style}>Column {index}</div>;
+  const Column = ({ index, style }) => (
     <div
-      style={{ ...style }}
-      className="mb-6 overflow-x-scroll calendar-wrap whitespace-nowrap w-[100vw]"
+      style={style}
+      className="mb-6 overflow-x-scroll calendar-wrap whitespace-nowrap bg-[color:var(--card-bg-color)] box-shadow: 0 25px 50px -12px rgb(31, 35, 36) px-9 border-r border-gray-700"
     >
-      {/* {formattedMonths.map((month) => ( */}
-      <div
+      {/* <div
         className="bg-[color:var(--card-bg-color)]  box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month px-9 border-r border-gray-700 pb-5"
         key={uuidv4()}
-      >
-        <p className="py-4 font-semibold text-center">
-          {formattedMonths[columnIndex]}
-        </p>
-        <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
-          {days.map((day) => {
-            return (
-              <div
-                key={uuidv4()}
-                className="w-5 h-5 text-sm font-semibold text-center individual-day"
-              >
-                {day}
-              </div>
-            );
-          })}
-        </div>
-        <div
-          // grid grid-cols-7
-          className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
-          key={uuidv4()}
-        >
-          {monthlyDates(formattedMonths[columnIndex]).map((day) => (
+      > */}
+      <p className="py-4 font-semibold text-center">{formattedMonths[index]}</p>
+      <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
+        {days.map((day) => {
+          return (
             <div
-              onClick={() => {
-                if (day <= todaysDate) {
-                  // modifySingleDaySalah(day);
-                  // setShowModal(true);
-                }
-              }}
               key={uuidv4()}
-              className="relative flex items-center justify-center individual-date"
+              className="w-5 h-5 text-sm font-semibold text-center individual-day"
             >
-              {determineRadialColors(day)}
-              <svg
-                className="absolute"
-                xmlns="http://www.w3.org/2000/svg"
-                id="svg"
-                viewBox="0 0 150 150"
-                style={{ height: "30px", width: "30px" }}
-              >
-                <desc>Created with Snap</desc>
-                <defs />
-                <path
-                  d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
-                  style={{
-                    strokeWidth: "13px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={zoharColor}
-                />
-                <path
-                  d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
-                  style={{
-                    strokeWidth: "13px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={asarColor}
-                />
-                <path
-                  d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
-                  style={{
-                    strokeWidth: "13px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={maghribColor}
-                />
-                <path
-                  d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
-                  style={{
-                    strokeWidth: "13px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={ishaColor}
-                />
-                <path
-                  d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
-                  style={{
-                    strokeWidth: "13px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={fajrColor}
-                />
-              </svg>
-              <p
-                // style={{
-                //   backgroundColor: countCompletedDates(
-                //     format(day, "dd.MM.yy")
-                //   ),
-                // }}
-                // rounded-md
-                className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
-                  isDayInSpecificMonth(day, formattedMonths[columnIndex])
-                    ? "white"
-                    : "text-gray-600"
-                }
-                  `}
-              >
-                {format(day, "d")}
-              </p>
+              {day}
             </div>
-          ))}
-        </div>
-        <Modal
-          setShowModal={setShowModal}
-          showModal={showModal}
-          salahTrackingArray={salahTrackingArray}
-          setSalahTrackingArray={setSalahTrackingArray}
-          setCurrentWeek={setCurrentWeek}
-          currentWeek={currentWeek}
-          startDate={startDate}
-        />
+          );
+        })}
       </div>
+      <div
+        className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
+        key={uuidv4()}
+      >
+        {monthlyDates(formattedMonths[index]).map((day) => (
+          <div
+            onClick={() => {
+              if (day <= todaysDate) {
+                // modifySingleDaySalah(day);
+                // setShowModal(true);
+              }
+            }}
+            key={uuidv4()}
+            className="relative flex items-center justify-center individual-date"
+          >
+            {determineRadialColors(day)}
+            <svg
+              className="absolute"
+              xmlns="http://www.w3.org/2000/svg"
+              id="svg"
+              viewBox="0 0 150 150"
+              style={{ height: "30px", width: "30px" }}
+            >
+              <desc>Created with Snap</desc>
+              <defs />
+              <path
+                d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                style={{
+                  strokeWidth: "13px",
+                  strokeLinecap: "round",
+                }}
+                fill="none"
+                stroke={zoharColor}
+              />
+              <path
+                d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                style={{
+                  strokeWidth: "13px",
+                  strokeLinecap: "round",
+                }}
+                fill="none"
+                stroke={asarColor}
+              />
+              <path
+                d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                style={{
+                  strokeWidth: "13px",
+                  strokeLinecap: "round",
+                }}
+                fill="none"
+                stroke={maghribColor}
+              />
+              <path
+                d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                style={{
+                  strokeWidth: "13px",
+                  strokeLinecap: "round",
+                }}
+                fill="none"
+                stroke={ishaColor}
+              />
+              <path
+                d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                style={{
+                  strokeWidth: "13px",
+                  strokeLinecap: "round",
+                }}
+                fill="none"
+                stroke={fajrColor}
+              />
+            </svg>
+            <p
+              className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
+                isDayInSpecificMonth(day, formattedMonths[index])
+                  ? "white"
+                  : "text-gray-600"
+              }
+              `}
+            >
+              {format(day, "d")}
+            </p>
+          </div>
+        ))}
+      </div>
+      <Modal
+        setShowModal={setShowModal}
+        showModal={showModal}
+        salahTrackingArray={salahTrackingArray}
+        setSalahTrackingArray={setSalahTrackingArray}
+        setCurrentWeek={setCurrentWeek}
+        currentWeek={currentWeek}
+        startDate={startDate}
+      />
     </div>
+    // </div>
   );
+
   return (
-    <div className="w-[100vw] overflow-x-scroll">
-      <Grid
-        cellRenderer={cellRenderer}
-        columnCount={formattedMonths.length} // Number of columns
-        columnWidth={100} // Width of each column
-        height={300} // Height of the grid
-        rowCount={1} // Number of rows
-        rowHeight={600} // Height of each row
-        width={500} // Width of the grid
-      ></Grid>
-    </div>
+    // <div className="calender-list-wrap">
+
+    <AutoSizer>
+      {({ height, width }) => (
+        <List
+          className="calender-list"
+          height={300}
+          itemCount={monthsBetween.length}
+          itemSize={300}
+          layout="horizontal"
+          width={100}
+          direction="rtl"
+        >
+          {Column}
+        </List>
+      )}
+    </AutoSizer>
+
+    // </div>
   );
 };
 

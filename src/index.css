@@ -133,15 +133,21 @@ td {
 }
 
 .calendar-wrap {
-  direction: rtl;
-}
-
-.single-month {
   direction: ltr;
 }
 
+.calender-list-wrap {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.calender-list {
+  width: 100% !important;
+  /* height: 0% !important; */
+}
+
 .monthly-calender-single-date {
-  line-height: 0.5;
+  /* line-height: 0.5; */
 }
 
 .ReactVirtualized__Grid,
@@ -181,7 +187,7 @@ td {
 }
 
 .ReactVirtualized__Grid__innerScrollContainer {
-  /* overflow-x: scroll !important; */
+  overflow-x: scroll !important;
 }
 
 @supports not (-webkit-touch-callout: none) {
