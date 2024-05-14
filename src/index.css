@@ -132,18 +132,14 @@ td {
   /* vertical-align: top; */
 }
 
-.calendar-wrap {
-  direction: ltr;
-}
-
 .calender-list-wrap {
-  width: 100% !important;
   height: 100% !important;
+  /* background-color: #a95223 !important; */
 }
 
-.calender-list {
-  width: 100% !important;
-  /* height: 0% !important; */
+.calendar-single-month-wrap {
+  direction: ltr;
+  height: 100% !important;
 }
 
 .monthly-calender-single-date {
@@ -188,6 +184,9 @@ td {
 
 .ReactVirtualized__Grid__innerScrollContainer {
   overflow-x: scroll !important;
+}
+
+.settings-page-wrap {
 }
 
 @supports not (-webkit-touch-callout: none) {

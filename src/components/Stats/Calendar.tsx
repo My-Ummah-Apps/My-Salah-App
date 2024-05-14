@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 // import { List, Grid } from "react-virtualized";
 // import CalendarMonthly from "./CalendarMonthly";
@@ -51,6 +51,8 @@ const Calendar = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
+  const calenderSingleMonthHeightRef = useRef(null);
+
   const days = ["M", "T", "W", "T", "F", "S", "S"];
   // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // function modifySingleDaySalah(date: Date) {
@@ -250,7 +252,9 @@ const Calendar = ({
   const Column = ({ index, style }) => (
     <div
       style={style}
-      className="mb-6 overflow-x-scroll calendar-wrap whitespace-nowrap bg-[color:var(--card-bg-color)] box-shadow: 0 25px 50px -12px rgb(31, 35, 36) px-9 border-r border-gray-700"
+      ref={calenderSingleMonthHeightRef}
+      // bg-[color:var(--card-bg-color)]
+      className="pb-5 overflow-x-scroll calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) px-9 border-r border-gray-700"
     >
       {/* <div
         className="bg-[color:var(--card-bg-color)]  box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month px-9 border-r border-gray-700 pb-5"
@@ -367,25 +371,22 @@ const Calendar = ({
   );
 
   return (
-    // <div className="calender-list-wrap">
-
-    <AutoSizer>
-      {({ height, width }) => (
-        <List
-          className="calender-list"
-          height={300}
-          itemCount={monthsBetween.length}
-          itemSize={300}
-          layout="horizontal"
-          width={100}
-          direction="rtl"
-        >
-          {Column}
-        </List>
-      )}
-    </AutoSizer>
-
-    // </div>
+    <div className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md">
+      <AutoSizer>
+        {({ width, height }) => (
+          <List
+            height={height}
+            itemCount={monthsBetween.length}
+            itemSize={300}
+            layout="horizontal"
+            width={width}
+            direction="rtl"
+          >
+            {Column}
+          </List>
+        )}
+      </AutoSizer>
+    </div>
   );
 };
 
