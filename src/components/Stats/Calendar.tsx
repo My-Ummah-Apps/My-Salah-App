@@ -26,6 +26,7 @@ import {
   // startOfYear,
   startOfWeek,
   eachMonthOfInterval,
+  setMonth,
   // endOfYear,
 } from "date-fns";
 
@@ -51,7 +52,23 @@ const Calendar = ({
   setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
   currentWeek: number;
 }) => {
-  const calenderSingleMonthHeightRef = useRef(null);
+  const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
+  const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
+  useEffect(() => {
+    console.log(calenderSingleMonthHeightRef.current);
+    if (calenderSingleMonthHeightRef.current) {
+      console.log(calenderSingleMonthHeightRef.current.clientHeight);
+      setSingleMonthDivHeight(
+        calenderSingleMonthHeightRef.current.clientHeight
+      );
+    }
+  });
+
+  const getSingleMonthDivHeight = () => {
+    // setSingleMonthDivHeight(e.target.clientHeight);
+    console.log("hi");
+    console.log(singleMonthDivHeight);
+  };
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
   // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -251,111 +268,114 @@ const Calendar = ({
   // const Column = ({ index, style }) => <div style={style}>Column {index}</div>;
   const Column = ({ index, style }) => (
     <div
-      style={style}
-      ref={calenderSingleMonthHeightRef}
+      style={{ ...style, border: "1px solid rgb(54, 49, 49)" }}
       // bg-[color:var(--card-bg-color)]
-      className="pb-5 overflow-x-scroll calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) px-9 border-r border-gray-700"
+
+      className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
     >
-      {/* <div
-        className="bg-[color:var(--card-bg-color)]  box-shadow: 0 25px 50px -12px rgb(31, 35, 36) single-month px-9 border-r border-gray-700 pb-5"
-        key={uuidv4()}
-      > */}
-      <p className="py-4 font-semibold text-center">{formattedMonths[index]}</p>
-      <div className="grid grid-cols-7 mb-3 place-items-center days-row-wrap gap-x-10">
-        {days.map((day) => {
-          return (
-            <div
-              key={uuidv4()}
-              className="w-5 h-5 text-sm font-semibold text-center individual-day"
-            >
-              {day}
-            </div>
-          );
-        })}
-      </div>
       <div
-        className="grid grid-cols-7 gap-x-10 gap-y-4 place-items-center month-dates-wrap"
-        key={uuidv4()}
+        ref={calenderSingleMonthHeightRef}
+        className={`month-name-days-dates-wrap`}
       >
-        {monthlyDates(formattedMonths[index]).map((day) => (
-          <div
-            onClick={() => {
-              if (day <= todaysDate) {
-                // modifySingleDaySalah(day);
-                // setShowModal(true);
-              }
-            }}
-            key={uuidv4()}
-            className="relative flex items-center justify-center individual-date"
-          >
-            {determineRadialColors(day)}
-            <svg
-              className="absolute"
-              xmlns="http://www.w3.org/2000/svg"
-              id="svg"
-              viewBox="0 0 150 150"
-              style={{ height: "30px", width: "30px" }}
+        <p className="py-4 font-semibold text-center">
+          {formattedMonths[index]}
+        </p>
+        <div className="grid grid-cols-7 px-2 mb-3 place-items-center days-row-wrap">
+          {days.map((day) => {
+            return (
+              <div
+                key={uuidv4()}
+                className="w-5 h-5 text-sm font-semibold text-center individual-day"
+              >
+                {day}
+              </div>
+            );
+          })}
+        </div>
+        <div
+          className="grid grid-cols-7 px-2 gap-y-4 place-items-center month-dates-wrap"
+          key={uuidv4()}
+        >
+          {monthlyDates(formattedMonths[index]).map((day) => (
+            <div
+              onClick={() => {
+                if (day <= todaysDate) {
+                  // modifySingleDaySalah(day);
+                  // setShowModal(true);
+                }
+              }}
+              key={uuidv4()}
+              className="relative flex items-center justify-center individual-date"
             >
-              <desc>Created with Snap</desc>
-              <defs />
-              <path
-                d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
-                style={{
-                  strokeWidth: "13px",
-                  strokeLinecap: "round",
-                }}
-                fill="none"
-                stroke={zoharColor}
-              />
-              <path
-                d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
-                style={{
-                  strokeWidth: "13px",
-                  strokeLinecap: "round",
-                }}
-                fill="none"
-                stroke={asarColor}
-              />
-              <path
-                d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
-                style={{
-                  strokeWidth: "13px",
-                  strokeLinecap: "round",
-                }}
-                fill="none"
-                stroke={maghribColor}
-              />
-              <path
-                d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
-                style={{
-                  strokeWidth: "13px",
-                  strokeLinecap: "round",
-                }}
-                fill="none"
-                stroke={ishaColor}
-              />
-              <path
-                d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
-                style={{
-                  strokeWidth: "13px",
-                  strokeLinecap: "round",
-                }}
-                fill="none"
-                stroke={fajrColor}
-              />
-            </svg>
-            <p
-              className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
-                isDayInSpecificMonth(day, formattedMonths[index])
-                  ? "white"
-                  : "text-gray-600"
-              }
+              {determineRadialColors(day)}
+              <svg
+                className="absolute"
+                xmlns="http://www.w3.org/2000/svg"
+                id="svg"
+                viewBox="0 0 150 150"
+                style={{ height: "30px", width: "30px" }}
+              >
+                <desc>Created with Snap</desc>
+                <defs />
+                <path
+                  d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                  style={{
+                    strokeWidth: "13px",
+                    strokeLinecap: "round",
+                  }}
+                  fill="none"
+                  stroke={zoharColor}
+                />
+                <path
+                  d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                  style={{
+                    strokeWidth: "13px",
+                    strokeLinecap: "round",
+                  }}
+                  fill="none"
+                  stroke={asarColor}
+                />
+                <path
+                  d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                  style={{
+                    strokeWidth: "13px",
+                    strokeLinecap: "round",
+                  }}
+                  fill="none"
+                  stroke={maghribColor}
+                />
+                <path
+                  d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                  style={{
+                    strokeWidth: "13px",
+                    strokeLinecap: "round",
+                  }}
+                  fill="none"
+                  stroke={ishaColor}
+                />
+                <path
+                  d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                  style={{
+                    strokeWidth: "13px",
+                    strokeLinecap: "round",
+                  }}
+                  fill="none"
+                  stroke={fajrColor}
+                />
+              </svg>
+              <p
+                className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
+                  isDayInSpecificMonth(day, formattedMonths[index])
+                    ? "white"
+                    : "text-gray-600"
+                }
               `}
-            >
-              {format(day, "d")}
-            </p>
-          </div>
-        ))}
+              >
+                {format(day, "d")}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
       <Modal
         setShowModal={setShowModal}
@@ -367,26 +387,29 @@ const Calendar = ({
         startDate={startDate}
       />
     </div>
-    // </div>
   );
 
   return (
-    <div className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md">
-      <AutoSizer>
-        {({ width, height }) => (
-          <List
-            height={height}
-            itemCount={monthsBetween.length}
-            itemSize={300}
-            layout="horizontal"
-            width={width}
-            direction="rtl"
-          >
-            {Column}
-          </List>
-        )}
-      </AutoSizer>
-    </div>
+    // <div
+    //   // style={{ height: singleMonthDivHeight }}
+    //   className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md"
+    // >
+    <AutoSizer disableHeight className="auto-sizer">
+      {({ width }) => (
+        <List
+          className="list"
+          height={330}
+          itemCount={monthsBetween.length}
+          itemSize={300}
+          layout="horizontal"
+          width={width}
+          direction="rtl"
+        >
+          {Column}
+        </List>
+      )}
+    </AutoSizer>
+    // </div>
   );
 };
 

@@ -133,13 +133,17 @@ td {
 }
 
 .calender-list-wrap {
-  height: 100% !important;
+  /* height: 100%; */
   /* background-color: #a95223 !important; */
+}
+
+.list {
+  /* height: 100% !important; */
 }
 
 .calendar-single-month-wrap {
   direction: ltr;
-  height: 100% !important;
+  /* height: 100% !important; */
 }
 
 .monthly-calender-single-date {
