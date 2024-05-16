@@ -174,9 +174,15 @@ const PrayerTableDisplay = ({
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  const [reasonsArray, setReasonsArray] = useState<string[]>();
+  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
   const [showReasonsArray, setShowReasonsArray] = useState(false);
-  let arr = selectedReasons;
+  const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
+    useState(false);
+  let selectedReasonsArray = selectedReasons;
+  const [customReason, setCustomReason] = useState("");
+  const handleCustomReason = (e: any) => {
+    setCustomReason(e.target.value);
+  };
   const [notes, setNotes] = useState("");
   const handleNotes = (e: any) => {
     setNotes(e.target.value);
@@ -274,22 +280,28 @@ const PrayerTableDisplay = ({
   }
 
   useEffect(() => {
-    setReasonsArray([
-      "Alarm",
-      "Education",
-      "Family",
-      "Friends",
-      "Gaming",
-      "Guests",
-      "Leisure",
-      "Movies",
-      "Shopping",
-      "Sleep",
-      "Sports",
-      "Travel",
-      "TV",
-      "Work",
-    ]);
+    const storedReasonsArray = localStorage.getItem("storedReasonsArray");
+    if (storedReasonsArray) {
+      setReasonsArray(JSON.parse(storedReasonsArray));
+    } else if (!storedReasonsArray) {
+      setReasonsArray([
+        "Alarm",
+        "Education",
+        "Family",
+        "Friends",
+        "Gaming",
+        "Guests",
+        "Leisure",
+        "Movies",
+        "Shopping",
+        "Sleep",
+        "Sports",
+        "Travel",
+        "TV",
+        "Work",
+      ]);
+      localStorage.setItem("storedReasonsArray", JSON.stringify(reasonsArray));
+    }
   }, []);
 
   let cellIcon: string | JSX.Element;
@@ -603,7 +615,8 @@ const PrayerTableDisplay = ({
                       <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
                       <p
                         onClick={() => {
-                          prompt();
+                          // prompt();
+                          setShowAddCustomReasonInputBox(true);
                         }}
                       >
                         +
@@ -620,19 +633,21 @@ const PrayerTableDisplay = ({
                               : "",
                           }}
                           onClick={() => {
-                            if (!arr.includes(item)) {
-                              arr = [...selectedReasons, item];
-                            } else if (arr.includes(item)) {
+                            if (!selectedReasonsArray.includes(item)) {
+                              selectedReasonsArray = [...selectedReasons, item];
+                            } else if (selectedReasonsArray.includes(item)) {
                               console.log(item);
                               let indexToRemove = selectedReasons.indexOf(item);
-                              arr = selectedReasons.filter((item) => {
-                                return (
-                                  selectedReasons.indexOf(item) !==
-                                  indexToRemove
-                                );
-                              });
+                              selectedReasonsArray = selectedReasons.filter(
+                                (item) => {
+                                  return (
+                                    selectedReasons.indexOf(item) !==
+                                    indexToRemove
+                                  );
+                                }
+                              );
                             }
-                            setSelectedReasons(arr);
+                            setSelectedReasons(selectedReasonsArray);
                           }}
                           className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
                         >
@@ -640,6 +655,35 @@ const PrayerTableDisplay = ({
                         </p>
                       ))}
                     </div>
+                  </div>
+                ) : null}
+                {showAddCustomReasonInputBox ? (
+                  <div className="absolute inline-block p-5 transform -translate-x-1/2 -translate-y-1/2 custom-input-box-wrap top-1/2 left-1/2 bg-slate-950">
+                    <p className="mb-5">Enter Custom Reason:</p>
+                    <input
+                      className="bg-gray-800"
+                      type="text"
+                      maxLength={10}
+                      value={customReason}
+                      onChange={handleCustomReason}
+                    />
+                    <button
+                      className="mt-10 bg-blue-700"
+                      onClick={() => {
+                        const updatedReasonsArray = [
+                          ...reasonsArray,
+                          customReason,
+                        ];
+                        setReasonsArray(updatedReasonsArray);
+                        setShowAddCustomReasonInputBox(false);
+                        localStorage.setItem(
+                          "storedReasonsArray",
+                          JSON.stringify(updatedReasonsArray)
+                        );
+                      }}
+                    >
+                      Save
+                    </button>
                   </div>
                 ) : null}
 
