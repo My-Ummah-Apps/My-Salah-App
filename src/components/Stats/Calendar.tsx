@@ -11,23 +11,15 @@ import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 import {
-  // add,
-  // sub,
   format,
   parse,
-  // startOfToday,
   startOfMonth,
-  // differenceInDays,
-  // isAfter,
-  // isBefore,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
-  // startOfYear,
   startOfWeek,
   eachMonthOfInterval,
   setMonth,
-  // endOfYear,
 } from "date-fns";
 
 const Calendar = ({
@@ -71,7 +63,7 @@ const Calendar = ({
   };
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
-  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   // function modifySingleDaySalah(date: Date) {
   //   const today: Date = new Date();
   //   setCurrentWeek(
@@ -397,6 +389,7 @@ const Calendar = ({
     <AutoSizer disableHeight className="auto-sizer">
       {({ width }) => (
         <List
+          style={{ borderRadius: "0.5rem" }}
           className="list"
           height={330}
           itemCount={monthsBetween.length}

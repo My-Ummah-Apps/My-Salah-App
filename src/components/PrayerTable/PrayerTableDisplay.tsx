@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
 // import { FixedSizeList as List } from "react-window";
@@ -175,6 +175,7 @@ const PrayerTableDisplay = ({
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [reasonsArray, setReasonsArray] = useState<string[]>();
+  const [showReasonsArray, setShowReasonsArray] = useState(false);
   let arr = selectedReasons;
   const [notes, setNotes] = useState("");
   const handleNotes = (e: any) => {
@@ -272,45 +273,24 @@ const PrayerTableDisplay = ({
     console.log(tableRowDate);
   }
 
-  let missedReasonsArray = [
-    "missedArray:",
-    "Alarm",
-    "Family",
-    "Guests",
-    "Friends",
-    "Movies",
-    "Sleep",
-  ];
-  let lateReasonsArray = [
-    "lateArray:",
-    "Alarm",
-    "Family",
-    "Friends",
-    "Guests",
-    "Movies",
-    "Sleep",
-    "Alarm",
-    "Family",
-    "Friends",
-    "Guests",
-    "Movies",
-    "Sleep",
-  ];
-  let prayedAloneReasonsArray = [
-    "alonearray: ",
-    "Family",
-    "Friends",
-    "Guests",
-    "Movies",
-    "Sleep",
-    "Alarm",
-    "Family",
-    "Friends",
-    "Guests",
-    "Movies",
-    "Sleep",
-    "Alarm",
-  ];
+  useEffect(() => {
+    setReasonsArray([
+      "Alarm",
+      "Education",
+      "Family",
+      "Friends",
+      "Gaming",
+      "Guests",
+      "Leisure",
+      "Movies",
+      "Shopping",
+      "Sleep",
+      "Sports",
+      "Travel",
+      "TV",
+      "Work",
+    ]);
+  }, []);
 
   let cellIcon: string | JSX.Element;
   function populateCells(formattedDate: string, salah: string, index: number) {
@@ -510,7 +490,9 @@ const PrayerTableDisplay = ({
                       <div
                         onClick={() => {
                           setSalahStatus("group");
-                          setReasonsArray([]);
+                          setSelectedReasons([]);
+                          setNotes("");
+                          // setReasonsArray([]);
                         }}
                         className={`${
                           salahStatus === "group" ? "border border-white" : ""
@@ -526,7 +508,7 @@ const PrayerTableDisplay = ({
                       <div
                         onClick={() => {
                           setSalahStatus("female-alone");
-                          setReasonsArray([]);
+                          // setReasonsArray([]);
                         }}
                         className={`${
                           salahStatus === "female-alone"
@@ -545,7 +527,7 @@ const PrayerTableDisplay = ({
                       <div
                         onClick={() => {
                           setSalahStatus("male-alone");
-                          setReasonsArray(prayedAloneReasonsArray);
+                          // setReasonsArray(reasonsArray);
                         }}
                         className={`${
                           salahStatus === "male-alone"
@@ -562,7 +544,7 @@ const PrayerTableDisplay = ({
                       <div
                         onClick={() => {
                           setSalahStatus("excused");
-                          setReasonsArray([]);
+                          // setReasonsArray([]);
                         }}
                         className={`${
                           salahStatus === "excused" ? "border border-white" : ""
@@ -576,7 +558,7 @@ const PrayerTableDisplay = ({
                   <div
                     onClick={() => {
                       setSalahStatus("late");
-                      setReasonsArray(lateReasonsArray);
+                      // setReasonsArray(reasonsArray);
                     }}
                     className={`${
                       salahStatus === "late" ? "border border-white" : ""
@@ -595,7 +577,7 @@ const PrayerTableDisplay = ({
                   <div
                     onClick={() => {
                       setSalahStatus("missed");
-                      setReasonsArray(missedReasonsArray);
+                      // setReasonsArray(reasonsArray);
                     }}
                     className={`${
                       salahStatus === "missed" ? "border border-white" : ""
@@ -612,40 +594,55 @@ const PrayerTableDisplay = ({
                     <p className="inline">Missed</p>
                   </div>
                 </div>
-                <div className="reasons-wrap">
-                  <h2 className="my-3 text-sm">Reason (Optional): </h2>
-                  <div className="flex flex-wrap ">
-                    {/* {missedReasonsArray.map((item) => ( */}
-                    {reasonsArray?.map((item) => (
-                      <p
-                        key={uuidv4()}
-                        style={{
-                          backgroundColor: selectedReasons.includes(item)
-                            ? "#2563eb"
-                            : "",
-                        }}
-                        onClick={() => {
-                          if (!arr.includes(item)) {
-                            arr = [...selectedReasons, item];
-                          } else if (arr.includes(item)) {
-                            console.log(item);
-                            let indexToRemove = selectedReasons.indexOf(item);
-                            arr = selectedReasons.filter((item) => {
-                              return (
-                                selectedReasons.indexOf(item) !== indexToRemove
-                              );
-                            });
-                          }
 
-                          setSelectedReasons(arr);
+                {salahStatus === "male-alone" ||
+                salahStatus === "late" ||
+                salahStatus === "missed" ? (
+                  <div className="my-8 reasons-wrap">
+                    <div className="flex justify-between">
+                      <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+                      <p
+                        onClick={() => {
+                          prompt();
                         }}
-                        className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
                       >
-                        {item}
+                        +
                       </p>
-                    ))}
+                    </div>
+                    <div className="flex flex-wrap ">
+                      {/* {missedReasonsArray.map((item) => ( */}
+                      {reasonsArray?.map((item) => (
+                        <p
+                          key={uuidv4()}
+                          style={{
+                            backgroundColor: selectedReasons.includes(item)
+                              ? "#2563eb"
+                              : "",
+                          }}
+                          onClick={() => {
+                            if (!arr.includes(item)) {
+                              arr = [...selectedReasons, item];
+                            } else if (arr.includes(item)) {
+                              console.log(item);
+                              let indexToRemove = selectedReasons.indexOf(item);
+                              arr = selectedReasons.filter((item) => {
+                                return (
+                                  selectedReasons.indexOf(item) !==
+                                  indexToRemove
+                                );
+                              });
+                            }
+                            setSelectedReasons(arr);
+                          }}
+                          className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+                        >
+                          {item}
+                        </p>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : null}
+
                 <div className="text-sm notes-wrap">
                   <h2 className="mt-3">Notes (Optional)</h2>
                   <textarea
