@@ -39,7 +39,7 @@
     "react-virtualized": "^9.22.5",
     "react-virtualized-auto-sizer": "^1.0.24",
     "react-window": "^1.8.10",
-    "recharts": "^2.12.4",
+    "recharts": "^2.12.7",
     "swiper": "^11.0.7",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",

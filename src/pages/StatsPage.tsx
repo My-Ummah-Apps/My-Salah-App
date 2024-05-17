@@ -6,6 +6,8 @@ import Calendar from "../components/Stats/Calendar";
 import StatCard from "../components/Stats/StatCard";
 import { eachDayOfInterval, parse } from "date-fns";
 
+import DonutPieChart from "../components/Stats/DonutPieChart";
+
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
@@ -168,7 +170,8 @@ const StatsPage = ({
         setCurrentWeek={setCurrentWeek}
         currentWeek={currentWeek}
       />{" "}
-      <div className="grid grid-cols-2 my-5 stats-cards-wrapper">
+      <DonutPieChart />
+      {/* <div className="grid grid-cols-2 my-5 stats-cards-wrapper">
         {userGender === "male" && (
           <StatCard
             statName={"In jamaah"}
@@ -218,7 +221,7 @@ const StatsPage = ({
           salahFulfilledDates={salahFulfilledDates}
           salahTrackingArray={salahTrackingArray}
         />
-      </div>
+      </div> */}
     </section>
   );
 };

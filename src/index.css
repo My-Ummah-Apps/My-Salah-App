@@ -99,7 +99,8 @@
   --card-shadow-color: rgb(31, 35, 36);
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
-  --late-status-color: #a95223;
+  /* --late-status-color: #a95223; */
+  --late-status-color: #ea580c;
   --alone-male-status-color: #bcaa4b;
   --alone-female-status-color: #448b75;
   --excused-status-color: #b317ae;
@@ -132,22 +133,8 @@ td {
   /* vertical-align: top; */
 }
 
-.calender-list-wrap {
-  /* height: 100%; */
-  /* background-color: #a95223 !important; */
-}
-
-.list {
-  /* height: 100% !important; */
-}
-
 .calendar-single-month-wrap {
   direction: ltr;
-  /* height: 100% !important; */
-}
-
-.monthly-calender-single-date {
-  /* line-height: 0.5; */
 }
 
 .ReactVirtualized__Grid,
@@ -166,8 +153,6 @@ td {
   text-transform: none;
   font-weight: 300;
   font-size: 0.9rem;
-  /* margin-right: 10px; */
-  /* text-align: left; */
 }
 
 .ReactVirtualized__Table__headerColumn:first-of-type {
@@ -188,6 +173,16 @@ td {
 
 .ReactVirtualized__Grid__innerScrollContainer {
   overflow-x: scroll !important;
+}
+
+.donut-pie-chart-text:before {
+  content: "";
+  display: inline-block;
+
+  margin-right: 0.3rem;
+  width: 10px; /* Adjust the size as needed */
+  height: 10px; /* Adjust the size as needed */
+  /* background-color: red; */
 }
 
 .settings-page-wrap {
