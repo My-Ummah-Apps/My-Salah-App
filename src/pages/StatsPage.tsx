@@ -168,7 +168,7 @@ const StatsPage = ({
         setCurrentWeek={setCurrentWeek}
         currentWeek={currentWeek}
       />{" "}
-      <div className="grid grid-cols-2 mb-5">
+      <div className="grid grid-cols-2 my-5 stats-cards-wrapper">
         {userGender === "male" && (
           <StatCard
             statName={"In jamaah"}
