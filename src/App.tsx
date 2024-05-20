@@ -105,8 +105,8 @@ const App = () => {
 
   // const todaysDate = new Date("2024-01-01");
   const todaysDate = new Date();
-  // let userStartDate: string | null = localStorage.getItem("userStartDate");
-  let userStartDate: string | null = "01.01.24";
+  let userStartDate: string | null = localStorage.getItem("userStartDate");
+  // let userStartDate: string | null = "01.01.24";
   if (!userStartDate) {
     userStartDate = format(todaysDate, "dd.MM.yy");
     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));

@@ -1,14 +1,14 @@
-import React, { PureComponent } from "react";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
+// import React, { PureComponent } from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-];
-
-const COLORS = ["#b62e2e", "#448b75", "#ea580c", "#bcaa4b"];
+interface CustomizedLabelProps {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  percent: number;
+}
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -17,9 +17,8 @@ const renderCustomizedLabel = ({
   midAngle,
   innerRadius,
   outerRadius,
-  percent,
-  index,
-}) => {
+  percent, //   index,
+}: CustomizedLabelProps) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -38,14 +37,50 @@ const renderCustomizedLabel = ({
   );
 };
 
-const DonutPieChart = () => {
+const DonutPieChart = ({
+  salahStatusStatistics,
+  userGender,
+}: {
+  salahStatusStatistics: {
+    salahInJamaahDatesOverall: number;
+    salahMaleAloneDatesOverall: number;
+    salahExcusedDatesOverall: number;
+    salahMissedDatesOverall: number;
+    salahLateDatesOverall: number;
+  };
+  userGender: string;
+}) => {
+  userGender = "female";
+
+  const data = [
+    userGender === "male"
+      ? {
+          name: "In Jamaah",
+          value: salahStatusStatistics.salahInJamaahDatesOverall,
+        }
+      : null,
+    {
+      name: "Alone",
+      value: salahStatusStatistics.salahMaleAloneDatesOverall,
+    },
+    userGender === "female"
+      ? {
+          name: "excused",
+          value: salahStatusStatistics.salahExcusedDatesOverall,
+        }
+      : null,
+    { name: "Late", value: salahStatusStatistics.salahLateDatesOverall },
+    { name: "Missed", value: salahStatusStatistics.salahMissedDatesOverall },
+  ];
+
+  const COLORS = ["green", "#BDA55D", "orange", "red"];
   return (
-    <div className="my-10 flex h-[200px] w-[100%] justify-around items-center donut-pie-chart-wrapper">
+    <div className="mt-5 mb-10 flex h-[200px] w-[100%] justify-around items-center donut-pie-chart-wrapper">
       <ResponsiveContainer className="" width="60%" height="100%">
         <PieChart width={400} height={400}>
           <Pie
             data={data}
-            isAnimationActive={false}
+            isAnimationActive={true}
             cx="50%"
             cy="50%"
             labelLine={false}
@@ -56,7 +91,9 @@ const DonutPieChart = () => {
             dataKey="value"
           >
             {data.map((entry, index) => (
+              // {data.map((entry, index) => (
               <Cell
+                style={{ outline: "none" }}
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
               />
@@ -64,11 +101,18 @@ const DonutPieChart = () => {
           </Pie>
         </PieChart>
       </ResponsiveContainer>
-      <div className="w-[40%]">
-        <p className="donut-pie-chart-text before:bg-[#b62e2e] ">In Jamaah</p>
-        <p className="donut-pie-chart-text before:bg-[#448b75]">Alone</p>
-        <p className="donut-pie-chart-text before:bg-[#ea580c]">Missed</p>
-        <p className="donut-pie-chart-text before:bg-[#bcaa4b]">Late</p>
+      <div className="justify-center">
+        <p className="donut-pie-chart-text before:bg-[#448b75]">
+          {" "}
+          {userGender === "male" ? " In Jamaah" : "Prayed"}
+        </p>
+        {userGender === "male" ? (
+          <p className="donut-pie-chart-text before:bg-[#bcaa4b]"> Alone</p>
+        ) : (
+          <p className="donut-pie-chart-text before:bg-[#dd42da]"> Excused</p>
+        )}
+        <p className="donut-pie-chart-text before:bg-[#ea580c]"> Late</p>
+        <p className="donut-pie-chart-text  before:bg-[#b62e2e]"> Missed</p>
       </div>
     </div>
   );

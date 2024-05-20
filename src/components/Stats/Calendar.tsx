@@ -47,9 +47,9 @@ const Calendar = ({
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
   useEffect(() => {
-    console.log(calenderSingleMonthHeightRef.current);
+    // console.log(calenderSingleMonthHeightRef.current);
     if (calenderSingleMonthHeightRef.current) {
-      console.log(calenderSingleMonthHeightRef.current.clientHeight);
+      // console.log(calenderSingleMonthHeightRef.current.clientHeight);
       setSingleMonthDivHeight(
         calenderSingleMonthHeightRef.current.clientHeight
       );

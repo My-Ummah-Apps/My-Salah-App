@@ -147,7 +147,7 @@ const PrayerTableDisplay = ({
   const [tableRowDate, setTableRowDate] = useState("");
 
   // Array to hold the last five dates
-  userStartDate = "05.05.22";
+  // userStartDate = "05.05.22";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
   const datesBetween = eachDayOfInterval({
@@ -175,7 +175,7 @@ const PrayerTableDisplay = ({
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  const [showReasonsArray, setShowReasonsArray] = useState(false);
+  // const [showReasonsArray, setShowReasonsArray] = useState(false);
   const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
     useState(false);
   let selectedReasonsArray = selectedReasons;

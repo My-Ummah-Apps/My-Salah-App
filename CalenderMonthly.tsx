@@ -31,8 +31,8 @@ const CalenderMonthly = ({
   // modifySingleDaySalah,
   setCurrentWeek,
   currentWeek, // salahName,
-  // currentMonth,
-}: {
+} // currentMonth,
+: {
   // getPrevMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   // getNextMonth: (event: React.MouseEvent<SVGSVGElement>) => void;
   grabDate: (e: any, date?: string, salahName?: string) => void;
