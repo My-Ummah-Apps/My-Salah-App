@@ -4,7 +4,7 @@ import { salahTrackingEntryType } from "../types/types";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import Calendar from "../components/Stats/Calendar";
 
-import { eachDayOfInterval, parse } from "date-fns";
+// import { eachDayOfInterval, parse } from "date-fns";
 
 import DonutPieChart from "../components/Stats/DonutPieChart";
 
@@ -36,11 +36,11 @@ const StatsPage = ({
   useEffect(() => {
     setHeading("Stats");
   }, []);
-  let jamaahStat = 0;
-  let aloneStat = 0;
-  let lateStat = 0;
-  let missedStat = 0;
-  let excusedStat = 0;
+  // let jamaahStat = 0;
+  // let aloneStat = 0;
+  // let lateStat = 0;
+  // let missedStat = 0;
+  // let excusedStat = 0;
 
   let salahInJamaahDatesOverall: string[] = [];
   let salahMaleAloneDatesOverall: string[] = [];
@@ -49,29 +49,27 @@ const StatsPage = ({
   let salahLateDatesOverall: string[] = [];
   let salahMissedDatesOverall: string[] = [];
 
-  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  let todaysDate = new Date();
-  let amountOfDaysBetweenStartDateAndToday = eachDayOfInterval({
-    start: userStartDateFormatted,
-    end: todaysDate,
-  });
-  let totalPossibleSalah = amountOfDaysBetweenStartDateAndToday.length * 5;
+  // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  // let todaysDate = new Date();
+  // let amountOfDaysBetweenStartDateAndToday = eachDayOfInterval({
+  //   start: userStartDateFormatted,
+  //   end: todaysDate,
+  // });
+  // let totalPossibleSalah = amountOfDaysBetweenStartDateAndToday.length * 5;
   // console.log(totalPossibleSalah);
 
-  const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
-    (accumulatorArray, salah) => {
-      for (let i = 0; i < salah.completedDates.length; i++) {
-        accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
-      }
-      return accumulatorArray;
-    },
-    []
-  );
+  // const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
+  //   (accumulatorArray, salah) => {
+  //     for (let i = 0; i < salah.completedDates.length; i++) {
+  //       accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
+  //     }
+  //     return accumulatorArray;
+  //   },
+  //   []
+  // );
 
   function getSalahStatusDates(status: string, array: string[]) {
-    console.log(status);
-    console.log(array);
-    let statToUpdate = 0;
+    // let statToUpdate = 0;
     salahTrackingArray.forEach((salah) => {
       for (let i = 0; i < salah.completedDates.length; i++) {
         if (Object.values(salah.completedDates[i])[0].status === status) {
@@ -80,9 +78,9 @@ const StatsPage = ({
       }
     });
 
-    statToUpdate = Math.round(
-      (salahFulfilledDates.length / totalPossibleSalah) * 100
-    );
+    // statToUpdate = Math.round(
+    //   (salahFulfilledDates.length / totalPossibleSalah) * 100
+    // );
 
     // console.log(totalPossibleSalah);
     // Below will potentially be useful when adding individual salah stats
@@ -92,17 +90,17 @@ const StatsPage = ({
     //   );
     // }
 
-    status === "group"
-      ? (jamaahStat = statToUpdate)
-      : status === "male-alone" || status === "female-alone"
-      ? (aloneStat = statToUpdate)
-      : status === "late"
-      ? (lateStat = statToUpdate)
-      : status === "missed"
-      ? (missedStat = statToUpdate)
-      : status === "excused"
-      ? (excusedStat = statToUpdate)
-      : null;
+    // status === "group"
+    //   ? (jamaahStat = statToUpdate)
+    //   : status === "male-alone" || status === "female-alone"
+    //   ? (aloneStat = statToUpdate)
+    //   : status === "late"
+    //   ? (lateStat = statToUpdate)
+    //   : status === "missed"
+    //   ? (missedStat = statToUpdate)
+    //   : status === "excused"
+    //   ? (excusedStat = statToUpdate)
+    //   : null;
   }
 
   getSalahStatusDates("group", salahInJamaahDatesOverall);
@@ -115,17 +113,10 @@ const StatsPage = ({
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
-  console.log("salahInJamaahDatesOverall " + salahInJamaahDatesOverall.length);
-  console.log(
-    "salahMaleAloneDatesOverall " + salahMaleAloneDatesOverall.length
-  );
-  console.log("salahExcusedDatesOverall " + salahExcusedDatesOverall.length);
-  console.log("salahMissedDatesOverall " + salahMissedDatesOverall.length);
-  console.log("salahLateDatesOverall " + salahLateDatesOverall.length);
-
   const salahStatusStatistics = {
     salahInJamaahDatesOverall: salahInJamaahDatesOverall.length,
     salahMaleAloneDatesOverall: salahMaleAloneDatesOverall.length,
+    salahFemaleAloneDatesOverall: salahFemaleAloneDatesOverall.length,
     salahExcusedDatesOverall: salahExcusedDatesOverall.length,
     salahMissedDatesOverall: salahMissedDatesOverall.length,
     salahLateDatesOverall: salahLateDatesOverall.length,

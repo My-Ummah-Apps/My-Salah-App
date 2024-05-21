@@ -283,8 +283,8 @@ const PrayerTableDisplay = ({
     const storedReasonsArray = localStorage.getItem("storedReasonsArray");
     if (storedReasonsArray) {
       setReasonsArray(JSON.parse(storedReasonsArray));
-    } else if (!storedReasonsArray) {
-      setReasonsArray([
+    } else if (storedReasonsArray === null) {
+      const defaultReasonsArray = [
         "Alarm",
         "Education",
         "Family",
@@ -299,8 +299,12 @@ const PrayerTableDisplay = ({
         "Travel",
         "TV",
         "Work",
-      ]);
-      localStorage.setItem("storedReasonsArray", JSON.stringify(reasonsArray));
+      ];
+      localStorage.setItem(
+        "storedReasonsArray",
+        JSON.stringify(defaultReasonsArray)
+      );
+      setReasonsArray(defaultReasonsArray);
     }
   }, []);
 
@@ -619,12 +623,12 @@ const PrayerTableDisplay = ({
                           setShowAddCustomReasonInputBox(true);
                         }}
                       >
-                        +
+                        {/* + */}
                       </p>
                     </div>
                     <div className="flex flex-wrap ">
                       {/* {missedReasonsArray.map((item) => ( */}
-                      {reasonsArray?.map((item) => (
+                      {reasonsArray.map((item) => (
                         <p
                           key={uuidv4()}
                           style={{

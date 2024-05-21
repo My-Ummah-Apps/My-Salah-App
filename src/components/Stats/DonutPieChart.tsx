@@ -1,5 +1,6 @@
 // import React, { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { prayerStatusColors } from "../../utils/prayerStatusColors";
 
 interface CustomizedLabelProps {
   cx: number;
@@ -44,38 +45,56 @@ const DonutPieChart = ({
   salahStatusStatistics: {
     salahInJamaahDatesOverall: number;
     salahMaleAloneDatesOverall: number;
+    salahFemaleAloneDatesOverall: number;
     salahExcusedDatesOverall: number;
     salahMissedDatesOverall: number;
     salahLateDatesOverall: number;
   };
   userGender: string;
 }) => {
-  userGender = "female";
-
   const data = [
     userGender === "male"
       ? {
           name: "In Jamaah",
           value: salahStatusStatistics.salahInJamaahDatesOverall,
         }
-      : null,
-    {
-      name: "Alone",
-      value: salahStatusStatistics.salahMaleAloneDatesOverall,
-    },
-    userGender === "female"
+      : {
+          name: "Prayed",
+          value: salahStatusStatistics.salahFemaleAloneDatesOverall,
+        },
+    userGender === "male"
       ? {
-          name: "excused",
-          value: salahStatusStatistics.salahExcusedDatesOverall,
+          name: "Alone",
+          value: salahStatusStatistics.salahMaleAloneDatesOverall,
         }
-      : null,
+      : {
+          name: "Excused",
+          value: salahStatusStatistics.salahExcusedDatesOverall,
+        },
+
     { name: "Late", value: salahStatusStatistics.salahLateDatesOverall },
     { name: "Missed", value: salahStatusStatistics.salahMissedDatesOverall },
   ];
 
-  const COLORS = ["green", "#BDA55D", "orange", "red"];
+  const COLORS =
+    // userGender === "male"
+    //   ? ["green", "#BDA55D", "orange", "red"]
+    //   : ["green", "purple", "orange", "red"];
+    userGender === "male"
+      ? [
+          prayerStatusColors.jamaahStatusColor,
+          prayerStatusColors.aloneMaleStatusColor,
+          prayerStatusColors.lateStatusColor,
+          prayerStatusColors.missedStatusColor,
+        ]
+      : [
+          prayerStatusColors.aloneFemaleStatusColor,
+          prayerStatusColors.excusedStatusColor,
+          prayerStatusColors.lateStatusColor,
+          prayerStatusColors.missedStatusColor,
+        ];
   return (
-    <div className="mt-5 mb-10 flex h-[200px] w-[100%] justify-around items-center donut-pie-chart-wrapper">
+    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-lg py-2">
       <ResponsiveContainer className="" width="60%" height="100%">
         <PieChart width={400} height={400}>
           <Pie
@@ -90,7 +109,7 @@ const DonutPieChart = ({
             fill="#8884d8"
             dataKey="value"
           >
-            {data.map((entry, index) => (
+            {data.map((_, index) => (
               // {data.map((entry, index) => (
               <Cell
                 style={{ outline: "none" }}
@@ -104,7 +123,7 @@ const DonutPieChart = ({
       <div className="justify-center">
         <p className="donut-pie-chart-text before:bg-[#448b75]">
           {" "}
-          {userGender === "male" ? " In Jamaah" : "Prayed"}
+          {userGender === "male" ? "In Jamaah" : "Prayed"}
         </p>
         {userGender === "male" ? (
           <p className="donut-pie-chart-text before:bg-[#bcaa4b]"> Alone</p>

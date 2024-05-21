@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { salahTrackingEntryType } from "../../types/types";
+import { CSSProperties } from "react";
+
 // import { List, Grid } from "react-virtualized";
 // import CalendarMonthly from "./CalendarMonthly";
 
@@ -19,7 +21,7 @@ import {
   endOfWeek,
   startOfWeek,
   eachMonthOfInterval,
-  setMonth,
+  // setMonth,
 } from "date-fns";
 
 const Calendar = ({
@@ -45,22 +47,22 @@ const Calendar = ({
   currentWeek: number;
 }) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
-  const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
+  // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
   useEffect(() => {
     // console.log(calenderSingleMonthHeightRef.current);
-    if (calenderSingleMonthHeightRef.current) {
-      // console.log(calenderSingleMonthHeightRef.current.clientHeight);
-      setSingleMonthDivHeight(
-        calenderSingleMonthHeightRef.current.clientHeight
-      );
-    }
+    // if (calenderSingleMonthHeightRef.current) {
+    //   // console.log(calenderSingleMonthHeightRef.current.clientHeight);
+    //   setSingleMonthDivHeight(
+    //     calenderSingleMonthHeightRef.current.clientHeight
+    //   );
+    // }
   });
 
-  const getSingleMonthDivHeight = () => {
-    // setSingleMonthDivHeight(e.target.clientHeight);
-    console.log("hi");
-    console.log(singleMonthDivHeight);
-  };
+  // const getSingleMonthDivHeight = () => {
+  //   // setSingleMonthDivHeight(e.target.clientHeight);
+  //   console.log("hi");
+  //   console.log(singleMonthDivHeight);
+  // };
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
@@ -150,7 +152,7 @@ const Calendar = ({
   const [showModal, setShowModal] = useState(false);
 
   let todaysDate = new Date();
-  userStartDate = "17.01.11";
+  // userStartDate = "17.01.11";
 
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
 
@@ -257,10 +259,22 @@ const Calendar = ({
     return null;
   }
 
+  console.log(monthsBetween.length);
+
   // const Column = ({ index, style }) => <div style={style}>Column {index}</div>;
-  const Column = ({ index, style }) => (
+  const Column = ({
+    index,
+    style,
+  }: {
+    index: number;
+    style: CSSProperties;
+  }) => (
     <div
-      style={{ ...style, border: "1px solid rgb(54, 49, 49)" }}
+      style={{
+        ...style,
+        width: monthsBetween.length === 1 ? "100%" : style.width,
+        border: "1px solid rgb(54, 49, 49)",
+      }}
       // bg-[color:var(--card-bg-color)]
 
       className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
