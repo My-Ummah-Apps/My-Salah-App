@@ -42,6 +42,9 @@ const StatsPage = ({
   // let missedStat = 0;
   // let excusedStat = 0;
 
+  // const [showDonutChart, setShowDonutChart] = useState(false);
+  let showDonutChart;
+
   let salahInJamaahDatesOverall: string[] = [];
   let salahMaleAloneDatesOverall: string[] = [];
   let salahFemaleAloneDatesOverall: string[] = [];
@@ -122,13 +125,39 @@ const StatsPage = ({
     salahLateDatesOverall: salahLateDatesOverall.length,
   };
 
+  // console.log(
+  //   Object.values(salahStatusStatistics).some((num) => num > 0)
+  // );
+  // console.log(Object.values(salahStatusStatistics));
+
+  for (let key in salahStatusStatistics) {
+    console.log(
+      salahStatusStatistics[key as keyof typeof salahStatusStatistics]
+    );
+    if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
+      console.log("RAN");
+      showDonutChart = true;
+      break;
+    }
+  }
+
+  // const salahStatusStatisticsLengthCheck = Object.values(
+  //   salahStatusStatistics
+  // ).some((length) => length > 0);
+
+  // setShowDonutChart(salahStatusStatisticsLengthCheck);
+
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
-      <DonutPieChart
-        userGender={userGender}
-        salahStatusStatistics={salahStatusStatistics}
-      />
+      {showDonutChart === true ? (
+        <DonutPieChart
+          userGender={userGender}
+          salahStatusStatistics={salahStatusStatistics}
+        />
+      ) : (
+        ""
+      )}
       <Calendar
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}

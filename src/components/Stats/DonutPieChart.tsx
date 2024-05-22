@@ -26,6 +26,7 @@ const renderCustomizedLabel = ({
 
   return (
     <text
+      className="text-sm"
       x={x}
       y={y}
       fill="white"
@@ -33,7 +34,11 @@ const renderCustomizedLabel = ({
       textAnchor="middle"
       dominantBaseline="central"
     >
-      {`${(percent * 100).toFixed(0)}%`}
+      {`${
+        Number((percent * 100).toFixed(0)) > 0
+          ? (percent * 100).toFixed(0) + "%"
+          : ""
+      }`}
     </text>
   );
 };
@@ -94,12 +99,13 @@ const DonutPieChart = ({
           prayerStatusColors.missedStatusColor,
         ];
   return (
-    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-lg py-2">
+    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-lg py-2 ">
       <ResponsiveContainer className="" width="60%" height="100%">
         <PieChart width={400} height={400}>
           <Pie
             data={data}
             isAnimationActive={true}
+            animationDuration={1000}
             cx="50%"
             cy="50%"
             labelLine={false}
@@ -121,17 +127,29 @@ const DonutPieChart = ({
         </PieChart>
       </ResponsiveContainer>
       <div className="justify-center">
-        <p className="donut-pie-chart-text before:bg-[#448b75]">
+        <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#448b75]">
           {" "}
           {userGender === "male" ? "In Jamaah" : "Prayed"}
         </p>
         {userGender === "male" ? (
-          <p className="donut-pie-chart-text before:bg-[#bcaa4b]"> Alone</p>
+          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#bcaa4b]">
+            {" "}
+            Alone
+          </p>
         ) : (
-          <p className="donut-pie-chart-text before:bg-[#dd42da]"> Excused</p>
+          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#dd42da]">
+            {" "}
+            Excused
+          </p>
         )}
-        <p className="donut-pie-chart-text before:bg-[#ea580c]"> Late</p>
-        <p className="donut-pie-chart-text  before:bg-[#b62e2e]"> Missed</p>
+        <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#ea580c]">
+          {" "}
+          Late
+        </p>
+        <p className="donut-pie-chart-text pb-1 text-sm  before:bg-[#b62e2e]">
+          {" "}
+          Missed
+        </p>
       </div>
     </div>
   );

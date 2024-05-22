@@ -700,7 +700,7 @@ const PrayerTableDisplay = ({
                     // wrap="hard"
                     rows={3}
                     // cols={1}
-                    className="w-full mt-3 bg-transparent border rounded-md border-amber-600"
+                    className="w-full p-1 mt-3 bg-transparent border rounded-md border-amber-600"
                   />
                 </div>
                 <button
