@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import { v4 as uuidv4 } from "uuid";
 import HomePage from "./pages/HomePage";
@@ -11,6 +11,7 @@ import { subDays, format } from "date-fns";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
+import { Keyboard } from "@capacitor/keyboard";
 
 // interface salahTrackingEntryType {
 //   salahName: string;
@@ -75,8 +76,54 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+if (Capacitor.isNativePlatform()) {
+  // Keyboard.addListener("keyboardWillShow", (info) => {
+  //   console.log("keyboard will show with height:", info.keyboardHeight);
+  // });
+  // Keyboard.addListener("keyboardDidShow", (info) => {
+  //   console.log("keyboard did show with height:", info.keyboardHeight);
+  // });
+  // Keyboard.addListener("keyboardWillHide", () => {
+  //   console.log("keyboard will hide");
+  // });
+  // Keyboard.addListener("keyboardDidHide", () => {
+  //   console.log("keyboard did hide");
+  // });
+  // window.addEventListener("keyboardWillShow", (e) => {
+  //   // const app: any = document.querySelector(".app");
+  //   console.log("APP IS: ");
+  //   console.log(appRef);
+  //   appRef.style.marginBottom = (e as any).keyboardHeight + "px";
+  // });
+  // window.addEventListener("keyboardWillHide", (e) => {
+  //   // const app: any = document.querySelector(".app");
+  //   appRef.style.marginBottom = "0px";
+  //   console.log("YOYO");
+  // });
+}
+
 const App = () => {
   const [showIntroModal, setShowIntroModal] = useState(false);
+  // const appRef = useRef();
+  // console.log(appRef);
+  // if (Capacitor.isNativePlatform()) {
+
+  //   window.addEventListener("keyboardWillShow", (e) => {
+  //     // const app: any = document.querySelector(".app");
+  //     console.log("SHOWING");
+  //     console.log("APP IS: ");
+  //     console.log(appRef);
+  //     console.log((e as any).keyboardHeight);
+  //     appRef.current.style.marginBottom = (e as any).keyboardHeight + "px";
+  //   });
+  //   window.addEventListener("keyboardWillHide", (e) => {
+  //     // const app: any = document.querySelector(".app");
+  //     console.log("HIDING");
+  //     console.log("APP IS: ");
+  //     console.log(appRef);
+  //     appRef.current.style.marginBottom = "0px";
+  //   });
+  // }
   // let launchCount: number | null = localStorage.getItem("launch-count");
   // useEffect(() => {
   //   if (launchCount > 14) {
@@ -212,7 +259,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <section className="App">
+      <section className="app">
         <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
           {/* <div></div> */}

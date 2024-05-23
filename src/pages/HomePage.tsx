@@ -19,9 +19,8 @@ const HomePage = ({
   // setSalahObjects: setSalahObjects,
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
-  salahTrackingArray,
-} // setCurrentWeek,
-// currentWeek,
+  salahTrackingArray, // setCurrentWeek,
+} // currentWeek,
 : {
   // title: React.ReactNode;
   userGender: string;

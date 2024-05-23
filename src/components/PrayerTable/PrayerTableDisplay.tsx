@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
 // import { FixedSizeList as List } from "react-window";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
+import { Capacitor } from "@capacitor/core";
+import { Keyboard } from "@capacitor/keyboard";
 import Sheet from "react-modal-sheet";
 // import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
@@ -75,6 +77,25 @@ const PrayerTableDisplay = ({
   // currentWeek: number;
   startDate: Date;
 }) => {
+  const appRef = useRef();
+  console.log(appRef);
+  if (Capacitor.isNativePlatform()) {
+    window.addEventListener("keyboardWillShow", (e) => {
+      // const app: any = document.querySelector(".app");
+      console.log("SHOWING");
+      console.log("APP IS: ");
+      console.log(appRef);
+      console.log(e.keyboardHeight);
+      appRef.current.style.marginBottom = (e as any).keyboardHeight + "px";
+    });
+    window.addEventListener("keyboardWillHide", (e) => {
+      // const app: any = document.querySelector(".app");
+      console.log("HIDING");
+      console.log("APP IS: ");
+      console.log(appRef);
+      appRef.current.style.marginBottom = "0px";
+    });
+  }
   // console.log("salahTrackingArray");
   // console.log(salahTrackingArray);
   // const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
@@ -275,8 +296,6 @@ const PrayerTableDisplay = ({
 
     setSelectedSalah(salah);
     setTableRowDate(tableRowDate);
-    console.log(selectedSalah);
-    console.log(tableRowDate);
   }
 
   useEffect(() => {
@@ -486,6 +505,8 @@ const PrayerTableDisplay = ({
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
     <section>
       <Sheet
+        className="sheet-prayer-update"
+        ref={appRef}
         isOpen={showUpdateStatusModal}
         onClose={() => setShowUpdateStatusModal(false)}
         detent="content-height"

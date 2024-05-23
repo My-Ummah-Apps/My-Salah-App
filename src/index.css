@@ -120,8 +120,13 @@ body {
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);
   color: rgb(184, 184, 184);
-  /* overflow-y: hidden; */
+  overflow-y: hidden;
   overflow-x: scroll;
+}
+
+.sheet-prayer-update {
+  margin-bottom: 0;
+  transition: margin-bottom 420ms;
 }
 
 .header-wrap {
