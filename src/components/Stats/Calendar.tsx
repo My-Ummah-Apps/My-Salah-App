@@ -299,7 +299,7 @@ const Calendar = ({
           })}
         </div>
         <div
-          className="grid grid-cols-7 px-2 gap-y-4 place-items-center month-dates-wrap"
+          className="grid grid-cols-7 px-2 gap-y-7 place-items-center month-dates-wrap"
           key={uuidv4()}
         >
           {monthlyDates(formattedMonths[index]).map((day) => (
@@ -319,7 +319,7 @@ const Calendar = ({
                 xmlns="http://www.w3.org/2000/svg"
                 id="svg"
                 viewBox="0 0 150 150"
-                style={{ height: "30px", width: "30px" }}
+                style={{ height: "37px", width: "37px" }}
               >
                 <desc>Created with Snap</desc>
                 <defs />
@@ -370,6 +370,7 @@ const Calendar = ({
                 />
               </svg>
               <p
+                //
                 className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
                   isDayInSpecificMonth(day, formattedMonths[index])
                     ? "white"
@@ -378,6 +379,7 @@ const Calendar = ({
               `}
               >
                 {format(day, "d")}
+                {/* {format(day, "dd")} */}
               </p>
             </div>
           ))}
@@ -405,7 +407,8 @@ const Calendar = ({
         <List
           style={{ borderRadius: "0.5rem" }}
           className="list"
-          height={330}
+          // height={330}
+          height={400}
           itemCount={monthsBetween.length}
           itemSize={300}
           layout="horizontal"

@@ -2,6 +2,8 @@ PODS:
   - Capacitor (6.0.0):
     - CapacitorCordova
   - CapacitorCordova (6.0.0)
+  - CapacitorKeyboard (6.0.0):
+    - Capacitor
   - CapacitorLocalNotifications (6.0.0):
     - Capacitor
   - CapacitorShare (6.0.0):
@@ -14,6 +16,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
@@ -24,6 +27,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorKeyboard:
+    :path: "../../node_modules/@capacitor/keyboard"
   CapacitorLocalNotifications:
     :path: "../../node_modules/@capacitor/local-notifications"
   CapacitorShare:
@@ -36,11 +41,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
   CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorKeyboard: deacbd09d8d1029c3681197fb05d206b721d5f73
   CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
   CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
   CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
   CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
 
-PODFILE CHECKSUM: d700f4aa7263daee0843402c9f51af2ef8d08d23
+PODFILE CHECKSUM: 310970bd13e63aa3459cf652b848af4a47836403
 
 COCOAPODS: 1.15.2

@@ -114,6 +114,7 @@ const DonutPieChart = ({
             innerRadius={40}
             fill="#8884d8"
             dataKey="value"
+            stroke="none"
           >
             {data.map((_, index) => (
               // {data.map((entry, index) => (
