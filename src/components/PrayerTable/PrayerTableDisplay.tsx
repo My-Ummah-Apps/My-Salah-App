@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 // import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
 // import { FixedSizeList as List } from "react-window";
@@ -6,7 +7,7 @@ import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
 import { Capacitor } from "@capacitor/core";
-import { Keyboard } from "@capacitor/keyboard";
+// import { Keyboard } from "@capacitor/keyboard";
 import Sheet from "react-modal-sheet";
 // import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
@@ -77,23 +78,43 @@ const PrayerTableDisplay = ({
   // currentWeek: number;
   startDate: Date;
 }) => {
-  const appRef = useRef();
-  console.log(appRef);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  // const notesBoxRef = useRef<HTMLDivElement>(null);
+  console.log(sheetRef);
   if (Capacitor.isNativePlatform()) {
+    Keyboard.setResizeMode({
+      mode: KeyboardResize.None,
+    });
+
     window.addEventListener("keyboardWillShow", (e) => {
       // const app: any = document.querySelector(".app");
       console.log("SHOWING");
-      console.log("APP IS: ");
-      console.log(appRef);
+      console.log("sheetRef IS: ");
+      console.log(sheetRef);
+      // if (notesBoxRef.current) {
+      //   console.log("TRIGGERED");
+      //   notesBoxRef.current.scrollIntoView({
+      //     behavior: "smooth",
+      //   });
+      // }
+      console.log("keyboardHeight:");
       console.log(e.keyboardHeight);
-      appRef.current.style.marginBottom = (e as any).keyboardHeight + "px";
+      if (sheetRef.current) {
+        console.log(sheetRef.current.style);
+        sheetRef.current.style.top = "-" + (e as any).keyboardHeight + "px";
+        // sheetRef.current.style.setProperty('top', "-" + (e as any).keyboardHeight + "px", 'important');
+        // sheetRef.current.style.top = 100 + "px";
+      }
     });
     window.addEventListener("keyboardWillHide", (e) => {
+      e;
       // const app: any = document.querySelector(".app");
       console.log("HIDING");
       console.log("APP IS: ");
-      console.log(appRef);
-      appRef.current.style.marginBottom = "0px";
+      console.log(sheetRef);
+      if (sheetRef.current) {
+        sheetRef.current.style.top = "0px";
+      }
     });
   }
   // console.log("salahTrackingArray");
@@ -504,252 +525,269 @@ const PrayerTableDisplay = ({
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
     <section>
-      <Sheet
-        className="sheet-prayer-update"
-        ref={appRef}
-        isOpen={showUpdateStatusModal}
-        onClose={() => setShowUpdateStatusModal(false)}
-        detent="content-height"
-        // tweenConfig = { ease: 'easeOut', duration: 0.2 }
+      <div
+        className="sheet-prayer-update-wrap bottom-12"
+        // ref={sheetRef}
       >
-        <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
-          <Sheet.Header />
-          <Sheet.Content>
-            <Sheet.Scroller>
-              {" "}
-              <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
-                <h1 className="mb-5 text-3xl text-center">
-                  How did you pray {selectedSalah}?
-                </h1>
-                <div className="grid grid-cols-4 grid-rows-1 gap-2 text-xs salah-statuses-wrap">
-                  {userGender === "male" ? (
-                    <>
-                      <div
-                        onClick={() => {
-                          setSalahStatus("group");
-                          setSelectedReasons([]);
-                          setNotes("");
-                          // setReasonsArray([]);
-                        }}
-                        className={`${
-                          salahStatus === "group" ? "border border-white" : ""
-                        } px-5 py-3  bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                      >
-                        {" "}
-                        <GoPeople className="w-full mb-1 text-3xl" />
-                        <p className="inline"> In Jamaah</p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        onClick={() => {
-                          setSalahStatus("female-alone");
-                          // setReasonsArray([]);
-                        }}
-                        className={`${
-                          salahStatus === "female-alone"
-                            ? "border border-white"
-                            : ""
-                        } px-5 py-3 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                      >
-                        {" "}
-                        <GoPerson className="w-full mb-1 text-3xl" />
-                        <p className="inline">Prayed</p>
-                      </div>
-                    </>
-                  )}
-                  {userGender === "male" ? (
-                    <>
-                      <div
-                        onClick={() => {
-                          setSalahStatus("male-alone");
-                          // setReasonsArray(reasonsArray);
-                        }}
-                        className={`${
-                          salahStatus === "male-alone"
-                            ? "border border-white"
-                            : ""
-                        } px-5 py-3  bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                      >
-                        <GoPerson className="w-full mb-1 text-3xl" />
-                        <p className="inline">On Time</p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        onClick={() => {
-                          setSalahStatus("excused");
-                          // setReasonsArray([]);
-                        }}
-                        className={`${
-                          salahStatus === "excused" ? "border border-white" : ""
-                        } px-5 py-3  bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                      >
-                        <PiFlower className="w-full mb-1 text-3xl" />
-                        <p className="inline">Excused</p>
-                      </div>{" "}
-                    </>
-                  )}
-                  <div
-                    onClick={() => {
-                      setSalahStatus("late");
-                      // setReasonsArray(reasonsArray);
-                    }}
-                    className={`${
-                      salahStatus === "late" ? "border border-white" : ""
-                    } px-5 py-3 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                  >
-                    <GoClock
-                      className="w-full mb-1 text-3xl"
-                      // style={{
-                      //   fontSize: "2rem",
-                      //   marginRight: "1rem",
-                      //   display: "inline",
-                      // }}
-                    />
-                    <p className="inline">Late</p>
-                  </div>
-                  <div
-                    onClick={() => {
-                      setSalahStatus("missed");
-                      // setReasonsArray(reasonsArray);
-                    }}
-                    className={`${
-                      salahStatus === "missed" ? "border border-white" : ""
-                    } px-5 py-3 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                  >
-                    <GoSkip
-                      className="w-full mb-1 text-3xl"
-                      // style={{
-                      //   fontSize: "2rem",
-                      //   marginRight: "1rem",
-                      //   display: "inline",
-                      // }}
-                    />
-                    <p className="inline">Missed</p>
-                  </div>
-                </div>
-
-                {salahStatus === "male-alone" ||
-                salahStatus === "late" ||
-                salahStatus === "missed" ? (
-                  <div className="my-8 reasons-wrap">
-                    <div className="flex justify-between">
-                      <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
-                      <p
-                        onClick={() => {
-                          // prompt();
-                          setShowAddCustomReasonInputBox(true);
-                        }}
-                      >
-                        {/* + */}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap ">
-                      {/* {missedReasonsArray.map((item) => ( */}
-                      {reasonsArray.map((item) => (
-                        <p
-                          key={uuidv4()}
-                          style={{
-                            backgroundColor: selectedReasons.includes(item)
-                              ? "#2563eb"
-                              : "",
-                          }}
+        <input />
+        <Sheet
+          isOpen={showUpdateStatusModal}
+          onClose={() => setShowUpdateStatusModal(false)}
+          detent="content-height"
+          // tweenConfig = { ease: 'easeOut', duration: 0.2 }
+        >
+          <Sheet.Container
+            // style={{ background: "blue" }}
+            ref={sheetRef}
+            style={{ backgroundColor: "rgb(33, 36, 38)" }}
+          >
+            <Sheet.Header />
+            <Sheet.Content>
+              <Sheet.Scroller>
+                {" "}
+                <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
+                  <h1 className="mb-5 text-3xl text-center">
+                    How did you pray {selectedSalah}?
+                  </h1>
+                  <div className="grid grid-cols-4 grid-rows-1 gap-2 text-xs salah-statuses-wrap">
+                    {userGender === "male" ? (
+                      <>
+                        <div
                           onClick={() => {
-                            if (!selectedReasonsArray.includes(item)) {
-                              selectedReasonsArray = [...selectedReasons, item];
-                            } else if (selectedReasonsArray.includes(item)) {
-                              console.log(item);
-                              let indexToRemove = selectedReasons.indexOf(item);
-                              selectedReasonsArray = selectedReasons.filter(
-                                (item) => {
-                                  return (
-                                    selectedReasons.indexOf(item) !==
-                                    indexToRemove
-                                  );
-                                }
-                              );
-                            }
-                            setSelectedReasons(selectedReasonsArray);
+                            setSalahStatus("group");
+                            setSelectedReasons([]);
+                            setNotes("");
+                            // setReasonsArray([]);
                           }}
-                          className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+                          className={`${
+                            salahStatus === "group" ? "border border-white" : ""
+                          } px-5 py-3  bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                         >
-                          {item}
-                        </p>
-                      ))}
+                          {" "}
+                          <GoPeople className="w-full mb-1 text-3xl" />
+                          <p className="inline"> In Jamaah</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div
+                          onClick={() => {
+                            setSalahStatus("female-alone");
+                            // setReasonsArray([]);
+                          }}
+                          className={`${
+                            salahStatus === "female-alone"
+                              ? "border border-white"
+                              : ""
+                          } px-5 py-3 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        >
+                          {" "}
+                          <GoPerson className="w-full mb-1 text-3xl" />
+                          <p className="inline">Prayed</p>
+                        </div>
+                      </>
+                    )}
+                    {userGender === "male" ? (
+                      <>
+                        <div
+                          onClick={() => {
+                            setSalahStatus("male-alone");
+                            // setReasonsArray(reasonsArray);
+                          }}
+                          className={`${
+                            salahStatus === "male-alone"
+                              ? "border border-white"
+                              : ""
+                          } px-5 py-3  bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        >
+                          <GoPerson className="w-full mb-1 text-3xl" />
+                          <p className="inline">On Time</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div
+                          onClick={() => {
+                            setSalahStatus("excused");
+                            // setReasonsArray([]);
+                          }}
+                          className={`${
+                            salahStatus === "excused"
+                              ? "border border-white"
+                              : ""
+                          } px-5 py-3  bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        >
+                          <PiFlower className="w-full mb-1 text-3xl" />
+                          <p className="inline">Excused</p>
+                        </div>{" "}
+                      </>
+                    )}
+                    <div
+                      onClick={() => {
+                        setSalahStatus("late");
+                        // setReasonsArray(reasonsArray);
+                      }}
+                      className={`${
+                        salahStatus === "late" ? "border border-white" : ""
+                      } px-5 py-3 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                    >
+                      <GoClock
+                        className="w-full mb-1 text-3xl"
+                        // style={{
+                        //   fontSize: "2rem",
+                        //   marginRight: "1rem",
+                        //   display: "inline",
+                        // }}
+                      />
+                      <p className="inline">Late</p>
+                    </div>
+                    <div
+                      onClick={() => {
+                        setSalahStatus("missed");
+                        // setReasonsArray(reasonsArray);
+                      }}
+                      className={`${
+                        salahStatus === "missed" ? "border border-white" : ""
+                      } px-5 py-3 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                    >
+                      <GoSkip
+                        className="w-full mb-1 text-3xl"
+                        // style={{
+                        //   fontSize: "2rem",
+                        //   marginRight: "1rem",
+                        //   display: "inline",
+                        // }}
+                      />
+                      <p className="inline">Missed</p>
                     </div>
                   </div>
-                ) : null}
-                {showAddCustomReasonInputBox ? (
-                  <div className="absolute inline-block p-5 transform -translate-x-1/2 -translate-y-1/2 custom-input-box-wrap top-1/2 left-1/2 bg-slate-950">
-                    <p className="mb-5">Enter Custom Reason:</p>
-                    <input
-                      className="bg-gray-800"
-                      type="text"
-                      maxLength={10}
-                      value={customReason}
-                      onChange={handleCustomReason}
-                    />
-                    <button
-                      className="mt-10 bg-blue-700"
-                      onClick={() => {
-                        const updatedReasonsArray = [
-                          ...reasonsArray,
-                          customReason,
-                        ];
-                        setReasonsArray(updatedReasonsArray);
-                        setShowAddCustomReasonInputBox(false);
-                        localStorage.setItem(
-                          "storedReasonsArray",
-                          JSON.stringify(updatedReasonsArray)
-                        );
-                      }}
-                    >
-                      Save
-                    </button>
-                  </div>
-                ) : null}
 
-                <div className="text-sm notes-wrap">
-                  <h2 className="mt-3">Notes (Optional)</h2>
-                  <textarea
-                    value={notes}
-                    onChange={handleNotes}
-                    style={{ resize: "vertical" }}
-                    // wrap="hard"
-                    rows={3}
-                    // cols={1}
-                    className="w-full p-1 mt-3 bg-transparent border rounded-md border-amber-600"
-                  />
-                </div>
-                <button
-                  onClick={() => {
-                    if (salahStatus) {
-                      changePrayerStatus(
-                        tableRowDate,
-                        selectedSalah,
-                        salahStatus,
-                        selectedReasons,
-                        notes
-                      );
-                      setShowUpdateStatusModal(false);
-                    }
-                  }}
-                  className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
-                    salahStatus ? "opacity-100" : "opacity-20"
-                  }`}
-                >
-                  Save
-                </button>
-              </section>
-            </Sheet.Scroller>
-          </Sheet.Content>
-        </Sheet.Container>
-        <Sheet.Backdrop />
-        <Sheet.Backdrop />
-      </Sheet>
+                  {salahStatus === "male-alone" ||
+                  salahStatus === "late" ||
+                  salahStatus === "missed" ? (
+                    <div className="my-8 reasons-wrap">
+                      <div className="flex justify-between">
+                        <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+                        <p
+                          onClick={() => {
+                            // prompt();
+                            setShowAddCustomReasonInputBox(true);
+                          }}
+                        >
+                          {/* + */}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap ">
+                        {/* {missedReasonsArray.map((item) => ( */}
+                        {reasonsArray.map((item) => (
+                          <p
+                            key={uuidv4()}
+                            style={{
+                              backgroundColor: selectedReasons.includes(item)
+                                ? "#2563eb"
+                                : "",
+                            }}
+                            onClick={() => {
+                              if (!selectedReasonsArray.includes(item)) {
+                                selectedReasonsArray = [
+                                  ...selectedReasons,
+                                  item,
+                                ];
+                              } else if (selectedReasonsArray.includes(item)) {
+                                console.log(item);
+                                let indexToRemove =
+                                  selectedReasons.indexOf(item);
+                                selectedReasonsArray = selectedReasons.filter(
+                                  (item) => {
+                                    return (
+                                      selectedReasons.indexOf(item) !==
+                                      indexToRemove
+                                    );
+                                  }
+                                );
+                              }
+                              setSelectedReasons(selectedReasonsArray);
+                            }}
+                            className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+                          >
+                            {item}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                  {showAddCustomReasonInputBox ? (
+                    <div className="absolute inline-block p-5 transform -translate-x-1/2 -translate-y-1/2 custom-input-box-wrap top-1/2 left-1/2 bg-slate-950">
+                      <p className="mb-5">Enter Custom Reason:</p>
+                      <input
+                        className="bg-gray-800"
+                        type="text"
+                        maxLength={10}
+                        value={customReason}
+                        onChange={handleCustomReason}
+                      />
+                      <button
+                        className="mt-10 bg-blue-700"
+                        onClick={() => {
+                          const updatedReasonsArray = [
+                            ...reasonsArray,
+                            customReason,
+                          ];
+                          setReasonsArray(updatedReasonsArray);
+                          setShowAddCustomReasonInputBox(false);
+                          localStorage.setItem(
+                            "storedReasonsArray",
+                            JSON.stringify(updatedReasonsArray)
+                          );
+                        }}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  ) : null}
+
+                  <div
+                    className="text-sm notes-wrap"
+                    //  useRef={notesBoxRef}
+                  >
+                    <h2 className="mt-3">Notes (Optional)</h2>
+                    <textarea
+                      value={notes}
+                      onChange={handleNotes}
+                      style={{ resize: "vertical" }}
+                      // wrap="hard"
+                      rows={3}
+                      // cols={1}
+                      className="w-full p-1 mt-3 bg-transparent border rounded-md border-amber-600"
+                    />
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (salahStatus) {
+                        changePrayerStatus(
+                          tableRowDate,
+                          selectedSalah,
+                          salahStatus,
+                          selectedReasons,
+                          notes
+                        );
+                        setShowUpdateStatusModal(false);
+                      }
+                    }}
+                    className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
+                      salahStatus ? "opacity-100" : "opacity-20"
+                    }`}
+                  >
+                    Save
+                  </button>
+                </section>
+              </Sheet.Scroller>
+            </Sheet.Content>
+          </Sheet.Container>
+          <Sheet.Backdrop />
+          <Sheet.Backdrop />
+        </Sheet>
+      </div>
 
       {/* <div style={{ width: "100vw !important" }}> */}
       <Table
