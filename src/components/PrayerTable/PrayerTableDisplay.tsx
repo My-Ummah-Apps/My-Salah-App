@@ -101,8 +101,15 @@ const PrayerTableDisplay = ({
       console.log(e.keyboardHeight);
       if (sheetRef.current) {
         console.log(sheetRef.current.style);
-        sheetRef.current.style.top = "-" + (e as any).keyboardHeight + "px";
-        // sheetRef.current.style.setProperty('top', "-" + (e as any).keyboardHeight + "px", 'important');
+        // sheetRef.current.style.top = "-" + (e as any).keyboardHeight + "px";
+        // let height = (e as any).keyboardHeight;
+        let height = 600;
+
+        sheetRef.current.style.setProperty(
+          "marginBottom",
+          height + "px",
+          "important"
+        );
         // sheetRef.current.style.top = 100 + "px";
       }
     });
@@ -113,10 +120,16 @@ const PrayerTableDisplay = ({
       console.log("APP IS: ");
       console.log(sheetRef);
       if (sheetRef.current) {
-        sheetRef.current.style.top = "0px";
+        // sheetRef.current.style.top = "0px";
+        sheetRef.current.style.setProperty(
+          "marginBottom",
+          0 + "px",
+          "important"
+        );
       }
     });
   }
+
   // console.log("salahTrackingArray");
   // console.log(salahTrackingArray);
   // const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
@@ -229,6 +242,21 @@ const PrayerTableDisplay = ({
   const handleNotes = (e: any) => {
     setNotes(e.target.value);
   };
+
+  // const prayerStatusRef = useRef<HTMLDivElement>(null);
+  const [prayerStatusesClass, setPrayerStatusesClass] = useState("");
+
+  useEffect(() => {
+    if (
+      salahStatus === "male-alone" ||
+      salahStatus === "late" ||
+      salahStatus === "missed"
+    ) {
+      setPrayerStatusesClass("prayer-status-modal-status-animation");
+    } else {
+      setPrayerStatusesClass("");
+    }
+  }, [salahStatus]);
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
   //   useState(false);
 
@@ -525,10 +553,7 @@ const PrayerTableDisplay = ({
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
     <section>
-      <div
-        className="sheet-prayer-update-wrap bottom-12"
-        // ref={sheetRef}
-      >
+      <div className="sheet-prayer-update-wrap bottom-12">
         <input />
         <Sheet
           isOpen={showUpdateStatusModal}
@@ -537,19 +562,24 @@ const PrayerTableDisplay = ({
           // tweenConfig = { ease: 'easeOut', duration: 0.2 }
         >
           <Sheet.Container
-            // style={{ background: "blue" }}
-            ref={sheetRef}
+            // style={{ background: "lightblue" }}
+            // ref={sheetRef}
             style={{ backgroundColor: "rgb(33, 36, 38)" }}
           >
             <Sheet.Header />
             <Sheet.Content>
               <Sheet.Scroller>
                 {" "}
-                <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
+                <section
+                  className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white"
+                  ref={sheetRef}
+                >
                   <h1 className="mb-5 text-3xl text-center">
                     How did you pray {selectedSalah}?
                   </h1>
-                  <div className="grid grid-cols-4 grid-rows-1 gap-2 text-xs salah-statuses-wrap">
+                  <div
+                    className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs ${prayerStatusesClass}`}
+                  >
                     {userGender === "male" ? (
                       <>
                         <div
@@ -665,7 +695,7 @@ const PrayerTableDisplay = ({
                   {salahStatus === "male-alone" ||
                   salahStatus === "late" ||
                   salahStatus === "missed" ? (
-                    <div className="my-8 reasons-wrap">
+                    <div className="my-8 overflow-x-hidden prayer-status-modal-reasons-wrap">
                       <div className="flex justify-between">
                         <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
                         <p
@@ -694,7 +724,6 @@ const PrayerTableDisplay = ({
                                   item,
                                 ];
                               } else if (selectedReasonsArray.includes(item)) {
-                                console.log(item);
                                 let indexToRemove =
                                   selectedReasons.indexOf(item);
                                 selectedReasonsArray = selectedReasons.filter(

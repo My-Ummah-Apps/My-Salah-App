@@ -44,16 +44,17 @@ body {
   background: var(--primary-color);
   color: rgb(184, 184, 184);
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: hidden;
 }
 
 .sheet-prayer-update-wrap {
   margin-bottom: 0;
+  top: 300px !important;
   transition: margin-bottom 420ms;
 }
 
 .react-modal-sheet-container {
-  /* top: 300px !important; */
+  /* top: 100px !important; */
   transition: top 420ms;
 }
 /* .sheet-prayer-update-wrap {
@@ -68,6 +69,34 @@ body {
 td {
   border-bottom: 1px solid rgb(54, 49, 49) !important;
   /* vertical-align: top; */
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-5%);
+  }
+}
+
+.prayer-status-modal-status-animation {
+  /* animation: slideUp 1s ease-out; */
+}
+
+.prayer-status-modal-reasons-wrap {
+  animation: slideInFromRight 0.5s ease-out;
+  /* margin: 100px 0 100px 0;  */
+  /* transition: margin-bottom 4.5s ease-in-out; */
 }
 
 .calendar-single-month-wrap {
@@ -115,7 +144,6 @@ td {
 .donut-pie-chart-text:before {
   content: "";
   display: inline-block;
-
   margin-right: 0.3rem;
   width: 10px; /* Adjust the size as needed */
   height: 10px; /* Adjust the size as needed */
