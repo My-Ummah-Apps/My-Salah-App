@@ -531,13 +531,17 @@ const PrayerTableDisplay = ({
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
     <section>
-      <div className="sheet-prayer-update-wrap bottom-12">
+      {/*  bottom-12 */}
+      <div className="sheet-prayer-update-wrap">
         <Sheet
+          // rootId="root"
           isOpen={showUpdateStatusModal}
           onClose={() => setShowUpdateStatusModal(false)}
           detent="content-height"
-
-          // tweenConfig = { ease: 'easeOut', duration: 0.2 }
+          // transition={{ duration: 100, type: "tween" }}
+          // animate={{ rotate: 360 }}
+          // transition={{ duration: 2 }}
+          tweenConfig={{ ease: "easeOut", duration: 0.3 }} // Adjust duration to slow down or speed up the animation
         >
           <Sheet.Container
             className="react-modal-sheet-container"

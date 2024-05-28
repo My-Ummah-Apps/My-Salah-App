@@ -10,9 +10,8 @@
 
 :root {
   max-width: 1280px;
-  /* margin: 0 auto; */
-  /* padding: 1rem; */
-  /* margin: 1rem; */
+  height: 100vh;
+  overflow: auto;
   /* --primary-color: rgb(41, 41, 41);
   --secondary-color: rgb(27, 27, 27);
   --card-bg-color: rgb(51, 51, 51); */
@@ -43,25 +42,13 @@ body {
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);
   color: rgb(184, 184, 184);
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-
-.sheet-prayer-update-wrap {
-  /* margin-bottom: 0;
-  top: 300px !important;
-  transition: margin-bottom 420ms; */
+  /* overflow-y: hidden;
+  overflow-x: hidden; */
 }
 
 .react-modal-sheet-container {
-  /* top: 100px !important; */
-  /* transition: bottom 420ms; */
   transition: margin-bottom 420ms;
 }
-/* .sheet-prayer-update-wrap {
-  top: 300px !important;
-  transition: top 420ms;
-} */
 
 .header-wrap {
   background: var(--primary-color);
