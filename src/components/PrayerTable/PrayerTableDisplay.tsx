@@ -81,7 +81,7 @@ const PrayerTableDisplay = ({
   const sheetRef = useRef<HTMLDivElement>(null);
   // const notesBoxRef = useRef<HTMLDivElement>(null);
   console.log(sheetRef);
-  if (Capacitor.isNativePlatform()) {
+  if (Capacitor.getPlatform() === "ios") {
     Keyboard.setResizeMode({
       mode: KeyboardResize.None,
     });
@@ -91,25 +91,23 @@ const PrayerTableDisplay = ({
       console.log("SHOWING");
       console.log("sheetRef IS: ");
       console.log(sheetRef);
-      // if (notesBoxRef.current) {
-      //   console.log("TRIGGERED");
-      //   notesBoxRef.current.scrollIntoView({
-      //     behavior: "smooth",
-      //   });
-      // }
-      console.log("keyboardHeight:");
-      console.log(e.keyboardHeight);
+
+      // console.log("keyboardHeight:");
+      // console.log(e.keyboardHeight);
       if (sheetRef.current) {
-        console.log(sheetRef.current.style);
+        console.log("COMPOENENT EXISTS!");
+        // console.log(sheetRef.current.style);
         // sheetRef.current.style.top = "-" + (e as any).keyboardHeight + "px";
-        // let height = (e as any).keyboardHeight;
-        let height = 600;
+        let height = (e as any).keyboardHeight;
+        // let height = 900;
 
         sheetRef.current.style.setProperty(
-          "marginBottom",
+          "margin-bottom",
           height + "px",
           "important"
         );
+        console.log("BELOW ARE THE STYLE PROPERTIES CHECK MARGIN BOTTOM!");
+        console.log(sheetRef.current.style);
         // sheetRef.current.style.top = 100 + "px";
       }
     });
@@ -122,7 +120,7 @@ const PrayerTableDisplay = ({
       if (sheetRef.current) {
         // sheetRef.current.style.top = "0px";
         sheetRef.current.style.setProperty(
-          "marginBottom",
+          "margin-bottom",
           0 + "px",
           "important"
         );
@@ -554,26 +552,23 @@ const PrayerTableDisplay = ({
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
     <section>
       <div className="sheet-prayer-update-wrap bottom-12">
-        <input />
         <Sheet
           isOpen={showUpdateStatusModal}
           onClose={() => setShowUpdateStatusModal(false)}
           detent="content-height"
+
           // tweenConfig = { ease: 'easeOut', duration: 0.2 }
         >
           <Sheet.Container
-            // style={{ background: "lightblue" }}
-            // ref={sheetRef}
+            className="react-modal-sheet-container"
+            ref={sheetRef}
             style={{ backgroundColor: "rgb(33, 36, 38)" }}
           >
             <Sheet.Header />
             <Sheet.Content>
               <Sheet.Scroller>
                 {" "}
-                <section
-                  className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white"
-                  ref={sheetRef}
-                >
+                <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
                   <h1 className="mb-5 text-3xl text-center">
                     How did you pray {selectedSalah}?
                   </h1>

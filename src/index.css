@@ -48,14 +48,15 @@ body {
 }
 
 .sheet-prayer-update-wrap {
-  margin-bottom: 0;
+  /* margin-bottom: 0;
   top: 300px !important;
-  transition: margin-bottom 420ms;
+  transition: margin-bottom 420ms; */
 }
 
 .react-modal-sheet-container {
   /* top: 100px !important; */
-  transition: top 420ms;
+  /* transition: bottom 420ms; */
+  transition: margin-bottom 420ms;
 }
 /* .sheet-prayer-update-wrap {
   top: 300px !important;

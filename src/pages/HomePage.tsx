@@ -20,8 +20,8 @@ const HomePage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
-} // currentWeek,
-: {
+  // currentWeek,
+}: {
   // title: React.ReactNode;
   userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
