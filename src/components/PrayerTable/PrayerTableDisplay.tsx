@@ -79,46 +79,26 @@ const PrayerTableDisplay = ({
   startDate: Date;
 }) => {
   const sheetRef = useRef<HTMLDivElement>(null);
-  // const notesBoxRef = useRef<HTMLDivElement>(null);
-  console.log(sheetRef);
+
   if (Capacitor.getPlatform() === "ios") {
     Keyboard.setResizeMode({
       mode: KeyboardResize.None,
     });
 
     window.addEventListener("keyboardWillShow", (e) => {
-      // const app: any = document.querySelector(".app");
-      console.log("SHOWING");
-      console.log("sheetRef IS: ");
-      console.log(sheetRef);
-
-      // console.log("keyboardHeight:");
-      // console.log(e.keyboardHeight);
       if (sheetRef.current) {
-        console.log("COMPOENENT EXISTS!");
-        // console.log(sheetRef.current.style);
-        // sheetRef.current.style.top = "-" + (e as any).keyboardHeight + "px";
         let height = (e as any).keyboardHeight;
-        // let height = 900;
-
         sheetRef.current.style.setProperty(
           "margin-bottom",
           height + "px",
           "important"
         );
-        console.log("BELOW ARE THE STYLE PROPERTIES CHECK MARGIN BOTTOM!");
-        console.log(sheetRef.current.style);
-        // sheetRef.current.style.top = 100 + "px";
       }
     });
     window.addEventListener("keyboardWillHide", (e) => {
       e;
-      // const app: any = document.querySelector(".app");
-      console.log("HIDING");
-      console.log("APP IS: ");
-      console.log(sheetRef);
+
       if (sheetRef.current) {
-        // sheetRef.current.style.top = "0px";
         sheetRef.current.style.setProperty(
           "margin-bottom",
           0 + "px",
