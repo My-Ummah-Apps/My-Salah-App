@@ -79,6 +79,9 @@ const PrayerTableDisplay = ({
   startDate: Date;
 }) => {
   const sheetRef = useRef<HTMLDivElement>(null);
+  // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
+  const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
+  const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
 
   if (Capacitor.getPlatform() === "ios") {
     Keyboard.setResizeMode({
@@ -221,18 +224,24 @@ const PrayerTableDisplay = ({
     setNotes(e.target.value);
   };
 
-  // const prayerStatusRef = useRef<HTMLDivElement>(null);
-  const [prayerStatusesClass, setPrayerStatusesClass] = useState("");
-
   useEffect(() => {
     if (
-      salahStatus === "male-alone" ||
-      salahStatus === "late" ||
-      salahStatus === "missed"
+      modalSheetPrayerReasonsWrap.current &&
+      modalSheetHiddenPrayerReasonsWrap.current
     ) {
-      setPrayerStatusesClass("prayer-status-modal-status-animation");
-    } else {
-      setPrayerStatusesClass("");
+      console.log(modalSheetPrayerReasonsWrap.current);
+      console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+      if (
+        salahStatus === "male-alone" ||
+        salahStatus === "late" ||
+        salahStatus === "missed"
+      ) {
+        modalSheetPrayerReasonsWrap.current.style.maxHeight =
+          modalSheetHiddenPrayerReasonsWrap.current.offsetHeight + "px";
+        modalSheetPrayerReasonsWrap.current.style.opacity = "1";
+      } else {
+        modalSheetPrayerReasonsWrap.current.style.maxHeight = "0";
+      }
     }
   }, [salahStatus]);
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
@@ -480,6 +489,7 @@ const PrayerTableDisplay = ({
         onClick={() => {
           grabDate(salah, formattedDate);
           setShowUpdateStatusModal(true);
+          console.log(salahStatus);
         }}
       >
         {cellIcon}
@@ -536,7 +546,12 @@ const PrayerTableDisplay = ({
         <Sheet
           // rootId="root"
           isOpen={showUpdateStatusModal}
-          onClose={() => setShowUpdateStatusModal(false)}
+          onClose={() => {
+            setShowUpdateStatusModal(false);
+            console.log(salahStatus);
+            setSalahStatus((prevValue) => prevValue + "1");
+            console.log(salahStatus);
+          }}
           detent="content-height"
           // transition={{ duration: 100, type: "tween" }}
           // animate={{ rotate: 360 }}
@@ -557,7 +572,8 @@ const PrayerTableDisplay = ({
                     How did you pray {selectedSalah}?
                   </h1>
                   <div
-                    className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs ${prayerStatusesClass}`}
+                    // ref={modalSheetPrayerStatusesWrap}
+                    className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs modal-sheet-prayer-statuses-wrap `}
                   >
                     {userGender === "male" ? (
                       <>
@@ -671,59 +687,58 @@ const PrayerTableDisplay = ({
                     </div>
                   </div>
 
-                  {salahStatus === "male-alone" ||
+                  {/* {salahStatus === "male-alone" ||
                   salahStatus === "late" ||
-                  salahStatus === "missed" ? (
-                    <div className="my-8 overflow-x-hidden prayer-status-modal-reasons-wrap">
-                      <div className="flex justify-between">
-                        <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
-                        <p
-                          onClick={() => {
-                            // prompt();
-                            setShowAddCustomReasonInputBox(true);
-                          }}
-                        >
-                          {/* + */}
-                        </p>
-                      </div>
-                      <div className="flex flex-wrap ">
-                        {/* {missedReasonsArray.map((item) => ( */}
-                        {reasonsArray.map((item) => (
-                          <p
-                            key={uuidv4()}
-                            style={{
-                              backgroundColor: selectedReasons.includes(item)
-                                ? "#2563eb"
-                                : "",
-                            }}
-                            onClick={() => {
-                              if (!selectedReasonsArray.includes(item)) {
-                                selectedReasonsArray = [
-                                  ...selectedReasons,
-                                  item,
-                                ];
-                              } else if (selectedReasonsArray.includes(item)) {
-                                let indexToRemove =
-                                  selectedReasons.indexOf(item);
-                                selectedReasonsArray = selectedReasons.filter(
-                                  (item) => {
-                                    return (
-                                      selectedReasons.indexOf(item) !==
-                                      indexToRemove
-                                    );
-                                  }
-                                );
-                              }
-                              setSelectedReasons(selectedReasonsArray);
-                            }}
-                            className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
-                          >
-                            {item}
-                          </p>
-                        ))}
-                      </div>
+                  salahStatus === "missed" ? ( */}
+                  <div
+                    ref={modalSheetPrayerReasonsWrap}
+                    className="my-8 overflow-x-hidden prayer-status-modal-reasons-wrap"
+                  >
+                    <div className="flex justify-between">
+                      <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+                      <p
+                        onClick={() => {
+                          // prompt();
+                          setShowAddCustomReasonInputBox(true);
+                        }}
+                      >
+                        {/* + */}
+                      </p>
                     </div>
-                  ) : null}
+                    <div className="flex flex-wrap ">
+                      {/* {missedReasonsArray.map((item) => ( */}
+                      {reasonsArray.map((item) => (
+                        <p
+                          key={uuidv4()}
+                          style={{
+                            backgroundColor: selectedReasons.includes(item)
+                              ? "#2563eb"
+                              : "",
+                          }}
+                          onClick={() => {
+                            if (!selectedReasonsArray.includes(item)) {
+                              selectedReasonsArray = [...selectedReasons, item];
+                            } else if (selectedReasonsArray.includes(item)) {
+                              let indexToRemove = selectedReasons.indexOf(item);
+                              selectedReasonsArray = selectedReasons.filter(
+                                (item) => {
+                                  return (
+                                    selectedReasons.indexOf(item) !==
+                                    indexToRemove
+                                  );
+                                }
+                              );
+                            }
+                            setSelectedReasons(selectedReasonsArray);
+                          }}
+                          className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+                        >
+                          {item}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                  {/* ) : null} */}
                   {showAddCustomReasonInputBox ? (
                     <div className="absolute inline-block p-5 transform -translate-x-1/2 -translate-y-1/2 custom-input-box-wrap top-1/2 left-1/2 bg-slate-950">
                       <p className="mb-5">Enter Custom Reason:</p>
@@ -894,6 +909,49 @@ const PrayerTableDisplay = ({
         {/* Add more columns here if needed */}
       </Table>
       {/* </div> */}
+      {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
+      <div ref={modalSheetHiddenPrayerReasonsWrap}>
+        <div className="my-8 overflow-x-hidden prayer-status-modal-reasons-wrap">
+          <div className="flex justify-between">
+            <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+            <p
+              onClick={() => {
+                // prompt();
+                setShowAddCustomReasonInputBox(true);
+              }}
+            >
+              {/* + */}
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap">
+          {/* {missedReasonsArray.map((item) => ( */}
+          {reasonsArray.map((item) => (
+            <p
+              key={uuidv4()}
+              style={{
+                backgroundColor: selectedReasons.includes(item)
+                  ? "#2563eb"
+                  : "",
+              }}
+              onClick={() => {
+                if (!selectedReasonsArray.includes(item)) {
+                  selectedReasonsArray = [...selectedReasons, item];
+                } else if (selectedReasonsArray.includes(item)) {
+                  let indexToRemove = selectedReasons.indexOf(item);
+                  selectedReasonsArray = selectedReasons.filter((item) => {
+                    return selectedReasons.indexOf(item) !== indexToRemove;
+                  });
+                }
+                setSelectedReasons(selectedReasonsArray);
+              }}
+              className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+            >
+              {item}
+            </p>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };

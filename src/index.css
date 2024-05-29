@@ -77,14 +77,25 @@ td {
   }
 }
 
-.prayer-status-modal-status-animation {
-  /* animation: slideUp 1s ease-out; */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.modal-sheet-prayer-statuses-wrap {
+  /* transition: bottom 420ms; */
 }
 
 .prayer-status-modal-reasons-wrap {
-  animation: slideInFromRight 0.5s ease-out;
-  /* margin: 100px 0 100px 0;  */
-  /* transition: margin-bottom 4.5s ease-in-out; */
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.5s ease-in-out,
+    fadeIn 5s ease-in;
 }
 
 .calendar-single-month-wrap {
