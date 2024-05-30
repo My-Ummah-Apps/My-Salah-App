@@ -91,7 +91,7 @@ td {
 }
 
 .prayer-status-modal-reasons-wrap {
-  max-height: 0;
+  /* max-height: 0; */
   opacity: 0;
   transition:
     max-height 0.5s ease-in-out,

@@ -174,10 +174,11 @@ const PrayerTableDisplay = ({
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  // const [showReasonsArray, setShowReasonsArray] = useState(false);
+  const [showReasons, setShowReasons] = useState(false);
   const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
     useState(false);
   let selectedReasonsArray = selectedReasons;
+  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>();
   const [customReason, setCustomReason] = useState("");
   const handleCustomReason = (e: any) => {
     setCustomReason(e.target.value);
@@ -188,12 +189,14 @@ const PrayerTableDisplay = ({
   };
   console.log(salahStatus);
   useEffect(() => {
+    console.log(modalSheetPrayerReasonsWrap.current);
+    console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
     if (
       modalSheetPrayerReasonsWrap.current &&
       modalSheetHiddenPrayerReasonsWrap.current
     ) {
-      // console.log(modalSheetPrayerReasonsWrap.current);
-      // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+      console.log(modalSheetPrayerReasonsWrap.current);
+      console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
       if (
         salahStatus === "male-alone" ||
         salahStatus === "late" ||
@@ -206,7 +209,7 @@ const PrayerTableDisplay = ({
         modalSheetPrayerReasonsWrap.current.style.maxHeight = "0";
       }
     }
-  }, [salahStatus]);
+  }, [hasUserClickedDate, salahStatus]);
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
   //   useState(false);
 
@@ -382,7 +385,7 @@ const PrayerTableDisplay = ({
         onClick={() => {
           grabDate(salah, formattedDate);
           setShowUpdateStatusModal(true);
-          // console.log(salahStatus);
+          setHasUserClickedDate(true);
         }}
       >
         {cellIcon}
@@ -441,6 +444,7 @@ const PrayerTableDisplay = ({
           isOpen={showUpdateStatusModal}
           onClose={() => {
             setShowUpdateStatusModal(false);
+            setHasUserClickedDate(false);
           }}
           detent="content-height"
           // transition={{ duration: 100, type: "tween" }}
@@ -470,6 +474,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("group");
+                            setShowReasons(false);
                             setSelectedReasons([]);
                             setNotes("");
                             // setReasonsArray([]);
@@ -488,6 +493,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("female-alone");
+                            setShowReasons(false);
                             // setReasonsArray([]);
                           }}
                           className={`${
@@ -507,6 +513,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("male-alone");
+                            setShowReasons(true);
                             // setReasonsArray(reasonsArray);
                           }}
                           className={`${
@@ -524,6 +531,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("excused");
+                            setShowReasons(false);
                             // setReasonsArray([]);
                           }}
                           className={`${
@@ -540,39 +548,27 @@ const PrayerTableDisplay = ({
                     <div
                       onClick={() => {
                         setSalahStatus("late");
+                        setShowReasons(true);
                         // setReasonsArray(reasonsArray);
                       }}
                       className={`${
                         salahStatus === "late" ? "border border-white" : ""
                       } px-5 py-3 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                     >
-                      <GoClock
-                        className="w-full mb-1 text-3xl"
-                        // style={{
-                        //   fontSize: "2rem",
-                        //   marginRight: "1rem",
-                        //   display: "inline",
-                        // }}
-                      />
+                      <GoClock className="w-full mb-1 text-3xl" />
                       <p className="inline">Late</p>
                     </div>
                     <div
                       onClick={() => {
                         setSalahStatus("missed");
+                        setShowReasons(true);
                         // setReasonsArray(reasonsArray);
                       }}
                       className={`${
                         salahStatus === "missed" ? "border border-white" : ""
                       } px-5 py-3 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                     >
-                      <GoSkip
-                        className="w-full mb-1 text-3xl"
-                        // style={{
-                        //   fontSize: "2rem",
-                        //   marginRight: "1rem",
-                        //   display: "inline",
-                        // }}
-                      />
+                      <GoSkip className="w-full mb-1 text-3xl" />
                       <p className="inline">Missed</p>
                     </div>
                   </div>
@@ -686,6 +682,7 @@ const PrayerTableDisplay = ({
                           notes
                         );
                         setShowUpdateStatusModal(false);
+                        setHasUserClickedDate(false);
                         // console.log(
                         //   "salahStatus before state update: " + salahStatus
                         // );
