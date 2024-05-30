@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
-// import Modal from "./Modal";
 import { v4 as uuidv4 } from "uuid";
-// import { FixedSizeList as List } from "react-window";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
@@ -12,47 +10,16 @@ import Sheet from "react-modal-sheet";
 // import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
 // import ReactModal from "react-modal";
-// import { FaMosque, FaHome } from "react-icons/fa";
-// import { ImCross } from "react-icons/im";
-
-// import { MdGroups, MdPerson } from "react-icons/md";
-// import { MdPerson } from "react-icons/md";
+// import Modal from "./Modal";
 import { LuDot } from "react-icons/lu";
-// import { BsPersonStanding } from "react-icons/bs";
-// import { AiOutlineStop } from "react-icons/ai";
-// import { GoCircleSlash } from "react-icons/go";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
 import { GoClock } from "react-icons/go";
 
-// import { PiClockCounterClockwise } from "react-icons/pi";
 import { salahTrackingEntryType } from "../../types/types";
-// interface salahTrackingEntryType {
-//   salahName: string;
-//   completedDates: { [date: string]: string }[] | [];
-// }
 
-// import {
-//   Drawer,
-//   DrawerClose,
-//   DrawerContent,
-//   DrawerDescription,
-//   DrawerFooter,
-//   DrawerHeader,
-//   DrawerTitle,
-//   DrawerTrigger,
-// } from "@/components/ui/drawer";
-
-import {
-  subDays,
-  format,
-  parse,
-  // startOfToday,
-  // startOfMonth,
-  eachDayOfInterval,
-  // differenceInDays,
-} from "date-fns";
+import { subDays, format, parse, eachDayOfInterval } from "date-fns";
 
 // import StreakCount from "../Stats/StreakCount";
 import { PiFlower } from "react-icons/pi";
@@ -64,8 +31,6 @@ const PrayerTableDisplay = ({
   userStartDate,
   setSalahTrackingArray,
   salahTrackingArray,
-  // setCurrentWeek,
-  // currentWeek,
   startDate,
 }: {
   userGender: string;
@@ -74,8 +39,6 @@ const PrayerTableDisplay = ({
   >;
   userStartDate: string;
   salahTrackingArray: salahTrackingEntryType[];
-  // setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  // currentWeek: number;
   startDate: Date;
 }) => {
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -223,14 +186,14 @@ const PrayerTableDisplay = ({
   const handleNotes = (e: any) => {
     setNotes(e.target.value);
   };
-
+  console.log(salahStatus);
   useEffect(() => {
     if (
       modalSheetPrayerReasonsWrap.current &&
       modalSheetHiddenPrayerReasonsWrap.current
     ) {
-      console.log(modalSheetPrayerReasonsWrap.current);
-      console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+      // console.log(modalSheetPrayerReasonsWrap.current);
+      // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
       if (
         salahStatus === "male-alone" ||
         salahStatus === "late" ||
@@ -388,97 +351,27 @@ const PrayerTableDisplay = ({
 
     if (cellIcon === "male-alone") {
       cellIcon = (
-        <div className="inline-block rounded-md bg-[color:var(--alone-male-status-color)] text-white w-[24px] h-[24px]">
-          {" "}
-          {/* <GoPerson
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
-
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
-          /> */}
-        </div>
+        <div className="inline-block rounded-md bg-[color:var(--alone-male-status-color)] text-white w-[24px] h-[24px]"></div>
       );
     } else if (cellIcon === "group") {
       cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]">
-          {" "}
-          {/* <GoPeople
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
-
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
-          /> */}
-        </div>
+        <div className="inline-block rounded-md  bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]"></div>
       );
     } else if (cellIcon === "female-alone") {
       cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--alone-female-status-color)] text-white w-[24px] h-[24px]">
-          {" "}
-          {/* <GoPeople
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
-
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
-          /> */}
-        </div>
+        <div className="inline-block rounded-md  bg-[color:var(--alone-female-status-color)] text-white w-[24px] h-[24px]"></div>
       );
     } else if (cellIcon === "excused") {
       cellIcon = (
-        <div className="inline-block rounded-md bg-[color:var(--excused-status-color)] text-white w-[24px] h-[24px]">
-          {/* <PiClockCounterClockwise
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
-
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
-          /> */}
-        </div>
+        <div className="inline-block rounded-md bg-[color:var(--excused-status-color)] text-white w-[24px] h-[24px]"></div>
       );
     } else if (cellIcon === "late") {
       cellIcon = (
-        <div className="inline-block rounded-md bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px] ">
-          {/* <PiClockCounterClockwise
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
-
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
-          /> */}
-        </div>
+        <div className="inline-block rounded-md bg-[color:var(--late-status-color)] text-white w-[24px] h-[24px] "></div>
       );
     } else if (cellIcon === "missed") {
       cellIcon = (
-        <div className="inline-block rounded-md bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px] ">
-          {" "}
-          {/* <AiOutlineStop
-            onClick={(e: React.TouchEvent<HTMLDivElement>) => {
-              // e.stopPropagation();
-
-              if (e.currentTarget.tagName === "svg") {
-                // setShowUpdateStatusModal(true);
-              }
-            }}
-            className={`text-white w-[15px] h-[15px] flex self-center justify-self-center `}
-          /> */}
-        </div>
+        <div className="inline-block rounded-md bg-[color:var(--missed-status-color)] red-block text-white w-[24px] h-[24px] "></div>
       );
     }
     return (
@@ -489,7 +382,7 @@ const PrayerTableDisplay = ({
         onClick={() => {
           grabDate(salah, formattedDate);
           setShowUpdateStatusModal(true);
-          console.log(salahStatus);
+          // console.log(salahStatus);
         }}
       >
         {cellIcon}
@@ -548,9 +441,6 @@ const PrayerTableDisplay = ({
           isOpen={showUpdateStatusModal}
           onClose={() => {
             setShowUpdateStatusModal(false);
-            console.log(salahStatus);
-            setSalahStatus((prevValue) => prevValue + "1");
-            console.log(salahStatus);
           }}
           detent="content-height"
           // transition={{ duration: 100, type: "tween" }}
@@ -756,6 +646,7 @@ const PrayerTableDisplay = ({
                             ...reasonsArray,
                             customReason,
                           ];
+
                           setReasonsArray(updatedReasonsArray);
                           setShowAddCustomReasonInputBox(false);
                           localStorage.setItem(
@@ -795,6 +686,13 @@ const PrayerTableDisplay = ({
                           notes
                         );
                         setShowUpdateStatusModal(false);
+                        // console.log(
+                        //   "salahStatus before state update: " + salahStatus
+                        // );
+                        // setSalahStatus((prevValue) => prevValue + "1");
+                        // console.log(
+                        //   "salahStatus after state update: " + salahStatus
+                        // );
                       }
                     }}
                     className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
