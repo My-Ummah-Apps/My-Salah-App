@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { Capacitor } from "@capacitor/core";
+// @ts-ignore
+import Switch from "react-ios-switch";
 import Modal from "react-modal";
-// import Switch from "react-ios-switch";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
+import {
+  checkNotificationPermissions,
+  requestPermissionFunction,
+} from "../utils/notifications";
+import { MdOutlineChevronRight } from "react-icons/md";
 // import Switch from "rc-switch";
-// import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
 const SettingsPage = ({
@@ -20,6 +25,33 @@ const SettingsPage = ({
   useEffect(() => {
     setHeading("Settings");
   }, []);
+
+  const [dailyNotification, setDailyNotification] = useState(false);
+
+  // Check if notification permissions have been granted
+  useEffect(() => {
+    const initialiseNotifications = async () => {
+      const permissionStatus = await checkNotificationPermissions();
+      if (permissionStatus === "denied") {
+        setDailyNotification(false);
+        // await scheduleMorningNotifications();
+      } else if (
+        permissionStatus === "prompt" ||
+        permissionStatus === "prompt-with-rationale"
+      ) {
+        setDailyNotification(false);
+        requestPermissionFunction();
+      } else if (permissionStatus === "granted") {
+        setDailyNotification(true);
+      }
+    };
+
+    initialiseNotifications();
+  }, []);
+
+  // console.log(checkNotificationPermissions());
+  // console.log(requestPermissionFunction());
+
   // let appLink: string;
   // const shareThisAppLink = async () => {
   //   if (Capacitor.getPlatform() == "ios") {
@@ -55,18 +87,47 @@ const SettingsPage = ({
           subText={"Support our work"}
           onClick={() => {}}
         /> */}
-
-        {/* <SettingIndividual
-            indvidualStyles={"my-[1rem] rounded-md"}
-            headingText={"Notifications"}
-            subText={"Set Notifications"}
-            onClick={() => {
-              // checkNotificationPermissions();
-              // handleOpenModal2();
-              alert("Notifications clicked");
+        <div
+          className={`flex items-center justify-between py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 mb-[1rem] rounded-md`}
+          // onClick={onClick}
+        >
+          <div className="mx-2">
+            <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] text-lg">
+              {"Notifications"}
+            </p>
+            <p className="support-sub-text pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+              {"Notification time"}
+            </p>
+          </div>
+          <Switch
+            checked={dailyNotification}
+            className={undefined}
+            disabled={undefined}
+            handleColor="white"
+            name={undefined}
+            offColor="white"
+            onChange={() => {
+              // if (checked === false) {
+              // }
             }}
-          /> */}
-
+            onColor="lightblue"
+            pendingOffColor={undefined}
+            pendingOnColor={undefined}
+            readOnly={undefined}
+            style={undefined}
+          />
+        </div>
+        {/* <SettingIndividual
+          indvidualStyles={"my-[1rem] rounded-md"}
+          headingText={"Notifications"}
+          subText={"Set Notifications"}
+          onClick={() => {
+            // checkNotificationPermissions();
+            // handleOpenModal2();
+            alert("Notifications clicked");
+          }}
+        /> */}
+        {/* 
         {Capacitor.getPlatform() === "android" ? (
           <SettingIndividual
             indvidualStyles={"rounded-t-md"}
@@ -90,7 +151,7 @@ const SettingsPage = ({
               );
             }}
           />
-        ) : null}
+        ) : null} */}
         {/* {Capacitor.getPlatform() === "android" ? ( */}
         {/* <SettingIndividual
           headingText={"Share"}

@@ -7,7 +7,6 @@ import Modal from "react-modal";
 // import { Share } from "@capacitor/share";
 // import { FaHandHoldingHeart } from "react-icons/fa";
 
-// import { LocalNotifications } from "@capacitor/local-notifications";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 import { MdOutlineChevronRight } from "react-icons/md";
 // import Switch from "rc-switch";

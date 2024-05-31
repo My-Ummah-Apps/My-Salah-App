@@ -174,7 +174,7 @@ const PrayerTableDisplay = ({
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  const [showReasons, setShowReasons] = useState(false);
+  // const [showReasons, setShowReasons] = useState(false);
   const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
     useState(false);
   let selectedReasonsArray = selectedReasons;
@@ -189,8 +189,8 @@ const PrayerTableDisplay = ({
   };
   console.log(salahStatus);
   useEffect(() => {
-    console.log(modalSheetPrayerReasonsWrap.current);
-    console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+    // console.log(modalSheetPrayerReasonsWrap.current);
+    // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
     if (
       modalSheetPrayerReasonsWrap.current &&
       modalSheetHiddenPrayerReasonsWrap.current
@@ -474,7 +474,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("group");
-                            setShowReasons(false);
+                            // setShowReasons(false);
                             setSelectedReasons([]);
                             setNotes("");
                             // setReasonsArray([]);
@@ -493,7 +493,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("female-alone");
-                            setShowReasons(false);
+                            // setShowReasons(false);
                             // setReasonsArray([]);
                           }}
                           className={`${
@@ -513,7 +513,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("male-alone");
-                            setShowReasons(true);
+                            // setShowReasons(true);
                             // setReasonsArray(reasonsArray);
                           }}
                           className={`${
@@ -531,7 +531,7 @@ const PrayerTableDisplay = ({
                         <div
                           onClick={() => {
                             setSalahStatus("excused");
-                            setShowReasons(false);
+                            // setShowReasons(false);
                             // setReasonsArray([]);
                           }}
                           className={`${
@@ -548,7 +548,7 @@ const PrayerTableDisplay = ({
                     <div
                       onClick={() => {
                         setSalahStatus("late");
-                        setShowReasons(true);
+                        // setShowReasons(true);
                         // setReasonsArray(reasonsArray);
                       }}
                       className={`${
@@ -561,7 +561,7 @@ const PrayerTableDisplay = ({
                     <div
                       onClick={() => {
                         setSalahStatus("missed");
-                        setShowReasons(true);
+                        // setShowReasons(true);
                         // setReasonsArray(reasonsArray);
                       }}
                       className={`${
@@ -805,7 +805,20 @@ const PrayerTableDisplay = ({
       </Table>
       {/* </div> */}
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
-      <div ref={modalSheetHiddenPrayerReasonsWrap}>
+      <div
+        style={
+          {
+            // transform: "translateX(1000px)",
+            // position: "absolute",
+            // backgroundColor: "transparent",
+            // color: "transparent",
+            // border: "none",
+            // left: "30%",
+            // zIndex: "-100",
+          }
+        }
+        ref={modalSheetHiddenPrayerReasonsWrap}
+      >
         <div className="my-8 overflow-x-hidden prayer-status-modal-reasons-wrap">
           <div className="flex justify-between">
             <h2 className="mb-3 text-sm">Reasons (Optional): </h2>

@@ -77,29 +77,6 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 if (Capacitor.isNativePlatform()) {
-  // Keyboard.addListener("keyboardWillShow", (info) => {
-  //   console.log("keyboard will show with height:", info.keyboardHeight);
-  // });
-  // Keyboard.addListener("keyboardDidShow", (info) => {
-  //   console.log("keyboard did show with height:", info.keyboardHeight);
-  // });
-  // Keyboard.addListener("keyboardWillHide", () => {
-  //   console.log("keyboard will hide");
-  // });
-  // Keyboard.addListener("keyboardDidHide", () => {
-  //   console.log("keyboard did hide");
-  // });
-  // window.addEventListener("keyboardWillShow", (e) => {
-  //   // const app: any = document.querySelector(".app");
-  //   console.log("APP IS: ");
-  //   console.log(appRef);
-  //   appRef.style.marginBottom = (e as any).keyboardHeight + "px";
-  // });
-  // window.addEventListener("keyboardWillHide", (e) => {
-  //   // const app: any = document.querySelector(".app");
-  //   appRef.style.marginBottom = "0px";
-  //   console.log("YOYO");
-  // });
 }
 
 const App = () => {
