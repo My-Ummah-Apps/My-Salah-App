@@ -36,7 +36,7 @@ export const requestPermissionFunction = async () => {
     return "prompt";
   }
 };
-let scheduleMorningNotifications: () => void;
+// let scheduleMorningNotifications: () => void;
 // let scheduleEveningNotification;
 if (Capacitor.isNativePlatform()) {
   // LocalNotifications.createChannel({
@@ -44,21 +44,21 @@ if (Capacitor.isNativePlatform()) {
   //   name: "Notification",
   //   description: "General Notification",
   // });
-  scheduleMorningNotifications = async () => {
-    await LocalNotifications.schedule({
-      notifications: [
-        {
-          title: "Morning Reminder",
-          body: `"Therefore remember Me. I will remember you." (Quran 2:152)`,
-          id: 1,
-          schedule: {
-            on: { hour: 9, minute: 0 }, // THIS WORKS ON IOS
-            allowWhileIdle: true,
-            //   foreground: true, // iOS only
-            repeats: true,
-          },
-        },
-      ],
-    });
-  };
+  // scheduleMorningNotifications = async () => {
+  //   await LocalNotifications.schedule({
+  //     notifications: [
+  //       {
+  //         title: "Morning Reminder",
+  //         body: `"Therefore remember Me. I will remember you." (Quran 2:152)`,
+  //         id: 1,
+  //         schedule: {
+  //           on: { hour: 9, minute: 0 }, // THIS WORKS ON IOS
+  //           allowWhileIdle: true,
+  //           //   foreground: true, // iOS only
+  //           repeats: true,
+  //         },
+  //       },
+  //     ],
+  //   });
+  // };
 }

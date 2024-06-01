@@ -436,7 +436,7 @@ const PrayerTableDisplay = ({
   return (
     // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
     // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-    <section>
+    <section className="relative">
       {/*  bottom-12 */}
       <div className="sheet-prayer-update-wrap">
         <Sheet
@@ -806,31 +806,47 @@ const PrayerTableDisplay = ({
       {/* </div> */}
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
       <div
-        style={
-          {
-            // transform: "translateX(1000px)",
-            // position: "absolute",
-            // backgroundColor: "transparent",
-            // color: "transparent",
-            // border: "none",
-            // left: "30%",
-            // zIndex: "-100",
-          }
-        }
+        className="absolute z-[-100]"
         ref={modalSheetHiddenPrayerReasonsWrap}
       >
-        <div className="my-8 overflow-x-hidden prayer-status-modal-reasons-wrap">
-          <div className="flex justify-between">
-            <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
-            <p
-              onClick={() => {
-                // prompt();
-                setShowAddCustomReasonInputBox(true);
-              }}
-            >
-              {/* + */}
-            </p>
+        <div
+          style={
+            {
+              // visibility: "hidden",
+              // transform: "translateX(1000px)",
+              // position: "absolute",
+              // backgroundColor: "transparent",
+              // color: "transparent",
+              // border: "none",
+              // left: "30%",
+              // zIndex: "-100",
+            }
+          }
+        >
+          <div className="overflow-x-hidden prayer-status-modal-reasons-wrap">
+            <div className="flex justify-between">
+              <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+              <p
+                onClick={() => {
+                  // prompt();
+                  setShowAddCustomReasonInputBox(true);
+                }}
+              >
+                {/* + */}
+              </p>
+            </div>
           </div>
+        </div>
+        <div className="flex justify-between">
+          <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+          <p
+            onClick={() => {
+              // prompt();
+              setShowAddCustomReasonInputBox(true);
+            }}
+          >
+            {/* + */}
+          </p>
         </div>
         <div className="flex flex-wrap">
           {/* {missedReasonsArray.map((item) => ( */}

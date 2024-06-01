@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Capacitor } from "@capacitor/core";
+// import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import Modal from "react-modal";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
+import Sheet from "react-modal-sheet";
 import {
   checkNotificationPermissions,
   requestPermissionFunction,
@@ -26,7 +27,26 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  const [dailyNotification, setDailyNotification] = useState(false);
+  const [handleNotificationsModal, setHandleNotificationsModal] =
+    useState(false);
+
+  const [dailyNotification, setDailyNotification] = useState<boolean | null>();
+
+  useEffect(() => {
+    if (localStorage.getItem("daily-notifications")) {
+      console.log(localStorage.getItem("daily-notifications"));
+      // setDailyNotification(localStorage.getItem("daily-notifications"));
+      // setDailyNotification(JSON.parse("daily-notifications") || false);
+      const storedDailyNotification = localStorage.getItem(
+        "daily-notifications"
+      )
+        ? JSON.parse("daily-notifications")
+        : false;
+      storedDailyNotification(storedDailyNotification);
+    } else if (!localStorage.getItem("daily-notifications")) {
+      setDailyNotification(false);
+    }
+  }, []);
 
   // Check if notification permissions have been granted
   useEffect(() => {
@@ -46,7 +66,7 @@ const SettingsPage = ({
       }
     };
 
-    initialiseNotifications();
+    // initialiseNotifications();
   }, []);
 
   // console.log(checkNotificationPermissions());
@@ -88,8 +108,11 @@ const SettingsPage = ({
           onClick={() => {}}
         /> */}
         <div
-          className={`flex items-center justify-between py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 mb-[1rem] rounded-md`}
-          // onClick={onClick}
+          // style={{ display: "none" }}
+          className={` flex items-center justify-between py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 mb-[1rem] rounded-md`}
+          onClick={() => {
+            setHandleNotificationsModal(true);
+          }}
         >
           <div className="mx-2">
             <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] text-lg">
@@ -99,24 +122,58 @@ const SettingsPage = ({
               {"Notification time"}
             </p>
           </div>
-          <Switch
-            checked={dailyNotification}
-            className={undefined}
-            disabled={undefined}
-            handleColor="white"
-            name={undefined}
-            offColor="white"
-            onChange={() => {
-              // if (checked === false) {
-              // }
-            }}
-            onColor="lightblue"
-            pendingOffColor={undefined}
-            pendingOnColor={undefined}
-            readOnly={undefined}
-            style={undefined}
-          />
-        </div>
+          <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
+        </div>{" "}
+        <Sheet
+          detent="content-height"
+          tweenConfig={{ ease: "easeOut", duration: 0.3 }}
+          isOpen={handleNotificationsModal}
+          onClose={() => setHandleNotificationsModal(false)}
+        >
+          <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+            <Sheet.Header />
+            <Sheet.Content>
+              <div className="h-[50vh]">
+                <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
+                  <p>Turn on Notifications</p>{" "}
+                  <Switch
+                    checked={dailyNotification}
+                    className={undefined}
+                    disabled={undefined}
+                    handleColor="white"
+                    name={undefined}
+                    offColor="white"
+                    onChange={() => {
+                      console.log(dailyNotification);
+                      setDailyNotification(
+                        (dailyNotification) => !dailyNotification
+                      );
+                      console.log(dailyNotification);
+                      dailyNotification
+                        ? localStorage.setItem(
+                            "daily-notificatons",
+                            dailyNotification.toString()
+                          )
+                        : console.log("daily-notifications doesn't exist");
+                    }}
+                    onColor="lightblue"
+                    pendingOffColor={undefined}
+                    pendingOnColor={undefined}
+                    readOnly={undefined}
+                    style={undefined}
+                  />
+                </div>
+                {dailyNotification === true ? (
+                  <div className="flex items-center justify-between p-3">
+                    <p>Set Time</p>
+                    <p>21:00</p>
+                  </div>
+                ) : null}
+              </div>
+            </Sheet.Content>
+          </Sheet.Container>
+          <Sheet.Backdrop />
+        </Sheet>
         {/* <SettingIndividual
           indvidualStyles={"my-[1rem] rounded-md"}
           headingText={"Notifications"}
