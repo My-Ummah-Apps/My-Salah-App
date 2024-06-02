@@ -30,21 +30,30 @@ const SettingsPage = ({
   const [handleNotificationsModal, setHandleNotificationsModal] =
     useState(false);
 
-  const [dailyNotification, setDailyNotification] = useState<boolean | null>();
+  const [dailyNotification, setDailyNotification] = useState<string | null>();
+  const [dailyNotificationTime, setDailyNotificationTime] = useState<string>();
+  const handleTimeChange = (e) => {
+    setDailyNotificationTime(e.target.value);
+    localStorage.setItem("dailyNotificationTime", e.target.value);
+  };
+  // const [dailyNotification, setDailyNotification] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("daily-notifications")) {
-      console.log(localStorage.getItem("daily-notifications"));
-      // setDailyNotification(localStorage.getItem("daily-notifications"));
-      // setDailyNotification(JSON.parse("daily-notifications") || false);
-      const storedDailyNotification = localStorage.getItem(
-        "daily-notifications"
-      )
-        ? JSON.parse("daily-notifications")
-        : false;
-      storedDailyNotification(storedDailyNotification);
-    } else if (!localStorage.getItem("daily-notifications")) {
-      setDailyNotification(false);
+    const storedDailyNotificationTime = localStorage.getItem(
+      "dailyNotificationTime"
+    );
+    if (storedDailyNotificationTime !== null) {
+      setDailyNotificationTime(storedDailyNotificationTime);
+    } else {
+      setDailyNotificationTime("21:00");
+    }
+  });
+
+  useEffect(() => {
+    if (localStorage.getItem("daily-notifications") === "true") {
+      setDailyNotification("true");
+    } else {
+      setDailyNotification("false");
     }
   }, []);
 
@@ -53,16 +62,16 @@ const SettingsPage = ({
     const initialiseNotifications = async () => {
       const permissionStatus = await checkNotificationPermissions();
       if (permissionStatus === "denied") {
-        setDailyNotification(false);
+        setDailyNotification("false");
         // await scheduleMorningNotifications();
       } else if (
         permissionStatus === "prompt" ||
         permissionStatus === "prompt-with-rationale"
       ) {
-        setDailyNotification(false);
+        setDailyNotification("false");
         requestPermissionFunction();
       } else if (permissionStatus === "granted") {
-        setDailyNotification(true);
+        setDailyNotification("true");
       }
     };
 
@@ -101,15 +110,9 @@ const SettingsPage = ({
         {/* <h1>{title}</h1> */}
       </div>
       <div className="settings-page-options-wrap">
-        {/* <SettingIndividual
-          indvidualStyles={"mb-[1rem] rounded-md"}
-          headingText={"Contribute"}
-          subText={"Support our work"}
-          onClick={() => {}}
-        /> */}
         <div
           // style={{ display: "none" }}
-          className={` flex items-center justify-between py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 mb-[1rem] rounded-md`}
+          className={` flex items-center justify-between  shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-[1rem] rounded-md`}
           onClick={() => {
             setHandleNotificationsModal(true);
           }}
@@ -135,24 +138,30 @@ const SettingsPage = ({
             <Sheet.Content>
               <div className="h-[50vh]">
                 <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
-                  <p>Turn on Notifications</p>{" "}
+                  <p>Turn on Daily Notification</p>{" "}
                   <Switch
-                    checked={dailyNotification}
+                    checked={dailyNotification === "true" ? false : true}
                     className={undefined}
                     disabled={undefined}
                     handleColor="white"
                     name={undefined}
                     offColor="white"
                     onChange={() => {
-                      console.log(dailyNotification);
-                      setDailyNotification(
-                        (dailyNotification) => !dailyNotification
+                      // console.log(
+                      //   "dailyNotification before setDailyNotification " +
+                      //     dailyNotification
+                      // );
+                      setDailyNotification((dailyNotification) =>
+                        dailyNotification === "true" ? "false" : "true"
                       );
-                      console.log(dailyNotification);
+                      console.log(
+                        "dailyNotification after setDailyNotification " +
+                          dailyNotification
+                      );
                       dailyNotification
                         ? localStorage.setItem(
                             "daily-notificatons",
-                            dailyNotification.toString()
+                            dailyNotification
                           )
                         : console.log("daily-notifications doesn't exist");
                     }}
@@ -163,10 +172,25 @@ const SettingsPage = ({
                     style={undefined}
                   />
                 </div>
-                {dailyNotification === true ? (
+                {dailyNotification === "false" ? (
                   <div className="flex items-center justify-between p-3">
                     <p>Set Time</p>
-                    <p>21:00</p>
+                    {/* <p> */}
+                    <input
+                      onChange={(e) => {
+                        handleTimeChange(e);
+                      }}
+                      style={{ backgroundColor: "transparent" }}
+                      className="focus:outline-none focus:ring-0 focus:border-transparent w-[auto] "
+                      type="time"
+                      id="appt"
+                      name="appt"
+                      min="09:00"
+                      max="18:00"
+                      value={dailyNotificationTime}
+                      required
+                    />
+                    {/* </p> */}
                   </div>
                 ) : null}
               </div>
