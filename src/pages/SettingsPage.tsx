@@ -10,6 +10,7 @@ import {
   checkNotificationPermissions,
   requestPermissionFunction,
 } from "../utils/notifications";
+import { LocalNotifications } from "@capacitor/local-notifications";
 import { MdOutlineChevronRight } from "react-icons/md";
 // import Switch from "rc-switch";
 // import { StatusBar, Style } from "@capacitor/status-bar";
@@ -27,56 +28,7 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  const [handleNotificationsModal, setHandleNotificationsModal] =
-    useState(false);
-
-  const [dailyNotification, setDailyNotification] = useState<string | null>();
-  const [dailyNotificationTime, setDailyNotificationTime] = useState<string>();
-  const handleTimeChange = (e) => {
-    setDailyNotificationTime(e.target.value);
-    localStorage.setItem("dailyNotificationTime", e.target.value);
-  };
-  // const [dailyNotification, setDailyNotification] = useState(false);
-
-  useEffect(() => {
-    const storedDailyNotificationTime = localStorage.getItem(
-      "dailyNotificationTime"
-    );
-    if (storedDailyNotificationTime !== null) {
-      setDailyNotificationTime(storedDailyNotificationTime);
-    } else {
-      setDailyNotificationTime("21:00");
-    }
-  });
-
-  useEffect(() => {
-    if (localStorage.getItem("daily-notifications") === "true") {
-      setDailyNotification("true");
-    } else {
-      setDailyNotification("false");
-    }
-  }, []);
-
-  // Check if notification permissions have been granted
-  useEffect(() => {
-    const initialiseNotifications = async () => {
-      const permissionStatus = await checkNotificationPermissions();
-      if (permissionStatus === "denied") {
-        setDailyNotification("false");
-        // await scheduleMorningNotifications();
-      } else if (
-        permissionStatus === "prompt" ||
-        permissionStatus === "prompt-with-rationale"
-      ) {
-        setDailyNotification("false");
-        requestPermissionFunction();
-      } else if (permissionStatus === "granted") {
-        setDailyNotification("true");
-      }
-    };
-
-    // initialiseNotifications();
-  }, []);
+  // checkNotificationPermissions();
 
   // console.log(checkNotificationPermissions());
   // console.log(requestPermissionFunction());
@@ -96,6 +48,74 @@ const SettingsPage = ({
   //     dialogTitle: "",
   //   });
   // };
+
+  const [handleNotificationsModal, setHandleNotificationsModal] =
+    useState(false);
+  const [dailyNotification, setDailyNotification] = useState<string | null>();
+  const [dailyNotificationTime, setDailyNotificationTime] = useState<string>();
+  const handleTimeChange = (e) => {
+    setDailyNotificationTime(e.target.value);
+    localStorage.setItem("dailyNotificationTime", e.target.value);
+  };
+  // const [dailyNotification, setDailyNotification] = useState(false);
+
+  useEffect(() => {
+    const storedDailyNotificationTime = localStorage.getItem(
+      "dailyNotificationTime"
+    );
+    if (storedDailyNotificationTime !== null) {
+      setDailyNotificationTime(storedDailyNotificationTime);
+    } else {
+      setDailyNotificationTime("21:00");
+    }
+  });
+
+  // useEffect(() => {
+  //   if (dailyNotification === "true") {
+  //     localStorage.setItem("daily-notification", "true");
+  //     console.log("dailyNotification === true");
+  //   } else if (dailyNotification === "false") {
+  //     localStorage.setItem("daily-notification", "false");
+  //     console.log("dailyNotification === false");
+  //   }
+  // }, [dailyNotification]);
+
+  async function checkNotificationPermissions() {
+    const checkPermission = await LocalNotifications.checkPermissions();
+    const userNotificationPermission = checkPermission.display;
+    console.log("checkNotificationPermissions() has run");
+    if (userNotificationPermission == "denied") {
+      alert("Please turn notifications back on from within system settings");
+      setDailyNotification("false");
+      localStorage.setItem("daily-notification", "false");
+      return;
+    } else if (userNotificationPermission == "granted") {
+      localStorage.setItem("daily-notification", "true");
+      setDailyNotification("true");
+    } else if (
+      // checkPermission.display == "denied" ||
+      userNotificationPermission == "prompt" ||
+      userNotificationPermission == "prompt-with-rationale"
+    ) {
+      setDailyNotification("false");
+      localStorage.setItem("daily-notification", "false");
+      requestPermissionFunction();
+    }
+  }
+
+  const requestPermissionFunction = async () => {
+    const requestPermission = await LocalNotifications.requestPermissions();
+    if (requestPermission.display == "granted") {
+      setDailyNotification("true");
+      localStorage.setItem("daily-notification", "true");
+    } else if (requestPermission.display == "denied") {
+      setDailyNotification("false");
+      localStorage.setItem("daily-notification", "false");
+    } else if (requestPermission.display == "prompt") {
+      setDailyNotification("false");
+      localStorage.setItem("daily-notification", "false");
+    }
+  };
 
   const link = (url: string) => {
     window.location.href = url;
@@ -140,30 +160,35 @@ const SettingsPage = ({
                 <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
                   <p>Turn on Daily Notification</p>{" "}
                   <Switch
-                    checked={dailyNotification === "true" ? false : true}
+                    checked={
+                      localStorage.getItem("daily-notification") === "true"
+                        ? true
+                        : false
+                    }
                     className={undefined}
                     disabled={undefined}
                     handleColor="white"
                     name={undefined}
                     offColor="white"
                     onChange={() => {
-                      // console.log(
-                      //   "dailyNotification before setDailyNotification " +
-                      //     dailyNotification
-                      // );
-                      setDailyNotification((dailyNotification) =>
-                        dailyNotification === "true" ? "false" : "true"
-                      );
-                      console.log(
-                        "dailyNotification after setDailyNotification " +
-                          dailyNotification
-                      );
-                      dailyNotification
-                        ? localStorage.setItem(
-                            "daily-notificatons",
-                            dailyNotification
-                          )
-                        : console.log("daily-notifications doesn't exist");
+                      if (
+                        localStorage.getItem("daily-notification") === "true"
+                      ) {
+                        console.log("DAILY TOGGLE TURNED OFF");
+                        setDailyNotification("false");
+                        localStorage.setItem("daily-notification", "false");
+                      } else if (
+                        localStorage.getItem("daily-notification") === "false"
+                      ) {
+                        console.log("DAILY TOGGLE TURNED ON");
+                        setDailyNotification("true");
+                        localStorage.setItem("daily-notification", "true");
+                        checkNotificationPermissions();
+                      }
+
+                      // dailyNotification === "false"
+                      //   ? checkNotificationPermissions()
+                      //   : null;
                     }}
                     onColor="lightblue"
                     pendingOffColor={undefined}
@@ -172,7 +197,7 @@ const SettingsPage = ({
                     style={undefined}
                   />
                 </div>
-                {dailyNotification === "false" ? (
+                {dailyNotification === "true" ? (
                   <div className="flex items-center justify-between p-3">
                     <p>Set Time</p>
                     {/* <p> */}
@@ -181,7 +206,9 @@ const SettingsPage = ({
                         handleTimeChange(e);
                       }}
                       style={{ backgroundColor: "transparent" }}
-                      className="focus:outline-none focus:ring-0 focus:border-transparent w-[auto] "
+                      className={`${
+                        dailyNotification ? "slideUp" : ""
+                      } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] `}
                       type="time"
                       id="appt"
                       name="appt"
