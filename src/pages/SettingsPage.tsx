@@ -28,58 +28,38 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  // checkNotificationPermissions();
-
-  // console.log(checkNotificationPermissions());
-  // console.log(requestPermissionFunction());
-
-  // let appLink: string;
-  // const shareThisAppLink = async () => {
-  //   if (Capacitor.getPlatform() == "ios") {
-  //     appLink = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
-  //   } else if (Capacitor.getPlatform() == "android") {
-  //     appLink = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
-  //   }
-
-  //   await Share.share({
-  //     title: "",
-  //     text: "",
-  //     url: appLink,
-  //     dialogTitle: "",
-  //   });
-  // };
-
   const [handleNotificationsModal, setHandleNotificationsModal] =
     useState(false);
-  const [dailyNotification, setDailyNotification] = useState<string | null>(
-    localStorage.getItem("daily-notification")
+  const [dailyNotification, setDailyNotification] = useState<string>(
+    localStorage.getItem("daily-notification") || "false"
   );
-  const [dailyNotificationTime, setDailyNotificationTime] =
-    useState<string>("21:00");
+  const defaultDailyNotificationTime = "21:00";
+  const [dailyNotificationTime, setDailyNotificationTime] = useState<string>(
+    localStorage.getItem("dailyNotificationTime") ||
+      defaultDailyNotificationTime
+  );
+
+  useEffect(() => {
+    if (localStorage.getItem("dailyNotificationTime") === null) {
+      localStorage.setItem(
+        "dailyNotificationTime",
+        defaultDailyNotificationTime
+      );
+    }
+  }, []);
 
   const handleTimeChange = (e: any) => {
     setDailyNotificationTime(e.target.value);
-    console.log(e.target.value.split(":").map(Number));
-    const notificationTime = e.target.value.split(":").map(Number);
-    scheduleDailyNotification(notificationTime[0], notificationTime[1]);
+    const [hour, minute] = e.target.value.split(":").map(Number);
+    scheduleDailyNotification(hour, minute);
     localStorage.setItem("dailyNotificationTime", e.target.value);
   };
-  // const [dailyNotification, setDailyNotification] = useState(false);
-  // let splitDailyNotificationTime: number[] | undefined;
-  // useEffect(() => {
-  //   const storedDailyNotificationTime = localStorage.getItem(
-  //     "dailyNotificationTime"
-  //   );
-  //   if (storedDailyNotificationTime !== null) {
-  //     setDailyNotificationTime(storedDailyNotificationTime);
-  //   } else {
-  //     setDailyNotificationTime("21:00");
-  //   }
-  //   splitDailyNotificationTime = dailyNotificationTime
-  //     ?.split(":")
-  //     .map((string) => Number(string));
-  //   console.log(splitDailyNotificationTime);
-  // }, [dailyNotificationTime]);
+
+  useEffect(() => {
+    if (dailyNotification !== null) {
+      localStorage.setItem("daily-notification", dailyNotification);
+    }
+  }, [dailyNotification]);
 
   const scheduleDailyNotification = async (hour: number, minute: number) => {
     await LocalNotifications.schedule({
@@ -102,37 +82,22 @@ const SettingsPage = ({
     });
   };
 
-  // useEffect(() => {
-  //   if (dailyNotification === "true") {
-  //     localStorage.setItem("daily-notification", "true");
-  //     console.log("dailyNotification === true");
-  //   } else if (dailyNotification === "false") {
-  //     localStorage.setItem("daily-notification", "false");
-  //     console.log("dailyNotification === false");
-  //   }
-  // }, [dailyNotification]);
-
   async function checkNotificationPermissions() {
     const checkPermission = await LocalNotifications.checkPermissions();
     const userNotificationPermission = checkPermission.display;
-    console.log("checkNotificationPermissions() has run");
-    if (userNotificationPermission == "denied") {
+    if (userNotificationPermission === "denied") {
       alert("Please turn notifications back on from within system settings");
       setDailyNotification("false");
-      localStorage.setItem("daily-notification", "false");
       return;
-    } else if (userNotificationPermission == "granted") {
-      localStorage.setItem("daily-notification", "true");
+    } else if (userNotificationPermission === "granted") {
       setDailyNotification("true");
-      const notificationTime = dailyNotificationTime.split(":").map(Number);
-      scheduleDailyNotification(notificationTime[0], notificationTime[1]);
+      // const notificationTime = dailyNotificationTime.split(":").map(Number);
+      // scheduleDailyNotification(notificationTime[0], notificationTime[1]);
     } else if (
-      // checkPermission.display == "denied" ||
-      userNotificationPermission == "prompt" ||
-      userNotificationPermission == "prompt-with-rationale"
+      userNotificationPermission === "prompt" ||
+      userNotificationPermission === "prompt-with-rationale"
     ) {
       setDailyNotification("false");
-      localStorage.setItem("daily-notification", "false");
       requestPermissionFunction();
     }
   }
@@ -141,13 +106,11 @@ const SettingsPage = ({
     const requestPermission = await LocalNotifications.requestPermissions();
     if (requestPermission.display == "granted") {
       setDailyNotification("true");
-      localStorage.setItem("daily-notification", "true");
-    } else if (requestPermission.display == "denied") {
+    } else if (
+      requestPermission.display == "prompt" ||
+      requestPermission.display == "denied"
+    ) {
       setDailyNotification("false");
-      localStorage.setItem("daily-notification", "false");
-    } else if (requestPermission.display == "prompt") {
-      setDailyNotification("false");
-      localStorage.setItem("daily-notification", "false");
     }
   };
 
@@ -194,11 +157,7 @@ const SettingsPage = ({
                 <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
                   <p>Turn on Daily Notification</p>{" "}
                   <Switch
-                    checked={
-                      localStorage.getItem("daily-notification") === "true"
-                        ? true
-                        : false
-                    }
+                    checked={dailyNotification === "true" ? true : false}
                     className={undefined}
                     disabled={undefined}
                     handleColor="white"
@@ -208,21 +167,13 @@ const SettingsPage = ({
                       if (
                         localStorage.getItem("daily-notification") === "true"
                       ) {
-                        console.log("DAILY TOGGLE TURNED OFF");
                         setDailyNotification("false");
-                        localStorage.setItem("daily-notification", "false");
                       } else if (
                         localStorage.getItem("daily-notification") === "false"
                       ) {
-                        console.log("DAILY TOGGLE TURNED ON");
                         setDailyNotification("true");
-                        localStorage.setItem("daily-notification", "true");
                         checkNotificationPermissions();
                       }
-
-                      // dailyNotification === "false"
-                      //   ? checkNotificationPermissions()
-                      //   : null;
                     }}
                     onColor="lightblue"
                     pendingOffColor={undefined}
@@ -343,6 +294,21 @@ const SettingsPage = ({
                   /> */}
       </div>
     </section>
+    // let appLink: string;
+    // const shareThisAppLink = async () => {
+    //   if (Capacitor.getPlatform() == "ios") {
+    //     appLink = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
+    //   } else if (Capacitor.getPlatform() == "android") {
+    //     appLink = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
+    //   }
+
+    //   await Share.share({
+    //     title: "",
+    //     text: "",
+    //     url: appLink,
+    //     dialogTitle: "",
+    //   });
+    // };
   );
 };
 
