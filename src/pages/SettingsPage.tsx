@@ -51,24 +51,56 @@ const SettingsPage = ({
 
   const [handleNotificationsModal, setHandleNotificationsModal] =
     useState(false);
-  const [dailyNotification, setDailyNotification] = useState<string | null>();
-  const [dailyNotificationTime, setDailyNotificationTime] = useState<string>();
-  const handleTimeChange = (e) => {
+  const [dailyNotification, setDailyNotification] = useState<string | null>(
+    localStorage.getItem("daily-notification")
+  );
+  const [dailyNotificationTime, setDailyNotificationTime] =
+    useState<string>("21:00");
+
+  const handleTimeChange = (e: any) => {
     setDailyNotificationTime(e.target.value);
+    console.log(e.target.value.split(":").map(Number));
+    const notificationTime = e.target.value.split(":").map(Number);
+    scheduleDailyNotification(notificationTime[0], notificationTime[1]);
     localStorage.setItem("dailyNotificationTime", e.target.value);
   };
   // const [dailyNotification, setDailyNotification] = useState(false);
+  // let splitDailyNotificationTime: number[] | undefined;
+  // useEffect(() => {
+  //   const storedDailyNotificationTime = localStorage.getItem(
+  //     "dailyNotificationTime"
+  //   );
+  //   if (storedDailyNotificationTime !== null) {
+  //     setDailyNotificationTime(storedDailyNotificationTime);
+  //   } else {
+  //     setDailyNotificationTime("21:00");
+  //   }
+  //   splitDailyNotificationTime = dailyNotificationTime
+  //     ?.split(":")
+  //     .map((string) => Number(string));
+  //   console.log(splitDailyNotificationTime);
+  // }, [dailyNotificationTime]);
 
-  useEffect(() => {
-    const storedDailyNotificationTime = localStorage.getItem(
-      "dailyNotificationTime"
-    );
-    if (storedDailyNotificationTime !== null) {
-      setDailyNotificationTime(storedDailyNotificationTime);
-    } else {
-      setDailyNotificationTime("21:00");
-    }
-  });
+  const scheduleDailyNotification = async (hour: number, minute: number) => {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: "Daily Reminder",
+          body: `Did you log your prayers today?`,
+          id: 1,
+          schedule: {
+            on: {
+              hour: hour,
+              minute: minute,
+            }, // THIS WORKS ON IOS
+            allowWhileIdle: true,
+            // foreground: true, // iOS only
+            repeats: true,
+          },
+        },
+      ],
+    });
+  };
 
   // useEffect(() => {
   //   if (dailyNotification === "true") {
@@ -92,6 +124,8 @@ const SettingsPage = ({
     } else if (userNotificationPermission == "granted") {
       localStorage.setItem("daily-notification", "true");
       setDailyNotification("true");
+      const notificationTime = dailyNotificationTime.split(":").map(Number);
+      scheduleDailyNotification(notificationTime[0], notificationTime[1]);
     } else if (
       // checkPermission.display == "denied" ||
       userNotificationPermission == "prompt" ||
@@ -204,6 +238,7 @@ const SettingsPage = ({
                     <input
                       onChange={(e) => {
                         handleTimeChange(e);
+                        // console.log(e.currentTarget);
                       }}
                       style={{ backgroundColor: "transparent" }}
                       className={`${
