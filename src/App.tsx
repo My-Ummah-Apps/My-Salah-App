@@ -80,6 +80,19 @@ if (Capacitor.isNativePlatform()) {
 }
 
 const App = () => {
+  // CHANGELOG FUNCTIONALITY
+  const betaAppVersion = "1.0.8";
+
+  useEffect(() => {
+    const storedBetaAppVersion = localStorage.getItem("storedBetaAppVersion");
+    if (betaAppVersion !== storedBetaAppVersion) {
+      localStorage.setItem("storedBetaAppVersion", betaAppVersion);
+      alert(
+        "Beta Version 1.0.8 Changelog:\n\n - Added notifications option within the settings page, please test it out and let me know if you encounter any issues / have any feedback.\n\n As usual, any other issues / bugs etc drop me a message.\n\n Jazakallahu Khair"
+      );
+    }
+  }, []);
+
   const [showIntroModal, setShowIntroModal] = useState(false);
   // const appRef = useRef();
   // console.log(appRef);

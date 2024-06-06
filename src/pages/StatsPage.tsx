@@ -135,7 +135,6 @@ const StatsPage = ({
       salahStatusStatistics[key as keyof typeof salahStatusStatistics]
     );
     if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
-      console.log("RAN");
       showDonutChart = true;
       break;
     }

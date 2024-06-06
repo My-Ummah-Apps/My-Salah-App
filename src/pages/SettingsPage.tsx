@@ -6,10 +6,10 @@ import Modal from "react-modal";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import Sheet from "react-modal-sheet";
-import {
-  checkNotificationPermissions,
-  requestPermissionFunction,
-} from "../utils/notifications";
+// import {
+//   checkNotificationPermissions,
+//   requestPermissionFunction,
+// } from "../utils/notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { MdOutlineChevronRight } from "react-icons/md";
 // import Switch from "rc-switch";
@@ -48,7 +48,8 @@ const SettingsPage = ({
     }
   }, []);
 
-  const handleTimeChange = (e: any) => {
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
     setDailyNotificationTime(e.target.value);
     const [hour, minute] = e.target.value.split(":").map(Number);
     scheduleDailyNotification(hour, minute);

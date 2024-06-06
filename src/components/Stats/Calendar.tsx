@@ -273,7 +273,7 @@ const Calendar = ({
       style={{
         ...style,
         width: monthsBetween.length === 1 ? "100%" : style.width,
-        border: "1px solid rgb(54, 49, 49)",
+        borderRight: "1px solid rgb(0, 0, 0, 0.2)",
       }}
       // bg-[color:var(--card-bg-color)]
 
@@ -299,7 +299,7 @@ const Calendar = ({
           })}
         </div>
         <div
-          className="grid grid-cols-7 px-2 gap-y-7 place-items-center month-dates-wrap"
+          className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap"
           key={uuidv4()}
         >
           {monthlyDates(formattedMonths[index]).map((day) => (
@@ -319,14 +319,14 @@ const Calendar = ({
                 xmlns="http://www.w3.org/2000/svg"
                 id="svg"
                 viewBox="0 0 150 150"
-                style={{ height: "37px", width: "37px" }}
+                style={{ height: "35px", width: "35px" }}
               >
                 <desc>Created with Snap</desc>
                 <defs />
                 <path
                   d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
                   style={{
-                    strokeWidth: "13px",
+                    strokeWidth: "11px",
                     strokeLinecap: "round",
                   }}
                   fill="none"
@@ -335,7 +335,7 @@ const Calendar = ({
                 <path
                   d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
                   style={{
-                    strokeWidth: "13px",
+                    strokeWidth: "11px",
                     strokeLinecap: "round",
                   }}
                   fill="none"
@@ -344,7 +344,7 @@ const Calendar = ({
                 <path
                   d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
                   style={{
-                    strokeWidth: "13px",
+                    strokeWidth: "11px",
                     strokeLinecap: "round",
                   }}
                   fill="none"
@@ -353,7 +353,7 @@ const Calendar = ({
                 <path
                   d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
                   style={{
-                    strokeWidth: "13px",
+                    strokeWidth: "11px",
                     strokeLinecap: "round",
                   }}
                   fill="none"
@@ -362,7 +362,7 @@ const Calendar = ({
                 <path
                   d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
                   style={{
-                    strokeWidth: "13px",
+                    strokeWidth: "11px",
                     strokeLinecap: "round",
                   }}
                   fill="none"
@@ -408,7 +408,7 @@ const Calendar = ({
           style={{ borderRadius: "0.5rem" }}
           className="list"
           // height={330}
-          height={400}
+          height={370}
           itemCount={monthsBetween.length}
           itemSize={300}
           layout="horizontal"
