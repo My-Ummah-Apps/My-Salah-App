@@ -358,11 +358,11 @@ const PrayerTableDisplay = ({
       );
     } else if (cellIcon === "group") {
       cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]"></div>
+        <div className="inline-block rounded-md bg-[color:var(--jamaah-status-color)] text-white w-[24px] h-[24px]"></div>
       );
     } else if (cellIcon === "female-alone") {
       cellIcon = (
-        <div className="inline-block rounded-md  bg-[color:var(--alone-female-status-color)] text-white w-[24px] h-[24px]"></div>
+        <div className="inline-block rounded-md bg-[color:var(--alone-female-status-color)] text-white w-[24px] h-[24px]"></div>
       );
     } else if (cellIcon === "excused") {
       cellIcon = (
@@ -617,7 +617,8 @@ const PrayerTableDisplay = ({
                             }
                             setSelectedReasons(selectedReasonsArray);
                           }}
-                          className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+                          // border border-gray-700 b-1 rounded-xl
+                          className="p-2 m-1 text-xs bg-[rgba(0, 0, 0, 1)] bg-gray-800/70 rounded-xl"
                         >
                           {item}
                         </p>

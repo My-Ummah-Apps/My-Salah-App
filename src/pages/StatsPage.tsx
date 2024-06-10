@@ -131,9 +131,9 @@ const StatsPage = ({
   // console.log(Object.values(salahStatusStatistics));
 
   for (let key in salahStatusStatistics) {
-    console.log(
-      salahStatusStatistics[key as keyof typeof salahStatusStatistics]
-    );
+    // console.log(
+    //   salahStatusStatistics[key as keyof typeof salahStatusStatistics]
+    // );
     if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
       showDonutChart = true;
       break;

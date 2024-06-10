@@ -4,7 +4,7 @@ import { CSSProperties } from "react";
 
 // import { List, Grid } from "react-virtualized";
 // import CalendarMonthly from "./CalendarMonthly";
-
+import Sheet from "react-modal-sheet";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
@@ -29,11 +29,10 @@ const Calendar = ({
   // showCalendarOneMonth,
   userStartDate,
   setSalahTrackingArray,
-  salahTrackingArray,
-  startDate,
-  setCurrentWeek,
-  currentWeek,
-}: {
+  salahTrackingArray, // setCurrentWeek,
+  // startDate,
+} // currentWeek,
+: {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
   userStartDate: string;
@@ -42,9 +41,8 @@ const Calendar = ({
   >;
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
-  //   modifySingleDaySalah: (date: Date) => void;
-  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  currentWeek: number;
+  // setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
+  // currentWeek: number;
 }) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
@@ -58,6 +56,9 @@ const Calendar = ({
     // }
   });
 
+  const [showDailySalahDataModal, sheShowDailySalahDataModal] = useState(false);
+  const [clickedDate, setClickedDate] = useState<string>();
+
   // const getSingleMonthDivHeight = () => {
   //   // setSingleMonthDivHeight(e.target.clientHeight);
   //   console.log("hi");
@@ -66,15 +67,49 @@ const Calendar = ({
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
-  // function modifySingleDaySalah(date: Date) {
-  //   const today: Date = new Date();
-  //   setCurrentWeek(
-  //     today > date
-  //       ? differenceInDays(today, date)
-  //       : differenceInDays(today, date) - 1
-  //   );
-  //   // setCurrentWeek(differenceInDays(today, date) - 1);
-  // }
+  function showDailySalahData(date: string) {
+    // console.log(date);
+    // console.log(salahTrackingArray);
+    // for (let i = 0; i < salahTrackingArray.length; i++) {
+    //   console.log(salahTrackingArray[i].completedDates);
+    // }
+
+    salahTrackingArray.forEach((item) => {
+      // if (item.salahName === salah) {
+      for (let i = 0; i < item.completedDates.length; i++) {
+        console.log(item.completedDates[0]);
+        console.log(Object.keys(item.completedDates[i])[0]);
+        console.log(item.salahName);
+        if (Object.keys(item.completedDates[i])[0] === date) {
+          // console.log("TRUE");
+          // setSalahStatus(item.completedDates[i][tableRowDate].status);
+          // setSelectedReasons(item.completedDates[i][tableRowDate].reasons);
+          // setNotes(item.completedDates[i][tableRowDate].notes);
+        }
+      }
+      // }
+    });
+
+    return (
+      <div className="">
+        <h1 className="mt-5 text-center">Stats for date...</h1>
+        {salahTrackingArray.map((item) => {
+          return (
+            <div className="py-5 m-5">
+              <div>{item.salahName}</div>
+              <div>
+                {item.completedDates.map((item, index) => {
+                  return <p>{item[date]}</p>;
+                })}
+              </div>
+              <div>Reasons</div>
+              <div>Notes</div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
@@ -148,8 +183,6 @@ const Calendar = ({
   //   // sameDatesArray = [];
   //   return color;
   // };
-
-  const [showModal, setShowModal] = useState(false);
 
   let todaysDate = new Date();
   // userStartDate = "17.01.11";
@@ -259,8 +292,6 @@ const Calendar = ({
     return null;
   }
 
-  console.log(monthsBetween.length);
-
   // const Column = ({ index, style }) => <div style={style}>Column {index}</div>;
   const Column = ({
     index,
@@ -306,8 +337,10 @@ const Calendar = ({
             <div
               onClick={() => {
                 if (day <= todaysDate) {
-                  // modifySingleDaySalah(day);
-                  // setShowModal(true);
+                  const formattedDate = format(day, "dd.MM.yy");
+                  setClickedDate(formattedDate);
+                  // showDailySalahData(clickedDate);
+                  sheShowDailySalahDataModal(true);
                 }
               }}
               key={uuidv4()}
@@ -385,15 +418,21 @@ const Calendar = ({
           ))}
         </div>
       </div>
-      <Modal
-        setShowModal={setShowModal}
-        showModal={showModal}
-        salahTrackingArray={salahTrackingArray}
-        setSalahTrackingArray={setSalahTrackingArray}
-        setCurrentWeek={setCurrentWeek}
-        currentWeek={currentWeek}
-        startDate={startDate}
-      />
+      <Sheet
+        // style={{ backgroundColor: "rgb(33, 36, 38)" }}
+        isOpen={showDailySalahDataModal}
+        onClose={() => sheShowDailySalahDataModal(false)}
+      >
+        <Sheet.Container>
+          <Sheet.Header />
+          <Sheet.Content>
+            <Sheet.Scroller>
+              <>{clickedDate ? showDailySalahData(clickedDate) : null}</>
+            </Sheet.Scroller>
+          </Sheet.Content>
+        </Sheet.Container>
+        <Sheet.Backdrop />
+      </Sheet>
     </div>
   );
 
