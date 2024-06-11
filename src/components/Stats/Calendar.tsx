@@ -8,7 +8,7 @@ import Sheet from "react-modal-sheet";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import Modal from "./Modal";
+// import Modal from "./Modal";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
@@ -28,7 +28,7 @@ const Calendar = ({
   // setShowCalendarOneMonth,
   // showCalendarOneMonth,
   userStartDate,
-  setSalahTrackingArray,
+  // setSalahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
   // startDate,
 } // currentWeek,
@@ -55,9 +55,13 @@ const Calendar = ({
     //   );
     // }
   });
-
+  salahTrackingArray;
   const [showDailySalahDataModal, sheShowDailySalahDataModal] = useState(false);
   const [clickedDate, setClickedDate] = useState<string>();
+
+  useEffect(() => {
+    setClickedDate(clickedDate);
+  }, [clickedDate]);
 
   // const getSingleMonthDivHeight = () => {
   //   // setSingleMonthDivHeight(e.target.clientHeight);
@@ -67,28 +71,21 @@ const Calendar = ({
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
+  const p = salahTrackingArray.map((item) => {
+    const array = item.completedDates;
+    console.log(Object.keys(item.completedDates[0])[0]);
+    return item;
+    // array.forEach((item) => console.log(item.notes));
+    // return item;
+  });
+  // console.log(p);
+
   function showDailySalahData(date: string) {
-    // console.log(date);
+    console.log(date);
     // console.log(salahTrackingArray);
     // for (let i = 0; i < salahTrackingArray.length; i++) {
     //   console.log(salahTrackingArray[i].completedDates);
     // }
-
-    salahTrackingArray.forEach((item) => {
-      // if (item.salahName === salah) {
-      for (let i = 0; i < item.completedDates.length; i++) {
-        console.log(item.completedDates[0]);
-        console.log(Object.keys(item.completedDates[i])[0]);
-        console.log(item.salahName);
-        if (Object.keys(item.completedDates[i])[0] === date) {
-          // console.log("TRUE");
-          // setSalahStatus(item.completedDates[i][tableRowDate].status);
-          // setSelectedReasons(item.completedDates[i][tableRowDate].reasons);
-          // setNotes(item.completedDates[i][tableRowDate].notes);
-        }
-      }
-      // }
-    });
 
     return (
       <div className="">
@@ -97,11 +94,11 @@ const Calendar = ({
           return (
             <div className="py-5 m-5">
               <div>{item.salahName}</div>
-              <div>
+              {/* <div>
                 {item.completedDates.map((item, index) => {
                   return <p>{item[date]}</p>;
                 })}
-              </div>
+              </div> */}
               <div>Reasons</div>
               <div>Notes</div>
             </div>
@@ -338,7 +335,9 @@ const Calendar = ({
               onClick={() => {
                 if (day <= todaysDate) {
                   const formattedDate = format(day, "dd.MM.yy");
+                  // setClickedDate(formattedDate);
                   setClickedDate(formattedDate);
+                  console.log("CLICKED DATE IS: " + clickedDate);
                   // showDailySalahData(clickedDate);
                   sheShowDailySalahDataModal(true);
                 }
@@ -424,11 +423,57 @@ const Calendar = ({
         onClose={() => sheShowDailySalahDataModal(false)}
       >
         <Sheet.Container>
-          <Sheet.Header />
-          <Sheet.Content>
-            <Sheet.Scroller>
-              <>{clickedDate ? showDailySalahData(clickedDate) : null}</>
-            </Sheet.Scroller>
+          <Sheet.Header className="bg-gray-700" />
+          <Sheet.Content className="bg-gray-700">
+            {/* <Sheet.Scroller> */}
+            {/* <>{clickedDate ? showDailySalahData(clickedDate) : null}</> */}
+            <section>
+              {salahTrackingArray.map((item) => {
+                // console.log(Object.keys(item.completedDates[0])[0]);
+                // console.log("CLICKED DATE:" + clickedDate);
+                const p = item.completedDates.map((item) => {
+                  // console.log(clickedDate);
+                  // console.log(Object.keys(item)[0]);
+                  // console.log(Object.keys(item)[0] === clickedDate);
+                  console.log("STATUS IS: ");
+                  console.log(item[Object.keys(item)[0]].status);
+                  if (Object.keys(item)[0] === clickedDate) {
+                    // console.log("STATUS IS: " + item[1].status);
+                  }
+                  Object.keys(item)[0] === clickedDate;
+                });
+                // console.log(p);
+
+                return (
+                  <div className="py-5 m-5">
+                    <div>{item.salahName}</div>
+                    <div>
+                      {item.completedDates.map((item) =>
+                        Object.keys(item)[0] === clickedDate
+                          ? item[Object.keys(item)[0]].status
+                          : "Date not filled"
+                      )}
+                    </div>
+                    <div>
+                      {item.completedDates.map((item) =>
+                        Object.keys(item)[0] === clickedDate
+                          ? item[Object.keys(item)[0]].reasons
+                          : "No reasons selected"
+                      )}
+                    </div>
+                    <div>
+                      {" "}
+                      {item.completedDates.map((item) =>
+                        Object.keys(item)[0] === clickedDate
+                          ? item[Object.keys(item)[0]].notes
+                          : "No notes entered"
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </section>
+            {/* </Sheet.Scroller> */}
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />

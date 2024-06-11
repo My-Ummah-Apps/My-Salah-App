@@ -18,9 +18,9 @@ const StatsPage = ({
   startDate,
   setSalahTrackingArray,
   salahTrackingArray,
-  setCurrentWeek,
-  currentWeek,
-}: {
+} // setCurrentWeek,
+// currentWeek,
+: {
   userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
@@ -162,8 +162,8 @@ const StatsPage = ({
         setSalahTrackingArray={setSalahTrackingArray}
         salahTrackingArray={salahTrackingArray}
         startDate={startDate}
-        setCurrentWeek={setCurrentWeek}
-        currentWeek={currentWeek}
+        // setCurrentWeek={setCurrentWeek}
+        // currentWeek={currentWeek}
       />{" "}
     </section>
   );
