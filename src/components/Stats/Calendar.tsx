@@ -11,6 +11,11 @@ import AutoSizer from "react-virtualized-auto-sizer";
 // import Modal from "./Modal";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { GoAlert, GoPerson } from "react-icons/go";
+import { GoPeople } from "react-icons/go";
+import { GoSkip } from "react-icons/go";
+import { GoClock } from "react-icons/go";
+import { PiFlower } from "react-icons/pi";
 
 import {
   format,
@@ -57,7 +62,7 @@ const Calendar = ({
   });
   salahTrackingArray;
   const [showDailySalahDataModal, sheShowDailySalahDataModal] = useState(false);
-  const [clickedDate, setClickedDate] = useState<string>();
+  const [clickedDate, setClickedDate] = useState<string>("");
 
   useEffect(() => {
     setClickedDate(clickedDate);
@@ -80,33 +85,33 @@ const Calendar = ({
   });
   // console.log(p);
 
-  function showDailySalahData(date: string) {
-    console.log(date);
-    // console.log(salahTrackingArray);
-    // for (let i = 0; i < salahTrackingArray.length; i++) {
-    //   console.log(salahTrackingArray[i].completedDates);
-    // }
+  // function showDailySalahData(date: string) {
+  //   console.log(date);
+  //   // console.log(salahTrackingArray);
+  //   // for (let i = 0; i < salahTrackingArray.length; i++) {
+  //   //   console.log(salahTrackingArray[i].completedDates);
+  //   // }
 
-    return (
-      <div className="">
-        <h1 className="mt-5 text-center">Stats for date...</h1>
-        {salahTrackingArray.map((item) => {
-          return (
-            <div className="py-5 m-5">
-              <div>{item.salahName}</div>
-              {/* <div>
-                {item.completedDates.map((item, index) => {
-                  return <p>{item[date]}</p>;
-                })}
-              </div> */}
-              <div>Reasons</div>
-              <div>Notes</div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
+  //   return (
+  //     <div className="">
+  //       <h1 className="mt-5 text-center">Stats for date...</h1>
+  //       {salahTrackingArray.map((item) => {
+  //         return (
+  //           <div className="py-5 m-5">
+  //             <div>{item.salahName}</div>
+  //             {/* <div>
+  //               {item.completedDates.map((item, index) => {
+  //                 return <p>{item[date]}</p>;
+  //               })}
+  //             </div> */}
+  //             <div>Reasons</div>
+  //             <div>Notes</div>
+  //           </div>
+  //         );
+  //       })}
+  //     </div>
+  //   );
+  // }
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
@@ -423,57 +428,128 @@ const Calendar = ({
         onClose={() => sheShowDailySalahDataModal(false)}
       >
         <Sheet.Container>
-          <Sheet.Header className="bg-gray-700" />
-          <Sheet.Content className="bg-gray-700">
-            {/* <Sheet.Scroller> */}
-            {/* <>{clickedDate ? showDailySalahData(clickedDate) : null}</> */}
-            <section>
-              {salahTrackingArray.map((item) => {
-                // console.log(Object.keys(item.completedDates[0])[0]);
-                // console.log("CLICKED DATE:" + clickedDate);
-                const p = item.completedDates.map((item) => {
-                  // console.log(clickedDate);
-                  // console.log(Object.keys(item)[0]);
-                  // console.log(Object.keys(item)[0] === clickedDate);
-                  console.log("STATUS IS: ");
-                  console.log(item[Object.keys(item)[0]].status);
-                  if (Object.keys(item)[0] === clickedDate) {
-                    // console.log("STATUS IS: " + item[1].status);
-                  }
-                  Object.keys(item)[0] === clickedDate;
-                });
-                // console.log(p);
+          <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
+          <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+            <Sheet.Scroller>
+              {/* <>{clickedDate ? showDailySalahData(clickedDate) : null}</> */}
+              <section>
+                {salahTrackingArray.map((item) => {
+                  // console.log(item.completedDates);
+                  // // console.log(Object.keys(item.completedDates[0])[0]);
+                  // // console.log("CLICKED DATE:" + clickedDate);
+                  // const p = item.completedDates.map((item) => {
+                  //   // console.log(clickedDate);
+                  //   // console.log(Object.keys(item)[0]);
+                  //   // console.log(Object.keys(item)[0] === clickedDate);
+                  //   console.log("STATUS IS: ");
+                  //   console.log(item[Object.keys(item)[0]].status);
+                  //   if (Object.keys(item)[0] === clickedDate) {
+                  //     // console.log("STATUS IS: " + item[1].status);
+                  //   }
+                  //   Object.keys(item)[0] === clickedDate;
+                  // });
+                  // console.log(p);
 
-                return (
-                  <div className="py-5 m-5">
-                    <div>{item.salahName}</div>
-                    <div>
-                      {item.completedDates.map((item) =>
-                        Object.keys(item)[0] === clickedDate
-                          ? item[Object.keys(item)[0]].status
-                          : "Date not filled"
-                      )}
+                  return (
+                    <div className="py-5 m-5">
+                      <h2 className="mb-10 text-2xl text-center">
+                        {item.salahName}
+                      </h2>
+                      <div className="">
+                        {item.completedDates.map(
+                          (item) => {
+                            const iconStyles =
+                              "px-20 py-2 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-row items-center justify-around w-full";
+                            const storedDate = Object.keys(item)[0];
+                            const status = item[storedDate].status;
+                            if (storedDate === clickedDate) {
+                              if (status === "group") {
+                                return (
+                                  // <div className={`${iconStyles}`}>
+                                  <div
+                                    className={`${iconStyles} bg-[color:var(--jamaah-status-color)]`}
+                                  >
+                                    <GoPeople />{" "}
+                                  </div>
+                                );
+                              } else if (status === "male-alone") {
+                                return (
+                                  <div
+                                    className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
+                                  >
+                                    <GoPerson />
+                                  </div>
+                                );
+                              } else if (status === "female-alone") {
+                                return (
+                                  <div
+                                    className={`${iconStyles} bg-[color:var(--alone-female-status-color)]`}
+                                  >
+                                    <GoPerson />
+                                  </div>
+                                );
+                              } else if (status === "late") {
+                                return (
+                                  <div
+                                    className={`${iconStyles} bg-[color:var(--late-status-color)]`}
+                                  >
+                                    {" "}
+                                    <GoSkip />{" "}
+                                  </div>
+                                );
+                              } else if (status === "missed") {
+                                return (
+                                  <div
+                                    className={`${iconStyles} bg-[color:var(--missed-status-color)]`}
+                                  >
+                                    <GoAlert />{" "}
+                                  </div>
+                                );
+                              } else if (status === "excused") {
+                                return (
+                                  <div
+                                    className={`${iconStyles} bg-[color:var(--excused-status-color)]`}
+                                  >
+                                    {" "}
+                                    <PiFlower />{" "}
+                                  </div>
+                                );
+                              }
+                            }
+                          }
+                          // ? item[Object.keys(item)[0]].status === "group" ? <GoPeople />
+                          // : null
+                        )}
+                      </div>
+
+                      <div>
+                        {/* {item.completedDates.map((item) =>
+                          Object.keys(item)[0] === clickedDate
+                            ? item[Object.keys(item)[0]].reasons
+                            : null
+                        )} */}
+                        <p>Reasons:</p>
+                        <p>
+                          {item.completedDates.map((item) => {
+                            if (Object.keys(item)[0] === clickedDate) {
+                              return " " + item[Object.keys(item)[0]].reasons;
+                            }
+                          })}
+                        </p>
+                      </div>
+                      <div>
+                        Notes:
+                        {item.completedDates.map((item) =>
+                          Object.keys(item)[0] === clickedDate
+                            ? item[Object.keys(item)[0]].notes
+                            : null
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      {item.completedDates.map((item) =>
-                        Object.keys(item)[0] === clickedDate
-                          ? item[Object.keys(item)[0]].reasons
-                          : "No reasons selected"
-                      )}
-                    </div>
-                    <div>
-                      {" "}
-                      {item.completedDates.map((item) =>
-                        Object.keys(item)[0] === clickedDate
-                          ? item[Object.keys(item)[0]].notes
-                          : "No notes entered"
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </section>
-            {/* </Sheet.Scroller> */}
+                  );
+                })}
+              </section>
+            </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />
