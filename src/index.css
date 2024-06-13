@@ -21,7 +21,7 @@
   /* --card-bg-color: rgb(42, 47, 50); */
   --card-bg-color: rgb(41, 41, 44);
   --card-shadow-color: rgb(31, 35, 36);
-
+  --border-bottom-color: rgb(54, 49, 49);
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
   /* --late-status-color: #a95223; */
@@ -58,7 +58,7 @@ body {
 }
 
 td {
-  border-bottom: 1px solid rgb(54, 49, 49) !important;
+  border-bottom: var(--border-bottom-color) !important;
   /* vertical-align: top; */
 }
 

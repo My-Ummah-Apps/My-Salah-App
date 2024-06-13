@@ -35,8 +35,8 @@ const Calendar = ({
   userStartDate,
   // setSalahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
-  // startDate,
-} // currentWeek,
+  // currentWeek,
+} // startDate,
 : {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
@@ -432,7 +432,7 @@ const Calendar = ({
           <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
             <Sheet.Scroller>
               {/* <>{clickedDate ? showDailySalahData(clickedDate) : null}</> */}
-              <section>
+              <section className="mb-20 sheet-content-wrap">
                 {salahTrackingArray.map((item) => {
                   // console.log(item.completedDates);
                   // // console.log(Object.keys(item.completedDates[0])[0]);
@@ -451,15 +451,13 @@ const Calendar = ({
                   // console.log(p);
 
                   return (
-                    <div className="py-5 m-5">
-                      <h2 className="mb-10 text-2xl text-center">
-                        {item.salahName}
-                      </h2>
-                      <div className="">
-                        {item.completedDates.map(
-                          (item) => {
+                    <div className="py-2 m-5 salah-name-status-notes-and-reasons-wrap border-[var(--border-bottom-color)] border-b">
+                      <div className="flex items-center justify-around mb-6 salah-name-and-icon-wrap">
+                        <h2 className="w-2/3 text-xl">{item.salahName}</h2>
+                        <div className="flex w-full">
+                          {item.completedDates.map((item) => {
                             const iconStyles =
-                              "px-20 py-2 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-row items-center justify-around w-full";
+                              "grow p-3 icon-and-text-wrap rounded-3xl flex flex-row items-center justify-center";
                             const storedDate = Object.keys(item)[0];
                             const status = item[storedDate].status;
                             if (storedDate === clickedDate) {
@@ -470,6 +468,7 @@ const Calendar = ({
                                     className={`${iconStyles} bg-[color:var(--jamaah-status-color)]`}
                                   >
                                     <GoPeople />{" "}
+                                    <p className="ml-2">Prayed in Jamaah</p>
                                   </div>
                                 );
                               } else if (status === "male-alone") {
@@ -478,6 +477,7 @@ const Calendar = ({
                                     className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
                                   >
                                     <GoPerson />
+                                    <p className="ml-2">Prayed Alone</p>
                                   </div>
                                 );
                               } else if (status === "female-alone") {
@@ -486,6 +486,7 @@ const Calendar = ({
                                     className={`${iconStyles} bg-[color:var(--alone-female-status-color)]`}
                                   >
                                     <GoPerson />
+                                    <p className="ml-2">Prayed Alone</p>
                                   </div>
                                 );
                               } else if (status === "late") {
@@ -495,6 +496,7 @@ const Calendar = ({
                                   >
                                     {" "}
                                     <GoSkip />{" "}
+                                    <p className="ml-2">Prayed late</p>
                                   </div>
                                 );
                               } else if (status === "missed") {
@@ -502,7 +504,7 @@ const Calendar = ({
                                   <div
                                     className={`${iconStyles} bg-[color:var(--missed-status-color)]`}
                                   >
-                                    <GoAlert />{" "}
+                                    <GoSkip /> <p className="ml-2">Missed</p>
                                   </div>
                                 );
                               } else if (status === "excused") {
@@ -511,40 +513,33 @@ const Calendar = ({
                                     className={`${iconStyles} bg-[color:var(--excused-status-color)]`}
                                   >
                                     {" "}
-                                    <PiFlower />{" "}
+                                    <PiFlower /> <p className="ml-2">Excused</p>
                                   </div>
                                 );
                               }
                             }
-                          }
-                          // ? item[Object.keys(item)[0]].status === "group" ? <GoPeople />
-                          // : null
-                        )}
-                      </div>
-
-                      <div>
-                        {/* {item.completedDates.map((item) =>
-                          Object.keys(item)[0] === clickedDate
-                            ? item[Object.keys(item)[0]].reasons
-                            : null
-                        )} */}
-                        <p>Reasons:</p>
-                        <p>
-                          {item.completedDates.map((item) => {
-                            if (Object.keys(item)[0] === clickedDate) {
-                              return " " + item[Object.keys(item)[0]].reasons;
-                            }
                           })}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm">
+                          {item.completedDates.map((item) =>
+                            Object.keys(item)[0] === clickedDate &&
+                            item[Object.keys(item)[0]].reasons.length > 0
+                              ? "Reason(s): " +
+                                item[Object.keys(item)[0]].reasons.join(", ")
+                              : null
+                          )}
                         </p>
                       </div>
-                      <div>
-                        Notes:
+                      <p className="text-sm">
                         {item.completedDates.map((item) =>
-                          Object.keys(item)[0] === clickedDate
-                            ? item[Object.keys(item)[0]].notes
+                          Object.keys(item)[0] === clickedDate &&
+                          item[Object.keys(item)[0]].notes.length > 0
+                            ? "Notes: " + item[Object.keys(item)[0]].notes
                             : null
                         )}
-                      </div>
+                      </p>
                     </div>
                   );
                 })}
