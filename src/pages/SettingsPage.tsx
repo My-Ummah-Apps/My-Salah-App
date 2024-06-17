@@ -123,14 +123,14 @@ const SettingsPage = ({
             link("https://myummahapps.com/");
           }}
         />
-        <SettingIndividual
+        {/* <SettingIndividual
           indvidualStyles="rounded-b-md"
           headingText={"About"}
           subText={"About us"}
           onClick={() => {
             // handleOpenModal4();
           }}
-        />
+        /> */}
         <Modal
           //   style={modalStyles}
           isOpen={showModal}

@@ -400,13 +400,6 @@ const Calendar = ({
           ))}
         </div>
       </div>
-
-      <CalenderSheet
-        setShowDailySalahDataModal={setShowDailySalahDataModal}
-        showDailySalahDataModal={showDailySalahDataModal}
-        salahTrackingArray={salahTrackingArray}
-        clickedDate={clickedDate}
-      />
     </div>
   );
 
@@ -415,23 +408,31 @@ const Calendar = ({
     //   // style={{ height: singleMonthDivHeight }}
     //   className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md"
     // >
-    <AutoSizer disableHeight className="auto-sizer">
-      {({ width }) => (
-        <List
-          // style={{ borderRadius: "0.5rem" }}
-          className="list rounded-2xl"
-          // height={330}
-          height={370}
-          itemCount={monthsBetween.length}
-          itemSize={300}
-          layout="horizontal"
-          width={width}
-          direction="rtl"
-        >
-          {Column}
-        </List>
-      )}
-    </AutoSizer>
+    <>
+      <AutoSizer disableHeight className="auto-sizer">
+        {({ width }) => (
+          <List
+            // style={{ borderRadius: "0.5rem" }}
+            className="list rounded-2xl"
+            // height={330}
+            height={370}
+            itemCount={monthsBetween.length}
+            itemSize={300}
+            layout="horizontal"
+            width={width}
+            direction="rtl"
+          >
+            {Column}
+          </List>
+        )}
+      </AutoSizer>
+      <CalenderSheet
+        setShowDailySalahDataModal={setShowDailySalahDataModal}
+        showDailySalahDataModal={showDailySalahDataModal}
+        salahTrackingArray={salahTrackingArray}
+        clickedDate={clickedDate}
+      />
+    </>
     // </div>
   );
 };
