@@ -7,7 +7,7 @@ import { GoSkip } from "react-icons/go";
 import { PiFlower } from "react-icons/pi";
 import { salahTrackingEntryType } from "../../types/types";
 
-const CalenderSheet = ({
+const DailyOverviewBottomSheet = ({
   salahTrackingArray,
   showDailySalahDataModal,
   setShowDailySalahDataModal,
@@ -24,7 +24,9 @@ const CalenderSheet = ({
   //   useEffect(() => {
   //     setClickedDate(clickedDate);
   //   }, [clickedDate]);
-
+  let datesExists;
+  const iconStyles =
+    "grow p-3 icon-and-text-wrap rounded-3xl flex flex-row items-center justify-center";
   return (
     <div className="">
       <Sheet
@@ -41,6 +43,7 @@ const CalenderSheet = ({
             <Sheet.Scroller>
               <section className="mb-20 sheet-content-wrap">
                 {salahTrackingArray.map((item) => {
+                  datesExists = false;
                   return (
                     <div
                       key={uuidv4()}
@@ -50,15 +53,12 @@ const CalenderSheet = ({
                         <h2 className="w-2/3 text-xl">{item.salahName}</h2>
                         <div className="flex w-full">
                           {item.completedDates.map((item) => {
-                            const iconStyles =
-                              "grow p-3 icon-and-text-wrap rounded-3xl flex flex-row items-center justify-center";
                             const storedDate = Object.keys(item)[0];
                             const status = item[storedDate].status;
-                            console.log(Object.keys(item)[0]);
-                            if (item.completedDates) {
-                            }
+                            console.log(Object.keys(item));
 
                             if (storedDate === clickedDate) {
+                              datesExists = true;
                               if (status === "group") {
                                 return (
                                   <div
@@ -122,6 +122,15 @@ const CalenderSheet = ({
                               }
                             }
                           })}
+                          {datesExists === false ? (
+                            <div
+                              key={uuidv4()}
+                              className={`${iconStyles} bg-gray-600`}
+                            >
+                              {" "}
+                              <p className="ml-2">No Status Provided</p>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                       <div>
@@ -157,4 +166,4 @@ const CalenderSheet = ({
   );
 };
 
-export default CalenderSheet;
+export default DailyOverviewBottomSheet;

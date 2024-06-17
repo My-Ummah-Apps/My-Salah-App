@@ -4,7 +4,7 @@ import { CSSProperties } from "react";
 
 // import { List, Grid } from "react-virtualized";
 // import CalendarMonthly from "./CalendarMonthly";
-import Sheet from "react-modal-sheet";
+
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
@@ -13,10 +13,7 @@ import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 // import { GoAlert } from "react-icons/go";
-import { GoPerson } from "react-icons/go";
-import { GoPeople } from "react-icons/go";
-import { GoSkip } from "react-icons/go";
-import { PiFlower } from "react-icons/pi";
+
 // import { GoClock } from "react-icons/go";
 
 import {
@@ -30,7 +27,7 @@ import {
   eachMonthOfInterval,
   // setMonth,
 } from "date-fns";
-import CalenderSheet from "./CalenderSheet";
+import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 
 const Calendar = ({
   // setShowCalendarOneMonth,
@@ -426,7 +423,7 @@ const Calendar = ({
           </List>
         )}
       </AutoSizer>
-      <CalenderSheet
+      <DailyOverviewBottomSheet
         setShowDailySalahDataModal={setShowDailySalahDataModal}
         showDailySalahDataModal={showDailySalahDataModal}
         salahTrackingArray={salahTrackingArray}
