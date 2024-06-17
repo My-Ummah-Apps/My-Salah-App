@@ -11,11 +11,13 @@ import AutoSizer from "react-virtualized-auto-sizer";
 // import Modal from "./Modal";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { GoAlert, GoPerson } from "react-icons/go";
+
+// import { GoAlert } from "react-icons/go";
+import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
-import { GoClock } from "react-icons/go";
 import { PiFlower } from "react-icons/pi";
+// import { GoClock } from "react-icons/go";
 
 import {
   format,
@@ -28,6 +30,7 @@ import {
   eachMonthOfInterval,
   // setMonth,
 } from "date-fns";
+import CalenderSheet from "./CalenderSheet";
 
 const Calendar = ({
   // setShowCalendarOneMonth,
@@ -35,8 +38,8 @@ const Calendar = ({
   userStartDate,
   // setSalahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
-  // currentWeek,
-} // startDate,
+  // startDate,
+} // currentWeek,
 : {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
@@ -61,12 +64,13 @@ const Calendar = ({
     // }
   });
   salahTrackingArray;
-  const [showDailySalahDataModal, sheShowDailySalahDataModal] = useState(false);
+  const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
+  console.log(showDailySalahDataModal);
   const [clickedDate, setClickedDate] = useState<string>("");
 
-  useEffect(() => {
-    setClickedDate(clickedDate);
-  }, [clickedDate]);
+  // useEffect(() => {
+  //   setClickedDate(clickedDate);
+  // }, [clickedDate]);
 
   // const getSingleMonthDivHeight = () => {
   //   // setSingleMonthDivHeight(e.target.clientHeight);
@@ -76,42 +80,14 @@ const Calendar = ({
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
-  const p = salahTrackingArray.map((item) => {
-    const array = item.completedDates;
-    console.log(Object.keys(item.completedDates[0])[0]);
-    return item;
-    // array.forEach((item) => console.log(item.notes));
-    // return item;
-  });
+  // const p = salahTrackingArray.map((item) => {
+  //   const array = item.completedDates;
+  //   // console.log(Object.keys(item.completedDates[0])[0]);
+  //   return item;
+  //   // array.forEach((item) => console.log(item.notes));
+  //   // return item;
+  // });
   // console.log(p);
-
-  // function showDailySalahData(date: string) {
-  //   console.log(date);
-  //   // console.log(salahTrackingArray);
-  //   // for (let i = 0; i < salahTrackingArray.length; i++) {
-  //   //   console.log(salahTrackingArray[i].completedDates);
-  //   // }
-
-  //   return (
-  //     <div className="">
-  //       <h1 className="mt-5 text-center">Stats for date...</h1>
-  //       {salahTrackingArray.map((item) => {
-  //         return (
-  //           <div className="py-5 m-5">
-  //             <div>{item.salahName}</div>
-  //             {/* <div>
-  //               {item.completedDates.map((item, index) => {
-  //                 return <p>{item[date]}</p>;
-  //               })}
-  //             </div> */}
-  //             <div>Reasons</div>
-  //             <div>Notes</div>
-  //           </div>
-  //         );
-  //       })}
-  //     </div>
-  //   );
-  // }
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
@@ -340,11 +316,13 @@ const Calendar = ({
               onClick={() => {
                 if (day <= todaysDate) {
                   const formattedDate = format(day, "dd.MM.yy");
-                  // setClickedDate(formattedDate);
+
                   setClickedDate(formattedDate);
-                  console.log("CLICKED DATE IS: " + clickedDate);
+                  // console.log("CLICKED DATE IS: " + clickedDate);
                   // showDailySalahData(clickedDate);
-                  sheShowDailySalahDataModal(true);
+                  setShowDailySalahDataModal(true);
+                  // console.log(showDailySalahDataModal);
+                  console.log("TRIGGERED");
                 }
               }}
               key={uuidv4()}
@@ -422,133 +400,13 @@ const Calendar = ({
           ))}
         </div>
       </div>
-      <Sheet
-        // style={{ backgroundColor: "rgb(33, 36, 38)" }}
-        isOpen={showDailySalahDataModal}
-        onClose={() => sheShowDailySalahDataModal(false)}
-      >
-        <Sheet.Container>
-          <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
-          <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
-            <Sheet.Scroller>
-              {/* <>{clickedDate ? showDailySalahData(clickedDate) : null}</> */}
-              <section className="mb-20 sheet-content-wrap">
-                {salahTrackingArray.map((item) => {
-                  // console.log(item.completedDates);
-                  // // console.log(Object.keys(item.completedDates[0])[0]);
-                  // // console.log("CLICKED DATE:" + clickedDate);
-                  // const p = item.completedDates.map((item) => {
-                  //   // console.log(clickedDate);
-                  //   // console.log(Object.keys(item)[0]);
-                  //   // console.log(Object.keys(item)[0] === clickedDate);
-                  //   console.log("STATUS IS: ");
-                  //   console.log(item[Object.keys(item)[0]].status);
-                  //   if (Object.keys(item)[0] === clickedDate) {
-                  //     // console.log("STATUS IS: " + item[1].status);
-                  //   }
-                  //   Object.keys(item)[0] === clickedDate;
-                  // });
-                  // console.log(p);
 
-                  return (
-                    <div className="py-2 m-5 salah-name-status-notes-and-reasons-wrap border-[var(--border-bottom-color)] border-b">
-                      <div className="flex items-center justify-around mb-6 salah-name-and-icon-wrap">
-                        <h2 className="w-2/3 text-xl">{item.salahName}</h2>
-                        <div className="flex w-full">
-                          {item.completedDates.map((item) => {
-                            const iconStyles =
-                              "grow p-3 icon-and-text-wrap rounded-3xl flex flex-row items-center justify-center";
-                            const storedDate = Object.keys(item)[0];
-                            const status = item[storedDate].status;
-                            if (storedDate === clickedDate) {
-                              if (status === "group") {
-                                return (
-                                  // <div className={`${iconStyles}`}>
-                                  <div
-                                    className={`${iconStyles} bg-[color:var(--jamaah-status-color)]`}
-                                  >
-                                    <GoPeople />{" "}
-                                    <p className="ml-2">Prayed in Jamaah</p>
-                                  </div>
-                                );
-                              } else if (status === "male-alone") {
-                                return (
-                                  <div
-                                    className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
-                                  >
-                                    <GoPerson />
-                                    <p className="ml-2">Prayed Alone</p>
-                                  </div>
-                                );
-                              } else if (status === "female-alone") {
-                                return (
-                                  <div
-                                    className={`${iconStyles} bg-[color:var(--alone-female-status-color)]`}
-                                  >
-                                    <GoPerson />
-                                    <p className="ml-2">Prayed Alone</p>
-                                  </div>
-                                );
-                              } else if (status === "late") {
-                                return (
-                                  <div
-                                    className={`${iconStyles} bg-[color:var(--late-status-color)]`}
-                                  >
-                                    {" "}
-                                    <GoSkip />{" "}
-                                    <p className="ml-2">Prayed late</p>
-                                  </div>
-                                );
-                              } else if (status === "missed") {
-                                return (
-                                  <div
-                                    className={`${iconStyles} bg-[color:var(--missed-status-color)]`}
-                                  >
-                                    <GoSkip /> <p className="ml-2">Missed</p>
-                                  </div>
-                                );
-                              } else if (status === "excused") {
-                                return (
-                                  <div
-                                    className={`${iconStyles} bg-[color:var(--excused-status-color)]`}
-                                  >
-                                    {" "}
-                                    <PiFlower /> <p className="ml-2">Excused</p>
-                                  </div>
-                                );
-                              }
-                            }
-                          })}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm">
-                          {item.completedDates.map((item) =>
-                            Object.keys(item)[0] === clickedDate &&
-                            item[Object.keys(item)[0]].reasons.length > 0
-                              ? "Reason(s): " +
-                                item[Object.keys(item)[0]].reasons.join(", ")
-                              : null
-                          )}
-                        </p>
-                      </div>
-                      <p className="text-sm">
-                        {item.completedDates.map((item) =>
-                          Object.keys(item)[0] === clickedDate &&
-                          item[Object.keys(item)[0]].notes.length > 0
-                            ? "Notes: " + item[Object.keys(item)[0]].notes
-                            : null
-                        )}
-                      </p>
-                    </div>
-                  );
-                })}
-              </section>
-            </Sheet.Scroller>
-          </Sheet.Content>
-        </Sheet.Container>
-        <Sheet.Backdrop />
-      </Sheet>
+      <CalenderSheet
+        setShowDailySalahDataModal={setShowDailySalahDataModal}
+        showDailySalahDataModal={showDailySalahDataModal}
+        salahTrackingArray={salahTrackingArray}
+        clickedDate={clickedDate}
+      />
     </div>
   );
 
@@ -560,8 +418,8 @@ const Calendar = ({
     <AutoSizer disableHeight className="auto-sizer">
       {({ width }) => (
         <List
-          style={{ borderRadius: "0.5rem" }}
-          className="list"
+          // style={{ borderRadius: "0.5rem" }}
+          className="list rounded-2xl"
           // height={330}
           height={370}
           itemCount={monthsBetween.length}

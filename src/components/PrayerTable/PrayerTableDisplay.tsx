@@ -171,6 +171,7 @@ const PrayerTableDisplay = ({
   generateDisplayedWeek();
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+  console.log(showUpdateStatusModal);
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
@@ -448,10 +449,7 @@ const PrayerTableDisplay = ({
   };
 
   return (
-    // Below touchevents cause an issue with onclicks further down the DOM tree not working on iOS devices
-    // <section onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
     <section className="relative">
-      {/*  bottom-12 */}
       <div className="sheet-prayer-update-wrap">
         <Sheet
           // rootId="root"
@@ -461,9 +459,6 @@ const PrayerTableDisplay = ({
             setHasUserClickedDate(false);
           }}
           detent="content-height"
-          // transition={{ duration: 100, type: "tween" }}
-          // animate={{ rotate: 360 }}
-          // transition={{ duration: 2 }}
           tweenConfig={{ ease: "easeOut", duration: 0.3 }} // Adjust duration to slow down or speed up the animation
         >
           <Sheet.Container
@@ -717,8 +712,7 @@ const PrayerTableDisplay = ({
               </Sheet.Scroller>
             </Sheet.Content>
           </Sheet.Container>
-          <Sheet.Backdrop />
-          <Sheet.Backdrop />
+          <Sheet.Backdrop onTap={close} />
         </Sheet>
       </div>
 

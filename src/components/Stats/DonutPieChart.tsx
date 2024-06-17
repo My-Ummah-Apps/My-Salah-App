@@ -99,7 +99,7 @@ const DonutPieChart = ({
           prayerStatusColors.missedStatusColor,
         ];
   return (
-    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-lg py-2 ">
+    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2 ">
       <ResponsiveContainer className="" width="60%" height="100%">
         <PieChart width={400} height={400}>
           <Pie

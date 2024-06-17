@@ -88,7 +88,7 @@ const App = () => {
     if (betaAppVersion !== storedBetaAppVersion) {
       localStorage.setItem("storedBetaAppVersion", betaAppVersion);
       alert(
-        "Beta Version 1.0.8 Changelog:\n\n - Added notifications option within the settings page, please test it out and let me know if you encounter any issues / have any feedback.\n\n As usual, any other issues / bugs etc drop me a message.\n\n Jazakallahu Khair"
+        "Beta Version 1.0.9 Changelog:\n\n -FEATURE: Selecting a calender date now shows daily performance for that date + notes and reasons (if they were entered)\n\n Beta Version 1.0.8 Changelog:\n\n - Added notifications option within the settings page, please test it out and let me know if you encounter any issues / have any feedback.\n\n As usual, any other issues / bugs etc drop me a message.\n\n Jazakallahu Khair"
       );
     }
   }, []);
