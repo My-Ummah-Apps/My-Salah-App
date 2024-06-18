@@ -11,6 +11,7 @@ import { subDays, format } from "date-fns";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
+
 // import { Keyboard } from "@capacitor/keyboard";
 
 // interface salahTrackingEntryType {
