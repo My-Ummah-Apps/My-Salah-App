@@ -2,19 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { salahTrackingEntryType } from "../../types/types";
 import { CSSProperties } from "react";
 
-// import { List, Grid } from "react-virtualized";
-// import CalendarMonthly from "./CalendarMonthly";
-
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-// import Modal from "./Modal";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
-
-// import { GoAlert } from "react-icons/go";
-
-// import { GoClock } from "react-icons/go";
 
 import {
   format,
@@ -36,8 +28,7 @@ const Calendar = ({
   // setSalahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
   // startDate,
-} // currentWeek,
-: {
+}: {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
   userStartDate: string;
