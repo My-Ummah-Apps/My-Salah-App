@@ -171,7 +171,6 @@ const PrayerTableDisplay = ({
   generateDisplayedWeek();
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  console.log(showUpdateStatusModal);
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
@@ -188,7 +187,7 @@ const PrayerTableDisplay = ({
   const handleNotes = (e: any) => {
     setNotes(e.target.value);
   };
-  console.log(salahStatus);
+
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);
     // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);

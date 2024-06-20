@@ -11,6 +11,9 @@ import { subDays, format } from "date-fns";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
+// import { initialiseDatabase } from "./utils/SQLiteService";
+import useSQLiteDB from "./utils/useSqLiteDB";
+import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
 
 // import { Keyboard } from "@capacitor/keyboard";
 
@@ -26,9 +29,31 @@ import SettingsPage from "./pages/SettingsPage";
 // import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
 import QiblahDirection from "./pages/QiblahDirection";
+import { platform } from "os";
+import { CapacitorSQLite, SQLiteConnection } from "@capacitor-community/sqlite";
 // import StreakCount from "./components/Stats/StreakCount";
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    if (Capacitor.getPlatform() === "web") {
+      const sqlite = new SQLiteConnection(CapacitorSQLite);
+      customElements.define("jeep-sqlite", JeepSqlite);
+      const JeepSqliteEl = document.createElement("jeep-sqlite");
+      document.body.appendChild(JeepSqliteEl);
+      await customElements.whenDefined("jeep-sqlite");
+      console.log(`after customElements.whenDefined`);
+
+      // Initialize the web store
+      await sqlite.initWebStore();
+      console.log(`after initWebStore`);
+
+      // initialiseDatabase();
+    }
+  } catch (error) {
+    console.log("ERROR IMPLEMENTING DB ON WEB: " + error);
+  }
+  // Web specific functionality for database - this is for easier debugging in the browser
+
   if (Capacitor.isNativePlatform()) {
     // STATUS BAR FUNCTIONALITY
 
