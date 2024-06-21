@@ -13,7 +13,7 @@ import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 // import { initialiseDatabase } from "./utils/SQLiteService";
 import useSQLiteDB from "./utils/useSqLiteDB";
-import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
+// import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
 
 // import { Keyboard } from "@capacitor/keyboard";
 
@@ -28,30 +28,33 @@ import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 // import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
-import QiblahDirection from "./pages/QiblahDirection";
-import { platform } from "os";
-import { CapacitorSQLite, SQLiteConnection } from "@capacitor-community/sqlite";
+// import QiblahDirection from "./pages/QiblahDirection";
+// import { platform } from "os";
+import {
+  // CapacitorSQLite,
+  // SQLiteConnection,
+  SQLiteDBConnection,
+} from "@capacitor-community/sqlite";
 // import StreakCount from "./components/Stats/StreakCount";
 
 window.addEventListener("DOMContentLoaded", async () => {
-  try {
-    if (Capacitor.getPlatform() === "web") {
-      const sqlite = new SQLiteConnection(CapacitorSQLite);
-      customElements.define("jeep-sqlite", JeepSqlite);
-      const JeepSqliteEl = document.createElement("jeep-sqlite");
-      document.body.appendChild(JeepSqliteEl);
-      await customElements.whenDefined("jeep-sqlite");
-      console.log(`after customElements.whenDefined`);
+  // try {
+  //   if (Capacitor.getPlatform() === "web") {
+  //     const sqlite = new SQLiteConnection(CapacitorSQLite);
+  //     // Create the 'jeep-sqlite' Stencil component
+  //     customElements.define("jeep-sqlite", JeepSqlite);
+  //     const jeepSqliteEl = document.createElement("jeep-sqlite");
+  //     document.body.appendChild(jeepSqliteEl);
+  //     await customElements.whenDefined("jeep-sqlite");
+  //     console.log(`after customElements.whenDefined`);
 
-      // Initialize the web store
-      await sqlite.initWebStore();
-      console.log(`after initWebStore`);
-
-      // initialiseDatabase();
-    }
-  } catch (error) {
-    console.log("ERROR IMPLEMENTING DB ON WEB: " + error);
-  }
+  //     // Initialize the Web store
+  //     await sqlite.initWebStore();
+  //     console.log(`after initWebStore`);
+  //   }
+  // } catch (error) {
+  //   console.log("ERROR IMPLEMENTING DB ON WEB: " + error);
+  // }
   // Web specific functionality for database - this is for easier debugging in the browser
 
   if (Capacitor.isNativePlatform()) {
@@ -106,6 +109,27 @@ if (Capacitor.isNativePlatform()) {
 }
 
 const App = () => {
+  // hook for sqlite db
+  const { performSQLAction, databaseInitialised } = useSQLiteDB();
+
+  useEffect(() => {
+    loadData();
+  }, [databaseInitialised]);
+
+  const loadData = async () => {
+    try {
+      // query db
+      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
+        // @ts-ignore
+        const respSelect = await db?.query(`SELECT * FROM db_salah-tracking`);
+        // put a usestate here to set the items
+      });
+    } catch (error) {
+      alert((error as Error).message);
+      // Put a usestate here such as setItems([]);
+    }
+  };
+
   // CHANGELOG FUNCTIONALITY
   const betaAppVersion = "1.0.8";
 
@@ -358,7 +382,7 @@ const App = () => {
               />
             }
           />
-          <Route
+          {/* <Route
             path="/QiblahDirection"
             element={
               <QiblahDirection
@@ -367,7 +391,7 @@ const App = () => {
                 pageStyles={pageStyles}
               />
             }
-          />
+          /> */}
         </Routes>
         <Sheet
           isOpen={showIntroModal}
