@@ -12,7 +12,7 @@ import { subDays, format } from "date-fns";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 // import { initialiseDatabase } from "./utils/SQLiteService";
-import useSQLiteDB from "./utils/useSqLiteDB";
+
 // import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
 
 // import { Keyboard } from "@capacitor/keyboard";
@@ -30,11 +30,11 @@ import SettingsPage from "./pages/SettingsPage";
 import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
 // import { platform } from "os";
-import {
-  // CapacitorSQLite,
-  // SQLiteConnection,
-  SQLiteDBConnection,
-} from "@capacitor-community/sqlite";
+// import {
+//   // CapacitorSQLite,
+//   // SQLiteConnection,
+//   SQLiteDBConnection,
+// } from "@capacitor-community/sqlite";
 // import StreakCount from "./components/Stats/StreakCount";
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -110,25 +110,7 @@ if (Capacitor.isNativePlatform()) {
 
 const App = () => {
   // hook for sqlite db
-  const { performSQLAction, databaseInitialised } = useSQLiteDB();
-
-  useEffect(() => {
-    loadData();
-  }, [databaseInitialised]);
-
-  const loadData = async () => {
-    try {
-      // query db
-      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
-        // @ts-ignore
-        const respSelect = await db?.query(`SELECT * FROM db_salah-tracking`);
-        // put a usestate here to set the items
-      });
-    } catch (error) {
-      alert((error as Error).message);
-      // Put a usestate here such as setItems([]);
-    }
-  };
+  // const { performSQLAction, databaseInitialised } = useSQLiteDB();
 
   // CHANGELOG FUNCTIONALITY
   const betaAppVersion = "1.0.8";

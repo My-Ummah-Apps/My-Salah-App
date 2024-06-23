@@ -7,6 +7,8 @@ AutoSizer;
 import { Capacitor } from "@capacitor/core";
 // import { Keyboard } from "@capacitor/keyboard";
 import Sheet from "react-modal-sheet";
+import useSQLiteDB from "../../utils/useSqLiteDB";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
 // import ReactModal from "react-modal";
@@ -41,10 +43,31 @@ const PrayerTableDisplay = ({
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
 }) => {
+  const { performSQLAction, databaseInitialised } = useSQLiteDB();
   const sheetRef = useRef<HTMLDivElement>(null);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    loadData();
+  }, [databaseInitialised]);
+
+  const loadData = async () => {
+    try {
+      // query db
+      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
+        // @ts-ignore
+        const respSelect = await db?.query(`SELECT * FROM salahtrackingtable`);
+        console.log();
+        // put a usestate here to set the items
+      });
+    } catch (error) {
+      alert((error as Error).message);
+      console.log("ERROR IS COMING FROM LINE 67 in PrayerTableDisplay.tsx");
+      // Put a usestate here such as setItems([]);
+    }
+  };
 
   if (Capacitor.getPlatform() === "ios") {
     Keyboard.setResizeMode({
@@ -213,6 +236,46 @@ const PrayerTableDisplay = ({
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
   //   useState(false);
 
+  const doesSalahAndDateExists = async (
+    salah: string,
+    formattedDate: string
+  ): Promise<boolean> => {
+    let doesSalahAndDateExistsResult = false;
+    try {
+      await performSQLAction(
+        async (db: SQLiteDBConnection | undefined) => {
+          const count = await db?.query(
+            `SELECT COUNT(*) AS count FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
+            [salah, formattedDate]
+          );
+          console.log("COUNT IS: ");
+          console.log(count);
+          if (count && count.values && count.values[0].count > 0) {
+            doesSalahAndDateExistsResult = true;
+            alert("Entry exists");
+          } else {
+            doesSalahAndDateExistsResult = false;
+            alert("Entry does not exist");
+          }
+
+          // // update ui
+          // const respSelect = await db?.query(
+          //   `SELECT * FROM salahtrackingtable;`
+          // );
+          // setItems(respSelect?.values);
+        },
+        async () => {
+          // setInputName("");
+          // setEditItem(undefined);
+        }
+      );
+    } catch (error) {
+      alert((error as Error).message);
+      console.log("ERROR ON LINE 336 PrayerTableDisplay.tsx");
+    }
+    return doesSalahAndDateExistsResult === false ? false : true;
+  };
+
   const changePrayerStatus: (
     tableRowDate: string,
     selectedSalah: string,
@@ -220,6 +283,8 @@ const PrayerTableDisplay = ({
     selectedReasons: string[],
     notes: string
   ) => void = (tableRowDate, selectedSalah, salahStatus) => {
+    doesSalahAndDateExists(selectedSalah, tableRowDate);
+
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
       if (item.salahName === selectedSalah.replace(/\s/g, "")) {
         const doesDateObjectExist = item.completedDates.find((date) => {
@@ -275,12 +340,28 @@ const PrayerTableDisplay = ({
     );
   };
 
+  const addSalahAndDateEntry = async (
+    formattedDate: string,
+    salahName: string
+  ) => {
+    try {
+      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
+        await db?.query(
+          `INSERT INTO salahtrackingtable (date, salahName, salahStatus) values (?,?,?)`,
+          [formattedDate, salahName, salahStatus]
+        );
+      });
+    } catch (error) {}
+  };
+
   function grabDate(salah: string, formattedDate: string) {
     setSalahStatus("");
     setSelectedReasons([]);
     setNotes("");
 
     let tableRowDate = formattedDate;
+
+    doesSalahAndDateExists(salah, formattedDate);
 
     salahTrackingArray.forEach((item) => {
       if (item.salahName === salah) {
@@ -692,6 +773,7 @@ const PrayerTableDisplay = ({
                         );
                         setShowUpdateStatusModal(false);
                         setHasUserClickedDate(false);
+
                         // console.log(
                         //   "salahStatus before state update: " + salahStatus
                         // );
