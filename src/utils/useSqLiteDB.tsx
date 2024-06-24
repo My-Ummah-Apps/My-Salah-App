@@ -34,9 +34,12 @@ const useSQLiteDB = () => {
             "salahtrackingtable",
             false
           );
+        console.log("connectionConsistency.result && isConn both true");
       } else {
         // If the dbConnection does not exist then create a new connection (additionally, if the "salahtrackingtable" database does not exist, create it at the same time as establishing the new connection)
-        console.log("CREATING / CONNECTING TO DATABASE");
+        console.log(
+          "connectionConsistency.result && isConn not true therefore CREATING / CONNECTING TO DATABASE"
+        );
         dbConnection.current = await sqliteConnection.current.createConnection(
           "salahtrackingtable",
           false,
@@ -51,6 +54,7 @@ const useSQLiteDB = () => {
     initialiseDB().then(() => {
       initialiseTables(); // Set up tables in the database (if they don't already exist)
       setDatabaseInitialised(true); // Update state to indicate that the database initialization process is complete
+      console.log("DATABASE INITIALISED");
     });
   }, []);
 
@@ -59,12 +63,14 @@ const useSQLiteDB = () => {
     action: (dbConnection: SQLiteDBConnection | undefined) => Promise<void>,
     cleanup?: () => Promise<void>
   ) => {
+    console.log("PERFORMSQLACTION FUNCTION HAS RUN!");
     try {
+      console.log("ATTEMPTING TO OPEN CONNECTION...");
       await dbConnection.current?.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
       await action(dbConnection.current); // Execute the passed in action function (add, edit etc) with dbConnection.current as its argument
     } catch (error) {
       alert((error as Error).message);
-      console.log("ERROR IS COMING FROM LINE 67 in useSQLiteDB.tsx");
+      console.log("ERROR IN CATCH: CONNECTION NOT ESTABLISHED");
     } finally {
       try {
         (await dbConnection.current?.isDBOpen())?.result &&
@@ -75,14 +81,16 @@ const useSQLiteDB = () => {
   };
   // here is where you can check and update table structure
   const initialiseTables = async () => {
+    console.log("INITIALISING TABLES...");
     performSQLAction(async (dbConnection: SQLiteDBConnection | undefined) => {
       // SQL query to create the 'salahtracking' table if it doesn't already exist
       const queryCreateSalahTrackingTable = `
-        CREATE TABLE IF NOT EXISTS salahtrackingtable(id INTEGER PRIMARY KEY NOT NULL, date TEXT NOT NULL, salahName TEXT NOT NULL, status TEXT NOT NULL, reasons TEXT, notes TEXT);
+        CREATE TABLE IF NOT EXISTS salahtrackingtable(id INTEGER PRIMARY KEY NOT NULL, date TEXT NOT NULL, salahName TEXT NOT NULL, salahStatus TEXT NOT NULL, reasons TEXT, notes TEXT);
         `;
       const respCT = await dbConnection?.execute(queryCreateSalahTrackingTable); // Execute the SQL query to create the table in the database
-      console.log("initialiseTables has RUN");
+
       console.log(`res: ${JSON.stringify(respCT)}`);
+      console.log("queryCreateSalahTrackingTable: ");
       console.log(queryCreateSalahTrackingTable);
     });
   };

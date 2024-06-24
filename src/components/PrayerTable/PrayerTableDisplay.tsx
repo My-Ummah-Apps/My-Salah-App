@@ -237,25 +237,44 @@ const PrayerTableDisplay = ({
   //   useState(false);
 
   const doesSalahAndDateExists = async (
-    salah: string,
+    salahName: string,
     formattedDate: string
   ): Promise<boolean> => {
+    console.log("SALAH NAME IS: " + salahName);
+    console.log("formattedDate DATE IS: " + formattedDate);
     let doesSalahAndDateExistsResult = false;
     try {
       await performSQLAction(
         async (db: SQLiteDBConnection | undefined) => {
           const count = await db?.query(
             `SELECT COUNT(*) AS count FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
-            [salah, formattedDate]
+            [formattedDate, salahName]
           );
           console.log("COUNT IS: ");
           console.log(count);
+          const result = await db?.query(
+            `SELECT * FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
+            [formattedDate, salahName]
+          );
+
+          if (result && result.values && result.values.length > 0) {
+            console.log("RESULT IS: ");
+            console.log(result?.values[0]);
+            setSalahStatus(result.values[0].salahStatus);
+            setSelectedReasons(result.values[0].reasons);
+            setNotes(result.values[0].notes);
+          } else {
+            setSalahStatus("");
+            setSelectedReasons([]);
+            setNotes("");
+          }
+
           if (count && count.values && count.values[0].count > 0) {
             doesSalahAndDateExistsResult = true;
-            alert("Entry exists");
+            // alert("Entry exists");
           } else {
             doesSalahAndDateExistsResult = false;
-            alert("Entry does not exist");
+            // alert("Entry does not exist");
           }
 
           // // update ui
@@ -271,9 +290,44 @@ const PrayerTableDisplay = ({
       );
     } catch (error) {
       alert((error as Error).message);
-      console.log("ERROR ON LINE 336 PrayerTableDisplay.tsx");
+      console.log("ERROR ON LINE 274 PrayerTableDisplay.tsx");
     }
     return doesSalahAndDateExistsResult === false ? false : true;
+  };
+
+  const addSalah = async (
+    salahName: string,
+    salahStatus: string,
+    date: string,
+    reasons?: string,
+    notes?: string
+  ) => {
+    console.log("addSalah FUNCTION BEING RUN");
+    try {
+      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
+        let query = `INSERT INTO salahtrackingtable (salahName, salahStatus, date`; // ) values (?,?,?)
+        let values = [salahName, salahStatus, date];
+
+        if (reasons !== undefined) {
+          query += `, reasons`;
+          values.push(reasons);
+        }
+
+        if (notes !== undefined) {
+          query += `, notes`;
+          values.push(notes);
+        }
+
+        query += `) VALUES (${values.map(() => "?").join(", ")})`;
+
+        await db?.query(query, values); // If .query isn't working, try .execute instead
+        // await db?.execute(query, values);
+        console.log("DATA INSERTED INTO DATABASE");
+      });
+    } catch (error) {
+      console.log("ERROR WITHIN addSalah function:");
+      console.log(error);
+    }
   };
 
   const changePrayerStatus: (
@@ -282,8 +336,16 @@ const PrayerTableDisplay = ({
     salahStatus: string,
     selectedReasons: string[],
     notes: string
-  ) => void = (tableRowDate, selectedSalah, salahStatus) => {
-    doesSalahAndDateExists(selectedSalah, tableRowDate);
+  ) => void = async (tableRowDate, selectedSalah, salahStatus) => {
+    const salahAndDateExist = await doesSalahAndDateExists(
+      selectedSalah,
+      tableRowDate
+    );
+
+    if (salahAndDateExist === false) {
+      addSalah(selectedSalah, salahStatus, tableRowDate);
+    } else if (salahAndDateExist === true) {
+    }
 
     const newSalahTrackingArray = salahTrackingArray.map((item) => {
       if (item.salahName === selectedSalah.replace(/\s/g, "")) {
@@ -340,44 +402,55 @@ const PrayerTableDisplay = ({
     );
   };
 
-  const addSalahAndDateEntry = async (
-    formattedDate: string,
-    salahName: string
-  ) => {
-    try {
-      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
-        await db?.query(
-          `INSERT INTO salahtrackingtable (date, salahName, salahStatus) values (?,?,?)`,
-          [formattedDate, salahName, salahStatus]
-        );
-      });
-    } catch (error) {}
-  };
+  // const addSalahAndDateEntry = async (
+  //   formattedDate: string,
+  //   salahName: string
+  // ) => {
+  //   try {
+  //     performSQLAction(async (db: SQLiteDBConnection | undefined) => {
+  //       await db?.query(
+  //         `INSERT INTO salahtrackingtable (date, salahName, salahStatus) values (?,?,?)`,
+  //         [formattedDate, salahName, salahStatus]
+  //       );
+  //     });
+  //   } catch (error) {}
+  // };
 
-  function grabDate(salah: string, formattedDate: string) {
+  async function grabDate(salahName: string, formattedDate: string) {
     setSalahStatus("");
     setSelectedReasons([]);
     setNotes("");
 
     let tableRowDate = formattedDate;
+    // Does salahAndDateExist need to exists in two places?
+    // const salahAndDateExist = await doesSalahAndDateExists(
+    //   salahName,
+    //   tableRowDate
+    // );
+    await doesSalahAndDateExists(salahName, tableRowDate);
 
-    doesSalahAndDateExists(salah, formattedDate);
+    // if (salahAndDateExist === true) {
+    // } else if (salahAndDateExist === false) {
+    //   setSalahStatus("");
+    //   setSelectedReasons([]);
+    //   setNotes("");
+    // }
 
-    salahTrackingArray.forEach((item) => {
-      if (item.salahName === salah) {
-        for (let i = 0; i < item.completedDates.length; i++) {
-          // console.log(item.completedDates[i]);
-          if (item.completedDates[i][tableRowDate]) {
-            // console.log("TRUE");
-            setSalahStatus(item.completedDates[i][tableRowDate].status);
-            setSelectedReasons(item.completedDates[i][tableRowDate].reasons);
-            setNotes(item.completedDates[i][tableRowDate].notes);
-          }
-        }
-      }
-    });
+    // salahTrackingArray.forEach((item) => {
+    //   if (item.salahName === salahName) {
+    //     for (let i = 0; i < item.completedDates.length; i++) {
+    //       // console.log(item.completedDates[i]);
+    //       if (item.completedDates[i][tableRowDate]) {
+    //         // console.log("TRUE");
+    //         // setSalahStatus(item.completedDates[i][tableRowDate].status);
+    //         // setSelectedReasons(item.completedDates[i][tableRowDate].reasons);
+    //         // setNotes(item.completedDates[i][tableRowDate].notes);
+    //       }
+    //     }
+    //   }
+    // });
 
-    setSelectedSalah(salah);
+    setSelectedSalah(salahName);
     setTableRowDate(tableRowDate);
   }
 
@@ -685,11 +758,11 @@ const PrayerTableDisplay = ({
                       {reasonsArray.map((item) => (
                         <p
                           key={uuidv4()}
-                          style={{
-                            backgroundColor: selectedReasons.includes(item)
-                              ? "#2563eb"
-                              : "",
-                          }}
+                          // style={{
+                          //   backgroundColor: selectedReasons.includes(item)
+                          //     ? "#2563eb"
+                          //     : "",
+                          // }}
                           onClick={() => {
                             if (!selectedReasonsArray.includes(item)) {
                               selectedReasonsArray = [...selectedReasons, item];
@@ -943,11 +1016,11 @@ const PrayerTableDisplay = ({
           {reasonsArray.map((item) => (
             <p
               key={uuidv4()}
-              style={{
-                backgroundColor: selectedReasons.includes(item)
-                  ? "#2563eb"
-                  : "",
-              }}
+              // style={{
+              //   backgroundColor: selectedReasons.includes(item)
+              //     ? "#2563eb"
+              //     : "",
+              // }}
               onClick={() => {
                 if (!selectedReasonsArray.includes(item)) {
                   selectedReasonsArray = [...selectedReasons, item];
