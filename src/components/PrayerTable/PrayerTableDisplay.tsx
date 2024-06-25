@@ -5,6 +5,7 @@ import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
 import { Capacitor } from "@capacitor/core";
+import PrayerTableCell from "./PrayerTableCell";
 // import { Keyboard } from "@capacitor/keyboard";
 import Sheet from "react-modal-sheet";
 import useSQLiteDB from "../../utils/useSqLiteDB";
@@ -201,7 +202,7 @@ const PrayerTableDisplay = ({
   const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
     useState(false);
   let selectedReasonsArray = selectedReasons;
-  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>();
+  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
   const [customReason, setCustomReason] = useState("");
   const handleCustomReason = (e: any) => {
     setCustomReason(e.target.value);
@@ -268,6 +269,9 @@ const PrayerTableDisplay = ({
             setSelectedReasons([]);
             setNotes("");
           }
+
+          console.log("SALAH STATS IS:");
+          console.log(salahStatus);
 
           if (count && count.values && count.values[0].count > 0) {
             doesSalahAndDateExistsResult = true;
@@ -347,59 +351,59 @@ const PrayerTableDisplay = ({
     } else if (salahAndDateExist === true) {
     }
 
-    const newSalahTrackingArray = salahTrackingArray.map((item) => {
-      if (item.salahName === selectedSalah.replace(/\s/g, "")) {
-        const doesDateObjectExist = item.completedDates.find((date) => {
-          return Object.keys(date)[0] === tableRowDate;
-        });
+    // const newSalahTrackingArray = salahTrackingArray.map((item) => {
+    //   if (item.salahName === selectedSalah.replace(/\s/g, "")) {
+    //     const doesDateObjectExist = item.completedDates.find((date) => {
+    //       return Object.keys(date)[0] === tableRowDate;
+    //     });
 
-        if (doesDateObjectExist === undefined) {
-          return {
-            ...item,
-            completedDates: [
-              ...item.completedDates,
-              {
-                [tableRowDate]: {
-                  status: salahStatus,
-                  reasons: selectedReasons,
-                  notes: notes,
-                },
-              },
-            ],
-          };
-        } else if (doesDateObjectExist !== undefined) {
-          const filteredCompletedDatesArray = item.completedDates.filter(
-            (date) => {
-              return (
-                Object.keys(doesDateObjectExist)[0] !== Object.keys(date)[0]
-              );
-            }
-          );
+    //     if (doesDateObjectExist === undefined) {
+    //       return {
+    //         ...item,
+    //         completedDates: [
+    //           ...item.completedDates,
+    //           {
+    //             [tableRowDate]: {
+    //               status: salahStatus,
+    //               reasons: selectedReasons,
+    //               notes: notes,
+    //             },
+    //           },
+    //         ],
+    //       };
+    //     } else if (doesDateObjectExist !== undefined) {
+    //       const filteredCompletedDatesArray = item.completedDates.filter(
+    //         (date) => {
+    //           return (
+    //             Object.keys(doesDateObjectExist)[0] !== Object.keys(date)[0]
+    //           );
+    //         }
+    //       );
 
-          return {
-            ...item,
-            completedDates: [
-              ...filteredCompletedDatesArray,
-              {
-                [tableRowDate]: {
-                  status: salahStatus,
-                  reasons: selectedReasons,
-                  notes: notes,
-                },
-              },
-            ],
-          };
-        }
-      }
+    //       return {
+    //         ...item,
+    //         completedDates: [
+    //           ...filteredCompletedDatesArray,
+    //           {
+    //             [tableRowDate]: {
+    //               status: salahStatus,
+    //               reasons: selectedReasons,
+    //               notes: notes,
+    //             },
+    //           },
+    //         ],
+    //       };
+    //     }
+    //   }
 
-      return item;
-    });
-    setSalahTrackingArray(newSalahTrackingArray);
+    //   return item;
+    // });
+    // setSalahTrackingArray(newSalahTrackingArray);
 
-    localStorage.setItem(
-      "storedSalahTrackingData",
-      JSON.stringify(newSalahTrackingArray)
-    );
+    // localStorage.setItem(
+    //   "storedSalahTrackingData",
+    //   JSON.stringify(newSalahTrackingArray)
+    // );
   };
 
   // const addSalahAndDateEntry = async (
@@ -486,7 +490,11 @@ const PrayerTableDisplay = ({
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   let cellIcon: string | JSX.Element;
-  function populateCells(formattedDate: string, salah: string, index: number) {
+  async function populateCells(
+    formattedDate: string,
+    salahName: string,
+    index: number
+  ) {
     cellIcon = (
       <LuDot
         className=" w-[24px] h-[24px]"
@@ -498,67 +506,80 @@ const PrayerTableDisplay = ({
       />
     );
 
+    if (await doesSalahAndDateExists(salahName, formattedDate)) {
+      // cellIcon = salahStatus;
+    }
+
     const matchedObject = salahTrackingArray[index]?.completedDates.find(
       (obj) => {
         return formattedDate === Object.keys(obj)[0];
       }
     );
 
-    if (matchedObject !== undefined) {
-      cellIcon = matchedObject[formattedDate].status;
-    }
+    // const iconColorMap = {
+    //   "male-alone": "bg-[color:var(--alone-male-status-color)]",
+    //   "group": "bg-[color:var(--jamaah-status-color)]",
+    //   "female-alone": "bg-[color:var(--alone-female-status-color)]",
+    //   "excused": "bg-[color:var(--excused-status-color)]",
+    //   "late": "bg-[color:var(--late-status-color)]",
+    //   "missed": "bg-[color:var(--missed-status-color)] red-block",
+    // };
 
-    if (cellIcon === "male-alone") {
-      cellIcon = (
-        <div
-          className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
-        ></div>
-      );
-    } else if (cellIcon === "group") {
-      cellIcon = (
-        <div
-          className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
-        ></div>
-      );
-    } else if (cellIcon === "female-alone") {
-      cellIcon = (
-        <div
-          className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
-        ></div>
-      );
-    } else if (cellIcon === "excused") {
-      cellIcon = (
-        <div
-          className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
-        ></div>
-      );
-    } else if (cellIcon === "late") {
-      cellIcon = (
-        <div
-          className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
-        ></div>
-      );
-    } else if (cellIcon === "missed") {
-      cellIcon = (
-        <div
-          className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
-        ></div>
-      );
-    }
-    return (
-      <div
-        id="icon-wrap"
-        className="flex items-center justify-center h-full pt-6 pb-5 text-center td-element"
-        key={uuidv4()}
-        onClick={() => {
-          grabDate(salah, formattedDate);
-          setShowUpdateStatusModal(true);
-          setHasUserClickedDate(true);
-        }}
-      >
-        {cellIcon}
-      </div>
-    );
+    // if (matchedObject !== undefined) {
+    //   cellIcon = matchedObject[formattedDate].status;
+    // }
+
+    // if (cellIcon === "male-alone") {
+    //   cellIcon = (
+    //     <div
+    //       className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
+    //     ></div>
+    //   );
+    // } else if (cellIcon === "group") {
+    //   cellIcon = (
+    //     <div
+    //       className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
+    //     ></div>
+    //   );
+    // } else if (cellIcon === "female-alone") {
+    //   cellIcon = (
+    //     <div
+    //       className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
+    //     ></div>
+    //   );
+    // } else if (cellIcon === "excused") {
+    //   cellIcon = (
+    //     <div
+    //       className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
+    //     ></div>
+    //   );
+    // } else if (cellIcon === "late") {
+    //   cellIcon = (
+    //     <div
+    //       className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
+    //     ></div>
+    //   );
+    // } else if (cellIcon === "missed") {
+    //   cellIcon = (
+    //     <div
+    //       className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
+    //     ></div>
+    //   );
+    // }
+    // return (
+    //   <div
+    //     id="icon-wrap"
+    //     className="flex items-center justify-center h-full pt-6 pb-5 text-center td-element"
+    //     key={uuidv4()}
+    //     onClick={() => {
+    //       grabDate(salahName, formattedDate);
+    //       setShowUpdateStatusModal(true);
+    //       setHasUserClickedDate(true);
+    //     }}
+    //   >
+    //     {cellIcon}
+    //   </div>
+    // );
 
     // pt-2
     // <div key={uuidv4()} className="h-full pt-6 pb-5 text-center td-element">
@@ -912,7 +933,19 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            return <>{populateCells(formattedDate, "Fajr", 0)}</>;
+            // return <>{populateCells(formattedDate, "Fajr", 0)}</>;
+            return (
+              <PrayerTableCell
+                salahStatus={salahStatus}
+                grabDate={grabDate}
+                setShowUpdateStatusModal={setShowUpdateStatusModal}
+                setHasUserClickedDate={setHasUserClickedDate}
+                doesSalahAndDateExists={doesSalahAndDateExists}
+                formattedDate={formattedDate}
+                salahName="Fajr"
+                iconStyles={iconStyles}
+              />
+            );
           }}
         />
         <Column
@@ -924,7 +957,20 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            return <>{populateCells(formattedDate, "Dhuhr", 1)}</>;
+            // return <>{populateCells(formattedDate, "Dhuhr", 1)}</>;
+            // return <div>hi</div>;
+            return (
+              <PrayerTableCell
+                salahStatus={salahStatus}
+                grabDate={grabDate}
+                setShowUpdateStatusModal={setShowUpdateStatusModal}
+                setHasUserClickedDate={setHasUserClickedDate}
+                doesSalahAndDateExists={doesSalahAndDateExists}
+                formattedDate={formattedDate}
+                salahName="Dhuhr"
+                iconStyles={iconStyles}
+              />
+            );
           }}
         />
         <Column
@@ -936,7 +982,20 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            return <>{populateCells(formattedDate, "Asar", 2)}</>;
+            // return <>{populateCells(formattedDate, "Asar", 2)}</>;
+            // return <div>hi</div>;
+            return (
+              <PrayerTableCell
+                salahStatus={salahStatus}
+                grabDate={grabDate}
+                setShowUpdateStatusModal={setShowUpdateStatusModal}
+                setHasUserClickedDate={setHasUserClickedDate}
+                doesSalahAndDateExists={doesSalahAndDateExists}
+                formattedDate={formattedDate}
+                salahName="Asar"
+                iconStyles={iconStyles}
+              />
+            );
           }}
         />
         <Column
@@ -948,7 +1007,20 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            return <>{populateCells(formattedDate, "Maghrib", 3)}</>;
+            // return <>{populateCells(formattedDate, "Maghrib", 3)}</>;
+            // return <div>hi</div>;
+            return (
+              <PrayerTableCell
+                salahStatus={salahStatus}
+                grabDate={grabDate}
+                setShowUpdateStatusModal={setShowUpdateStatusModal}
+                setHasUserClickedDate={setHasUserClickedDate}
+                doesSalahAndDateExists={doesSalahAndDateExists}
+                formattedDate={formattedDate}
+                salahName="Maghrib"
+                iconStyles={iconStyles}
+              />
+            );
           }}
         />
         <Column
@@ -960,7 +1032,20 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            return <>{populateCells(formattedDate, "Isha", 4)}</>;
+            // return <>{populateCells(formattedDate, "Isha", 4)}</>;
+            // return <div>hi</div>;
+            return (
+              <PrayerTableCell
+                salahStatus={salahStatus}
+                grabDate={grabDate}
+                setShowUpdateStatusModal={setShowUpdateStatusModal}
+                setHasUserClickedDate={setHasUserClickedDate}
+                doesSalahAndDateExists={doesSalahAndDateExists}
+                formattedDate={formattedDate}
+                salahName="Isha"
+                iconStyles={iconStyles}
+              />
+            );
           }}
         />
 
