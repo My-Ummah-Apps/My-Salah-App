@@ -27,59 +27,65 @@ const PrayerTableCell = ({
   let [cellData, setCellData] = useState<JSX.Element>(
     <LuDot className="w-[24px] h-[24px]" />
   );
-  console.log("SALAH STATUS WITHIN CELL IS:");
-  console.log(salahStatus);
-  useEffect(() => {
-    async function fetchCellData() {
-      let icon: string | JSX.Element = <LuDot className="w-[24px] h-[24px]" />;
 
-      if (await doesSalahAndDateExists(salahName, formattedDate)) {
-        icon = salahStatus;
-      }
+  useEffect(() => {
+    console.log("USEEFFECT FOR CELL HAS RUN!");
+    async function fetchCellData() {
+      console.log("FETCH DATA HAS RUN");
+      console.log("SALAH STATUS IS:" + salahStatus);
+      console.log("SALAH NAME IS: " + salahName);
+      console.log("DATE IS: " + formattedDate);
+
+      //   let icon: string | JSX.Element = <LuDot className="w-[24px] h-[24px]" />;
+      // This isn't equalling to true for some reasons
+      //   if ((await doesSalahAndDateExists(salahName, formattedDate)) === true) {
+      //     // icon = salahStatus;
+      //     console.log("SALAH STATUS WITHIN CELL IS:");
+      //   } // ADD THIS BACK IN
 
       if (salahStatus === "male-alone") {
-        cellData = (
+        setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
           ></div>
         );
       } else if (salahStatus === "group") {
-        cellData = (
+        setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
           ></div>
         );
       } else if (salahStatus === "female-alone") {
-        cellData = (
+        setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
           ></div>
         );
       } else if (salahStatus === "excused") {
-        cellData = (
+        setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
           ></div>
         );
       } else if (salahStatus === "late") {
-        cellData = (
+        setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
           ></div>
         );
       } else if (salahStatus === "missed") {
-        cellData = (
+        setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
           ></div>
         );
       }
 
-      setCellData(<div>{salahStatus}</div>);
+      //   setCellData(<div>{salahStatus}</div>);
     }
 
     fetchCellData();
-  }, [formattedDate]);
+  }, []);
   console.log("CELL DATA IS: ");
   console.log(cellData);
   return (
@@ -93,7 +99,7 @@ const PrayerTableCell = ({
         setHasUserClickedDate(true);
       }}
     >
-      {salahStatus}
+      {cellData}
     </div>
   );
 };

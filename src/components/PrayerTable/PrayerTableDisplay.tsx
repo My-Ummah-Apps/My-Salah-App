@@ -44,25 +44,39 @@ const PrayerTableDisplay = ({
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
 }) => {
-  const { performSQLAction, databaseInitialised } = useSQLiteDB();
+  const { performSQLAction, isDatabaseInitialised } = useSQLiteDB();
   const sheetRef = useRef<HTMLDivElement>(null);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isDatabaseInitialised === true) {
+      loadData();
+      console.log("DATABASE HAS INITIASLISED!!!");
+    }
+  }, [isDatabaseInitialised]);
+
+  setTimeout(() => {
+    console.log("TIMEOUT HAS RUN");
     loadData();
-  }, [databaseInitialised]);
+  }, 5000);
 
   const loadData = async () => {
     try {
       // query db
-      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
-        // @ts-ignore
-        const respSelect = await db?.query(`SELECT * FROM salahtrackingtable`);
-        console.log();
-        // put a usestate here to set the items
-      });
+      console.log("PERFORMSQLACTION IS RUNNING WITHIN TABLE COMPONENT!");
+      await performSQLAction(
+        async (dbConnection: SQLiteDBConnection | undefined) => {
+          const respSelect = await dbConnection?.query(
+            `SELECT * FROM salahtrackingtable`
+          );
+          console.log("TABLE DATA: ");
+          console.log(respSelect);
+          // put a usestate here to set the items
+          setNotes("123"); // Remove this for debugging purposes only
+        }
+      );
     } catch (error) {
       alert((error as Error).message);
       console.log("ERROR IS COMING FROM LINE 67 in PrayerTableDisplay.tsx");
@@ -237,67 +251,71 @@ const PrayerTableDisplay = ({
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
   //   useState(false);
 
-  const doesSalahAndDateExists = async (
-    salahName: string,
-    formattedDate: string
-  ): Promise<boolean> => {
-    console.log("SALAH NAME IS: " + salahName);
-    console.log("formattedDate DATE IS: " + formattedDate);
-    let doesSalahAndDateExistsResult = false;
-    try {
-      await performSQLAction(
-        async (db: SQLiteDBConnection | undefined) => {
-          const count = await db?.query(
-            `SELECT COUNT(*) AS count FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
-            [formattedDate, salahName]
-          );
-          console.log("COUNT IS: ");
-          console.log(count);
-          const result = await db?.query(
-            `SELECT * FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
-            [formattedDate, salahName]
-          );
+  // const doesSalahAndDateExists = async (
+  //   salahName: string,
+  //   formattedDate: string
+  // ): Promise<boolean> => {
+  //   console.log("SALAH NAME IS: " + salahName);
+  //   console.log("formattedDate DATE IS: " + formattedDate);
+  //   let doesSalahAndDateExistsResult = false;
+  //   try {
+  //     await performSQLAction(
+  //       async (db: SQLiteDBConnection | undefined) => {
+  //         const count = await db?.query(
+  //           `SELECT COUNT(*) AS count FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
+  //           [formattedDate, salahName]
+  //         );
+  //         console.log("COUNT IS: ");
+  //         console.log(count);
+  //         const result = await db?.query(
+  //           `SELECT * FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
+  //           [formattedDate, salahName]
+  //         );
 
-          if (result && result.values && result.values.length > 0) {
-            console.log("RESULT IS: ");
-            console.log(result?.values[0]);
-            setSalahStatus(result.values[0].salahStatus);
-            setSelectedReasons(result.values[0].reasons);
-            setNotes(result.values[0].notes);
-          } else {
-            setSalahStatus("");
-            setSelectedReasons([]);
-            setNotes("");
-          }
+  //         if (result && result.values && result.values.length > 0) {
+  //           // console.log("RESULT IS: ");
+  //           // console.log(result.values[0].salahStatus);
+  //           setSalahStatus(result.values[0].salahStatus);
+  //           console.log("RESULT IS: ");
+  //           console.log(salahStatus);
+  //           setSelectedReasons(result.values[0].reasons);
+  //           setNotes(result.values[0].notes);
+  //         } else {
+  //           setSalahStatus("");
+  //           setSelectedReasons([]);
+  //           setNotes("");
+  //         }
 
-          console.log("SALAH STATS IS:");
-          console.log(salahStatus);
+  //         console.log("SALAH STATS IS:");
+  //         console.log(salahStatus);
 
-          if (count && count.values && count.values[0].count > 0) {
-            doesSalahAndDateExistsResult = true;
-            // alert("Entry exists");
-          } else {
-            doesSalahAndDateExistsResult = false;
-            // alert("Entry does not exist");
-          }
+  //         if (count && count.values && count.values[0].count > 0) {
+  //           doesSalahAndDateExistsResult = true;
+  //           // alert("Entry exists");
+  //         } else {
+  //           doesSalahAndDateExistsResult = false;
+  //           // alert("Entry does not exist");
+  //         }
 
-          // // update ui
-          // const respSelect = await db?.query(
-          //   `SELECT * FROM salahtrackingtable;`
-          // );
-          // setItems(respSelect?.values);
-        },
-        async () => {
-          // setInputName("");
-          // setEditItem(undefined);
-        }
-      );
-    } catch (error) {
-      alert((error as Error).message);
-      console.log("ERROR ON LINE 274 PrayerTableDisplay.tsx");
-    }
-    return doesSalahAndDateExistsResult === false ? false : true;
-  };
+  //         // // update ui
+  //         // const databaseData = await db?.query(
+  //         //   `SELECT * FROM salahtrackingtable;`
+  //         // );
+  //         // console.log("DATABASE DATA:");
+  //         // console.log(databaseData);
+  //         // setItems(respSelect?.values);
+  //       },
+  //       async () => {
+  //         // setInputName("");
+  //         // setEditItem(undefined);
+  //       }
+  //     );
+  //   } catch (error) {
+  //     alert((error as Error).message);
+  //     console.log("ERROR ON LINE 274 PrayerTableDisplay.tsx");
+  //   }
+  //   return doesSalahAndDateExistsResult === false ? false : true;
+  // };
 
   const addSalah = async (
     salahName: string,
@@ -327,6 +345,7 @@ const PrayerTableDisplay = ({
         await db?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
         console.log("DATA INSERTED INTO DATABASE");
+        setNotes("hi"); // this is just to force a re-render and see if anytning changes in the UI, needs to be removed eventally
       });
     } catch (error) {
       console.log("ERROR WITHIN addSalah function:");
@@ -341,22 +360,20 @@ const PrayerTableDisplay = ({
     selectedReasons: string[],
     notes: string
   ) => void = async (tableRowDate, selectedSalah, salahStatus) => {
-    const salahAndDateExist = await doesSalahAndDateExists(
-      selectedSalah,
-      tableRowDate
-    );
-
-    if (salahAndDateExist === false) {
-      addSalah(selectedSalah, salahStatus, tableRowDate);
-    } else if (salahAndDateExist === true) {
-    }
-
+    // const salahAndDateExist = await doesSalahAndDateExists(
+    //   selectedSalah,
+    //   tableRowDate
+    // ); // ADD THIS BACK IN
+    // if (salahAndDateExist === false) {
+    //   console.log("SALAH AND DATE DONT EXIST INITIATING ADDSALAH FUNCTION");
+    //   // addSalah(selectedSalah, salahStatus, tableRowDate);
+    // } else if (salahAndDateExist === true) {
+    // }
     // const newSalahTrackingArray = salahTrackingArray.map((item) => {
     //   if (item.salahName === selectedSalah.replace(/\s/g, "")) {
     //     const doesDateObjectExist = item.completedDates.find((date) => {
     //       return Object.keys(date)[0] === tableRowDate;
     //     });
-
     //     if (doesDateObjectExist === undefined) {
     //       return {
     //         ...item,
@@ -379,7 +396,6 @@ const PrayerTableDisplay = ({
     //           );
     //         }
     //       );
-
     //       return {
     //         ...item,
     //         completedDates: [
@@ -395,11 +411,9 @@ const PrayerTableDisplay = ({
     //       };
     //     }
     //   }
-
     //   return item;
     // });
     // setSalahTrackingArray(newSalahTrackingArray);
-
     // localStorage.setItem(
     //   "storedSalahTrackingData",
     //   JSON.stringify(newSalahTrackingArray)
@@ -431,7 +445,7 @@ const PrayerTableDisplay = ({
     //   salahName,
     //   tableRowDate
     // );
-    await doesSalahAndDateExists(salahName, tableRowDate);
+    // await doesSalahAndDateExists(salahName, tableRowDate); // ADD THIS BACK IN
 
     // if (salahAndDateExist === true) {
     // } else if (salahAndDateExist === false) {
@@ -490,115 +504,115 @@ const PrayerTableDisplay = ({
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   let cellIcon: string | JSX.Element;
-  async function populateCells(
-    formattedDate: string,
-    salahName: string,
-    index: number
-  ) {
-    cellIcon = (
-      <LuDot
-        className=" w-[24px] h-[24px]"
-        onClick={(e: React.MouseEvent<SVGElement>) => {
-          if (e.currentTarget.tagName === "svg") {
-            // setShowUpdateStatusModal(true);
-          }
-        }}
-      />
-    );
+  // async function populateCells(
+  //   formattedDate: string,
+  //   salahName: string,
+  //   index: number
+  // ) {
+  //   cellIcon = (
+  //     <LuDot
+  //       className=" w-[24px] h-[24px]"
+  //       onClick={(e: React.MouseEvent<SVGElement>) => {
+  //         if (e.currentTarget.tagName === "svg") {
+  //           // setShowUpdateStatusModal(true);
+  //         }
+  //       }}
+  //     />
+  //   );
 
-    if (await doesSalahAndDateExists(salahName, formattedDate)) {
-      // cellIcon = salahStatus;
-    }
+  //   if (await doesSalahAndDateExists(salahName, formattedDate)) {
+  //     // cellIcon = salahStatus;
+  //   }
 
-    const matchedObject = salahTrackingArray[index]?.completedDates.find(
-      (obj) => {
-        return formattedDate === Object.keys(obj)[0];
-      }
-    );
+  //   const matchedObject = salahTrackingArray[index]?.completedDates.find(
+  //     (obj) => {
+  //       return formattedDate === Object.keys(obj)[0];
+  //     }
+  //   );
 
-    // const iconColorMap = {
-    //   "male-alone": "bg-[color:var(--alone-male-status-color)]",
-    //   "group": "bg-[color:var(--jamaah-status-color)]",
-    //   "female-alone": "bg-[color:var(--alone-female-status-color)]",
-    //   "excused": "bg-[color:var(--excused-status-color)]",
-    //   "late": "bg-[color:var(--late-status-color)]",
-    //   "missed": "bg-[color:var(--missed-status-color)] red-block",
-    // };
+  //   // const iconColorMap = {
+  //   //   "male-alone": "bg-[color:var(--alone-male-status-color)]",
+  //   //   "group": "bg-[color:var(--jamaah-status-color)]",
+  //   //   "female-alone": "bg-[color:var(--alone-female-status-color)]",
+  //   //   "excused": "bg-[color:var(--excused-status-color)]",
+  //   //   "late": "bg-[color:var(--late-status-color)]",
+  //   //   "missed": "bg-[color:var(--missed-status-color)] red-block",
+  //   // };
 
-    // if (matchedObject !== undefined) {
-    //   cellIcon = matchedObject[formattedDate].status;
-    // }
+  //   // if (matchedObject !== undefined) {
+  //   //   cellIcon = matchedObject[formattedDate].status;
+  //   // }
 
-    // if (cellIcon === "male-alone") {
-    //   cellIcon = (
-    //     <div
-    //       className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
-    //     ></div>
-    //   );
-    // } else if (cellIcon === "group") {
-    //   cellIcon = (
-    //     <div
-    //       className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
-    //     ></div>
-    //   );
-    // } else if (cellIcon === "female-alone") {
-    //   cellIcon = (
-    //     <div
-    //       className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
-    //     ></div>
-    //   );
-    // } else if (cellIcon === "excused") {
-    //   cellIcon = (
-    //     <div
-    //       className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
-    //     ></div>
-    //   );
-    // } else if (cellIcon === "late") {
-    //   cellIcon = (
-    //     <div
-    //       className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
-    //     ></div>
-    //   );
-    // } else if (cellIcon === "missed") {
-    //   cellIcon = (
-    //     <div
-    //       className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
-    //     ></div>
-    //   );
-    // }
-    // return (
-    //   <div
-    //     id="icon-wrap"
-    //     className="flex items-center justify-center h-full pt-6 pb-5 text-center td-element"
-    //     key={uuidv4()}
-    //     onClick={() => {
-    //       grabDate(salahName, formattedDate);
-    //       setShowUpdateStatusModal(true);
-    //       setHasUserClickedDate(true);
-    //     }}
-    //   >
-    //     {cellIcon}
-    //   </div>
-    // );
+  //   // if (cellIcon === "male-alone") {
+  //   //   cellIcon = (
+  //   //     <div
+  //   //       className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
+  //   //     ></div>
+  //   //   );
+  //   // } else if (cellIcon === "group") {
+  //   //   cellIcon = (
+  //   //     <div
+  //   //       className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
+  //   //     ></div>
+  //   //   );
+  //   // } else if (cellIcon === "female-alone") {
+  //   //   cellIcon = (
+  //   //     <div
+  //   //       className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
+  //   //     ></div>
+  //   //   );
+  //   // } else if (cellIcon === "excused") {
+  //   //   cellIcon = (
+  //   //     <div
+  //   //       className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
+  //   //     ></div>
+  //   //   );
+  //   // } else if (cellIcon === "late") {
+  //   //   cellIcon = (
+  //   //     <div
+  //   //       className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
+  //   //     ></div>
+  //   //   );
+  //   // } else if (cellIcon === "missed") {
+  //   //   cellIcon = (
+  //   //     <div
+  //   //       className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
+  //   //     ></div>
+  //   //   );
+  //   // }
+  //   // return (
+  //   //   <div
+  //   //     id="icon-wrap"
+  //   //     className="flex items-center justify-center h-full pt-6 pb-5 text-center td-element"
+  //   //     key={uuidv4()}
+  //   //     onClick={() => {
+  //   //       grabDate(salahName, formattedDate);
+  //   //       setShowUpdateStatusModal(true);
+  //   //       setHasUserClickedDate(true);
+  //   //     }}
+  //   //   >
+  //   //     {cellIcon}
+  //   //   </div>
+  //   // );
 
-    // pt-2
-    // <div key={uuidv4()} className="h-full pt-6 pb-5 text-center td-element">
-    // <div
-    //   id="icon-wrap"
-    //   // className="h-full pt-6 pb-5 text-center td-element"
-    //   key={uuidv4()}
-    //   onClick={(e) => {
-    //     // e.stopPropagation();
-    //     grabDate(e);
-    //     setShowUpdateStatusModal(true);
-    //   }}
-    // >
-    //   {cellIcon}
-    // </div>
-    // {/* </div> */}
+  //   // pt-2
+  //   // <div key={uuidv4()} className="h-full pt-6 pb-5 text-center td-element">
+  //   // <div
+  //   //   id="icon-wrap"
+  //   //   // className="h-full pt-6 pb-5 text-center td-element"
+  //   //   key={uuidv4()}
+  //   //   onClick={(e) => {
+  //   //     // e.stopPropagation();
+  //   //     grabDate(e);
+  //   //     setShowUpdateStatusModal(true);
+  //   //   }}
+  //   // >
+  //   //   {cellIcon}
+  //   // </div>
+  //   // {/* </div> */}
 
-    // });
-  }
+  //   // });
+  // }
 
   // const wreathStyles = {
   //   // height: "30%",
@@ -934,6 +948,7 @@ const PrayerTableDisplay = ({
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
             // return <>{populateCells(formattedDate, "Fajr", 0)}</>;
+            return <div>hi</div>;
             return (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -958,7 +973,7 @@ const PrayerTableDisplay = ({
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
             // return <>{populateCells(formattedDate, "Dhuhr", 1)}</>;
-            // return <div>hi</div>;
+            return <div>hi</div>;
             return (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -983,7 +998,7 @@ const PrayerTableDisplay = ({
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
             // return <>{populateCells(formattedDate, "Asar", 2)}</>;
-            // return <div>hi</div>;
+            return <div>hi</div>;
             return (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -1008,7 +1023,7 @@ const PrayerTableDisplay = ({
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
             // return <>{populateCells(formattedDate, "Maghrib", 3)}</>;
-            // return <div>hi</div>;
+            return <div>hi</div>;
             return (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -1033,7 +1048,7 @@ const PrayerTableDisplay = ({
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
             // return <>{populateCells(formattedDate, "Isha", 4)}</>;
-            // return <div>hi</div>;
+            return <div>hi</div>;
             return (
               <PrayerTableCell
                 salahStatus={salahStatus}

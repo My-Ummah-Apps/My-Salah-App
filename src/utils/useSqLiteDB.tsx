@@ -8,7 +8,7 @@ import {
 const useSQLiteDB = () => {
   const dbConnection = useRef<SQLiteDBConnection>(); // Database connection, will deal with READ/INSERT etc
   const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection itself
-  const [databaseInitialised, setDatabaseInitialised] =
+  const [isDatabaseInitialised, setisDatabaseInitialised] =
     useState<boolean>(false);
 
   //   console.log(dbConnection.current);
@@ -53,8 +53,10 @@ const useSQLiteDB = () => {
     // Async function that sets up the sqliteConnection & dbConnection , .then is called after the initialiseDB() promise is resolved so the code inside .then will execute once initialiseDB has completed it's execution
     initialiseDB().then(() => {
       initialiseTables(); // Set up tables in the database (if they don't already exist)
-      setDatabaseInitialised(true); // Update state to indicate that the database initialization process is complete
-      console.log("DATABASE INITIALISED");
+      setisDatabaseInitialised(true); // Update state to indicate that the database initialization process is complete
+      console.log(
+        "initialiseTables() HAS RUN, SETTING ISDATABASEINITIALISED TO TRUE"
+      );
     });
   }, []);
 
@@ -89,13 +91,22 @@ const useSQLiteDB = () => {
         `;
       const respCT = await dbConnection?.execute(queryCreateSalahTrackingTable); // Execute the SQL query to create the table in the database
 
-      console.log(`res: ${JSON.stringify(respCT)}`);
-      console.log("queryCreateSalahTrackingTable: ");
-      console.log(queryCreateSalahTrackingTable);
+      // console.log(`res: ${JSON.stringify(respCT)}`);
+      //   console.log("queryCreateSalahTrackingTable: ");
+      console.log("res: ");
+      console.log(respCT);
+
+      // Insert dummy data
+      const queryInsertDummyData = `
+        INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes) 
+        VALUES ('2024-06-25', 'Fajr', 'completed', 'No reasons', 'No notes');
+      `;
+      const respInsert = await dbConnection?.execute(queryInsertDummyData);
+      console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
     });
   };
 
-  return { performSQLAction, databaseInitialised }; // This exposes both performSQLAction and databaseInitialised so when importing this hook in another component both of these can be accessed by said component
+  return { performSQLAction, isDatabaseInitialised }; // This exposes both performSQLAction and databaseInitialised so when importing this hook in another component both of these can be accessed by said component
 };
 
 export default useSQLiteDB;
