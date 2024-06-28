@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 import { LuDot } from "react-icons/lu";
 
 const PrayerTableCell = ({
-  //   salahStatus,
-  grabDate,
+  salahStatus,
+  handleTableCellClick,
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   doesSalahAndDateExists,
@@ -12,14 +12,14 @@ const PrayerTableCell = ({
   salahName,
   iconStyles,
 }: {
-  //   salahStatus: string;
-  grabDate: (salahName: string, formattedDate: string) => void;
+  salahStatus: string;
+  handleTableCellClick: (salahName: string, formattedDate: string) => void;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   doesSalahAndDateExists: (
     salahName: string,
     formattedDate: string
-  ) => Promise<string>;
+  ) => Promise<string | null>;
   formattedDate: string;
   salahName: string;
   iconStyles: any;
@@ -28,58 +28,52 @@ const PrayerTableCell = ({
     <LuDot className="w-[24px] h-[24px]" />
   );
 
+  //   const [salahStatus, setSalahStatus] = useState<null | string>();
+  //
   useEffect(() => {
     console.log("USEEFFECT FOR CELL HAS RUN!");
     async function fetchCellData() {
       console.log("FETCH DATA HAS RUN");
 
-      //   console.log("SALAH NAME IS: " + salahName);
-      //   console.log("DATE IS: " + formattedDate);
-
-      let icon: string | JSX.Element = <LuDot className="w-[24px] h-[24px]" />;
-      //   This isn't equalling to true for some reasons
-      //   if ((await doesSalahAndDateExists(salahName, formattedDate)) === true) {
-      //     //   icon = salahStatus;
-      //     //   console.log("SALAH STATUS WITHIN CELL IS:");
-      //     // salahStatus = ""
-      //   }
-      const salahStatus = await doesSalahAndDateExists(
+      const salahStatusResult = await doesSalahAndDateExists(
         salahName,
         formattedDate
       );
-      console.log("SALAH STATUS IS:" + salahStatus);
+      //   setSalahStatus(salahStatusResult);
+      //   console.log("SALAH STATUS IS:" + salahStatusResult);
+      console.log("SALAH STATUS IS:" + salahStatusResult);
 
-      if (salahStatus === "male-alone") {
+      if (salahStatusResult === "male-alone") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
           ></div>
         );
-      } else if (salahStatus === "group") {
+      } else if (salahStatusResult === "group") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
           ></div>
         );
-      } else if (salahStatus === "female-alone") {
+      } else if (salahStatusResult === "female-alone") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
           ></div>
         );
-      } else if (salahStatus === "excused") {
+      } else if (salahStatusResult === "excused") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
           ></div>
         );
-      } else if (salahStatus === "late") {
+      } else if (salahStatusResult === "late") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
           ></div>
         );
-      } else if (salahStatus === "missed") {
+      } else if (salahStatusResult === "missed") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
@@ -87,7 +81,7 @@ const PrayerTableCell = ({
         );
       }
 
-      //   setCellData(<div>{salahStatus}</div>);
+      //   setCellData(<div>{salahStatusResult}</div>);
     }
 
     fetchCellData();
@@ -100,7 +94,7 @@ const PrayerTableCell = ({
       className="flex items-center justify-center h-full pt-6 pb-5 text-center td-element"
       key={uuidv4()}
       onClick={() => {
-        grabDate(salahName, formattedDate);
+        handleTableCellClick(salahName, formattedDate);
         setShowUpdateStatusModal(true);
         setHasUserClickedDate(true);
       }}

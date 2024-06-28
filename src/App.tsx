@@ -171,8 +171,8 @@ const App = () => {
 
   // const todaysDate = new Date("2024-01-01");
   const todaysDate = new Date();
-  let userStartDate: string | null = localStorage.getItem("userStartDate");
-  // let userStartDate: string | null = "01.01.24";
+  // let userStartDate: string | null = localStorage.getItem("userStartDate");
+  let userStartDate: string | null = "01.01.23";
   if (!userStartDate) {
     userStartDate = format(todaysDate, "dd.MM.yy");
     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
@@ -297,7 +297,7 @@ const App = () => {
             </p>
           </>
         </dialog> */}
-        ;
+
         <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
           {/* <div></div> */}

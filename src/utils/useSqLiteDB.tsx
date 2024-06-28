@@ -6,6 +6,7 @@ import {
 } from "@capacitor-community/sqlite";
 
 const useSQLiteDB = () => {
+  console.log("useSQLiteDB HAS RUN");
   const dbConnection = useRef<SQLiteDBConnection>(); // Database connection, will deal with READ/INSERT etc
   const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection itself
   const [isDatabaseInitialised, setisDatabaseInitialised] =
@@ -72,6 +73,20 @@ const useSQLiteDB = () => {
     //   );
     // });
     initialiseDB();
+
+    // Cleanup function to close the database connection when the component unmounts
+    return () => {
+      const cleanupDB = async () => {
+        if (dbConnection.current) {
+          const isOpen = await dbConnection.current.isDBOpen();
+          if (isOpen?.result) {
+            await dbConnection.current.close();
+          }
+        }
+      };
+      cleanupDB();
+      console.log("CLEANUP WITHIN initialiseDB()");
+    };
   }, []);
 
   //   This async function will handle CRUD operations on the database, it will take an action function passed which will determine what type of CRUD functionality it will execute
@@ -92,6 +107,7 @@ const useSQLiteDB = () => {
         (await dbConnection.current?.isDBOpen())?.result &&
           (await dbConnection.current?.close()); // Check if the database is still open and close it if necessary
         cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
+        console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
         console.log("ERROR");
         console.log(error);
@@ -117,12 +133,12 @@ const useSQLiteDB = () => {
         console.log(respCT);
 
         // Insert dummy data
-        const queryInsertDummyData = `
-        INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes) 
-        VALUES ('24.06.24', 'Fajr', 'male-alone', 'No reasons', 'No notes');
-      `;
-        const respInsert = await dbConnection?.execute(queryInsertDummyData);
-        console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
+        //     const queryInsertDummyData = `
+        //     INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
+        //     VALUES ('24.06.24', 'Fajr', 'male-alone', 'No reasons', 'No notes');
+        //   `;
+        // const respInsert = await dbConnection?.execute(queryInsertDummyData);
+        // console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
       }
     );
   };
