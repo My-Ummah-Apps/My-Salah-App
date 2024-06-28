@@ -10,7 +10,6 @@ const PrayerTableCell = ({
   doesSalahAndDateExists,
   formattedDate,
   salahName,
-  iconStyles,
 }: {
   salahStatus: string;
   handleTableCellClick: (salahName: string, formattedDate: string) => void;
@@ -22,12 +21,11 @@ const PrayerTableCell = ({
   ) => Promise<string | null>;
   formattedDate: string;
   salahName: string;
-  iconStyles: any;
 }) => {
   let [cellData, setCellData] = useState<JSX.Element>(
     <LuDot className="w-[24px] h-[24px]" />
   );
-
+  const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
   //   const [salahStatus, setSalahStatus] = useState<null | string>();
   //
   useEffect(() => {

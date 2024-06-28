@@ -10,11 +10,9 @@ import PrayerTableCell from "./PrayerTableCell";
 import Sheet from "react-modal-sheet";
 import useSQLiteDB from "../../utils/useSqLiteDB";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-// import CalenderMonthly from "../Stats/CalenderMonthly";
 // import StatCard from "../Stats/StatCard";
 // import ReactModal from "react-modal";
 // import Modal from "./Modal";
-import { LuDot } from "react-icons/lu";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
@@ -61,11 +59,6 @@ const PrayerTableDisplay = ({
     };
     initialiseAndLoadData();
   }, [isDatabaseInitialised]);
-
-  // setTimeout(() => {
-  //   console.log("TIMEOUT HAS RUN");
-  //   loadData();
-  // }, 5000);
 
   // const loadData = async () => {
   //   try {
@@ -123,93 +116,25 @@ const PrayerTableDisplay = ({
     });
   }
 
-  // console.log("salahTrackingArray");
-  // console.log(salahTrackingArray);
-  // const [monthlyCalenderToShow, setMonthlyCalenderToShow] = useState("");
-
-  // const [streakCounter, setStreakCounter] = useState(0);
-
-  // BELOW CODE IS FROM CALENDER.TSX TO MAKE MONTHLY CALENDER FUNCTIONALITY WORK WHEN A TABLE ROW IS CLICKED
-  // THIS IS ALL DUPLICATE CODE FROM CALENDER.TSX AND NEED TO FIND A MORE EFFICIENT WAY OF DOING THIS
-  //  ----------------------------------------------
-
-  // const days = ["M", "T", "W", "T", "F", "S", "S"];
-  // const today = startOfToday();
-  // const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
-  //   const parsedCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
-  //   const dayMonth = startOfMonth(dayToCheck);
-  //   return (
-  //     dayMonth.getMonth() === parsedCurrentMonth.getMonth() &&
-  //     dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
-  //   );
-  // };
-
-  // const countCompletedDates = (date: string, salahName?: string) => {
-  //   const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
-  //     string[]
-  //   >((accumulatorArray, salah) => {
-  //     if (salah.salahName === salahName) {
-  //       salah.completedDates.forEach((item) => {
-  //         accumulatorArray.push(Object.keys(item)[0]);
-  //       });
-  //     } else if (!salahName) {
-  //       salah.completedDates.forEach((item) => {
-  //         accumulatorArray.push(Object.keys(item)[0]);
-  //       });
-  //     }
-  //     return accumulatorArray;
-  //   }, []);
-
-  //   let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
-  //     (currentDate) => currentDate === date
-  //   );
-
-  //   let sameDatesArrayLength = sameDatesArray.length;
-
-  //   let color;
-
-  //   if (salahName) {
-  //     if (sameDatesArrayLength === 0) {
-  //       color = "transparent";
-  //     } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-  //       color = "green";
-  //     }
-  //   } else if (!salahName) {
-  //     if (sameDatesArrayLength === 0) {
-  //       color = "transparent";
-  //     } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-  //       color = "orange";
-  //     } else if (sameDatesArrayLength === 5) {
-  //       color = "green";
-  //     }
-  //   }
-
-  //   sameDatesArray = [];
-  //   return color;
-  // };
-  // END OF CODE FROM CALENDER.TSX ----------------------------------------------
-
-  // const [icon, setIcon] = useState("");
-  // const [showCalenderOneMonth, setShowCalenderOneMonth] = useState(false);
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableRowDate, setTableRowDate] = useState("");
 
-  // Array to hold the last five dates
   // userStartDate = "05.05.22";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
-  const datesBetween = eachDayOfInterval({
+  const datesBetweenUserStartDateAndToday = eachDayOfInterval({
     start: userStartDateFormatted,
     end: endDate,
   });
-  // console.log(datesBetween.length);
-  const datesFormatted = datesBetween.map((date) => format(date, "dd.MM.yy"));
+  // console.log(datesBetweenUserStartDateAndToday.length);
+  const datesFormatted = datesBetweenUserStartDateAndToday.map((date) =>
+    format(date, "dd.MM.yy")
+  );
   datesFormatted.reverse();
   let currentDisplayedDates: string[] = [];
-  function generateDisplayedWeek() {
+  function generateTableRowDates() {
     currentDisplayedDates = Array.from(
-      // { length: datesBetween.length },
-      { length: datesBetween.length },
+      { length: datesBetweenUserStartDateAndToday.length },
       (_, index) => {
         const date = subDays(startDate, index);
         return format(date, "dd.MM.yy");
@@ -217,7 +142,7 @@ const PrayerTableDisplay = ({
     );
   }
 
-  generateDisplayedWeek();
+  generateTableRowDates();
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [salahStatus, setSalahStatus] = useState("");
@@ -467,136 +392,10 @@ const PrayerTableDisplay = ({
     }
   }, []);
 
-  const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
-
-  let cellIcon: string | JSX.Element;
-  // async function populateCells(
-  //   formattedDate: string,
-  //   salahName: string,
-  //   index: number
-  // ) {
-  //   cellIcon = (
-  //     <LuDot
-  //       className=" w-[24px] h-[24px]"
-  //       onClick={(e: React.MouseEvent<SVGElement>) => {
-  //         if (e.currentTarget.tagName === "svg") {
-  //           // setShowUpdateStatusModal(true);
-  //         }
-  //       }}
-  //     />
-  //   );
-
-  //   if (await doesSalahAndDateExists(salahName, formattedDate)) {
-  //     // cellIcon = salahStatus;
-  //   }
-
-  //   const matchedObject = salahTrackingArray[index]?.completedDates.find(
-  //     (obj) => {
-  //       return formattedDate === Object.keys(obj)[0];
-  //     }
-  //   );
-
-  //   // const iconColorMap = {
-  //   //   "male-alone": "bg-[color:var(--alone-male-status-color)]",
-  //   //   "group": "bg-[color:var(--jamaah-status-color)]",
-  //   //   "female-alone": "bg-[color:var(--alone-female-status-color)]",
-  //   //   "excused": "bg-[color:var(--excused-status-color)]",
-  //   //   "late": "bg-[color:var(--late-status-color)]",
-  //   //   "missed": "bg-[color:var(--missed-status-color)] red-block",
-  //   // };
-
-  //   // if (matchedObject !== undefined) {
-  //   //   cellIcon = matchedObject[formattedDate].status;
-  //   // }
-
-  //   // if (cellIcon === "male-alone") {
-  //   //   cellIcon = (
-  //   //     <div
-  //   //       className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
-  //   //     ></div>
-  //   //   );
-  //   // } else if (cellIcon === "group") {
-  //   //   cellIcon = (
-  //   //     <div
-  //   //       className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
-  //   //     ></div>
-  //   //   );
-  //   // } else if (cellIcon === "female-alone") {
-  //   //   cellIcon = (
-  //   //     <div
-  //   //       className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
-  //   //     ></div>
-  //   //   );
-  //   // } else if (cellIcon === "excused") {
-  //   //   cellIcon = (
-  //   //     <div
-  //   //       className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
-  //   //     ></div>
-  //   //   );
-  //   // } else if (cellIcon === "late") {
-  //   //   cellIcon = (
-  //   //     <div
-  //   //       className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
-  //   //     ></div>
-  //   //   );
-  //   // } else if (cellIcon === "missed") {
-  //   //   cellIcon = (
-  //   //     <div
-  //   //       className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
-  //   //     ></div>
-  //   //   );
-  //   // }
-  //   // return (
-  //   //   <div
-  //   //     id="icon-wrap"
-  //   //     className="flex items-center justify-center h-full pt-6 pb-5 text-center td-element"
-  //   //     key={uuidv4()}
-  //   //     onClick={() => {
-  //   //       handleTableCellClick(salahName, formattedDate);
-  //   //       setShowUpdateStatusModal(true);
-  //   //       setHasUserClickedDate(true);
-  //   //     }}
-  //   //   >
-  //   //     {cellIcon}
-  //   //   </div>
-  //   // );
-
-  //   // pt-2
-  //   // <div key={uuidv4()} className="h-full pt-6 pb-5 text-center td-element">
-  //   // <div
-  //   //   id="icon-wrap"
-  //   //   // className="h-full pt-6 pb-5 text-center td-element"
-  //   //   key={uuidv4()}
-  //   //   onClick={(e) => {
-  //   //     // e.stopPropagation();
-  //   //     handleTableCellClick(e);
-  //   //     setShowUpdateStatusModal(true);
-  //   //   }}
-  //   // >
-  //   //   {cellIcon}
-  //   // </div>
-  //   // {/* </div> */}
-
-  //   // });
-  // }
-
   // const wreathStyles = {
   //   // height: "30%",
   //   width: "35%",
   // };
-  // let excusedColor;
-
-  // if (userGender === "female") {
-  //   excusedColor = "purple";
-  //   console.log("trigger");
-  // } else if (userGender === "male") {
-  //   excusedColor = "var(--alone-male-status-color)";
-  // }
-
-  // let tableRowDate;
-  // let selectedSalah
-  // tableRowDate, selectedSalah, "missed"
-  // let salahStatus: string;
 
   const rowGetter = ({ index }: any) => {
     return currentDisplayedDates[index]; // Return data for the row at the specified index
@@ -848,13 +647,6 @@ const PrayerTableDisplay = ({
                         setShowUpdateStatusModal(false);
                         setHasUserClickedDate(false);
                         forceUpdate();
-                        // console.log(
-                        //   "salahStatus before state update: " + salahStatus
-                        // );
-                        // setSalahStatus((prevValue) => prevValue + "1");
-                        // console.log(
-                        //   "salahStatus after state update: " + salahStatus
-                        // );
                       }
                     }}
                     className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
@@ -913,8 +705,6 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            // return <>{populateCells(formattedDate, "Fajr", 0)}</>;
-            // return <div>hi</div>;
             return renderTableCell ? (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -924,7 +714,6 @@ const PrayerTableDisplay = ({
                 doesSalahAndDateExists={doesSalahAndDateExists}
                 formattedDate={formattedDate}
                 salahName="Fajr"
-                iconStyles={iconStyles}
               />
             ) : (
               <></>
@@ -940,8 +729,6 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            // return <>{populateCells(formattedDate, "Dhuhr", 1)}</>;
-            // return <div>hi</div>;
             return renderTableCell ? (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -951,7 +738,6 @@ const PrayerTableDisplay = ({
                 doesSalahAndDateExists={doesSalahAndDateExists}
                 formattedDate={formattedDate}
                 salahName="Dhuhr"
-                iconStyles={iconStyles}
               />
             ) : (
               <></>
@@ -967,8 +753,6 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            // return <>{populateCells(formattedDate, "Asar", 2)}</>;
-            // return <div>hi</div>;
             return renderTableCell ? (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -978,7 +762,6 @@ const PrayerTableDisplay = ({
                 doesSalahAndDateExists={doesSalahAndDateExists}
                 formattedDate={formattedDate}
                 salahName="Asar"
-                iconStyles={iconStyles}
               />
             ) : (
               <></>
@@ -994,8 +777,6 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            // return <>{populateCells(formattedDate, "Maghrib", 3)}</>;
-            // return <div>hi</div>;
             return renderTableCell ? (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -1005,7 +786,6 @@ const PrayerTableDisplay = ({
                 doesSalahAndDateExists={doesSalahAndDateExists}
                 formattedDate={formattedDate}
                 salahName="Maghrib"
-                iconStyles={iconStyles}
               />
             ) : (
               <></>
@@ -1021,8 +801,6 @@ const PrayerTableDisplay = ({
           cellRenderer={({ rowData }) => {
             const dateObject = parse(rowData, "dd.MM.yy", new Date());
             const formattedDate = format(dateObject, "dd.MM.yy");
-            // return <>{populateCells(formattedDate, "Isha", 4)}</>;
-            // return <div>hi</div>;
             return renderTableCell ? (
               <PrayerTableCell
                 salahStatus={salahStatus}
@@ -1032,15 +810,12 @@ const PrayerTableDisplay = ({
                 doesSalahAndDateExists={doesSalahAndDateExists}
                 formattedDate={formattedDate}
                 salahName="Isha"
-                iconStyles={iconStyles}
               />
             ) : (
               <></>
             );
           }}
         />
-
-        {/* Add more columns here if needed */}
       </Table>
       {/* </div> */}
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
