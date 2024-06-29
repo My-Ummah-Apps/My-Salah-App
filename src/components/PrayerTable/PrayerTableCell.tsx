@@ -28,15 +28,14 @@ const PrayerTableCell = ({
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
   //   const [salahStatus, setSalahStatus] = useState<null | string>();
   //
+  console.log("TABLE CELL HAS RUN");
   useEffect(() => {
-    console.log("USEEFFECT FOR CELL HAS RUN!");
     async function fetchCellData() {
-      console.log("FETCH DATA HAS RUN WITHIN CELL");
-
-      const salahStatusResult = await doesSalahAndDateExists(
-        salahName,
-        formattedDate
-      );
+      //   const salahStatusResult = await doesSalahAndDateExists(
+      //     salahName,
+      //     formattedDate
+      //   ); // This does cause database errors upon prayer table being scrolled
+      let salahStatusResult = "male-alone"; // This does not cause database errors upon prayer table being scrolled
       //   setSalahStatus(salahStatusResult);
       //   console.log("SALAH STATUS IS:" + salahStatusResult);
       console.log("SALAH STATUS IS:" + salahStatusResult);

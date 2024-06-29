@@ -37,7 +37,7 @@ const PrayerTableDisplay = ({
     const initialiseAndLoadData = async () => {
       if (isDatabaseInitialised === true) {
         // await loadData();
-        console.log("DATABASE HAS INITIASLISED!!!");
+        console.log("DATABASE HAS INITIALISED");
         setRenderTableCell(true);
       }
     };
@@ -281,34 +281,8 @@ const PrayerTableDisplay = ({
 
   return (
     <section className="relative">
-      <PrayerStatusBottomSheet
-        tableRowDate={tableRowDate}
-        setSalahStatus={setSalahStatus}
-        setSelectedReasons={setSelectedReasons}
-        setReasonsArray={setReasonsArray}
-        selectedReasonsArray={selectedReasonsArray}
-        selectedReasons={selectedReasons}
-        reasonsArray={reasonsArray}
-        handleCustomReason={handleCustomReason}
-        setNotes={setNotes}
-        notes={notes}
-        handleNotes={handleNotes}
-        selectedSalah={selectedSalah}
-        userGender={userGender}
-        showUpdateStatusModal={showUpdateStatusModal}
-        salahStatus={salahStatus}
-        // handleTableCellClick={handleTableCellClick}
-        setShowUpdateStatusModal={setShowUpdateStatusModal}
-        setHasUserClickedDate={setHasUserClickedDate}
-        hasUserClickedDate={hasUserClickedDate}
-        customReason={customReason}
-        setShowAddCustomReasonInputBox={setShowAddCustomReasonInputBox}
-        showAddCustomReasonInputBox={showAddCustomReasonInputBox}
-        doesSalahAndDateExists={doesSalahAndDateExists}
-        // formattedDate={formattedDate}
-      />
-
       {/* <div style={{ width: "100vw !important" }}> */}
+
       <Table
         style={{
           textTransform: "none",
@@ -361,7 +335,7 @@ const PrayerTableDisplay = ({
                 salahName="Fajr"
               />
             ) : (
-              <></>
+              <>nil</>
             );
           }}
         />
@@ -385,7 +359,7 @@ const PrayerTableDisplay = ({
                 salahName="Dhuhr"
               />
             ) : (
-              <></>
+              <>nil</>
             );
           }}
         />
@@ -409,7 +383,7 @@ const PrayerTableDisplay = ({
                 salahName="Asar"
               />
             ) : (
-              <></>
+              <>nil</>
             );
           }}
         />
@@ -433,7 +407,7 @@ const PrayerTableDisplay = ({
                 salahName="Maghrib"
               />
             ) : (
-              <></>
+              <>nil</>
             );
           }}
         />
@@ -457,13 +431,40 @@ const PrayerTableDisplay = ({
                 salahName="Isha"
               />
             ) : (
-              <></>
+              <>Nil</>
             );
           }}
         />
       </Table>
-      {/* </div> */}
+
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
+      <PrayerStatusBottomSheet
+        performSQLAction={performSQLAction}
+        tableRowDate={tableRowDate}
+        setSalahStatus={setSalahStatus}
+        setSelectedReasons={setSelectedReasons}
+        setReasonsArray={setReasonsArray}
+        selectedReasonsArray={selectedReasonsArray}
+        selectedReasons={selectedReasons}
+        reasonsArray={reasonsArray}
+        handleCustomReason={handleCustomReason}
+        setNotes={setNotes}
+        notes={notes}
+        handleNotes={handleNotes}
+        selectedSalah={selectedSalah}
+        userGender={userGender}
+        showUpdateStatusModal={showUpdateStatusModal}
+        salahStatus={salahStatus}
+        // handleTableCellClick={handleTableCellClick}
+        setShowUpdateStatusModal={setShowUpdateStatusModal}
+        setHasUserClickedDate={setHasUserClickedDate}
+        hasUserClickedDate={hasUserClickedDate}
+        customReason={customReason}
+        setShowAddCustomReasonInputBox={setShowAddCustomReasonInputBox}
+        showAddCustomReasonInputBox={showAddCustomReasonInputBox}
+        doesSalahAndDateExists={doesSalahAndDateExists}
+        // formattedDate={formattedDate}
+      />
     </section>
   );
 };

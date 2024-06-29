@@ -17,6 +17,7 @@ const useSQLiteDB = () => {
   useEffect(() => {
     const initialiseDB = async () => {
       try {
+        // if (sqliteConnection && dbConnection) return;
         if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so no need to re-initialise by running the code below, hence it will return out of the function at this point
         console.log("INITIALISING DATABASE");
 
@@ -57,7 +58,7 @@ const useSQLiteDB = () => {
 
         await initialiseTables();
         setisDatabaseInitialised(true);
-        console.log("Database initialization complete");
+        console.log("Database initialisation complete");
       } catch (error) {
         console.error("Error initializing database:", error);
         throw new Error("Database initialization failed");
@@ -113,7 +114,7 @@ const useSQLiteDB = () => {
         cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
         console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
-        console.log("ERROR");
+        console.log("ERROR ON LINE 116");
         console.log(error);
       }
     }

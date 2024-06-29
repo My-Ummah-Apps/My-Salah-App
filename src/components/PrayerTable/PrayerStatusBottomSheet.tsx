@@ -12,6 +12,7 @@ import useSQLiteDB from "../../utils/useSqLiteDB";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 const PrayerStatusBottomSheet = ({
+  performSQLAction,
   tableRowDate,
   doesSalahAndDateExists,
   setSalahStatus,
@@ -35,6 +36,7 @@ const PrayerStatusBottomSheet = ({
   hasUserClickedDate,
   customReason,
 }: {
+  performSQLAction: any;
   tableRowDate: string;
   doesSalahAndDateExists: (
     salahName: string,
@@ -64,7 +66,6 @@ const PrayerStatusBottomSheet = ({
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
-  const { performSQLAction } = useSQLiteDB();
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);
