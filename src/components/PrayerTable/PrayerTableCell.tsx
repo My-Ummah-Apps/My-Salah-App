@@ -31,7 +31,7 @@ const PrayerTableCell = ({
   useEffect(() => {
     console.log("USEEFFECT FOR CELL HAS RUN!");
     async function fetchCellData() {
-      console.log("FETCH DATA HAS RUN");
+      console.log("FETCH DATA HAS RUN WITHIN CELL");
 
       const salahStatusResult = await doesSalahAndDateExists(
         salahName,

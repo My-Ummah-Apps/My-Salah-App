@@ -100,8 +100,12 @@ const useSQLiteDB = () => {
       await dbConnection.current?.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
       await action(dbConnection.current); // Execute the passed in action function (add, edit etc) with dbConnection.current as its argument
     } catch (error) {
-      alert((error as Error).message);
-      console.log("ERROR IN CATCH: CONNECTION NOT ESTABLISHED");
+      //   alert((error as Error).message);
+      console.log(
+        "ERROR IN CATCH: CONNECTION NOT ESTABLISHED, ERROR AS FOLLOWS:"
+      );
+      console.log(error);
+      //   console.log((error as Error).message);
     } finally {
       try {
         (await dbConnection.current?.isDBOpen())?.result &&
