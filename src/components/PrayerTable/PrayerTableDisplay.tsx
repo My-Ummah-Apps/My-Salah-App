@@ -1,15 +1,16 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useState, useReducer, useRef } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import "react-virtualized/styles.css";
-import { Column, Table, AutoSizer } from "react-virtualized";
+import { Column, Table, AutoSizer, InfiniteLoader } from "react-virtualized";
 AutoSizer;
 import PrayerTableCell from "./PrayerTableCell";
-import useSQLiteDB from "../../utils/useSqLiteDB";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { salahTrackingEntryType } from "../../types/types";
 import { subDays, format, parse, eachDayOfInterval } from "date-fns";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import useSQLiteDB from "../../utils/useSqLiteDB";
+import { SQLiteConnection, CapacitorSQLite } from "@capacitor-community/sqlite";
 
 // import StreakCount from "../Stats/StreakCount";
 const PrayerTableDisplay = ({
@@ -27,7 +28,12 @@ const PrayerTableDisplay = ({
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
 }) => {
-  const { performSQLAction, isDatabaseInitialised } = useSQLiteDB();
+  const {
+    performSQLAction,
+    isDatabaseInitialised,
+    sqliteConnection,
+    dbConnection,
+  } = useSQLiteDB();
 
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
@@ -39,10 +45,13 @@ const PrayerTableDisplay = ({
         // await loadData();
         console.log("DATABASE HAS INITIALISED");
         setRenderTableCell(true);
+        await fetchDateFromDatabase(1, 50);
+        console.log("TEST");
+        console.log(dbConnection.current);
       }
     };
     initialiseAndLoadData();
-  }, [isDatabaseInitialised]);
+  }, [isDatabaseInitialised]); // isDatabaseInitialised is never set to false, so can probably be removed safely
 
   // const loadData = async () => {
   //   try {
@@ -87,18 +96,54 @@ const PrayerTableDisplay = ({
     format(date, "dd.MM.yy")
   );
   datesFormatted.reverse();
-  let currentDisplayedDates: string[] = [];
-  function generateTableRowDates() {
-    currentDisplayedDates = Array.from(
-      { length: datesBetweenUserStartDateAndToday.length },
-      (_, index) => {
-        const date = subDays(startDate, index);
-        return format(date, "dd.MM.yy");
-      }
-    );
-  }
 
-  generateTableRowDates();
+  // let currentDisplayedDates: string[] = [];
+  // function generateTableRowDates() {
+  //   currentDisplayedDates = Array.from(
+  //     { length: datesBetweenUserStartDateAndToday.length },
+  //     (_, index) => {
+  //       const date = subDays(startDate, index);
+  //       return format(date, "dd.MM.yy");
+  //     }
+  //   );
+  // }
+
+  // const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection itself
+  // const dbConnection = useRef<SQLiteDBConnection>(); // Database connection, will deal with READ/INSERT etc
+
+  // console.log("sqliteConnection");
+  // console.log(sqliteConnection?.current);
+
+  const INITIAL_LOAD_SIZE = 50;
+  const LOAD_MORE_SIZE = 50;
+
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  let currentDisplayedDates: string[] = [];
+  const fetchDateFromDatabase = async (start: number, end: number) => {
+    try {
+      const establishDBConnection = await dbConnection.current?.open();
+      console.log("establishDBConnection:");
+      console.log(establishDBConnection);
+      // Despite fetchDateFromDatabase only being called after database is initialised,
+      // for some reason establishDBConnection still returns undefined
+      const query = `SELECT date, salahName, salahStatus, reasons, notes 
+          FROM salahtrackingtable 
+          LIMIT ? OFFSET ?`;
+
+      // const rows = await dbConnection?.all(query, [end - start, start]);
+    } catch (error) {
+      console.log("ERROR IN fetchDateFromDatabase FUNCTION: ");
+      console.log(error);
+    }
+    // return Array.from({ length: end - start }, (_, index) => {
+    //   const date = subDays(startDate, index);
+    //   return {
+    //     date: format(date, "dd.MM.yy"),
+    //   };
+    // });
+  };
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [salahStatus, setSalahStatus] = useState("");
@@ -125,8 +170,8 @@ const PrayerTableDisplay = ({
     salahName: string,
     formattedDate: string
   ): Promise<string | null> => {
-    console.log("SALAH NAME IS: " + salahName);
-    console.log("formattedDate DATE IS: " + formattedDate);
+    // console.log("SALAH NAME IS: " + salahName);
+    // console.log("formattedDate DATE IS: " + formattedDate);
     // let doesSalahAndDateExistsResult = false;
     let currentSalahStatus = null;
     try {
@@ -146,14 +191,14 @@ const PrayerTableDisplay = ({
           // console.log(result);
 
           if (result && result.values && result.values.length > 0) {
-            console.log("RESULT IS: ");
-            console.log(result.values[0].salahStatus);
+            // console.log("RESULT IS: ");
+            // console.log(result.values[0].salahStatus);
             setSalahStatus(result.values[0].salahStatus);
             setSelectedReasons(result.values[0].reasons);
             setNotes(result.values[0].notes);
             currentSalahStatus = result.values[0].salahStatus;
           } else {
-            console.log("RESULT DOES NOT EXIST");
+            // console.log("RESULT DOES NOT EXIST");
             setSalahStatus("");
             setSelectedReasons([]);
             setNotes("");
@@ -189,11 +234,11 @@ const PrayerTableDisplay = ({
       );
     } catch (error) {
       alert((error as Error).message);
-      console.log("ERROR ON LINE 274 PrayerTableDisplay.tsx");
+      console.log("ERROR ON LINE 192 PrayerTableDisplay.tsx");
     }
 
-    console.log("STATUS OF SALAH: ");
-    console.log(salahStatus);
+    // console.log("STATUS OF SALAH: ");
+    // console.log(salahStatus);
     return currentSalahStatus;
   };
 

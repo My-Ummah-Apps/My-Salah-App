@@ -7,8 +7,8 @@ import {
 
 const useSQLiteDB = () => {
   console.log("useSQLiteDB HAS RUN");
-  const dbConnection = useRef<SQLiteDBConnection>(); // Database connection, will deal with READ/INSERT etc
-  const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection itself
+  const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection
+  const dbConnection = useRef<SQLiteDBConnection>(); // This is the connection to the database itself, will deal with READ/INSERT etc
   const [isDatabaseInitialised, setisDatabaseInitialised] =
     useState<boolean>(false);
 
@@ -76,18 +76,18 @@ const useSQLiteDB = () => {
     initialiseDB();
 
     // Cleanup function to close the database connection when the component unmounts
-    return () => {
-      const cleanupDB = async () => {
-        if (dbConnection.current) {
-          const isOpen = await dbConnection.current.isDBOpen();
-          if (isOpen?.result) {
-            await dbConnection.current.close();
-          }
-        }
-      };
-      cleanupDB();
-      console.log("CLEANUP WITHIN initialiseDB()");
-    };
+    // return () => {
+    //   const cleanupDB = async () => {
+    //     if (dbConnection.current) {
+    //       const isOpen = await dbConnection.current.isDBOpen();
+    //       if (isOpen?.result) {
+    //         await dbConnection.current.close();
+    //       }
+    //     }
+    //   };
+    //   cleanupDB();
+    //   console.log("CLEANUP WITHIN initialiseDB()");
+    // };
   }, []);
 
   //   This async function will handle CRUD operations on the database, it will take an action function passed which will determine what type of CRUD functionality it will execute
@@ -95,7 +95,7 @@ const useSQLiteDB = () => {
     action: (dbConnection: SQLiteDBConnection | undefined) => Promise<void>,
     cleanup?: () => Promise<void>
   ) => {
-    console.log("PERFORMSQLACTION FUNCTION HAS RUN!");
+    console.log("PERFORMSQLACTION FUNCTION HAS RUN");
     try {
       console.log("ATTEMPTING TO OPEN CONNECTION...");
       await dbConnection.current?.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
@@ -114,7 +114,7 @@ const useSQLiteDB = () => {
         cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
         console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
-        console.log("ERROR ON LINE 116");
+        console.log("ERROR ON LINE 117");
         console.log(error);
       }
     }
@@ -134,8 +134,8 @@ const useSQLiteDB = () => {
 
         // console.log(`res: ${JSON.stringify(respCT)}`);
         //   console.log("queryCreateSalahTrackingTable: ");
-        console.log("res: ");
-        console.log(respCT);
+        // console.log("res: ");
+        // console.log(respCT);
 
         // Insert dummy data
         //     const queryInsertDummyData = `
@@ -148,7 +148,12 @@ const useSQLiteDB = () => {
     );
   };
 
-  return { performSQLAction, isDatabaseInitialised }; // This exposes both performSQLAction and databaseInitialised so when importing this hook in another component both of these can be accessed by said component
+  return {
+    performSQLAction,
+    isDatabaseInitialised,
+    sqliteConnection,
+    dbConnection,
+  }; // This exposes both performSQLAction and databaseInitialised so when importing this hook in another component both of these can be accessed by said component
 };
 
 export default useSQLiteDB;
