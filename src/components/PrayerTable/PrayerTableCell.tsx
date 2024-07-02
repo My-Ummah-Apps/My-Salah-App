@@ -36,7 +36,7 @@ const PrayerTableCell = ({
       //     salahName,
       //     formattedDate
       //   ); // This does cause database errors upon prayer table being scrolled
-      //   let salahStatusResult = "male-alone"; // This does not cause database errors upon prayer table being scrolled
+      let salahStatusResult = "male-alone"; // This does not cause database errors upon prayer table being scrolled
       //   setSalahStatus(salahStatusResult);
       //   console.log("SALAH STATUS IS:" + salahStatusResult);
       //   console.log("SALAH STATUS IS:" + salahStatusResult);

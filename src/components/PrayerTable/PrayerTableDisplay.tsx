@@ -39,19 +39,7 @@ const PrayerTableDisplay = ({
 
   const [renderTableCell, setRenderTableCell] = useState(false);
 
-  useEffect(() => {
-    const initialiseAndLoadData = async () => {
-      if (isDatabaseInitialised === true) {
-        // await loadData();
-        console.log("DATABASE HAS INITIALISED");
-        setRenderTableCell(true);
-        await fetchDateFromDatabase(1, 50);
-        console.log("TEST");
-        console.log(dbConnection.current);
-      }
-    };
-    initialiseAndLoadData();
-  }, [isDatabaseInitialised]); // isDatabaseInitialised is never set to false, so can probably be removed safely
+  // isDatabaseInitialised is never set to false, so can probably be removed safely
 
   // const loadData = async () => {
   //   try {
@@ -81,6 +69,79 @@ const PrayerTableDisplay = ({
   //   }
   // };
 
+  const [data, setData] = useState<any>();
+
+  useEffect(() => {
+    const initialiseAndLoadData = async () => {
+      if (isDatabaseInitialised === true) {
+        console.log("DATABASE HAS INITIALISED");
+        setRenderTableCell(true);
+        setData(await fetchDataFromDatabase(1, 50));
+        console.log("setData");
+      }
+    };
+    initialiseAndLoadData();
+  }, [isDatabaseInitialised]);
+
+  const INITIAL_LOAD_SIZE = 50;
+  const LOAD_MORE_SIZE = 50;
+
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(data);
+
+  // let currentDisplayedDates: string[] = [];
+  // function generateTableRowDates() {
+  //   currentDisplayedDates = Array.from(
+  //     { length: datesBetweenUserStartDateAndToday.length },
+  //     (_, index) => {
+  //       const date = subDays(startDate, index);
+  //       return format(date, "dd.MM.yy");
+  //     }
+  //   );
+  // }
+
+  let currentDisplayedDates: string[] = [];
+  const fetchDataFromDatabase = async (start: number, end: number) => {
+    console.log("fetchDataFromDatabase FUNCTION HAS EXECUTED");
+    try {
+      const isDbOpen = await dbConnection.current?.isDBOpen();
+      // console.log("isDbOpen:");
+      // console.log(isDbOpen);
+      if (isDbOpen?.result === false) {
+        await dbConnection.current?.open();
+        console.log(
+          "DB Connection within fetchDataFromDatabase function opened successfully"
+        );
+      }
+
+      const res = await dbConnection.current?.query(
+        `SELECT * FROM salahtrackingtable WHERE id BETWEEN ? AND ?`,
+        [start, end]
+      );
+      // console.log("RES IS: ");
+      // console.log(res);
+
+      return res;
+
+      // Despite fetchDataFromDatabase only being called after database is initialised,
+      // for some reason establishDBConnection still returns undefined
+      // const query = `SELECT date, salahName, salahStatus, reasons, notes
+      //     FROM salahtrackingtable
+      //     LIMIT ? OFFSET ?`;
+
+      // const rows = await dbConnection?.all(query, [end - start, start]);
+    } catch (error) {
+      console.log("ERROR IN fetchDataFromDatabase FUNCTION: ");
+      console.log(error);
+    }
+    // return Array.from({ length: end - start }, (_, index) => {
+    //   const date = subDays(startDate, index);
+    //   return {
+    //     date: format(date, "dd.MM.yy"),
+    //   };
+    // });
+  };
+
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableRowDate, setTableRowDate] = useState("");
 
@@ -96,54 +157,6 @@ const PrayerTableDisplay = ({
     format(date, "dd.MM.yy")
   );
   datesFormatted.reverse();
-
-  // let currentDisplayedDates: string[] = [];
-  // function generateTableRowDates() {
-  //   currentDisplayedDates = Array.from(
-  //     { length: datesBetweenUserStartDateAndToday.length },
-  //     (_, index) => {
-  //       const date = subDays(startDate, index);
-  //       return format(date, "dd.MM.yy");
-  //     }
-  //   );
-  // }
-
-  // const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection itself
-  // const dbConnection = useRef<SQLiteDBConnection>(); // Database connection, will deal with READ/INSERT etc
-
-  // console.log("sqliteConnection");
-  // console.log(sqliteConnection?.current);
-
-  const INITIAL_LOAD_SIZE = 50;
-  const LOAD_MORE_SIZE = 50;
-
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  let currentDisplayedDates: string[] = [];
-  const fetchDateFromDatabase = async (start: number, end: number) => {
-    try {
-      const establishDBConnection = await dbConnection.current?.open();
-      console.log("establishDBConnection:");
-      console.log(establishDBConnection);
-      // Despite fetchDateFromDatabase only being called after database is initialised,
-      // for some reason establishDBConnection still returns undefined
-      const query = `SELECT date, salahName, salahStatus, reasons, notes 
-          FROM salahtrackingtable 
-          LIMIT ? OFFSET ?`;
-
-      // const rows = await dbConnection?.all(query, [end - start, start]);
-    } catch (error) {
-      console.log("ERROR IN fetchDateFromDatabase FUNCTION: ");
-      console.log(error);
-    }
-    // return Array.from({ length: end - start }, (_, index) => {
-    //   const date = subDays(startDate, index);
-    //   return {
-    //     date: format(date, "dd.MM.yy"),
-    //   };
-    // });
-  };
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [salahStatus, setSalahStatus] = useState("");
@@ -321,166 +334,186 @@ const PrayerTableDisplay = ({
   // };
 
   const rowGetter = ({ index }: any) => {
-    return currentDisplayedDates[index]; // Return data for the row at the specified index
+    return data[index];
+    // return currentDisplayedDates[index]; // Return data for the row at the specified index
   };
+
+  const isRowLoaded = ({ index }: any) => {
+    return !!data[index];
+  };
+
+  function loadMoreRows({ startIndex, stopIndex }: any) {
+    return fetchDataFromDatabase(startIndex, stopIndex);
+  }
 
   return (
     <section className="relative">
       {/* <div style={{ width: "100vw !important" }}> */}
 
-      <Table
-        style={{
-          textTransform: "none",
-        }}
-        className="text-center "
-        rowCount={currentDisplayedDates.length}
-        rowGetter={rowGetter}
-        rowHeight={100}
-        headerHeight={40}
-        height={800}
-        width={510}
+      <InfiniteLoader
+        isRowLoaded={isRowLoaded}
+        loadMoreRows={loadMoreRows}
+        rowCount={50}
       >
-        <Column
-          style={{ marginLeft: "0" }}
-          className="text-sm text-left "
-          label=""
-          dataKey="date"
-          width={120}
-          flexGrow={1}
-          cellRenderer={({ rowData }) => {
-            const dateObject = parse(rowData, "dd.MM.yy", new Date());
-            const formattedDate = format(dateObject, "dd.MM.yy");
-            const formattedDay = format(dateObject, "EEEE");
-            return (
-              <>
-                <p>{formattedDate}</p>
-                <p>{formattedDay}</p>
-              </>
-            );
-          }}
-        />
+        {({ onRowsRendered, registerChild }) => (
+          <Table
+            style={{
+              textTransform: "none",
+            }}
+            className="text-center"
+            onRowsRendered={onRowsRendered}
+            ref={registerChild}
+            rowCount={50}
+            // rowCount={currentDisplayedDates.length}
+            rowGetter={rowGetter}
+            rowHeight={100}
+            headerHeight={40}
+            height={800}
+            width={510}
+          >
+            <Column
+              style={{ marginLeft: "0" }}
+              className="text-sm text-left "
+              label=""
+              dataKey="date"
+              width={120}
+              flexGrow={1}
+              cellRenderer={({ rowData }) => {
+                const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                const formattedDate = format(dateObject, "dd.MM.yy");
+                const formattedDay = format(dateObject, "EEEE");
+                return (
+                  <>
+                    {/* <p>{formattedDate}</p>
+                <p>{formattedDay}</p> */}
+                  </>
+                );
+              }}
+            />
 
-        <Column
-          className="text-center"
-          label="Fajr"
-          dataKey="date"
-          width={80}
-          flexGrow={1}
-          cellRenderer={({ rowData }) => {
-            const dateObject = parse(rowData, "dd.MM.yy", new Date());
-            const formattedDate = format(dateObject, "dd.MM.yy");
-            return renderTableCell ? (
-              <PrayerTableCell
-                salahStatus={salahStatus}
-                handleTableCellClick={handleTableCellClick}
-                setShowUpdateStatusModal={setShowUpdateStatusModal}
-                setHasUserClickedDate={setHasUserClickedDate}
-                doesSalahAndDateExists={doesSalahAndDateExists}
-                formattedDate={formattedDate}
-                salahName="Fajr"
-              />
-            ) : (
-              <>nil</>
-            );
-          }}
-        />
-        <Column
-          className="text-center"
-          label="Dhuhr"
-          dataKey="date"
-          width={80}
-          flexGrow={1}
-          cellRenderer={({ rowData }) => {
-            const dateObject = parse(rowData, "dd.MM.yy", new Date());
-            const formattedDate = format(dateObject, "dd.MM.yy");
-            return renderTableCell ? (
-              <PrayerTableCell
-                salahStatus={salahStatus}
-                handleTableCellClick={handleTableCellClick}
-                setShowUpdateStatusModal={setShowUpdateStatusModal}
-                setHasUserClickedDate={setHasUserClickedDate}
-                doesSalahAndDateExists={doesSalahAndDateExists}
-                formattedDate={formattedDate}
-                salahName="Dhuhr"
-              />
-            ) : (
-              <>nil</>
-            );
-          }}
-        />
-        <Column
-          className="text-center"
-          label="Asar"
-          dataKey="date"
-          width={80}
-          flexGrow={1}
-          cellRenderer={({ rowData }) => {
-            const dateObject = parse(rowData, "dd.MM.yy", new Date());
-            const formattedDate = format(dateObject, "dd.MM.yy");
-            return renderTableCell ? (
-              <PrayerTableCell
-                salahStatus={salahStatus}
-                handleTableCellClick={handleTableCellClick}
-                setShowUpdateStatusModal={setShowUpdateStatusModal}
-                setHasUserClickedDate={setHasUserClickedDate}
-                doesSalahAndDateExists={doesSalahAndDateExists}
-                formattedDate={formattedDate}
-                salahName="Asar"
-              />
-            ) : (
-              <>nil</>
-            );
-          }}
-        />
-        <Column
-          className="text-center"
-          label="Maghrib"
-          dataKey="date"
-          width={80}
-          flexGrow={1}
-          cellRenderer={({ rowData }) => {
-            const dateObject = parse(rowData, "dd.MM.yy", new Date());
-            const formattedDate = format(dateObject, "dd.MM.yy");
-            return renderTableCell ? (
-              <PrayerTableCell
-                salahStatus={salahStatus}
-                handleTableCellClick={handleTableCellClick}
-                setShowUpdateStatusModal={setShowUpdateStatusModal}
-                setHasUserClickedDate={setHasUserClickedDate}
-                doesSalahAndDateExists={doesSalahAndDateExists}
-                formattedDate={formattedDate}
-                salahName="Maghrib"
-              />
-            ) : (
-              <>nil</>
-            );
-          }}
-        />
-        <Column
-          className="text-center"
-          label="Isha"
-          dataKey="date"
-          width={80}
-          flexGrow={1}
-          cellRenderer={({ rowData }) => {
-            const dateObject = parse(rowData, "dd.MM.yy", new Date());
-            const formattedDate = format(dateObject, "dd.MM.yy");
-            return renderTableCell ? (
-              <PrayerTableCell
-                salahStatus={salahStatus}
-                handleTableCellClick={handleTableCellClick}
-                setShowUpdateStatusModal={setShowUpdateStatusModal}
-                setHasUserClickedDate={setHasUserClickedDate}
-                doesSalahAndDateExists={doesSalahAndDateExists}
-                formattedDate={formattedDate}
-                salahName="Isha"
-              />
-            ) : (
-              <>Nil</>
-            );
-          }}
-        />
-      </Table>
+            <Column
+              className="text-center"
+              label="Fajr"
+              dataKey="date"
+              width={80}
+              flexGrow={1}
+              cellRenderer={({ rowData }) => {
+                const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                const formattedDate = format(dateObject, "dd.MM.yy");
+                return renderTableCell ? (
+                  <PrayerTableCell
+                    salahStatus={salahStatus}
+                    handleTableCellClick={handleTableCellClick}
+                    setShowUpdateStatusModal={setShowUpdateStatusModal}
+                    setHasUserClickedDate={setHasUserClickedDate}
+                    doesSalahAndDateExists={doesSalahAndDateExists}
+                    formattedDate={formattedDate}
+                    salahName="Fajr"
+                  />
+                ) : (
+                  <>nil</>
+                );
+              }}
+            />
+            <Column
+              className="text-center"
+              label="Dhuhr"
+              dataKey="date"
+              width={80}
+              flexGrow={1}
+              cellRenderer={({ rowData }) => {
+                const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                const formattedDate = format(dateObject, "dd.MM.yy");
+                return renderTableCell ? (
+                  <PrayerTableCell
+                    salahStatus={salahStatus}
+                    handleTableCellClick={handleTableCellClick}
+                    setShowUpdateStatusModal={setShowUpdateStatusModal}
+                    setHasUserClickedDate={setHasUserClickedDate}
+                    doesSalahAndDateExists={doesSalahAndDateExists}
+                    formattedDate={formattedDate}
+                    salahName="Dhuhr"
+                  />
+                ) : (
+                  <>nil</>
+                );
+              }}
+            />
+            <Column
+              className="text-center"
+              label="Asar"
+              dataKey="date"
+              width={80}
+              flexGrow={1}
+              cellRenderer={({ rowData }) => {
+                const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                const formattedDate = format(dateObject, "dd.MM.yy");
+                return renderTableCell ? (
+                  <PrayerTableCell
+                    salahStatus={salahStatus}
+                    handleTableCellClick={handleTableCellClick}
+                    setShowUpdateStatusModal={setShowUpdateStatusModal}
+                    setHasUserClickedDate={setHasUserClickedDate}
+                    doesSalahAndDateExists={doesSalahAndDateExists}
+                    formattedDate={formattedDate}
+                    salahName="Asar"
+                  />
+                ) : (
+                  <>nil</>
+                );
+              }}
+            />
+            <Column
+              className="text-center"
+              label="Maghrib"
+              dataKey="date"
+              width={80}
+              flexGrow={1}
+              cellRenderer={({ rowData }) => {
+                const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                const formattedDate = format(dateObject, "dd.MM.yy");
+                return renderTableCell ? (
+                  <PrayerTableCell
+                    salahStatus={salahStatus}
+                    handleTableCellClick={handleTableCellClick}
+                    setShowUpdateStatusModal={setShowUpdateStatusModal}
+                    setHasUserClickedDate={setHasUserClickedDate}
+                    doesSalahAndDateExists={doesSalahAndDateExists}
+                    formattedDate={formattedDate}
+                    salahName="Maghrib"
+                  />
+                ) : (
+                  <>nil</>
+                );
+              }}
+            />
+            <Column
+              className="text-center"
+              label="Isha"
+              dataKey="date"
+              width={80}
+              flexGrow={1}
+              cellRenderer={({ rowData }) => {
+                const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                const formattedDate = format(dateObject, "dd.MM.yy");
+                return renderTableCell ? (
+                  <PrayerTableCell
+                    salahStatus={salahStatus}
+                    handleTableCellClick={handleTableCellClick}
+                    setShowUpdateStatusModal={setShowUpdateStatusModal}
+                    setHasUserClickedDate={setHasUserClickedDate}
+                    doesSalahAndDateExists={doesSalahAndDateExists}
+                    formattedDate={formattedDate}
+                    salahName="Isha"
+                  />
+                ) : (
+                  <>Nil</>
+                );
+              }}
+            />
+          </Table>
+        )}
+      </InfiniteLoader>
 
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
       <PrayerStatusBottomSheet
