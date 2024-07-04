@@ -399,28 +399,58 @@ const PrayerTableDisplay = ({
   // from the same object and render it, otherwise if it does not exist then render a blank cell
 
   const dataArr = [
-    { id: 1, date: "Date", status: "group" },
     {
-      id: 2,
-      date: "Date",
-      status: "group",
+      "01.01.24": [
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+      ],
     },
     {
-      id: 3,
-      date: "Date",
-      status: "group",
+      "02.01.24": [
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+      ],
     },
     {
-      id: 4,
-      date: "Date",
-      status: "group",
+      "03.01.24": [
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+        { id: 1, salahName: "salahName", date: "Date", status: "group" },
+      ],
     },
+    // { id: 1, salahName: "salahName", date: "Date", status: "group" },
+    // {
+    //   id: 2,
+    //   salahName: "salahName",
+    //   date: "Date1",
+    //   status: "group",
+    // },
+    // {
+    //   id: 3,
+    //   salahName: "salahName",
+    //   date: "Date2",
+    //   status: "alone",
+    // },
+    // {
+    //   id: 4,
+    //   salahName: "salahName",
+    //   date: "Date3",
+    //   status: "group",
+    // },
   ];
-  const [isDateColumn, setIsDateColumn] = useState<boolean>(true);
+  // const [isDateColumn, setIsDateColumn] = useState<boolean>(true);
   const rowGetter = ({ index }: any) => {
     console.log("ROWGETTER HAS RUN");
-
-    return dataArr[index];
+    console.log(dataArr[index]["01.01.24"][0].date);
+    return dataArr[index]["01.01.24"][0];
     // console.log("isDateColumn");
     // console.log(isDateColumn);
     // return currentDisplayedDates[index]; // Return data for the row at the specified index
@@ -472,7 +502,7 @@ const PrayerTableDisplay = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           // rowCount={datesFormatted.length}
-          rowCount={3}
+          rowCount={1}
         >
           {({ onRowsRendered, registerChild }) => (
             <Table
@@ -483,7 +513,7 @@ const PrayerTableDisplay = ({
               onRowsRendered={onRowsRendered}
               ref={registerChild}
               // rowCount={datesFormatted.length}
-              rowCount={3}
+              rowCount={1}
               // rowCount={currentDisplayedDates.length}
               rowGetter={rowGetter}
               rowHeight={100}
@@ -494,11 +524,13 @@ const PrayerTableDisplay = ({
               <Column
                 style={{ marginLeft: "0" }}
                 className="text-sm text-left "
-                label="Date"
+                label=""
                 dataKey="date"
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
+                  console.log("ROWDATA");
+                  console.log(rowData.status);
                   // setIsDateColumn(true);
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDay = format(rowData, "EEEE");
@@ -516,7 +548,7 @@ const PrayerTableDisplay = ({
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDate = format(dateObject, "dd.MM.yy");
                   // setIsDateColumn(false);
-                  return <div>{rowData.status}</div>;
+                  return <div>{rowData.date}</div>;
                   // return renderTableCell ? (
                   //   <PrayerTableCell
                   //     salahStatus={salahStatus}
