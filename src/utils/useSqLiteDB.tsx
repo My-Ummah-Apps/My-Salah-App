@@ -138,9 +138,9 @@ const useSQLiteDB = () => {
         // console.log(respCT);
 
         // Insert dummy data
-        //     const queryInsertDummyData = `
+        // const queryInsertDummyData = `
         //     INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
-        //     VALUES ('24.06.24', 'Fajr', 'male-alone', 'No reasons', 'No notes');
+        //     VALUES ('01.07.24', 'Isha', 'missed', 'No reasons', 'No notes');
         //   `;
         // const respInsert = await dbConnection?.execute(queryInsertDummyData);
         // console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
