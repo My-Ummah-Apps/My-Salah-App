@@ -70,8 +70,9 @@ const PrayerTableDisplay = ({
   // };
 
   const [data, setData] = useState<any>([]);
+  console.log("DATA::");
+  console.log(data);
   const [renderTable, setRenderTable] = useState(false);
-
   useEffect(() => {
     console.log("isDatabaseInitialised useEffect has run");
     const initialiseAndLoadData = async () => {
@@ -79,13 +80,21 @@ const PrayerTableDisplay = ({
         console.log("DATABASE HAS INITIALISED");
         // setRenderTableCell(true);
         setData(await fetchDataFromDatabase(1, 50));
-        setRenderTable(true);
 
         // console.log("setData");
       }
     };
     initialiseAndLoadData();
   }, [isDatabaseInitialised]);
+
+  useEffect(() => {
+    console.log("DATA WITHIN USEEFFECT");
+    console.log(data);
+    if (data.length > 0) {
+      console.log("RENDERTABLE TRUE");
+      setRenderTable(true);
+    }
+  }, [data]);
 
   const INITIAL_LOAD_SIZE = 50;
   const LOAD_MORE_SIZE = 50;
@@ -132,7 +141,7 @@ const PrayerTableDisplay = ({
   //     }
   //   );
   // }
-
+  let holdArr: any = [];
   // let currentDisplayedDates: string[] = [];
   const fetchDataFromDatabase = async (
     startIndex: number,
@@ -150,20 +159,20 @@ const PrayerTableDisplay = ({
         );
       }
 
-      const queryInsertDummyData = `
-            INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
-            VALUES ('01.07.24', 'Isha', 'missed', 'No reasons', 'No notes');
-          `;
-      const respInsert =
-        await dbConnection?.current?.execute(queryInsertDummyData);
-      console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
-      // await dbConnection?.current?.execute(`COMMIT;`);
+      // const queryInsertDummyData = `
+      //       INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
+      //       VALUES ('01.07.24', 'Isha', 'missed', 'No reasons', 'No notes');
+      //     `;
+      // const respInsert =
+      //   await dbConnection?.current?.execute(queryInsertDummyData);
+      // console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
+      // // await dbConnection?.current?.execute(`COMMIT;`);
 
-      const checkInsertedData = await dbConnection.current?.query(
-        `SELECT * FROM salahtrackingtable WHERE date = '01.07.24'`
-      );
+      // const checkInsertedData = await dbConnection.current?.query(
+      //   `SELECT * FROM salahtrackingtable WHERE date = '01.07.24'`
+      // );
 
-      console.log("Inserted Data Check: ", checkInsertedData);
+      // console.log("Inserted Data Check: ", checkInsertedData);
 
       const res = await dbConnection.current?.query(
         `SELECT * FROM salahtrackingtable WHERE id BETWEEN ? AND ?`,
@@ -173,37 +182,79 @@ const PrayerTableDisplay = ({
       console.log("RES IS: ");
       console.log(res);
       // setData(res);
-      let dataObjectForRowGetterFunc = {};
+      // [
+      //   {
+      //     "date": "01.01.24",
+      //     "salahs": {
+      //       "Fajr": "group",
+      //       "Dhuhr": "group",
+      //       "Asr": "group",
+      //       "Maghrib": "group",
+      //       "Isha": "group"
+      //     }
+      //   ]
+
+      // const test = res?.values?.reduce(
+      //   (accumulator, currentValue) => {
+      //     accumulator + currentValue
+      //   },
+      //   {}
+      // );
+
+      // console.log("test1");
+      // console.log(test);
+
       const staticDateAndDatabaseDataCombined = res?.values?.map(
         (obj, index) => {
-          // console.log("OBJ:");
-          // console.log(obj);
+          console.log("OBJ:");
+          console.log(obj);
           const dateFromDatesFormattedArr = datesFormatted[startIndex + index];
 
           // console.log("single obj: ");
           // console.log(res?.values?.[index].date);
           console.log("dateFromDatesFormattedArr: ");
           console.log(dateFromDatesFormattedArr);
-          console.log("res?.values?.[index].date:");
-          console.log(res?.values?.[index].date);
+          // console.log("res?.values?.[index].date:");
+          // console.log(res?.values?.[index].date);
+
+          type Salahs = {
+            [key: string]: string;
+          };
+
+          let singleSalahObj = {
+            date: dateFromDatesFormattedArr,
+            salahs: {
+              Fajr: "",
+              Dhuhr: "",
+              Asr: "",
+              Maghrib: "",
+              Isha: "",
+            } as Salahs,
+          };
 
           if (res?.values?.[index].date === dateFromDatesFormattedArr) {
             console.log("DATE MATCH DETECTED");
-            dataObjectForRowGetterFunc = { dateFromDatesFormattedArr, ...res };
+            let salahName: any = res?.values?.[index].salahName;
+            let salahStatus: string = res?.values?.[index].salahStatus;
+            singleSalahObj.salahs[salahName] = salahStatus;
+            console.log("salahName::");
+            console.log(singleSalahObj.salahs[salahName]);
           }
-
-          console.log("dataObjectForRowGetterFunc is: ");
-          console.log(dataObjectForRowGetterFunc);
-
-          return dataObjectForRowGetterFunc;
-
-          // return { date: datesFormatted[startIndex + index], ...res };
+          console.log("singleSalahObj");
+          console.log(singleSalahObj);
+          holdArr.push(singleSalahObj);
         }
       );
-      // console.log("staticDateAndDatabaseDataCombined");
-      // console.log(res?.values);
 
-      return staticDateAndDatabaseDataCombined;
+      // setData(holdArr);
+      return holdArr;
+      console.log("DATA WITHIN FETCH FUNC:");
+      console.log(data);
+
+      console.log("holdArr");
+      console.log(holdArr);
+
+      // return staticDateAndDatabaseDataCombined;
 
       // return res?.values;
 
@@ -398,73 +449,33 @@ const PrayerTableDisplay = ({
   // rows date exists (and take the column datakey into account ie the salah name) then grab the salah status
   // from the same object and render it, otherwise if it does not exist then render a blank cell
 
-  const dataArr = [
-    {
-      "01.01.24": [
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-      ],
-    },
-    {
-      "02.01.24": [
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-      ],
-    },
-    {
-      "03.01.24": [
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-        { id: 1, salahName: "salahName", date: "Date", status: "group" },
-      ],
-    },
-    // { id: 1, salahName: "salahName", date: "Date", status: "group" },
-    // {
-    //   id: 2,
-    //   salahName: "salahName",
-    //   date: "Date1",
-    //   status: "group",
-    // },
-    // {
-    //   id: 3,
-    //   salahName: "salahName",
-    //   date: "Date2",
-    //   status: "alone",
-    // },
-    // {
-    //   id: 4,
-    //   salahName: "salahName",
-    //   date: "Date3",
-    //   status: "group",
-    // },
-  ];
+  // const generateData = (numberOfDays: number) => {
+  //   const data = [];
+  //   const salahStatuses = ["group", "male-alone", "missed", "late"];
+
+  //   for (let i = 0; i < numberOfDays; i++) {
+  //     const date = format(subDays(new Date(), i), "dd.MM.yy");
+  //     const salahs = {
+  //       Fajr: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
+  //       Dhuhr: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
+  //       Asar: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
+  //       Maghrib:
+  //         salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
+  //       Isha: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
+  //     };
+
+  //     data.push({ date, salahs });
+  //   }
+
+  //   return data;
+  // };
+
+  // const data = generateData(10000); // Generate 10,000 days of data
   // const [isDateColumn, setIsDateColumn] = useState<boolean>(true);
   const rowGetter = ({ index }: any) => {
     console.log("ROWGETTER HAS RUN");
-    console.log(dataArr[index]["01.01.24"][0].date);
-    return dataArr[index]["01.01.24"][0];
-    // console.log("isDateColumn");
-    // console.log(isDateColumn);
-    // return currentDisplayedDates[index]; // Return data for the row at the specified index
-    // if (isDatabaseInitialised === true) {
-    //   // if (isDateColumn) {
-    //   //   console.log("datesFormatted[index]");
-    //   //   console.log(datesFormatted[index]);
-    //   //   console.log("ROWGETTER INDEX IS:");
-    //   //   console.log(index);
-    //   //   return datesFormatted[index];
-    //   // } else {
-    //   //   return "not date column";
-    //   // }
-    // }
+    // console.log(dataArr[index]["01.01.24"][0].date);
+    return data[index];
   };
 
   // console.log("DATES FORMATTED ARRAY:");
@@ -475,7 +486,7 @@ const PrayerTableDisplay = ({
     // return !!currentDisplayedDates[index];
     // if (isDatabaseInitialised === true) {
     // return !!datesFormatted[index];
-    return !!dataArr[index];
+    return !!data[index];
     // return !!data[index];
     // }
   };
@@ -494,15 +505,17 @@ const PrayerTableDisplay = ({
     // }
   }
 
+  const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
+
   return (
     <section className="relative">
       {/* <div style={{ width: "100vw !important" }}> */}
-      {renderTable ? (
+      {renderTable === true ? (
         <InfiniteLoader
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           // rowCount={datesFormatted.length}
-          rowCount={1}
+          rowCount={data.length}
         >
           {({ onRowsRendered, registerChild }) => (
             <Table
@@ -513,7 +526,7 @@ const PrayerTableDisplay = ({
               onRowsRendered={onRowsRendered}
               ref={registerChild}
               // rowCount={datesFormatted.length}
-              rowCount={1}
+              rowCount={data.length}
               // rowCount={currentDisplayedDates.length}
               rowGetter={rowGetter}
               rowHeight={100}
@@ -530,141 +543,36 @@ const PrayerTableDisplay = ({
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
                   console.log("ROWDATA");
-                  console.log(rowData.status);
+                  console.log(rowData.date);
                   // setIsDateColumn(true);
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDay = format(rowData, "EEEE");
+
                   return <div>{rowData.date}</div>;
                 }}
               />
-
-              <Column
-                className="text-center"
-                label="Dhuhr"
-                dataKey="Dhuhr"
-                width={80}
-                flexGrow={1}
-                cellRenderer={({ rowData }) => {
-                  // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                  // const formattedDate = format(dateObject, "dd.MM.yy");
-                  // setIsDateColumn(false);
-                  return <div>{rowData.date}</div>;
-                  // return renderTableCell ? (
-                  //   <PrayerTableCell
-                  //     salahStatus={salahStatus}
-                  //     handleTableCellClick={handleTableCellClick}
-                  //     setShowUpdateStatusModal={setShowUpdateStatusModal}
-                  //     setHasUserClickedDate={setHasUserClickedDate}
-                  //     doesSalahAndDateExists={doesSalahAndDateExists}
-                  //     formattedDate={formattedDate}
-                  //     salahName="Dhuhr"
-                  //   />
-                  // ) : (
-                  //   <>nil</>
-                  // );
-                }}
-              />
-
-              <Column
-                className="text-center"
-                label="Fajr"
-                dataKey="date"
-                width={80}
-                flexGrow={1}
-                cellRenderer={({ rowData }) => {
-                  // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                  // const formattedDate = format(dateObject, "dd.MM.yy");
-                  return <div>{rowData.status}</div>;
-                  // return renderTableCell ? (
-                  //   <PrayerTableCell
-                  //     salahStatus={salahStatus}
-                  //     handleTableCellClick={handleTableCellClick}
-                  //     setShowUpdateStatusModal={setShowUpdateStatusModal}
-                  //     setHasUserClickedDate={setHasUserClickedDate}
-                  //     doesSalahAndDateExists={doesSalahAndDateExists}
-                  //     formattedDate={formattedDate}
-                  //     salahName="Fajr"
-                  //   />
-                  // ) : (
-                  //   <>nil</>
-                  // );
-                }}
-              />
-              <Column
-                className="text-center"
-                label="Dhuhr"
-                dataKey="date"
-                width={80}
-                flexGrow={1}
-                cellRenderer={({ rowData }) => {
-                  // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                  // const formattedDate = format(dateObject, "dd.MM.yy");
-                  return <div>{rowData.status}</div>;
-                  // return renderTableCell ? (
-                  //   <PrayerTableCell
-                  //     salahStatus={salahStatus}
-                  //     handleTableCellClick={handleTableCellClick}
-                  //     setShowUpdateStatusModal={setShowUpdateStatusModal}
-                  //     setHasUserClickedDate={setHasUserClickedDate}
-                  //     doesSalahAndDateExists={doesSalahAndDateExists}
-                  //     formattedDate={formattedDate}
-                  //     salahName="Dhuhr"
-                  //   />
-                  // ) : (
-                  //   <>nil</>
-                  // );
-                }}
-              />
-              <Column
-                className="text-center"
-                label="Asar"
-                dataKey="date"
-                width={80}
-                flexGrow={1}
-                cellRenderer={({ rowData }) => {
-                  // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                  // const formattedDate = format(dateObject, "dd.MM.yy");
-                  return <div>{rowData.status}</div>;
-                  // return renderTableCell ? (
-                  //   <PrayerTableCell
-                  //     salahStatus={salahStatus}
-                  //     handleTableCellClick={handleTableCellClick}
-                  //     setShowUpdateStatusModal={setShowUpdateStatusModal}
-                  //     setHasUserClickedDate={setHasUserClickedDate}
-                  //     doesSalahAndDateExists={doesSalahAndDateExists}
-                  //     formattedDate={formattedDate}
-                  //     salahName="Asar"
-                  //   />
-                  // ) : (
-                  //   <>nil</>
-                  // );
-                }}
-              />
-              <Column
-                className="text-center"
-                label="Maghrib"
-                dataKey="date"
-                width={80}
-                flexGrow={1}
-                cellRenderer={({ rowData }) => {
-                  // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                  // const formattedDate = format(dateObject, "dd.MM.yy");
-                  return <div>{rowData.status}</div>;
-                  // return renderTableCell ? (
-                  //   <PrayerTableCell
-                  //     salahStatus={salahStatus}
-                  //     handleTableCellClick={handleTableCellClick}
-                  //     setShowUpdateStatusModal={setShowUpdateStatusModal}
-                  //     setHasUserClickedDate={setHasUserClickedDate}
-                  //     doesSalahAndDateExists={doesSalahAndDateExists}
-                  //     formattedDate={formattedDate}
-                  //     salahName="Maghrib"
-                  //   />
-                  // ) : (
-                  //   <>nil</>
-                  // );
-                }}
-              />
+              {salahNamesArr.map((salahName) => (
+                <Column
+                  style={{ marginLeft: "0" }}
+                  className="text-sm text-left "
+                  label={salahName}
+                  dataKey="date"
+                  width={120}
+                  flexGrow={1}
+                  cellRenderer={({ rowData }) => {
+                    console.log("ROWDATA");
+                    console.log(rowData.salahs[salahName]);
+                    // const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                    // const formattedDay = format(rowData, "EEEE");
+                    // return <div>{rowData}</div>;
+                    return rowData ? (
+                      <div>{rowData.salahs[salahName]}</div>
+                    ) : (
+                      <div>No Data</div>
+                    );
+                  }}
+                />
+              ))}
             </Table>
           )}
         </InfiniteLoader>
