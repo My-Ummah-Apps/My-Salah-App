@@ -4,6 +4,7 @@ import {
   SQLiteDBConnection,
   CapacitorSQLite,
 } from "@capacitor-community/sqlite";
+import { format, subDays } from "date-fns";
 
 const useSQLiteDB = () => {
   console.log("useSQLiteDB HAS RUN");
@@ -132,6 +133,8 @@ const useSQLiteDB = () => {
           queryCreateSalahTrackingTable
         ); // Execute the SQL query to create the table in the database
 
+        // await insertDummyData(dbConnection);
+
         // console.log(`res: ${JSON.stringify(respCT)}`);
         //   console.log("queryCreateSalahTrackingTable: ");
         // console.log("res: ");
@@ -146,6 +149,35 @@ const useSQLiteDB = () => {
         // console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
       }
     );
+  };
+
+  const insertDummyData = async (
+    dbConnection: SQLiteDBConnection | undefined
+  ) => {
+    const salahNames = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
+    const salahStatuses = [
+      "missed",
+      "late",
+      "group",
+      "male-alone",
+      "female-alone",
+    ];
+    const startDate = new Date(2024, 6, 5); // July 5, 2024
+
+    const getRandomItem = (arr: string[]) =>
+      arr[Math.floor(Math.random() * arr.length)];
+
+    for (let i = 0; i < 1000; i++) {
+      const date = format(subDays(startDate, i), "dd.MM.yy");
+      const salahName = getRandomItem(salahNames);
+      const salahStatus = getRandomItem(salahStatuses);
+      const queryInsert = `
+        INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
+        VALUES ('${date}', '${salahName}', '${salahStatus}', '', '');
+      `;
+      await dbConnection?.execute(queryInsert);
+    }
+    console.log("1000 rows inserted");
   };
 
   return {

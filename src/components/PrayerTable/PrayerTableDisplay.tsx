@@ -39,6 +39,19 @@ const PrayerTableDisplay = ({
 
   const [renderTableCell, setRenderTableCell] = useState(false);
 
+  // userStartDate = "05.05.22";
+  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  const endDate = new Date(); // Current date
+  const datesBetweenUserStartDateAndToday = eachDayOfInterval({
+    start: userStartDateFormatted,
+    end: endDate,
+  });
+  // console.log(datesBetweenUserStartDateAndToday.length);
+  const datesFormatted = datesBetweenUserStartDateAndToday.map((date) =>
+    format(date, "dd.MM.yy")
+  );
+  datesFormatted.reverse();
+
   // isDatabaseInitialised is never set to false, so can probably be removed safely
 
   // const loadData = async () => {
@@ -73,15 +86,17 @@ const PrayerTableDisplay = ({
   console.log("DATA::");
   console.log(data);
   const [renderTable, setRenderTable] = useState(false);
+  const INITIAL_LOAD_SIZE = 50;
+  const LOAD_MORE_SIZE = 50;
   useEffect(() => {
     console.log("isDatabaseInitialised useEffect has run");
     const initialiseAndLoadData = async () => {
       if (isDatabaseInitialised === true) {
         console.log("DATABASE HAS INITIALISED");
         // setRenderTableCell(true);
-        setData(await fetchDataFromDatabase(1, 50));
-
-        // console.log("setData");
+        setData(await fetchDataFromDatabase(1, INITIAL_LOAD_SIZE));
+        console.log("setData within useEffect has run and its data is: ");
+        console.log(data);
       }
     };
     initialiseAndLoadData();
@@ -95,9 +110,6 @@ const PrayerTableDisplay = ({
       setRenderTable(true);
     }
   }, [data]);
-
-  const INITIAL_LOAD_SIZE = 50;
-  const LOAD_MORE_SIZE = 50;
 
   const [isLoading, setIsLoading] = useState(false);
   console.log(data);
@@ -150,8 +162,7 @@ const PrayerTableDisplay = ({
     console.log("fetchDataFromDatabase FUNCTION HAS EXECUTED");
     try {
       const isDbOpen = await dbConnection.current?.isDBOpen();
-      // console.log("isDbOpen:");
-      // console.log(isDbOpen);
+      console.log("START AND END INDEX: " + startIndex, endIndex);
       if (isDbOpen?.result === false) {
         await dbConnection.current?.open();
         console.log(
@@ -159,63 +170,33 @@ const PrayerTableDisplay = ({
         );
       }
 
-      // const queryInsertDummyData = `
-      //       INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
-      //       VALUES ('01.07.24', 'Isha', 'missed', 'No reasons', 'No notes');
-      //     `;
-      // const respInsert =
-      //   await dbConnection?.current?.execute(queryInsertDummyData);
-      // console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
-      // // await dbConnection?.current?.execute(`COMMIT;`);
+      const slicedDatesFormattedArr = datesFormatted.slice(
+        startIndex,
+        endIndex
+      );
+      const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
+      console.log("slicedDatesFormattedArr");
+      console.log(slicedDatesFormattedArr);
 
-      // const checkInsertedData = await dbConnection.current?.query(
-      //   `SELECT * FROM salahtrackingtable WHERE date = '01.07.24'`
-      // );
-
-      // console.log("Inserted Data Check: ", checkInsertedData);
-
+      const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
       const res = await dbConnection.current?.query(
-        `SELECT * FROM salahtrackingtable WHERE id BETWEEN ? AND ?`,
-        [startIndex, endIndex]
+        query,
+        slicedDatesFormattedArr
       );
 
       console.log("RES IS: ");
       console.log(res);
-      // setData(res);
-      // [
-      //   {
-      //     "date": "01.01.24",
-      //     "salahs": {
-      //       "Fajr": "group",
-      //       "Dhuhr": "group",
-      //       "Asr": "group",
-      //       "Maghrib": "group",
-      //       "Isha": "group"
-      //     }
-      //   ]
 
-      // const test = res?.values?.reduce(
-      //   (accumulator, currentValue) => {
-      //     accumulator + currentValue
-      //   },
-      //   {}
-      // );
-
-      // console.log("test1");
-      // console.log(test);
-
+      // const staticDateAndDatabaseDataCombined = res?.values?.map(
       const staticDateAndDatabaseDataCombined = res?.values?.map(
         (obj, index) => {
-          console.log("OBJ:");
-          console.log(obj);
+          // console.log("OBJ:");
+          // console.log(obj);
           const dateFromDatesFormattedArr = datesFormatted[startIndex + index];
+          // const dateFromDatesFormattedArr = slicedDatesFormattedArr[index];
 
-          // console.log("single obj: ");
-          // console.log(res?.values?.[index].date);
           console.log("dateFromDatesFormattedArr: ");
           console.log(dateFromDatesFormattedArr);
-          // console.log("res?.values?.[index].date:");
-          // console.log(res?.values?.[index].date);
 
           type Salahs = {
             [key: string]: string;
@@ -237,61 +218,30 @@ const PrayerTableDisplay = ({
             let salahName: any = res?.values?.[index].salahName;
             let salahStatus: string = res?.values?.[index].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
-            console.log("salahName::");
-            console.log(singleSalahObj.salahs[salahName]);
+            // console.log("salahName::");
+            // console.log(singleSalahObj.salahs[salahName]);
           }
-          console.log("singleSalahObj");
-          console.log(singleSalahObj);
+          // console.log("singleSalahObj");
+          // console.log(singleSalahObj);
           holdArr.push(singleSalahObj);
         }
       );
 
-      // setData(holdArr);
+      console.log("holdArr data is:");
+      console.log(holdArr);
+      console.log("holdArr length is:");
+      console.log(holdArr.length);
       return holdArr;
       console.log("DATA WITHIN FETCH FUNC:");
       console.log(data);
-
-      console.log("holdArr");
-      console.log(holdArr);
-
-      // return staticDateAndDatabaseDataCombined;
-
-      // return res?.values;
-
-      // Despite fetchDataFromDatabase only being called after database is initialised,
-      // for some reason establishDBConnection still returns undefined
-      // const query = `SELECT date, salahName, salahStatus, reasons, notes
-      //     FROM salahtrackingtable
-      //     LIMIT ? OFFSET ?`;
-
-      // const rows = await dbConnection?.all(query, [end - start, start]);
     } catch (error) {
       console.log("ERROR IN fetchDataFromDatabase FUNCTION: ");
       console.log(error);
     }
-    // return Array.from({ length: end - start }, (_, index) => {
-    //   const date = subDays(startDate, index);
-    //   return {
-    //     date: format(date, "dd.MM.yy"),
-    //   };
-    // });
   };
 
   const [selectedSalah, setSelectedSalah] = useState("");
   const [tableRowDate, setTableRowDate] = useState("");
-
-  // userStartDate = "05.05.22";
-  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  const endDate = new Date(); // Current date
-  const datesBetweenUserStartDateAndToday = eachDayOfInterval({
-    start: userStartDateFormatted,
-    end: endDate,
-  });
-  // console.log(datesBetweenUserStartDateAndToday.length);
-  const datesFormatted = datesBetweenUserStartDateAndToday.map((date) =>
-    format(date, "dd.MM.yy")
-  );
-  datesFormatted.reverse();
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [salahStatus, setSalahStatus] = useState("");
@@ -408,27 +358,6 @@ const PrayerTableDisplay = ({
     // );
     // await doesSalahAndDateExists(salahName, tableRowDate); // ADD THIS BACK IN
 
-    // if (salahAndDateExist === true) {
-    // } else if (salahAndDateExist === false) {
-    //   setSalahStatus("");
-    //   setSelectedReasons([]);
-    //   setNotes("");
-    // }
-
-    // salahTrackingArray.forEach((item) => {
-    //   if (item.salahName === salahName) {
-    //     for (let i = 0; i < item.completedDates.length; i++) {
-    //       // console.log(item.completedDates[i]);
-    //       if (item.completedDates[i][tableRowDate]) {
-    //         // console.log("TRUE");
-    //         // setSalahStatus(item.completedDates[i][tableRowDate].status);
-    //         // setSelectedReasons(item.completedDates[i][tableRowDate].reasons);
-    //         // setNotes(item.completedDates[i][tableRowDate].notes);
-    //       }
-    //     }
-    //   }
-    // });
-
     setSelectedSalah(salahName);
     setTableRowDate(tableRowDate);
   }
@@ -438,16 +367,6 @@ const PrayerTableDisplay = ({
   //   width: "35%",
   // };
   // let isDateColumn: boolean;
-
-  // Example of constructing object from database:
-  // Take date from datesArray, example: 01.07.24
-  // Add this to the object, example: {date: datefromDatesArray}
-  // Thereafter, run through the database, and add any objects to the above object that has the same date
-  // as from datesarray
-  // this way, objects will be created, each with a date from the datesarray, and any objects from the database
-  // that matched the datesarray date, rowGetter will then use this to populate the row, if an object for that
-  // rows date exists (and take the column datakey into account ie the salah name) then grab the salah status
-  // from the same object and render it, otherwise if it does not exist then render a blank cell
 
   // const generateData = (numberOfDays: number) => {
   //   const data = [];
@@ -482,27 +401,17 @@ const PrayerTableDisplay = ({
   // console.log(datesFormatted);
 
   const isRowLoaded = ({ index }: any) => {
-    console.log("ISROWLOADED HAS RUN");
-    // return !!currentDisplayedDates[index];
-    // if (isDatabaseInitialised === true) {
-    // return !!datesFormatted[index];
+    console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!data[index]);
+    console.log("data amout is: " + data.length);
     return !!data[index];
-    // return !!data[index];
-    // }
   };
 
-  function loadMoreRows({ startIndex, stopIndex }: any) {
+  async function loadMoreRows({ startIndex, stopIndex }: any) {
     console.log("LOADMOREROWS HAS RUN");
-    // if (isDateColumn) {
-    //   return datesFormatted[startIndex];
-    // } else {
-    //   return fetchDataFromDatabase(startIndex, stopIndex);
-    // }
-    return fetchDataFromDatabase(startIndex, stopIndex);
-
-    // if (isDatabaseInitialised === true) {
-
-    // }
+    console.log(startIndex, stopIndex);
+    const moreRows = await fetchDataFromDatabase(startIndex, stopIndex);
+    setData((prevData: any) => [...prevData, ...moreRows]);
+    // return fetchDataFromDatabase(startIndex, stopIndex);
   }
 
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
@@ -514,8 +423,7 @@ const PrayerTableDisplay = ({
         <InfiniteLoader
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
-          // rowCount={datesFormatted.length}
-          rowCount={data.length}
+          rowCount={datesFormatted.length}
         >
           {({ onRowsRendered, registerChild }) => (
             <Table
@@ -525,9 +433,7 @@ const PrayerTableDisplay = ({
               className="text-center"
               onRowsRendered={onRowsRendered}
               ref={registerChild}
-              // rowCount={datesFormatted.length}
-              rowCount={data.length}
-              // rowCount={currentDisplayedDates.length}
+              rowCount={datesFormatted.length}
               rowGetter={rowGetter}
               rowHeight={100}
               headerHeight={40}
@@ -544,7 +450,6 @@ const PrayerTableDisplay = ({
                 cellRenderer={({ rowData }) => {
                   console.log("ROWDATA");
                   console.log(rowData.date);
-                  // setIsDateColumn(true);
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDay = format(rowData, "EEEE");
 
