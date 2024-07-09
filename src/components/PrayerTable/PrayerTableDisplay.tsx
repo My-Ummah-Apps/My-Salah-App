@@ -11,7 +11,7 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import useSQLiteDB from "../../utils/useSqLiteDB";
 import { SQLiteConnection, CapacitorSQLite } from "@capacitor-community/sqlite";
-
+import { LuDot } from "react-icons/lu";
 // import StreakCount from "../Stats/StreakCount";
 const PrayerTableDisplay = ({
   userGender,
@@ -37,8 +37,6 @@ const PrayerTableDisplay = ({
 
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
-  const [renderTableCell, setRenderTableCell] = useState(false);
-
   // userStartDate = "05.05.22";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
@@ -46,41 +44,11 @@ const PrayerTableDisplay = ({
     start: userStartDateFormatted,
     end: endDate,
   });
-  // console.log(datesBetweenUserStartDateAndToday.length);
+
   const datesFormatted = datesBetweenUserStartDateAndToday.map((date) =>
     format(date, "dd.MM.yy")
   );
   datesFormatted.reverse();
-
-  // isDatabaseInitialised is never set to false, so can probably be removed safely
-
-  // const loadData = async () => {
-  //   try {
-  //     // query db
-  //     console.log("PERFORMSQLACTION IS RUNNING WITHIN TABLE COMPONENT!");
-  //     await performSQLAction(
-  //       async (dbConnection: SQLiteDBConnection | undefined) => {
-  //         const respSelect = await dbConnection?.query(
-  //           `SELECT * FROM salahtrackingtable`
-  //         );
-  //         console.log("TABLE DATA: ");
-  //         console.log(respSelect);
-  //         const result = await dbConnection?.query(
-  //           `SELECT * FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
-  //           ["26.06.24", "Dhuhr"]
-  //         );
-  //         console.log("RESULT IS: ");
-  //         console.log(result);
-  //         // put a usestate here to set the items
-  //         // setNotes("123"); // Remove this for debugging purposes only
-  //       }
-  //     );
-  //   } catch (error) {
-  //     alert((error as Error).message);
-  //     console.log("ERROR IS COMING FROM LINE 67 in PrayerTableDisplay.tsx");
-  //     // Put a usestate here such as setItems([]);
-  //   }
-  // };
 
   const [data, setData] = useState<any>([]);
   console.log("DATA::");
@@ -93,68 +61,21 @@ const PrayerTableDisplay = ({
     const initialiseAndLoadData = async () => {
       if (isDatabaseInitialised === true) {
         console.log("DATABASE HAS INITIALISED");
-        // setRenderTableCell(true);
         setData(await fetchDataFromDatabase(1, INITIAL_LOAD_SIZE));
         console.log("setData within useEffect has run and its data is: ");
         console.log(data);
+        console.log(data.length);
+        setRenderTable(true);
       }
     };
     initialiseAndLoadData();
   }, [isDatabaseInitialised]);
-
-  useEffect(() => {
-    console.log("DATA WITHIN USEEFFECT");
-    console.log(data);
-    if (data.length > 0) {
-      console.log("RENDERTABLE TRUE");
-      setRenderTable(true);
-    }
-  }, [data]);
+  // isDatabaseInitialised is only initialised once, so can probably be safely removed
 
   const [isLoading, setIsLoading] = useState(false);
   console.log(data);
 
-  useEffect(() => {
-    const storedReasonsArray = localStorage.getItem("storedReasonsArray");
-    if (storedReasonsArray) {
-      setReasonsArray(JSON.parse(storedReasonsArray));
-    } else if (storedReasonsArray === null) {
-      const defaultReasonsArray = [
-        "Alarm",
-        "Education",
-        "Family",
-        "Friends",
-        "Gaming",
-        "Guests",
-        "Leisure",
-        "Movies",
-        "Shopping",
-        "Sleep",
-        "Sports",
-        "Travel",
-        "TV",
-        "Work",
-      ];
-      localStorage.setItem(
-        "storedReasonsArray",
-        JSON.stringify(defaultReasonsArray)
-      );
-      setReasonsArray(defaultReasonsArray);
-    }
-  }, []);
-
-  // let currentDisplayedDates: string[] = [];
-  // function generateTableRowDates() {
-  //   currentDisplayedDates = Array.from(
-  //     { length: datesBetweenUserStartDateAndToday.length },
-  //     (_, index) => {
-  //       const date = subDays(startDate, index);
-  //       return format(date, "dd.MM.yy");
-  //     }
-  //   );
-  // }
   let holdArr: any = [];
-  // let currentDisplayedDates: string[] = [];
   const fetchDataFromDatabase = async (
     startIndex: number,
     endIndex: number
@@ -188,8 +109,8 @@ const PrayerTableDisplay = ({
       console.log(res);
 
       // const staticDateAndDatabaseDataCombined = res?.values?.map(
-      const staticDateAndDatabaseDataCombined = res?.values?.map(
-        (obj, index) => {
+      const staticDateAndDatabaseDataCombined = slicedDatesFormattedArr.map(
+        (_, index) => {
           // console.log("OBJ:");
           // console.log(obj);
           const dateFromDatesFormattedArr = datesFormatted[startIndex + index];
@@ -207,22 +128,27 @@ const PrayerTableDisplay = ({
             salahs: {
               Fajr: "",
               Dhuhr: "",
-              Asr: "",
+              Asar: "",
               Maghrib: "",
               Isha: "",
             } as Salahs,
           };
 
-          if (res?.values?.[index].date === dateFromDatesFormattedArr) {
-            console.log("DATE MATCH DETECTED");
-            let salahName: any = res?.values?.[index].salahName;
-            let salahStatus: string = res?.values?.[index].salahStatus;
-            singleSalahObj.salahs[salahName] = salahStatus;
-            // console.log("salahName::");
-            // console.log(singleSalahObj.salahs[salahName]);
+          if (res?.values?.length) {
+            for (let i = 0; i < res.values.length; i++) {
+              if (res.values[index].date === dateFromDatesFormattedArr) {
+                console.log("DATE MATCH DETECTED");
+                let salahName: any = res?.values?.[index].salahName;
+                let salahStatus: string = res?.values?.[index].salahStatus;
+                singleSalahObj.salahs[salahName] = salahStatus;
+                // console.log("salahName::");
+                // console.log(singleSalahObj.salahs[salahName]);
+              }
+            }
           }
-          // console.log("singleSalahObj");
-          // console.log(singleSalahObj);
+
+          console.log("singleSalahObj");
+          console.log(singleSalahObj);
           holdArr.push(singleSalahObj);
         }
       );
@@ -231,12 +157,23 @@ const PrayerTableDisplay = ({
       console.log(holdArr);
       console.log("holdArr length is:");
       console.log(holdArr.length);
-      return holdArr;
       console.log("DATA WITHIN FETCH FUNC:");
       console.log(data);
+      return holdArr;
     } catch (error) {
       console.log("ERROR IN fetchDataFromDatabase FUNCTION: ");
       console.log(error);
+    } finally {
+      try {
+        const isDbOpen = await dbConnection.current?.isDBOpen();
+        if (isDbOpen?.result) {
+          await dbConnection.current?.close();
+          console.log("Database connection closed within fetch function");
+        }
+      } catch (finalError) {
+        console.log("ERROR CLOSING DATABASE CONNECTION:");
+        console.log(finalError);
+      }
     }
   };
 
@@ -264,136 +201,13 @@ const PrayerTableDisplay = ({
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
   //   useState(false);
 
-  const doesSalahAndDateExists = async (
-    salahName: string,
-    formattedDate: string
-  ): Promise<string | null> => {
-    // console.log("SALAH NAME IS: " + salahName);
-    // console.log("formattedDate DATE IS: " + formattedDate);
-    // let doesSalahAndDateExistsResult = false;
-    let currentSalahStatus = null;
-    try {
-      await performSQLAction(
-        async (dbConnection: SQLiteDBConnection | undefined) => {
-          // const count = await dbConnection?.query(
-          //   `SELECT COUNT(*) AS count FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
-          //   [formattedDate, salahName]
-          // );
-          // console.log("COUNT IS: ");
-          // console.log(count);
-          const result = await dbConnection?.query(
-            `SELECT * FROM salahtrackingtable WHERE date = ? AND salahName = ?`,
-            [formattedDate, salahName]
-          );
-          // console.log("RESULT IS: ");
-          // console.log(result);
-
-          if (result && result.values && result.values.length > 0) {
-            // console.log("RESULT IS: ");
-            // console.log(result.values[0].salahStatus);
-            setSalahStatus(result.values[0].salahStatus);
-            setSelectedReasons(result.values[0].reasons);
-            setNotes(result.values[0].notes);
-            currentSalahStatus = result.values[0].salahStatus;
-          } else {
-            // console.log("RESULT DOES NOT EXIST");
-            setSalahStatus("");
-            setSelectedReasons([]);
-            setNotes("");
-          }
-
-          // console.log("SALAH STATS IS:");
-          // console.log(salahStatus);
-
-          // if (count && count.values && count.values[0].count > 0) {
-          //   // doesSalahAndDateExistsResult = true;
-          //   console.log("COUNT EXISTS");
-          //   console.log("COUNT IS: ");
-          //   console.log(count);
-          //   // alert("Entry exists");
-          // } else {
-          //   console.log("COUNT DOES NOT EXIST");
-          //   // doesSalahAndDateExistsResult = false;
-          //   // alert("Entry does not exist");
-          // }
-
-          // // update ui
-          // const databaseData = await db?.query(
-          //   `SELECT * FROM salahtrackingtable;`
-          // );
-          // console.log("DATABASE DATA:");
-          // console.log(databaseData);
-          // setItems(respSelect?.values);
-        },
-        async () => {
-          // setInputName("");
-          // setEditItem(undefined);
-        }
-      );
-    } catch (error) {
-      alert((error as Error).message);
-      console.log("ERROR ON LINE 192 PrayerTableDisplay.tsx");
-    }
-
-    // console.log("STATUS OF SALAH: ");
-    // console.log(salahStatus);
-    return currentSalahStatus;
-  };
-
   console.log("TABLE RERENDERED");
 
-  async function handleTableCellClick(
-    salahName: string,
-    formattedDate: string
-  ) {
-    setSalahStatus("");
-    setSelectedReasons([]);
-    setNotes("");
-
-    let tableRowDate = formattedDate;
-    // Does salahAndDateExist need to exists in two places?
-    // const salahAndDateExist = await doesSalahAndDateExists(
-    //   salahName,
-    //   tableRowDate
-    // );
-    // await doesSalahAndDateExists(salahName, tableRowDate); // ADD THIS BACK IN
-
-    setSelectedSalah(salahName);
-    setTableRowDate(tableRowDate);
-  }
-
-  // const wreathStyles = {
-  //   // height: "30%",
-  //   width: "35%",
-  // };
-  // let isDateColumn: boolean;
-
-  // const generateData = (numberOfDays: number) => {
-  //   const data = [];
-  //   const salahStatuses = ["group", "male-alone", "missed", "late"];
-
-  //   for (let i = 0; i < numberOfDays; i++) {
-  //     const date = format(subDays(new Date(), i), "dd.MM.yy");
-  //     const salahs = {
-  //       Fajr: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
-  //       Dhuhr: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
-  //       Asar: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
-  //       Maghrib:
-  //         salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
-  //       Isha: salahStatuses[Math.floor(Math.random() * salahStatuses.length)],
-  //     };
-
-  //     data.push({ date, salahs });
-  //   }
-
-  //   return data;
-  // };
-
-  // const data = generateData(10000); // Generate 10,000 days of data
-  // const [isDateColumn, setIsDateColumn] = useState<boolean>(true);
   const rowGetter = ({ index }: any) => {
     console.log("ROWGETTER HAS RUN");
+    console.log(data[index]);
     // console.log(dataArr[index]["01.01.24"][0].date);
+    // return data ? data[index] : "none";
     return data[index];
   };
 
@@ -448,12 +262,17 @@ const PrayerTableDisplay = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
-                  console.log("ROWDATA");
-                  console.log(rowData.date);
+                  console.log("ROWDATA IN DATE COLUMN:");
+                  console.log(rowData);
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDay = format(rowData, "EEEE");
-
-                  return <div>{rowData.date}</div>;
+                  {
+                    return rowData !== "none" ? (
+                      <div>{rowData.date}</div>
+                    ) : (
+                      <div>{""}</div>
+                    );
+                  }
                 }}
               />
               {salahNamesArr.map((salahName) => (
@@ -465,16 +284,23 @@ const PrayerTableDisplay = ({
                   width={120}
                   flexGrow={1}
                   cellRenderer={({ rowData }) => {
-                    console.log("ROWDATA");
-                    console.log(rowData.salahs[salahName]);
+                    // console.log("ROWDATA");
+                    // console.log(rowData.salahs[salahName]);
                     // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                     // const formattedDay = format(rowData, "EEEE");
-                    // return <div>{rowData}</div>;
-                    return rowData ? (
-                      <div>{rowData.salahs[salahName]}</div>
-                    ) : (
-                      <div>No Data</div>
-                    );
+                    {
+                      return rowData.salahs[salahName] !== "" ? (
+                        // <div>{rowData.salahs[salahName]}</div>
+                        <div>{"status"}</div>
+                      ) : (
+                        <LuDot
+                          onClick={() => {
+                            setShowUpdateStatusModal(true);
+                          }}
+                          className="w-[24px] h-[24px]"
+                        />
+                      );
+                    }
                   }}
                 />
               ))}
@@ -487,6 +313,7 @@ const PrayerTableDisplay = ({
 
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
       <PrayerStatusBottomSheet
+        dbConnection={dbConnection}
         performSQLAction={performSQLAction}
         tableRowDate={tableRowDate}
         setSalahStatus={setSalahStatus}
@@ -510,7 +337,6 @@ const PrayerTableDisplay = ({
         customReason={customReason}
         setShowAddCustomReasonInputBox={setShowAddCustomReasonInputBox}
         showAddCustomReasonInputBox={showAddCustomReasonInputBox}
-        doesSalahAndDateExists={doesSalahAndDateExists}
         // formattedDate={formattedDate}
       />
     </section>

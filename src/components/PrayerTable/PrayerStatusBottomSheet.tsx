@@ -12,9 +12,10 @@ import useSQLiteDB from "../../utils/useSqLiteDB";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 const PrayerStatusBottomSheet = ({
+  dbConnection,
   performSQLAction,
   tableRowDate,
-  doesSalahAndDateExists,
+
   setSalahStatus,
   salahStatus,
   setSelectedReasons,
@@ -36,12 +37,10 @@ const PrayerStatusBottomSheet = ({
   hasUserClickedDate,
   customReason,
 }: {
+  dbConnection: any;
   performSQLAction: any;
   tableRowDate: string;
-  doesSalahAndDateExists: (
-    salahName: string,
-    formattedDate: string
-  ) => Promise<string | null>;
+
   setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
   setSelectedReasons: React.Dispatch<React.SetStateAction<string[]>>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -66,6 +65,35 @@ const PrayerStatusBottomSheet = ({
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const storedReasonsArray = localStorage.getItem("storedReasonsArray");
+    if (storedReasonsArray) {
+      setReasonsArray(JSON.parse(storedReasonsArray));
+    } else if (storedReasonsArray === null) {
+      const defaultReasonsArray = [
+        "Alarm",
+        "Education",
+        "Family",
+        "Friends",
+        "Gaming",
+        "Guests",
+        "Leisure",
+        "Movies",
+        "Shopping",
+        "Sleep",
+        "Sports",
+        "Travel",
+        "TV",
+        "Work",
+      ];
+      localStorage.setItem(
+        "storedReasonsArray",
+        JSON.stringify(defaultReasonsArray)
+      );
+      setReasonsArray(defaultReasonsArray);
+    }
+  }, []);
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);
@@ -127,30 +155,47 @@ const PrayerStatusBottomSheet = ({
   ) => {
     console.log("addSalah FUNCTION BEING RUN");
     try {
-      performSQLAction(async (db: SQLiteDBConnection | undefined) => {
-        let query = `INSERT INTO salahtrackingtable (salahName, salahStatus, date`; // ) values (?,?,?)
-        let values = [salahName, salahStatus, date];
+      const isDbOpen = await dbConnection.current?.open();
+      if (isDbOpen?.result === false) {
+        await dbConnection.current?.open();
+        console.log(
+          "DB Connection within addSalah function opened successfully"
+        );
+      }
 
-        if (reasons !== undefined) {
-          query += `, reasons`;
-          values.push(reasons);
-        }
-
-        if (notes !== undefined) {
-          query += `, notes`;
-          values.push(notes);
-        }
-
-        query += `) VALUES (${values.map(() => "?").join(", ")})`;
-
-        await db?.query(query, values); // If .query isn't working, try .execute instead
-        // await db?.execute(query, values);
-        console.log("DATA INSERTED INTO DATABASE");
-        // setNotes("hi"); // this is just to force a re-render and see if anytning changes in the UI, needs to be removed eventally
-      });
+      // performSQLAction(async (db: SQLiteDBConnection | undefined) => {
+      //   let query = `INSERT INTO salahtrackingtable (salahName, salahStatus, date`; // ) values (?,?,?)
+      //   let values = [salahName, salahStatus, date];
+      //   if (reasons !== undefined) {
+      //     query += `, reasons`;
+      //     values.push(reasons);
+      //   }
+      //   if (notes !== undefined) {
+      //     query += `, notes`;
+      //     values.push(notes);
+      //   }
+      //   query += `) VALUES (${values.map(() => "?").join(", ")})`;
+      //   await db?.query(query, values); // If .query isn't working, try .execute instead
+      //   // await db?.execute(query, values);
+      //   console.log("DATA INSERTED INTO DATABASE");
+      //   // setNotes("hi"); // this is just to force a re-render and see if anytning changes in the UI, needs to be removed eventally
+      // });
     } catch (error) {
       console.log("ERROR WITHIN addSalah function:");
       console.log(error);
+    } finally {
+      try {
+        const isDbOpen = await dbConnection.current?.open();
+        if (isDbOpen?.result) {
+          await dbConnection.current?.close();
+          console.log("Database connection closed within addSalah function");
+        }
+      } catch (error) {
+        console.log(
+          "ERROR WHEN TRYING TO CLOSE DATABASE IN ADDSALAH FUNCTION:"
+        );
+        console.log(error);
+      }
     }
   };
 
@@ -161,19 +206,19 @@ const PrayerStatusBottomSheet = ({
     selectedReasons: string[],
     notes: string
   ) => void = async (tableRowDate, selectedSalah, salahStatus) => {
-    const salahAndDateExist = await doesSalahAndDateExists(
-      selectedSalah,
-      tableRowDate
-    );
-    if (salahAndDateExist === null) {
-      console.log("SALAH AND DATE DONT EXIST INITIATING ADDSALAH FUNCTION");
-      // Add add functionality
-      addSalah(selectedSalah, salahStatus, tableRowDate);
-      // forceUpdate();
-      // setNotes("hello");
-    } else if (salahAndDateExist !== null) {
-      // Add edit functionality
-    }
+    // const salahAndDateExist = await doesSalahAndDateExists(
+    //   selectedSalah,
+    //   tableRowDate
+    // );
+    // if (salahAndDateExist === null) {
+    //   console.log("SALAH AND DATE DONT EXIST INITIATING ADDSALAH FUNCTION");
+    //   // Add add functionality
+    //   addSalah(selectedSalah, salahStatus, tableRowDate);
+    //   // forceUpdate();
+    //   // setNotes("hello");
+    // } else if (salahAndDateExist !== null) {
+    //   // Add edit functionality
+    // }
   };
 
   return (
