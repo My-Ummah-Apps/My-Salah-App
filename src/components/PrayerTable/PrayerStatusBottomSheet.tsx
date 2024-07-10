@@ -13,9 +13,9 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
+  // doesSalahAndDateExists,
   performSQLAction,
   tableRowDate,
-
   setSalahStatus,
   salahStatus,
   setSelectedReasons,
@@ -38,9 +38,12 @@ const PrayerStatusBottomSheet = ({
   customReason,
 }: {
   dbConnection: any;
+  // doesSalahAndDateExists: (
+  //   salahName: string,
+  //   formattedDate: string
+  // ) => Promise<string | null>;
   performSQLAction: any;
   tableRowDate: string;
-
   setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
   setSelectedReasons: React.Dispatch<React.SetStateAction<string[]>>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -155,7 +158,7 @@ const PrayerStatusBottomSheet = ({
   ) => {
     console.log("addSalah FUNCTION BEING RUN");
     try {
-      const isDbOpen = await dbConnection.current?.open();
+      const isDbOpen = await dbConnection.current?.isDBOpen();
       if (isDbOpen?.result === false) {
         await dbConnection.current?.open();
         console.log(
@@ -163,29 +166,27 @@ const PrayerStatusBottomSheet = ({
         );
       }
 
-      // performSQLAction(async (db: SQLiteDBConnection | undefined) => {
-      //   let query = `INSERT INTO salahtrackingtable (salahName, salahStatus, date`; // ) values (?,?,?)
-      //   let values = [salahName, salahStatus, date];
-      //   if (reasons !== undefined) {
-      //     query += `, reasons`;
-      //     values.push(reasons);
-      //   }
-      //   if (notes !== undefined) {
-      //     query += `, notes`;
-      //     values.push(notes);
-      //   }
-      //   query += `) VALUES (${values.map(() => "?").join(", ")})`;
-      //   await db?.query(query, values); // If .query isn't working, try .execute instead
-      //   // await db?.execute(query, values);
-      //   console.log("DATA INSERTED INTO DATABASE");
-      //   // setNotes("hi"); // this is just to force a re-render and see if anytning changes in the UI, needs to be removed eventally
-      // });
+      let query = `INSERT INTO salahtrackingtable(salahName, salahStatus, date`;
+      const values = [salahName, salahStatus, date];
+
+      if (reasons !== undefined) {
+        query += `, reasons`;
+        values.push(reasons);
+      }
+      if (notes !== undefined) {
+        query += `, notes`;
+        values.push(notes);
+      }
+      query += `) VALUES (${values.map(() => "?").join(", ")})`;
+      await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
+      // await db?.execute(query, values);
+      console.log("DATA INSERTED INTO DATABASE");
     } catch (error) {
       console.log("ERROR WITHIN addSalah function:");
       console.log(error);
     } finally {
       try {
-        const isDbOpen = await dbConnection.current?.open();
+        const isDbOpen = await dbConnection.current?.isDbOpen();
         if (isDbOpen?.result) {
           await dbConnection.current?.close();
           console.log("Database connection closed within addSalah function");
