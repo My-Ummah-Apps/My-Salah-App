@@ -8,14 +8,13 @@ import { useEffect, useRef } from "react";
 import { Capacitor } from "@capacitor/core";
 import { v4 as uuidv4 } from "uuid";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
-import useSQLiteDB from "../../utils/useSqLiteDB";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
+  doesSalahAndDateExists,
   // doesSalahAndDateExists,
-  performSQLAction,
-  tableRowDate,
+  salahName,
+  cellDate,
   setSalahStatus,
   salahStatus,
   setSelectedReasons,
@@ -29,7 +28,6 @@ const PrayerStatusBottomSheet = ({
   notes,
   setShowAddCustomReasonInputBox,
   showAddCustomReasonInputBox,
-  selectedSalah,
   userGender,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
@@ -38,12 +36,9 @@ const PrayerStatusBottomSheet = ({
   customReason,
 }: {
   dbConnection: any;
-  // doesSalahAndDateExists: (
-  //   salahName: string,
-  //   formattedDate: string
-  // ) => Promise<string | null>;
-  performSQLAction: any;
-  tableRowDate: string;
+  doesSalahAndDateExists: (salahName: string, date: string) => Promise<boolean>;
+  salahName: string;
+  cellDate: string;
   setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
   setSelectedReasons: React.Dispatch<React.SetStateAction<string[]>>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -56,7 +51,6 @@ const PrayerStatusBottomSheet = ({
   notes: string;
   setShowAddCustomReasonInputBox: React.Dispatch<React.SetStateAction<boolean>>;
   showAddCustomReasonInputBox: boolean;
-  selectedSalah: string;
   userGender: string;
   showUpdateStatusModal: boolean;
   salahStatus: string;
@@ -68,6 +62,7 @@ const PrayerStatusBottomSheet = ({
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
+  console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
 
   useEffect(() => {
     const storedReasonsArray = localStorage.getItem("storedReasonsArray");
@@ -149,20 +144,20 @@ const PrayerStatusBottomSheet = ({
     });
   }
 
-  const addSalah = async (
+  const addOrModifySalah = async (
     salahName: string,
     salahStatus: string,
     date: string,
     reasons?: string,
     notes?: string
   ) => {
-    console.log("addSalah FUNCTION BEING RUN");
+    console.log("addOrModifySalah FUNCTION BEING RUN");
     try {
       const isDbOpen = await dbConnection.current?.isDBOpen();
       if (isDbOpen?.result === false) {
         await dbConnection.current?.open();
         console.log(
-          "DB Connection within addSalah function opened successfully"
+          "DB Connection within addOrModifySalah function opened successfully"
         );
       }
 
@@ -182,14 +177,16 @@ const PrayerStatusBottomSheet = ({
       // await db?.execute(query, values);
       console.log("DATA INSERTED INTO DATABASE");
     } catch (error) {
-      console.log("ERROR WITHIN addSalah function:");
+      console.log("ERROR WITHIN addOrModifySalah function:");
       console.log(error);
     } finally {
       try {
         const isDbOpen = await dbConnection.current?.isDbOpen();
         if (isDbOpen?.result) {
           await dbConnection.current?.close();
-          console.log("Database connection closed within addSalah function");
+          console.log(
+            "Database connection closed within addOrModifySalah function"
+          );
         }
       } catch (error) {
         console.log(
@@ -201,20 +198,25 @@ const PrayerStatusBottomSheet = ({
   };
 
   const handleSaveSalahClick: (
-    tableRowDate: string,
-    selectedSalah: string,
+    date: string,
+    salahName: string,
     salahStatus: string,
     selectedReasons: string[],
     notes: string
-  ) => void = async (tableRowDate, selectedSalah, salahStatus) => {
+  ) => void = async (date, salahName, salahStatus) => {
     // const salahAndDateExist = await doesSalahAndDateExists(
-    //   selectedSalah,
+    //   salahName,
     //   tableRowDate
     // );
+    if (await doesSalahAndDateExists(salahName, date)) {
+      console.log("ADDING ITEM...");
+    } else {
+      console.log("EDITING ITEM");
+    }
     // if (salahAndDateExist === null) {
     //   console.log("SALAH AND DATE DONT EXIST INITIATING ADDSALAH FUNCTION");
     //   // Add add functionality
-    //   addSalah(selectedSalah, salahStatus, tableRowDate);
+    //   addOrModifySalah(salahName, salahStatus, tableRowDate);
     //   // forceUpdate();
     //   // setNotes("hello");
     // } else if (salahAndDateExist !== null) {
@@ -245,7 +247,7 @@ const PrayerStatusBottomSheet = ({
               {" "}
               <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
                 <h1 className="mb-5 text-3xl text-center">
-                  How did you pray {selectedSalah}?
+                  How did you pray {salahName}?
                 </h1>
                 <div
                   // ref={modalSheetPrayerStatusesWrap}
@@ -456,8 +458,8 @@ const PrayerStatusBottomSheet = ({
                   onClick={() => {
                     if (salahStatus) {
                       handleSaveSalahClick(
-                        tableRowDate,
-                        selectedSalah,
+                        cellDate,
+                        salahName,
                         salahStatus,
                         selectedReasons,
                         notes

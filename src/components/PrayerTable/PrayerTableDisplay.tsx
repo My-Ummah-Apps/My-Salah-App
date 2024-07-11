@@ -7,7 +7,6 @@ AutoSizer;
 import PrayerTableCell from "./PrayerTableCell";
 import { salahTrackingEntryType } from "../../types/types";
 import { subDays, format, parse, eachDayOfInterval } from "date-fns";
-import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import useSQLiteDB from "../../utils/useSqLiteDB";
 import { SQLiteConnection, CapacitorSQLite } from "@capacitor-community/sqlite";
@@ -34,7 +33,7 @@ const PrayerTableDisplay = ({
     sqliteConnection,
     dbConnection,
   } = useSQLiteDB();
-
+  console.log("PRAYER TABLE COMPONENT RENDERED");
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   // userStartDate = "05.05.22";
@@ -49,6 +48,26 @@ const PrayerTableDisplay = ({
     format(date, "dd.MM.yy")
   );
   datesFormatted.reverse();
+
+  // const [selectedSalah, setSelectedSalah] = useState("");
+
+  // const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+  // const [salahStatus, setSalahStatus] = useState("");
+  // const [showReasons, setShowReasons] = useState(false);
+  // const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
+  //   useState(false);
+  // const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
+  // const [reasonsArray, setReasonsArray] = useState<string[]>([]);
+  // let selectedReasonsArray = selectedReasons;
+  // const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
+  // const [customReason, setCustomReason] = useState("");
+  // const handleCustomReason = (e: any) => {
+  //   setCustomReason(e.target.value);
+  // };
+  // const [notes, setNotes] = useState("");
+  // const handleNotes = (e: any) => {
+  //   setNotes(e.target.value);
+  // };
 
   const [data, setData] = useState<any>([]);
   // console.log("DATA::");
@@ -177,80 +196,6 @@ const PrayerTableDisplay = ({
     }
   };
 
-  const doesSalahAndDateExists = async (
-    salahName: string,
-    formattedDate: string
-  ) => {
-    try {
-      const isDbOpen = await dbConnection.current?.isDBOpen();
-      if (isDbOpen?.result === false) {
-        await dbConnection.current?.open();
-        console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
-      }
-
-      const query = `
-      SELECT * FROM salahtrackingtable 
-      WHERE salahName = ? AND date = ?;
-    `;
-      const values = [salahName, formattedDate];
-
-      console.log(await dbConnection.current?.query(query, values));
-      const res = await dbConnection.current?.query(query, values);
-
-      console.log("res.values");
-      console.log(res?.values);
-
-      if (res && res.values && res.values.length > 0) {
-        // setSalahStatus()
-        // setNotes()
-
-        console.log("DATA FOUND");
-      } else {
-        setSalahStatus("");
-        setNotes("No notes here");
-      }
-    } catch (error) {
-      console.log(
-        "ERROR OPENING CONNECTION IN doesSalahAndDateExists FUNCTION:"
-      );
-      console.log(error);
-    } finally {
-      try {
-        const isDbOpen = await dbConnection.current?.isDBOpen();
-        if (isDbOpen?.result) {
-          await dbConnection.current?.close();
-          console.log("Database connection closed within addSalah function");
-        }
-      } catch (error) {
-        console.log(
-          "ERROR CLOSING DATABASE IN doesSalahAndDateExists FUNCTION:"
-        );
-        console.log(error);
-      }
-    }
-  };
-
-  const [selectedSalah, setSelectedSalah] = useState("");
-  const [tableRowDate, setTableRowDate] = useState("");
-
-  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  const [salahStatus, setSalahStatus] = useState("");
-  const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  // const [showReasons, setShowReasons] = useState(false);
-  const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
-    useState(false);
-  let selectedReasonsArray = selectedReasons;
-  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
-  const [customReason, setCustomReason] = useState("");
-  const handleCustomReason = (e: any) => {
-    setCustomReason(e.target.value);
-  };
-  const [notes, setNotes] = useState("");
-  const handleNotes = (e: any) => {
-    setNotes(e.target.value);
-  };
-
   // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
   //   useState(false);
 
@@ -330,6 +275,7 @@ const PrayerTableDisplay = ({
               />
               {salahNamesArr.map((salahName) => (
                 <Column
+                  key={salahName + uuidv4}
                   style={{ marginLeft: "0" }}
                   className="text-sm text-left "
                   label={salahName}
@@ -343,13 +289,10 @@ const PrayerTableDisplay = ({
                     // const formattedDay = format(rowData, "EEEE");
                     return (
                       <PrayerTableCell
+                        dbConnection={dbConnection}
                         cellDate={rowData.date}
                         salahName={salahName}
-                        salahStatus={salahStatus}
-                        setShowUpdateStatusModal={setShowUpdateStatusModal}
-                        setHasUserClickedDate={setHasUserClickedDate}
-                        // handleTableCellClick={handleTableCellClick}
-                        doesSalahAndDateExists={doesSalahAndDateExists}
+                        userGender={userGender}
                       />
                     );
                   }}
@@ -363,34 +306,6 @@ const PrayerTableDisplay = ({
       )}
 
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
-      <PrayerStatusBottomSheet
-        // doesSalahAndDateExists={doesSalahAndDateExists}
-        dbConnection={dbConnection}
-        performSQLAction={performSQLAction}
-        tableRowDate={tableRowDate}
-        setSalahStatus={setSalahStatus}
-        setSelectedReasons={setSelectedReasons}
-        setReasonsArray={setReasonsArray}
-        selectedReasonsArray={selectedReasonsArray}
-        selectedReasons={selectedReasons}
-        reasonsArray={reasonsArray}
-        handleCustomReason={handleCustomReason}
-        setNotes={setNotes}
-        notes={notes}
-        handleNotes={handleNotes}
-        selectedSalah={selectedSalah}
-        userGender={userGender}
-        showUpdateStatusModal={showUpdateStatusModal}
-        salahStatus={salahStatus}
-        // handleTableCellClick={handleTableCellClick}
-        setShowUpdateStatusModal={setShowUpdateStatusModal}
-        setHasUserClickedDate={setHasUserClickedDate}
-        hasUserClickedDate={hasUserClickedDate}
-        customReason={customReason}
-        setShowAddCustomReasonInputBox={setShowAddCustomReasonInputBox}
-        showAddCustomReasonInputBox={showAddCustomReasonInputBox}
-        // formattedDate={formattedDate}
-      />
     </section>
   );
 };
