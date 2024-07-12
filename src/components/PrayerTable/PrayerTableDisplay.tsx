@@ -101,9 +101,9 @@ const PrayerTableDisplay = ({
   ) => {
     console.log("fetchDataFromDatabase FUNCTION HAS EXECUTED");
     try {
-      const isDbOpen = await dbConnection.current?.isDBOpen();
+      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
       console.log("START AND END INDEX: " + startIndex, endIndex);
-      if (isDbOpen?.result === false) {
+      if (isDatabaseOpen?.result === false) {
         await dbConnection.current?.open();
         console.log(
           "DB Connection within fetchDataFromDatabase function opened successfully"
@@ -184,8 +184,8 @@ const PrayerTableDisplay = ({
       console.log(error);
     } finally {
       try {
-        const isDbOpen = await dbConnection.current?.isDBOpen();
-        if (isDbOpen?.result) {
+        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+        if (isDatabaseOpen?.result) {
           await dbConnection.current?.close();
           console.log("Database connection closed within fetch function");
         }
@@ -284,12 +284,14 @@ const PrayerTableDisplay = ({
                   flexGrow={1}
                   cellRenderer={({ rowData }) => {
                     console.log("ROWDATA");
-                    console.log(rowData);
+                    // console.log(rowData);
+                    // console.log(typeof rowData.salahs[salahName]);
                     // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                     // const formattedDay = format(rowData, "EEEE");
                     return (
                       <PrayerTableCell
                         dbConnection={dbConnection}
+                        salahStatusFromCell={rowData.salahs[salahName]}
                         cellDate={rowData.date}
                         salahName={salahName}
                         userGender={userGender}

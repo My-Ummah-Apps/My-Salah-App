@@ -41,6 +41,7 @@ const useSQLiteDB = () => {
               "salahtrackingtable",
               false
             );
+
           console.log("connectionConsistency.result && isConn both true");
         } else {
           // If the dbConnection does not exist then create a new connection (additionally, if the "salahtrackingtable" database does not exist, create it at the same time as establishing the new connection)

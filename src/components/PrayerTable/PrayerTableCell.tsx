@@ -6,10 +6,12 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 const PrayerTableCell = ({
   dbConnection,
   salahName,
+  salahStatusFromCell,
   cellDate,
   userGender,
 }: {
   salahName: string;
+  salahStatusFromCell: string;
   cellDate: string;
   dbConnection: any;
   userGender: string;
@@ -39,10 +41,17 @@ const PrayerTableCell = ({
     setNotes(e.target.value);
   };
 
-  const doesSalahAndDateExists = async (salahName: string, date: string) => {
+  // useEffect(() => {
+  //   setSalahStatus(salahStatusFromCell);
+  // }, []);
+
+  const doesSalahAndDateExists = async (
+    salahName: string,
+    date: string
+  ): Promise<boolean | undefined> => {
     try {
-      const isDbOpen = await dbConnection.current?.isDBOpen();
-      if (isDbOpen?.result === false) {
+      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+      if (isDatabaseOpen?.result === false) {
         await dbConnection.current?.open();
         console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
       }
@@ -66,8 +75,9 @@ const PrayerTableCell = ({
         setNotes("Data exists");
         return true;
       } else {
+        console.log("DATE NOT FOUND");
         setSalahStatus("");
-        setNotes("No notes here");
+        setNotes("");
         return false;
       }
     } catch (error) {
@@ -97,8 +107,8 @@ const PrayerTableCell = ({
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
   //   const [salahStatus, setSalahStatus] = useState<null | string>();
   //
-  console.log("TABLE CELL HAS RUN AND ITS DATE ROW DATE IS: " + cellDate);
-  console.log("TABLE CELL HAS RUN AND ITS SALAH IS: " + salahName);
+  // console.log("TABLE CELL HAS RUN AND ITS DATE ROW DATE IS: " + cellDate);
+  // console.log("TABLE CELL HAS RUN AND ITS SALAH IS: " + salahName);
 
   useEffect(() => {
     async function fetchCellData() {
@@ -106,37 +116,37 @@ const PrayerTableCell = ({
       //   setSalahStatus(salahStatus);
       //   console.log("SALAH STATUS IS:" + salahStatus);
 
-      if (salahStatus === "male-alone") {
+      if (salahStatusFromCell === "male-alone") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
           ></div>
         );
-      } else if (salahStatus === "group") {
+      } else if (salahStatusFromCell === "group") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
           ></div>
         );
-      } else if (salahStatus === "female-alone") {
+      } else if (salahStatusFromCell === "female-alone") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
           ></div>
         );
-      } else if (salahStatus === "excused") {
+      } else if (salahStatusFromCell === "excused") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
           ></div>
         );
-      } else if (salahStatus === "late") {
+      } else if (salahStatusFromCell === "late") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
           ></div>
         );
-      } else if (salahStatus === "missed") {
+      } else if (salahStatusFromCell === "missed") {
         setCellData(
           <div
             className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
@@ -168,7 +178,7 @@ const PrayerTableCell = ({
       </div>
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
-          doesSalahAndDateExist={doesSalahAndDateExists}
+          doesSalahAndDateExists={doesSalahAndDateExists}
           salahName={salahName}
           cellDate={cellDate}
           dbConnection={dbConnection}

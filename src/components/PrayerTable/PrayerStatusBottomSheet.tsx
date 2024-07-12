@@ -36,7 +36,10 @@ const PrayerStatusBottomSheet = ({
   customReason,
 }: {
   dbConnection: any;
-  doesSalahAndDateExists: (salahName: string, date: string) => Promise<boolean>;
+  doesSalahAndDateExists: (
+    salahName: string,
+    date: string
+  ) => Promise<boolean | undefined>;
   salahName: string;
   cellDate: string;
   setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
@@ -148,41 +151,64 @@ const PrayerStatusBottomSheet = ({
     salahName: string,
     salahStatus: string,
     date: string,
-    reasons?: string,
+    reasons?: string[],
     notes?: string
   ) => {
     console.log("addOrModifySalah FUNCTION BEING RUN");
+    console.log("NOTES: ");
+    console.log(notes);
+    console.log("reasons: ");
+    console.log(reasons);
+
     try {
       const isDbOpen = await dbConnection.current?.isDBOpen();
-      if (isDbOpen?.result === false) {
+      if ((await isDbOpen?.result) === false) {
         await dbConnection.current?.open();
         console.log(
           "DB Connection within addOrModifySalah function opened successfully"
         );
       }
 
-      let query = `INSERT INTO salahtrackingtable(salahName, salahStatus, date`;
-      const values = [salahName, salahStatus, date];
+      const salahAndDateExist = await doesSalahAndDateExists(salahName, date);
 
-      if (reasons !== undefined) {
-        query += `, reasons`;
-        values.push(reasons);
+      console.log("Does salah and date exist:");
+      console.log(salahAndDateExist);
+      // This statement isn't even running!
+      if (salahAndDateExist) {
+        console.log("ADDING ITEM...");
+        let query = `INSERT INTO salahtrackingtable(salahName, salahStatus, date`;
+        const values = [salahName, salahStatus, date];
+
+        if (reasons !== undefined && reasons.length > 0) {
+          console.log("REASONS ARE NOT UNDEFINED");
+          query += `, reasons`;
+          values.push(...reasons);
+        }
+        if (notes !== undefined && notes !== "") {
+          console.log("NOTES ARE NOT UNDEFINED");
+          query += `, notes`;
+          values.push(notes);
+        }
+
+        query += `) VALUES (${values.map(() => "?").join(", ")})`;
+        console.log("HELLOOOOOO");
+        console.log(dbConnection.current);
+        await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
+        // await db?.execute(query, values);
+
+        console.log("DB INSERT HAS RUN");
+      } else if (!salahAndDateExist) {
+        console.log("EDITING ITEM...");
       }
-      if (notes !== undefined) {
-        query += `, notes`;
-        values.push(notes);
-      }
-      query += `) VALUES (${values.map(() => "?").join(", ")})`;
-      await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
-      // await db?.execute(query, values);
+
       console.log("DATA INSERTED INTO DATABASE");
     } catch (error) {
       console.log("ERROR WITHIN addOrModifySalah function:");
       console.log(error);
     } finally {
       try {
-        const isDbOpen = await dbConnection.current?.isDbOpen();
-        if (isDbOpen?.result) {
+        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+        if (isDatabaseOpen?.result) {
           await dbConnection.current?.close();
           console.log(
             "Database connection closed within addOrModifySalah function"
@@ -195,33 +221,6 @@ const PrayerStatusBottomSheet = ({
         console.log(error);
       }
     }
-  };
-
-  const handleSaveSalahClick: (
-    date: string,
-    salahName: string,
-    salahStatus: string,
-    selectedReasons: string[],
-    notes: string
-  ) => void = async (date, salahName, salahStatus) => {
-    // const salahAndDateExist = await doesSalahAndDateExists(
-    //   salahName,
-    //   tableRowDate
-    // );
-    if (await doesSalahAndDateExists(salahName, date)) {
-      console.log("ADDING ITEM...");
-    } else {
-      console.log("EDITING ITEM");
-    }
-    // if (salahAndDateExist === null) {
-    //   console.log("SALAH AND DATE DONT EXIST INITIATING ADDSALAH FUNCTION");
-    //   // Add add functionality
-    //   addOrModifySalah(salahName, salahStatus, tableRowDate);
-    //   // forceUpdate();
-    //   // setNotes("hello");
-    // } else if (salahAndDateExist !== null) {
-    //   // Add edit functionality
-    // }
   };
 
   return (
@@ -457,7 +456,7 @@ const PrayerStatusBottomSheet = ({
                 <button
                   onClick={() => {
                     if (salahStatus) {
-                      handleSaveSalahClick(
+                      addOrModifySalah(
                         cellDate,
                         salahName,
                         salahStatus,
