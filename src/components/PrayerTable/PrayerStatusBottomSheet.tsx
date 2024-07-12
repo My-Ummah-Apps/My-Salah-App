@@ -173,8 +173,8 @@ const PrayerStatusBottomSheet = ({
 
       console.log("Does salah and date exist:");
       console.log(salahAndDateExist);
-      // This statement isn't even running!
-      if (salahAndDateExist) {
+
+      if (!salahAndDateExist) {
         console.log("ADDING ITEM...");
         let query = `INSERT INTO salahtrackingtable(salahName, salahStatus, date`;
         const values = [salahName, salahStatus, date];
@@ -197,7 +197,7 @@ const PrayerStatusBottomSheet = ({
         // await db?.execute(query, values);
 
         console.log("DB INSERT HAS RUN");
-      } else if (!salahAndDateExist) {
+      } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
       }
 
