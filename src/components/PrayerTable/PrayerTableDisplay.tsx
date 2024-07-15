@@ -202,8 +202,8 @@ const PrayerTableDisplay = ({
   console.log("TABLE RERENDERED");
 
   const rowGetter = ({ index }: any) => {
-    // console.log("ROWGETTER HAS RUN");
-    // console.log(data[index]);
+    console.log("ROWGETTER HAS RUN");
+    console.log(data);
     // console.log(dataArr[index]["01.01.24"][0].date);
     // return data ? data[index] : "none";
     return data[index];

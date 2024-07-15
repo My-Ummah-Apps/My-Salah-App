@@ -4,68 +4,118 @@ import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
 import { GoClock } from "react-icons/go";
 import { PiFlower } from "react-icons/pi";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { v4 as uuidv4 } from "uuid";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
-  doesSalahAndDateExists,
-  // doesSalahAndDateExists,
   salahName,
   cellDate,
-  setSalahStatus,
-  salahStatus,
-  setSelectedReasons,
-  handleCustomReason,
-  setReasonsArray,
-  selectedReasons,
-  reasonsArray,
-  selectedReasonsArray,
-  setNotes,
-  handleNotes,
-  notes,
-  setShowAddCustomReasonInputBox,
-  showAddCustomReasonInputBox,
   userGender,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
   setHasUserClickedDate,
-  hasUserClickedDate,
-  customReason,
+  hasUserClickedDate, // customReason,
 }: {
   dbConnection: any;
-  doesSalahAndDateExists: (
-    salahName: string,
-    date: string
-  ) => Promise<boolean | undefined>;
   salahName: string;
   cellDate: string;
-  setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedReasons: React.Dispatch<React.SetStateAction<string[]>>;
-  setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
-  handleCustomReason: (e: any) => void;
-  selectedReasons: string[];
-  selectedReasonsArray: string[];
-  reasonsArray: string[];
-  setNotes: React.Dispatch<React.SetStateAction<string>>;
-  handleNotes: (e: any) => void;
-  notes: string;
-  setShowAddCustomReasonInputBox: React.Dispatch<React.SetStateAction<boolean>>;
-  showAddCustomReasonInputBox: boolean;
   userGender: string;
   showUpdateStatusModal: boolean;
-  salahStatus: string;
+
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   hasUserClickedDate: boolean;
-  customReason: string;
+  // customReason: string;
 }) => {
+  const [updatingDatabase, setUpdatingDatabase] = useState<boolean>();
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
-  console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
+  const [selectedSalah, setSelectedSalah] = useState("");
+  const [salahStatus, setSalahStatus] = useState("");
+  const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
+  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
+  const [customReason, setCustomReason] = useState("");
+  const handleCustomReason = (e: any) => {
+    setCustomReason(e.target.value);
+  };
+  const [notes, setNotes] = useState("");
+  const handleNotes = (e: any) => {
+    setNotes(e.target.value);
+  };
+  const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
+    useState(false);
+
+  let selectedReasonsArray = selectedReasons;
+  // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
+
+  let isDatabaseUpdating: boolean;
+
+  const doesSalahAndDateExists = async (
+    salahName: string,
+    date: string
+  ): Promise<boolean | undefined> => {
+    console.log("UPDATING DATABASE? " + updatingDatabase);
+    // if (updatingDatabase) return;
+    if (isDatabaseUpdating) return;
+    try {
+      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+      if (isDatabaseOpen?.result === false) {
+        await dbConnection.current?.open();
+        console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
+      }
+
+      const query = `
+      SELECT * FROM salahtrackingtable 
+      WHERE salahName = ? AND date = ?;
+    `;
+      const values = [salahName, date];
+
+      console.log(await dbConnection.current?.query(query, values));
+      const res = await dbConnection.current?.query(query, values);
+
+      console.log("res.values");
+      console.log(res?.values);
+
+      if (res && res.values && res.values.length > 0) {
+        console.log("DATA FOUND");
+        setSelectedSalah(salahName);
+        setSalahStatus("group");
+        setNotes("Data exists");
+        return true;
+      } else {
+        console.log("DATE NOT FOUND");
+        setSalahStatus("");
+        setNotes("");
+        return false;
+      }
+    } catch (error) {
+      console.log(
+        "ERROR OPENING CONNECTION IN doesSalahAndDateExists FUNCTION:"
+      );
+      console.log(error);
+    } finally {
+      try {
+        const isDbOpen = await dbConnection.current?.isDBOpen();
+        if (isDbOpen?.result) {
+          await dbConnection.current?.close();
+          console.log("Database connection closed within addSalah function");
+        }
+      } catch (error) {
+        console.log(
+          "ERROR CLOSING DATABASE IN doesSalahAndDateExists FUNCTION:"
+        );
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    doesSalahAndDateExists(salahName, cellDate);
+  }, []);
 
   useEffect(() => {
     const storedReasonsArray = localStorage.getItem("storedReasonsArray");
@@ -103,8 +153,8 @@ const PrayerStatusBottomSheet = ({
       modalSheetPrayerReasonsWrap.current &&
       modalSheetHiddenPrayerReasonsWrap.current
     ) {
-      console.log(modalSheetPrayerReasonsWrap.current);
-      console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+      // console.log(modalSheetPrayerReasonsWrap.current);
+      // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
       if (
         salahStatus === "male-alone" ||
         salahStatus === "late" ||
@@ -160,23 +210,34 @@ const PrayerStatusBottomSheet = ({
     console.log("reasons: ");
     console.log(reasons);
 
+    // setUpdatingDatabase((prevState) => !prevState);
+    isDatabaseUpdating = true;
+    console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
+
     try {
       const isDbOpen = await dbConnection.current?.isDBOpen();
-      if ((await isDbOpen?.result) === false) {
+      if (isDbOpen?.result === false) {
         await dbConnection.current?.open();
         console.log(
           "DB Connection within addOrModifySalah function opened successfully"
         );
       }
 
+      console.log("Is DB Open within addOrModifySalah Function: ");
+      console.log(isDbOpen.result);
+
       const salahAndDateExist = await doesSalahAndDateExists(salahName, date);
 
       console.log("Does salah and date exist:");
       console.log(salahAndDateExist);
 
+      // await dbConnection.current?.query(
+      //   `INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes) VALUES ("01.01.21", "Dhuhr", "alone", "", "")`
+      // );
+
       if (!salahAndDateExist) {
         console.log("ADDING ITEM...");
-        let query = `INSERT INTO salahtrackingtable(salahName, salahStatus, date`;
+        let query = `INSERT INTO salahtrackingtable(date, salahName, salahStatus`;
         const values = [salahName, salahStatus, date];
 
         if (reasons !== undefined && reasons.length > 0) {
@@ -196,7 +257,7 @@ const PrayerStatusBottomSheet = ({
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
 
-        console.log("DB INSERT HAS RUN");
+        console.log("DB INSERT HAS RUR");
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
       }
@@ -213,10 +274,12 @@ const PrayerStatusBottomSheet = ({
           console.log(
             "Database connection closed within addOrModifySalah function"
           );
+          // setUpdatingDatabase(false);
+          isDatabaseUpdating = false;
         }
       } catch (error) {
         console.log(
-          "ERROR WHEN TRYING TO CLOSE DATABASE IN ADDSALAH FUNCTION:"
+          "ERROR WHEN TRYING TO CLOSE DATABASE IN addOrModifySalah FUNCTION:"
         );
         console.log(error);
       }
