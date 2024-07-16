@@ -115,8 +115,8 @@ const PrayerTableDisplay = ({
         endIndex
       );
       const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
-      console.log("slicedDatesFormattedArr");
-      console.log(slicedDatesFormattedArr);
+      // console.log("slicedDatesFormattedArr");
+      // console.log(slicedDatesFormattedArr);
 
       const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
       const res = await dbConnection.current?.query(
@@ -126,12 +126,11 @@ const PrayerTableDisplay = ({
 
       console.log("RES IS: ");
       console.log(res);
-
+      console.log(slicedDatesFormattedArr);
       // const staticDateAndDatabaseDataCombined = res?.values?.map(
       const staticDateAndDatabaseDataCombined = slicedDatesFormattedArr.map(
         (_, index) => {
-          // console.log("OBJ:");
-          // console.log(obj);
+          // console.log("staticDateAndDatabaseDataCombined HAS RUN");
           const dateFromDatesFormattedArr = datesFormatted[startIndex + index];
           // const dateFromDatesFormattedArr = slicedDatesFormattedArr[index];
 
@@ -153,15 +152,13 @@ const PrayerTableDisplay = ({
             } as Salahs,
           };
 
-          if (res?.values?.length) {
+          if (res?.values && res.values.length > 0) {
             for (let i = 0; i < res.values.length; i++) {
-              if (res.values[index].date === dateFromDatesFormattedArr) {
-                console.log("DATE MATCH DETECTED");
-                let salahName: any = res?.values?.[index].salahName;
-                let salahStatus: string = res?.values?.[index].salahStatus;
+              if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
+                // console.log("DATE MATCH DETECTED");
+                let salahName: any = res?.values?.[i].salahName;
+                let salahStatus: string = res?.values?.[i].salahStatus;
                 singleSalahObj.salahs[salahName] = salahStatus;
-                // console.log("salahName::");
-                // console.log(singleSalahObj.salahs[salahName]);
               }
             }
           }
@@ -169,16 +166,21 @@ const PrayerTableDisplay = ({
           // console.log("singleSalahObj");
           // console.log(singleSalahObj);
           holdArr.push(singleSalahObj);
+          return singleSalahObj;
         }
       );
 
-      // console.log("holdArr data is:");
-      // console.log(holdArr);
+      // staticDateAndDatabaseDataCombined()
+
+      console.log("holdArr data is:");
+      console.log(holdArr);
       console.log("holdArr length is:");
       console.log(holdArr.length);
       // console.log("DATA WITHIN FETCH FUNC:");
       // console.log(data);
       return holdArr;
+      // console.log(staticDateAndDatabaseDataCombined);
+      // return staticDateAndDatabaseDataCombined;
     } catch (error) {
       console.log("ERROR IN fetchDataFromDatabase FUNCTION: ");
       console.log(error);
@@ -207,19 +209,22 @@ const PrayerTableDisplay = ({
     // console.log(dataArr[index]["01.01.24"][0].date);
     // return data ? data[index] : "none";
     return data[index];
+    // return data[index] || { date: "", salahs: {} };
   };
 
   // console.log("DATES FORMATTED ARRAY:");
   // console.log(datesFormatted);
 
   const isRowLoaded = ({ index }: any) => {
-    // console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!data[index]);
+    console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!data[index]);
     // console.log("data amout is: " + data.length);
     return !!data[index];
+    //  return data[index] !== undefined;
+    // return data ? !!data[index] : false;
   };
 
   async function loadMoreRows({ startIndex, stopIndex }: any) {
-    // console.log("LOADMOREROWS HAS RUN");
+    console.log("LOADMOREROWS HAS RUN");
     // console.log(startIndex, stopIndex);
     const moreRows = await fetchDataFromDatabase(startIndex, stopIndex);
     setData((prevData: any) => [...prevData, ...moreRows]);
@@ -260,15 +265,15 @@ const PrayerTableDisplay = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
-                  // console.log("ROWDATA IN DATE COLUMN:");
-                  // console.log(rowData);
+                  console.log("ROWDATA IN DATE COLUMN:");
+                  console.log(rowData);
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDay = format(rowData, "EEEE");
                   {
-                    return rowData !== "none" ? (
+                    return rowData.date ? (
                       <div>{rowData.date}</div>
                     ) : (
-                      <div>{""}</div>
+                      <div>{"Loading..."}</div>
                     );
                   }
                 }}
@@ -284,11 +289,11 @@ const PrayerTableDisplay = ({
                   flexGrow={1}
                   cellRenderer={({ rowData }) => {
                     console.log("ROWDATA");
-                    // console.log(rowData);
+                    console.log(rowData.salahs[salahName]);
                     // console.log(typeof rowData.salahs[salahName]);
                     // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                     // const formattedDay = format(rowData, "EEEE");
-                    return (
+                    return rowData ? (
                       <PrayerTableCell
                         dbConnection={dbConnection}
                         salahStatusFromCell={rowData.salahs[salahName]}
@@ -296,6 +301,8 @@ const PrayerTableDisplay = ({
                         salahName={salahName}
                         userGender={userGender}
                       />
+                    ) : (
+                      <div>{"Loading..."}</div>
                     );
                   }}
                 />
