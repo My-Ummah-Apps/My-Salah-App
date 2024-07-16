@@ -35,50 +35,25 @@ const PrayerTableCell = ({
   // console.log("TABLE CELL HAS RUN AND ITS DATE ROW DATE IS: " + cellDate);
   // console.log("TABLE CELL HAS RUN AND ITS SALAH IS: " + salahName);
 
+  const dict = {
+    group: "bg-[color:var(--jamaah-status-color)]",
+    "male-alone": "bg-[color:var(--alone-male-status-color)]",
+    "female-alone": "bg-[color:var(--alone-female-status-color)]",
+    excused: "bg-[color:var(--excused-status-color)]",
+    late: "bg-[color:var(--late-status-color)]",
+    missed: "bg-[color:var(--missed-status-color)]",
+  };
+
+  console.log(salahStatusFromCell);
+
   useEffect(() => {
     async function fetchCellData() {
-      //   let salahStatus = "male-alone"; // This does not cause database errors upon prayer table being scrolled
-      //   setSalahStatus(salahStatus);
-      //   console.log("SALAH STATUS IS:" + salahStatus);
-
-      if (salahStatusFromCell === "male-alone") {
-        setCellData(
-          <div
-            className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
-          ></div>
-        );
-      } else if (salahStatusFromCell === "group") {
-        setCellData(
-          <div
-            className={`${iconStyles} bg-[color:var(--jamaah-status-color)] `}
-          ></div>
-        );
-      } else if (salahStatusFromCell === "female-alone") {
-        setCellData(
-          <div
-            className={`${iconStyles} bg-[color:var(--alone-female-status-color)] `}
-          ></div>
-        );
-      } else if (salahStatusFromCell === "excused") {
-        setCellData(
-          <div
-            className={`${iconStyles} bg-[color:var(--excused-status-color)] `}
-          ></div>
-        );
-      } else if (salahStatusFromCell === "late") {
-        setCellData(
-          <div
-            className={`${iconStyles} bg-[color:var(--late-status-color)]  `}
-          ></div>
-        );
-      } else if (salahStatusFromCell === "missed") {
-        setCellData(
-          <div
-            className={`${iconStyles} bg-[color:var(--missed-status-color)] red-block  `}
-          ></div>
-        );
-      } else {
+      if (salahStatusFromCell === "") {
         setCellData(<LuDot className="w-[24px] h-[24px]" />);
+      } else {
+        setCellData(
+          <div className={`${iconStyles} ${dict[salahStatusFromCell]} `}></div>
+        );
       }
     }
 
