@@ -72,11 +72,13 @@ const PrayerTable = ({
   const [isLoading, setIsLoading] = useState(false);
   // console.log(data);
 
-  let holdArr: any = [];
+  let holdArr: any;
+  holdArr = [];
   const fetchDataFromDatabase = async (
     startIndex: number,
     endIndex: number
   ) => {
+    // holdArr = [];
     console.log("fetchDataFromDatabase FUNCTION HAS EXECUTED");
     try {
       const isDatabaseOpen = await dbConnection.current?.isDBOpen();
@@ -103,56 +105,46 @@ const PrayerTable = ({
       console.log("RES IS: ");
       console.log(res);
       console.log(slicedDatesFormattedArr);
-      // const staticDateAndDatabaseDataCombined = res?.values?.map(
-      const staticDateAndDatabaseDataCombined = slicedDatesFormattedArr.map(
-        (_, index) => {
-          // console.log("staticDateAndDatabaseDataCombined HAS RUN");
-          const dateFromDatesFormattedArr = datesFormatted[startIndex + index];
 
-          type Salahs = {
-            [key: string]: string;
-          };
+      // console.log("staticDateAndDatabaseDataCombined HAS RUN");
+      for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
+        const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
 
-          let singleSalahObj = {
-            date: dateFromDatesFormattedArr,
-            salahs: {
-              Fajr: "",
-              Dhuhr: "",
-              Asar: "",
-              Maghrib: "",
-              Isha: "",
-            } as Salahs,
-          };
+        type Salahs = {
+          [key: string]: string;
+        };
 
-          if (res?.values && res.values.length > 0) {
-            for (let i = 0; i < res.values.length; i++) {
-              if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
-                // console.log("DATE MATCH DETECTED");
-                let salahName: any = res?.values?.[i].salahName;
-                let salahStatus: string = res?.values?.[i].salahStatus;
-                singleSalahObj.salahs[salahName] = salahStatus;
-              }
+        let singleSalahObj = {
+          date: dateFromDatesFormattedArr,
+          salahs: {
+            Fajr: "",
+            Dhuhr: "",
+            Asar: "",
+            Maghrib: "",
+            Isha: "",
+          } as Salahs,
+        };
+
+        if (res?.values && res.values.length > 0) {
+          for (let i = 0; i < res.values.length; i++) {
+            if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
+              // console.log("DATE MATCH DETECTED");
+              let salahName: any = res?.values?.[i].salahName;
+              let salahStatus: string = res?.values?.[i].salahStatus;
+              singleSalahObj.salahs[salahName] = salahStatus;
             }
           }
-
-          // console.log("singleSalahObj");
-          // console.log(singleSalahObj);
-          holdArr.push(singleSalahObj);
-          return singleSalahObj;
         }
-      );
 
-      // staticDateAndDatabaseDataCombined()
+        holdArr.push(singleSalahObj);
+      }
 
       console.log("holdArr data is:");
       console.log(holdArr);
       console.log("holdArr length is:");
       console.log(holdArr.length);
-      // console.log("DATA WITHIN FETCH FUNC:");
-      // console.log(data);
+
       return holdArr;
-      // console.log(staticDateAndDatabaseDataCombined);
-      // return staticDateAndDatabaseDataCombined;
     } catch (error) {
       console.log("ERROR IN fetchDataFromDatabase FUNCTION: ");
       console.log(error);
@@ -170,37 +162,25 @@ const PrayerTable = ({
     }
   };
 
-  // const [showMonthlyCalenderModal, setShowMonthlyCalenderModal] =
-  //   useState(false);
-
-  console.log("TABLE RERENDERED");
-
   const rowGetter = ({ index }: any) => {
     console.log("ROWGETTER HAS RUN");
     console.log(data[index]);
-    // console.log(dataArr[index]["01.01.24"][0].date);
-    // return data ? data[index] : "none";
-    // return data[index];
-    return data[index] || { date: "Loading...", salahs: {} };
+    return data[index];
+    // return data[index] || { date: "Loading...", salahs: {} };
   };
-
-  // console.log("DATES FORMATTED ARRAY:");
-  // console.log(datesFormatted);
 
   const isRowLoaded = ({ index }: any) => {
     console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!data[index]);
-    // console.log("data amout is: " + data.length);
     return !!data[index];
-    //  return data[index] !== undefined;
-    // return data ? !!data[index] : false;
   };
 
   const loadMoreRows = async ({ startIndex, stopIndex }: any) => {
-    console.log("LOADMOREROWS HAS RUN");
-    // console.log(startIndex, stopIndex);
-    const moreRows = await fetchDataFromDatabase(startIndex, stopIndex);
-    setData((prevData: any) => [...prevData, ...moreRows]);
-    // return fetchDataFromDatabase(startIndex, stopIndex);
+    try {
+      const moreRows = await fetchDataFromDatabase(startIndex, stopIndex + 500);
+      setData((prevData: any) => [...prevData, ...moreRows]);
+    } catch (error) {
+      console.error("Error loading more rows:", error);
+    }
   };
 
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
@@ -237,8 +217,8 @@ const PrayerTable = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
-                  // console.log("ROWDATA IN DATE COLUMN:");
-                  // console.log(rowData);
+                  console.log("ROWDATA IN DATE COLUMN:");
+                  console.log(rowData);
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDay = format(rowData, "EEEE");
                   {
