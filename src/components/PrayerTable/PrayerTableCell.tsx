@@ -44,7 +44,7 @@ const PrayerTableCell = ({
     missed: "bg-[color:var(--missed-status-color)]",
   };
 
-  console.log(salahStatusFromCell);
+  // console.log(salahStatusFromCell);
 
   useEffect(() => {
     async function fetchCellData() {

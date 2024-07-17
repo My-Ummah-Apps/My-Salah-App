@@ -12,7 +12,7 @@ import useSQLiteDB from "../../utils/useSqLiteDB";
 import { SQLiteConnection, CapacitorSQLite } from "@capacitor-community/sqlite";
 import { LuDot } from "react-icons/lu";
 // import StreakCount from "../Stats/StreakCount";
-const PrayerTableDisplay = ({
+const PrayerTable = ({
   userGender,
   userStartDate,
   setSalahTrackingArray,
@@ -49,29 +49,7 @@ const PrayerTableDisplay = ({
   );
   datesFormatted.reverse();
 
-  // const [selectedSalah, setSelectedSalah] = useState("");
-
-  // const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  // const [salahStatus, setSalahStatus] = useState("");
-  // const [showReasons, setShowReasons] = useState(false);
-  // const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
-  //   useState(false);
-  // const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  // const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  // let selectedReasonsArray = selectedReasons;
-  // const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
-  // const [customReason, setCustomReason] = useState("");
-  // const handleCustomReason = (e: any) => {
-  //   setCustomReason(e.target.value);
-  // };
-  // const [notes, setNotes] = useState("");
-  // const handleNotes = (e: any) => {
-  //   setNotes(e.target.value);
-  // };
-
   const [data, setData] = useState<any>([]);
-  // console.log("DATA::");
-  // console.log(data);
   const [renderTable, setRenderTable] = useState(false);
   const INITIAL_LOAD_SIZE = 50;
   const LOAD_MORE_SIZE = 50;
@@ -115,8 +93,6 @@ const PrayerTableDisplay = ({
         endIndex
       );
       const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
-      // console.log("slicedDatesFormattedArr");
-      // console.log(slicedDatesFormattedArr);
 
       const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
       const res = await dbConnection.current?.query(
@@ -132,10 +108,6 @@ const PrayerTableDisplay = ({
         (_, index) => {
           // console.log("staticDateAndDatabaseDataCombined HAS RUN");
           const dateFromDatesFormattedArr = datesFormatted[startIndex + index];
-          // const dateFromDatesFormattedArr = slicedDatesFormattedArr[index];
-
-          // console.log("dateFromDatesFormattedArr: ");
-          // console.log(dateFromDatesFormattedArr);
 
           type Salahs = {
             [key: string]: string;
@@ -205,11 +177,11 @@ const PrayerTableDisplay = ({
 
   const rowGetter = ({ index }: any) => {
     console.log("ROWGETTER HAS RUN");
-    console.log(data);
+    console.log(data[index]);
     // console.log(dataArr[index]["01.01.24"][0].date);
     // return data ? data[index] : "none";
-    return data[index];
-    // return data[index] || { date: "", salahs: {} };
+    // return data[index];
+    return data[index] || { date: "Loading...", salahs: {} };
   };
 
   // console.log("DATES FORMATTED ARRAY:");
@@ -223,13 +195,13 @@ const PrayerTableDisplay = ({
     // return data ? !!data[index] : false;
   };
 
-  async function loadMoreRows({ startIndex, stopIndex }: any) {
+  const loadMoreRows = async ({ startIndex, stopIndex }: any) => {
     console.log("LOADMOREROWS HAS RUN");
     // console.log(startIndex, stopIndex);
     const moreRows = await fetchDataFromDatabase(startIndex, stopIndex);
     setData((prevData: any) => [...prevData, ...moreRows]);
     // return fetchDataFromDatabase(startIndex, stopIndex);
-  }
+  };
 
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
 
@@ -265,8 +237,8 @@ const PrayerTableDisplay = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
-                  console.log("ROWDATA IN DATE COLUMN:");
-                  console.log(rowData);
+                  // console.log("ROWDATA IN DATE COLUMN:");
+                  // console.log(rowData);
                   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                   // const formattedDay = format(rowData, "EEEE");
                   {
@@ -319,4 +291,4 @@ const PrayerTableDisplay = ({
   );
 };
 
-export default PrayerTableDisplay;
+export default PrayerTable;

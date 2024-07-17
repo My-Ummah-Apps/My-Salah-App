@@ -1,4 +1,4 @@
-import PrayerTableDisplay from "../components/PrayerTable/PrayerTableDisplay";
+import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
 import { salahTrackingEntryType } from "../types/types";
 import { useEffect } from "react";
@@ -20,8 +20,8 @@ const HomePage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
-  // currentWeek,
-}: {
+} // currentWeek,
+: {
   // title: React.ReactNode;
   userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -51,7 +51,7 @@ const HomePage = ({
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
       {/* <NextSalahTime /> */}
-      <PrayerTableDisplay
+      <PrayerTable
         userGender={userGender}
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}
