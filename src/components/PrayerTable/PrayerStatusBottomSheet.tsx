@@ -34,7 +34,7 @@ const PrayerStatusBottomSheet = ({
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
-  const [selectedSalah, setSelectedSalah] = useState("");
+  // const [selectedSalah, setSelectedSalah] = useState("");
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
@@ -74,22 +74,24 @@ const PrayerStatusBottomSheet = ({
     `;
       const values = [salahName, date];
 
-      console.log(await dbConnection.current?.query(query, values));
+      // console.log(await dbConnection.current?.query(query, values));
       const res = await dbConnection.current?.query(query, values);
 
-      console.log("res.values");
-      console.log(res?.values);
+      // console.log("res.values");
+      // console.log(res?.values);
 
       if (res && res.values && res.values.length > 0) {
         console.log("DATA FOUND");
-        setSelectedSalah(salahName);
-        setSalahStatus("group");
-        setNotes("Data exists");
+        // setSelectedSalah(salahName);
+        setSalahStatus(res.values[0].salahStatus);
+        setNotes(res.values[0].notes);
+        // setReasonsArray
         return true;
-      } else {
+      } else if (res && res.values && res.values.length === 0) {
         console.log("DATE NOT FOUND");
         setSalahStatus("");
         setNotes("");
+        // setReasonsArray
         return false;
       }
     } catch (error) {
@@ -204,13 +206,6 @@ const PrayerStatusBottomSheet = ({
     reasons?: string[],
     notes?: string
   ) => {
-    console.log("addOrModifySalah FUNCTION BEING RUN");
-    console.log("NOTES: ");
-    console.log(notes);
-    console.log("reasons: ");
-    console.log(reasons);
-
-    // setUpdatingDatabase((prevState) => !prevState);
     isDatabaseUpdating = true;
     console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
 
@@ -257,7 +252,7 @@ const PrayerStatusBottomSheet = ({
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
 
-        console.log("DB INSERT HAS RUR");
+        console.log("DB INSERT HAS RUN");
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
       }
@@ -527,7 +522,7 @@ const PrayerStatusBottomSheet = ({
                         notes
                       );
                       setShowUpdateStatusModal(false);
-                      setHasUserClickedDate(false);
+                      // setHasUserClickedDate(true);
                       // forceUpdate();
                     }
                   }}

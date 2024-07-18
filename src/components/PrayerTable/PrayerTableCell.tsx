@@ -9,31 +9,25 @@ const PrayerTableCell = ({
   salahStatusFromCell,
   cellDate,
   userGender,
+  setHasUserClickedDate,
+  hasUserClickedDate,
 }: {
   salahName: string;
   salahStatusFromCell: string;
   cellDate: string;
   dbConnection: any;
   userGender: string;
+  setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
+  hasUserClickedDate: boolean;
 }) => {
-  //   console.log("CELL DATE IS: ");
-  //   console.log(cellDate);
-  //   console.log("salahName IS:");
-  //   console.log(salahName);
-  //   console.log("salahStatus IS:");
-  //   console.log(salahStatus);
+  // console.log("TABLE CELL RENDERED");
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
 
   let [cellData, setCellData] = useState<JSX.Element>(
     <LuDot className="w-[24px] h-[24px]" />
   );
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
-  //   const [salahStatus, setSalahStatus] = useState<null | string>();
-  //
-  // console.log("TABLE CELL HAS RUN AND ITS DATE ROW DATE IS: " + cellDate);
-  // console.log("TABLE CELL HAS RUN AND ITS SALAH IS: " + salahName);
 
   const dict = {
     group: "bg-[color:var(--jamaah-status-color)]",
@@ -43,8 +37,6 @@ const PrayerTableCell = ({
     late: "bg-[color:var(--late-status-color)]",
     missed: "bg-[color:var(--missed-status-color)]",
   };
-
-  // console.log(salahStatusFromCell);
 
   useEffect(() => {
     async function fetchCellData() {

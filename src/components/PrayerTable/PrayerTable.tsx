@@ -163,20 +163,21 @@ const PrayerTable = ({
   };
 
   const rowGetter = ({ index }: any) => {
-    console.log("ROWGETTER HAS RUN");
-    console.log(data[index]);
+    // console.log("ROWGETTER HAS RUN");
+    // console.log(data[index]);
     return data[index];
     // return data[index] || { date: "Loading...", salahs: {} };
   };
 
   const isRowLoaded = ({ index }: any) => {
-    console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!data[index]);
+    // console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!data[index]);
     return !!data[index];
   };
 
   const loadMoreRows = async ({ startIndex, stopIndex }: any) => {
     try {
-      const moreRows = await fetchDataFromDatabase(startIndex, stopIndex + 500);
+      // const moreRows = await fetchDataFromDatabase(startIndex, stopIndex + 500);
+      const moreRows = await fetchDataFromDatabase(startIndex, stopIndex);
       setData((prevData: any) => [...prevData, ...moreRows]);
     } catch (error) {
       console.error("Error loading more rows:", error);
@@ -184,7 +185,7 @@ const PrayerTable = ({
   };
 
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
-
+  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
   return (
     <section className="relative">
       {/* <div style={{ width: "100vw !important" }}> */}
@@ -193,6 +194,7 @@ const PrayerTable = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={datesFormatted.length}
+          threshold={100} // Threshold at which to pre-fetch data. A threshold X means that data will start loading when a user scrolls within X rows. Defaults is 15.
         >
           {({ onRowsRendered, registerChild }) => (
             <Table
@@ -213,22 +215,23 @@ const PrayerTable = ({
                 style={{ marginLeft: "0" }}
                 className="text-sm text-left "
                 label=""
-                dataKey=""
+                dataKey="date"
+                // dataKey=""
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData }) => {
-                  console.log("ROWDATA IN DATE COLUMN:");
-                  console.log(rowData);
-                  // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                  // const formattedDay = format(rowData, "EEEE");
-                  {
-                    return rowData.date ? (
-                      <div>{rowData.date}</div>
-                    ) : (
-                      <div>{"Loading..."}</div>
-                    );
-                  }
-                }}
+                // cellRenderer={({ rowData }) => {
+                //   console.log("ROWDATA IN DATE COLUMN:");
+                //   console.log(rowData);
+                //   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
+                //   // const formattedDay = format(rowData, "EEEE");
+                //   {
+                //     return rowData.date ? (
+                //       <div>{rowData.date}</div>
+                //     ) : (
+                //       <div>{"Loading..."}</div>
+                //     );
+                //   }
+                // }}
               />
               {salahNamesArr.map((salahName) => (
                 <Column
@@ -236,26 +239,31 @@ const PrayerTable = ({
                   style={{ marginLeft: "0" }}
                   className="text-sm text-left "
                   label={salahName}
+                  // dataKey="rowData.salahs[salahName]"
                   dataKey=""
                   width={120}
                   flexGrow={1}
                   cellRenderer={({ rowData }) => {
-                    console.log("ROWDATA");
-                    console.log(rowData.salahs[salahName]);
+                    // console.log("ROWDATA");
+                    // console.log(rowData.salahs[salahName]);
                     // console.log(typeof rowData.salahs[salahName]);
                     // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                     // const formattedDay = format(rowData, "EEEE");
-                    return rowData ? (
+                    // return rowData ? (
+                    return (
                       <PrayerTableCell
                         dbConnection={dbConnection}
                         salahStatusFromCell={rowData.salahs[salahName]}
                         cellDate={rowData.date}
                         salahName={salahName}
                         userGender={userGender}
+                        setHasUserClickedDate={setHasUserClickedDate}
+                        hasUserClickedDate={hasUserClickedDate}
                       />
-                    ) : (
-                      <div>{"Loading..."}</div>
                     );
+                    // ) : (
+                    //   <div>{"Loading..."}</div>
+                    // );
                   }}
                 />
               ))}

@@ -128,7 +128,7 @@ const useSQLiteDB = () => {
       async (dbConnection: SQLiteDBConnection | undefined) => {
         // SQL query to create the 'salahtracking' table if it doesn't already exist
         const queryCreateSalahTrackingTable = `
-        CREATE TABLE IF NOT EXISTS salahtrackingtable(id INTEGER PRIMARY KEY NOT NULL, date TEXT NOT NULL, salahName TEXT NOT NULL, salahStatus TEXT NOT NULL, reasons TEXT, notes TEXT);
+        CREATE TABLE IF NOT EXISTS salahtrackingtable(id INTEGER PRIMARY KEY NOT NULL, date TEXT NOT NULL, salahName TEXT NOT NULL, salahStatus TEXT NOT NULL, reasons TEXT DEFAULT '', notes TEXT DEFAULT '');
         `;
         const respCT = await dbConnection?.execute(
           queryCreateSalahTrackingTable
