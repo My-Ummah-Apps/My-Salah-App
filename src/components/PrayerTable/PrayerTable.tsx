@@ -5,12 +5,15 @@ import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer, InfiniteLoader } from "react-virtualized";
 AutoSizer;
 import PrayerTableCell from "./PrayerTableCell";
+import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 import { salahTrackingEntryType } from "../../types/types";
 import { subDays, format, parse, eachDayOfInterval } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import useSQLiteDB from "../../utils/useSqLiteDB";
 import { SQLiteConnection, CapacitorSQLite } from "@capacitor-community/sqlite";
 import { LuDot } from "react-icons/lu";
+import { divide } from "lodash";
+
 // import StreakCount from "../Stats/StreakCount";
 const PrayerTable = ({
   userGender,
@@ -35,8 +38,10 @@ const PrayerTable = ({
   } = useSQLiteDB();
   console.log("PRAYER TABLE COMPONENT RENDERED");
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
-
+  // const [salahStatus, setSalahStatus] = useState<string | undefined>();
   // userStartDate = "05.05.22";
+  let [cellColor, setCellColor] = useState<JSX.Element>();
+
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
   const datesBetweenUserStartDateAndToday = eachDayOfInterval({
@@ -50,7 +55,14 @@ const PrayerTable = ({
   datesFormatted.reverse();
 
   const [data, setData] = useState<any>([]);
+  console.log("SETDATA WITHIN TABLE IS:");
+  console.log(data);
   const [renderTable, setRenderTable] = useState(false);
+  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
+  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+
+  const [clickedDate, setClickedDate] = useState<string>("");
+  const [clickedSalah, setClickedSalah] = useState<string>("");
   const INITIAL_LOAD_SIZE = 50;
   const LOAD_MORE_SIZE = 50;
   useEffect(() => {
@@ -165,6 +177,7 @@ const PrayerTable = ({
   const rowGetter = ({ index }: any) => {
     // console.log("ROWGETTER HAS RUN");
     // console.log(data[index]);
+
     return data[index];
     // return data[index] || { date: "Loading...", salahs: {} };
   };
@@ -184,8 +197,18 @@ const PrayerTable = ({
     }
   };
 
+  const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
+  const dict = {
+    group: "bg-[color:var(--jamaah-status-color)]",
+    "male-alone": "bg-[color:var(--alone-male-status-color)]",
+    "female-alone": "bg-[color:var(--alone-female-status-color)]",
+    excused: "bg-[color:var(--excused-status-color)]",
+    late: "bg-[color:var(--late-status-color)]",
+    missed: "bg-[color:var(--missed-status-color)]",
+  };
+
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
-  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
+
   return (
     <section className="relative">
       {/* <div style={{ width: "100vw !important" }}> */}
@@ -216,7 +239,6 @@ const PrayerTable = ({
                 className="text-sm text-left "
                 label=""
                 dataKey="date"
-                // dataKey=""
                 width={120}
                 flexGrow={1}
                 // cellRenderer={({ rowData }) => {
@@ -244,26 +266,41 @@ const PrayerTable = ({
                   width={120}
                   flexGrow={1}
                   cellRenderer={({ rowData }) => {
-                    // console.log("ROWDATA");
-                    // console.log(rowData.salahs[salahName]);
+                    // console.log("ROW DATA IS:");
+                    // console.log(rowData);
                     // console.log(typeof rowData.salahs[salahName]);
                     // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                     // const formattedDay = format(rowData, "EEEE");
                     // return rowData ? (
-                    return (
-                      <PrayerTableCell
-                        dbConnection={dbConnection}
-                        salahStatusFromCell={rowData.salahs[salahName]}
-                        cellDate={rowData.date}
-                        salahName={salahName}
-                        userGender={userGender}
-                        setHasUserClickedDate={setHasUserClickedDate}
-                        hasUserClickedDate={hasUserClickedDate}
+                    // console.log("RENDERING COLUMN, SALAH STATUS IS:");
+                    // console.log(rowData.salahs[salahName]);
+                    return rowData.salahs[salahName] === "" ? (
+                      <LuDot
+                        onClick={() => {
+                          setShowUpdateStatusModal(true);
+                          setClickedDate(rowData.date);
+                          setClickedSalah(salahName);
+                          setHasUserClickedDate(true);
+                          // console.log("SALAH INFO IS:");
+                          // console.log(rowData.salahs[salahName]);
+                        }}
+                        className="w-[24px] h-[24px]"
                       />
+                    ) : (
+                      <div
+                        onClick={() => {
+                          setShowUpdateStatusModal(true);
+                          setClickedDate(rowData.date);
+                          setClickedSalah(salahName);
+                          setHasUserClickedDate(true);
+                        }}
+                        className={`${iconStyles}
+                        ${dict[rowData.salahs[salahName]]}
+                        `}
+                      >
+                        {/* {cellData} */}
+                      </div>
                     );
-                    // ) : (
-                    //   <div>{"Loading..."}</div>
-                    // );
                   }}
                 />
               ))}
@@ -275,6 +312,26 @@ const PrayerTable = ({
       )}
 
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
+      {showUpdateStatusModal && (
+        <PrayerStatusBottomSheet
+          setCellColor={setCellColor}
+          fetchDataFromDatabase={fetchDataFromDatabase}
+          setData={setData}
+          data={data}
+          // salahName={salahName}
+          // cellDate={cellDate}
+          clickedDate={clickedDate}
+          clickedSalah={clickedSalah}
+          dbConnection={dbConnection}
+          userGender={userGender}
+          setShowUpdateStatusModal={setShowUpdateStatusModal}
+          showUpdateStatusModal={showUpdateStatusModal}
+          setHasUserClickedDate={setHasUserClickedDate}
+          hasUserClickedDate={hasUserClickedDate}
+          // setSalahStatus={setSalahStatus}
+          // salahStatus={salahStatus}
+        />
+      )}
     </section>
   );
 };

@@ -10,7 +10,8 @@ const PrayerTableCell = ({
   cellDate,
   userGender,
   setHasUserClickedDate,
-  hasUserClickedDate,
+  hasUserClickedDate, // setSalahStatus,
+  // salahStatus,
 }: {
   salahName: string;
   salahStatusFromCell: string;
@@ -19,8 +20,12 @@ const PrayerTableCell = ({
   userGender: string;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   hasUserClickedDate: boolean;
+  // setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
+  // salahStatus: string;
 }) => {
-  // console.log("TABLE CELL RENDERED");
+  const [salahStatus, setSalahStatus] = useState<string | undefined>();
+  console.log("TABLE CELL RENDERED");
+  // const [salahStatus, setSalahStatus] = useState("");
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
 
@@ -37,7 +42,7 @@ const PrayerTableCell = ({
     late: "bg-[color:var(--late-status-color)]",
     missed: "bg-[color:var(--missed-status-color)]",
   };
-
+  console.log("SALAH STATUS:" + salahStatus);
   useEffect(() => {
     async function fetchCellData() {
       if (salahStatusFromCell === "") {
@@ -67,8 +72,9 @@ const PrayerTableCell = ({
       >
         {cellData}
       </div>
-      {showUpdateStatusModal && (
+      {/* {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
+          setCellData={setCellData}
           salahName={salahName}
           cellDate={cellDate}
           dbConnection={dbConnection}
@@ -77,8 +83,10 @@ const PrayerTableCell = ({
           showUpdateStatusModal={showUpdateStatusModal}
           setHasUserClickedDate={setHasUserClickedDate}
           hasUserClickedDate={hasUserClickedDate}
+          setSalahStatus={setSalahStatus}
+          salahStatus={salahStatus}
         />
-      )}
+      )} */}
     </>
   );
 };

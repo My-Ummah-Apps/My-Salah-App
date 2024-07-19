@@ -11,25 +11,43 @@ import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
-  salahName,
-  cellDate,
+  fetchDataFromDatabase,
+  setData,
+  data,
+  setCellColor,
+  clickedDate,
+  clickedSalah,
+  // cellDate,
   userGender,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   hasUserClickedDate, // customReason,
-}: {
+  // salahStatus,
+} // setSalahStatus,
+: {
   dbConnection: any;
-  salahName: string;
-  cellDate: string;
+  fetchDataFromDatabase: (startIndex: number, endIndex: number) => Promise<any>;
+  setData: React.Dispatch<any>;
+  data: any;
+  setCellColor: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  clickedDate: string;
+  clickedSalah: string;
+  // cellDate: string;
   userGender: string;
   showUpdateStatusModal: boolean;
 
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   hasUserClickedDate: boolean;
+  // setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
+  // salahStatus: string;
   // customReason: string;
 }) => {
+  console.log("CLICKED DATE IS: ");
+  console.log(clickedDate);
+  console.log("clickedSalah");
+  console.log(clickedSalah);
   const [updatingDatabase, setUpdatingDatabase] = useState<boolean>();
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
@@ -51,47 +69,64 @@ const PrayerStatusBottomSheet = ({
 
   let selectedReasonsArray = selectedReasons;
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
+  const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
+  const dict = {
+    group: "bg-[color:var(--jamaah-status-color)]",
+    "male-alone": "bg-[color:var(--alone-male-status-color)]",
+    "female-alone": "bg-[color:var(--alone-female-status-color)]",
+    excused: "bg-[color:var(--excused-status-color)]",
+    late: "bg-[color:var(--late-status-color)]",
+    missed: "bg-[color:var(--missed-status-color)]",
+  };
 
   let isDatabaseUpdating: boolean;
 
   const doesSalahAndDateExists = async (
-    salahName: string,
+    clickedSalah: string,
     date: string
-  ): Promise<boolean | undefined> => {
-    console.log("UPDATING DATABASE? " + updatingDatabase);
-    // if (updatingDatabase) return;
-    if (isDatabaseUpdating) return;
+  ): Promise<boolean> => {
+    // console.log("UPDATING DATABASE? " + updatingDatabase);
+    // if (isDatabaseUpdating) return;
+
     try {
       const isDatabaseOpen = await dbConnection.current?.isDBOpen();
       if (isDatabaseOpen?.result === false) {
         await dbConnection.current?.open();
-        console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
+        // console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
       }
 
-      const query = `
+      //   const query = `
+      //   SELECT * FROM salahtrackingtable
+      //   WHERE clickedSalah = ? AND date = ?;
+      // `;
+      //   const values = [clickedSalah, date];
+      const res = await dbConnection.current?.query(
+        `
       SELECT * FROM salahtrackingtable 
       WHERE salahName = ? AND date = ?;
-    `;
-      const values = [salahName, date];
-
-      // console.log(await dbConnection.current?.query(query, values));
-      const res = await dbConnection.current?.query(query, values);
-
-      // console.log("res.values");
-      // console.log(res?.values);
+    `,
+        [clickedSalah, date]
+      );
+      console.log("res is: ");
+      console.log(res);
 
       if (res && res.values && res.values.length > 0) {
         console.log("DATA FOUND");
-        // setSelectedSalah(salahName);
+        console.log("SETDATA IS:");
+        console.log(data);
+
+        // setSelectedSalah(clickedSalah);
         setSalahStatus(res.values[0].salahStatus);
         setNotes(res.values[0].notes);
         // setReasonsArray
         return true;
       } else if (res && res.values && res.values.length === 0) {
-        console.log("DATE NOT FOUND");
         setSalahStatus("");
         setNotes("");
         // setReasonsArray
+        console.log("DATE DOES NOT EXIST, SETTING TO FALSE...");
+        console.log("SETDATA IS:");
+        console.log(data);
         return false;
       }
     } catch (error) {
@@ -102,9 +137,9 @@ const PrayerStatusBottomSheet = ({
     } finally {
       try {
         const isDbOpen = await dbConnection.current?.isDBOpen();
-        if (isDbOpen?.result) {
+        if (isDbOpen?.result && !isDatabaseUpdating) {
           await dbConnection.current?.close();
-          console.log("Database connection closed within addSalah function");
+          // console.log("Database connection closed within addSalah function");
         }
       } catch (error) {
         console.log(
@@ -113,11 +148,94 @@ const PrayerStatusBottomSheet = ({
         console.log(error);
       }
     }
+    console.log("DOES SALAH EXIST HAS RUN TO THE END");
+    return false;
   };
 
-  useEffect(() => {
-    doesSalahAndDateExists(salahName, cellDate);
-  }, []);
+  const addOrModifySalah = async (
+    clickedSalah: string,
+    salahStatus: string,
+    date: string,
+    reasons?: string[],
+    notes?: string
+  ) => {
+    console.log("DATA WITHIN ADDORMODIFY FUNCTION");
+    // console.log(clickedSalah, salahStatus, date, reasons, notes);
+    console.log("clickedSalah:", clickedSalah);
+    isDatabaseUpdating = true;
+    // console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
+
+    try {
+      const isDbOpen = await dbConnection.current?.isDBOpen();
+      if (isDbOpen?.result === false) {
+        await dbConnection.current?.open();
+        // console.log(
+        //   "DB Connection within addOrModifySalah function opened successfully"
+        // );
+      }
+
+      // console.log("Is DB Open within addOrModifySalah Function: ");
+      // console.log(isDbOpen.result);
+
+      const salahAndDateExist = await doesSalahAndDateExists(
+        clickedSalah,
+        date
+      );
+
+      console.log("Does salah and date exist:");
+      console.log(salahAndDateExist);
+
+      if (!salahAndDateExist) {
+        console.log("ADDING ITEM...");
+        let query = `INSERT INTO salahtrackingtable(date, salahName, salahStatus`;
+        const values = [clickedSalah, salahStatus, date];
+
+        if (reasons !== undefined && reasons.length > 0) {
+          console.log("REASONS ARE NOT UNDEFINED");
+          query += `, reasons`;
+          values.push(...reasons);
+        }
+        if (notes !== undefined && notes !== "") {
+          console.log("NOTES ARE NOT UNDEFINED");
+          query += `, notes`;
+          values.push(notes);
+        }
+
+        query += `) VALUES (${values.map(() => "?").join(", ")})`;
+
+        await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
+        // await db?.execute(query, values);
+      } else if (salahAndDateExist) {
+        console.log("EDITING ITEM...");
+      }
+
+      // console.log("DATA INSERTED INTO DATABASE");
+    } catch (error) {
+      console.log("ERROR WITHIN addOrModifySalah function:");
+      console.log(error);
+    } finally {
+      try {
+        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+        if (isDatabaseOpen?.result) {
+          await dbConnection.current?.close();
+          // console.log(
+          //   "Database connection closed within addOrModifySalah function"
+          // );
+          // setUpdatingDatabase(false);
+          isDatabaseUpdating = false;
+        }
+      } catch (error) {
+        console.log(
+          "ERROR WHEN TRYING TO CLOSE DATABASE IN addOrModifySalah FUNCTION:"
+        );
+        console.log(error);
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   doesSalahAndDateExists(clickedSalah, cellDate);
+  // }, []);
 
   useEffect(() => {
     const storedReasonsArray = localStorage.getItem("storedReasonsArray");
@@ -199,88 +317,6 @@ const PrayerStatusBottomSheet = ({
     });
   }
 
-  const addOrModifySalah = async (
-    salahName: string,
-    salahStatus: string,
-    date: string,
-    reasons?: string[],
-    notes?: string
-  ) => {
-    isDatabaseUpdating = true;
-    console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
-
-    try {
-      const isDbOpen = await dbConnection.current?.isDBOpen();
-      if (isDbOpen?.result === false) {
-        await dbConnection.current?.open();
-        console.log(
-          "DB Connection within addOrModifySalah function opened successfully"
-        );
-      }
-
-      console.log("Is DB Open within addOrModifySalah Function: ");
-      console.log(isDbOpen.result);
-
-      const salahAndDateExist = await doesSalahAndDateExists(salahName, date);
-
-      console.log("Does salah and date exist:");
-      console.log(salahAndDateExist);
-
-      // await dbConnection.current?.query(
-      //   `INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes) VALUES ("01.01.21", "Dhuhr", "alone", "", "")`
-      // );
-
-      if (!salahAndDateExist) {
-        console.log("ADDING ITEM...");
-        let query = `INSERT INTO salahtrackingtable(date, salahName, salahStatus`;
-        const values = [salahName, salahStatus, date];
-
-        if (reasons !== undefined && reasons.length > 0) {
-          console.log("REASONS ARE NOT UNDEFINED");
-          query += `, reasons`;
-          values.push(...reasons);
-        }
-        if (notes !== undefined && notes !== "") {
-          console.log("NOTES ARE NOT UNDEFINED");
-          query += `, notes`;
-          values.push(notes);
-        }
-
-        query += `) VALUES (${values.map(() => "?").join(", ")})`;
-        console.log("HELLOOOOOO");
-        console.log(dbConnection.current);
-        await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
-        // await db?.execute(query, values);
-
-        console.log("DB INSERT HAS RUN");
-      } else if (salahAndDateExist) {
-        console.log("EDITING ITEM...");
-      }
-
-      console.log("DATA INSERTED INTO DATABASE");
-    } catch (error) {
-      console.log("ERROR WITHIN addOrModifySalah function:");
-      console.log(error);
-    } finally {
-      try {
-        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-        if (isDatabaseOpen?.result) {
-          await dbConnection.current?.close();
-          console.log(
-            "Database connection closed within addOrModifySalah function"
-          );
-          // setUpdatingDatabase(false);
-          isDatabaseUpdating = false;
-        }
-      } catch (error) {
-        console.log(
-          "ERROR WHEN TRYING TO CLOSE DATABASE IN addOrModifySalah FUNCTION:"
-        );
-        console.log(error);
-      }
-    }
-  };
-
   return (
     <div className="sheet-prayer-update-wrap">
       <Sheet
@@ -304,7 +340,7 @@ const PrayerStatusBottomSheet = ({
               {" "}
               <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
                 <h1 className="mb-5 text-3xl text-center">
-                  How did you pray {salahName}?
+                  How did you pray {clickedSalah}?
                 </h1>
                 <div
                   // ref={modalSheetPrayerStatusesWrap}
@@ -515,15 +551,18 @@ const PrayerStatusBottomSheet = ({
                   onClick={() => {
                     if (salahStatus) {
                       addOrModifySalah(
-                        cellDate,
-                        salahName,
+                        clickedDate,
+                        clickedSalah,
                         salahStatus,
                         selectedReasons,
                         notes
                       );
+                      setCellColor(
+                        <div
+                          className={`${iconStyles} ${dict[salahStatus]} `}
+                        ></div>
+                      );
                       setShowUpdateStatusModal(false);
-                      // setHasUserClickedDate(true);
-                      // forceUpdate();
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
