@@ -11,8 +11,8 @@ const PrayerTableCell = ({
   userGender,
   setHasUserClickedDate,
   hasUserClickedDate, // setSalahStatus,
-  // salahStatus,
-}: {
+} // salahStatus,
+: {
   salahName: string;
   salahStatusFromCell: string;
   cellDate: string;

@@ -41,6 +41,8 @@ const PrayerTable = ({
   // const [salahStatus, setSalahStatus] = useState<string | undefined>();
   // userStartDate = "05.05.22";
   let [cellColor, setCellColor] = useState<JSX.Element>();
+  let sIndex: number = 0;
+  let eIndex: number = 0;
 
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
@@ -71,6 +73,8 @@ const PrayerTable = ({
       if (isDatabaseInitialised === true) {
         console.log("DATABASE HAS INITIALISED");
         setData(await fetchDataFromDatabase(1, INITIAL_LOAD_SIZE));
+        let sIndex = 1;
+        let eIndex = INITIAL_LOAD_SIZE;
         console.log("setData within useEffect has run and its data is: ");
         console.log(data);
         console.log(data.length);
@@ -192,6 +196,8 @@ const PrayerTable = ({
       // const moreRows = await fetchDataFromDatabase(startIndex, stopIndex + 500);
       const moreRows = await fetchDataFromDatabase(startIndex, stopIndex);
       setData((prevData: any) => [...prevData, ...moreRows]);
+      sIndex = startIndex;
+      eIndex = stopIndex;
     } catch (error) {
       console.error("Error loading more rows:", error);
     }
@@ -262,7 +268,7 @@ const PrayerTable = ({
                   className="text-sm text-left "
                   label={salahName}
                   // dataKey="rowData.salahs[salahName]"
-                  dataKey=""
+                  dataKey={""}
                   width={120}
                   flexGrow={1}
                   cellRenderer={({ rowData }) => {
@@ -315,6 +321,8 @@ const PrayerTable = ({
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
           setCellColor={setCellColor}
+          sIndex={sIndex}
+          eIndex={eIndex}
           fetchDataFromDatabase={fetchDataFromDatabase}
           setData={setData}
           data={data}

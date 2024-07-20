@@ -15,6 +15,8 @@ const PrayerStatusBottomSheet = ({
   setData,
   data,
   setCellColor,
+  startIndex,
+  endIndex,
   clickedDate,
   clickedSalah,
   // cellDate,
@@ -23,14 +25,16 @@ const PrayerStatusBottomSheet = ({
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   hasUserClickedDate, // customReason,
-  // salahStatus,
-} // setSalahStatus,
+  // setSalahStatus,
+} // salahStatus,
 : {
   dbConnection: any;
   fetchDataFromDatabase: (startIndex: number, endIndex: number) => Promise<any>;
   setData: React.Dispatch<any>;
   data: any;
   setCellColor: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  startIndex: number;
+  endIndex: number;
   clickedDate: string;
   clickedSalah: string;
   // cellDate: string;
@@ -548,7 +552,7 @@ const PrayerStatusBottomSheet = ({
                   />
                 </div>
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     if (salahStatus) {
                       addOrModifySalah(
                         clickedDate,
@@ -557,10 +561,17 @@ const PrayerStatusBottomSheet = ({
                         selectedReasons,
                         notes
                       );
-                      setCellColor(
-                        <div
-                          className={`${iconStyles} ${dict[salahStatus]} `}
-                        ></div>
+                      // setCellColor(
+                      //   <div
+                      //     className={`${iconStyles} ${dict[salahStatus]} `}
+                      //   ></div>
+                      // );
+                      console.log(
+                        "START AND STOP INDEX: " + startIndex,
+                        endIndex
+                      );
+                      setData(
+                        await fetchDataFromDatabase(startIndex, endIndex)
                       );
                       setShowUpdateStatusModal(false);
                     }
