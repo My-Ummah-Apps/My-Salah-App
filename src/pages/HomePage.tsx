@@ -10,7 +10,13 @@ import { useEffect } from "react";
 // }
 
 const HomePage = ({
+  dbConnection,
+  renderTable,
+  setData,
+  data,
+  datesFormatted,
   // title,
+  fetchSalahTrackingDataFromDB,
   userGender,
   setHeading,
   userStartDate,
@@ -22,20 +28,27 @@ const HomePage = ({
   salahTrackingArray, // setCurrentWeek,
 } // currentWeek,
 : {
+  dbConnection: any;
+  renderTable: boolean;
+  setData: React.Dispatch<any>;
+  data: any;
+  datesFormatted: string[];
+  fetchSalahTrackingDataFromDB: (
+    startIndex: number,
+    endIndex: number
+  ) => Promise<any>;
   // title: React.ReactNode;
   userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
   startDate: Date;
-  // setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  // currentWeek: number;
+
   // currentStartDate: number;
   setSalahTrackingArray: React.Dispatch<
     React.SetStateAction<salahTrackingEntryType[]>
   >;
   salahTrackingArray: salahTrackingEntryType[];
-  // currentWeek: number;
 }) => {
   useEffect(() => {
     setHeading("Home");
@@ -52,6 +65,12 @@ const HomePage = ({
       {/* {title} */}
       {/* <NextSalahTime /> */}
       <PrayerTable
+        dbConnection={dbConnection}
+        renderTable={renderTable}
+        fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
+        datesFormatted={datesFormatted}
+        setData={setData}
+        data={data}
         userGender={userGender}
         userStartDate={userStartDate}
         setSalahTrackingArray={setSalahTrackingArray}

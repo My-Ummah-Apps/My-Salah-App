@@ -11,12 +11,12 @@ import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
-  fetchDataFromDatabase,
+  fetchSalahTrackingDataFromDB,
   setData,
   data,
   setCellColor,
-  startIndex,
-  endIndex,
+  sIndex,
+  eIndex,
   clickedDate,
   clickedSalah,
   // cellDate,
@@ -25,16 +25,19 @@ const PrayerStatusBottomSheet = ({
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   hasUserClickedDate, // customReason,
-  // setSalahStatus,
-} // salahStatus,
+  // salahStatus,
+} // setSalahStatus,
 : {
   dbConnection: any;
-  fetchDataFromDatabase: (startIndex: number, endIndex: number) => Promise<any>;
+  fetchSalahTrackingDataFromDB: (
+    startIndex: number,
+    endIndex: number
+  ) => Promise<any>;
   setData: React.Dispatch<any>;
   data: any;
   setCellColor: React.Dispatch<React.SetStateAction<JSX.Element>>;
-  startIndex: number;
-  endIndex: number;
+  sIndex: number;
+  eIndex: number;
   clickedDate: string;
   clickedSalah: string;
   // cellDate: string;
@@ -48,10 +51,13 @@ const PrayerStatusBottomSheet = ({
   // salahStatus: string;
   // customReason: string;
 }) => {
-  console.log("CLICKED DATE IS: ");
-  console.log(clickedDate);
-  console.log("clickedSalah");
-  console.log(clickedSalah);
+  console.log("INDEX:");
+  console.log(sIndex);
+  console.log(eIndex);
+  // console.log("CLICKED DATE IS: ");
+  // console.log(clickedDate);
+  // console.log("clickedSalah");
+  // console.log(clickedSalah);
   const [updatingDatabase, setUpdatingDatabase] = useState<boolean>();
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
@@ -209,10 +215,12 @@ const PrayerStatusBottomSheet = ({
 
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
+        // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
+        // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
       }
-
+      // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
       // console.log("DATA INSERTED INTO DATABASE");
     } catch (error) {
       console.log("ERROR WITHIN addOrModifySalah function:");
@@ -566,13 +574,8 @@ const PrayerStatusBottomSheet = ({
                       //     className={`${iconStyles} ${dict[salahStatus]} `}
                       //   ></div>
                       // );
-                      console.log(
-                        "START AND STOP INDEX: " + startIndex,
-                        endIndex
-                      );
-                      setData(
-                        await fetchDataFromDatabase(startIndex, endIndex)
-                      );
+
+                      // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
                       setShowUpdateStatusModal(false);
                     }
                   }}

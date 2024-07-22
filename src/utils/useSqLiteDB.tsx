@@ -78,18 +78,18 @@ const useSQLiteDB = () => {
     initialiseDB();
 
     // Cleanup function to close the database connection when the component unmounts
-    // return () => {
-    //   const cleanupDB = async () => {
-    //     if (dbConnection.current) {
-    //       const isOpen = await dbConnection.current.isDBOpen();
-    //       if (isOpen?.result) {
-    //         await dbConnection.current.close();
-    //       }
-    //     }
-    //   };
-    //   cleanupDB();
-    //   console.log("CLEANUP WITHIN initialiseDB()");
-    // };
+    return () => {
+      const cleanupDB = async () => {
+        if (dbConnection.current) {
+          const isOpen = await dbConnection.current.isDBOpen();
+          if (isOpen?.result) {
+            await dbConnection.current.close();
+          }
+        }
+      };
+      cleanupDB();
+      console.log("CLEANUP WITHIN initialiseDB()");
+    };
   }, []);
 
   //   This async function will handle CRUD operations on the database, it will take an action function passed which will determine what type of CRUD functionality it will execute
@@ -127,58 +127,25 @@ const useSQLiteDB = () => {
     await performSQLAction(
       async (dbConnection: SQLiteDBConnection | undefined) => {
         // SQL query to create the 'salahtracking' table if it doesn't already exist
-        const queryCreateSalahTrackingTable = `
-        CREATE TABLE IF NOT EXISTS salahtrackingtable(id INTEGER PRIMARY KEY NOT NULL, date TEXT NOT NULL, salahName TEXT NOT NULL, salahStatus TEXT NOT NULL, reasons TEXT DEFAULT '', notes TEXT DEFAULT '');
+        const salahtrackingtable = `
+        CREATE TABLE IF NOT EXISTS salahtrackingtable(
+        id INTEGER PRIMARY KEY NOT NULL,
+        date TEXT NOT NULL, 
+        salahName TEXT NOT NULL, 
+        salahStatus TEXT NOT NULL, 
+        reasons TEXT DEFAULT '', 
+        notes TEXT DEFAULT ''
+        );
         `;
-        const respCT = await dbConnection?.execute(
-          queryCreateSalahTrackingTable
-        ); // Execute the SQL query to create the table in the database
-
-        // await insertDummyData(dbConnection);
-
-        // console.log(`res: ${JSON.stringify(respCT)}`);
-        //   console.log("queryCreateSalahTrackingTable: ");
-        // console.log("res: ");
-        // console.log(respCT);
-
-        // Insert dummy data
-        // const queryInsertDummyData = `
-        //     INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
-        //     VALUES ('01.07.24', 'Isha', 'missed', 'No reasons', 'No notes');
-        //   `;
-        // const respInsert = await dbConnection?.execute(queryInsertDummyData);
-        // console.log("Dummy Data Insert Response: ", respInsert); // Log the response of dummy data insertion
+        const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
+        id INTEGER PRIMARY KEY NOT NULL,
+        userGender TEXT NOT NULL DEFAULT '', 
+        notifications TEXT NOT NULL DEFAULT ''
+        )`;
+        await dbConnection?.execute(userpreferencestable);
+        await dbConnection?.execute(salahtrackingtable); // Execute the SQL query to create the table in the database
       }
     );
-  };
-
-  const insertDummyData = async (
-    dbConnection: SQLiteDBConnection | undefined
-  ) => {
-    const salahNames = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
-    const salahStatuses = [
-      "missed",
-      "late",
-      "group",
-      "male-alone",
-      "female-alone",
-    ];
-    const startDate = new Date(2024, 6, 5); // July 5, 2024
-
-    const getRandomItem = (arr: string[]) =>
-      arr[Math.floor(Math.random() * arr.length)];
-
-    for (let i = 0; i < 1000; i++) {
-      const date = format(subDays(startDate, i), "dd.MM.yy");
-      const salahName = getRandomItem(salahNames);
-      const salahStatus = getRandomItem(salahStatuses);
-      const queryInsert = `
-        INSERT INTO salahtrackingtable (date, salahName, salahStatus, reasons, notes)
-        VALUES ('${date}', '${salahName}', '${salahStatus}', '', '');
-      `;
-      await dbConnection?.execute(queryInsert);
-    }
-    console.log("1000 rows inserted");
   };
 
   return {

@@ -5,12 +5,12 @@ import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 // import Notifications from "./utils/notifications";
 import { salahTrackingEntryType } from "./types/types";
-import { subDays, format } from "date-fns";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
+import { subDays, format, parse, eachDayOfInterval } from "date-fns";
 // import { initialiseDatabase } from "./utils/SQLiteService";
 
 // import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
@@ -30,32 +30,11 @@ import SettingsPage from "./pages/SettingsPage";
 import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
 // import { platform } from "os";
-// import {
-//   // CapacitorSQLite,
-//   // SQLiteConnection,
-//   SQLiteDBConnection,
-// } from "@capacitor-community/sqlite";
 // import StreakCount from "./components/Stats/StreakCount";
+import useSQLiteDB from "./utils/useSqLiteDB";
 
 window.addEventListener("DOMContentLoaded", async () => {
   // try {
-  //   if (Capacitor.getPlatform() === "web") {
-  //     const sqlite = new SQLiteConnection(CapacitorSQLite);
-  //     // Create the 'jeep-sqlite' Stencil component
-  //     customElements.define("jeep-sqlite", JeepSqlite);
-  //     const jeepSqliteEl = document.createElement("jeep-sqlite");
-  //     document.body.appendChild(jeepSqliteEl);
-  //     await customElements.whenDefined("jeep-sqlite");
-  //     console.log(`after customElements.whenDefined`);
-
-  //     // Initialize the Web store
-  //     await sqlite.initWebStore();
-  //     console.log(`after initWebStore`);
-  //   }
-  // } catch (error) {
-  //   console.log("ERROR IMPLEMENTING DB ON WEB: " + error);
-  // }
-  // Web specific functionality for database - this is for easier debugging in the browser
 
   if (Capacitor.isNativePlatform()) {
     // STATUS BAR FUNCTIONALITY
@@ -109,6 +88,188 @@ if (Capacitor.isNativePlatform()) {
 }
 
 const App = () => {
+  const {
+    performSQLAction,
+    isDatabaseInitialised,
+    sqliteConnection,
+    dbConnection,
+  } = useSQLiteDB();
+  const INITIAL_LOAD_SIZE = 50;
+  const [data, setData] = useState<any>([]);
+  // console.log("SETDATA WITHIN TABLE IS:");
+  // console.log(data);
+  let [sIndex, setSIndex] = useState<number>();
+  let [eIndex, setEIndex] = useState<number>();
+
+  // isDatabaseInitialised is only initialised once, so can probably be safely removed
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [renderTable, setRenderTable] = useState(false);
+  // console.log(data);
+  let userStartDate: string | null = "01.01.23";
+  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  const endDate = new Date(); // Current date
+  const datesBetweenUserStartDateAndToday = eachDayOfInterval({
+    start: userStartDateFormatted,
+    end: endDate,
+  });
+  const datesFormatted = datesBetweenUserStartDateAndToday.map((date) =>
+    format(date, "dd.MM.yy")
+  );
+  datesFormatted.reverse();
+
+  const fetchUserPreferencesFromDB = async () => {
+    console.log("fetchUserPreferencesFromDB FUNCTION HAS EXECUTED");
+    try {
+      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+
+      if (isDatabaseOpen?.result === false) {
+        await dbConnection.current?.open();
+        console.log(
+          "DB Connection within fetchUserPreferencesFromDB function opened successfully"
+        );
+      }
+
+      // const query = `SELECT * FROM userpreferencestable`;
+      const res = await dbConnection.current?.query(
+        `SELECT * FROM userpreferencestable`
+      );
+
+      const insertQuery = `INSERT INTO userpreferencestable (userGender, notifications) VALUES (?,?)`;
+      if (res?.values && res.values.length === 0) {
+        // await dbConnection.current?.query(insertQuery, ["", ""]);
+      }
+
+      console.log("RES (userpreferencestable) IS: ");
+      console.log(res);
+    } catch (error) {
+      console.log("ERROR IN fetchUserPreferencesFromDB FUNCTION: ");
+      console.log(error);
+    } finally {
+      try {
+        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+        if (isDatabaseOpen?.result) {
+          await dbConnection.current?.close();
+          console.log("Database connection closed within fetch function");
+        }
+      } catch (finalError) {
+        console.log("ERROR CLOSING DATABASE CONNECTION:");
+        console.log(finalError);
+      }
+    }
+  };
+
+  let holdArr: any;
+  holdArr = [];
+  const fetchSalahTrackingDataFromDB = async (
+    startIndex: number,
+    endIndex: number
+  ) => {
+    // holdArr = [];
+    console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
+    try {
+      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+      console.log("START AND END INDEX: " + startIndex, endIndex);
+      if (isDatabaseOpen?.result === false) {
+        await dbConnection.current?.open();
+        console.log(
+          "DB Connection within fetchSalahTrackingDataFromDB function opened successfully"
+        );
+      }
+
+      const slicedDatesFormattedArr = datesFormatted.slice(
+        startIndex,
+        endIndex
+      );
+      const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
+
+      const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
+      const res = await dbConnection.current?.query(
+        query,
+        slicedDatesFormattedArr
+      );
+
+      console.log("RES IS: ");
+      console.log(res);
+      console.log(slicedDatesFormattedArr);
+
+      // console.log("staticDateAndDatabaseDataCombined HAS RUN");
+      for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
+        const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
+
+        type Salahs = {
+          [key: string]: string;
+        };
+
+        let singleSalahObj = {
+          date: dateFromDatesFormattedArr,
+          salahs: {
+            Fajr: "",
+            Dhuhr: "",
+            Asar: "",
+            Maghrib: "",
+            Isha: "",
+          } as Salahs,
+        };
+
+        if (res?.values && res.values.length > 0) {
+          for (let i = 0; i < res.values.length; i++) {
+            if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
+              // console.log("DATE MATCH DETECTED");
+              let salahName: any = res?.values?.[i].salahName;
+              let salahStatus: string = res?.values?.[i].salahStatus;
+              singleSalahObj.salahs[salahName] = salahStatus;
+            }
+          }
+        }
+
+        holdArr.push(singleSalahObj);
+      }
+
+      // console.log("holdArr data is:");
+      // console.log(holdArr);
+      // console.log("holdArr length is:");
+      // console.log(holdArr.length);
+
+      return holdArr;
+    } catch (error) {
+      console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
+      console.log(error);
+    } finally {
+      try {
+        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+        if (isDatabaseOpen?.result) {
+          await dbConnection.current?.close();
+          console.log("Database connection closed within fetch function");
+        }
+      } catch (finalError) {
+        console.log("ERROR CLOSING DATABASE CONNECTION:");
+        console.log(finalError);
+      }
+    }
+  };
+
+  useEffect(() => {
+    console.log("isDatabaseInitialised useEffect has run");
+    const initialiseAndLoadData = async () => {
+      if (isDatabaseInitialised === true) {
+        console.log("DATABASE HAS INITIALISED");
+        setData(await fetchSalahTrackingDataFromDB(1, INITIAL_LOAD_SIZE));
+        await fetchUserPreferencesFromDB();
+        // let sIndex = 1;
+        // let eIndex = INITIAL_LOAD_SIZE;
+        setSIndex(1);
+        setEIndex(50);
+
+        console.log("setData within useEffect has run and its data is: ");
+        console.log(data);
+        console.log(data.length);
+        setRenderTable(true);
+      }
+    };
+    initialiseAndLoadData();
+  }, [isDatabaseInitialised]);
   // hook for sqlite db
   // const { performSQLAction, databaseInitialised } = useSQLiteDB();
 
@@ -172,7 +333,7 @@ const App = () => {
   // const todaysDate = new Date("2024-01-01");
   const todaysDate = new Date();
   // let userStartDate: string | null = localStorage.getItem("userStartDate");
-  let userStartDate: string | null = "01.01.23";
+
   if (!userStartDate) {
     userStartDate = format(todaysDate, "dd.MM.yy");
     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
@@ -200,31 +361,6 @@ const App = () => {
     const storedSalahTrackingData = localStorage.getItem(
       "storedSalahTrackingData"
     );
-
-    storedSalahTrackingData
-      ? setSalahTrackingArray(JSON.parse(storedSalahTrackingData))
-      : setSalahTrackingArray([
-          {
-            salahName: "Fajr",
-            completedDates: [],
-          },
-          {
-            salahName: "Dhuhr",
-            completedDates: [],
-          },
-          {
-            salahName: "Asar",
-            completedDates: [],
-          },
-          {
-            salahName: "Maghrib",
-            completedDates: [],
-          },
-          {
-            salahName: "Isha",
-            completedDates: [],
-          },
-        ]);
   }, []);
 
   const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
@@ -325,6 +461,12 @@ const App = () => {
               <HomePage
                 // title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
                 // title={heading}
+                dbConnection={dbConnection}
+                renderTable={renderTable}
+                datesFormatted={datesFormatted}
+                fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
+                setData={setData}
+                data={data}
                 userGender={userGender}
                 userStartDate={userStartDate}
                 setHeading={setHeading}
