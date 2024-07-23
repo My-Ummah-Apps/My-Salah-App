@@ -4,7 +4,6 @@ import {
   SQLiteDBConnection,
   CapacitorSQLite,
 } from "@capacitor-community/sqlite";
-import { format, subDays } from "date-fns";
 
 const useSQLiteDB = () => {
   console.log("useSQLiteDB HAS RUN");
@@ -140,7 +139,10 @@ const useSQLiteDB = () => {
         const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
         id INTEGER PRIMARY KEY NOT NULL,
         userGender TEXT NOT NULL DEFAULT '', 
-        notifications TEXT NOT NULL DEFAULT ''
+        notifications INTEGER NOT NULL DEFAULT 0,
+        haptics INTEGER NOT NULL DEFAULT 0,
+        reasonsArray TEXT NOT NULL DEFAULT '',
+        showReasons INTEGER NOT NULL DEFAULT 0
         )`;
         await dbConnection?.execute(userpreferencestable);
         await dbConnection?.execute(salahtrackingtable); // Execute the SQL query to create the table in the database

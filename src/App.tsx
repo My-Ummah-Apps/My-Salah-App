@@ -13,8 +13,6 @@ import { Capacitor } from "@capacitor/core";
 import { subDays, format, parse, eachDayOfInterval } from "date-fns";
 // import { initialiseDatabase } from "./utils/SQLiteService";
 
-// import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
-
 // import { Keyboard } from "@capacitor/keyboard";
 
 // interface salahTrackingEntryType {
@@ -88,12 +86,28 @@ if (Capacitor.isNativePlatform()) {
 }
 
 const App = () => {
-  const {
-    performSQLAction,
-    isDatabaseInitialised,
-    sqliteConnection,
-    dbConnection,
-  } = useSQLiteDB();
+  const { isDatabaseInitialised, sqliteConnection, dbConnection } =
+    useSQLiteDB();
+  useEffect(() => {
+    console.log("isDatabaseInitialised useEffect has run");
+    const initialiseAndLoadData = async () => {
+      if (isDatabaseInitialised === true) {
+        console.log("DATABASE HAS INITIALISED");
+        setData(await fetchSalahTrackingDataFromDB(1, INITIAL_LOAD_SIZE));
+        await fetchUserPreferencesFromDB();
+        // let sIndex = 1;
+        // let eIndex = INITIAL_LOAD_SIZE;
+        setSIndex(1);
+        setEIndex(50);
+
+        console.log("setData within useEffect has run and its data is: ");
+        console.log(data);
+        console.log(data.length);
+        setRenderTable(true);
+      }
+    };
+    initialiseAndLoadData();
+  }, [isDatabaseInitialised]);
   const INITIAL_LOAD_SIZE = 50;
   const [data, setData] = useState<any>([]);
   // console.log("SETDATA WITHIN TABLE IS:");
@@ -118,44 +132,87 @@ const App = () => {
     format(date, "dd.MM.yy")
   );
   datesFormatted.reverse();
+  let userGender: string;
+
+  async function checkAndEstablishDBConnection() {
+    if (!dbConnection.current) {
+      throw new Error(
+        "Database connection not initialised within checkAndEstablishDBConnection"
+      );
+    }
+    try {
+      const isDatabaseOpen = await dbConnection.current.isDBOpen();
+      if (isDatabaseOpen.result === false) {
+        await dbConnection.current?.open();
+        console.log(
+          "DB Connection within checkAndEstablishDBConnection function opened successfully"
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(
+        "Database connection not initialised within checkAndEstablishDBConnection"
+      );
+    }
+  }
+
+  async function checkAndCloseDBConnection() {
+    try {
+      if (!dbConnection.current) {
+        throw new Error(
+          "dbConnection.current undefined in checkAndCloseDBConnection"
+        );
+      }
+
+      const isDatabaseOpen = await dbConnection.current.isDBOpen();
+      if (isDatabaseOpen.result) {
+        await dbConnection.current?.close();
+        console.log(
+          "Database connection closed within fetchUserPreferencesFromDB function"
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(
+        "Database connection not initialised within checkAndCloseDBConnection"
+      );
+    }
+  }
 
   const fetchUserPreferencesFromDB = async () => {
     console.log("fetchUserPreferencesFromDB FUNCTION HAS EXECUTED");
     try {
-      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-
-      if (isDatabaseOpen?.result === false) {
-        await dbConnection.current?.open();
-        console.log(
-          "DB Connection within fetchUserPreferencesFromDB function opened successfully"
-        );
-      }
+      await checkAndEstablishDBConnection();
 
       // const query = `SELECT * FROM userpreferencestable`;
       const res = await dbConnection.current?.query(
         `SELECT * FROM userpreferencestable`
       );
 
-      const insertQuery = `INSERT INTO userpreferencestable (userGender, notifications) VALUES (?,?)`;
+      console.log("RES (userpreferencestable) IS: ");
+      console.log(res);
+
       if (res?.values && res.values.length === 0) {
+        setShowIntroModal(true);
         // await dbConnection.current?.query(insertQuery, ["", ""]);
       }
 
-      console.log("RES (userpreferencestable) IS: ");
-      console.log(res);
+      // useEffect(() => {
+      //   if (!userGender) {
+      //
+      //   }
+      // }, []);
+
+      // const insertQuery = `INSERT INTO userpreferencestable (userGender, notifications) VALUES (?,?)`;
     } catch (error) {
       console.log("ERROR IN fetchUserPreferencesFromDB FUNCTION: ");
       console.log(error);
     } finally {
       try {
-        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-        if (isDatabaseOpen?.result) {
-          await dbConnection.current?.close();
-          console.log("Database connection closed within fetch function");
-        }
-      } catch (finalError) {
+        await checkAndCloseDBConnection();
+      } catch (error) {
         console.log("ERROR CLOSING DATABASE CONNECTION:");
-        console.log(finalError);
+        console.log(error);
       }
     }
   };
@@ -169,14 +226,8 @@ const App = () => {
     // holdArr = [];
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
-      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
       console.log("START AND END INDEX: " + startIndex, endIndex);
-      if (isDatabaseOpen?.result === false) {
-        await dbConnection.current?.open();
-        console.log(
-          "DB Connection within fetchSalahTrackingDataFromDB function opened successfully"
-        );
-      }
+      await checkAndEstablishDBConnection();
 
       const slicedDatesFormattedArr = datesFormatted.slice(
         startIndex,
@@ -236,13 +287,10 @@ const App = () => {
     } catch (error) {
       console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
       console.log(error);
+      throw new Error("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
     } finally {
       try {
-        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-        if (isDatabaseOpen?.result) {
-          await dbConnection.current?.close();
-          console.log("Database connection closed within fetch function");
-        }
+        await checkAndCloseDBConnection();
       } catch (finalError) {
         console.log("ERROR CLOSING DATABASE CONNECTION:");
         console.log(finalError);
@@ -250,26 +298,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("isDatabaseInitialised useEffect has run");
-    const initialiseAndLoadData = async () => {
-      if (isDatabaseInitialised === true) {
-        console.log("DATABASE HAS INITIALISED");
-        setData(await fetchSalahTrackingDataFromDB(1, INITIAL_LOAD_SIZE));
-        await fetchUserPreferencesFromDB();
-        // let sIndex = 1;
-        // let eIndex = INITIAL_LOAD_SIZE;
-        setSIndex(1);
-        setEIndex(50);
-
-        console.log("setData within useEffect has run and its data is: ");
-        console.log(data);
-        console.log(data.length);
-        setRenderTable(true);
-      }
-    };
-    initialiseAndLoadData();
-  }, [isDatabaseInitialised]);
   // hook for sqlite db
   // const { performSQLAction, databaseInitialised } = useSQLiteDB();
 
@@ -322,13 +350,6 @@ const App = () => {
   // });
 
   // let userGender: string | null = localStorage.getItem("userGender");
-  let userGender: any = localStorage.getItem("userGender");
-
-  useEffect(() => {
-    if (!userGender) {
-      setShowIntroModal(true);
-    }
-  }, []);
 
   // const todaysDate = new Date("2024-01-01");
   const todaysDate = new Date();
@@ -531,7 +552,7 @@ const App = () => {
                 <h1 className="text-4xl">Select your gender</h1>
                 <p
                   onClick={() => {
-                    localStorage.setItem("userGender", "male");
+                    // localStorage.setItem("userGender", "male");
                     setShowIntroModal(false);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-blue-800 rounded-2xl"
@@ -540,7 +561,7 @@ const App = () => {
                 </p>
                 <p
                   onClick={() => {
-                    localStorage.setItem("userGender", "female");
+                    // localStorage.setItem("userGender", "female");
                     setShowIntroModal(false);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-pink-400 rounded-2xl"
