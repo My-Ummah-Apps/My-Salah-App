@@ -30,7 +30,7 @@ const useSQLiteDB = () => {
             "salahtrackingtable",
             false
           )
-        ).result; // The isConnection method checks if there is an existing connection, this is a asynchronous operation so it awaits the result which will either be true or false
+        ).result; // The isConnection method checks if there is an existing connection, will return a boolean and possibly undefined also
 
         // Is the connection consistent and does the dbConnection connection already exist?
         if (connectionConsistency.result && isConn) {
@@ -66,41 +66,82 @@ const useSQLiteDB = () => {
       }
     };
 
-    // Async function that sets up the sqliteConnection & dbConnection , .then is called after the initialiseDB() promise is resolved so the code inside .then will execute once initialiseDB has completed it's execution
-    // initialiseDB().then(() => {
-    //   initialiseTables(); // Set up tables in the database (if they don't already exist)
-    //   setisDatabaseInitialised(true); // Update state to indicate that the database initialization process is complete
-    //   console.log(
-    //     "initialiseTables() HAS RUN, SETTING ISDATABASEINITIALISED TO TRUE"
-    //   );
-    // });
     initialiseDB();
 
     // Cleanup function to close the database connection when the component unmounts
     return () => {
       const cleanupDB = async () => {
-        if (dbConnection.current) {
-          const isOpen = await dbConnection.current.isDBOpen();
-          if (isOpen?.result) {
-            await dbConnection.current.close();
-          }
-        }
+        await checkAndOpenOrCloseDBConnection("close");
       };
       cleanupDB();
       console.log("CLEANUP WITHIN initialiseDB()");
     };
   }, []);
 
-  //   This async function will handle CRUD operations on the database, it will take an action function passed which will determine what type of CRUD functionality it will execute
-  const performSQLAction = async (
-    action: (dbConnection: SQLiteDBConnection | undefined) => Promise<void>,
-    cleanup?: () => Promise<void>
-  ) => {
-    console.log("PERFORMSQLACTION FUNCTION HAS RUN");
+  async function checkAndOpenOrCloseDBConnection(action: string) {
+    try {
+      if (!dbConnection.current) {
+        throw new Error(
+          "Database connection not initialised within checkAndOpenOrCloseDBConnection"
+        );
+      }
+      const isDatabaseOpen = await dbConnection.current.isDBOpen();
+
+      if (action === "open" && isDatabaseOpen.result === false) {
+        await dbConnection.current?.open();
+        console.log(
+          "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
+        );
+      } else if (action === "close" && isDatabaseOpen.result === true) {
+        await dbConnection.current?.close();
+        console.log(
+          "Database connection closed within checkAndOpenOrCloseDBConnection function"
+        );
+      } else if (isDatabaseOpen.result === undefined) {
+        throw new Error(
+          "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
+        );
+      } else {
+        throw new Error("Unable to open or close database connection");
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(
+        "Database connection not initialised within checkAndOpenOrCloseDBConnection"
+      );
+    }
+  }
+
+  // here is where you can check and update table structure
+  const initialiseTables = async () => {
+    console.log("INITIALISING TABLES...");
     try {
       console.log("ATTEMPTING TO OPEN CONNECTION...");
-      await dbConnection.current?.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
-      await action(dbConnection.current); // Execute the passed in action function (add, edit etc) with dbConnection.current as its argument
+
+      // await dbConnection.current?.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
+      await checkAndOpenOrCloseDBConnection("open");
+
+      // SQL query to create the 'salahtracking' table if it doesn't already exist
+      const salahtrackingtable = `
+        CREATE TABLE IF NOT EXISTS salahtrackingtable(
+        id INTEGER PRIMARY KEY NOT NULL,
+        date TEXT NOT NULL, 
+        salahName TEXT NOT NULL, 
+        salahStatus TEXT NOT NULL, 
+        reasons TEXT DEFAULT '', 
+        notes TEXT DEFAULT ''
+        );
+        `;
+      const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
+        id INTEGER PRIMARY KEY NOT NULL,
+        userGender TEXT NOT NULL DEFAULT '', 
+        notifications INTEGER NOT NULL DEFAULT 0,
+        haptics INTEGER NOT NULL DEFAULT 0,
+        reasonsArray TEXT NOT NULL DEFAULT '',
+        showReasons INTEGER NOT NULL DEFAULT 0
+        )`;
+      await dbConnection.current?.execute(userpreferencestable);
+      await dbConnection.current?.execute(salahtrackingtable); // Execute the SQL query to create the table in the database
     } catch (error) {
       //   alert((error as Error).message);
       console.log(
@@ -112,7 +153,7 @@ const useSQLiteDB = () => {
       try {
         (await dbConnection.current?.isDBOpen())?.result &&
           (await dbConnection.current?.close()); // Check if the database is still open and close it if necessary
-        cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
+        // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
         console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
         console.log("ERROR ON LINE 117");
@@ -120,41 +161,12 @@ const useSQLiteDB = () => {
       }
     }
   };
-  // here is where you can check and update table structure
-  const initialiseTables = async () => {
-    console.log("INITIALISING TABLES...");
-    await performSQLAction(
-      async (dbConnection: SQLiteDBConnection | undefined) => {
-        // SQL query to create the 'salahtracking' table if it doesn't already exist
-        const salahtrackingtable = `
-        CREATE TABLE IF NOT EXISTS salahtrackingtable(
-        id INTEGER PRIMARY KEY NOT NULL,
-        date TEXT NOT NULL, 
-        salahName TEXT NOT NULL, 
-        salahStatus TEXT NOT NULL, 
-        reasons TEXT DEFAULT '', 
-        notes TEXT DEFAULT ''
-        );
-        `;
-        const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
-        id INTEGER PRIMARY KEY NOT NULL,
-        userGender TEXT NOT NULL DEFAULT '', 
-        notifications INTEGER NOT NULL DEFAULT 0,
-        haptics INTEGER NOT NULL DEFAULT 0,
-        reasonsArray TEXT NOT NULL DEFAULT '',
-        showReasons INTEGER NOT NULL DEFAULT 0
-        )`;
-        await dbConnection?.execute(userpreferencestable);
-        await dbConnection?.execute(salahtrackingtable); // Execute the SQL query to create the table in the database
-      }
-    );
-  };
 
   return {
-    performSQLAction,
     isDatabaseInitialised,
     sqliteConnection,
     dbConnection,
+    checkAndOpenOrCloseDBConnection,
   }; // This exposes both performSQLAction and databaseInitialised so when importing this hook in another component both of these can be accessed by said component
 };
 

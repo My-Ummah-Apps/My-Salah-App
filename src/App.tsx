@@ -86,8 +86,12 @@ if (Capacitor.isNativePlatform()) {
 }
 
 const App = () => {
-  const { isDatabaseInitialised, sqliteConnection, dbConnection } =
-    useSQLiteDB();
+  const {
+    isDatabaseInitialised,
+    sqliteConnection,
+    dbConnection,
+    checkAndOpenOrCloseDBConnection,
+  } = useSQLiteDB();
   useEffect(() => {
     console.log("isDatabaseInitialised useEffect has run");
     const initialiseAndLoadData = async () => {
@@ -133,40 +137,6 @@ const App = () => {
   );
   datesFormatted.reverse();
   let userGender: string;
-
-  async function checkAndOpenOrCloseDBConnection(action: string) {
-    try {
-      if (!dbConnection.current) {
-        throw new Error(
-          "Database connection not initialised within checkAndOpenOrCloseDBConnection"
-        );
-      }
-      const isDatabaseOpen = await dbConnection.current.isDBOpen();
-
-      if (action === "open" && isDatabaseOpen.result === false) {
-        await dbConnection.current?.open();
-        console.log(
-          "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
-        );
-      } else if (action === "close" && isDatabaseOpen.result === true) {
-        await dbConnection.current?.close();
-        console.log(
-          "Database connection closed within checkAndOpenOrCloseDBConnection function"
-        );
-      } else if (isDatabaseOpen.result === undefined) {
-        throw new Error(
-          "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
-        );
-      } else {
-        throw new Error("Unable to open or close database connection");
-      }
-    } catch (error) {
-      console.log(error);
-      throw new Error(
-        "Database connection not initialised within checkAndOpenOrCloseDBConnection"
-      );
-    }
-  }
 
   const fetchUserPreferencesFromDB = async () => {
     console.log("fetchUserPreferencesFromDB FUNCTION HAS EXECUTED");
