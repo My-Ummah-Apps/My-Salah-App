@@ -86,6 +86,7 @@ if (Capacitor.isNativePlatform()) {
 }
 
 const App = () => {
+  console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
     sqliteConnection,
@@ -93,9 +94,12 @@ const App = () => {
     checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
   useEffect(() => {
-    console.log("isDatabaseInitialised useEffect has run");
-    const initialiseAndLoadData = async () => {
-      if (isDatabaseInitialised === true) {
+    console.log(
+      "isDatabaseInitialised useEffect has run and isDatabaseInitialised is: " +
+        isDatabaseInitialised
+    );
+    if (isDatabaseInitialised === true) {
+      const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
         setData(await fetchSalahTrackingDataFromDB(1, INITIAL_LOAD_SIZE));
         await fetchUserPreferencesFromDB();
@@ -108,9 +112,9 @@ const App = () => {
         console.log(data);
         console.log(data.length);
         setRenderTable(true);
-      }
-    };
-    initialiseAndLoadData();
+      };
+      initialiseAndLoadData();
+    }
   }, [isDatabaseInitialised]);
   const INITIAL_LOAD_SIZE = 50;
   const [data, setData] = useState<any>([]);

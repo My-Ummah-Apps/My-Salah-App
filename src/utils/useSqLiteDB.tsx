@@ -68,9 +68,15 @@ const useSQLiteDB = () => {
 
     initialiseDB();
 
+    // initialiseDB().then(() => {
+    //   initialiseTables();
+    //   setisDatabaseInitialised(true);
+    // });
+
     // Cleanup function to close the database connection when the component unmounts
     return () => {
       const cleanupDB = async () => {
+        console.log("cleanup within initialiseDB has run");
         await checkAndOpenOrCloseDBConnection("close");
       };
       cleanupDB();
@@ -79,10 +85,12 @@ const useSQLiteDB = () => {
   }, []);
 
   async function checkAndOpenOrCloseDBConnection(action: string) {
+    console.log("checkAndOpenOrCloseDBConnection has run");
+    // console.log("dbConnection.current: " + dbConnection.current);
     try {
       if (!dbConnection.current) {
         throw new Error(
-          "Database connection not initialised within checkAndOpenOrCloseDBConnection"
+          "Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection.current is falsy"
         );
       }
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
@@ -106,9 +114,9 @@ const useSQLiteDB = () => {
       }
     } catch (error) {
       console.log(error);
-      throw new Error(
-        "Database connection not initialised within checkAndOpenOrCloseDBConnection"
-      );
+      // throw new Error(
+      //   "Database connection not initialised within checkAndOpenOrCloseDBConnection"
+      // );
     }
   }
 
@@ -167,7 +175,7 @@ const useSQLiteDB = () => {
     sqliteConnection,
     dbConnection,
     checkAndOpenOrCloseDBConnection,
-  }; // This exposes both performSQLAction and databaseInitialised so when importing this hook in another component both of these can be accessed by said component
+  }; // This exposes, checkAndOpenOrCloseDBConnection, databaseInitialised etc so when importing this hook in another component all of these can be accessed by said component
 };
 
 export default useSQLiteDB;
