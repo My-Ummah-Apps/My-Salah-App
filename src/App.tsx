@@ -134,47 +134,36 @@ const App = () => {
   datesFormatted.reverse();
   let userGender: string;
 
-  async function checkAndEstablishDBConnection() {
-    if (!dbConnection.current) {
-      throw new Error(
-        "Database connection not initialised within checkAndEstablishDBConnection"
-      );
-    }
-    try {
-      const isDatabaseOpen = await dbConnection.current.isDBOpen();
-      if (isDatabaseOpen.result === false) {
-        await dbConnection.current?.open();
-        console.log(
-          "DB Connection within checkAndEstablishDBConnection function opened successfully"
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      throw new Error(
-        "Database connection not initialised within checkAndEstablishDBConnection"
-      );
-    }
-  }
-
-  async function checkAndCloseDBConnection() {
+  async function checkAndOpenOrCloseDBConnection(action: string) {
     try {
       if (!dbConnection.current) {
         throw new Error(
-          "dbConnection.current undefined in checkAndCloseDBConnection"
+          "Database connection not initialised within checkAndOpenOrCloseDBConnection"
         );
       }
-
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
-      if (isDatabaseOpen.result) {
+
+      if (action === "open" && isDatabaseOpen.result === false) {
+        await dbConnection.current?.open();
+        console.log(
+          "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
+        );
+      } else if (action === "close" && isDatabaseOpen.result === true) {
         await dbConnection.current?.close();
         console.log(
-          "Database connection closed within fetchUserPreferencesFromDB function"
+          "Database connection closed within checkAndOpenOrCloseDBConnection function"
         );
+      } else if (isDatabaseOpen.result === undefined) {
+        throw new Error(
+          "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
+        );
+      } else {
+        throw new Error("Unable to open or close database connection");
       }
     } catch (error) {
       console.log(error);
       throw new Error(
-        "Database connection not initialised within checkAndCloseDBConnection"
+        "Database connection not initialised within checkAndOpenOrCloseDBConnection"
       );
     }
   }
@@ -182,7 +171,7 @@ const App = () => {
   const fetchUserPreferencesFromDB = async () => {
     console.log("fetchUserPreferencesFromDB FUNCTION HAS EXECUTED");
     try {
-      await checkAndEstablishDBConnection();
+      await checkAndOpenOrCloseDBConnection("open");
 
       // const query = `SELECT * FROM userpreferencestable`;
       const res = await dbConnection.current?.query(
@@ -209,7 +198,7 @@ const App = () => {
       console.log(error);
     } finally {
       try {
-        await checkAndCloseDBConnection();
+        await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.log("ERROR CLOSING DATABASE CONNECTION:");
         console.log(error);
@@ -227,7 +216,7 @@ const App = () => {
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
       console.log("START AND END INDEX: " + startIndex, endIndex);
-      await checkAndEstablishDBConnection();
+      await checkAndOpenOrCloseDBConnection("open");
 
       const slicedDatesFormattedArr = datesFormatted.slice(
         startIndex,
@@ -290,7 +279,7 @@ const App = () => {
       throw new Error("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
     } finally {
       try {
-        await checkAndCloseDBConnection();
+        await checkAndOpenOrCloseDBConnection("close");
       } catch (finalError) {
         console.log("ERROR CLOSING DATABASE CONNECTION:");
         console.log(finalError);

@@ -49,7 +49,7 @@ const useSQLiteDB = () => {
           );
           dbConnection.current =
             await sqliteConnection.current.createConnection(
-              "salahtrackingtable",
+              "mysalahappdatabase",
               false,
               "no-encryption",
               1,
