@@ -61,8 +61,8 @@ const useSQLiteDB = () => {
         setisDatabaseInitialised(true);
         console.log("Database initialisation complete");
       } catch (error) {
-        console.error("Error initializing database:", error);
-        throw new Error("Database initialization failed");
+        console.error("Error initializing database: " + error);
+        // throw new Error("Database initialization failed");
       }
     };
 
@@ -141,22 +141,24 @@ const useSQLiteDB = () => {
         );
         `;
       const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
-        id INTEGER PRIMARY KEY NOT NULL,
-        userGender TEXT NOT NULL DEFAULT '', 
-        notifications INTEGER NOT NULL DEFAULT 0,
-        haptics INTEGER NOT NULL DEFAULT 0,
-        reasonsArray TEXT NOT NULL DEFAULT '',
-        showReasons INTEGER NOT NULL DEFAULT 0
+        preferenceName TEXT PRIMARY KEY NOT NULL, 
+        preferenceValue TEXT NOT NULL DEFAULT ''
+       
         )`;
+      // const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
+      //   preferenceName TEXT PRIMARY KEY NOT NULL,
+      //   userGender TEXT NOT NULL DEFAULT '',
+      //   notifications INTEGER NOT NULL DEFAULT 0,
+      //   haptics INTEGER NOT NULL DEFAULT 0,
+      //   reasonsArray TEXT NOT NULL DEFAULT '',
+      //   showReasons INTEGER NOT NULL DEFAULT 0
+      //   )`;
       await dbConnection.current?.execute(userpreferencestable);
       await dbConnection.current?.execute(salahtrackingtable); // Execute the SQL query to create the table in the database
     } catch (error) {
-      //   alert((error as Error).message);
       console.log(
-        "ERROR IN CATCH: CONNECTION NOT ESTABLISHED, ERROR AS FOLLOWS:"
+        "ERROR IN CATCH: CONNECTION NOT ESTABLISHED, ERROR AS FOLLOWS: " + error
       );
-      console.log(error);
-      //   console.log((error as Error).message);
     } finally {
       try {
         (await dbConnection.current?.isDBOpen())?.result &&
@@ -164,8 +166,7 @@ const useSQLiteDB = () => {
         // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
         console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
-        console.log("ERROR ON LINE 117");
-        console.log(error);
+        console.log("ERROR WITHIN FINALLY CATCH IN initialiseTables: " + error);
       }
     }
   };

@@ -82,9 +82,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-if (Capacitor.isNativePlatform()) {
-}
-
 const App = () => {
   console.log("APP COMPONENT HAS RENDERED");
   const {
@@ -156,6 +153,16 @@ const App = () => {
       console.log(res);
 
       if (res?.values && res.values.length === 0) {
+        const insertQuery = `
+        INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue) 
+        VALUES 
+        ('userGender', ''),
+        ('notifications', '0'),
+        ('haptics', '0'),
+        ('reasonsArray', ''),
+        ('showReasons', '0')
+      `;
+        await dbConnection.current?.execute(insertQuery);
         setShowIntroModal(true);
         // await dbConnection.current?.query(insertQuery, ["", ""]);
       }
@@ -168,14 +175,12 @@ const App = () => {
 
       // const insertQuery = `INSERT INTO userpreferencestable (userGender, notifications) VALUES (?,?)`;
     } catch (error) {
-      console.log("ERROR IN fetchUserPreferencesFromDB FUNCTION: ");
-      console.log(error);
+      console.log("ERROR IN fetchUserPreferencesFromDB FUNCTION: " + error);
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.log("ERROR CLOSING DATABASE CONNECTION:");
-        console.log(error);
+        console.log("ERROR CLOSING DATABASE CONNECTION: " + error);
       }
     }
   };
@@ -206,7 +211,7 @@ const App = () => {
 
       console.log("RES IS: ");
       console.log(res);
-      console.log(slicedDatesFormattedArr);
+      // console.log(slicedDatesFormattedArr);
 
       // console.log("staticDateAndDatabaseDataCombined HAS RUN");
       for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
@@ -248,21 +253,41 @@ const App = () => {
 
       return holdArr;
     } catch (error) {
-      console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
-      console.log(error);
+      console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: " + error);
       throw new Error("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
-      } catch (finalError) {
-        console.log("ERROR CLOSING DATABASE CONNECTION:");
-        console.log(finalError);
+      } catch (error) {
+        console.log("ERROR CLOSING DATABASE CONNECTION: " + error);
       }
     }
   };
 
-  // hook for sqlite db
-  // const { performSQLAction, databaseInitialised } = useSQLiteDB();
+  type PreferenceType =
+    | "userGender"
+    | "notifications"
+    | "haptics"
+    | "reasonsArray"
+    | "showReasons";
+  const insertDataIntoUserPreferencesTable = async (
+    value: string | number,
+    preference: PreferenceType
+  ) => {
+    try {
+      await checkAndOpenOrCloseDBConnection("open");
+      const query = `UPDATE userpreferencestable SET preferenceValue = ? WHERE preferenceName = ?`;
+      await dbConnection.current?.run(query, [value, preference]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   // CHANGELOG FUNCTIONALITY
   const betaAppVersion = "1.0.8";
@@ -514,8 +539,12 @@ const App = () => {
               <section className="p-5 text-center">
                 <h1 className="text-4xl">Select your gender</h1>
                 <p
-                  onClick={() => {
+                  onClick={async () => {
                     // localStorage.setItem("userGender", "male");
+                    await insertDataIntoUserPreferencesTable(
+                      "male",
+                      "userGender"
+                    );
                     setShowIntroModal(false);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-blue-800 rounded-2xl"
@@ -523,8 +552,12 @@ const App = () => {
                   Male
                 </p>
                 <p
-                  onClick={() => {
+                  onClick={async () => {
                     // localStorage.setItem("userGender", "female");
+                    await insertDataIntoUserPreferencesTable(
+                      "female",
+                      "userGender"
+                    );
                     setShowIntroModal(false);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-pink-400 rounded-2xl"
