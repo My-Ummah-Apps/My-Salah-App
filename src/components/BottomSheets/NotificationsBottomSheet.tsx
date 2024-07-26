@@ -3,13 +3,32 @@ import Sheet from "react-modal-sheet";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { PreferenceType } from "../../types/types";
 
 const NotificationsBottomSheet = ({
   setHandleNotificationsModal,
   handleNotificationsModal,
+  dbConnection,
+  modifyDataInUserPreferencesTable,
+  checkAndOpenOrCloseDBConnection,
+  setDailyNotification,
+  dailyNotification,
+  setDailyNotificationTime,
+  dailyNotificationTime,
 }: {
   setHandleNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleNotificationsModal: boolean;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  modifyDataInUserPreferencesTable: (
+    value: string,
+    preference: PreferenceType
+  ) => Promise<void>;
+  checkAndOpenOrCloseDBConnection: (action: string) => Promise<void>;
+  setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
+  dailyNotification: string;
+  setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
+  dailyNotificationTime: string;
 }) => {
   const scheduleDailyNotification = async (hour: number, minute: number) => {
     await LocalNotifications.schedule({
@@ -37,17 +56,18 @@ const NotificationsBottomSheet = ({
     const userNotificationPermission = checkPermission.display;
     if (userNotificationPermission === "denied") {
       alert("Please turn notifications back on from within system settings");
-      setDailyNotification("false");
+      setDailyNotification("0");
       return;
     } else if (userNotificationPermission === "granted") {
-      setDailyNotification("true");
+      setDailyNotification("1");
+
       // const notificationTime = dailyNotificationTime.split(":").map(Number);
       // scheduleDailyNotification(notificationTime[0], notificationTime[1]);
     } else if (
       userNotificationPermission === "prompt" ||
       userNotificationPermission === "prompt-with-rationale"
     ) {
-      setDailyNotification("false");
+      setDailyNotification("0");
       requestPermissionFunction();
     }
   }
@@ -55,61 +75,29 @@ const NotificationsBottomSheet = ({
   const requestPermissionFunction = async () => {
     const requestPermission = await LocalNotifications.requestPermissions();
     if (requestPermission.display == "granted") {
-      setDailyNotification("true");
+      setDailyNotification("1");
+      modifyDataInUserPreferencesTable("1", "dailyNotification");
     } else if (
       requestPermission.display == "prompt" ||
       requestPermission.display == "denied"
     ) {
-      setDailyNotification("false");
+      setDailyNotification("0");
+      modifyDataInUserPreferencesTable("0", "dailyNotification");
     }
   };
-
-  const [dailyNotification, setDailyNotification] = useState<string>(
-    localStorage.getItem("daily-notification") || "false"
-  );
-  const defaultDailyNotificationTime = "21:00";
-  const [dailyNotificationTime, setDailyNotificationTime] = useState<string>(
-    localStorage.getItem("dailyNotificationTime") ||
-      defaultDailyNotificationTime
-  );
-
-  useEffect(() => {
-    if (localStorage.getItem("dailyNotificationTime") === null) {
-      localStorage.setItem(
-        "dailyNotificationTime",
-        defaultDailyNotificationTime
-      );
-    }
-  }, []);
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e);
     setDailyNotificationTime(e.target.value);
     const [hour, minute] = e.target.value.split(":").map(Number);
     scheduleDailyNotification(hour, minute);
-    localStorage.setItem("dailyNotificationTime", e.target.value);
+    modifyDataInUserPreferencesTable(e.target.value, "dailyNotificationTime");
+    // localStorage.setItem("dailyNotificationTime", e.target.value);
   };
 
-  useEffect(() => {
-    if (dailyNotification !== null) {
-      localStorage.setItem("daily-notification", dailyNotification);
-    }
-  }, [dailyNotification]);
-
-  useEffect(() => {
-    if (localStorage.getItem("dailyNotificationTime") === null) {
-      localStorage.setItem(
-        "dailyNotificationTime",
-        defaultDailyNotificationTime
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    if (dailyNotification !== null) {
-      localStorage.setItem("daily-notification", dailyNotification);
-    }
-  }, [dailyNotification]);
+  // useEffect(() => {
+  //   modifyDataInUserPreferencesTable()
+  // }, [dailyNotification])
 
   return (
     <Sheet
@@ -125,21 +113,19 @@ const NotificationsBottomSheet = ({
             <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
               <p>Turn on Daily Notification</p>{" "}
               <Switch
-                checked={dailyNotification === "true" ? true : false}
+                checked={dailyNotification === "1" ? true : false}
                 className={undefined}
                 disabled={undefined}
                 handleColor="white"
                 name={undefined}
                 offColor="white"
+                // For some reason, modifyDataInUserPreferencesTable is registering the opposite value ie when 1 should be passed into the database its passing in 0 and vice versa
                 onChange={() => {
-                  if (localStorage.getItem("daily-notification") === "true") {
-                    setDailyNotification("false");
-                  } else if (
-                    localStorage.getItem("daily-notification") === "false"
-                  ) {
-                    setDailyNotification("true");
-                    checkNotificationPermissions();
-                  }
+                  setDailyNotification(dailyNotification === "0" ? "1" : "0");
+                  modifyDataInUserPreferencesTable(
+                    dailyNotification,
+                    "dailyNotification"
+                  );
                 }}
                 onColor="lightblue"
                 pendingOffColor={undefined}
@@ -148,7 +134,7 @@ const NotificationsBottomSheet = ({
                 style={undefined}
               />
             </div>
-            {dailyNotification === "true" ? (
+            {dailyNotification === "1" ? (
               <div className="flex items-center justify-between p-3">
                 <p>Set Time</p>
                 {/* <p> */}

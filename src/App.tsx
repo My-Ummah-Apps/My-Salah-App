@@ -11,6 +11,7 @@ import { salahTrackingEntryType } from "./types/types";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 import { subDays, format, parse, eachDayOfInterval } from "date-fns";
+import { PreferenceType } from "./types/types";
 // import { initialiseDatabase } from "./utils/SQLiteService";
 
 // import { Keyboard } from "@capacitor/keyboard";
@@ -115,6 +116,10 @@ const App = () => {
   }, [isDatabaseInitialised]);
   const INITIAL_LOAD_SIZE = 50;
   const [data, setData] = useState<any>([]);
+  const [userGender, setUserGender] = useState<string>("");
+  const [dailyNotification, setDailyNotification] = useState<string>("");
+  const [dailyNotificationTime, setDailyNotificationTime] =
+    useState<string>("");
   // console.log("SETDATA WITHIN TABLE IS:");
   // console.log(data);
   let [sIndex, setSIndex] = useState<number>();
@@ -137,7 +142,6 @@ const App = () => {
     format(date, "dd.MM.yy")
   );
   datesFormatted.reverse();
-  let userGender: string;
 
   const fetchUserPreferencesFromDB = async () => {
     console.log("fetchUserPreferencesFromDB FUNCTION HAS EXECUTED");
@@ -157,7 +161,8 @@ const App = () => {
         INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue) 
         VALUES 
         ('userGender', ''),
-        ('notifications', '0'),
+        ('dailyNotification', '0'),
+        ('dailyNotificationTime', '21:00'),
         ('haptics', '0'),
         ('reasonsArray', ''),
         ('showReasons', '0')
@@ -165,6 +170,24 @@ const App = () => {
         await dbConnection.current?.execute(insertQuery);
         setShowIntroModal(true);
         // await dbConnection.current?.query(insertQuery, ["", ""]);
+      }
+
+      const dailyNotificationRow = res?.values?.find(
+        (row) => row.preferenceName === "dailyNotification"
+      );
+      const dailyNotificationTimeRow = res?.values?.find(
+        (row) => row.preferenceName === "dailyNotificationTime"
+      );
+
+      if (dailyNotificationRow) {
+        setDailyNotification(dailyNotificationRow.preferenceValue);
+      } else {
+        console.log("dailyNotification row not found");
+      }
+      if (dailyNotificationTimeRow) {
+        setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
+      } else {
+        console.log("dailyNotificationTime row not found");
       }
 
       // useEffect(() => {
@@ -264,20 +287,18 @@ const App = () => {
     }
   };
 
-  type PreferenceType =
-    | "userGender"
-    | "notifications"
-    | "haptics"
-    | "reasonsArray"
-    | "showReasons";
-  const insertDataIntoUserPreferencesTable = async (
-    value: string | number,
+  const modifyDataInUserPreferencesTable = async (
+    value: string,
     preference: PreferenceType
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
       const query = `UPDATE userpreferencestable SET preferenceValue = ? WHERE preferenceName = ?`;
       await dbConnection.current?.run(query, [value, preference]);
+
+      if (preference === "userGender") {
+        setUserGender(value);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -366,58 +387,58 @@ const App = () => {
   const today: Date = new Date();
   const startDate: Date = subDays(today, currentWeek);
 
-  useEffect(() => {
-    const storedSalahTrackingData = localStorage.getItem(
-      "storedSalahTrackingData"
-    );
-  }, []);
+  // useEffect(() => {
+  //   const storedSalahTrackingData = localStorage.getItem(
+  //     "storedSalahTrackingData"
+  //   );
+  // }, []);
 
-  const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
-    (accumulatorArray, salah) => {
-      for (let i = 0; i < salah.completedDates.length; i++) {
-        Object.values(salah.completedDates[i]);
-        if (
-          Object.values(salah.completedDates[i])[0].status !== "missed" &&
-          Object.values(salah.completedDates[i])[0].status !== "blank"
-        ) {
-          accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
-        }
-      }
-      return accumulatorArray;
-    },
-    []
-  );
+  // const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
+  //   (accumulatorArray, salah) => {
+  //     for (let i = 0; i < salah.completedDates.length; i++) {
+  //       Object.values(salah.completedDates[i]);
+  //       if (
+  //         Object.values(salah.completedDates[i])[0].status !== "missed" &&
+  //         Object.values(salah.completedDates[i])[0].status !== "blank"
+  //       ) {
+  //         accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
+  //       }
+  //     }
+  //     return accumulatorArray;
+  //   },
+  //   []
+  // );
 
   // console.log(salahFulfilledDates);
 
-  let datesFrequency: { [date: string]: number } = {};
-  salahFulfilledDates.forEach((date) => {
-    datesFrequency[date] = (datesFrequency[date] || 0) + 1;
-  });
+  // let datesFrequency: { [date: string]: number } = {};
+  // salahFulfilledDates.forEach((date) => {
+  //   datesFrequency[date] = (datesFrequency[date] || 0) + 1;
+  // });
 
-  const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
-    datesFrequency[date] === 5 ? true : false
-  );
+  // const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
+  //   datesFrequency[date] === 5 ? true : false
+  // );
 
-  let streakCount = 0;
-  function checkStreak() {
-    // const todaysDate = new Date();
+  // let streakCount = 0;
+  // function checkStreak() {
+  //   // const todaysDate = new Date();
 
-    for (let i = 0; i < datesFrequencyReduced.length; i++) {
-      let formattedDate = subDays(todaysDate, i);
+  //   for (let i = 0; i < datesFrequencyReduced.length; i++) {
+  //     let formattedDate = subDays(todaysDate, i);
 
-      if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {
-        streakCount += 1;
-      } else {
-        break;
-      }
-    }
-    setStreakCounter(streakCount);
-  }
+  //     if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {
+  //       streakCount += 1;
+  //     } else {
+  //       break;
+  //     }
+  //   }
+  //   setStreakCounter(streakCount);
+  // }
 
-  useEffect(() => {
-    checkStreak();
-  }, [datesFrequencyReduced]);
+  // useEffect(() => {
+  //   checkStreak();
+  // }, [datesFrequencyReduced]);
 
   const pageStyles: string = `py-[9vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
 
@@ -495,6 +516,17 @@ const App = () => {
                 setHeading={setHeading}
                 // title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
                 pageStyles={pageStyles}
+                dbConnection={dbConnection}
+                modifyDataInUserPreferencesTable={
+                  modifyDataInUserPreferencesTable
+                }
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
+                setDailyNotification={setDailyNotification}
+                setDailyNotificationTime={setDailyNotificationTime}
+                dailyNotificationTime={dailyNotificationTime}
+                dailyNotification={dailyNotification}
               />
             }
           />
@@ -541,7 +573,7 @@ const App = () => {
                 <p
                   onClick={async () => {
                     // localStorage.setItem("userGender", "male");
-                    await insertDataIntoUserPreferencesTable(
+                    await modifyDataInUserPreferencesTable(
                       "male",
                       "userGender"
                     );
@@ -554,7 +586,7 @@ const App = () => {
                 <p
                   onClick={async () => {
                     // localStorage.setItem("userGender", "female");
-                    await insertDataIntoUserPreferencesTable(
+                    await modifyDataInUserPreferencesTable(
                       "female",
                       "userGender"
                     );

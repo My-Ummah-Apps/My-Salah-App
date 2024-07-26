@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import Modal from "react-modal";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
+import { PreferenceType } from "../types/types";
 
 // import {
 //   checkNotificationPermissions,
@@ -20,10 +22,27 @@ const SettingsPage = ({
   // title,
   setHeading,
   pageStyles,
+  dbConnection,
+  modifyDataInUserPreferencesTable,
+  checkAndOpenOrCloseDBConnection,
+  setDailyNotification,
+  dailyNotification,
+  setDailyNotificationTime,
+  dailyNotificationTime,
 }: {
   // title: React.ReactNode;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  modifyDataInUserPreferencesTable: (
+    value: string,
+    preference: PreferenceType
+  ) => Promise<void>;
+  checkAndOpenOrCloseDBConnection: (action: string) => Promise<void>;
+  setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
+  dailyNotification: string;
+  setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
+  dailyNotificationTime: string;
 }) => {
   useEffect(() => {
     setHeading("Settings");
@@ -62,8 +81,15 @@ const SettingsPage = ({
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
           <NotificationsBottomSheet
+            dbConnection={dbConnection}
+            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+            checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
             setHandleNotificationsModal={setHandleNotificationsModal}
             handleNotificationsModal={handleNotificationsModal}
+            setDailyNotification={setDailyNotification}
+            dailyNotification={dailyNotification}
+            setDailyNotificationTime={setDailyNotificationTime}
+            dailyNotificationTime={dailyNotificationTime}
           />
         </div>{" "}
         {/* <SettingIndividual

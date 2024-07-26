@@ -54,6 +54,8 @@ const HomePage = ({
     setHeading("Home");
   }, []);
 
+  console.log("USERGENDER: ", userGender);
+
   // setHeading("Home");
 
   // const today: Date = new Date();

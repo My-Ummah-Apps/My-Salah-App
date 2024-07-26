@@ -10,6 +10,14 @@ export interface salahTrackingEntryType {
   }[];
 }
 
+export type PreferenceType =
+  | "userGender"
+  | "dailyNotification"
+  | "dailyNotificationTime"
+  | "haptics"
+  | "reasonsArray"
+  | "showReasons";
+
 // [tableRowDate]: { status: salahStatus, reasons: [], notes: "" }
 
 export type currentStartDateType = number;
