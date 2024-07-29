@@ -463,11 +463,11 @@ const PrayerStatusBottomSheet = ({
                     {reasonsArray.map((item) => (
                       <p
                         key={item}
-                        // style={{
-                        //   backgroundColor: selectedReasons.includes(item)
-                        //     ? "#2563eb"
-                        //     : "",
-                        // }}
+                        style={{
+                          backgroundColor: selectedReasons.includes(item)
+                            ? "#2563eb"
+                            : "",
+                        }}
                         onClick={() => {
                           if (!selectedReasonsArray.includes(item)) {
                             selectedReasonsArray = [...selectedReasons, item];
@@ -620,9 +620,7 @@ const PrayerStatusBottomSheet = ({
             <p
               key={uuidv4()}
               style={{
-                backgroundColor: selectedReasons.includes(item)
-                  ? "#2563eb"
-                  : "",
+                backgroundColor: selectedReasons.includes(item) ? "#fff" : "",
               }}
               onClick={() => {
                 if (!selectedReasonsArray.includes(item)) {
