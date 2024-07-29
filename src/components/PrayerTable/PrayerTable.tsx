@@ -16,6 +16,8 @@ const PrayerTable = ({
   renderTable,
   setData,
   data,
+  setReasonsArray,
+  reasonsArray,
   datesFormatted,
   fetchSalahTrackingDataFromDB,
   userGender,
@@ -28,6 +30,8 @@ const PrayerTable = ({
   renderTable: boolean;
   setData: React.Dispatch<any>;
   data: any;
+  setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
+  reasonsArray: string[];
   datesFormatted: string[];
   fetchSalahTrackingDataFromDB: (
     startIndex: number,
@@ -208,6 +212,8 @@ const PrayerTable = ({
           fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
           setData={setData}
           data={data}
+          setReasonsArray={setReasonsArray}
+          reasonsArray={reasonsArray}
           // salahName={salahName}
           // cellDate={cellDate}
           clickedDate={clickedDate}

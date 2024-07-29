@@ -119,7 +119,6 @@ const NotificationsBottomSheet = ({
                 handleColor="white"
                 name={undefined}
                 offColor="white"
-                // For some reason, modifyDataInUserPreferencesTable is registering the opposite value ie when 1 should be passed into the database its passing in 0 and vice versa
                 onChange={() => {
                   setDailyNotification((prevValue) => {
                     return prevValue === "1" ? "0" : "1";

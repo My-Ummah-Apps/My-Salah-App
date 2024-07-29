@@ -14,6 +14,8 @@ const HomePage = ({
   renderTable,
   setData,
   data,
+  setReasonsArray,
+  reasonsArray,
   datesFormatted,
   // title,
   fetchSalahTrackingDataFromDB,
@@ -26,12 +28,14 @@ const HomePage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
-} // currentWeek,
-: {
+  // currentWeek,
+}: {
   dbConnection: any;
   renderTable: boolean;
   setData: React.Dispatch<any>;
   data: any;
+  setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
+  reasonsArray: string[];
   datesFormatted: string[];
   fetchSalahTrackingDataFromDB: (
     startIndex: number,
@@ -70,6 +74,8 @@ const HomePage = ({
         dbConnection={dbConnection}
         renderTable={renderTable}
         fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
+        setReasonsArray={setReasonsArray}
+        reasonsArray={reasonsArray}
         datesFormatted={datesFormatted}
         setData={setData}
         data={data}

@@ -120,6 +120,7 @@ const App = () => {
   const [dailyNotification, setDailyNotification] = useState<string>("");
   const [dailyNotificationTime, setDailyNotificationTime] =
     useState<string>("");
+  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
   // console.log("SETDATA WITHIN TABLE IS:");
   // console.log(data);
   let [sIndex, setSIndex] = useState<number>();
@@ -157,33 +158,71 @@ const App = () => {
       console.log(res);
 
       if (res?.values && res.values.length === 0) {
+        //   const insertQuery = `
+        //   INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue)
+        //   VALUES
+        //   ('userGender', ''),
+        //   ('dailyNotification', '0'),
+        //   ('dailyNotificationTime', '21:00'),
+        //   ('haptics', '0'),
+        //   ('reasonsArray', '${stringifiedReasonsArr}'),
+        //   ('showReasons', '0')
+        // `;
+
         const insertQuery = `
-        INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue) 
-        VALUES 
-        ('userGender', ''),
-        ('dailyNotification', '0'),
-        ('dailyNotificationTime', '21:00'),
-        ('haptics', '0'),
-        ('reasonsArray', ''),
-        ('showReasons', '0')
-      `;
-        await dbConnection.current?.execute(insertQuery);
+          INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue) 
+          VALUES 
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?)
+          `;
+        // prettier-ignore
+        const params = [
+          "userGender", "",
+          "dailyNotification", "0",
+          "dailyNotificationTime", "21:00",
+          "haptics", "0",
+          "reasonsArray", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
+          "showReasons", "0",
+        ];
+        await dbConnection.current?.query(insertQuery, params);
+        // await dbConnection.current?.execute(insertQuery);
+
         setShowIntroModal(true);
-        // await dbConnection.current?.query(insertQuery, ["", ""]);
       }
+
+      const userGenderRow = res?.values?.find(
+        (row) => row.preferenceName === "userGender"
+      );
 
       const dailyNotificationRow = res?.values?.find(
         (row) => row.preferenceName === "dailyNotification"
       );
+      console.log("dailyNotificationRow", dailyNotificationRow);
       const dailyNotificationTimeRow = res?.values?.find(
         (row) => row.preferenceName === "dailyNotificationTime"
       );
+
+      const reasons = res?.values?.find(
+        (row) => row.preferenceName === "reasonsArray"
+      );
+      setReasonsArray(reasons.preferenceValue.split(","));
+
+      if (userGenderRow) {
+        setUserGender(userGenderRow.preferenceValue);
+      } else {
+        console.log("userGenderRow row not found");
+      }
 
       if (dailyNotificationRow) {
         setDailyNotification(dailyNotificationRow.preferenceValue);
       } else {
         console.log("dailyNotification row not found");
       }
+
       if (dailyNotificationTimeRow) {
         setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
       } else {
@@ -296,10 +335,7 @@ const App = () => {
       await checkAndOpenOrCloseDBConnection("open");
       const query = `UPDATE userpreferencestable SET preferenceValue = ? WHERE preferenceName = ?`;
       await dbConnection.current?.run(query, [value, preference]);
-
-      if (preference === "userGender") {
-        setUserGender(value);
-      }
+      console.log("🚀 ~ App ~ value:", value);
     } catch (error) {
       console.log(error);
     } finally {
@@ -494,6 +530,8 @@ const App = () => {
                 // title={heading}
                 dbConnection={dbConnection}
                 renderTable={renderTable}
+                setReasonsArray={setReasonsArray}
+                reasonsArray={reasonsArray}
                 datesFormatted={datesFormatted}
                 fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
                 setData={setData}
@@ -573,6 +611,7 @@ const App = () => {
                 <h1 className="text-4xl">Select your gender</h1>
                 <p
                   onClick={async () => {
+                    setUserGender("male");
                     // localStorage.setItem("userGender", "male");
                     await modifyDataInUserPreferencesTable(
                       "male",
@@ -587,6 +626,7 @@ const App = () => {
                 <p
                   onClick={async () => {
                     // localStorage.setItem("userGender", "female");
+                    setUserGender("female");
                     await modifyDataInUserPreferencesTable(
                       "female",
                       "userGender"

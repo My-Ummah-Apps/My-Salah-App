@@ -14,6 +14,8 @@ const PrayerStatusBottomSheet = ({
   fetchSalahTrackingDataFromDB,
   setData,
   data,
+  setReasonsArray,
+  reasonsArray,
   setCellColor,
   sIndex,
   eIndex,
@@ -35,6 +37,8 @@ const PrayerStatusBottomSheet = ({
   ) => Promise<any>;
   setData: React.Dispatch<any>;
   data: any;
+  setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
+  reasonsArray: string[];
   setCellColor: React.Dispatch<React.SetStateAction<JSX.Element>>;
   sIndex: number;
   eIndex: number;
@@ -51,9 +55,9 @@ const PrayerStatusBottomSheet = ({
   // salahStatus: string;
   // customReason: string;
 }) => {
-  console.log("INDEX:");
-  console.log(sIndex);
-  console.log(eIndex);
+  // console.log("INDEX:");
+  // console.log(sIndex);
+  // console.log(eIndex);
   // console.log("CLICKED DATE IS: ");
   // console.log(clickedDate);
   // console.log("clickedSalah");
@@ -65,7 +69,7 @@ const PrayerStatusBottomSheet = ({
   // const [selectedSalah, setSelectedSalah] = useState("");
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
+  // const [reasonsArray, setReasonsArray] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState("");
   const handleCustomReason = (e: any) => {
     setCustomReason(e.target.value);
@@ -248,35 +252,6 @@ const PrayerStatusBottomSheet = ({
   // useEffect(() => {
   //   doesSalahAndDateExists(clickedSalah, cellDate);
   // }, []);
-
-  useEffect(() => {
-    const storedReasonsArray = localStorage.getItem("storedReasonsArray");
-    if (storedReasonsArray) {
-      setReasonsArray(JSON.parse(storedReasonsArray));
-    } else if (storedReasonsArray === null) {
-      const defaultReasonsArray = [
-        "Alarm",
-        "Education",
-        "Family",
-        "Friends",
-        "Gaming",
-        "Guests",
-        "Leisure",
-        "Movies",
-        "Shopping",
-        "Sleep",
-        "Sports",
-        "Travel",
-        "TV",
-        "Work",
-      ];
-      localStorage.setItem(
-        "storedReasonsArray",
-        JSON.stringify(defaultReasonsArray)
-      );
-      setReasonsArray(defaultReasonsArray);
-    }
-  }, []);
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);
