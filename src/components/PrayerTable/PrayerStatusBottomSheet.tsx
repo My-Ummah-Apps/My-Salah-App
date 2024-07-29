@@ -69,7 +69,6 @@ const PrayerStatusBottomSheet = ({
   // const [selectedSalah, setSelectedSalah] = useState("");
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  // const [reasonsArray, setReasonsArray] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState("");
   const handleCustomReason = (e: any) => {
     setCustomReason(e.target.value);
@@ -82,6 +81,8 @@ const PrayerStatusBottomSheet = ({
     useState(false);
 
   let selectedReasonsArray = selectedReasons;
+  console.log("🚀 ~ selectedReasonsArray:", selectedReasonsArray);
+
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
   const dict = {
@@ -207,8 +208,12 @@ const PrayerStatusBottomSheet = ({
         if (reasons !== undefined && reasons.length > 0) {
           console.log("REASONS ARE NOT UNDEFINED");
           query += `, reasons`;
-          values.push(...reasons);
+          const stringifiedReasons = reasons.join(", ");
+          // values.push(...reasons);
+          console.log("🚀 ~ reasons:", stringifiedReasons);
+          values.push(stringifiedReasons);
         }
+
         if (notes !== undefined && notes !== "") {
           console.log("NOTES ARE NOT UNDEFINED");
           query += `, notes`;
@@ -457,7 +462,7 @@ const PrayerStatusBottomSheet = ({
                     {/* {missedReasonsArray.map((item) => ( */}
                     {reasonsArray.map((item) => (
                       <p
-                        key={uuidv4()}
+                        key={item}
                         // style={{
                         //   backgroundColor: selectedReasons.includes(item)
                         //     ? "#2563eb"
@@ -614,11 +619,11 @@ const PrayerStatusBottomSheet = ({
           {reasonsArray.map((item) => (
             <p
               key={uuidv4()}
-              // style={{
-              //   backgroundColor: selectedReasons.includes(item)
-              //     ? "#2563eb"
-              //     : "",
-              // }}
+              style={{
+                backgroundColor: selectedReasons.includes(item)
+                  ? "#2563eb"
+                  : "",
+              }}
               onClick={() => {
                 if (!selectedReasonsArray.includes(item)) {
                   selectedReasonsArray = [...selectedReasons, item];
