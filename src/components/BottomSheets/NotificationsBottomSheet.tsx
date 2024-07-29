@@ -95,9 +95,9 @@ const NotificationsBottomSheet = ({
     // localStorage.setItem("dailyNotificationTime", e.target.value);
   };
 
-  // useEffect(() => {
-  //   modifyDataInUserPreferencesTable()
-  // }, [dailyNotification])
+  useEffect(() => {
+    modifyDataInUserPreferencesTable(dailyNotification, "dailyNotification");
+  }, [dailyNotification]);
 
   return (
     <Sheet
@@ -121,11 +121,9 @@ const NotificationsBottomSheet = ({
                 offColor="white"
                 // For some reason, modifyDataInUserPreferencesTable is registering the opposite value ie when 1 should be passed into the database its passing in 0 and vice versa
                 onChange={() => {
-                  setDailyNotification(dailyNotification === "0" ? "1" : "0");
-                  modifyDataInUserPreferencesTable(
-                    dailyNotification,
-                    "dailyNotification"
-                  );
+                  setDailyNotification((prevValue) => {
+                    return prevValue === "1" ? "0" : "1";
+                  });
                 }}
                 onColor="lightblue"
                 pendingOffColor={undefined}

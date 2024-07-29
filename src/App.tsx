@@ -291,6 +291,7 @@ const App = () => {
     value: string,
     preference: PreferenceType
   ) => {
+    console.log("value is: " + value);
     try {
       await checkAndOpenOrCloseDBConnection("open");
       const query = `UPDATE userpreferencestable SET preferenceValue = ? WHERE preferenceName = ?`;
