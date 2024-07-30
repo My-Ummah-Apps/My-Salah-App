@@ -139,6 +139,8 @@ td {
 
 .ReactVirtualized__Table__rowColumn {
   margin-right: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .ReactVirtualized__Grid__innerScrollContainer {

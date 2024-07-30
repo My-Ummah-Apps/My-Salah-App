@@ -128,7 +128,7 @@ const PrayerTable = ({
             >
               <Column
                 style={{ marginLeft: "0" }}
-                className="text-sm text-left "
+                className="text-sm text-left"
                 label=""
                 dataKey="date"
                 width={120}
@@ -151,7 +151,7 @@ const PrayerTable = ({
                 <Column
                   key={salahName + uuidv4}
                   style={{ marginLeft: "0" }}
-                  className="text-sm text-left "
+                  className="text-sm"
                   label={salahName}
                   // dataKey="rowData.salahs[salahName]"
                   dataKey={""}
@@ -168,6 +168,7 @@ const PrayerTable = ({
                     // console.log(rowData.salahs[salahName]);
                     return rowData.salahs[salahName] === "" ? (
                       <LuDot
+                        className="w-[24px] h-[24px]"
                         onClick={() => {
                           setShowUpdateStatusModal(true);
                           setClickedDate(rowData.date);
@@ -176,7 +177,6 @@ const PrayerTable = ({
                           // console.log("SALAH INFO IS:");
                           // console.log(rowData.salahs[salahName]);
                         }}
-                        className="w-[24px] h-[24px]"
                       />
                     ) : (
                       <div
