@@ -136,13 +136,9 @@ const PrayerStatusBottomSheet = ({
         return false;
       } else if (res && res.values && res.values.length > 0) {
         console.log("SALAH DATA FOUND, RES.VALUES IS: ", res.values);
-
-        // setSelectedSalah(clickedSalah);
         setSalahStatus(res.values[0].salahStatus);
         setNotes(res.values[0].notes);
-        // setSelectedReasons(res.values[0].reasons.join(", "));
-        // console.log("selectedReasons, ");
-
+        setSelectedReasons(res.values[0].reasons.split(", "));
         return true;
       }
     } catch (error) {
