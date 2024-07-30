@@ -81,7 +81,6 @@ const PrayerStatusBottomSheet = ({
     useState(false);
 
   let selectedReasonsArray = selectedReasons;
-  console.log("🚀 ~ selectedReasonsArray:", selectedReasonsArray);
 
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
@@ -98,9 +97,9 @@ const PrayerStatusBottomSheet = ({
 
   const doesSalahAndDateExists = async (
     clickedSalah: string,
-    date: string
+    clickedDate: string
   ): Promise<boolean> => {
-    // console.log("UPDATING DATABASE? " + updatingDatabase);
+    console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
     // if (isDatabaseUpdating) return;
 
     try {
@@ -120,29 +119,31 @@ const PrayerStatusBottomSheet = ({
       SELECT * FROM salahtrackingtable 
       WHERE salahName = ? AND date = ?;
     `,
-        [clickedSalah, date]
+        [clickedSalah, clickedDate]
       );
       console.log("res is: ");
       console.log(res);
 
-      if (res && res.values && res.values.length > 0) {
-        console.log("DATA FOUND");
-        console.log("SETDATA IS:");
-        console.log(data);
+      if (res && res.values && res.values.length === 0) {
+        console.log("SALAH DATA NOT FOUND, RES.VALUES IS: ", res.values);
+        setSalahStatus("");
+        setNotes("");
+        setSelectedReasons([]);
+        // setReasonsArray
+        // console.log("DATE DOES NOT EXIST, SETTING TO FALSE...");
+        // console.log("SETDATA IS:");
+        // console.log(data);
+        return false;
+      } else if (res && res.values && res.values.length > 0) {
+        console.log("SALAH DATA FOUND, RES.VALUES IS: ", res.values);
 
         // setSelectedSalah(clickedSalah);
         setSalahStatus(res.values[0].salahStatus);
         setNotes(res.values[0].notes);
-        // setReasonsArray
+        // setSelectedReasons(res.values[0].reasons.join(", "));
+        // console.log("selectedReasons, ");
+
         return true;
-      } else if (res && res.values && res.values.length === 0) {
-        setSalahStatus("");
-        setNotes("");
-        // setReasonsArray
-        console.log("DATE DOES NOT EXIST, SETTING TO FALSE...");
-        console.log("SETDATA IS:");
-        console.log(data);
-        return false;
       }
     } catch (error) {
       console.log(
@@ -167,16 +168,28 @@ const PrayerStatusBottomSheet = ({
     return false;
   };
 
+  useEffect(() => {
+    const checkDB = async () => {
+      try {
+        await doesSalahAndDateExists(clickedSalah, clickedDate);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    checkDB();
+  }, [clickedDate]);
+
   const addOrModifySalah = async (
+    clickedDate: string,
     clickedSalah: string,
     salahStatus: string,
-    date: string,
-    reasons?: string[],
+    selectedReasons?: string[],
     notes?: string
   ) => {
-    console.log("DATA WITHIN ADDORMODIFY FUNCTION");
+    console.log("addOrModifySalah HAS RUN");
     // console.log(clickedSalah, salahStatus, date, reasons, notes);
-    console.log("clickedSalah:", clickedSalah);
+    console.log("clickedSalah: ", clickedSalah);
     isDatabaseUpdating = true;
     // console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
 
@@ -194,21 +207,20 @@ const PrayerStatusBottomSheet = ({
 
       const salahAndDateExist = await doesSalahAndDateExists(
         clickedSalah,
-        date
+        clickedDate
       );
 
-      console.log("Does salah and date exist:");
-      console.log(salahAndDateExist);
+      console.log("Does salah and date exist: ", salahAndDateExist);
 
       if (!salahAndDateExist) {
         console.log("ADDING ITEM...");
         let query = `INSERT INTO salahtrackingtable(date, salahName, salahStatus`;
-        const values = [clickedSalah, salahStatus, date];
+        const values = [clickedDate, clickedSalah, salahStatus];
 
-        if (reasons !== undefined && reasons.length > 0) {
+        if (selectedReasons !== undefined && selectedReasons.length > 0) {
           console.log("REASONS ARE NOT UNDEFINED");
           query += `, reasons`;
-          const stringifiedReasons = reasons.join(", ");
+          const stringifiedReasons = selectedReasons.join(", ");
           // values.push(...reasons);
           console.log("🚀 ~ reasons:", stringifiedReasons);
           values.push(stringifiedReasons);
@@ -227,13 +239,40 @@ const PrayerStatusBottomSheet = ({
         // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
+
+        let query = `UPDATE salahtrackingtable SET salahStatus = ?`;
+        const values = [salahStatus];
+
+        // await dbConnection.current?.run(query, [salahStatus, clickedDate]);
+
+        if (selectedReasons !== undefined && selectedReasons.length > 0) {
+          console.log("REASONS ARE NOT UNDEFINED");
+          const stringifiedReasons = selectedReasons.join(", ");
+          query += `, reasons = ?`;
+          // values.push(...reasons);
+          console.log("🚀 ~ reasons:", stringifiedReasons);
+          values.push(stringifiedReasons);
+        }
+
+        if (notes !== undefined && notes !== "") {
+          console.log("NOTES ARE NOT UNDEFINED");
+          query += `, notes = ?`;
+          values.push(notes);
+        }
+
+        query += ` WHERE date = ? AND salahName = ?`;
+        values.push(clickedDate, clickedSalah);
+
+        console.log("🚀 ~ query:", query);
+        console.log("🚀 ~ values:", values);
+        await dbConnection.current?.query(query, values);
         // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
       }
       // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
       // console.log("DATA INSERTED INTO DATABASE");
     } catch (error) {
-      console.log("ERROR WITHIN addOrModifySalah function:");
-      console.log(error);
+      // console.error("ERROR WITHIN addOrModifySalah function:");
+      console.error(error);
     } finally {
       try {
         const isDatabaseOpen = await dbConnection.current?.isDBOpen();
@@ -246,10 +285,10 @@ const PrayerStatusBottomSheet = ({
           isDatabaseUpdating = false;
         }
       } catch (error) {
-        console.log(
-          "ERROR WHEN TRYING TO CLOSE DATABASE IN addOrModifySalah FUNCTION:"
-        );
-        console.log(error);
+        // console.log(
+        //   "ERROR WHEN TRYING TO CLOSE DATABASE IN addOrModifySalah FUNCTION:"
+        // );
+        console.error(error);
       }
     }
   };
@@ -483,6 +522,10 @@ const PrayerStatusBottomSheet = ({
                             );
                           }
                           setSelectedReasons(selectedReasonsArray);
+                          console.log(
+                            "selectedReasonsArray ",
+                            selectedReasonsArray
+                          );
                         }}
                         // border border-gray-700 b-1 rounded-xl
                         className="p-2 m-1 text-xs bg-[rgba(0, 0, 0, 1)] bg-gray-800/70 rounded-xl"
