@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 // import Notifications from "./utils/notifications";
-import { salahTrackingEntryType } from "./types/types";
+import { SalahRecord, SalahRecordsArray } from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -12,6 +12,7 @@ import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 import { subDays, format, parse, eachDayOfInterval } from "date-fns";
 import { PreferenceType } from "./types/types";
+import { userGenderType } from "./types/types";
 // import { initialiseDatabase } from "./utils/SQLiteService";
 
 // import { Keyboard } from "@capacitor/keyboard";
@@ -84,6 +85,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 const App = () => {
+  const INITIAL_LOAD_SIZE = 50;
+  const [data, setData] = useState<SalahRecordsArray>();
+  let [sIndex, setSIndex] = useState<number | undefined>();
+  let [eIndex, setEIndex] = useState<number>(INITIAL_LOAD_SIZE);
   console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
@@ -92,39 +97,35 @@ const App = () => {
     checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
   useEffect(() => {
-    console.log(
-      "isDatabaseInitialised useEffect has run and isDatabaseInitialised is: " +
-        isDatabaseInitialised
-    );
+    // console.log(
+    //   "isDatabaseInitialised useEffect has run and isDatabaseInitialised is: " +
+    //     isDatabaseInitialised
+    // );
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
-        setData(await fetchSalahTrackingDataFromDB(1, INITIAL_LOAD_SIZE));
+        setData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
         await fetchUserPreferencesFromDB();
         // let sIndex = 1;
         // let eIndex = INITIAL_LOAD_SIZE;
-        setSIndex(1);
+        setSIndex(0);
         setEIndex(50);
 
-        console.log("setData within useEffect has run and its data is: ");
-        console.log(data);
-        console.log(data.length);
+        console.log("setData within useEffect has run and its data is: ", data);
+        // console.log(data.length);
         setRenderTable(true);
       };
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
-  const INITIAL_LOAD_SIZE = 50;
-  const [data, setData] = useState<any>([]);
-  const [userGender, setUserGender] = useState<string>("");
+
+  const [userGender, setUserGender] = useState<userGenderType>();
   const [dailyNotification, setDailyNotification] = useState<string>("");
   const [dailyNotificationTime, setDailyNotificationTime] =
     useState<string>("");
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
   // console.log("SETDATA WITHIN TABLE IS:");
   // console.log(data);
-  let [sIndex, setSIndex] = useState<number>();
-  let [eIndex, setEIndex] = useState<number>();
 
   // isDatabaseInitialised is only initialised once, so can probably be safely removed
 
@@ -158,17 +159,6 @@ const App = () => {
       console.log(res);
 
       if (res?.values && res.values.length === 0) {
-        //   const insertQuery = `
-        //   INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue)
-        //   VALUES
-        //   ('userGender', ''),
-        //   ('dailyNotification', '0'),
-        //   ('dailyNotificationTime', '21:00'),
-        //   ('haptics', '0'),
-        //   ('reasonsArray', '${stringifiedReasonsArr}'),
-        //   ('showReasons', '0')
-        // `;
-
         const insertQuery = `
           INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue) 
           VALUES 
@@ -530,6 +520,10 @@ const App = () => {
                 // title={heading}
                 dbConnection={dbConnection}
                 renderTable={renderTable}
+                setSIndex={setSIndex}
+                setEIndex={setEIndex}
+                sIndex={sIndex}
+                eIndex={eIndex}
                 setReasonsArray={setReasonsArray}
                 reasonsArray={reasonsArray}
                 datesFormatted={datesFormatted}

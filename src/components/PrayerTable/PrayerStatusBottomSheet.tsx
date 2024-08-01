@@ -8,17 +8,18 @@ import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { v4 as uuidv4 } from "uuid";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
+import { SalahRecordsArray } from "../../types/types";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
   fetchSalahTrackingDataFromDB,
+  sIndex,
+  eIndex,
   setData,
   data,
   setReasonsArray,
   reasonsArray,
   setCellColor,
-  sIndex,
-  eIndex,
   clickedDate,
   clickedSalah,
   // cellDate,
@@ -35,7 +36,7 @@ const PrayerStatusBottomSheet = ({
     startIndex: number,
     endIndex: number
   ) => Promise<any>;
-  setData: React.Dispatch<any>;
+  setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   data: any;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
@@ -47,7 +48,6 @@ const PrayerStatusBottomSheet = ({
   // cellDate: string;
   userGender: string;
   showUpdateStatusModal: boolean;
-
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   hasUserClickedDate: boolean;
@@ -55,13 +55,8 @@ const PrayerStatusBottomSheet = ({
   // salahStatus: string;
   // customReason: string;
 }) => {
-  // console.log("INDEX:");
-  // console.log(sIndex);
-  // console.log(eIndex);
-  // console.log("CLICKED DATE IS: ");
-  // console.log(clickedDate);
-  // console.log("clickedSalah");
-  // console.log(clickedSalah);
+  // console.log("CLICKED DATE IS: ", clickedDate);
+  // console.log("clickedSalah ", clickedSalah);
   const [updatingDatabase, setUpdatingDatabase] = useState<boolean>();
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
@@ -81,7 +76,7 @@ const PrayerStatusBottomSheet = ({
     useState(false);
 
   let selectedReasonsArray = selectedReasons;
-
+  console.log("s and e index: ", sIndex, eIndex);
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
   const dict = {
@@ -233,6 +228,8 @@ const PrayerStatusBottomSheet = ({
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
         // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
+        const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
+        setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
 
@@ -263,6 +260,8 @@ const PrayerStatusBottomSheet = ({
         console.log("🚀 ~ values:", values);
         await dbConnection.current?.query(query, values);
         // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
+        const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
+        setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
       }
       // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
       // console.log("DATA INSERTED INTO DATABASE");

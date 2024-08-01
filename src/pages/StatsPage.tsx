@@ -5,7 +5,7 @@ import { salahTrackingEntryType } from "../types/types";
 import Calendar from "../components/Stats/Calendar";
 
 // import { eachDayOfInterval, parse } from "date-fns";
-
+import { userGenderType } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
 
 // import StreakCount from "../components/Stats/StreakCount";
@@ -17,11 +17,10 @@ const StatsPage = ({
   pageStyles,
   startDate,
   setSalahTrackingArray,
-  salahTrackingArray,
-} // setCurrentWeek,
-// currentWeek,
+  salahTrackingArray, // setCurrentWeek,
+} // currentWeek,
 : {
-  userGender: string;
+  userGender: userGenderType;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;

@@ -7,6 +7,7 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import { PreferenceType } from "../types/types";
+import { DBConnectionStateType } from "../types/types";
 
 // import {
 //   checkNotificationPermissions,
@@ -38,7 +39,9 @@ const SettingsPage = ({
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
-  checkAndOpenOrCloseDBConnection: (action: string) => Promise<void>;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
   dailyNotification: string;
   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;

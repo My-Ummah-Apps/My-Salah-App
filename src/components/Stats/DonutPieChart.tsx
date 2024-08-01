@@ -1,6 +1,7 @@
 // import React, { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { prayerStatusColors } from "../../utils/prayerStatusColors";
+import { userGenderType } from "../../types/types";
 
 interface CustomizedLabelProps {
   cx: number;
@@ -55,7 +56,7 @@ const DonutPieChart = ({
     salahMissedDatesOverall: number;
     salahLateDatesOverall: number;
   };
-  userGender: string;
+  userGender: userGenderType;
 }) => {
   const data = [
     userGender === "male"

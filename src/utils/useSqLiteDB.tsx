@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { DBConnectionStateType } from "../types/types";
 import {
   SQLiteConnection,
   SQLiteDBConnection,
@@ -84,7 +85,9 @@ const useSQLiteDB = () => {
     };
   }, []);
 
-  async function checkAndOpenOrCloseDBConnection(action: string) {
+  async function checkAndOpenOrCloseDBConnection(
+    action: DBConnectionStateType
+  ) {
     console.log("checkAndOpenOrCloseDBConnection has run");
     // console.log("dbConnection.current: " + dbConnection.current);
     try {
@@ -93,6 +96,7 @@ const useSQLiteDB = () => {
           "Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection.current is falsy"
         );
       }
+      console.log("dbConnection.current exists");
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
 
       if (action === "open" && isDatabaseOpen.result === false) {
@@ -110,6 +114,7 @@ const useSQLiteDB = () => {
           "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
         );
       } else {
+        console.log("isDatabaseOpen.result: ", isDatabaseOpen.result);
         throw new Error("Unable to open or close database connection");
       }
     } catch (error) {

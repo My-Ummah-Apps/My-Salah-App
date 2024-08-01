@@ -1,6 +1,6 @@
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
-import { salahTrackingEntryType } from "../types/types";
+import { SalahRecordsArray, salahTrackingEntryType } from "../types/types";
 import { useEffect } from "react";
 
 // import { subDays } from "date-fns";
@@ -12,6 +12,10 @@ import { useEffect } from "react";
 const HomePage = ({
   dbConnection,
   renderTable,
+  sIndex,
+  eIndex,
+  setSIndex,
+  setEIndex,
   setData,
   data,
   setReasonsArray,
@@ -32,7 +36,11 @@ const HomePage = ({
 }: {
   dbConnection: any;
   renderTable: boolean;
-  setData: React.Dispatch<any>;
+  setSIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setEIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  sIndex: number;
+  eIndex: number;
+  setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   data: any;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
@@ -59,7 +67,7 @@ const HomePage = ({
   }, []);
 
   console.log("USERGENDER: ", userGender);
-
+  console.log("s & e index:", sIndex, eIndex);
   // setHeading("Home");
 
   // const today: Date = new Date();
@@ -73,6 +81,10 @@ const HomePage = ({
       <PrayerTable
         dbConnection={dbConnection}
         renderTable={renderTable}
+        setSIndex={setSIndex}
+        setEIndex={setEIndex}
+        sIndex={sIndex}
+        eIndex={eIndex}
         fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
         setReasonsArray={setReasonsArray}
         reasonsArray={reasonsArray}

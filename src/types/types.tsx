@@ -3,12 +3,30 @@
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
-export interface salahTrackingEntryType {
-  salahName: string;
-  completedDates: {
-    [date: string]: { status: string; reasons: string[]; notes: string };
-  }[];
+type SalahStatus =
+  | "group"
+  | "male-alone"
+  | "female-alone"
+  | "late"
+  | "missed"
+  | "excused";
+
+interface Salahs {
+  salahs: {
+    Fajr: SalahStatus;
+    Dhuhr: SalahStatus;
+    Asar: SalahStatus;
+    Maghrib: SalahStatus;
+    Isha: SalahStatus;
+  };
 }
+
+interface SalahRecord {
+  date: string;
+  salah: Salahs;
+}
+
+export type SalahRecordsArray = SalahRecord[];
 
 export type PreferenceType =
   | "userGender"
@@ -17,6 +35,10 @@ export type PreferenceType =
   | "haptics"
   | "reasonsArray"
   | "showReasons";
+
+export type DBConnectionStateType = "open" | "close";
+
+export type userGenderType = "male" | "female";
 
 // [tableRowDate]: { status: salahStatus, reasons: [], notes: "" }
 

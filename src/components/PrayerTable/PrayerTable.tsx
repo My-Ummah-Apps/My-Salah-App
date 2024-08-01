@@ -6,14 +6,18 @@ import { Column, Table, AutoSizer, InfiniteLoader } from "react-virtualized";
 AutoSizer;
 
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
-import { salahTrackingEntryType } from "../../types/types";
 
 import { LuDot } from "react-icons/lu";
+import { SalahRecordsArray } from "../../types/types";
 
 // import StreakCount from "../Stats/StreakCount";
 const PrayerTable = ({
   dbConnection,
   renderTable,
+  setSIndex,
+  setEIndex,
+  sIndex,
+  eIndex,
   setData,
   data,
   setReasonsArray,
@@ -22,14 +26,16 @@ const PrayerTable = ({
   fetchSalahTrackingDataFromDB,
   userGender,
   userStartDate,
-  setSalahTrackingArray,
-  salahTrackingArray,
   startDate,
 }: {
   dbConnection: any;
   renderTable: boolean;
-  setData: React.Dispatch<any>;
-  data: any;
+  setSIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setEIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  sIndex: number;
+  eIndex: number;
+  setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  data: SalahRecordsArray;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFormatted: string[];
@@ -38,14 +44,10 @@ const PrayerTable = ({
     endIndex: number
   ) => Promise<any>;
   userGender: string;
-  setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingEntryType[]>
-  >;
   userStartDate: string;
-  salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
 }) => {
-  console.log("PRAYER TABLE COMPONENT RENDERED");
+  console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", data);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
   // const [salahStatus, setSalahStatus] = useState<string | undefined>();
   // userStartDate = "05.05.22";
@@ -60,9 +62,12 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    // console.log("ROWGETTER HAS RUN");
-    // console.log(data[index]);
-
+    // if (data[index] === undefined) {
+    //   console.log("ROWGETTER HAS RUN, Looking for index: ", index);
+    //   console.log("ROWGETTER HAS RUN", data);
+    // }
+    console.log("ROWGETTER HAS RUN, Looking for index: ", index);
+    console.log("ROWGETTER HAS RUN", data);
     return data[index];
     // return data[index] || { date: "Loading...", salahs: {} };
   };
@@ -79,11 +84,13 @@ const PrayerTable = ({
         startIndex,
         stopIndex
       );
-      setData((prevData: any) => [...prevData, ...moreRows]);
       // sIndex = startIndex;
       // eIndex = stopIndex;
-      // setSIndex(startIndex);
-      // setEIndex(stopIndex);
+      setSIndex(startIndex);
+      setEIndex(stopIndex);
+      setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
+      console.log("Data within loadmorerows: ", data);
+      console.log("loadmorerows has run");
     } catch (error) {
       console.error("Error loading more rows:", error);
     }
@@ -186,6 +193,7 @@ const PrayerTable = ({
                           setClickedSalah(salahName);
                           setHasUserClickedDate(true);
                         }}
+                        // There's an issue where, when a salah status is added OR modified with reasons etc or without, the table cell color does NOT change or isn't updated ie it remains as a dot, only upon page refresh does it change, HOWEVER, if the cell is clicked on even without a refresh all the details are there ie salah status, any reasons or notes... so its literally just the cell color thats not changing, unsure if the below is the cause of this, this component is re-rendering and the below should be dealing with the table cell color but it isn't for some reasons
                         className={`${iconStyles}
                         ${dict[rowData.salahs[salahName]]}
                         `}
@@ -206,8 +214,8 @@ const PrayerTable = ({
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
-          // sIndex={sIndex}
-          // eIndex={eIndex}
+          sIndex={sIndex}
+          eIndex={eIndex}
           setCellColor={setCellColor}
           fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
           setData={setData}
