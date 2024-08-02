@@ -25,20 +25,14 @@ const Calendar = ({
   // setShowCalendarOneMonth,
   // showCalendarOneMonth,
   userStartDate,
-  // setSalahTrackingArray,
-  salahTrackingArray, // setCurrentWeek,
-  // startDate,
-}: {
+} // startDate,
+: {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
   userStartDate: string;
-  setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingEntryType[]>
-  >;
+
   salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
-  // setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  // currentWeek: number;
 }) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
@@ -51,7 +45,7 @@ const Calendar = ({
     //   );
     // }
   });
-  salahTrackingArray;
+
   const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
   console.log(showDailySalahDataModal);
   const [clickedDate, setClickedDate] = useState<string>("");

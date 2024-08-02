@@ -16,7 +16,6 @@ const PrayerStatusBottomSheet = ({
   sIndex,
   eIndex,
   setData,
-  data,
   setReasonsArray,
   reasonsArray,
   setCellColor,
@@ -28,8 +27,8 @@ const PrayerStatusBottomSheet = ({
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   hasUserClickedDate, // customReason,
-  // salahStatus,
-} // setSalahStatus,
+  // setSalahStatus,
+} // salahStatus,
 : {
   dbConnection: any;
   fetchSalahTrackingDataFromDB: (
@@ -37,10 +36,9 @@ const PrayerStatusBottomSheet = ({
     endIndex: number
   ) => Promise<any>;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  data: any;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
-  setCellColor: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  setCellColor: any;
   sIndex: number;
   eIndex: number;
   clickedDate: string;
@@ -227,9 +225,9 @@ const PrayerStatusBottomSheet = ({
 
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
-        // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
-        const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
-        setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
+
+        // const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
+        // setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
 
@@ -259,11 +257,20 @@ const PrayerStatusBottomSheet = ({
         console.log("🚀 ~ query:", query);
         console.log("🚀 ~ values:", values);
         await dbConnection.current?.query(query, values);
+
+        // const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
+        // setData((prevData: SalahRecordsArray) => {
+        //   console.log("🚀 ~ prevData:", prevData);
+        //   return [...prevData, ...moreRows];
+        // });
+
+        // console.log("moreRows:", moreRows);
+
+        // console.log("🚀 ~ setData ~ moreRows:", moreRows);
+        // console.log("yo", eIndex);
         // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
-        const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
-        setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
       }
-      // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
+
       // console.log("DATA INSERTED INTO DATABASE");
     } catch (error) {
       // console.error("ERROR WITHIN addOrModifySalah function:");
@@ -593,7 +600,6 @@ const PrayerStatusBottomSheet = ({
                       //   ></div>
                       // );
 
-                      // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
                       setShowUpdateStatusModal(false);
                     }
                   }}

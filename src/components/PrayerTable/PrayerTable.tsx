@@ -51,7 +51,7 @@ const PrayerTable = ({
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
   // const [salahStatus, setSalahStatus] = useState<string | undefined>();
   // userStartDate = "05.05.22";
-  let [cellColor, setCellColor] = useState<JSX.Element>();
+  let [cellColor, setCellColor] = useState<string>("");
   // let sIndex: number = 0;
   // let eIndex: number = 0;
 
@@ -61,15 +61,19 @@ const PrayerTable = ({
   const [clickedDate, setClickedDate] = useState<string>("");
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
+  // useEffect(() => {
+  //   setData(data);
+  // }, [data]);
+
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  useEffect(() => {
+    forceUpdate();
+    console.log("DATA UPDATED: ", data);
+  }, [data]);
+
   const rowGetter = ({ index }: any) => {
-    // if (data[index] === undefined) {
-    //   console.log("ROWGETTER HAS RUN, Looking for index: ", index);
-    //   console.log("ROWGETTER HAS RUN", data);
-    // }
-    console.log("ROWGETTER HAS RUN, Looking for index: ", index);
-    console.log("ROWGETTER HAS RUN", data);
+    // console.log("ROWGETTER HAS RUN", data);
     return data[index];
-    // return data[index] || { date: "Loading...", salahs: {} };
   };
 
   const isRowLoaded = ({ index }: any) => {
@@ -79,13 +83,11 @@ const PrayerTable = ({
 
   const loadMoreRows = async ({ startIndex, stopIndex }: any) => {
     try {
-      // const moreRows = await fetchSalahTrackingDataFromDB(startIndex, stopIndex + 500);
       const moreRows = await fetchSalahTrackingDataFromDB(
         startIndex,
         stopIndex
       );
-      // sIndex = startIndex;
-      // eIndex = stopIndex;
+      console.log("START AND STOP INDEX: ", startIndex, stopIndex);
       setSIndex(startIndex);
       setEIndex(stopIndex);
       setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
@@ -140,19 +142,6 @@ const PrayerTable = ({
                 dataKey="date"
                 width={120}
                 flexGrow={1}
-                // cellRenderer={({ rowData }) => {
-                //   console.log("ROWDATA IN DATE COLUMN:");
-                //   console.log(rowData);
-                //   // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                //   // const formattedDay = format(rowData, "EEEE");
-                //   {
-                //     return rowData.date ? (
-                //       <div>{rowData.date}</div>
-                //     ) : (
-                //       <div>{"Loading..."}</div>
-                //     );
-                //   }
-                // }}
               />
               {salahNamesArr.map((salahName) => (
                 <Column
@@ -165,9 +154,7 @@ const PrayerTable = ({
                   width={120}
                   flexGrow={1}
                   cellRenderer={({ rowData }) => {
-                    // console.log("ROW DATA IS:");
-                    // console.log(rowData);
-                    // console.log(typeof rowData.salahs[salahName]);
+                    // console.log("ROW DATA IS: ", rowData);
                     // const dateObject = parse(rowData, "dd.MM.yy", new Date());
                     // const formattedDay = format(rowData, "EEEE");
                     // return rowData ? (
@@ -175,28 +162,24 @@ const PrayerTable = ({
                     // console.log(rowData.salahs[salahName]);
                     return rowData.salahs[salahName] === "" ? (
                       <LuDot
-                        className="w-[24px] h-[24px]"
+                        className={`w-[24px] h-[24px]`}
                         onClick={() => {
                           setShowUpdateStatusModal(true);
                           setClickedDate(rowData.date);
                           setClickedSalah(salahName);
                           setHasUserClickedDate(true);
-                          // console.log("SALAH INFO IS:");
-                          // console.log(rowData.salahs[salahName]);
                         }}
                       />
                     ) : (
                       <div
+                        className={`w-[24px] h-[24px] ${iconStyles}
+                        ${dict[rowData.salahs[salahName]]}`}
                         onClick={() => {
                           setShowUpdateStatusModal(true);
                           setClickedDate(rowData.date);
                           setClickedSalah(salahName);
                           setHasUserClickedDate(true);
                         }}
-                        // There's an issue where, when a salah status is added OR modified with reasons etc or without, the table cell color does NOT change or isn't updated ie it remains as a dot, only upon page refresh does it change, HOWEVER, if the cell is clicked on even without a refresh all the details are there ie salah status, any reasons or notes... so its literally just the cell color thats not changing, unsure if the below is the cause of this, this component is re-rendering and the below should be dealing with the table cell color but it isn't for some reasons
-                        className={`${iconStyles}
-                        ${dict[rowData.salahs[salahName]]}
-                        `}
                       >
                         {/* {cellData} */}
                       </div>
@@ -219,11 +202,8 @@ const PrayerTable = ({
           setCellColor={setCellColor}
           fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
           setData={setData}
-          data={data}
           setReasonsArray={setReasonsArray}
           reasonsArray={reasonsArray}
-          // salahName={salahName}
-          // cellDate={cellDate}
           clickedDate={clickedDate}
           clickedSalah={clickedSalah}
           dbConnection={dbConnection}
@@ -232,8 +212,6 @@ const PrayerTable = ({
           showUpdateStatusModal={showUpdateStatusModal}
           setHasUserClickedDate={setHasUserClickedDate}
           hasUserClickedDate={hasUserClickedDate}
-          // setSalahStatus={setSalahStatus}
-          // salahStatus={salahStatus}
         />
       )}
     </section>

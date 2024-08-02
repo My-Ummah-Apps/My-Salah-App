@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import { v4 as uuidv4 } from "uuid";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 // import Notifications from "./utils/notifications";
-import { SalahRecord, SalahRecordsArray } from "./types/types";
+import { SalahRecordsArray } from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -87,39 +87,29 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   const INITIAL_LOAD_SIZE = 50;
   const [data, setData] = useState<SalahRecordsArray>();
-  let [sIndex, setSIndex] = useState<number | undefined>();
+  let [sIndex, setSIndex] = useState<number | undefined>(0);
   let [eIndex, setEIndex] = useState<number>(INITIAL_LOAD_SIZE);
   console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
-    sqliteConnection,
     dbConnection,
     checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
   useEffect(() => {
-    // console.log(
-    //   "isDatabaseInitialised useEffect has run and isDatabaseInitialised is: " +
-    //     isDatabaseInitialised
-    // );
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
         setData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
         await fetchUserPreferencesFromDB();
-        // let sIndex = 1;
-        // let eIndex = INITIAL_LOAD_SIZE;
         setSIndex(0);
-        setEIndex(50);
-
-        console.log("setData within useEffect has run and its data is: ", data);
-        // console.log(data.length);
+        setEIndex(INITIAL_LOAD_SIZE);
         setRenderTable(true);
       };
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
 
-  const [userGender, setUserGender] = useState<userGenderType>();
+  const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");
   const [dailyNotificationTime, setDailyNotificationTime] =
     useState<string>("");
@@ -405,9 +395,6 @@ const App = () => {
 
   const [streakCounter, setStreakCounter] = useState(0);
   streakCounter;
-  const [salahTrackingArray, setSalahTrackingArray] = useState<
-    salahTrackingEntryType[]
-  >([]);
   const [heading, setHeading] = useState("");
 
   const [currentWeek, setCurrentWeek] = useState(0);
@@ -535,8 +522,6 @@ const App = () => {
                 setHeading={setHeading}
                 pageStyles={pageStyles}
                 startDate={startDate}
-                setSalahTrackingArray={setSalahTrackingArray}
-                salahTrackingArray={salahTrackingArray}
                 // setCurrentWeek={setCurrentWeek}
                 // currentWeek={currentWeek}
               />
@@ -572,10 +557,7 @@ const App = () => {
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
                 setHeading={setHeading}
-                setCurrentWeek={setCurrentWeek}
                 startDate={startDate}
-                setSalahTrackingArray={setSalahTrackingArray}
-                salahTrackingArray={salahTrackingArray}
                 currentWeek={currentWeek}
               />
             }

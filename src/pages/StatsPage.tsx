@@ -16,21 +16,12 @@ const StatsPage = ({
   userStartDate,
   pageStyles,
   startDate,
-  setSalahTrackingArray,
-  salahTrackingArray, // setCurrentWeek,
-} // currentWeek,
-: {
+}: {
   userGender: userGenderType;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
   startDate: Date;
-  setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingEntryType[]>
-  >;
-  salahTrackingArray: salahTrackingEntryType[];
-  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  currentWeek: number;
 }) => {
   useEffect(() => {
     setHeading("Stats");
@@ -72,18 +63,16 @@ const StatsPage = ({
 
   function getSalahStatusDates(status: string, array: string[]) {
     // let statToUpdate = 0;
-    salahTrackingArray.forEach((salah) => {
-      for (let i = 0; i < salah.completedDates.length; i++) {
-        if (Object.values(salah.completedDates[i])[0].status === status) {
-          array.push(Object.keys(salah.completedDates[i])[0]);
-        }
-      }
-    });
-
+    // salahTrackingArray.forEach((salah) => {
+    //   for (let i = 0; i < salah.completedDates.length; i++) {
+    //     if (Object.values(salah.completedDates[i])[0].status === status) {
+    //       array.push(Object.keys(salah.completedDates[i])[0]);
+    //     }
+    //   }
+    // });
     // statToUpdate = Math.round(
     //   (salahFulfilledDates.length / totalPossibleSalah) * 100
     // );
-
     // console.log(totalPossibleSalah);
     // Below will potentially be useful when adding individual salah stats
     // if (array.length > 0) {
@@ -91,7 +80,6 @@ const StatsPage = ({
     //     (array.length / (salahFulfilledDates.length + array.length)) * 100
     //   );
     // }
-
     // status === "group"
     //   ? (jamaahStat = statToUpdate)
     //   : status === "male-alone" || status === "female-alone"
@@ -158,8 +146,6 @@ const StatsPage = ({
       )}
       <Calendar
         userStartDate={userStartDate}
-        setSalahTrackingArray={setSalahTrackingArray}
-        salahTrackingArray={salahTrackingArray}
         startDate={startDate}
         // setCurrentWeek={setCurrentWeek}
         // currentWeek={currentWeek}

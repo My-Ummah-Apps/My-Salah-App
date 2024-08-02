@@ -32,8 +32,8 @@ const HomePage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
-  // currentWeek,
-}: {
+} // currentWeek,
+: {
   dbConnection: any;
   renderTable: boolean;
   setSIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
