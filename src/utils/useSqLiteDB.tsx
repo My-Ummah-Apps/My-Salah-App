@@ -113,8 +113,9 @@ const useSQLiteDB = () => {
           "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
         );
       } else {
-        console.log("isDatabaseOpen.result: ", isDatabaseOpen.result);
-        throw new Error("Unable to open or close database connection");
+        throw new Error(
+          `Database is open: ${isDatabaseOpen.result}, unable to ${action} database connection`
+        );
       }
     } catch (error) {
       console.log(error);

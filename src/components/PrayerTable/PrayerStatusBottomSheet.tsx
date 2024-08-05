@@ -26,8 +26,8 @@ const PrayerStatusBottomSheet = ({
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   hasUserClickedDate, // customReason,
-  // salahStatus,
-} // setSalahStatus,
+  // setSalahStatus,
+} // salahStatus,
 : {
   dbConnection: any;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
@@ -140,9 +140,9 @@ const PrayerStatusBottomSheet = ({
     selectedReasons?: string[],
     notes?: string
   ) => {
-    console.log("addOrModifySalah HAS RUN");
+    // console.log("addOrModifySalah HAS RUN");
     // console.log(clickedSalah, salahStatus, date, reasons, notes);
-    console.log("clickedSalah: ", clickedSalah);
+    // console.log("clickedSalah: ", clickedSalah);
     // if (isDatabaseUpdating) return false;
 
     // isDatabaseUpdating = true;
@@ -151,14 +151,21 @@ const PrayerStatusBottomSheet = ({
     const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
     try {
-      await checkAndOpenOrCloseDBConnection("open");
+      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+      if (isDatabaseOpen?.result === false) {
+        // await dbConnection.current?.open();
+        await checkAndOpenOrCloseDBConnection("open");
+        console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
+      } // This conditional check needs to be done throughout the app, it looks like the database connection is being left open somewhere, which is causing errors in the console.log, need to eliminate these errors and hopefully this will mean that isDatabaseUpdating checks will no longer be required
+
+      // await checkAndOpenOrCloseDBConnection("open");
 
       const salahAndDateExist = await doesSalahAndDateExists(
         clickedSalah,
         clickedDate
       );
 
-      console.log("Does salah and date exist: ", salahAndDateExist);
+      // console.log("Does salah and date exist: ", salahAndDateExist);
 
       if (!salahAndDateExist) {
         console.log("ADDING ITEM...");
@@ -166,7 +173,7 @@ const PrayerStatusBottomSheet = ({
         const values = [clickedDate, clickedSalah, salahStatus];
 
         if (selectedReasons !== undefined && selectedReasons.length > 0) {
-          console.log("REASONS ARE NOT UNDEFINED");
+          // console.log("REASONS ARE NOT UNDEFINED");
           query += `, reasons`;
           const stringifiedReasons = selectedReasons.join(", ");
           // values.push(...reasons);
@@ -175,7 +182,7 @@ const PrayerStatusBottomSheet = ({
         }
 
         if (notes !== undefined && notes !== "") {
-          console.log("NOTES ARE NOT UNDEFINED");
+          // console.log("NOTES ARE NOT UNDEFINED");
           query += `, notes`;
           values.push(notes);
         }
