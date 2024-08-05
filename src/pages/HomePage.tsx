@@ -1,10 +1,6 @@
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
-import {
-  SalahRecordsArray,
-  salahTrackingEntryType,
-  DBConnectionStateType,
-} from "../types/types";
+import { SalahRecordsArray, DBConnectionStateType } from "../types/types";
 import { useEffect } from "react";
 
 // import { subDays } from "date-fns";
@@ -17,10 +13,7 @@ const HomePage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   renderTable,
-  sIndex,
-  eIndex,
-  setSIndex,
-  setEIndex,
+
   setData,
   data,
   setReasonsArray,
@@ -33,21 +26,12 @@ const HomePage = ({
   userStartDate,
   pageStyles,
   startDate,
-  // setSalahObjects: setSalahObjects,
-  setSalahTrackingArray,
-  // salahTrackingArray: salahTrackingArray,
-  salahTrackingArray, // setCurrentWeek,
-  // currentWeek,
 }: {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setSIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
-  setEIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
-  sIndex: number;
-  eIndex: number;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   data: any;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -63,19 +47,11 @@ const HomePage = ({
   userStartDate: string;
   pageStyles: string;
   startDate: Date;
-
-  // currentStartDate: number;
-  setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingEntryType[]>
-  >;
-  salahTrackingArray: salahTrackingEntryType[];
 }) => {
   useEffect(() => {
     setHeading("Home");
   }, []);
 
-  console.log("USERGENDER: ", userGender);
-  console.log("s & e index:", sIndex, eIndex);
   // setHeading("Home");
 
   // const today: Date = new Date();
@@ -90,10 +66,6 @@ const HomePage = ({
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         renderTable={renderTable}
-        setSIndex={setSIndex}
-        setEIndex={setEIndex}
-        sIndex={sIndex}
-        eIndex={eIndex}
         fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
         setReasonsArray={setReasonsArray}
         reasonsArray={reasonsArray}
@@ -101,12 +73,8 @@ const HomePage = ({
         setData={setData}
         data={data}
         userGender={userGender}
-        userStartDate={userStartDate}
-        setSalahTrackingArray={setSalahTrackingArray}
-        salahTrackingArray={salahTrackingArray}
-        // setCurrentWeek={setCurrentWeek}
-        // currentWeek={currentWeek}
-        startDate={startDate}
+        // userStartDate={userStartDate}
+        // startDate={startDate}
       />
     </section>
   );

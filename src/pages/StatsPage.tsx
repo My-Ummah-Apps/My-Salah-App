@@ -1,6 +1,5 @@
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { useEffect } from "react";
-import { salahTrackingEntryType } from "../types/types";
 // import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import Calendar from "../components/Stats/Calendar";
 

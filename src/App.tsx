@@ -87,8 +87,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   const INITIAL_LOAD_SIZE = 50;
   const [data, setData] = useState<SalahRecordsArray>();
-  let [sIndex, setSIndex] = useState<number | undefined>(0);
-  let [eIndex, setEIndex] = useState<number>(INITIAL_LOAD_SIZE);
   console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
@@ -101,26 +99,20 @@ const App = () => {
         console.log("DATABASE HAS INITIALISED");
         setData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
         await fetchUserPreferencesFromDB();
-        setSIndex(0);
-        setEIndex(INITIAL_LOAD_SIZE);
         setRenderTable(true);
       };
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
+  // isDatabaseInitialised is only initialised once, so can probably be safely removed
 
   const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");
   const [dailyNotificationTime, setDailyNotificationTime] =
     useState<string>("");
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  // console.log("SETDATA WITHIN TABLE IS:");
-  // console.log(data);
-
-  // isDatabaseInitialised is only initialised once, so can probably be safely removed
 
   const [renderTable, setRenderTable] = useState(false);
-  // console.log(data);
   let userStartDate: string | null = "01.01.23";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
@@ -508,10 +500,6 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 renderTable={renderTable}
-                setSIndex={setSIndex}
-                setEIndex={setEIndex}
-                sIndex={sIndex}
-                eIndex={eIndex}
                 setReasonsArray={setReasonsArray}
                 reasonsArray={reasonsArray}
                 datesFormatted={datesFormatted}
@@ -559,7 +547,6 @@ const App = () => {
                 pageStyles={pageStyles}
                 setHeading={setHeading}
                 startDate={startDate}
-                currentWeek={currentWeek}
               />
             }
           />

@@ -15,27 +15,20 @@ const PrayerTable = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   renderTable,
-  setSIndex,
-  setEIndex,
-  sIndex,
-  eIndex,
   setData,
   data,
   setReasonsArray,
   reasonsArray,
   datesFormatted,
   fetchSalahTrackingDataFromDB,
-  userGender,
-  userStartDate,
-  startDate,
+  userGender, // userStartDate,
+  // startDate,
 }: {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setSIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
-  setEIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
   sIndex: number;
   eIndex: number;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
@@ -48,8 +41,8 @@ const PrayerTable = ({
     endIndex: number
   ) => Promise<any>;
   userGender: string;
-  userStartDate: string;
-  startDate: Date;
+  // userStartDate: string;
+  // startDate: Date;
 }) => {
   console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", data);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
@@ -82,8 +75,6 @@ const PrayerTable = ({
         stopIndex
       );
       console.log("START AND STOP INDEX: ", startIndex, stopIndex);
-      setSIndex(startIndex);
-      setEIndex(stopIndex);
       setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
       console.log("Data within loadmorerows: ", data);
       console.log("loadmorerows has run");
@@ -192,10 +183,7 @@ const PrayerTable = ({
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          sIndex={sIndex}
-          eIndex={eIndex}
           setCellColor={setCellColor}
-          fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
           setData={setData}
           data={data}
           setReasonsArray={setReasonsArray}

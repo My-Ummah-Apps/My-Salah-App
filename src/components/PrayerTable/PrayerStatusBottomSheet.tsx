@@ -13,15 +13,11 @@ import { DBConnectionStateType } from "../../types/types";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
-  fetchSalahTrackingDataFromDB,
   checkAndOpenOrCloseDBConnection,
-  sIndex,
-  eIndex,
   setData,
   data,
   setReasonsArray,
   reasonsArray,
-  setCellColor,
   clickedDate,
   clickedSalah,
   // cellDate,
@@ -34,10 +30,6 @@ const PrayerStatusBottomSheet = ({
 } // setSalahStatus,
 : {
   dbConnection: any;
-  fetchSalahTrackingDataFromDB: (
-    startIndex: number,
-    endIndex: number
-  ) => Promise<any>;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   data: any;
   checkAndOpenOrCloseDBConnection: (
@@ -46,8 +38,6 @@ const PrayerStatusBottomSheet = ({
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   setCellColor: any;
-  sIndex: number;
-  eIndex: number;
   clickedDate: string;
   clickedSalah: string;
   // cellDate: string;
@@ -81,7 +71,6 @@ const PrayerStatusBottomSheet = ({
     useState(false);
 
   let selectedReasonsArray = selectedReasons;
-  console.log("s and e index: ", sIndex, eIndex);
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
@@ -91,8 +80,13 @@ const PrayerStatusBottomSheet = ({
     clickedSalah: string,
     clickedDate: string
   ): Promise<boolean> => {
-    // console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
-    if (isDatabaseUpdating) return false;
+    console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
+    console.log("isDatabaseUpdating? ", isDatabaseUpdating);
+    // if (isDatabaseUpdating) {
+    //   throw new Error(
+    //     "Database already updating, unable to run doesSalahAndDateExists"
+    //   );
+    // }
 
     isDatabaseUpdating = true;
 
@@ -127,8 +121,10 @@ const PrayerStatusBottomSheet = ({
       console.error(error);
     } finally {
       try {
-        isDatabaseUpdating = false;
-        await checkAndOpenOrCloseDBConnection("close");
+        // isDatabaseUpdating = false;
+        if (!isDatabaseUpdating) {
+          await checkAndOpenOrCloseDBConnection("close");
+        }
       } catch (error) {
         console.log(error);
       }
@@ -136,18 +132,6 @@ const PrayerStatusBottomSheet = ({
 
     return false;
   };
-
-  useEffect(() => {
-    const checkDB = async () => {
-      try {
-        await doesSalahAndDateExists(clickedSalah, clickedDate);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    checkDB();
-  }, [clickedDate]);
 
   const addOrModifySalah = async (
     clickedDate: string,
@@ -159,18 +143,15 @@ const PrayerStatusBottomSheet = ({
     console.log("addOrModifySalah HAS RUN");
     // console.log(clickedSalah, salahStatus, date, reasons, notes);
     console.log("clickedSalah: ", clickedSalah);
-    if (isDatabaseUpdating) return false;
+    // if (isDatabaseUpdating) return false;
 
-    isDatabaseUpdating = true;
+    // isDatabaseUpdating = true;
     // console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
 
     const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
-
-      // console.log("Is DB Open within addOrModifySalah Function: ");
-      // console.log(isDbOpen.result);
 
       const salahAndDateExist = await doesSalahAndDateExists(
         clickedSalah,
@@ -203,8 +184,6 @@ const PrayerStatusBottomSheet = ({
 
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
-
-        // const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
@@ -244,8 +223,6 @@ const PrayerStatusBottomSheet = ({
         // console.log("🚀 ~ query:", query);
         // console.log("🚀 ~ values:", values);
         await dbConnection.current?.query(query, values);
-
-        // const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
