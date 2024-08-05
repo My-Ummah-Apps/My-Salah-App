@@ -89,7 +89,6 @@ const useSQLiteDB = () => {
     action: DBConnectionStateType
   ) {
     console.log("checkAndOpenOrCloseDBConnection has run");
-    // console.log("dbConnection.current: " + dbConnection.current);
     try {
       if (!dbConnection.current) {
         throw new Error(
@@ -119,9 +118,6 @@ const useSQLiteDB = () => {
       }
     } catch (error) {
       console.log(error);
-      // throw new Error(
-      //   "Database connection not initialised within checkAndOpenOrCloseDBConnection"
-      // );
     }
   }
 
@@ -150,20 +146,11 @@ const useSQLiteDB = () => {
         preferenceValue TEXT NOT NULL DEFAULT ''
        
         )`;
-      // const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
-      //   preferenceName TEXT PRIMARY KEY NOT NULL,
-      //   userGender TEXT NOT NULL DEFAULT '',
-      //   notifications INTEGER NOT NULL DEFAULT 0,
-      //   haptics INTEGER NOT NULL DEFAULT 0,
-      //   reasonsArray TEXT NOT NULL DEFAULT '',
-      //   showReasons INTEGER NOT NULL DEFAULT 0
-      //   )`;
+
       await dbConnection.current?.execute(userpreferencestable);
       await dbConnection.current?.execute(salahtrackingtable); // Execute the SQL query to create the table in the database
     } catch (error) {
-      console.log(
-        "ERROR IN CATCH: CONNECTION NOT ESTABLISHED, ERROR AS FOLLOWS: " + error
-      );
+      console.error(error);
     } finally {
       try {
         (await dbConnection.current?.isDBOpen())?.result &&
@@ -171,7 +158,7 @@ const useSQLiteDB = () => {
         // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
         console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
-        console.log("ERROR WITHIN FINALLY CATCH IN initialiseTables: " + error);
+        console.error(error);
       }
     }
   };

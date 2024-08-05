@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer, InfiniteLoader } from "react-virtualized";
 AutoSizer;
-
+import { DBConnectionStateType } from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
@@ -13,6 +13,7 @@ import { SalahRecordsArray } from "../../types/types";
 // import StreakCount from "../Stats/StreakCount";
 const PrayerTable = ({
   dbConnection,
+  checkAndOpenOrCloseDBConnection,
   renderTable,
   setSIndex,
   setEIndex,
@@ -29,6 +30,9 @@ const PrayerTable = ({
   startDate,
 }: {
   dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   renderTable: boolean;
   setSIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
   setEIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
@@ -187,6 +191,7 @@ const PrayerTable = ({
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
+          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           sIndex={sIndex}
           eIndex={eIndex}
           setCellColor={setCellColor}

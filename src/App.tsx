@@ -119,8 +119,6 @@ const App = () => {
 
   // isDatabaseInitialised is only initialised once, so can probably be safely removed
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const [renderTable, setRenderTable] = useState(false);
   // console.log(data);
   let userStartDate: string | null = "01.01.23";
@@ -506,6 +504,9 @@ const App = () => {
                 // title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
                 // title={heading}
                 dbConnection={dbConnection}
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
                 renderTable={renderTable}
                 setSIndex={setSIndex}
                 setEIndex={setEIndex}

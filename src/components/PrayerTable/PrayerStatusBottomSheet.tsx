@@ -9,10 +9,12 @@ import { Capacitor } from "@capacitor/core";
 import { v4 as uuidv4 } from "uuid";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { SalahRecordsArray } from "../../types/types";
+import { DBConnectionStateType } from "../../types/types";
 
 const PrayerStatusBottomSheet = ({
   dbConnection,
   fetchSalahTrackingDataFromDB,
+  checkAndOpenOrCloseDBConnection,
   sIndex,
   eIndex,
   setData,
@@ -28,8 +30,8 @@ const PrayerStatusBottomSheet = ({
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   hasUserClickedDate, // customReason,
-  // setSalahStatus,
-} // salahStatus,
+  // salahStatus,
+} // setSalahStatus,
 : {
   dbConnection: any;
   fetchSalahTrackingDataFromDB: (
@@ -38,6 +40,9 @@ const PrayerStatusBottomSheet = ({
   ) => Promise<any>;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   data: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   setCellColor: any;
@@ -79,36 +84,21 @@ const PrayerStatusBottomSheet = ({
   console.log("s and e index: ", sIndex, eIndex);
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
-  const dict = {
-    group: "bg-[color:var(--jamaah-status-color)]",
-    "male-alone": "bg-[color:var(--alone-male-status-color)]",
-    "female-alone": "bg-[color:var(--alone-female-status-color)]",
-    excused: "bg-[color:var(--excused-status-color)]",
-    late: "bg-[color:var(--late-status-color)]",
-    missed: "bg-[color:var(--missed-status-color)]",
-  };
 
-  let isDatabaseUpdating: boolean;
+  let isDatabaseUpdating: boolean = false;
 
   const doesSalahAndDateExists = async (
     clickedSalah: string,
     clickedDate: string
   ): Promise<boolean> => {
-    console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
-    // if (isDatabaseUpdating) return;
+    // console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
+    if (isDatabaseUpdating) return false;
+
+    isDatabaseUpdating = true;
 
     try {
-      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-      if (isDatabaseOpen?.result === false) {
-        await dbConnection.current?.open();
-        // console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
-      }
+      await checkAndOpenOrCloseDBConnection("open");
 
-      //   const query = `
-      //   SELECT * FROM salahtrackingtable
-      //   WHERE clickedSalah = ? AND date = ?;
-      // `;
-      //   const values = [clickedSalah, date];
       const res = await dbConnection.current?.query(
         `
       SELECT * FROM salahtrackingtable 
@@ -124,10 +114,7 @@ const PrayerStatusBottomSheet = ({
         setSalahStatus("");
         setNotes("");
         setSelectedReasons([]);
-        // setReasonsArray
-        // console.log("DATE DOES NOT EXIST, SETTING TO FALSE...");
-        // console.log("SETDATA IS:");
-        // console.log(data);
+
         return false;
       } else if (res && res.values && res.values.length > 0) {
         console.log("SALAH DATA FOUND, RES.VALUES IS: ", res.values);
@@ -137,25 +124,16 @@ const PrayerStatusBottomSheet = ({
         return true;
       }
     } catch (error) {
-      console.log(
-        "ERROR OPENING CONNECTION IN doesSalahAndDateExists FUNCTION:"
-      );
-      console.log(error);
+      console.error(error);
     } finally {
       try {
-        const isDbOpen = await dbConnection.current?.isDBOpen();
-        if (isDbOpen?.result && !isDatabaseUpdating) {
-          await dbConnection.current?.close();
-          // console.log("Database connection closed within addSalah function");
-        }
+        isDatabaseUpdating = false;
+        await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.log(
-          "ERROR CLOSING DATABASE IN doesSalahAndDateExists FUNCTION:"
-        );
         console.log(error);
       }
     }
-    console.log("DOES SALAH EXIST HAS RUN TO THE END");
+
     return false;
   };
 
@@ -170,7 +148,7 @@ const PrayerStatusBottomSheet = ({
 
     checkDB();
   }, [clickedDate]);
-  console.log("data: ", [...data]);
+
   const addOrModifySalah = async (
     clickedDate: string,
     clickedSalah: string,
@@ -181,17 +159,15 @@ const PrayerStatusBottomSheet = ({
     console.log("addOrModifySalah HAS RUN");
     // console.log(clickedSalah, salahStatus, date, reasons, notes);
     console.log("clickedSalah: ", clickedSalah);
+    if (isDatabaseUpdating) return false;
+
     isDatabaseUpdating = true;
     // console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
 
+    const findDateWithinData = data.find((obj) => obj.date === clickedDate);
+
     try {
-      const isDbOpen = await dbConnection.current?.isDBOpen();
-      if (isDbOpen?.result === false) {
-        await dbConnection.current?.open();
-        // console.log(
-        //   "DB Connection within addOrModifySalah function opened successfully"
-        // );
-      }
+      await checkAndOpenOrCloseDBConnection("open");
 
       // console.log("Is DB Open within addOrModifySalah Function: ");
       // console.log(isDbOpen.result);
@@ -228,7 +204,7 @@ const PrayerStatusBottomSheet = ({
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
 
-        const findDateWithinData = data.find((obj) => obj.date === clickedDate);
+        // const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
@@ -269,7 +245,7 @@ const PrayerStatusBottomSheet = ({
         // console.log("🚀 ~ values:", values);
         await dbConnection.current?.query(query, values);
 
-        const findDateWithinData = data.find((obj) => obj.date === clickedDate);
+        // const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
@@ -283,27 +259,12 @@ const PrayerStatusBottomSheet = ({
       console.error(error);
     } finally {
       try {
-        const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-        if (isDatabaseOpen?.result) {
-          await dbConnection.current?.close();
-          // console.log(
-          //   "Database connection closed within addOrModifySalah function"
-          // );
-          // setUpdatingDatabase(false);
-          isDatabaseUpdating = false;
-        }
+        await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        // console.log(
-        //   "ERROR WHEN TRYING TO CLOSE DATABASE IN addOrModifySalah FUNCTION:"
-        // );
         console.error(error);
       }
     }
   };
-
-  // useEffect(() => {
-  //   doesSalahAndDateExists(clickedSalah, cellDate);
-  // }, []);
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);
@@ -392,7 +353,7 @@ const PrayerStatusBottomSheet = ({
                           setSalahStatus("group");
                           // setShowReasons(false);
                           setSelectedReasons([]);
-                          setNotes("");
+                          // setNotes("");
                           // setReasonsArray([]);
                         }}
                         className={`${

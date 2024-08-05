@@ -1,6 +1,10 @@
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
-import { SalahRecordsArray, salahTrackingEntryType } from "../types/types";
+import {
+  SalahRecordsArray,
+  salahTrackingEntryType,
+  DBConnectionStateType,
+} from "../types/types";
 import { useEffect } from "react";
 
 // import { subDays } from "date-fns";
@@ -11,6 +15,7 @@ import { useEffect } from "react";
 
 const HomePage = ({
   dbConnection,
+  checkAndOpenOrCloseDBConnection,
   renderTable,
   sIndex,
   eIndex,
@@ -32,9 +37,12 @@ const HomePage = ({
   setSalahTrackingArray,
   // salahTrackingArray: salahTrackingArray,
   salahTrackingArray, // setCurrentWeek,
-} // currentWeek,
-: {
+  // currentWeek,
+}: {
   dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   renderTable: boolean;
   setSIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
   setEIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
@@ -80,6 +88,7 @@ const HomePage = ({
       {/* <NextSalahTime /> */}
       <PrayerTable
         dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         renderTable={renderTable}
         setSIndex={setSIndex}
         setEIndex={setEIndex}
