@@ -21,7 +21,7 @@ interface Salahs {
   };
 }
 
-interface SalahRecord {
+export interface SalahRecord {
   date: string;
   salah: Salahs;
 }

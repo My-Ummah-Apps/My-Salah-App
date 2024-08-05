@@ -61,16 +61,6 @@ const PrayerTable = ({
   const [clickedDate, setClickedDate] = useState<string>("");
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
-  // useEffect(() => {
-  //   setData(data);
-  // }, [data]);
-
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  useEffect(() => {
-    forceUpdate();
-    console.log("DATA UPDATED: ", data);
-  }, [data]);
-
   const rowGetter = ({ index }: any) => {
     // console.log("ROWGETTER HAS RUN", data);
     return data[index];
@@ -202,6 +192,7 @@ const PrayerTable = ({
           setCellColor={setCellColor}
           fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
           setData={setData}
+          data={data}
           setReasonsArray={setReasonsArray}
           reasonsArray={reasonsArray}
           clickedDate={clickedDate}

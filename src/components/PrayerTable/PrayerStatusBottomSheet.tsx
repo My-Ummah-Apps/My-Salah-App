@@ -16,6 +16,7 @@ const PrayerStatusBottomSheet = ({
   sIndex,
   eIndex,
   setData,
+  data,
   setReasonsArray,
   reasonsArray,
   setCellColor,
@@ -36,6 +37,7 @@ const PrayerStatusBottomSheet = ({
     endIndex: number
   ) => Promise<any>;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  data: any;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   setCellColor: any;
@@ -168,7 +170,7 @@ const PrayerStatusBottomSheet = ({
 
     checkDB();
   }, [clickedDate]);
-
+  console.log("data: ", [...data]);
   const addOrModifySalah = async (
     clickedDate: string,
     clickedSalah: string,
@@ -226,8 +228,17 @@ const PrayerStatusBottomSheet = ({
         await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
 
-        // const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
-        // setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
+        const findDateWithinData = data.find((obj) => obj.date === clickedDate);
+
+        if (findDateWithinData) {
+          findDateWithinData.salahs[clickedSalah] = salahStatus;
+        } else {
+          console.error(`Date ${clickedDate} not found in data`);
+        }
+
+        setData([...data]);
+
+        console.log("amendedData ", findDateWithinData);
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
 
@@ -254,26 +265,21 @@ const PrayerStatusBottomSheet = ({
         query += ` WHERE date = ? AND salahName = ?`;
         values.push(clickedDate, clickedSalah);
 
-        console.log("🚀 ~ query:", query);
-        console.log("🚀 ~ values:", values);
+        // console.log("🚀 ~ query:", query);
+        // console.log("🚀 ~ values:", values);
         await dbConnection.current?.query(query, values);
 
-        // const moreRows = await fetchSalahTrackingDataFromDB(sIndex, eIndex);
-        // setData((prevData: SalahRecordsArray) => {
-        //   console.log("🚀 ~ prevData:", prevData);
-        //   return [...prevData, ...moreRows];
-        // });
+        const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
-        // console.log("moreRows:", moreRows);
+        if (findDateWithinData) {
+          findDateWithinData.salahs[clickedSalah] = salahStatus;
+        } else {
+          console.error(`Date ${clickedDate} not found in data`);
+        }
 
-        // console.log("🚀 ~ setData ~ moreRows:", moreRows);
-        // console.log("yo", eIndex);
-        // setData(await fetchSalahTrackingDataFromDB(sIndex, eIndex));
+        setData([...data]);
       }
-
-      // console.log("DATA INSERTED INTO DATABASE");
     } catch (error) {
-      // console.error("ERROR WITHIN addOrModifySalah function:");
       console.error(error);
     } finally {
       try {
