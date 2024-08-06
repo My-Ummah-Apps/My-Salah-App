@@ -20,15 +20,12 @@ const PrayerStatusBottomSheet = ({
   reasonsArray,
   clickedDate,
   clickedSalah,
-  // cellDate,
   userGender,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
   setHasUserClickedDate,
-  hasUserClickedDate, // customReason,
-  // salahStatus,
-} // setSalahStatus,
-: {
+  hasUserClickedDate,
+}: {
   dbConnection: any;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   data: any;
@@ -37,26 +34,18 @@ const PrayerStatusBottomSheet = ({
   ) => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
-  setCellColor: any;
   clickedDate: string;
   clickedSalah: string;
-  // cellDate: string;
   userGender: string;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   hasUserClickedDate: boolean;
-  // setSalahStatus: React.Dispatch<React.SetStateAction<string>>;
-  // salahStatus: string;
-  // customReason: string;
 }) => {
-  // console.log("CLICKED DATE IS: ", clickedDate);
-  // console.log("clickedSalah ", clickedSalah);
-  const [updatingDatabase, setUpdatingDatabase] = useState<boolean>();
+  // TODO: On very first app launch, the reasons section does not slide in, after a refresh it starts working
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
-  // const [selectedSalah, setSelectedSalah] = useState("");
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState("");
@@ -82,13 +71,6 @@ const PrayerStatusBottomSheet = ({
   ): Promise<boolean> => {
     console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
     console.log("isDatabaseUpdating? ", isDatabaseUpdating);
-    // if (isDatabaseUpdating) {
-    //   throw new Error(
-    //     "Database already updating, unable to run doesSalahAndDateExists"
-    //   );
-    // }
-
-    isDatabaseUpdating = true;
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -100,15 +82,14 @@ const PrayerStatusBottomSheet = ({
     `,
         [clickedSalah, clickedDate]
       );
-      console.log("res is: ");
-      console.log(res);
+
+      console.log("res is: ", res);
 
       if (res && res.values && res.values.length === 0) {
         console.log("SALAH DATA NOT FOUND, RES.VALUES IS: ", res.values);
         setSalahStatus("");
         setNotes("");
         setSelectedReasons([]);
-
         return false;
       } else if (res && res.values && res.values.length > 0) {
         console.log("SALAH DATA FOUND, RES.VALUES IS: ", res.values);
@@ -121,10 +102,8 @@ const PrayerStatusBottomSheet = ({
       console.error(error);
     } finally {
       try {
-        // isDatabaseUpdating = false;
-        if (!isDatabaseUpdating) {
-          await checkAndOpenOrCloseDBConnection("close");
-        }
+        // TODO: Below is stopping the database from being updated so have commented it out for now, this needs to be debugged
+        // await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.log(error);
       }
@@ -132,6 +111,19 @@ const PrayerStatusBottomSheet = ({
 
     return false;
   };
+
+  useEffect(() => {
+    const checkDB = async () => {
+      try {
+        await doesSalahAndDateExists(clickedSalah, clickedDate);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    checkDB();
+  }, []);
+  // }, [clickedDate]);
 
   const addOrModifySalah = async (
     clickedDate: string,
@@ -141,32 +133,16 @@ const PrayerStatusBottomSheet = ({
     notes?: string
   ) => {
     // console.log("addOrModifySalah HAS RUN");
-    // console.log(clickedSalah, salahStatus, date, reasons, notes);
-    // console.log("clickedSalah: ", clickedSalah);
-    // if (isDatabaseUpdating) return false;
-
-    // isDatabaseUpdating = true;
-    // console.log("UPDATING DATABASE STATE IS: " + updatingDatabase);
 
     const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
-      // const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-      // if (isDatabaseOpen?.result === false) {
-      //   // await dbConnection.current?.open();
-      //   await checkAndOpenOrCloseDBConnection("open");
-      //   console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
-      // } // This conditional check needs to be done throughout the app, it looks like the database connection is being left open somewhere, which is causing errors in the console.log, need to eliminate these errors and hopefully this will mean that isDatabaseUpdating checks will no longer be required
-
-      // await checkAndOpenOrCloseDBConnection("open");
 
       const salahAndDateExist = await doesSalahAndDateExists(
         clickedSalah,
         clickedDate
       );
-
-      // console.log("Does salah and date exist: ", salahAndDateExist);
 
       if (!salahAndDateExist) {
         console.log("ADDING ITEM...");
@@ -546,11 +522,6 @@ const PrayerStatusBottomSheet = ({
                         selectedReasons,
                         notes
                       );
-                      // setCellColor(
-                      //   <div
-                      //     className={`${iconStyles} ${dict[salahStatus]} `}
-                      //   ></div>
-                      // );
 
                       setShowUpdateStatusModal(false);
                     }

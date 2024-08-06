@@ -28,22 +28,22 @@ const useSQLiteDB = () => {
 
         const isConn = (
           await sqliteConnection.current.isConnection(
-            "salahtrackingtable",
+            "mysalahappdatabase",
             false
           )
         ).result; // The isConnection method checks if there is an existing connection
 
         if (connectionConsistency.result && isConn) {
-          // Retrieve the existing connection to "salahtrackingtable"
+          // Retrieve the existing connection to "mysalahappdatabase"
           dbConnection.current =
             await sqliteConnection.current.retrieveConnection(
-              "salahtrackingtable",
+              "mysalahappdatabase",
               false
             );
 
           console.log("connectionConsistency.result && isConn both true");
         } else {
-          // If the dbConnection does not exist then create a new connection (additionally, if the "salahtrackingtable" database does not exist, create it at the same time as establishing the new connection)
+          // If the dbConnection does not exist then create a new connection (additionally, if the "mysalahappdatabase" database does not exist, create it at the same time as establishing the new connection)
           console.log(
             "connectionConsistency.result && isConn not true therefore CREATING / CONNECTING TO DATABASE"
           );
@@ -97,6 +97,7 @@ const useSQLiteDB = () => {
       }
 
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
+      console.log("isDatabaseOpen", isDatabaseOpen);
 
       if (isDatabaseOpen.result === undefined) {
         throw new Error(

@@ -1,12 +1,17 @@
 import { useState, useRef, useEffect } from "react";
-import { salahTrackingEntryType } from "../../types/types";
+// import { salahTrackingEntryType } from "../../types/types";
 import { CSSProperties } from "react";
 
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import _ from "lodash";
+import styles from "./InfiniteLoader.example.css";
+import InfiniteLoader from "react-window-infinite-loader";
+
+// import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
+// import { List, AutoSizer, InfiniteLoader } from "react-virtualized";
+// AutoSizer;
 
 import {
   format,
@@ -24,16 +29,18 @@ import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 const Calendar = ({
   // setShowCalendarOneMonth,
   // showCalendarOneMonth,
-  userStartDate,
-} // startDate,
-: {
+  userStartDate, // startDate,
+}: {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
+  data: any;
   userStartDate: string;
 
-  salahTrackingArray: salahTrackingEntryType[];
+  // salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
 }) => {
+  // TODO: Step 1 - Set up initial salah data from the database, this will be replacing salahTrackingArray, initial data needs to cover maybe six months but will need to test how fast calender months can be scrolled
+  // TODO: Step 2 - Implement similar functionality to the fetchSalahTrackingDataFromDB function from app.tsx, this functionality will be for the loadMoreItems function that react-window uses
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
   useEffect(() => {
@@ -122,26 +129,6 @@ const Calendar = ({
 
   //   // let sameDatesArrayLength = sameDatesArray.length;
 
-  //   let color;
-
-  //   // if (salahName) {
-  //   //   if (sameDatesArrayLength === 0) {
-  //   //     color = "transparent";
-  //   //   } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-  //   //     color = { fajrColor };
-  //   //   }
-  //   // } else if (!salahName) {
-  //   //   if (sameDatesArrayLength === 0) {
-  //   //     color = { asarColor };
-  //   //   } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-  //   //     color = { zoharColor };
-  //   //   } else if (sameDatesArrayLength === 5) {
-  //   //     color = { ishaColor };
-  //   //   }
-  //   // }
-
-  //   // sameDatesArray = [];
-  //   return color;
   // };
 
   let todaysDate = new Date();
@@ -162,14 +149,6 @@ const Calendar = ({
     format(month, "MMMM yyyy")
   );
   formattedMonths.reverse();
-
-  // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
-  //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
-  //   monthsInYear = monthsInYear.filter(
-  //     // (month) => month < userStartDateFormatted
-  //      isAfter(month, p)
-  //   );
-  // }
 
   // const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
   // console.log(monthStrings);
@@ -217,38 +196,38 @@ const Calendar = ({
     maghribColor = "#585858";
     ishaColor = "#585858";
 
-    salahTrackingArray.forEach((item) => {
-      let formattedDate = format(date, "dd.MM.yy");
-      let completedDates = item.completedDates;
+    // salahTrackingArray.forEach((item) => {
+    //   let formattedDate = format(date, "dd.MM.yy");
+    //   let completedDates = item.completedDates;
 
-      for (let key in completedDates) {
-        if (completedDates[key].hasOwnProperty(formattedDate)) {
-          if (Object.keys(completedDates[key])[0] === formattedDate) {
-            if (item.salahName === "Fajr") {
-              fajrColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Dhuhr") {
-              zoharColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Asar") {
-              asarColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Maghrib") {
-              maghribColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Isha") {
-              ishaColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            }
-          }
-        }
-      }
-    });
+    //   for (let key in completedDates) {
+    //     if (completedDates[key].hasOwnProperty(formattedDate)) {
+    //       if (Object.keys(completedDates[key])[0] === formattedDate) {
+    //         if (item.salahName === "Fajr") {
+    //           fajrColor = generateRadialColor({
+    //             formattedDate: completedDates[key][formattedDate].status,
+    //           });
+    //         } else if (item.salahName === "Dhuhr") {
+    //           zoharColor = generateRadialColor({
+    //             formattedDate: completedDates[key][formattedDate].status,
+    //           });
+    //         } else if (item.salahName === "Asar") {
+    //           asarColor = generateRadialColor({
+    //             formattedDate: completedDates[key][formattedDate].status,
+    //           });
+    //         } else if (item.salahName === "Maghrib") {
+    //           maghribColor = generateRadialColor({
+    //             formattedDate: completedDates[key][formattedDate].status,
+    //           });
+    //         } else if (item.salahName === "Isha") {
+    //           ishaColor = generateRadialColor({
+    //             formattedDate: completedDates[key][formattedDate].status,
+    //           });
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
     return null;
   }
 
@@ -385,13 +364,49 @@ const Calendar = ({
     </div>
   );
 
+  const isItemLoaded = (index) => !!itemStatusMap[index];
+  const loadMoreItems = (startIndex, stopIndex) => {
+    // for (let index = startIndex; index <= stopIndex; index++) {
+    //   itemStatusMap[index] = LOADING;
+    // }
+  };
+
   return (
     // <div
     //   // style={{ height: singleMonthDivHeight }}
     //   className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md"
     // >
     <>
-      <AutoSizer disableHeight className="auto-sizer">
+      <InfiniteLoader
+        // isRowLoaded={isRowLoaded}
+        // loadMoreRows={loadMoreRows}
+        // rowCount={monthsBetween.length}
+        isItemLoaded={isItemLoaded}
+        itemCount={monthsBetween.length}
+        loadMoreItems={loadMoreItems}
+      >
+        {({ onRowsRendered, registerChild }) => (
+          <AutoSizer disableHeight>
+            {({ width }) => (
+              <List
+                // style={{ borderRadius: "0.5rem" }}
+                className="list rounded-2xl"
+                // height={330}
+                height={370}
+                itemCount={monthsBetween.length}
+                // itemCount
+                itemSize={300}
+                layout="horizontal"
+                width={width}
+                direction="rtl"
+              >
+                {Column}
+              </List>
+            )}
+          </AutoSizer>
+        )}
+      </InfiniteLoader>
+      {/* <AutoSizer disableHeight className="auto-sizer">
         {({ width }) => (
           <List
             // style={{ borderRadius: "0.5rem" }}
@@ -407,13 +422,13 @@ const Calendar = ({
             {Column}
           </List>
         )}
-      </AutoSizer>
-      <DailyOverviewBottomSheet
+      </AutoSizer> */}
+      {/* <DailyOverviewBottomSheet
         setShowDailySalahDataModal={setShowDailySalahDataModal}
         showDailySalahDataModal={showDailySalahDataModal}
         salahTrackingArray={salahTrackingArray}
         clickedDate={clickedDate}
-      />
+      /> */}
     </>
     // </div>
   );

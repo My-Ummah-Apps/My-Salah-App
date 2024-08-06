@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer, useRef } from "react";
+import React, { useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import "react-virtualized/styles.css";
@@ -22,8 +22,8 @@ const PrayerTable = ({
   datesFormatted,
   fetchSalahTrackingDataFromDB,
   userGender, // userStartDate,
-  // startDate,
-}: {
+} // startDate,
+: {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -44,13 +44,8 @@ const PrayerTable = ({
   // userStartDate: string;
   // startDate: Date;
 }) => {
-  console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", data);
+  // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", data);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
-  // const [salahStatus, setSalahStatus] = useState<string | undefined>();
-  // userStartDate = "05.05.22";
-  let [cellColor, setCellColor] = useState<string>("");
-  // let sIndex: number = 0;
-  // let eIndex: number = 0;
 
   const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
@@ -183,7 +178,6 @@ const PrayerTable = ({
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          setCellColor={setCellColor}
           setData={setData}
           data={data}
           setReasonsArray={setReasonsArray}

@@ -217,13 +217,11 @@ const App = () => {
     }
   };
 
-  let holdArr: any;
-  holdArr = [];
+  let holdArr = [];
   const fetchSalahTrackingDataFromDB = async (
     startIndex: number,
     endIndex: number
   ) => {
-    // holdArr = [];
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
       console.log("START AND END INDEX: " + startIndex, endIndex);
@@ -241,11 +239,6 @@ const App = () => {
         slicedDatesFormattedArr
       );
 
-      console.log("RES IS: ");
-      console.log(res);
-      // console.log(slicedDatesFormattedArr);
-
-      // console.log("staticDateAndDatabaseDataCombined HAS RUN");
       for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
         const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
 
@@ -267,7 +260,6 @@ const App = () => {
         if (res?.values && res.values.length > 0) {
           for (let i = 0; i < res.values.length; i++) {
             if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
-              // console.log("DATE MATCH DETECTED");
               let salahName: any = res?.values?.[i].salahName;
               let salahStatus: string = res?.values?.[i].salahStatus;
               singleSalahObj.salahs[salahName] = salahStatus;
@@ -278,11 +270,6 @@ const App = () => {
         holdArr.push(singleSalahObj);
       }
 
-      // console.log("holdArr data is:");
-      // console.log(holdArr);
-      // console.log("holdArr length is:");
-      // console.log(holdArr.length);
-
       return holdArr;
     } catch (error) {
       console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: " + error);
@@ -291,7 +278,7 @@ const App = () => {
       try {
         await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.log("ERROR CLOSING DATABASE CONNECTION: " + error);
+        console.error(error);
       }
     }
   };
@@ -543,6 +530,7 @@ const App = () => {
               <StatsPage
                 userGender={userGender}
                 userStartDate={userStartDate}
+                data={data}
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
                 setHeading={setHeading}

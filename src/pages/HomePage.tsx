@@ -13,7 +13,6 @@ const HomePage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   renderTable,
-
   setData,
   data,
   setReasonsArray,

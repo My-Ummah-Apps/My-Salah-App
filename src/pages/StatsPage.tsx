@@ -11,12 +11,14 @@ import DonutPieChart from "../components/Stats/DonutPieChart";
 
 const StatsPage = ({
   userGender,
+  data,
   setHeading,
   userStartDate,
   pageStyles,
   startDate,
 }: {
   userGender: userGenderType;
+  data: any;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
@@ -25,6 +27,7 @@ const StatsPage = ({
   useEffect(() => {
     setHeading("Stats");
   }, []);
+
   // let jamaahStat = 0;
   // let aloneStat = 0;
   // let lateStat = 0;
@@ -145,6 +148,7 @@ const StatsPage = ({
       )}
       <Calendar
         userStartDate={userStartDate}
+        data={data}
         startDate={startDate}
         // setCurrentWeek={setCurrentWeek}
         // currentWeek={currentWeek}
