@@ -19,23 +19,22 @@ const useSQLiteDB = () => {
     const initialiseDB = async () => {
       try {
         // if (sqliteConnection && dbConnection) return;
-        if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so no need to re-initialise by running the code below, hence it will return out of the function at this point
+        if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so return out of the function
         console.log("INITIALISING DATABASE");
 
         sqliteConnection.current = new SQLiteConnection(CapacitorSQLite); // Create a new SQLiteConnection instance and assign it to sqliteConnection.current.
         const connectionConsistency =
-          await sqliteConnection.current.checkConnectionsConsistency(); // Check the consistency of the connections and store the result in connectionConsistency.
+          await sqliteConnection.current.checkConnectionsConsistency();
 
         const isConn = (
           await sqliteConnection.current.isConnection(
             "salahtrackingtable",
             false
           )
-        ).result; // The isConnection method checks if there is an existing connection, will return a boolean and possibly undefined also
+        ).result; // The isConnection method checks if there is an existing connection
 
-        // Is the connection consistent and does the dbConnection connection already exist?
         if (connectionConsistency.result && isConn) {
-          // Retrieve the existing connection to "salahtrackingtable".
+          // Retrieve the existing connection to "salahtrackingtable"
           dbConnection.current =
             await sqliteConnection.current.retrieveConnection(
               "salahtrackingtable",
@@ -63,7 +62,6 @@ const useSQLiteDB = () => {
         console.log("Database initialisation complete");
       } catch (error) {
         console.error("Error initializing database: " + error);
-        // throw new Error("Database initialization failed");
       }
     };
 
@@ -75,30 +73,36 @@ const useSQLiteDB = () => {
     // });
 
     // Cleanup function to close the database connection when the component unmounts
+    const cleanUp = async () => {
+      await checkAndOpenOrCloseDBConnection("close");
+    };
     return () => {
-      const cleanupDB = async () => {
-        console.log("cleanup within initialiseDB has run");
-        await checkAndOpenOrCloseDBConnection("close");
-      };
-      cleanupDB();
-      console.log("CLEANUP WITHIN initialiseDB()");
+      console.log("cleanup within initialiseDB has run");
+      cleanUp();
     };
   }, []);
 
   async function checkAndOpenOrCloseDBConnection(
     action: DBConnectionStateType
   ) {
-    console.log("checkAndOpenOrCloseDBConnection has run");
+    console.log(
+      "checkAndOpenOrCloseDBConnection has run, dbConnection.current is:"
+    );
+    console.log(dbConnection.current);
     try {
       if (!dbConnection.current) {
         throw new Error(
-          "Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection.current is falsy"
+          `Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection.current is ${dbConnection.current}`
         );
       }
-      console.log("dbConnection.current exists");
+
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
 
-      if (action === "open" && isDatabaseOpen.result === false) {
+      if (isDatabaseOpen.result === undefined) {
+        throw new Error(
+          "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
+        );
+      } else if (action === "open" && isDatabaseOpen.result === false) {
         await dbConnection.current?.open();
         console.log(
           "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
@@ -108,17 +112,13 @@ const useSQLiteDB = () => {
         console.log(
           "Database connection closed within checkAndOpenOrCloseDBConnection function"
         );
-      } else if (isDatabaseOpen.result === undefined) {
-        throw new Error(
-          "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
-        );
       } else {
         throw new Error(
           `Database is open: ${isDatabaseOpen.result}, unable to ${action} database connection`
         );
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

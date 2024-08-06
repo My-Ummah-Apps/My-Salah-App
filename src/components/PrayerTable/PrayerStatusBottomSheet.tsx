@@ -26,8 +26,8 @@ const PrayerStatusBottomSheet = ({
   setShowUpdateStatusModal,
   setHasUserClickedDate,
   hasUserClickedDate, // customReason,
-  // setSalahStatus,
-} // salahStatus,
+  // salahStatus,
+} // setSalahStatus,
 : {
   dbConnection: any;
   setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
@@ -151,12 +151,13 @@ const PrayerStatusBottomSheet = ({
     const findDateWithinData = data.find((obj) => obj.date === clickedDate);
 
     try {
-      const isDatabaseOpen = await dbConnection.current?.isDBOpen();
-      if (isDatabaseOpen?.result === false) {
-        // await dbConnection.current?.open();
-        await checkAndOpenOrCloseDBConnection("open");
-        console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
-      } // This conditional check needs to be done throughout the app, it looks like the database connection is being left open somewhere, which is causing errors in the console.log, need to eliminate these errors and hopefully this will mean that isDatabaseUpdating checks will no longer be required
+      await checkAndOpenOrCloseDBConnection("open");
+      // const isDatabaseOpen = await dbConnection.current?.isDBOpen();
+      // if (isDatabaseOpen?.result === false) {
+      //   // await dbConnection.current?.open();
+      //   await checkAndOpenOrCloseDBConnection("open");
+      //   console.log("DB CONNECTION OPENED IN doesSalahAndDateExists FUNCTION");
+      // } // This conditional check needs to be done throughout the app, it looks like the database connection is being left open somewhere, which is causing errors in the console.log, need to eliminate these errors and hopefully this will mean that isDatabaseUpdating checks will no longer be required
 
       // await checkAndOpenOrCloseDBConnection("open");
 
