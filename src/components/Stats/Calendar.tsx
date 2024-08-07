@@ -7,9 +7,10 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 import styles from "./InfiniteLoader.example.css";
 import InfiniteLoader from "react-window-infinite-loader";
-
 // import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { DBConnectionStateType } from "../../types/types";
 // import { List, AutoSizer, InfiniteLoader } from "react-virtualized";
 // AutoSizer;
 
@@ -27,20 +28,158 @@ import {
 import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 
 const Calendar = ({
+  dbConnection,
   // setShowCalendarOneMonth,
   // showCalendarOneMonth,
-  userStartDate, // startDate,
+  userStartDate,
+  checkAndOpenOrCloseDBConnection,
 }: {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   data: any;
   userStartDate: string;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
 
-  // salahTrackingArray: salahTrackingEntryType[];
   startDate: Date;
 }) => {
   // TODO: Step 1 - Set up initial salah data from the database, this will be replacing salahTrackingArray, initial data needs to cover maybe six months but will need to test how fast calender months can be scrolled
   // TODO: Step 2 - Implement similar functionality to the fetchSalahTrackingDataFromDB function from app.tsx, this functionality will be for the loadMoreItems function that react-window uses
+
+  const [salahData, setSalahData] = useState();
+  let holdArr = [];
+
+  useEffect(() => {
+    const grabSalahData = async () => {
+      // setSalahData(await fetchSalahTrackingDataFromDB());
+      // setSalahData(await fetchSalahTrackingDataFromDB(0, 400));
+    };
+    grabSalahData();
+  }, []);
+
+  const fetchSalahTrackingDataFromDB = async (
+    startIndex?: number,
+    endIndex?: number
+  ) => {
+    console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
+    try {
+      // console.log("START AND END INDEX: " + startIndex, endIndex);
+      await checkAndOpenOrCloseDBConnection("open");
+
+      // const slicedDatesFormattedArr = datesFormatted.slice(
+      //   startIndex,
+      //   endIndex
+      // );
+      // const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
+
+      // const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
+      const res = await dbConnection.current?.query(
+        `SELECT * FROM salahtrackingtable`
+      );
+
+      console.log("ress is: ", res);
+
+      // for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
+      //   // const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
+
+      // type Salahs = {
+      //   [key: string]: string;
+      // };
+
+      const reformattedSalahData = [];
+      const datesArr = [];
+
+      // Grab a date
+      // TODO: Create array of objects from the database data (res), this array will then be used for the radial functions
+      res?.values?.forEach((obj) => {
+        console.log(obj);
+        let dateObj = {};
+        let date = obj.date;
+        console.log("date: ", date);
+        if (!datesArr.includes(date)) {
+          datesArr.push(date);
+        }
+      });
+
+      console.log("datesArr: ", datesArr);
+
+      // setSalahData([
+      //   {
+      //     "01.08.24": [
+      //       {
+      //         salahName: "zohar",
+      //         status: "group",
+      //       },
+      //       {
+      //         salahName: "asar",
+      //         status: "missed",
+      //       },
+      //       {
+      //         salahName: "isha",
+      //         status: "late",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     "02.08.24": [
+      //       {
+      //         salahName: "fajr",
+      //         status: "group",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     "03.08.24": [
+      //       {
+      //         salahName: "isha",
+      //         status: "group",
+      //       },
+      //     ],
+      //   },
+      // ]);
+
+      // Date, salah name, status
+      let dateFromDatesFormattedArr = [];
+
+      let singleSalahObj = {
+        date: dateFromDatesFormattedArr,
+        salahs: {
+          Fajr: "",
+          Dhuhr: "",
+          Asar: "",
+          Maghrib: "",
+          Isha: "",
+        } as Salahs,
+      };
+
+      if (res?.values && res.values.length > 0) {
+        for (let i = 0; i < res.values.length; i++) {
+          if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
+            let salahName: any = res?.values?.[i].salahName;
+            let salahStatus: string = res?.values?.[i].salahStatus;
+            singleSalahObj.salahs[salahName] = salahStatus;
+          }
+        }
+      }
+
+      holdArr.push(singleSalahObj);
+
+      return holdArr;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  fetchSalahTrackingDataFromDB();
+
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
   useEffect(() => {
@@ -54,7 +193,7 @@ const Calendar = ({
   });
 
   const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
-  console.log(showDailySalahDataModal);
+  // console.log(showDailySalahDataModal);
   const [clickedDate, setClickedDate] = useState<string>("");
 
   // useEffect(() => {
@@ -68,15 +207,6 @@ const Calendar = ({
   // };
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
-
-  // const p = salahTrackingArray.map((item) => {
-  //   const array = item.completedDates;
-  //   // console.log(Object.keys(item.completedDates[0])[0]);
-  //   return item;
-  //   // array.forEach((item) => console.log(item.notes));
-  //   // return item;
-  // });
-  // console.log(p);
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
@@ -195,6 +325,9 @@ const Calendar = ({
     asarColor = "#585858";
     maghribColor = "#585858";
     ishaColor = "#585858";
+
+    // console.log("dummyData", dummyData);
+    // dummyData
 
     // salahTrackingArray.forEach((item) => {
     //   let formattedDate = format(date, "dd.MM.yy");
@@ -365,10 +498,17 @@ const Calendar = ({
   );
 
   const isItemLoaded = (index) => !!itemStatusMap[index];
-  const loadMoreItems = (startIndex, stopIndex) => {
-    // for (let index = startIndex; index <= stopIndex; index++) {
-    //   itemStatusMap[index] = LOADING;
-    // }
+  const loadMoreItems = async (startIndex, stopIndex) => {
+    try {
+      const moreRows = await fetchSalahTrackingDataFromDB(
+        startIndex,
+        stopIndex
+      );
+      console.log("START AND STOP INDEX: ", startIndex, stopIndex);
+      setSalahData((prevData) => [...prevData, ...moreRows]);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

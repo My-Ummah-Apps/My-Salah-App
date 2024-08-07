@@ -528,9 +528,13 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
+                dbConnection={dbConnection}
                 userGender={userGender}
                 userStartDate={userStartDate}
                 data={data}
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
                 setHeading={setHeading}

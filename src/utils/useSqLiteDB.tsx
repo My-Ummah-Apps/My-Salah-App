@@ -99,6 +99,14 @@ const useSQLiteDB = () => {
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
       console.log("isDatabaseOpen", isDatabaseOpen);
 
+      // TODO: The below eliminates errors for now which occurs if the app is trying to open the database but its already open and close it when its already closed, further investigation is needed however to see why attempts are being made to open/close the database when its already opened/closed
+      if (
+        (action === "open" && isDatabaseOpen.result === true) ||
+        (action === "close" && isDatabaseOpen.result === false)
+      ) {
+        return;
+      }
+
       if (isDatabaseOpen.result === undefined) {
         throw new Error(
           "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"

@@ -6,19 +6,26 @@ import Calendar from "../components/Stats/Calendar";
 // import { eachDayOfInterval, parse } from "date-fns";
 import { userGenderType } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
-
+import { DBConnectionStateType } from "../types/types";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
+  dbConnection,
   userGender,
   data,
+  checkAndOpenOrCloseDBConnection,
   setHeading,
   userStartDate,
   pageStyles,
   startDate,
 }: {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   userGender: userGenderType;
   data: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
@@ -147,9 +154,11 @@ const StatsPage = ({
         ""
       )}
       <Calendar
+        dbConnection={dbConnection}
         userStartDate={userStartDate}
         data={data}
         startDate={startDate}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         // setCurrentWeek={setCurrentWeek}
         // currentWeek={currentWeek}
       />{" "}
