@@ -48,7 +48,7 @@ const Calendar = ({
   // TODO: Step 1 - Set up initial salah data from the database, this will be replacing salahTrackingArray, initial data needs to cover maybe six months but will need to test how fast calender months can be scrolled
   // TODO: Step 2 - Implement similar functionality to the fetchSalahTrackingDataFromDB function from app.tsx, this functionality will be for the loadMoreItems function that react-window uses
 
-  const [salahData, setSalahData] = useState();
+  const [salahData, setSalahData] = useState([]);
   let holdArr = [];
 
   useEffect(() => {
@@ -59,10 +59,7 @@ const Calendar = ({
     grabSalahData();
   }, []);
 
-  const fetchSalahTrackingDataFromDB = async (
-    startIndex?: number,
-    endIndex?: number
-  ) => {
+  const fetchSalahTrackingDataFromDB = async () => {
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
       // console.log("START AND END INDEX: " + startIndex, endIndex);
@@ -89,84 +86,61 @@ const Calendar = ({
       // };
 
       const reformattedSalahData = [];
-      const datesArr = [];
+      const salahArr = [];
+
+      // let singleSalahObj = {
+      //   date: dateFromDatesFormattedArr,
+      //   salahs: {
+      //     Fajr: "",
+      //     Dhuhr: "",
+      //     Asar: "",
+      //     Maghrib: "",
+      //     Isha: "",
+      //   } as Salahs,
+      // };
+
+      let emptyArr = [];
 
       // Grab a date
       // TODO: Create array of objects from the database data (res), this array will then be used for the radial functions
-      res?.values?.forEach((obj) => {
-        console.log(obj);
-        let dateObj = {};
-        let date = obj.date;
-        console.log("date: ", date);
-        if (!datesArr.includes(date)) {
-          datesArr.push(date);
-        }
-      });
+      if (res && res.values) {
+        const resValues = res.values;
+        res.values.forEach((obj) => {
+          if (!salahData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
+            console.log(`Date ${obj.date} does not exist`);
+            let currentDate = obj.date;
+            // let date = obj.date;
+            let singleSalahObj = {
+              [obj.date]: [],
+            };
+            for (let i = 0; i < resValues.length; i++) {
+              if (resValues[i].date === currentDate) {
+                console.log(`res.values[i]:`);
+                console.log(resValues[i]);
 
-      console.log("datesArr: ", datesArr);
+                let singleObj = {
+                  salahName: resValues[i].salahName,
+                  salahStatus: resValues[i].salahStatus,
+                };
+                singleSalahObj[obj.date].push(singleObj);
+              }
+            }
+            console.log(`singleSalahObj:`);
+            console.log(singleSalahObj);
+            // if (!emptyArr.includes())
 
-      // setSalahData([
-      //   {
-      //     "01.08.24": [
-      //       {
-      //         salahName: "zohar",
-      //         status: "group",
-      //       },
-      //       {
-      //         salahName: "asar",
-      //         status: "missed",
-      //       },
-      //       {
-      //         salahName: "isha",
-      //         status: "late",
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     "02.08.24": [
-      //       {
-      //         salahName: "fajr",
-      //         status: "group",
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     "03.08.24": [
-      //       {
-      //         salahName: "isha",
-      //         status: "group",
-      //       },
-      //     ],
-      //   },
-      // ]);
-
-      // Date, salah name, status
-      let dateFromDatesFormattedArr = [];
-
-      let singleSalahObj = {
-        date: dateFromDatesFormattedArr,
-        salahs: {
-          Fajr: "",
-          Dhuhr: "",
-          Asar: "",
-          Maghrib: "",
-          Isha: "",
-        } as Salahs,
-      };
-
-      if (res?.values && res.values.length > 0) {
-        for (let i = 0; i < res.values.length; i++) {
-          if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
-            let salahName: any = res?.values?.[i].salahName;
-            let salahStatus: string = res?.values?.[i].salahStatus;
-            singleSalahObj.salahs[salahName] = salahStatus;
+            emptyArr.push(singleSalahObj);
+            // setSalahData((prevValue) => [...prevValue, ...emptyArr]);
+          } else {
+            console.log(`Date exists and is ${obj.date}`);
           }
-        }
+        });
       }
 
-      holdArr.push(singleSalahObj);
+      setSalahData(emptyArr);
+      console.log("empty array: ", emptyArr);
 
-      return holdArr;
+      // return holdArr;
     } catch (error) {
       console.error(error);
     } finally {
@@ -178,7 +152,13 @@ const Calendar = ({
     }
   };
 
-  fetchSalahTrackingDataFromDB();
+  useEffect(() => {
+    fetchSalahTrackingDataFromDB();
+  }, []);
+
+  useEffect(() => {
+    console.log("salahData: ", salahData);
+  }, [salahData]);
 
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
@@ -296,6 +276,8 @@ const Calendar = ({
   };
 
   function generateRadialColor(status: { [date: string]: string }) {
+    // TODO: Below log is coming up as undefined, data structure has now changed, so code potentially needs a heavy refactor so radial colors show
+    console.log("generateRadialColor date: ", status);
     return Object.values(status)[0] === "male-alone"
       ? "var(--alone-male-status-color)"
       : Object.values(status)[0] === "group"
@@ -329,37 +311,71 @@ const Calendar = ({
     // console.log("dummyData", dummyData);
     // dummyData
 
-    // salahTrackingArray.forEach((item) => {
-    //   let formattedDate = format(date, "dd.MM.yy");
-    //   let completedDates = item.completedDates;
+    // salahData.forEach((item) => {
+    let formattedDate = format(date, "dd.MM.yy");
+    // let completedDates = item.completedDates;
+    // console.log("item: ", item);
+    for (let key in salahData) {
+      // console.log(salahData[key]);
+      // console.log(formattedDate);
 
-    //   for (let key in completedDates) {
-    //     if (completedDates[key].hasOwnProperty(formattedDate)) {
-    //       if (Object.keys(completedDates[key])[0] === formattedDate) {
-    //         if (item.salahName === "Fajr") {
-    //           fajrColor = generateRadialColor({
-    //             formattedDate: completedDates[key][formattedDate].status,
-    //           });
-    //         } else if (item.salahName === "Dhuhr") {
-    //           zoharColor = generateRadialColor({
-    //             formattedDate: completedDates[key][formattedDate].status,
-    //           });
-    //         } else if (item.salahName === "Asar") {
-    //           asarColor = generateRadialColor({
-    //             formattedDate: completedDates[key][formattedDate].status,
-    //           });
-    //         } else if (item.salahName === "Maghrib") {
-    //           maghribColor = generateRadialColor({
-    //             formattedDate: completedDates[key][formattedDate].status,
-    //           });
-    //         } else if (item.salahName === "Isha") {
-    //           ishaColor = generateRadialColor({
-    //             formattedDate: completedDates[key][formattedDate].status,
-    //           });
-    //         }
+      if (salahData[key].hasOwnProperty(formattedDate)) {
+        console.log(salahData[key][formattedDate]);
+
+        // console.log(salahData[key]);
+        salahData[key][formattedDate].forEach((item) => {
+          if (item.salahName === "Fajr") {
+            fajrColor = generateRadialColor({
+              formattedDate: salahData[key][formattedDate].salahStatus,
+            });
+          } else if (item.salahName === "Dhuhr") {
+            zoharColor = generateRadialColor({
+              formattedDate: salahData[key][formattedDate].salahStatus,
+            });
+          } else if (item.salahName === "Asar") {
+            asarColor = generateRadialColor({
+              formattedDate: salahData[key][formattedDate].salahStatus,
+            });
+          } else if (item.salahName === "Maghrib") {
+            maghribColor = generateRadialColor({
+              formattedDate: salahData[key][formattedDate].salahStatus,
+            });
+          } else if (item.salahName === "Isha") {
+            ishaColor = generateRadialColor({
+              formattedDate: salahData[key][formattedDate].salahStatus,
+            });
+          }
+        });
+      }
+    }
+
+    // for (let key in completedDates) {
+    //   if (completedDates[key].hasOwnProperty(formattedDate)) {
+    //     if (Object.keys(completedDates[key])[0] === formattedDate) {
+    //       if (item.salahName === "Fajr") {
+    //         fajrColor = generateRadialColor({
+    //           formattedDate: completedDates[key][formattedDate].status,
+    //         });
+    //       } else if (item.salahName === "Dhuhr") {
+    //         zoharColor = generateRadialColor({
+    //           formattedDate: completedDates[key][formattedDate].status,
+    //         });
+    //       } else if (item.salahName === "Asar") {
+    //         asarColor = generateRadialColor({
+    //           formattedDate: completedDates[key][formattedDate].status,
+    //         });
+    //       } else if (item.salahName === "Maghrib") {
+    //         maghribColor = generateRadialColor({
+    //           formattedDate: completedDates[key][formattedDate].status,
+    //         });
+    //       } else if (item.salahName === "Isha") {
+    //         ishaColor = generateRadialColor({
+    //           formattedDate: completedDates[key][formattedDate].status,
+    //         });
     //       }
     //     }
     //   }
+    // }
     // });
     return null;
   }
@@ -500,10 +516,10 @@ const Calendar = ({
   const isItemLoaded = (index) => !!itemStatusMap[index];
   const loadMoreItems = async (startIndex, stopIndex) => {
     try {
-      const moreRows = await fetchSalahTrackingDataFromDB(
-        startIndex,
-        stopIndex
-      );
+      // const moreRows = await fetchSalahTrackingDataFromDB(
+      //   startIndex,
+      //   stopIndex
+      // );
       console.log("START AND STOP INDEX: ", startIndex, stopIndex);
       setSalahData((prevData) => [...prevData, ...moreRows]);
     } catch (error) {
