@@ -87,6 +87,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   const INITIAL_LOAD_SIZE = 50;
   const [salahData, setSalahData] = useState<SalahRecordsArray>();
+  const [DBResultCalenderData, setDBResultCalenderData] = useState();
+
   console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
@@ -105,29 +107,41 @@ const App = () => {
     }
   }, [isDatabaseInitialised]);
   // isDatabaseInitialised is only initialised once, so can probably be safely removed
-  let DBResultCalenderData;
-  // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long
+  // let DBResultCalenderData;
+  // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long, also ensure this useEffect runs every time new data is INSERTED into the database ie whenever a table cell is updated, as this data will then need to reflect in the calendar component
   useEffect(() => {
-    if (renderTable === true) {
-      const fetchCalenderData = async () => {
+    // if (renderTable === true) {
+
+    const fetchCalendarData = async () => {
+      console.log("fetchCalendarData has run");
+      try {
+        await checkAndOpenOrCloseDBConnection("open");
+        setDBResultCalenderData(
+          await dbConnection.current?.query(`SELECT * FROM salahtrackingtable`)
+        );
+        // DBResultCalenderData = await dbConnection.current?.query(
+        //   `SELECT * FROM salahtrackingtable`
+        // );
+      } catch (error) {
+        console.error("error fetching calender salahData: ", error);
+      } finally {
         try {
-          await checkAndOpenOrCloseDBConnection("open");
-          DBResultCalenderData = await dbConnection.current?.query(
-            `SELECT * FROM salahtrackingtable`
-          );
+          await checkAndOpenOrCloseDBConnection("close");
         } catch (error) {
-          console.error("error fetching calender salahData: ", error);
-        } finally {
-          try {
-            await checkAndOpenOrCloseDBConnection("close");
-          } catch (error) {
-            console.error("error closing database connection", error);
-          }
+          console.error("error closing database connection", error);
         }
-      };
-      fetchCalenderData();
-    }
-  }, [salahData]);
+      }
+
+      console.log("DBResultCalenderData,", DBResultCalenderData);
+    };
+    const executeFetch = async () => {
+      await fetchCalendarData();
+    };
+
+    executeFetch();
+
+    // }
+  }, []);
 
   const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");

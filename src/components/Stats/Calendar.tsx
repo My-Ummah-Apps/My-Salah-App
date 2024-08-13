@@ -25,26 +25,26 @@ import {
 import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 
 const Calendar = ({
-  dbConnection,
+  // dbConnection,
   // salahData,
   DBResultCalenderData,
   // setShowCalendarOneMonth,
   // showCalendarOneMonth,
-  userStartDate,
-  checkAndOpenOrCloseDBConnection,
+  userStartDate, // checkAndOpenOrCloseDBConnection,
 }: {
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   // salahData: any;
   DBResultCalenderData: any;
   userStartDate: string;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
 
   startDate: Date;
 }) => {
+  console.log("DBResultCalenderData,", DBResultCalenderData);
   const [calenderData, setCalenderData] = useState([]);
 
   const modifyDBResultCalenderData = () => {
@@ -54,6 +54,8 @@ const Calendar = ({
 
     if (DBResultCalenderData && DBResultCalenderData.values) {
       const resValues = DBResultCalenderData.values;
+      console.log("🚀 ~ modifyDBResultCalenderData ~ resValues:", resValues);
+
       resValues.forEach((obj) => {
         if (!calenderData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
           console.log(`Date ${obj.date} does not exist`);
@@ -232,7 +234,9 @@ const Calendar = ({
       : "";
   }
 
+  // ! BUG: Below function is running a huge amount of times as the calender months are scrolled, this is going to cause performance issues, need to find a fix for this
   function determineRadialColors(date: Date) {
+    console.log("determineRadialColors has run");
     if (date < userStartDateFormatted || date > todaysDate) {
       fajrColor = "transparent";
       zoharColor = "transparent";
@@ -248,11 +252,10 @@ const Calendar = ({
     ishaColor = "#585858";
 
     let formattedDate = format(date, "dd.MM.yy");
-
+    console.log("CalenderData: ", calenderData);
     for (let key in calenderData) {
       if (calenderData[key].hasOwnProperty(formattedDate)) {
         calenderData[key][formattedDate].forEach((item) => {
-          // console.log(item.salahName);
           if (item.salahName === "Fajr") {
             fajrColor = generateRadialColor(item.salahStatus);
           } else if (item.salahName === "Dhuhr") {
@@ -404,19 +407,8 @@ const Calendar = ({
     </div>
   );
 
-  const isItemLoaded = (index) => !!itemStatusMap[index];
-  const loadMoreItems = async (startIndex, stopIndex) => {
-    try {
-      // const moreRows = modifyDBResultCalenderData(
-      //   startIndex,
-      //   stopIndex
-      // );
-      console.log("START AND STOP INDEX: ", startIndex, stopIndex);
-      setCalenderData((prevData) => [...prevData, ...moreRows]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const isItemLoaded = (index) => !!itemStatusMap[index];
+  // const loadMoreItems = async (startIndex: number, stopIndex: number) => {};
 
   return (
     // <div
@@ -424,35 +416,35 @@ const Calendar = ({
     //   className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md"
     // >
     <>
-      <InfiniteLoader
+      {/* <InfiniteLoader
         // isRowLoaded={isRowLoaded}
         // loadMoreRows={loadMoreRows}
         // rowCount={monthsBetween.length}
         isItemLoaded={isItemLoaded}
         itemCount={monthsBetween.length}
         loadMoreItems={loadMoreItems}
-      >
-        {({ onRowsRendered, registerChild }) => (
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <List
-                // style={{ borderRadius: "0.5rem" }}
-                className="list rounded-2xl"
-                // height={330}
-                height={370}
-                itemCount={monthsBetween.length}
-                // itemCount
-                itemSize={300}
-                layout="horizontal"
-                width={width}
-                direction="rtl"
-              >
-                {Column}
-              </List>
-            )}
-          </AutoSizer>
+      > */}
+      {/* {({ onRowsRendered, registerChild }) => ( */}
+      <AutoSizer disableHeight>
+        {({ width }) => (
+          <List
+            // style={{ borderRadius: "0.5rem" }}
+            className="list rounded-2xl"
+            // height={330}
+            height={370}
+            itemCount={monthsBetween.length}
+            // itemCount
+            itemSize={300}
+            layout="horizontal"
+            width={width}
+            direction="rtl"
+          >
+            {Column}
+          </List>
         )}
-      </InfiniteLoader>
+      </AutoSizer>
+      {/* )} */}
+      {/* </InfiniteLoader> */}
       {/* <AutoSizer disableHeight className="auto-sizer">
         {({ width }) => (
           <List
