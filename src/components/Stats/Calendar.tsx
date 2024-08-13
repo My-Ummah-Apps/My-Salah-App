@@ -58,7 +58,7 @@ const Calendar = ({
         `SELECT * FROM salahtrackingtable`
       );
 
-      console.log("ress is: ", res);
+      // console.log("ress is: ", res);
 
       let emptyArr = [];
 
@@ -272,8 +272,6 @@ const Calendar = ({
 
     for (let key in salahData) {
       if (salahData[key].hasOwnProperty(formattedDate)) {
-        console.log("formattedDate data is: ", salahData[key][formattedDate]);
-
         salahData[key][formattedDate].forEach((item) => {
           // console.log(item.salahName);
           if (item.salahName === "Fajr") {

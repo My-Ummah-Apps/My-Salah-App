@@ -131,14 +131,21 @@ const App = () => {
       await checkAndOpenOrCloseDBConnection("open");
 
       // const query = `SELECT * FROM userpreferencestable`;
-      const res = await dbConnection.current?.query(
+      const DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userpreferencestable`
       );
 
-      console.log("RES (userpreferencestable) IS: ");
-      console.log(res);
+      // const DBResultPreferences2 = await dbConnection.current?.query(
+      //   `SELECT * FROM salahtrackingtable`
+      // );
 
-      if (res?.values && res.values.length === 0) {
+      // console.log("DBResultPreferences (userpreferencestable) IS: ");
+      // console.log(DBResultPreferences);
+
+      if (
+        DBResultPreferences?.values &&
+        DBResultPreferences.values.length === 0
+      ) {
         const insertQuery = `
           INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue) 
           VALUES 
@@ -164,19 +171,19 @@ const App = () => {
         setShowIntroModal(true);
       }
 
-      const userGenderRow = res?.values?.find(
+      const userGenderRow = DBResultPreferences?.values?.find(
         (row) => row.preferenceName === "userGender"
       );
 
-      const dailyNotificationRow = res?.values?.find(
+      const dailyNotificationRow = DBResultPreferences?.values?.find(
         (row) => row.preferenceName === "dailyNotification"
       );
       console.log("dailyNotificationRow", dailyNotificationRow);
-      const dailyNotificationTimeRow = res?.values?.find(
+      const dailyNotificationTimeRow = DBResultPreferences?.values?.find(
         (row) => row.preferenceName === "dailyNotificationTime"
       );
 
-      const reasons = res?.values?.find(
+      const reasons = DBResultPreferences?.values?.find(
         (row) => row.preferenceName === "reasonsArray"
       );
       setReasonsArray(reasons.preferenceValue.split(","));
@@ -198,12 +205,6 @@ const App = () => {
       } else {
         console.log("dailyNotificationTime row not found");
       }
-
-      // useEffect(() => {
-      //   if (!userGender) {
-      //
-      //   }
-      // }, []);
 
       // const insertQuery = `INSERT INTO userpreferencestable (userGender, notifications) VALUES (?,?)`;
     } catch (error) {
@@ -234,7 +235,7 @@ const App = () => {
       const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
 
       const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
-      const res = await dbConnection.current?.query(
+      const DBResultSalahData = await dbConnection.current?.query(
         query,
         slicedDatesFormattedArr
       );
@@ -257,11 +258,14 @@ const App = () => {
           } as Salahs,
         };
 
-        if (res?.values && res.values.length > 0) {
-          for (let i = 0; i < res.values.length; i++) {
-            if (res.values?.[i]?.date === dateFromDatesFormattedArr) {
-              let salahName: any = res?.values?.[i].salahName;
-              let salahStatus: string = res?.values?.[i].salahStatus;
+        if (DBResultSalahData?.values && DBResultSalahData.values.length > 0) {
+          for (let i = 0; i < DBResultSalahData.values.length; i++) {
+            if (
+              DBResultSalahData.values?.[i]?.date === dateFromDatesFormattedArr
+            ) {
+              let salahName: any = DBResultSalahData?.values?.[i].salahName;
+              let salahStatus: string =
+                DBResultSalahData?.values?.[i].salahStatus;
               singleSalahObj.salahs[salahName] = salahStatus;
             }
           }

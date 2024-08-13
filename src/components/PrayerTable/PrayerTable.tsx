@@ -22,8 +22,8 @@ const PrayerTable = ({
   datesFormatted,
   fetchSalahTrackingDataFromDB,
   userGender, // userStartDate,
-} // startDate,
-: {
+  // startDate,
+}: {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -44,6 +44,7 @@ const PrayerTable = ({
   // userStartDate: string;
   // startDate: Date;
 }) => {
+  // ! BUG: If the user scrolls too fast, the table doesn't crash, however, cells cannot be updated, and the table stops at a particular date, it doesn't go all the way back to the userstartdate as it should, if scrolling is done at a normal speed then these issues do not occur
   // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", data);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
@@ -98,7 +99,7 @@ const PrayerTable = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={datesFormatted.length}
-          threshold={100} // Threshold at which to pre-fetch data. A threshold X means that data will start loading when a user scrolls within X rows. Defaults is 15.
+          threshold={200} // Threshold at which to pre-fetch data. A threshold X means that data will start loading when a user scrolls within X rows. Defaults is 15.
         >
           {({ onRowsRendered, registerChild }) => (
             <Table
