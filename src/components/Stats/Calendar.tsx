@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-// import { salahTrackingEntryType } from "../../types/types";
 import { CSSProperties } from "react";
 
 import { FixedSizeList as List } from "react-window";
@@ -8,12 +7,9 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import styles from "./InfiniteLoader.example.css";
 import InfiniteLoader from "react-window-infinite-loader";
 import { prayerStatusColors } from "../../utils/prayerStatusColors";
-// import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { DBConnectionStateType } from "../../types/types";
-// import { List, AutoSizer, InfiniteLoader } from "react-virtualized";
-// AutoSizer;
 
 import {
   format,
@@ -46,59 +42,23 @@ const Calendar = ({
 
   startDate: Date;
 }) => {
-  // TODO: Step 1 - Set up initial salah data from the database, this will be replacing salahTrackingArray, initial data needs to cover maybe six months but will need to test how fast calender months can be scrolled
-  // TODO: Step 2 - Implement similar functionality to the fetchSalahTrackingDataFromDB function from app.tsx, this functionality will be for the loadMoreItems function that react-window uses
-
   const [salahData, setSalahData] = useState([]);
-  let holdArr = [];
 
   useEffect(() => {
-    const grabSalahData = async () => {
-      // setSalahData(await fetchSalahTrackingDataFromDB());
-      // setSalahData(await fetchSalahTrackingDataFromDB(0, 400));
-    };
+    const grabSalahData = async () => {};
     grabSalahData();
   }, []);
 
   const fetchSalahTrackingDataFromDB = async () => {
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
-      // console.log("START AND END INDEX: " + startIndex, endIndex);
       await checkAndOpenOrCloseDBConnection("open");
 
-      // const slicedDatesFormattedArr = datesFormatted.slice(
-      //   startIndex,
-      //   endIndex
-      // );
-      // const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
-
-      // const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
       const res = await dbConnection.current?.query(
         `SELECT * FROM salahtrackingtable`
       );
 
       console.log("ress is: ", res);
-
-      // for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
-      //   // const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
-
-      // type Salahs = {
-      //   [key: string]: string;
-      // };
-
-      const reformattedSalahData = [];
-      const salahArr = [];
-
-      // let singleSalahObj = {
-      //   date: dateFromDatesFormattedArr,
-      //   salahs: {
-      //     Fajr: "",
-      //     Dhuhr: "",
-      //     Asar: "",
-      //     Maghrib: "",
-      //     Isha: "",
-      //   } as Salahs,
-      // };
 
       let emptyArr = [];
 
@@ -331,34 +291,6 @@ const Calendar = ({
       }
     }
 
-    // for (let key in completedDates) {
-    //   if (completedDates[key].hasOwnProperty(formattedDate)) {
-    //     if (Object.keys(completedDates[key])[0] === formattedDate) {
-    //       if (item.salahName === "Fajr") {
-    //         fajrColor = generateRadialColor({
-    //           formattedDate: completedDates[key][formattedDate].status,
-    //         });
-    //       } else if (item.salahName === "Dhuhr") {
-    //         zoharColor = generateRadialColor({
-    //           formattedDate: completedDates[key][formattedDate].status,
-    //         });
-    //       } else if (item.salahName === "Asar") {
-    //         asarColor = generateRadialColor({
-    //           formattedDate: completedDates[key][formattedDate].status,
-    //         });
-    //       } else if (item.salahName === "Maghrib") {
-    //         maghribColor = generateRadialColor({
-    //           formattedDate: completedDates[key][formattedDate].status,
-    //         });
-    //       } else if (item.salahName === "Isha") {
-    //         ishaColor = generateRadialColor({
-    //           formattedDate: completedDates[key][formattedDate].status,
-    //         });
-    //       }
-    //     }
-    //   }
-    // }
-    // });
     return null;
   }
 
