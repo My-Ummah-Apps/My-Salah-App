@@ -7,6 +7,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 import styles from "./InfiniteLoader.example.css";
 import InfiniteLoader from "react-window-infinite-loader";
+import { prayerStatusColors } from "../../utils/prayerStatusColors";
 // import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -105,7 +106,7 @@ const Calendar = ({
       // TODO: Create array of objects from the database data (res), this array will then be used for the radial functions
       if (res && res.values) {
         const resValues = res.values;
-        res.values.forEach((obj) => {
+        resValues.forEach((obj) => {
           if (!salahData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
             console.log(`Date ${obj.date} does not exist`);
             let currentDate = obj.date;
@@ -275,21 +276,20 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  function generateRadialColor(status: { [date: string]: string }) {
-    // TODO: Below log is coming up as undefined, data structure has now changed, so code potentially needs a heavy refactor so radial colors show
-    console.log("generateRadialColor date: ", status);
-    return Object.values(status)[0] === "male-alone"
-      ? "var(--alone-male-status-color)"
-      : Object.values(status)[0] === "group"
-      ? "var(--jamaah-status-color)"
-      : Object.values(status)[0] === "female-alone"
-      ? "var(--alone-female-status-color)"
-      : Object.values(status)[0] === "excused"
-      ? "var(--excused-status-color)"
-      : Object.values(status)[0] === "missed"
-      ? "var(--missed-status-color)"
-      : Object.values(status)[0] === "late"
-      ? "var(--late-status-color)"
+  function generateRadialColor(status: string) {
+    console.log("generateRadialColor: ", status);
+    return status === "male-alone"
+      ? prayerStatusColors.aloneMaleStatusColor
+      : status === "group"
+      ? prayerStatusColors.jamaahStatusColor
+      : status === "female-alone"
+      ? prayerStatusColors.aloneFemaleStatusColor
+      : status === "excused"
+      ? prayerStatusColors.excusedStatusColor
+      : status === "missed"
+      ? prayerStatusColors.missedStatusColor
+      : status === "late"
+      ? prayerStatusColors.lateStatusColor
       : "";
   }
 
@@ -308,42 +308,24 @@ const Calendar = ({
     maghribColor = "#585858";
     ishaColor = "#585858";
 
-    // console.log("dummyData", dummyData);
-    // dummyData
-
-    // salahData.forEach((item) => {
     let formattedDate = format(date, "dd.MM.yy");
-    // let completedDates = item.completedDates;
-    // console.log("item: ", item);
+
     for (let key in salahData) {
-      // console.log(salahData[key]);
-      // console.log(formattedDate);
-
       if (salahData[key].hasOwnProperty(formattedDate)) {
-        console.log(salahData[key][formattedDate]);
+        console.log("formattedDate data is: ", salahData[key][formattedDate]);
 
-        // console.log(salahData[key]);
         salahData[key][formattedDate].forEach((item) => {
+          // console.log(item.salahName);
           if (item.salahName === "Fajr") {
-            fajrColor = generateRadialColor({
-              formattedDate: salahData[key][formattedDate].salahStatus,
-            });
+            fajrColor = generateRadialColor(item.salahStatus);
           } else if (item.salahName === "Dhuhr") {
-            zoharColor = generateRadialColor({
-              formattedDate: salahData[key][formattedDate].salahStatus,
-            });
+            zoharColor = generateRadialColor(item.salahStatus);
           } else if (item.salahName === "Asar") {
-            asarColor = generateRadialColor({
-              formattedDate: salahData[key][formattedDate].salahStatus,
-            });
+            asarColor = generateRadialColor(item.salahStatus);
           } else if (item.salahName === "Maghrib") {
-            maghribColor = generateRadialColor({
-              formattedDate: salahData[key][formattedDate].salahStatus,
-            });
+            maghribColor = generateRadialColor(item.salahStatus);
           } else if (item.salahName === "Isha") {
-            ishaColor = generateRadialColor({
-              formattedDate: salahData[key][formattedDate].salahStatus,
-            });
+            ishaColor = generateRadialColor(item.salahStatus);
           }
         });
       }
