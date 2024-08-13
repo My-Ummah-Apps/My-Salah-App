@@ -15,8 +15,8 @@ const PrayerTable = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   renderTable,
-  setData,
-  data,
+  setSalahData,
+  salahData,
   setReasonsArray,
   reasonsArray,
   datesFormatted,
@@ -31,8 +31,8 @@ const PrayerTable = ({
   renderTable: boolean;
   sIndex: number;
   eIndex: number;
-  setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  data: SalahRecordsArray;
+  setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  salahData: SalahRecordsArray;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFormatted: string[];
@@ -45,7 +45,7 @@ const PrayerTable = ({
   // startDate: Date;
 }) => {
   // ! BUG: If the user scrolls too fast, the table doesn't crash, however, cells cannot be updated, and the table stops at a particular date, it doesn't go all the way back to the userstartdate as it should, if scrolling is done at a normal speed then these issues do not occur
-  // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", data);
+  // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", salahData);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
@@ -55,13 +55,13 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    // console.log("ROWGETTER HAS RUN", data);
-    return data[index];
+    // console.log("ROWGETTER HAS RUN", salahData);
+    return salahData[index];
   };
 
   const isRowLoaded = ({ index }: any) => {
-    // console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!data[index]);
-    return !!data[index];
+    // console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!salahData[index]);
+    return !!salahData[index];
   };
 
   const loadMoreRows = async ({ startIndex, stopIndex }: any) => {
@@ -71,8 +71,8 @@ const PrayerTable = ({
         stopIndex
       );
       console.log("START AND STOP INDEX: ", startIndex, stopIndex);
-      setData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
-      console.log("Data within loadmorerows: ", data);
+      setSalahData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
+      console.log("Data within loadmorerows: ", salahData);
       console.log("loadmorerows has run");
     } catch (error) {
       console.error("Error loading more rows:", error);
@@ -99,7 +99,7 @@ const PrayerTable = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={datesFormatted.length}
-          threshold={200} // Threshold at which to pre-fetch data. A threshold X means that data will start loading when a user scrolls within X rows. Defaults is 15.
+          threshold={200} // Threshold at which to pre-fetch salahData. A threshold X means that salahData will start loading when a user scrolls within X rows. Defaults is 15.
         >
           {({ onRowsRendered, registerChild }) => (
             <Table
@@ -179,8 +179,8 @@ const PrayerTable = ({
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          setData={setData}
-          data={data}
+          setSalahData={setSalahData}
+          salahData={salahData}
           setReasonsArray={setReasonsArray}
           reasonsArray={reasonsArray}
           clickedDate={clickedDate}

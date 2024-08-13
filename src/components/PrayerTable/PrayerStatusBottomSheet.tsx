@@ -14,8 +14,8 @@ import { DBConnectionStateType } from "../../types/types";
 const PrayerStatusBottomSheet = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  setData,
-  data,
+  setSalahData,
+  salahData,
   setReasonsArray,
   reasonsArray,
   clickedDate,
@@ -27,8 +27,8 @@ const PrayerStatusBottomSheet = ({
   hasUserClickedDate,
 }: {
   dbConnection: any;
-  setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  data: any;
+  setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  salahData: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -134,7 +134,9 @@ const PrayerStatusBottomSheet = ({
   ) => {
     // console.log("addOrModifySalah HAS RUN");
 
-    const findDateWithinData = data.find((obj) => obj.date === clickedDate);
+    const findDateWithinData = salahData.find(
+      (obj) => obj.date === clickedDate
+    );
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -172,10 +174,10 @@ const PrayerStatusBottomSheet = ({
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
         } else {
-          console.error(`Date ${clickedDate} not found in data`);
+          console.error(`Date ${clickedDate} not found in salahData`);
         }
 
-        setData([...data]);
+        setSalahData([...salahData]);
 
         console.log("amendedData ", findDateWithinData);
       } else if (salahAndDateExist) {
@@ -211,10 +213,10 @@ const PrayerStatusBottomSheet = ({
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
         } else {
-          console.error(`Date ${clickedDate} not found in data`);
+          console.error(`Date ${clickedDate} not found in salahData`);
         }
 
-        setData([...data]);
+        setSalahData([...salahData]);
       }
     } catch (error) {
       console.error(error);

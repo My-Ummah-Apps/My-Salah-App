@@ -86,7 +86,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 const App = () => {
   const INITIAL_LOAD_SIZE = 50;
-  const [data, setData] = useState<SalahRecordsArray>();
+  const [salahData, setSalahData] = useState<SalahRecordsArray>();
   console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
@@ -97,7 +97,7 @@ const App = () => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
-        setData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
+        setSalahData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
         await fetchUserPreferencesFromDB();
         setRenderTable(true);
       };
@@ -105,6 +105,29 @@ const App = () => {
     }
   }, [isDatabaseInitialised]);
   // isDatabaseInitialised is only initialised once, so can probably be safely removed
+  let DBResultCalenderData;
+  // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long
+  useEffect(() => {
+    if (renderTable === true) {
+      const fetchCalenderData = async () => {
+        try {
+          await checkAndOpenOrCloseDBConnection("open");
+          DBResultCalenderData = await dbConnection.current?.query(
+            `SELECT * FROM salahtrackingtable`
+          );
+        } catch (error) {
+          console.error("error fetching calender salahData: ", error);
+        } finally {
+          try {
+            await checkAndOpenOrCloseDBConnection("close");
+          } catch (error) {
+            console.error("error closing database connection", error);
+          }
+        }
+      };
+      fetchCalenderData();
+    }
+  }, [salahData]);
 
   const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");
@@ -495,8 +518,8 @@ const App = () => {
                 reasonsArray={reasonsArray}
                 datesFormatted={datesFormatted}
                 fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
-                setData={setData}
-                data={data}
+                setSalahData={setSalahData}
+                salahData={salahData}
                 userGender={userGender}
                 userStartDate={userStartDate}
                 setHeading={setHeading}
@@ -535,7 +558,8 @@ const App = () => {
                 dbConnection={dbConnection}
                 userGender={userGender}
                 userStartDate={userStartDate}
-                data={data}
+                salahData={salahData}
+                DBResultCalenderData={DBResultCalenderData}
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }

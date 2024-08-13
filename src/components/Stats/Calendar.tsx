@@ -26,6 +26,8 @@ import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 
 const Calendar = ({
   dbConnection,
+  // salahData,
+  DBResultCalenderData,
   // setShowCalendarOneMonth,
   // showCalendarOneMonth,
   userStartDate,
@@ -34,7 +36,8 @@ const Calendar = ({
   // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
   // showCalendarOneMonth: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  data: any;
+  // salahData: any;
+  DBResultCalenderData: any;
   userStartDate: string;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -42,84 +45,60 @@ const Calendar = ({
 
   startDate: Date;
 }) => {
-  const [salahData, setSalahData] = useState([]);
+  const [calenderData, setCalenderData] = useState([]);
 
-  useEffect(() => {
-    const grabSalahData = async () => {};
-    grabSalahData();
-  }, []);
+  const modifyDBResultCalenderData = () => {
+    console.log("modifyDBResultCalenderData FUNCTION HAS EXECUTED");
 
-  const fetchSalahTrackingDataFromDB = async () => {
-    console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
-    try {
-      await checkAndOpenOrCloseDBConnection("open");
+    let emptyArr = [];
 
-      const res = await dbConnection.current?.query(
-        `SELECT * FROM salahtrackingtable`
-      );
+    if (DBResultCalenderData && DBResultCalenderData.values) {
+      const resValues = DBResultCalenderData.values;
+      resValues.forEach((obj) => {
+        if (!calenderData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
+          console.log(`Date ${obj.date} does not exist`);
+          let currentDate = obj.date;
+          // let date = obj.date;
+          let singleSalahObj = {
+            [obj.date]: [],
+          };
+          for (let i = 0; i < resValues.length; i++) {
+            if (resValues[i].date === currentDate) {
+              // console.log(`DBResultCalenderData.values[i]:`);
+              // console.log(resValues[i]);
 
-      // console.log("ress is: ", res);
-
-      let emptyArr = [];
-
-      // Grab a date
-      // TODO: Create array of objects from the database data (res), this array will then be used for the radial functions
-      if (res && res.values) {
-        const resValues = res.values;
-        resValues.forEach((obj) => {
-          if (!salahData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
-            console.log(`Date ${obj.date} does not exist`);
-            let currentDate = obj.date;
-            // let date = obj.date;
-            let singleSalahObj = {
-              [obj.date]: [],
-            };
-            for (let i = 0; i < resValues.length; i++) {
-              if (resValues[i].date === currentDate) {
-                console.log(`res.values[i]:`);
-                console.log(resValues[i]);
-
-                let singleObj = {
-                  salahName: resValues[i].salahName,
-                  salahStatus: resValues[i].salahStatus,
-                };
-                singleSalahObj[obj.date].push(singleObj);
-              }
+              let singleObj = {
+                salahName: resValues[i].salahName,
+                salahStatus: resValues[i].salahStatus,
+              };
+              singleSalahObj[obj.date].push(singleObj);
             }
-            console.log(`singleSalahObj:`);
-            console.log(singleSalahObj);
-            // if (!emptyArr.includes())
-
-            emptyArr.push(singleSalahObj);
-            // setSalahData((prevValue) => [...prevValue, ...emptyArr]);
-          } else {
-            console.log(`Date exists and is ${obj.date}`);
           }
-        });
-      }
+          // console.log(`singleSalahObj:`);
+          // console.log(singleSalahObj);
+          // if (!emptyArr.includes())
 
-      setSalahData(emptyArr);
-      console.log("empty array: ", emptyArr);
-
-      // return holdArr;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      try {
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
+          emptyArr.push(singleSalahObj);
+          // setCalenderData((prevValue) => [...prevValue, ...emptyArr]);
+        } else {
+          console.log(`Date exists and is ${obj.date}`);
+        }
+      });
     }
+
+    setCalenderData(emptyArr);
+    console.log("empty array: ", emptyArr);
+
+    // return holdArr;
   };
 
   useEffect(() => {
-    fetchSalahTrackingDataFromDB();
+    modifyDBResultCalenderData();
   }, []);
 
   useEffect(() => {
-    console.log("salahData: ", salahData);
-  }, [salahData]);
+    console.log("calenderData: ", calenderData);
+  }, [calenderData]);
 
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
@@ -270,9 +249,9 @@ const Calendar = ({
 
     let formattedDate = format(date, "dd.MM.yy");
 
-    for (let key in salahData) {
-      if (salahData[key].hasOwnProperty(formattedDate)) {
-        salahData[key][formattedDate].forEach((item) => {
+    for (let key in calenderData) {
+      if (calenderData[key].hasOwnProperty(formattedDate)) {
+        calenderData[key][formattedDate].forEach((item) => {
           // console.log(item.salahName);
           if (item.salahName === "Fajr") {
             fajrColor = generateRadialColor(item.salahStatus);
@@ -428,12 +407,12 @@ const Calendar = ({
   const isItemLoaded = (index) => !!itemStatusMap[index];
   const loadMoreItems = async (startIndex, stopIndex) => {
     try {
-      // const moreRows = await fetchSalahTrackingDataFromDB(
+      // const moreRows = modifyDBResultCalenderData(
       //   startIndex,
       //   stopIndex
       // );
       console.log("START AND STOP INDEX: ", startIndex, stopIndex);
-      setSalahData((prevData) => [...prevData, ...moreRows]);
+      setCalenderData((prevData) => [...prevData, ...moreRows]);
     } catch (error) {
       console.error(error);
     }

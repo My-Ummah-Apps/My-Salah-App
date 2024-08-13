@@ -13,8 +13,8 @@ const HomePage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   renderTable,
-  setData,
-  data,
+  setSalahData,
+  salahData,
   setReasonsArray,
   reasonsArray,
   datesFormatted,
@@ -31,8 +31,8 @@ const HomePage = ({
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  data: any;
+  setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  salahData: any;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFormatted: string[];
@@ -69,8 +69,8 @@ const HomePage = ({
         setReasonsArray={setReasonsArray}
         reasonsArray={reasonsArray}
         datesFormatted={datesFormatted}
-        setData={setData}
-        data={data}
+        setSalahData={setSalahData}
+        salahData={salahData}
         userGender={userGender}
         // userStartDate={userStartDate}
         // startDate={startDate}

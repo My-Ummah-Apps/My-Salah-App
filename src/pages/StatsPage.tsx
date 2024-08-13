@@ -13,7 +13,8 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 const StatsPage = ({
   dbConnection,
   userGender,
-  data,
+  salahData,
+  DBResultCalenderData,
   checkAndOpenOrCloseDBConnection,
   setHeading,
   userStartDate,
@@ -22,7 +23,8 @@ const StatsPage = ({
 }: {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   userGender: userGenderType;
-  data: any;
+  salahData: any;
+  DBResultCalenderData: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -156,7 +158,8 @@ const StatsPage = ({
       <Calendar
         dbConnection={dbConnection}
         userStartDate={userStartDate}
-        data={data}
+        salahData={salahData}
+        DBResultCalenderData={DBResultCalenderData}
         startDate={startDate}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         // setCurrentWeek={setCurrentWeek}
