@@ -27,7 +27,8 @@ import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 const Calendar = ({
   // dbConnection,
   // salahData,
-  DBResultCalenderData,
+
+  calenderData,
   // setShowCalendarOneMonth,
   // showCalendarOneMonth,
   userStartDate, // checkAndOpenOrCloseDBConnection,
@@ -36,7 +37,8 @@ const Calendar = ({
   // showCalendarOneMonth: boolean;
   // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   // salahData: any;
-  DBResultCalenderData: any;
+
+  calenderData: any;
   userStartDate: string;
   // checkAndOpenOrCloseDBConnection: (
   //   action: DBConnectionStateType
@@ -44,62 +46,16 @@ const Calendar = ({
 
   startDate: Date;
 }) => {
-  console.log("DBResultCalenderData,", DBResultCalenderData);
-  const [calenderData, setCalenderData] = useState([]);
+  // const [calenderData, setCalenderData] = useState([]);
 
-  const modifyDBResultCalenderData = () => {
-    console.log("modifyDBResultCalenderData FUNCTION HAS EXECUTED");
+  // modifyDBResultCalenderData();
 
-    let emptyArr = [];
-
-    if (DBResultCalenderData && DBResultCalenderData.values) {
-      const resValues = DBResultCalenderData.values;
-      console.log("🚀 ~ modifyDBResultCalenderData ~ resValues:", resValues);
-
-      resValues.forEach((obj) => {
-        if (!calenderData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
-          console.log(`Date ${obj.date} does not exist`);
-          let currentDate = obj.date;
-          // let date = obj.date;
-          let singleSalahObj = {
-            [obj.date]: [],
-          };
-          for (let i = 0; i < resValues.length; i++) {
-            if (resValues[i].date === currentDate) {
-              // console.log(`DBResultCalenderData.values[i]:`);
-              // console.log(resValues[i]);
-
-              let singleObj = {
-                salahName: resValues[i].salahName,
-                salahStatus: resValues[i].salahStatus,
-              };
-              singleSalahObj[obj.date].push(singleObj);
-            }
-          }
-          // console.log(`singleSalahObj:`);
-          // console.log(singleSalahObj);
-          // if (!emptyArr.includes())
-
-          emptyArr.push(singleSalahObj);
-          // setCalenderData((prevValue) => [...prevValue, ...emptyArr]);
-        } else {
-          console.log(`Date exists and is ${obj.date}`);
-        }
-      });
-    }
-
-    setCalenderData(emptyArr);
-    console.log("empty array: ", emptyArr);
-
-    // return holdArr;
-  };
+  // useEffect(() => {
+  //   modifyDBResultCalenderData();
+  // }, []);
 
   useEffect(() => {
-    modifyDBResultCalenderData();
-  }, []);
-
-  useEffect(() => {
-    console.log("calenderData: ", calenderData);
+    console.log("calendarData: ", calenderData);
   }, [calenderData]);
 
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
@@ -153,11 +109,11 @@ const Calendar = ({
   // );
   // Need to modify the below so depending on the month being rendered, it either shows the overall statuses for each date for every salah or shows the status for the particular date for one salah only
 
-  let fajrColor = "green";
-  let zoharColor = "blue";
-  let asarColor = "red";
-  let maghribColor = "yellow";
-  let ishaColor = "orange";
+  let fajrColor = "";
+  let zoharColor = "";
+  let asarColor = "";
+  let maghribColor = "";
+  let ishaColor = "";
 
   // const countCompletedDates = (date: string, salahName?: string) => {
   //   const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
@@ -217,22 +173,14 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  function generateRadialColor(status: string) {
-    console.log("generateRadialColor: ", status);
-    return status === "male-alone"
-      ? prayerStatusColors.aloneMaleStatusColor
-      : status === "group"
-      ? prayerStatusColors.jamaahStatusColor
-      : status === "female-alone"
-      ? prayerStatusColors.aloneFemaleStatusColor
-      : status === "excused"
-      ? prayerStatusColors.excusedStatusColor
-      : status === "missed"
-      ? prayerStatusColors.missedStatusColor
-      : status === "late"
-      ? prayerStatusColors.lateStatusColor
-      : "";
-  }
+  const dict = {
+    group: prayerStatusColors.jamaahStatusColor,
+    "male-alone": prayerStatusColors.aloneMaleStatusColor,
+    "female-alone": prayerStatusColors.aloneFemaleStatusColor,
+    excused: prayerStatusColors.excusedStatusColor,
+    late: prayerStatusColors.lateStatusColor,
+    missed: prayerStatusColors.missedStatusColor,
+  };
 
   // ! BUG: Below function is running a huge amount of times as the calender months are scrolled, this is going to cause performance issues, need to find a fix for this
   function determineRadialColors(date: Date) {
@@ -252,20 +200,22 @@ const Calendar = ({
     ishaColor = "#585858";
 
     let formattedDate = format(date, "dd.MM.yy");
-    console.log("CalenderData: ", calenderData);
+
     for (let key in calenderData) {
+      // console.log("HAS RUNn");
       if (calenderData[key].hasOwnProperty(formattedDate)) {
         calenderData[key][formattedDate].forEach((item) => {
           if (item.salahName === "Fajr") {
-            fajrColor = generateRadialColor(item.salahStatus);
+            fajrColor = dict[item.salahStatus];
           } else if (item.salahName === "Dhuhr") {
-            zoharColor = generateRadialColor(item.salahStatus);
+            zoharColor = dict[item.salahStatus];
           } else if (item.salahName === "Asar") {
-            asarColor = generateRadialColor(item.salahStatus);
+            asarColor = dict[item.salahStatus];
           } else if (item.salahName === "Maghrib") {
-            maghribColor = generateRadialColor(item.salahStatus);
+            maghribColor = dict[item.salahStatus];
           } else if (item.salahName === "Isha") {
-            ishaColor = generateRadialColor(item.salahStatus);
+            ishaColor = dict[item.salahStatus];
+            ishaColor = "generateRadialColor(item.salahStatus);";
           }
         });
       }

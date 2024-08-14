@@ -36,6 +36,14 @@ export type PreferenceType =
   | "reasonsArray"
   | "showReasons";
 
+type SalahNames = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
+
+export interface CalenderSalahArrayObject {
+  [date: string]: [{ salahName: SalahNames; salahStatus: SalahStatus }];
+}
+
+export type CalenderSalahArray = CalenderSalahArrayObject[];
+
 export type DBConnectionStateType = "open" | "close";
 
 export type userGenderType = "male" | "female";

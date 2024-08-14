@@ -15,6 +15,7 @@ const HomePage = ({
   renderTable,
   setSalahData,
   salahData,
+  fetchCalendarData,
   setReasonsArray,
   reasonsArray,
   datesFormatted,
@@ -33,6 +34,7 @@ const HomePage = ({
   renderTable: boolean;
   setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   salahData: any;
+  fetchCalendarData: () => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFormatted: string[];
@@ -71,6 +73,7 @@ const HomePage = ({
         datesFormatted={datesFormatted}
         setSalahData={setSalahData}
         salahData={salahData}
+        fetchCalendarData={fetchCalendarData}
         userGender={userGender}
         // userStartDate={userStartDate}
         // startDate={startDate}

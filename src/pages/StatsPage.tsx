@@ -14,7 +14,8 @@ const StatsPage = ({
   dbConnection,
   userGender,
   salahData,
-  DBResultCalenderData,
+  calenderData,
+
   checkAndOpenOrCloseDBConnection,
   setHeading,
   userStartDate,
@@ -24,7 +25,8 @@ const StatsPage = ({
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   userGender: userGenderType;
   salahData: any;
-  DBResultCalenderData: any;
+  calenderData: any;
+
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -156,10 +158,9 @@ const StatsPage = ({
         ""
       )}
       <Calendar
-        dbConnection={dbConnection}
         userStartDate={userStartDate}
         salahData={salahData}
-        DBResultCalenderData={DBResultCalenderData}
+        calenderData={calenderData}
         startDate={startDate}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         // setCurrentWeek={setCurrentWeek}

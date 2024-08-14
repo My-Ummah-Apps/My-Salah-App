@@ -16,6 +16,7 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setSalahData,
   salahData,
+  fetchCalendarData,
   setReasonsArray,
   reasonsArray,
   clickedDate,
@@ -29,6 +30,7 @@ const PrayerStatusBottomSheet = ({
   dbConnection: any;
   setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   salahData: any;
+  fetchCalendarData: () => Promise<void>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -178,6 +180,7 @@ const PrayerStatusBottomSheet = ({
         }
 
         setSalahData([...salahData]);
+        await fetchCalendarData();
 
         console.log("amendedData ", findDateWithinData);
       } else if (salahAndDateExist) {

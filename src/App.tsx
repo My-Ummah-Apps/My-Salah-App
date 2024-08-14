@@ -87,7 +87,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   const INITIAL_LOAD_SIZE = 50;
   const [salahData, setSalahData] = useState<SalahRecordsArray>();
-  const [DBResultCalenderData, setDBResultCalenderData] = useState();
+  const [calenderData, setCalenderData] = useState([]);
 
   console.log("APP COMPONENT HAS RENDERED");
   const {
@@ -95,6 +95,7 @@ const App = () => {
     dbConnection,
     checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
+
   useEffect(() => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
@@ -102,46 +103,85 @@ const App = () => {
         setSalahData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
         await fetchUserPreferencesFromDB();
         setRenderTable(true);
+        fetchCalendarData();
       };
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
-  // isDatabaseInitialised is only initialised once, so can probably be safely removed
-  // let DBResultCalenderData;
-  // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long, also ensure this useEffect runs every time new data is INSERTED into the database ie whenever a table cell is updated, as this data will then need to reflect in the calendar component
-  useEffect(() => {
-    // if (renderTable === true) {
 
-    const fetchCalendarData = async () => {
-      console.log("fetchCalendarData has run");
-      try {
-        await checkAndOpenOrCloseDBConnection("open");
-        setDBResultCalenderData(
-          await dbConnection.current?.query(`SELECT * FROM salahtrackingtable`)
-        );
-        // DBResultCalenderData = await dbConnection.current?.query(
-        //   `SELECT * FROM salahtrackingtable`
-        // );
-      } catch (error) {
-        console.error("error fetching calender salahData: ", error);
-      } finally {
-        try {
-          await checkAndOpenOrCloseDBConnection("close");
-        } catch (error) {
-          console.error("error closing database connection", error);
-        }
+  // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long, also ensure this useEffect runs every time new data is INSERTED into the database ie whenever a table cell is updated, as this data will then need to reflect in the calendar component
+  // useEffect(() => {
+  // if (renderTable === true) {
+
+  const fetchCalendarData = async () => {
+    console.log("fetchCalendarData has run");
+    try {
+      await checkAndOpenOrCloseDBConnection("open");
+
+      const fetchedDBResultCalenderData = await dbConnection.current?.query(
+        `SELECT * FROM salahtrackingtable`
+      );
+
+      console.log(
+        "🚀 ~ fetchCalendarData ~ fetchedsetDBResultCalenderData:",
+        fetchedDBResultCalenderData
+      );
+
+      console.log("modifyDBResultCalenderData FUNCTION HAS EXECUTED");
+
+      let calenderDataArr = [];
+
+      if (fetchedDBResultCalenderData && fetchedDBResultCalenderData.values) {
+        const resValues = fetchedDBResultCalenderData.values;
+        console.log("🚀 ~ modifyDBResultCalenderData ~ resValues:", resValues);
+
+        resValues.forEach((obj) => {
+          if (!calenderData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
+            console.log("!calenderData.some"); // !BUG: This if statement only runs on every other occasion when file is saved, sort out the type for this as hasOwnProperty is giving an error, this should help debug this further
+            let currentDate = obj.date;
+
+            let singleSalahObj = {
+              [currentDate]: [],
+            };
+            for (let i = 0; i < resValues.length; i++) {
+              if (resValues[i].date === currentDate) {
+                let singleObj = {
+                  salahName: resValues[i].salahName,
+                  salahStatus: resValues[i].salahStatus,
+                };
+                singleSalahObj[obj.date].push(singleObj);
+              }
+            }
+
+            calenderDataArr.push(singleSalahObj);
+          }
+        });
       }
 
-      console.log("DBResultCalenderData,", DBResultCalenderData);
-    };
-    const executeFetch = async () => {
-      await fetchCalendarData();
-    };
+      setCalenderData(calenderDataArr);
+      console.log("calenderDataArr array: ", calenderDataArr);
 
-    executeFetch();
+      // return holdArr;
+    } catch (error) {
+      console.error("error fetching calender salahData: ", error);
+    } finally {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error("error closing database connection", error);
+      }
+    }
+  };
+  const executeFetchCalendarDataFunc = async () => {
+    await fetchCalendarData();
+  };
 
-    // }
-  }, []);
+  // useEffect(() => {
+  //   console.log("USEEFFECT FOR fetchCalendarData has run");
+  //   if (isDatabaseInitialised) {
+  //     fetchCalendarData();
+  //   }
+  // }, [salahData]);
 
   const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");
@@ -534,6 +574,7 @@ const App = () => {
                 fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
                 setSalahData={setSalahData}
                 salahData={salahData}
+                fetchCalendarData={fetchCalendarData}
                 userGender={userGender}
                 userStartDate={userStartDate}
                 setHeading={setHeading}
@@ -573,7 +614,7 @@ const App = () => {
                 userGender={userGender}
                 userStartDate={userStartDate}
                 salahData={salahData}
-                DBResultCalenderData={DBResultCalenderData}
+                calenderData={calenderData}
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }

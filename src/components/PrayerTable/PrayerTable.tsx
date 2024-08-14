@@ -17,6 +17,7 @@ const PrayerTable = ({
   renderTable,
   setSalahData,
   salahData,
+  fetchCalendarData,
   setReasonsArray,
   reasonsArray,
   datesFormatted,
@@ -29,10 +30,9 @@ const PrayerTable = ({
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  sIndex: number;
-  eIndex: number;
   setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   salahData: SalahRecordsArray;
+  fetchCalendarData: () => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFormatted: string[];
@@ -181,6 +181,7 @@ const PrayerTable = ({
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           setSalahData={setSalahData}
           salahData={salahData}
+          fetchCalendarData={fetchCalendarData}
           setReasonsArray={setReasonsArray}
           reasonsArray={reasonsArray}
           clickedDate={clickedDate}
