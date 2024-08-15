@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Sheet from "react-modal-sheet";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+// import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { PreferenceType } from "../../types/types";
 
 const NotificationsBottomSheet = ({
   setHandleNotificationsModal,
   handleNotificationsModal,
-  dbConnection,
+  // dbConnection,
   modifyDataInUserPreferencesTable,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   setDailyNotification,
   dailyNotification,
   setDailyNotificationTime,
@@ -19,12 +19,12 @@ const NotificationsBottomSheet = ({
 }: {
   setHandleNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleNotificationsModal: boolean;
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   modifyDataInUserPreferencesTable: (
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
-  checkAndOpenOrCloseDBConnection: (action: string) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (action: string) => Promise<void>;
   setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
   dailyNotification: string;
   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
@@ -51,40 +51,40 @@ const NotificationsBottomSheet = ({
     });
   };
 
-  async function checkNotificationPermissions() {
-    const checkPermission = await LocalNotifications.checkPermissions();
-    const userNotificationPermission = checkPermission.display;
-    if (userNotificationPermission === "denied") {
-      alert("Please turn notifications back on from within system settings");
-      setDailyNotification("0");
-      return;
-    } else if (userNotificationPermission === "granted") {
-      setDailyNotification("1");
+  // async function checkNotificationPermissions() {
+  //   const checkPermission = await LocalNotifications.checkPermissions();
+  //   const userNotificationPermission = checkPermission.display;
+  //   if (userNotificationPermission === "denied") {
+  //     alert("Please turn notifications back on from within system settings");
+  //     setDailyNotification("0");
+  //     return;
+  //   } else if (userNotificationPermission === "granted") {
+  //     setDailyNotification("1");
 
-      // const notificationTime = dailyNotificationTime.split(":").map(Number);
-      // scheduleDailyNotification(notificationTime[0], notificationTime[1]);
-    } else if (
-      userNotificationPermission === "prompt" ||
-      userNotificationPermission === "prompt-with-rationale"
-    ) {
-      setDailyNotification("0");
-      requestPermissionFunction();
-    }
-  }
+  //     // const notificationTime = dailyNotificationTime.split(":").map(Number);
+  //     // scheduleDailyNotification(notificationTime[0], notificationTime[1]);
+  //   } else if (
+  //     userNotificationPermission === "prompt" ||
+  //     userNotificationPermission === "prompt-with-rationale"
+  //   ) {
+  //     setDailyNotification("0");
+  //     requestPermissionFunction();
+  //   }
+  // }
 
-  const requestPermissionFunction = async () => {
-    const requestPermission = await LocalNotifications.requestPermissions();
-    if (requestPermission.display == "granted") {
-      setDailyNotification("1");
-      modifyDataInUserPreferencesTable("1", "dailyNotification");
-    } else if (
-      requestPermission.display == "prompt" ||
-      requestPermission.display == "denied"
-    ) {
-      setDailyNotification("0");
-      modifyDataInUserPreferencesTable("0", "dailyNotification");
-    }
-  };
+  // const requestPermissionFunction = async () => {
+  //   const requestPermission = await LocalNotifications.requestPermissions();
+  //   if (requestPermission.display == "granted") {
+  //     setDailyNotification("1");
+  //     modifyDataInUserPreferencesTable("1", "dailyNotification");
+  //   } else if (
+  //     requestPermission.display == "prompt" ||
+  //     requestPermission.display == "denied"
+  //   ) {
+  //     setDailyNotification("0");
+  //     modifyDataInUserPreferencesTable("0", "dailyNotification");
+  //   }
+  // };
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e);

@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import Modal from "react-modal";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+// import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import { PreferenceType } from "../types/types";
-import { DBConnectionStateType } from "../types/types";
+// import { DBConnectionStateType } from "../types/types";
 
 // import {
 //   checkNotificationPermissions,
@@ -23,9 +23,9 @@ const SettingsPage = ({
   // title,
   setHeading,
   pageStyles,
-  dbConnection,
+  // dbConnection,
   modifyDataInUserPreferencesTable,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   setDailyNotification,
   dailyNotification,
   setDailyNotificationTime,
@@ -34,14 +34,14 @@ const SettingsPage = ({
   // title: React.ReactNode;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   modifyDataInUserPreferencesTable: (
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
   dailyNotification: string;
   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
@@ -84,9 +84,9 @@ const SettingsPage = ({
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
           <NotificationsBottomSheet
-            dbConnection={dbConnection}
+            // dbConnection={dbConnection}
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-            checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+            // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
             setHandleNotificationsModal={setHandleNotificationsModal}
             handleNotificationsModal={handleNotificationsModal}
             setDailyNotification={setDailyNotification}

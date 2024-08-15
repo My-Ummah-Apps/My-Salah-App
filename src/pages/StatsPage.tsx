@@ -6,34 +6,33 @@ import Calendar from "../components/Stats/Calendar";
 // import { eachDayOfInterval, parse } from "date-fns";
 import { userGenderType } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
-import { DBConnectionStateType } from "../types/types";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+// import { DBConnectionStateType } from "../types/types";
+// import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
-  dbConnection,
+  // dbConnection,
   userGender,
-  salahData,
+  // tableData,
   calenderData,
 
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   setHeading,
   userStartDate,
-  pageStyles,
-  startDate,
+  pageStyles, // startDate,
 }: {
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   userGender: userGenderType;
-  salahData: any;
+  // tableData: any;
   calenderData: any;
 
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
-  startDate: Date;
+  // startDate: Date;
 }) => {
   useEffect(() => {
     setHeading("Stats");
@@ -74,45 +73,45 @@ const StatsPage = ({
   //   []
   // );
 
-  function getSalahStatusDates(status: string, array: string[]) {
-    // let statToUpdate = 0;
-    // salahTrackingArray.forEach((salah) => {
-    //   for (let i = 0; i < salah.completedDates.length; i++) {
-    //     if (Object.values(salah.completedDates[i])[0].status === status) {
-    //       array.push(Object.keys(salah.completedDates[i])[0]);
-    //     }
-    //   }
-    // });
-    // statToUpdate = Math.round(
-    //   (salahFulfilledDates.length / totalPossibleSalah) * 100
-    // );
-    // console.log(totalPossibleSalah);
-    // Below will potentially be useful when adding individual salah stats
-    // if (array.length > 0) {
-    //   statToUpdate = Math.round(
-    //     (array.length / (salahFulfilledDates.length + array.length)) * 100
-    //   );
-    // }
-    // status === "group"
-    //   ? (jamaahStat = statToUpdate)
-    //   : status === "male-alone" || status === "female-alone"
-    //   ? (aloneStat = statToUpdate)
-    //   : status === "late"
-    //   ? (lateStat = statToUpdate)
-    //   : status === "missed"
-    //   ? (missedStat = statToUpdate)
-    //   : status === "excused"
-    //   ? (excusedStat = statToUpdate)
-    //   : null;
-  }
+  // function getSalahStatusDates(status: string, array: string[]) {
+  //   // let statToUpdate = 0;
+  //   // salahTrackingArray.forEach((salah) => {
+  //   //   for (let i = 0; i < salah.completedDates.length; i++) {
+  //   //     if (Object.values(salah.completedDates[i])[0].status === status) {
+  //   //       array.push(Object.keys(salah.completedDates[i])[0]);
+  //   //     }
+  //   //   }
+  //   // });
+  //   // statToUpdate = Math.round(
+  //   //   (salahFulfilledDates.length / totalPossibleSalah) * 100
+  //   // );
+  //   // console.log(totalPossibleSalah);
+  //   // Below will potentially be useful when adding individual salah stats
+  //   // if (array.length > 0) {
+  //   //   statToUpdate = Math.round(
+  //   //     (array.length / (salahFulfilledDates.length + array.length)) * 100
+  //   //   );
+  //   // }
+  //   // status === "group"
+  //   //   ? (jamaahStat = statToUpdate)
+  //   //   : status === "male-alone" || status === "female-alone"
+  //   //   ? (aloneStat = statToUpdate)
+  //   //   : status === "late"
+  //   //   ? (lateStat = statToUpdate)
+  //   //   : status === "missed"
+  //   //   ? (missedStat = statToUpdate)
+  //   //   : status === "excused"
+  //   //   ? (excusedStat = statToUpdate)
+  //   //   : null;
+  // }
 
-  getSalahStatusDates("group", salahInJamaahDatesOverall);
-  userGender === "male"
-    ? getSalahStatusDates("male-alone", salahMaleAloneDatesOverall)
-    : getSalahStatusDates("female-alone", salahFemaleAloneDatesOverall);
-  getSalahStatusDates("late", salahLateDatesOverall);
-  getSalahStatusDates("missed", salahMissedDatesOverall);
-  getSalahStatusDates("excused", salahExcusedDatesOverall);
+  // getSalahStatusDates("group", salahInJamaahDatesOverall);
+  // userGender === "male"
+  //   ? getSalahStatusDates("male-alone", salahMaleAloneDatesOverall)
+  //   : getSalahStatusDates("female-alone", salahFemaleAloneDatesOverall);
+  // getSalahStatusDates("late", salahLateDatesOverall);
+  // getSalahStatusDates("missed", salahMissedDatesOverall);
+  // getSalahStatusDates("excused", salahExcusedDatesOverall);
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
@@ -159,10 +158,9 @@ const StatsPage = ({
       )}
       <Calendar
         userStartDate={userStartDate}
-        salahData={salahData}
         calenderData={calenderData}
-        startDate={startDate}
-        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        // startDate={startDate}
+        // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         // setCurrentWeek={setCurrentWeek}
         // currentWeek={currentWeek}
       />{" "}

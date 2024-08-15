@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import { v4 as uuidv4 } from "uuid";
 import HomePage from "./pages/HomePage";
@@ -8,14 +8,17 @@ import {
   CalenderSalahArray,
   CalenderSalahArrayObject,
   SalahEntry,
+  SalahNames,
+  SalahRecord,
   SalahRecordsArray,
+  SalahStatus,
 } from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
-import { subDays, format, parse, eachDayOfInterval } from "date-fns";
+import { format, parse, eachDayOfInterval } from "date-fns";
 import { PreferenceType } from "./types/types";
 import { userGenderType } from "./types/types";
 // import { initialiseDatabase } from "./utils/SQLiteService";
@@ -91,7 +94,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 const App = () => {
   const INITIAL_LOAD_SIZE = 50;
-  const [salahData, setSalahData] = useState<SalahRecordsArray>();
+  const [tableData, setTableData] = useState<SalahRecordsArray>([]);
   const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
 
   console.log("APP COMPONENT HAS RENDERED");
@@ -105,7 +108,7 @@ const App = () => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
-        setSalahData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
+        setTableData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
         await fetchUserPreferencesFromDB();
         setRenderTable(true);
         fetchCalendarData();
@@ -113,6 +116,10 @@ const App = () => {
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
+
+  useEffect(() => {
+    console.log("SALAHDATAA: ", tableData);
+  }, [tableData]);
 
   // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long, also ensure this useEffect runs every time new data is INSERTED into the database ie whenever a table cell is updated, as this data will then need to reflect in the calendar component
   // useEffect(() => {
@@ -127,22 +134,10 @@ const App = () => {
         `SELECT * FROM salahtrackingtable`
       );
 
-      console.log(
-        "🚀 ~ fetchCalendarData ~ fetchedsetDBResultCalenderData:",
-        DBResultCalenderData
-      );
-
-      console.log("modifyDBResultCalenderData FUNCTION HAS EXECUTED");
-
       let calenderDataArr: CalenderSalahArray = [];
 
       if (DBResultCalenderData && DBResultCalenderData.values) {
         const DBResultCalenderDataValues = DBResultCalenderData.values;
-        // console.log(
-        //   "🚀 ~ modifyDBResultCalenderData ~ DBResultCalenderDataValues:",
-        //   DBResultCalenderDataValues
-        // );
-        // if (DBResultCalenderDataValues.includes())
 
         DBResultCalenderDataValues.forEach((obj) => {
           if (
@@ -150,19 +145,11 @@ const App = () => {
               calenderObj.hasOwnProperty(obj.date)
             )
           ) {
-            console.log("calenderDataArr array: ", calenderDataArr);
-            console.log(
-              `Date is ${obj.date} and it does not exist within calenderDataArr`
-            );
             let currentDate = obj.date;
             const filteredDBResultCalenderDataValues =
               DBResultCalenderDataValues.filter(
                 (obj) => obj.date === currentDate
               );
-            console.log(
-              "🚀 ~ DBResultCalenderDataValues.forEach ~ filteredDBResultCalenderDataValues:",
-              filteredDBResultCalenderDataValues
-            );
 
             let singleSalahObj: CalenderSalahArrayObject = {
               [currentDate]: [],
@@ -184,9 +171,9 @@ const App = () => {
       setCalenderData(calenderDataArr);
       // console.log("calenderDataArr array: ", calenderDataArr);
 
-      // return holdArr;
+      // return singleSalahObjArr;
     } catch (error) {
-      console.error("error fetching calender salahData: ", error);
+      console.error("error fetching calender tableData: ", error);
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
@@ -195,16 +182,16 @@ const App = () => {
       }
     }
   };
-  const executeFetchCalendarDataFunc = async () => {
-    await fetchCalendarData();
-  };
+  // const executeFetchCalendarDataFunc = async () => {
+  //   await fetchCalendarData();
+  // };
 
   // useEffect(() => {
   //   console.log("USEEFFECT FOR fetchCalendarData has run");
   //   if (isDatabaseInitialised) {
   //     fetchCalendarData();
   //   }
-  // }, [salahData]);
+  // }, [tableData]);
 
   const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");
@@ -318,7 +305,7 @@ const App = () => {
     }
   };
 
-  let holdArr = [];
+  let singleSalahObjArr: SalahRecordsArray = [];
   const fetchSalahTrackingDataFromDB = async (
     startIndex: number,
     endIndex: number
@@ -343,11 +330,7 @@ const App = () => {
       for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
         const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
 
-        type Salahs = {
-          [key: string]: string;
-        };
-
-        let singleSalahObj = {
+        let singleSalahObj: SalahRecord = {
           date: dateFromDatesFormattedArr,
           salahs: {
             Fajr: "",
@@ -355,7 +338,7 @@ const App = () => {
             Asar: "",
             Maghrib: "",
             Isha: "",
-          } as Salahs,
+          },
         };
 
         if (DBResultSalahData?.values && DBResultSalahData.values.length > 0) {
@@ -363,18 +346,19 @@ const App = () => {
             if (
               DBResultSalahData.values?.[i]?.date === dateFromDatesFormattedArr
             ) {
-              let salahName: any = DBResultSalahData?.values?.[i].salahName;
-              let salahStatus: string =
+              let salahName: SalahNames =
+                DBResultSalahData?.values?.[i].salahName;
+              let salahStatus: SalahStatus =
                 DBResultSalahData?.values?.[i].salahStatus;
               singleSalahObj.salahs[salahName] = salahStatus;
             }
           }
         }
 
-        holdArr.push(singleSalahObj);
+        singleSalahObjArr.push(singleSalahObj);
       }
 
-      return holdArr;
+      return singleSalahObjArr;
     } catch (error) {
       console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: " + error);
       throw new Error("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
@@ -474,13 +458,13 @@ const App = () => {
   //   }
   // }, []);
 
-  const [streakCounter, setStreakCounter] = useState(0);
-  streakCounter;
+  // const [streakCounter, setStreakCounter] = useState(0);
+
   const [heading, setHeading] = useState("");
 
-  const [currentWeek, setCurrentWeek] = useState(0);
-  const today: Date = new Date();
-  const startDate: Date = subDays(today, currentWeek);
+  // const [currentWeek, setCurrentWeek] = useState(0);
+  // const today: Date = new Date();
+  // const startDate: Date = subDays(today, currentWeek);
 
   // useEffect(() => {
   //   const storedSalahTrackingData = localStorage.getItem(
@@ -595,14 +579,14 @@ const App = () => {
                 reasonsArray={reasonsArray}
                 datesFormatted={datesFormatted}
                 fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
-                setSalahData={setSalahData}
-                salahData={salahData}
+                setTableData={setTableData}
+                tableData={tableData}
                 fetchCalendarData={fetchCalendarData}
                 userGender={userGender}
                 userStartDate={userStartDate}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
-                startDate={startDate}
+                // startDate={startDate}
                 // setCurrentWeek={setCurrentWeek}
                 // currentWeek={currentWeek}
               />
@@ -615,13 +599,13 @@ const App = () => {
                 setHeading={setHeading}
                 // title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
                 pageStyles={pageStyles}
-                dbConnection={dbConnection}
+                // dbConnection={dbConnection}
                 modifyDataInUserPreferencesTable={
                   modifyDataInUserPreferencesTable
                 }
-                checkAndOpenOrCloseDBConnection={
-                  checkAndOpenOrCloseDBConnection
-                }
+                // checkAndOpenOrCloseDBConnection={
+                //   checkAndOpenOrCloseDBConnection
+                // }
                 setDailyNotification={setDailyNotification}
                 setDailyNotificationTime={setDailyNotificationTime}
                 dailyNotificationTime={dailyNotificationTime}
@@ -633,18 +617,18 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
-                dbConnection={dbConnection}
+                // dbConnection={dbConnection}
                 userGender={userGender}
                 userStartDate={userStartDate}
-                salahData={salahData}
+                // tableData={tableData}
                 calenderData={calenderData}
-                checkAndOpenOrCloseDBConnection={
-                  checkAndOpenOrCloseDBConnection
-                }
+                // checkAndOpenOrCloseDBConnection={
+                //   checkAndOpenOrCloseDBConnection
+                // }
                 // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
                 setHeading={setHeading}
-                startDate={startDate}
+                // startDate={startDate}
               />
             }
           />

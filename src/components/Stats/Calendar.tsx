@@ -1,15 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { CSSProperties } from "react";
 
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import styles from "./InfiniteLoader.example.css";
-import InfiniteLoader from "react-window-infinite-loader";
 import { prayerStatusColors } from "../../utils/prayerStatusColors";
 import { v4 as uuidv4 } from "uuid";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { DBConnectionStateType } from "../../types/types";
 
 import {
   format,
@@ -22,41 +18,21 @@ import {
   eachMonthOfInterval,
   // setMonth,
 } from "date-fns";
-import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
+import { SalahEntry } from "../../types/types";
+// import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 
 const Calendar = ({
-  // dbConnection,
-  // salahData,
-
   calenderData,
-  // setShowCalendarOneMonth,
-  // showCalendarOneMonth,
-  userStartDate, // checkAndOpenOrCloseDBConnection,
+  userStartDate,
 }: {
-  // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
-  // showCalendarOneMonth: boolean;
-  // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // salahData: any;
-
   calenderData: any;
   userStartDate: string;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
 
-  startDate: Date;
+  // startDate: Date;
 }) => {
-  // const [calenderData, setCalenderData] = useState([]);
-
-  // modifyDBResultCalenderData();
-
   // useEffect(() => {
-  //   modifyDBResultCalenderData();
-  // }, []);
-
-  useEffect(() => {
-    console.log("calendarData: ", calenderData);
-  }, [calenderData]);
+  //   console.log("calendarData: ", calenderData);
+  // }, [calenderData]);
 
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
@@ -70,9 +46,9 @@ const Calendar = ({
     // }
   });
 
-  const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
+  // const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
   // console.log(showDailySalahDataModal);
-  const [clickedDate, setClickedDate] = useState<string>("");
+  // const [clickedDate, setClickedDate] = useState<string>("");
 
   // useEffect(() => {
   //   setClickedDate(clickedDate);
@@ -182,7 +158,7 @@ const Calendar = ({
     missed: prayerStatusColors.missedStatusColor,
   };
 
-  // ! BUG: Below function is running a huge amount of times as the calender months are scrolled, this is going to cause performance issues, need to find a fix for this
+  // ! BUG: Below function is running a huge amount of times as the calender months are scrolled, this is going to cause performance issues
   function determineRadialColors(date: Date) {
     console.log("determineRadialColors has run");
     if (date < userStartDateFormatted || date > todaysDate) {
@@ -202,20 +178,19 @@ const Calendar = ({
     let formattedDate = format(date, "dd.MM.yy");
 
     for (let key in calenderData) {
-      // console.log("HAS RUNn");
       if (calenderData[key].hasOwnProperty(formattedDate)) {
-        calenderData[key][formattedDate].forEach((item) => {
+        // TODO: Need to understand below types keyof typeof dict
+        calenderData[key][formattedDate].forEach((item: SalahEntry) => {
           if (item.salahName === "Fajr") {
-            fajrColor = dict[item.salahStatus];
+            fajrColor = dict[item.salahStatus as keyof typeof dict];
           } else if (item.salahName === "Dhuhr") {
-            zoharColor = dict[item.salahStatus];
+            zoharColor = dict[item.salahStatus as keyof typeof dict];
           } else if (item.salahName === "Asar") {
-            asarColor = dict[item.salahStatus];
+            asarColor = dict[item.salahStatus as keyof typeof dict];
           } else if (item.salahName === "Maghrib") {
-            maghribColor = dict[item.salahStatus];
+            maghribColor = dict[item.salahStatus as keyof typeof dict];
           } else if (item.salahName === "Isha") {
-            ishaColor = dict[item.salahStatus];
-            ishaColor = "generateRadialColor(item.salahStatus);";
+            ishaColor = dict[item.salahStatus as keyof typeof dict];
           }
         });
       }
@@ -269,12 +244,12 @@ const Calendar = ({
             <div
               onClick={() => {
                 if (day <= todaysDate) {
-                  const formattedDate = format(day, "dd.MM.yy");
+                  // const formattedDate = format(day, "dd.MM.yy");
 
-                  setClickedDate(formattedDate);
+                  // setClickedDate(formattedDate);
                   // console.log("CLICKED DATE IS: " + clickedDate);
                   // showDailySalahData(clickedDate);
-                  setShowDailySalahDataModal(true);
+                  // setShowDailySalahDataModal(true);
                   // console.log(showDailySalahDataModal);
                   console.log("TRIGGERED");
                 }

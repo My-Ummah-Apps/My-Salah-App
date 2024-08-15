@@ -13,8 +13,8 @@ const HomePage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   renderTable,
-  setSalahData,
-  salahData,
+  setTableData,
+  tableData,
   fetchCalendarData,
   setReasonsArray,
   reasonsArray,
@@ -23,17 +23,16 @@ const HomePage = ({
   fetchSalahTrackingDataFromDB,
   userGender,
   setHeading,
-  userStartDate,
-  pageStyles,
-  startDate,
+  // userStartDate,
+  pageStyles, // startDate,
 }: {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  salahData: any;
+  setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  tableData: any;
   fetchCalendarData: () => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
@@ -47,7 +46,7 @@ const HomePage = ({
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
-  startDate: Date;
+  // startDate: Date;
 }) => {
   useEffect(() => {
     setHeading("Home");
@@ -71,8 +70,8 @@ const HomePage = ({
         setReasonsArray={setReasonsArray}
         reasonsArray={reasonsArray}
         datesFormatted={datesFormatted}
-        setSalahData={setSalahData}
-        salahData={salahData}
+        setTableData={setTableData}
+        tableData={tableData}
         fetchCalendarData={fetchCalendarData}
         userGender={userGender}
         // userStartDate={userStartDate}

@@ -3,27 +3,26 @@
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
-type SalahStatus =
+export type SalahStatus =
   | "group"
   | "male-alone"
   | "female-alone"
   | "late"
   | "missed"
-  | "excused";
+  | "excused"
+  | "";
 
 interface Salahs {
-  salahs: {
-    Fajr: SalahStatus;
-    Dhuhr: SalahStatus;
-    Asar: SalahStatus;
-    Maghrib: SalahStatus;
-    Isha: SalahStatus;
-  };
+  Fajr: SalahStatus;
+  Dhuhr: SalahStatus;
+  Asar: SalahStatus;
+  Maghrib: SalahStatus;
+  Isha: SalahStatus;
 }
 
 export interface SalahRecord {
   date: string;
-  salah: Salahs;
+  salahs: Salahs;
 }
 
 export type SalahRecordsArray = SalahRecord[];
@@ -36,7 +35,7 @@ export type PreferenceType =
   | "reasonsArray"
   | "showReasons";
 
-type SalahNames = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
+export type SalahNames = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
 
 export interface SalahEntry {
   salahName: SalahNames;

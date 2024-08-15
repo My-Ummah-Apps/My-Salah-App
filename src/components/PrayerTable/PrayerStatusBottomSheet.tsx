@@ -14,8 +14,8 @@ import { DBConnectionStateType } from "../../types/types";
 const PrayerStatusBottomSheet = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  setSalahData,
-  salahData,
+  setTableData,
+  tableData,
   fetchCalendarData,
   setReasonsArray,
   reasonsArray,
@@ -28,8 +28,8 @@ const PrayerStatusBottomSheet = ({
   hasUserClickedDate,
 }: {
   dbConnection: any;
-  setSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  salahData: any;
+  setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  tableData: any;
   fetchCalendarData: () => Promise<void>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -63,7 +63,7 @@ const PrayerStatusBottomSheet = ({
 
   let selectedReasonsArray = selectedReasons;
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
-  const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
+  // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   let isDatabaseUpdating: boolean = false;
 
@@ -136,9 +136,10 @@ const PrayerStatusBottomSheet = ({
   ) => {
     // console.log("addOrModifySalah HAS RUN");
 
-    const findDateWithinData = salahData.find(
-      (obj) => obj.date === clickedDate
+    const findDateWithinData = tableData.find(
+      (obj: any) => obj.date === clickedDate
     );
+    console.log("🚀 ~ tableData:", tableData);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -176,10 +177,10 @@ const PrayerStatusBottomSheet = ({
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
         } else {
-          console.error(`Date ${clickedDate} not found in salahData`);
+          console.error(`Date ${clickedDate} not found in tableData`);
         }
 
-        setSalahData([...salahData]);
+        setTableData([...tableData]);
         await fetchCalendarData();
 
         console.log("amendedData ", findDateWithinData);
@@ -216,10 +217,10 @@ const PrayerStatusBottomSheet = ({
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
         } else {
-          console.error(`Date ${clickedDate} not found in salahData`);
+          console.error(`Date ${clickedDate} not found in tableData`);
         }
 
-        setSalahData([...salahData]);
+        setTableData([...tableData]);
       }
     } catch (error) {
       console.error(error);
