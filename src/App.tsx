@@ -142,24 +142,41 @@ const App = () => {
         //   "🚀 ~ modifyDBResultCalenderData ~ DBResultCalenderDataValues:",
         //   DBResultCalenderDataValues
         // );
+        // if (DBResultCalenderDataValues.includes())
 
         DBResultCalenderDataValues.forEach((obj) => {
-          if (!calenderData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
-            console.log("!calenderData.some"); // !BUG: This if statement only runs on every other occasion when file is saved, sort out the type for this as hasOwnProperty is giving an error, this should help debug this further
+          // !BUG: This if statement only runs on every other occasion when file is saved, sort out the type for this as hasOwnProperty is giving an error, this should help debug this further
+
+          if (
+            !calenderDataArr.some((calenderObj) =>
+              calenderObj.hasOwnProperty(obj.date)
+            )
+          ) {
+            console.log("calenderDataArr array: ", calenderDataArr);
+            console.log(
+              `Date is ${obj.date} and it does not exist within calenderDataArr`
+            );
             let currentDate = obj.date;
+            const filteredDBResultCalenderDataValues =
+              DBResultCalenderDataValues.filter(
+                (obj) => obj.date === currentDate
+              );
+            console.log(
+              "🚀 ~ DBResultCalenderDataValues.forEach ~ filteredDBResultCalenderDataValues:",
+              filteredDBResultCalenderDataValues
+            );
 
             let singleSalahObj: CalenderSalahArrayObject = {
               [currentDate]: [],
             };
-            for (let i = 0; i < DBResultCalenderDataValues.length; i++) {
-              if (DBResultCalenderDataValues[i].date === currentDate) {
-                let singleObj: SalahEntry = {
-                  salahName: DBResultCalenderDataValues[i].salahName,
-                  salahStatus: DBResultCalenderDataValues[i].salahStatus,
-                };
-                singleSalahObj[obj.date].push(singleObj);
-              }
-            }
+
+            filteredDBResultCalenderDataValues.forEach((obj) => {
+              let singleObj: SalahEntry = {
+                salahName: obj.salahName,
+                salahStatus: obj.salahStatus,
+              };
+              singleSalahObj[obj.date].push(singleObj);
+            });
 
             calenderDataArr.push(singleSalahObj);
           }
@@ -167,7 +184,7 @@ const App = () => {
       }
 
       setCalenderData(calenderDataArr);
-      console.log("calenderDataArr array: ", calenderDataArr);
+      // console.log("calenderDataArr array: ", calenderDataArr);
 
       // return holdArr;
     } catch (error) {
