@@ -38,8 +38,13 @@ export type PreferenceType =
 
 type SalahNames = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
 
+export interface SalahEntry {
+  salahName: SalahNames;
+  salahStatus: SalahStatus;
+}
+
 export interface CalenderSalahArrayObject {
-  [date: string]: [{ salahName: SalahNames; salahStatus: SalahStatus }];
+  [date: string]: SalahEntry[];
 }
 
 export type CalenderSalahArray = CalenderSalahArrayObject[];

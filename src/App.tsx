@@ -4,7 +4,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 // import Notifications from "./utils/notifications";
-import { SalahRecordsArray } from "./types/types";
+import {
+  CalenderSalahArray,
+  CalenderSalahArrayObject,
+  SalahEntry,
+  SalahRecordsArray,
+} from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
@@ -87,7 +92,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   const INITIAL_LOAD_SIZE = 50;
   const [salahData, setSalahData] = useState<SalahRecordsArray>();
-  const [calenderData, setCalenderData] = useState([]);
+  const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
 
   console.log("APP COMPONENT HAS RENDERED");
   const {
@@ -118,36 +123,39 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const fetchedDBResultCalenderData = await dbConnection.current?.query(
+      const DBResultCalenderData = await dbConnection.current?.query(
         `SELECT * FROM salahtrackingtable`
       );
 
       console.log(
         "🚀 ~ fetchCalendarData ~ fetchedsetDBResultCalenderData:",
-        fetchedDBResultCalenderData
+        DBResultCalenderData
       );
 
       console.log("modifyDBResultCalenderData FUNCTION HAS EXECUTED");
 
-      let calenderDataArr = [];
+      let calenderDataArr: CalenderSalahArray = [];
 
-      if (fetchedDBResultCalenderData && fetchedDBResultCalenderData.values) {
-        const resValues = fetchedDBResultCalenderData.values;
-        console.log("🚀 ~ modifyDBResultCalenderData ~ resValues:", resValues);
+      if (DBResultCalenderData && DBResultCalenderData.values) {
+        const DBResultCalenderDataValues = DBResultCalenderData.values;
+        // console.log(
+        //   "🚀 ~ modifyDBResultCalenderData ~ DBResultCalenderDataValues:",
+        //   DBResultCalenderDataValues
+        // );
 
-        resValues.forEach((obj) => {
+        DBResultCalenderDataValues.forEach((obj) => {
           if (!calenderData.some((obj1) => obj1.hasOwnProperty(obj.date))) {
             console.log("!calenderData.some"); // !BUG: This if statement only runs on every other occasion when file is saved, sort out the type for this as hasOwnProperty is giving an error, this should help debug this further
             let currentDate = obj.date;
 
-            let singleSalahObj = {
+            let singleSalahObj: CalenderSalahArrayObject = {
               [currentDate]: [],
             };
-            for (let i = 0; i < resValues.length; i++) {
-              if (resValues[i].date === currentDate) {
-                let singleObj = {
-                  salahName: resValues[i].salahName,
-                  salahStatus: resValues[i].salahStatus,
+            for (let i = 0; i < DBResultCalenderDataValues.length; i++) {
+              if (DBResultCalenderDataValues[i].date === currentDate) {
+                let singleObj: SalahEntry = {
+                  salahName: DBResultCalenderDataValues[i].salahName,
+                  salahStatus: DBResultCalenderDataValues[i].salahStatus,
                 };
                 singleSalahObj[obj.date].push(singleObj);
               }
