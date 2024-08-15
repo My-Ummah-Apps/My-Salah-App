@@ -145,8 +145,6 @@ const App = () => {
         // if (DBResultCalenderDataValues.includes())
 
         DBResultCalenderDataValues.forEach((obj) => {
-          // !BUG: This if statement only runs on every other occasion when file is saved, sort out the type for this as hasOwnProperty is giving an error, this should help debug this further
-
           if (
             !calenderDataArr.some((calenderObj) =>
               calenderObj.hasOwnProperty(obj.date)
