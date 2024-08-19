@@ -85,10 +85,11 @@ const useSQLiteDB = () => {
   async function checkAndOpenOrCloseDBConnection(
     action: DBConnectionStateType
   ) {
-    console.log(
-      "checkAndOpenOrCloseDBConnection has run, dbConnection.current is:"
-    );
-    console.log(dbConnection.current);
+    // console.log(
+    //   "checkAndOpenOrCloseDBConnection has run, dbConnection.current is: ",
+    //   dbConnection.current
+    // );
+
     try {
       if (!dbConnection.current) {
         throw new Error(
@@ -96,8 +97,10 @@ const useSQLiteDB = () => {
         );
       }
 
+      console.log("dbConnection.current exists");
+
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
-      console.log("isDatabaseOpen", isDatabaseOpen);
+      console.log("isDatabaseOpen", isDatabaseOpen.result);
 
       // TODO: The below eliminates errors for now which occurs if the app is trying to open the database but its already open and close it when its already closed, further investigation is needed however to see why attempts are being made to open/close the database when its already opened/closed
       if (
@@ -123,7 +126,7 @@ const useSQLiteDB = () => {
         );
       } else {
         throw new Error(
-          `Database is open: ${isDatabaseOpen.result}, unable to ${action} database connection`
+          `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
         );
       }
     } catch (error) {

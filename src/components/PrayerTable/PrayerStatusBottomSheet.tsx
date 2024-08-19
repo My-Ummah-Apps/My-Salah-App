@@ -44,7 +44,7 @@ const PrayerStatusBottomSheet = ({
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   hasUserClickedDate: boolean;
 }) => {
-  // TODO: On very first app launch, the reasons section does not slide in, after a refresh it starts working
+  // ! BUG: On very first app launch, the reasons section does not slide in, after a refresh it starts working
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);

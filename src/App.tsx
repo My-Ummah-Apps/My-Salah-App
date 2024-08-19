@@ -200,7 +200,7 @@ const App = () => {
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
 
   const [renderTable, setRenderTable] = useState(false);
-  let userStartDate: string | null = "01.01.23";
+  let userStartDate: string | null = "01.01.01";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const endDate = new Date(); // Current date
   const datesBetweenUserStartDateAndToday = eachDayOfInterval({
@@ -306,32 +306,39 @@ const App = () => {
   };
 
   let singleSalahObjArr: SalahRecordsArray = [];
-  const fetchSalahTrackingDataFromDB = async (
-    startIndex: number,
-    endIndex: number
-  ) => {
+  let isFetching = false;
+  const fetchSalahTrackingDataFromDB = async () // startIndex: number,
+  // endIndex: number
+  : Promise<SalahRecordsArray> => {
+    if (isFetching) return [];
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
-      console.log("START AND END INDEX: " + startIndex, endIndex);
+      // console.log("START AND END INDEX: " + startIndex, endIndex);
       await checkAndOpenOrCloseDBConnection("open");
+      isFetching = true;
 
-      const slicedDatesFormattedArr = datesFormatted.slice(
-        startIndex,
-        endIndex
-      );
-      const placeholders = slicedDatesFormattedArr.map(() => "?").join(", ");
+      // const slicedDatesFormattedArr = datesFormatted.slice(
+      //   startIndex,
+      //   endIndex
+      // );
+      const placeholders = datesFormatted.map(() => "?").join(", ");
 
       const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
+      // const query = `SELECT * FROM salahtrackingtable`;
+
       const DBResultSalahData = await dbConnection.current?.query(
         query,
-        slicedDatesFormattedArr
+        datesFormatted
       );
 
-      for (let i = 0; i < slicedDatesFormattedArr.length; i++) {
-        const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
+      console.log("DBResultSalahData:", DBResultSalahData);
+
+      for (let i = 0; i < datesFormatted.length; i++) {
+        // const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
 
         let singleSalahObj: SalahRecord = {
-          date: dateFromDatesFormattedArr,
+          // date: dateFromDatesFormattedArr,
+          date: datesFormatted[i],
           salahs: {
             Fajr: "",
             Dhuhr: "",
@@ -361,10 +368,11 @@ const App = () => {
       return singleSalahObjArr;
     } catch (error) {
       console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: " + error);
-      throw new Error("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: ");
+      return [];
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
+        isFetching = false;
       } catch (error) {
         console.error(error);
       }

@@ -158,9 +158,9 @@ const Calendar = ({
     missed: prayerStatusColors.missedStatusColor,
   };
 
-  // ! BUG: Below function is running a huge amount of times as the calender months are scrolled, this is going to cause performance issues
+  // ! BUG: Below function is running a huge amount of times as the calender months are scrolled, unsure if this is whats causing performance issues when calender component is being scrolled, comment this function call out and see if its still causing slowdown on mobile devices, it could even be console logs that are causing slowdowns
   function determineRadialColors(date: Date) {
-    console.log("determineRadialColors has run");
+    // console.log("determineRadialColors has run, date is: ", date);
     if (date < userStartDateFormatted || date > todaysDate) {
       fajrColor = "transparent";
       zoharColor = "transparent";
@@ -179,7 +179,6 @@ const Calendar = ({
 
     for (let key in calenderData) {
       if (calenderData[key].hasOwnProperty(formattedDate)) {
-        // TODO: Need to understand below types keyof typeof dict
         calenderData[key][formattedDate].forEach((item: SalahEntry) => {
           if (item.salahName === "Fajr") {
             fajrColor = dict[item.salahStatus as keyof typeof dict];
