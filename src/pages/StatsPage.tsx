@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Calendar from "../components/Stats/Calendar";
 
 // import { eachDayOfInterval, parse } from "date-fns";
-import { userGenderType } from "../types/types";
+import { CalenderSalahArray, userGenderType } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
 // import { DBConnectionStateType } from "../types/types";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -24,7 +24,7 @@ const StatsPage = ({
   // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   userGender: userGenderType;
   // tableData: any;
-  calenderData: any;
+  calenderData: CalenderSalahArray;
 
   // checkAndOpenOrCloseDBConnection: (
   //   action: DBConnectionStateType
@@ -38,6 +38,8 @@ const StatsPage = ({
     setHeading("Stats");
   }, []);
 
+  console.log("calenderData: ", calenderData);
+
   // let jamaahStat = 0;
   // let aloneStat = 0;
   // let lateStat = 0;
@@ -46,6 +48,21 @@ const StatsPage = ({
 
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let showDonutChart;
+  let emptyArray = [];
+  // TODO: Amend below to calculate overall stats for donut chart
+  const calculateOverallStats = () => {
+    calenderData.forEach((item) => {
+      console.log("🚀 ~ calenderData.forEach ~ item:", Object.values(item));
+      const test = Object.values(item).map((item) => {
+        console.log("🚀 ~ test ~ item:", item[0].salahStatus);
+      });
+      for (let i = 0; i < Object.values(item).length; i++) {
+        emptyArray.push(item[i].salahStatus);
+      }
+    });
+  };
+
+  calculateOverallStats();
 
   let salahInJamaahDatesOverall: string[] = [];
   let salahMaleAloneDatesOverall: string[] = [];
@@ -74,35 +91,35 @@ const StatsPage = ({
   // );
 
   // function getSalahStatusDates(status: string, array: string[]) {
-  //   // let statToUpdate = 0;
-  //   // salahTrackingArray.forEach((salah) => {
-  //   //   for (let i = 0; i < salah.completedDates.length; i++) {
-  //   //     if (Object.values(salah.completedDates[i])[0].status === status) {
-  //   //       array.push(Object.keys(salah.completedDates[i])[0]);
-  //   //     }
-  //   //   }
-  //   // });
-  //   // statToUpdate = Math.round(
-  //   //   (salahFulfilledDates.length / totalPossibleSalah) * 100
-  //   // );
-  //   // console.log(totalPossibleSalah);
-  //   // Below will potentially be useful when adding individual salah stats
-  //   // if (array.length > 0) {
-  //   //   statToUpdate = Math.round(
-  //   //     (array.length / (salahFulfilledDates.length + array.length)) * 100
-  //   //   );
-  //   // }
-  //   // status === "group"
-  //   //   ? (jamaahStat = statToUpdate)
-  //   //   : status === "male-alone" || status === "female-alone"
-  //   //   ? (aloneStat = statToUpdate)
-  //   //   : status === "late"
-  //   //   ? (lateStat = statToUpdate)
-  //   //   : status === "missed"
-  //   //   ? (missedStat = statToUpdate)
-  //   //   : status === "excused"
-  //   //   ? (excusedStat = statToUpdate)
-  //   //   : null;
+  // let statToUpdate = 0;
+  // salahTrackingArray.forEach((salah) => {
+  //   for (let i = 0; i < salah.completedDates.length; i++) {
+  //     if (Object.values(salah.completedDates[i])[0].status === status) {
+  //       array.push(Object.keys(salah.completedDates[i])[0]);
+  //     }
+  //   }
+  // });
+  // statToUpdate = Math.round(
+  //   (salahFulfilledDates.length / totalPossibleSalah) * 100
+  // );
+  // console.log(totalPossibleSalah);
+  // Below will potentially be useful when adding individual salah stats
+  // if (array.length > 0) {
+  //   statToUpdate = Math.round(
+  //     (array.length / (salahFulfilledDates.length + array.length)) * 100
+  //   );
+  // }
+  // status === "group"
+  //   ? (jamaahStat = statToUpdate)
+  //   : status === "male-alone" || status === "female-alone"
+  //   ? (aloneStat = statToUpdate)
+  //   : status === "late"
+  //   ? (lateStat = statToUpdate)
+  //   : status === "missed"
+  //   ? (missedStat = statToUpdate)
+  //   : status === "excused"
+  //   ? (excusedStat = statToUpdate)
+  //   : null
   // }
 
   // getSalahStatusDates("group", salahInJamaahDatesOverall);

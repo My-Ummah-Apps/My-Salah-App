@@ -96,7 +96,7 @@ const App = () => {
   const [tableData, setTableData] = useState<SalahRecordsArray>([]);
   const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
 
-  console.log("APP COMPONENT HAS RENDERED");
+  // console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
     dbConnection,
@@ -116,14 +116,7 @@ const App = () => {
     }
   }, [isDatabaseInitialised]);
 
-  useEffect(() => {
-    // console.log("SALAHDATAA: ", tableData);
-  }, [tableData]);
-
-  // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long, also ensure this useEffect runs every time new data is INSERTED into the database ie whenever a table cell is updated, as this data will then need to reflect in the calendar component
-  // useEffect(() => {
-  // if (renderTable === true) {
-
+  // ? Is it possible to use table data for the calender also? could remove the below function
   const fetchCalendarData = async () => {
     console.log("fetchCalendarData has run");
     try {
@@ -168,9 +161,6 @@ const App = () => {
       }
 
       setCalenderData(calenderDataArr);
-      console.log("calenderDataArr array: ", calenderDataArr);
-
-      // return singleSalahObjArr;
     } catch (error) {
       console.error("error fetching calender tableData: ", error);
     } finally {
@@ -191,6 +181,8 @@ const App = () => {
   //     fetchCalendarData();
   //   }
   // }, [tableData]);
+
+  console.log("YO ", tableData[0], calenderData[0]);
 
   const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");
@@ -304,7 +296,6 @@ const App = () => {
   };
 
   let singleSalahObjArr: SalahRecordsArray = [];
-  // TODO: Refactor the below function to work without start and index numbers as infiniteloader is being removed from the app
   const fetchSalahTrackingDataFromDB = async (): Promise<SalahRecordsArray> => {
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {

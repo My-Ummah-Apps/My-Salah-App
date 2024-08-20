@@ -21,10 +21,10 @@ const PrayerTable = ({
   setReasonsArray,
   reasonsArray,
   datesFormatted,
-  fetchSalahTrackingDataFromDB,
+
   userGender, // userStartDate,
-} // startDate,
-: {
+  // startDate,
+}: {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -36,10 +36,6 @@ const PrayerTable = ({
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFormatted: string[];
-  fetchSalahTrackingDataFromDB: (
-    startIndex: number,
-    endIndex: number
-  ) => Promise<any>;
   userGender: string;
   // userStartDate: string;
   // startDate: Date;
@@ -54,7 +50,6 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    console.log("ROWGETTER HAS RUN", tableData[index].salahs["Fajr"]);
     return tableData[index];
   };
 
@@ -103,7 +98,6 @@ const PrayerTable = ({
               width={120}
               flexGrow={1}
               cellRenderer={({ rowData }) => {
-                console.log("salahName ", rowData);
                 return rowData.salahs[salahName] === "" ? (
                   <LuDot
                     className={`w-[24px] h-[24px]`}

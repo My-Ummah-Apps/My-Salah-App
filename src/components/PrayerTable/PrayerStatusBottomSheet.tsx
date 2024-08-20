@@ -139,7 +139,6 @@ const PrayerStatusBottomSheet = ({
     const findDateWithinData = tableData.find(
       (obj: any) => obj.date === clickedDate
     );
-    console.log("🚀 ~ tableData:", tableData);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -150,7 +149,6 @@ const PrayerStatusBottomSheet = ({
       );
 
       if (!salahAndDateExist) {
-        console.log("ADDING ITEM...");
         let query = `INSERT INTO salahDataTable(date, salahName, salahStatus`;
         const values = [clickedDate, clickedSalah, salahStatus];
 

@@ -85,11 +85,6 @@ const useSQLiteDB = () => {
   async function checkAndOpenOrCloseDBConnection(
     action: DBConnectionStateType
   ) {
-    // console.log(
-    //   "checkAndOpenOrCloseDBConnection has run, dbConnection.current is: ",
-    //   dbConnection.current
-    // );
-
     try {
       if (!dbConnection.current) {
         throw new Error(
@@ -115,12 +110,12 @@ const useSQLiteDB = () => {
           "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
         );
       } else if (action === "open" && isDatabaseOpen.result === false) {
-        await dbConnection.current?.open();
+        await dbConnection.current.open();
         console.log(
           "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
         );
       } else if (action === "close" && isDatabaseOpen.result === true) {
-        await dbConnection.current?.close();
+        await dbConnection.current.close();
         console.log(
           "Database connection closed within checkAndOpenOrCloseDBConnection function"
         );
@@ -140,7 +135,13 @@ const useSQLiteDB = () => {
     try {
       console.log("ATTEMPTING TO OPEN CONNECTION...");
 
-      // await dbConnection.current?.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
+      if (!dbConnection.current) {
+        throw new Error(
+          `Table not created/initialised within initialiseTables, dbConnection.current is ${dbConnection.current}`
+        );
+      }
+
+      // await dbConnection.current.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
       await checkAndOpenOrCloseDBConnection("open");
 
       // SQL query to create the 'salahtracking' table if it doesn't already exist
@@ -160,14 +161,20 @@ const useSQLiteDB = () => {
        
         )`;
 
-      await dbConnection.current?.execute(userPreferencesTable);
-      await dbConnection.current?.execute(salahDataTable); // Execute the SQL query to create the table in the database
+      await dbConnection.current.execute(userPreferencesTable);
+      await dbConnection.current.execute(salahDataTable); // Execute the SQL query to create the table in the database
     } catch (error) {
       console.error(error);
     } finally {
       try {
-        (await dbConnection.current?.isDBOpen())?.result &&
-          (await dbConnection.current?.close()); // Check if the database is still open and close it if necessary
+        if (!dbConnection.current) {
+          throw new Error(
+            `Unable to close cnnection within initialiseTables, dbConnection.current is ${dbConnection.current}`
+          );
+        }
+
+        (await dbConnection.current.isDBOpen()).result &&
+          (await dbConnection.current.close()); // Check if the database is still open and close it if necessary
         // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
         console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
