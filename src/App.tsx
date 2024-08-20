@@ -202,10 +202,10 @@ const App = () => {
   const [renderTable, setRenderTable] = useState(false);
   let userStartDate: string | null = "01.01.01";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  const endDate = new Date(); // Current date
+  const todaysDate = new Date();
   const datesBetweenUserStartDateAndToday = eachDayOfInterval({
     start: userStartDateFormatted,
-    end: endDate,
+    end: todaysDate,
   });
   const datesFormatted = datesBetweenUserStartDateAndToday.map((date) =>
     format(date, "dd.MM.yy")
@@ -306,16 +306,14 @@ const App = () => {
   };
 
   let singleSalahObjArr: SalahRecordsArray = [];
-  let isFetching = false;
+  // TODO: Refactor the below function to work without start and index numbers as infiniteloader is being removed from the app
   const fetchSalahTrackingDataFromDB = async () // startIndex: number,
   // endIndex: number
   : Promise<SalahRecordsArray> => {
-    if (isFetching) return [];
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
       // console.log("START AND END INDEX: " + startIndex, endIndex);
       await checkAndOpenOrCloseDBConnection("open");
-      isFetching = true;
 
       // const slicedDatesFormattedArr = datesFormatted.slice(
       //   startIndex,
@@ -372,7 +370,6 @@ const App = () => {
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
-        isFetching = false;
       } catch (error) {
         console.error(error);
       }
@@ -448,23 +445,7 @@ const App = () => {
   //   }
   // });
 
-  // let userGender: string | null = localStorage.getItem("userGender");
-
   // const todaysDate = new Date("2024-01-01");
-  const todaysDate = new Date();
-  // let userStartDate: string | null = localStorage.getItem("userStartDate");
-
-  if (!userStartDate) {
-    userStartDate = format(todaysDate, "dd.MM.yy");
-    localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
-  }
-  // useEffect(() => {
-  //   console.log("trrue");
-  //   if (!userStartDate) {
-  //     userStartDate = format(todaysDate, "dd.MM.yy");
-  //     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
-  //   }
-  // }, []);
 
   // const [streakCounter, setStreakCounter] = useState(0);
 

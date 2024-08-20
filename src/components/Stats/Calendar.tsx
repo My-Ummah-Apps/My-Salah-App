@@ -115,17 +115,16 @@ const Calendar = ({
 
   // };
 
-  let todaysDate = new Date();
   // userStartDate = "17.01.11";
 
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
 
-  const endDate = new Date();
+  const todaysDate = new Date();
 
   // Generate an array of all the months between the start and end dates
   const monthsBetween = eachMonthOfInterval({
     start: userStartDateFormatted,
-    end: endDate,
+    end: todaysDate,
   });
 
   // Format the months
