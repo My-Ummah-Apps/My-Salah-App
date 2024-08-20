@@ -144,8 +144,8 @@ const useSQLiteDB = () => {
       await checkAndOpenOrCloseDBConnection("open");
 
       // SQL query to create the 'salahtracking' table if it doesn't already exist
-      const salahtrackingtable = `
-        CREATE TABLE IF NOT EXISTS salahtrackingtable(
+      const salahDataTable = `
+        CREATE TABLE IF NOT EXISTS salahDataTable(
         id INTEGER PRIMARY KEY NOT NULL,
         date TEXT NOT NULL, 
         salahName TEXT NOT NULL, 
@@ -154,14 +154,14 @@ const useSQLiteDB = () => {
         notes TEXT DEFAULT ''
         );
         `;
-      const userpreferencestable = `CREATE TABLE IF NOT EXISTS userpreferencestable(
+      const userPreferencesTable = `CREATE TABLE IF NOT EXISTS userPreferencesTable(
         preferenceName TEXT PRIMARY KEY NOT NULL, 
         preferenceValue TEXT NOT NULL DEFAULT ''
        
         )`;
 
-      await dbConnection.current?.execute(userpreferencestable);
-      await dbConnection.current?.execute(salahtrackingtable); // Execute the SQL query to create the table in the database
+      await dbConnection.current?.execute(userPreferencesTable);
+      await dbConnection.current?.execute(salahDataTable); // Execute the SQL query to create the table in the database
     } catch (error) {
       console.error(error);
     } finally {

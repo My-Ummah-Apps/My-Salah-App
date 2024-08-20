@@ -23,8 +23,8 @@ const PrayerTable = ({
   datesFormatted,
   fetchSalahTrackingDataFromDB,
   userGender, // userStartDate,
-  // startDate,
-}: {
+} // startDate,
+: {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -44,7 +44,6 @@ const PrayerTable = ({
   // userStartDate: string;
   // startDate: Date;
 }) => {
-  // ! BUG: If the user scrolls too fast, the table doesn't crash, however, cells cannot be updated, and the table stops at a particular date, it doesn't go all the way back to the userstartdate as it should, if scrolling is done at a normal speed then these issues do not occur
   // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", tableData);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
@@ -55,35 +54,9 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    // console.log("ROWGETTER HAS RUN", tableData);
-    // return tableData[index];
+    console.log("ROWGETTER HAS RUN", tableData[index].salahs["Fajr"]);
     return tableData[index];
   };
-
-  // const isRowLoaded = ({ index }: any) => {
-  //   // console.log("ISROWLOADED HAS RUN AND BOOLEAN IS: " + !!tableData[index]);
-  //   return !!tableData[index];
-  // };
-
-  // const [showPlaceHolder, setShowPlaceHolder] = useState<boolean>();
-
-  // const loadMoreRows = async ({ startIndex, stopIndex }: any) => {
-  //   setShowPlaceHolder(true);
-  //   try {
-  //     const moreRows = await fetchSalahTrackingDataFromDB(
-  //       startIndex,
-  //       stopIndex
-  //     );
-
-  //     console.log("START AND STOP INDEX: ", startIndex, stopIndex);
-  //     setTableData((prevData: SalahRecordsArray) => [...prevData, ...moreRows]);
-  //     setShowPlaceHolder(true);
-  //     console.log("Data within loadmorerows: ", tableData);
-  //     console.log("loadmorerows has run");
-  //   } catch (error) {
-  //     console.error("Error loading more rows:", error);
-  //   }
-  // };
 
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
   const dict = {
@@ -99,22 +72,12 @@ const PrayerTable = ({
 
   return (
     <section className="relative">
-      {/* <div style={{ width: "100vw !important" }}> */}
       {renderTable === true ? (
-        // <InfiniteLoader
-        //   isRowLoaded={isRowLoaded}
-        //   loadMoreRows={loadMoreRows}
-        //   rowCount={datesFormatted.length}
-        //   threshold={1000} // Threshold at which to pre-fetch tableData. A threshold X means that tableData will start loading when a user scrolls within X rows. Defaults is 15.
-        // >
-        //   {({ onRowsRendered, registerChild }) => (
         <Table
           style={{
             textTransform: "none",
           }}
           className="text-center"
-          // onRowsRendered={onRowsRendered}
-          // ref={registerChild}
           rowCount={datesFormatted.length}
           rowGetter={rowGetter}
           rowHeight={100}
@@ -136,17 +99,11 @@ const PrayerTable = ({
               style={{ marginLeft: "0" }}
               className="text-sm"
               label={salahName}
-              // dataKey="rowData.salahs[salahName]"
               dataKey={""}
               width={120}
               flexGrow={1}
               cellRenderer={({ rowData }) => {
-                // console.log("ROW DATA IS: ", rowData);
-                // const dateObject = parse(rowData, "dd.MM.yy", new Date());
-                // const formattedDay = format(rowData, "EEEE");
-                // return rowData ? (
-                // console.log("RENDERING COLUMN, SALAH STATUS IS:");
-                // console.log(rowData.salahs[salahName]);
+                console.log("salahName ", rowData);
                 return rowData.salahs[salahName] === "" ? (
                   <LuDot
                     className={`w-[24px] h-[24px]`}
@@ -169,17 +126,13 @@ const PrayerTable = ({
                       setClickedSalah(salahName);
                       setHasUserClickedDate(true);
                     }}
-                  >
-                    {/* {cellData} */}
-                  </div>
+                  ></div>
                 );
               }}
             />
           ))}
         </Table>
       ) : (
-        // )}
-        // </InfiniteLoader>
         <div>Loading Data...</div>
       )}
 

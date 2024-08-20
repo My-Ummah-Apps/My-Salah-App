@@ -79,7 +79,7 @@ const PrayerStatusBottomSheet = ({
 
       const res = await dbConnection.current?.query(
         `
-      SELECT * FROM salahtrackingtable 
+      SELECT * FROM salahDataTable 
       WHERE salahName = ? AND date = ?;
     `,
         [clickedSalah, clickedDate]
@@ -151,7 +151,7 @@ const PrayerStatusBottomSheet = ({
 
       if (!salahAndDateExist) {
         console.log("ADDING ITEM...");
-        let query = `INSERT INTO salahtrackingtable(date, salahName, salahStatus`;
+        let query = `INSERT INTO salahDataTable(date, salahName, salahStatus`;
         const values = [clickedDate, clickedSalah, salahStatus];
 
         if (selectedReasons !== undefined && selectedReasons.length > 0) {
@@ -187,7 +187,7 @@ const PrayerStatusBottomSheet = ({
       } else if (salahAndDateExist) {
         console.log("EDITING ITEM...");
 
-        let query = `UPDATE salahtrackingtable SET salahStatus = ?`;
+        let query = `UPDATE salahDataTable SET salahStatus = ?`;
         const values = [salahStatus];
 
         // await dbConnection.current?.run(query, [salahStatus, clickedDate]);

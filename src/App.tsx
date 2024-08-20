@@ -93,7 +93,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 const App = () => {
-  const INITIAL_LOAD_SIZE = 50;
   const [tableData, setTableData] = useState<SalahRecordsArray>([]);
   const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
 
@@ -108,7 +107,7 @@ const App = () => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
-        setTableData(await fetchSalahTrackingDataFromDB(0, INITIAL_LOAD_SIZE));
+        setTableData(await fetchSalahTrackingDataFromDB());
         await fetchUserPreferencesFromDB();
         setRenderTable(true);
         fetchCalendarData();
@@ -118,7 +117,7 @@ const App = () => {
   }, [isDatabaseInitialised]);
 
   useEffect(() => {
-    console.log("SALAHDATAA: ", tableData);
+    // console.log("SALAHDATAA: ", tableData);
   }, [tableData]);
 
   // TODO: Below useEffect should only run once the homepage has loaded and is shown to the user, this is to stop app launch time from getting too long, also ensure this useEffect runs every time new data is INSERTED into the database ie whenever a table cell is updated, as this data will then need to reflect in the calendar component
@@ -131,7 +130,7 @@ const App = () => {
       await checkAndOpenOrCloseDBConnection("open");
 
       const DBResultCalenderData = await dbConnection.current?.query(
-        `SELECT * FROM salahtrackingtable`
+        `SELECT * FROM salahDataTable`
       );
 
       let calenderDataArr: CalenderSalahArray = [];
@@ -169,7 +168,7 @@ const App = () => {
       }
 
       setCalenderData(calenderDataArr);
-      // console.log("calenderDataArr array: ", calenderDataArr);
+      console.log("calenderDataArr array: ", calenderDataArr);
 
       // return singleSalahObjArr;
     } catch (error) {
@@ -217,16 +216,16 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      // const query = `SELECT * FROM userpreferencestable`;
+      // const query = `SELECT * FROM userPreferencesTable`;
       const DBResultPreferences = await dbConnection.current?.query(
-        `SELECT * FROM userpreferencestable`
+        `SELECT * FROM userPreferencesTable`
       );
 
       // const DBResultPreferences2 = await dbConnection.current?.query(
-      //   `SELECT * FROM salahtrackingtable`
+      //   `SELECT * FROM salahDataTable`
       // );
 
-      // console.log("DBResultPreferences (userpreferencestable) IS: ");
+      // console.log("DBResultPreferences (userPreferencesTable) IS: ");
       // console.log(DBResultPreferences);
 
       if (
@@ -234,7 +233,7 @@ const App = () => {
         DBResultPreferences.values.length === 0
       ) {
         const insertQuery = `
-          INSERT OR IGNORE INTO userpreferencestable (preferenceName, preferenceValue) 
+          INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
           VALUES 
           (?, ?),
           (?, ?),
@@ -273,58 +272,53 @@ const App = () => {
       const reasons = DBResultPreferences?.values?.find(
         (row) => row.preferenceName === "reasonsArray"
       );
+      console.log("reasons: ", reasons);
       setReasonsArray(reasons.preferenceValue.split(","));
 
       if (userGenderRow) {
         setUserGender(userGenderRow.preferenceValue);
       } else {
-        console.log("userGenderRow row not found");
+        console.error("userGenderRow row not found");
       }
 
       if (dailyNotificationRow) {
         setDailyNotification(dailyNotificationRow.preferenceValue);
       } else {
-        console.log("dailyNotification row not found");
+        console.error("dailyNotification row not found");
       }
 
       if (dailyNotificationTimeRow) {
         setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
       } else {
-        console.log("dailyNotificationTime row not found");
+        console.error("dailyNotificationTime row not found");
       }
-
-      // const insertQuery = `INSERT INTO userpreferencestable (userGender, notifications) VALUES (?,?)`;
     } catch (error) {
-      console.log("ERROR IN fetchUserPreferencesFromDB FUNCTION: " + error);
+      console.error("ERROR IN fetchUserPreferencesFromDB FUNCTION: " + error);
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.log("ERROR CLOSING DATABASE CONNECTION: " + error);
+        console.error("ERROR CLOSING DATABASE CONNECTION: " + error);
       }
     }
   };
 
   let singleSalahObjArr: SalahRecordsArray = [];
   // TODO: Refactor the below function to work without start and index numbers as infiniteloader is being removed from the app
-  const fetchSalahTrackingDataFromDB = async () // startIndex: number,
-  // endIndex: number
-  : Promise<SalahRecordsArray> => {
+  const fetchSalahTrackingDataFromDB = async (): Promise<SalahRecordsArray> => {
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
     try {
-      // console.log("START AND END INDEX: " + startIndex, endIndex);
       await checkAndOpenOrCloseDBConnection("open");
 
-      // const slicedDatesFormattedArr = datesFormatted.slice(
-      //   startIndex,
-      //   endIndex
-      // );
       const placeholders = datesFormatted.map(() => "?").join(", ");
+      const query = `SELECT * FROM salahDataTable WHERE date IN (${placeholders})`;
+      // const query = `SELECT * FROM salahDataTable`;
 
-      const query = `SELECT * FROM salahtrackingtable WHERE date IN (${placeholders})`;
-      // const query = `SELECT * FROM salahtrackingtable`;
+      if (!dbConnection.current) {
+        throw new Error(`dbConnection.current is: ${dbConnection.current}`);
+      }
 
-      const DBResultSalahData = await dbConnection.current?.query(
+      const DBResultSalahData = await dbConnection.current.query(
         query,
         datesFormatted
       );
@@ -332,10 +326,7 @@ const App = () => {
       console.log("DBResultSalahData:", DBResultSalahData);
 
       for (let i = 0; i < datesFormatted.length; i++) {
-        // const dateFromDatesFormattedArr = datesFormatted[startIndex + i];
-
         let singleSalahObj: SalahRecord = {
-          // date: dateFromDatesFormattedArr,
           date: datesFormatted[i],
           salahs: {
             Fajr: "",
@@ -346,15 +337,14 @@ const App = () => {
           },
         };
 
-        if (DBResultSalahData?.values && DBResultSalahData.values.length > 0) {
+        const currentDate = datesFormatted[i];
+
+        if (DBResultSalahData.values && DBResultSalahData.values.length > 0) {
           for (let i = 0; i < DBResultSalahData.values.length; i++) {
-            if (
-              DBResultSalahData.values?.[i]?.date === dateFromDatesFormattedArr
-            ) {
-              let salahName: SalahNames =
-                DBResultSalahData?.values?.[i].salahName;
+            if (DBResultSalahData.values[i].date === currentDate) {
+              let salahName: SalahNames = DBResultSalahData.values[i].salahName;
               let salahStatus: SalahStatus =
-                DBResultSalahData?.values?.[i].salahStatus;
+                DBResultSalahData.values[i].salahStatus;
               singleSalahObj.salahs[salahName] = salahStatus;
             }
           }
@@ -365,7 +355,7 @@ const App = () => {
 
       return singleSalahObjArr;
     } catch (error) {
-      console.log("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: " + error);
+      console.error("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: " + error);
       return [];
     } finally {
       try {
@@ -376,6 +366,10 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("Table Data: ", tableData);
+  }, [tableData]);
+
   const modifyDataInUserPreferencesTable = async (
     value: string,
     preference: PreferenceType
@@ -383,7 +377,7 @@ const App = () => {
     console.log("value is: " + value);
     try {
       await checkAndOpenOrCloseDBConnection("open");
-      const query = `UPDATE userpreferencestable SET preferenceValue = ? WHERE preferenceName = ?`;
+      const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
       await dbConnection.current?.run(query, [value, preference]);
       console.log("🚀 ~ App ~ value:", value);
     } catch (error) {
