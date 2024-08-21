@@ -71,8 +71,8 @@ const PrayerStatusBottomSheet = ({
     clickedSalah: string,
     clickedDate: string
   ): Promise<boolean> => {
-    console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
-    console.log("isDatabaseUpdating? ", isDatabaseUpdating);
+    // console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
+    // console.log("isDatabaseUpdating? ", isDatabaseUpdating);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -88,13 +88,13 @@ const PrayerStatusBottomSheet = ({
       // console.log("res is: ", res);
 
       if (res && res.values && res.values.length === 0) {
-        console.log("SALAH DATA NOT FOUND, RES.VALUES IS: ", res.values);
+        // console.log("SALAH DATA NOT FOUND, RES.VALUES IS: ", res.values);
         setSalahStatus("");
         setNotes("");
         setSelectedReasons([]);
         return false;
       } else if (res && res.values && res.values.length > 0) {
-        console.log("SALAH DATA FOUND, RES.VALUES IS: ", res.values);
+        // console.log("SALAH DATA FOUND, RES.VALUES IS: ", res.values);
         setSalahStatus(res.values[0].salahStatus);
         setNotes(res.values[0].notes);
         setSelectedReasons(res.values[0].reasons.split(", "));
@@ -107,7 +107,7 @@ const PrayerStatusBottomSheet = ({
         // TODO: Below is stopping the database from being updated so have commented it out for now, this needs to be debugged
         // await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
 

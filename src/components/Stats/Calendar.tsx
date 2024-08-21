@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { CSSProperties } from "react";
 
 import { FixedSizeList as List } from "react-window";
@@ -18,16 +18,19 @@ import {
   eachMonthOfInterval,
   // setMonth,
 } from "date-fns";
+
 import { CalenderSalahArray, SalahEntry } from "../../types/types";
 // import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
+import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
 
 const Calendar = ({
   calenderData,
   userStartDate,
+  tableData,
 }: {
   calenderData: CalenderSalahArray;
   userStartDate: string;
-
+  tableData: any;
   // startDate: Date;
 }) => {
   // useEffect(() => {
@@ -46,9 +49,9 @@ const Calendar = ({
     // }
   });
 
-  // const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
+  const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
   // console.log(showDailySalahDataModal);
-  // const [clickedDate, setClickedDate] = useState<string>("");
+  const [clickedDate, setClickedDate] = useState<string>("");
 
   // useEffect(() => {
   //   setClickedDate(clickedDate);
@@ -240,12 +243,12 @@ const Calendar = ({
             <div
               onClick={() => {
                 if (day <= todaysDate) {
-                  // const formattedDate = format(day, "dd.MM.yy");
+                  const formattedDate = format(day, "dd.MM.yy");
 
-                  // setClickedDate(formattedDate);
+                  setClickedDate(formattedDate);
                   // console.log("CLICKED DATE IS: " + clickedDate);
                   // showDailySalahData(clickedDate);
-                  // setShowDailySalahDataModal(true);
+                  setShowDailySalahDataModal(true);
                   // console.log(showDailySalahDataModal);
                   console.log("TRIGGERED");
                 }
@@ -383,12 +386,12 @@ const Calendar = ({
           </List>
         )}
       </AutoSizer> */}
-      {/* <DailyOverviewBottomSheet
+      <BottomSheetSingleDateView
         setShowDailySalahDataModal={setShowDailySalahDataModal}
         showDailySalahDataModal={showDailySalahDataModal}
-        salahTrackingArray={salahTrackingArray}
+        tableData={tableData}
         clickedDate={clickedDate}
-      /> */}
+      />
     </>
     // </div>
   );

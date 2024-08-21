@@ -357,10 +357,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Table Data: ", tableData);
-  }, [tableData]);
-
   const modifyDataInUserPreferencesTable = async (
     value: string,
     preference: PreferenceType
@@ -372,12 +368,12 @@ const App = () => {
       await dbConnection.current?.run(query, [value, preference]);
       console.log("🚀 ~ App ~ value:", value);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };
@@ -542,8 +538,6 @@ const App = () => {
             index
             element={
               <HomePage
-                // title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
-                // title={heading}
                 dbConnection={dbConnection}
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
@@ -560,9 +554,6 @@ const App = () => {
                 userStartDate={userStartDate}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
-                // startDate={startDate}
-                // setCurrentWeek={setCurrentWeek}
-                // currentWeek={currentWeek}
               />
             }
           />
@@ -571,15 +562,10 @@ const App = () => {
             element={
               <SettingsPage
                 setHeading={setHeading}
-                // title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
                 pageStyles={pageStyles}
-                // dbConnection={dbConnection}
                 modifyDataInUserPreferencesTable={
                   modifyDataInUserPreferencesTable
                 }
-                // checkAndOpenOrCloseDBConnection={
-                //   checkAndOpenOrCloseDBConnection
-                // }
                 setDailyNotification={setDailyNotification}
                 setDailyNotificationTime={setDailyNotificationTime}
                 dailyNotificationTime={dailyNotificationTime}
@@ -591,18 +577,12 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
-                // dbConnection={dbConnection}
                 userGender={userGender}
                 userStartDate={userStartDate}
-                // tableData={tableData}
+                tableData={tableData}
                 calenderData={calenderData}
-                // checkAndOpenOrCloseDBConnection={
-                //   checkAndOpenOrCloseDBConnection
-                // }
-                // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
                 pageStyles={pageStyles}
                 setHeading={setHeading}
-                // startDate={startDate}
               />
             }
           />

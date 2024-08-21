@@ -7,15 +7,17 @@ import DonutPieChart from "../components/Stats/DonutPieChart";
 
 const StatsPage = ({
   userGender,
+  userStartDate,
+  tableData,
   calenderData,
   setHeading,
-  userStartDate,
-  pageStyles, // startDate,
+  pageStyles,
 }: {
   userGender: userGenderType;
+  userStartDate: string;
+  tableData: any;
   calenderData: CalenderSalahArray;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
-  userStartDate: string;
   pageStyles: string;
 }) => {
   useEffect(() => {
@@ -88,7 +90,11 @@ const StatsPage = ({
       ) : (
         ""
       )}
-      <Calendar userStartDate={userStartDate} calenderData={calenderData} />{" "}
+      <Calendar
+        userStartDate={userStartDate}
+        calenderData={calenderData}
+        tableData={tableData}
+      />{" "}
     </section>
   );
 };
