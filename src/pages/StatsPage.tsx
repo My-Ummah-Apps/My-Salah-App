@@ -1,38 +1,22 @@
-// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { useEffect } from "react";
-// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
-import Calendar from "../components/Stats/Calendar";
 
-// import { eachDayOfInterval, parse } from "date-fns";
+import Calendar from "../components/Stats/Calendar";
 import { CalenderSalahArray, userGenderType } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
-// import { DBConnectionStateType } from "../types/types";
-// import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
-  // dbConnection,
   userGender,
-  // tableData,
   calenderData,
-
-  // checkAndOpenOrCloseDBConnection,
   setHeading,
   userStartDate,
   pageStyles, // startDate,
 }: {
-  // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   userGender: userGenderType;
-  // tableData: any;
   calenderData: CalenderSalahArray;
-
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
-  // startDate: Date;
 }) => {
   useEffect(() => {
     setHeading("Stats");
@@ -86,26 +70,12 @@ const StatsPage = ({
     salahLateDatesOverall: salahLateDatesOverall.length,
   };
 
-  // console.log(
-  //   Object.values(salahStatusStatistics).some((num) => num > 0)
-  // );
-  // console.log(Object.values(salahStatusStatistics));
-
   for (let key in salahStatusStatistics) {
-    // console.log(
-    //   salahStatusStatistics[key as keyof typeof salahStatusStatistics]
-    // );
     if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
       showDonutChart = true;
       break;
     }
   }
-
-  // const salahStatusStatisticsLengthCheck = Object.values(
-  //   salahStatusStatistics
-  // ).some((length) => length > 0);
-
-  // setShowDonutChart(salahStatusStatisticsLengthCheck);
 
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
@@ -118,14 +88,7 @@ const StatsPage = ({
       ) : (
         ""
       )}
-      <Calendar
-        userStartDate={userStartDate}
-        calenderData={calenderData}
-        // startDate={startDate}
-        // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-        // setCurrentWeek={setCurrentWeek}
-        // currentWeek={currentWeek}
-      />{" "}
+      <Calendar userStartDate={userStartDate} calenderData={calenderData} />{" "}
     </section>
   );
 };
