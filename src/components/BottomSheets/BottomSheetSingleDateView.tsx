@@ -1,4 +1,5 @@
 // import { useState, useEffect } from "react";
+
 import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
 import { GoPerson } from "react-icons/go";
@@ -6,23 +7,64 @@ import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
 import { PiFlower } from "react-icons/pi";
 import { CalenderSalahArray } from "../../types/types";
+import { DBConnectionStateType } from "../../types/types";
+import { useEffect, useState } from "react";
 
 const BottomSheetSingleDateView = ({
-  tableData,
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
   showDailySalahDataModal,
   setShowDailySalahDataModal,
   clickedDate,
 }: {
-  // salahTrackingArray: salahTrackingEntryType[];
-  tableData: any;
+  dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   showDailySalahDataModal: boolean;
   setShowDailySalahDataModal: React.Dispatch<React.SetStateAction<boolean>>;
   clickedDate: string;
 }) => {
-  console.log("🚀 ~ tableData: ", tableData);
+  console.log("BOTTOM DATE SHEET HAS RENDERED");
+  const [clickedDateData, setClickedDateData] = useState([]);
 
-  const dataForClickedDate = tableData.find((obj) => obj.date === clickedDate);
-  console.log("🚀 ~ test:", test);
+  const prayerNamesOrder = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
+
+  const grabSingleDateData = async (clickedDate: string) => {
+    try {
+      await checkAndOpenOrCloseDBConnection("open");
+
+      const query = "SELECT * FROM salahDataTable WHERE date = ?";
+
+      const data = await dbConnection.current.query(query, [clickedDate]);
+      console.log("🚀 ~ grabSingleDateData ~ data:", data.values);
+
+      const sortedData = data.values.sort((a, b) => {
+        // console.log("🚀 ~ sortedData ~ a:", a);
+        // console.log("🚀 ~ sortedData ~ b:", b);
+        prayerNamesOrder.indexOf(a.salahName) -
+          prayerNamesOrder.indexOf(b.salahName);
+      });
+
+      console.log("🚀 ~ grabSingleDateData ~ sortedData:", sortedData);
+
+      setClickedDateData(sortedData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    grabSingleDateData(clickedDate);
+  }, [clickedDate]);
+
+  //   console.log("🚀 ~ grabSingleDateData ~ sortedData:", clickedDateData);
 
   let datesExists;
   const iconStyles =
@@ -41,8 +83,10 @@ const BottomSheetSingleDateView = ({
           <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
           <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
             <Sheet.Scroller>
-              {/* <section className="mb-20 sheet-content-wrap">
-                {salahTrackingArray.map((item) => {
+              <section className="mb-20 sheet-content-wrap">
+                {clickedDateData.map((item) => {
+                  console.log("🚀 ~ {clickedDateData.map ~ item:", item);
+
                   datesExists = false;
                   return (
                     <div
@@ -57,69 +101,65 @@ const BottomSheetSingleDateView = ({
                             const status = item[storedDate].status;
                             console.log(Object.keys(item));
 
-                            if (storedDate === clickedDate) {
-                              datesExists = true;
-                              if (status === "group") {
-                                return (
-                                  <div
-                                    key={uuidv4()}
-                                    className={`${iconStyles} bg-[color:var(--jamaah-status-color)]`}
-                                  >
-                                    <GoPeople />{" "}
-                                    <p className="ml-2">Prayed in Jamaah</p>
-                                  </div>
-                                );
-                              } else if (status === "male-alone") {
-                                return (
-                                  <div
-                                    key={uuidv4()}
-                                    className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
-                                  >
-                                    <GoPerson />
-                                    <p className="ml-2">Prayed Alone</p>
-                                  </div>
-                                );
-                              } else if (status === "female-alone") {
-                                return (
-                                  <div
-                                    key={uuidv4()}
-                                    className={`${iconStyles} bg-[color:var(--alone-female-status-color)]`}
-                                  >
-                                    <GoPerson />
-                                    <p className="ml-2">Prayed Alone</p>
-                                  </div>
-                                );
-                              } else if (status === "late") {
-                                return (
-                                  <div
-                                    key={uuidv4()}
-                                    className={`${iconStyles} bg-[color:var(--late-status-color)]`}
-                                  >
-                                    {" "}
-                                    <GoSkip />{" "}
-                                    <p className="ml-2">Prayed late</p>
-                                  </div>
-                                );
-                              } else if (status === "missed") {
-                                return (
-                                  <div
-                                    key={uuidv4()}
-                                    className={`${iconStyles} bg-[color:var(--missed-status-color)]`}
-                                  >
-                                    <GoSkip /> <p className="ml-2">Missed</p>
-                                  </div>
-                                );
-                              } else if (status === "excused") {
-                                return (
-                                  <div
-                                    key={uuidv4()}
-                                    className={`${iconStyles} bg-[color:var(--excused-status-color)]`}
-                                  >
-                                    {" "}
-                                    <PiFlower /> <p className="ml-2">Excused</p>
-                                  </div>
-                                );
-                              }
+                            if (status === "group") {
+                              return (
+                                <div
+                                  key={uuidv4()}
+                                  className={`${iconStyles} bg-[color:var(--jamaah-status-color)]`}
+                                >
+                                  <GoPeople />{" "}
+                                  <p className="ml-2">Prayed in Jamaah</p>
+                                </div>
+                              );
+                            } else if (status === "male-alone") {
+                              return (
+                                <div
+                                  key={uuidv4()}
+                                  className={`${iconStyles} bg-[color:var(--alone-male-status-color)]`}
+                                >
+                                  <GoPerson />
+                                  <p className="ml-2">Prayed Alone</p>
+                                </div>
+                              );
+                            } else if (status === "female-alone") {
+                              return (
+                                <div
+                                  key={uuidv4()}
+                                  className={`${iconStyles} bg-[color:var(--alone-female-status-color)]`}
+                                >
+                                  <GoPerson />
+                                  <p className="ml-2">Prayed Alone</p>
+                                </div>
+                              );
+                            } else if (status === "late") {
+                              return (
+                                <div
+                                  key={uuidv4()}
+                                  className={`${iconStyles} bg-[color:var(--late-status-color)]`}
+                                >
+                                  {" "}
+                                  <GoSkip /> <p className="ml-2">Prayed late</p>
+                                </div>
+                              );
+                            } else if (status === "missed") {
+                              return (
+                                <div
+                                  key={uuidv4()}
+                                  className={`${iconStyles} bg-[color:var(--missed-status-color)]`}
+                                >
+                                  <GoSkip /> <p className="ml-2">Missed</p>
+                                </div>
+                              );
+                            } else if (status === "excused") {
+                              return (
+                                <div
+                                  key={uuidv4()}
+                                  className={`${iconStyles} bg-[color:var(--excused-status-color)]`}
+                                >
+                                  {" "}
+                                  <PiFlower /> <p className="ml-2">Excused</p>
+                                </div>
+                              );
                             }
                           })}
                           {datesExists === false ? (
@@ -155,7 +195,7 @@ const BottomSheetSingleDateView = ({
                     </div>
                   );
                 })}
-              </section> */}
+              </section>
             </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>

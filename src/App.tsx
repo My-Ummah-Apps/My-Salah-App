@@ -577,9 +577,12 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
+                dbConnection={dbConnection}
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
                 userGender={userGender}
                 userStartDate={userStartDate}
-                tableData={tableData}
                 calenderData={calenderData}
                 pageStyles={pageStyles}
                 setHeading={setHeading}

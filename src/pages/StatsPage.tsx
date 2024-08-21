@@ -3,19 +3,24 @@ import { useEffect } from "react";
 import Calendar from "../components/Stats/Calendar";
 import { CalenderSalahArray, userGenderType } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
+import { DBConnectionStateType } from "../types/types";
 // import StreakCount from "../components/Stats/StreakCount";
 
 const StatsPage = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
   userGender,
   userStartDate,
-  tableData,
   calenderData,
   setHeading,
   pageStyles,
 }: {
+  dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   userGender: userGenderType;
   userStartDate: string;
-  tableData: any;
   calenderData: CalenderSalahArray;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
@@ -91,9 +96,10 @@ const StatsPage = ({
         ""
       )}
       <Calendar
+        dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         userStartDate={userStartDate}
         calenderData={calenderData}
-        tableData={tableData}
       />{" "}
     </section>
   );

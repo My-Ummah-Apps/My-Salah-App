@@ -20,17 +20,23 @@ import {
 } from "date-fns";
 
 import { CalenderSalahArray, SalahEntry } from "../../types/types";
+import { DBConnectionStateType } from "../../types/types";
 // import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
 
 const Calendar = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
   calenderData,
   userStartDate,
-  tableData,
 }: {
+  dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   calenderData: CalenderSalahArray;
   userStartDate: string;
-  tableData: any;
+
   // startDate: Date;
 }) => {
   // useEffect(() => {
@@ -387,9 +393,10 @@ const Calendar = ({
         )}
       </AutoSizer> */}
       <BottomSheetSingleDateView
+        dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setShowDailySalahDataModal={setShowDailySalahDataModal}
         showDailySalahDataModal={showDailySalahDataModal}
-        tableData={tableData}
         clickedDate={clickedDate}
       />
     </>

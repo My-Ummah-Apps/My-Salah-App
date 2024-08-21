@@ -77,7 +77,7 @@ const PrayerStatusBottomSheet = ({
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const res = await dbConnection.current?.query(
+      const res = await dbConnection.current.query(
         `
       SELECT * FROM salahDataTable 
       WHERE salahName = ? AND date = ?;
@@ -88,7 +88,6 @@ const PrayerStatusBottomSheet = ({
       // console.log("res is: ", res);
 
       if (res && res.values && res.values.length === 0) {
-        // console.log("SALAH DATA NOT FOUND, RES.VALUES IS: ", res.values);
         setSalahStatus("");
         setNotes("");
         setSelectedReasons([]);
@@ -169,7 +168,7 @@ const PrayerStatusBottomSheet = ({
 
         query += `) VALUES (${values.map(() => "?").join(", ")})`;
 
-        await dbConnection.current?.query(query, values); // If .query isn't working, try .execute instead
+        await dbConnection.current.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
 
         if (findDateWithinData) {
@@ -210,7 +209,7 @@ const PrayerStatusBottomSheet = ({
 
         // console.log("🚀 ~ query:", query);
         // console.log("🚀 ~ values:", values);
-        await dbConnection.current?.query(query, values);
+        await dbConnection.current.query(query, values);
 
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
