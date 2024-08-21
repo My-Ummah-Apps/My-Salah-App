@@ -59,7 +59,7 @@ const StatsPage = ({
         });
       });
     });
-    console.log("emptyArray: ", salahStatusesOverallArr);
+    // console.log("emptyArray: ", salahStatusesOverallArr);
 
     const filterSalahStatuses = (salahStatus: string) => {
       return salahStatusesOverallArr.filter((status) => status === salahStatus);
@@ -74,65 +74,6 @@ const StatsPage = ({
   };
 
   calculateOverallStats();
-
-  // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  // let todaysDate = new Date();
-  // let amountOfDaysBetweenStartDateAndToday = eachDayOfInterval({
-  //   start: userStartDateFormatted,
-  //   end: todaysDate,
-  // });
-  // let totalPossibleSalah = amountOfDaysBetweenStartDateAndToday.length * 5;
-  // console.log(totalPossibleSalah);
-
-  // const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
-  //   (accumulatorArray, salah) => {
-  //     for (let i = 0; i < salah.completedDates.length; i++) {
-  //       accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
-  //     }
-  //     return accumulatorArray;
-  //   },
-  //   []
-  // );
-
-  // function getSalahStatusDates(status: string, array: string[]) {
-  // let statToUpdate = 0;
-  // salahTrackingArray.forEach((salah) => {
-  //   for (let i = 0; i < salah.completedDates.length; i++) {
-  //     if (Object.values(salah.completedDates[i])[0].status === status) {
-  //       array.push(Object.keys(salah.completedDates[i])[0]);
-  //     }
-  //   }
-  // });
-  // statToUpdate = Math.round(
-  //   (salahFulfilledDates.length / totalPossibleSalah) * 100
-  // );
-  // console.log(totalPossibleSalah);
-  // Below will potentially be useful when adding individual salah stats
-  // if (array.length > 0) {
-  //   statToUpdate = Math.round(
-  //     (array.length / (salahFulfilledDates.length + array.length)) * 100
-  //   );
-  // }
-  // status === "group"
-  //   ? (jamaahStat = statToUpdate)
-  //   : status === "male-alone" || status === "female-alone"
-  //   ? (aloneStat = statToUpdate)
-  //   : status === "late"
-  //   ? (lateStat = statToUpdate)
-  //   : status === "missed"
-  //   ? (missedStat = statToUpdate)
-  //   : status === "excused"
-  //   ? (excusedStat = statToUpdate)
-  //   : null
-  // }
-
-  // getSalahStatusDates("group", salahInJamaahDatesOverall);
-  // userGender === "male"
-  //   ? getSalahStatusDates("male-alone", salahMaleAloneDatesOverall)
-  //   : getSalahStatusDates("female-alone", salahFemaleAloneDatesOverall);
-  // getSalahStatusDates("late", salahLateDatesOverall);
-  // getSalahStatusDates("missed", salahMissedDatesOverall);
-  // getSalahStatusDates("excused", salahExcusedDatesOverall);
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
