@@ -24,21 +24,21 @@ import { DBConnectionStateType } from "../../types/types";
 // import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
 
-const Calendar = ({
-  dbConnection,
-  checkAndOpenOrCloseDBConnection,
-  calenderData,
-  userStartDate,
-}: {
+interface CalenderProps {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
   calenderData: CalenderSalahArray;
   userStartDate: string;
+}
 
-  // startDate: Date;
-}) => {
+const Calendar = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
+  calenderData,
+  userStartDate,
+}: CalenderProps) => {
   // useEffect(() => {
   //   console.log("calendarData: ", calenderData);
   // }, [calenderData]);

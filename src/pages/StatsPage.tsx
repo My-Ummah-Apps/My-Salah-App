@@ -6,15 +6,7 @@ import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
 // import StreakCount from "../components/Stats/StreakCount";
 
-const StatsPage = ({
-  dbConnection,
-  checkAndOpenOrCloseDBConnection,
-  userGender,
-  userStartDate,
-  calenderData,
-  setHeading,
-  pageStyles,
-}: {
+interface StatsPageProps {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -24,7 +16,17 @@ const StatsPage = ({
   calenderData: CalenderSalahArray;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
-}) => {
+}
+
+const StatsPage = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
+  userGender,
+  userStartDate,
+  calenderData,
+  setHeading,
+  pageStyles,
+}: StatsPageProps) => {
   useEffect(() => {
     setHeading("Stats");
   }, []);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import "react-virtualized/styles.css";
-import { Column, Table, AutoSizer, InfiniteLoader } from "react-virtualized";
+import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
 import { DBConnectionStateType } from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
@@ -11,20 +11,8 @@ import { LuDot } from "react-icons/lu";
 import { SalahRecordsArray } from "../../types/types";
 
 // import StreakCount from "../Stats/StreakCount";
-const PrayerTable = ({
-  dbConnection,
-  checkAndOpenOrCloseDBConnection,
-  renderTable,
-  setTableData,
-  tableData,
-  fetchCalendarData,
-  setReasonsArray,
-  reasonsArray,
-  datesFormatted,
 
-  userGender, // userStartDate,
-  // startDate,
-}: {
+interface PrayerTableProps {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -37,9 +25,20 @@ const PrayerTable = ({
   reasonsArray: string[];
   datesFormatted: string[];
   userGender: string;
-  // userStartDate: string;
-  // startDate: Date;
-}) => {
+}
+
+const PrayerTable = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
+  renderTable,
+  setTableData,
+  tableData,
+  fetchCalendarData,
+  setReasonsArray,
+  reasonsArray,
+  datesFormatted,
+  userGender,
+}: PrayerTableProps) => {
   // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", tableData);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 

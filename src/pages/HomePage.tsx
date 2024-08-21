@@ -9,23 +9,7 @@ import { useEffect } from "react";
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
-const HomePage = ({
-  dbConnection,
-  checkAndOpenOrCloseDBConnection,
-  renderTable,
-  setTableData,
-  tableData,
-  fetchCalendarData,
-  setReasonsArray,
-  reasonsArray,
-  datesFormatted,
-  // title,
-  fetchSalahTrackingDataFromDB,
-  userGender,
-  setHeading,
-  // userStartDate,
-  pageStyles, // startDate,
-}: {
+interface HomePageProps {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -37,17 +21,26 @@ const HomePage = ({
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFormatted: string[];
-  fetchSalahTrackingDataFromDB: (
-    startIndex: number,
-    endIndex: number
-  ) => Promise<any>;
-  // title: React.ReactNode;
   userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
   pageStyles: string;
-  // startDate: Date;
-}) => {
+}
+
+const HomePage = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
+  renderTable,
+  setTableData,
+  tableData,
+  fetchCalendarData,
+  setReasonsArray,
+  reasonsArray,
+  datesFormatted,
+  userGender,
+  setHeading,
+  pageStyles,
+}: HomePageProps) => {
   useEffect(() => {
     setHeading("Home");
   }, []);
@@ -66,7 +59,6 @@ const HomePage = ({
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         renderTable={renderTable}
-        fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
         setReasonsArray={setReasonsArray}
         reasonsArray={reasonsArray}
         datesFormatted={datesFormatted}

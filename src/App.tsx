@@ -546,7 +546,6 @@ const App = () => {
                 setReasonsArray={setReasonsArray}
                 reasonsArray={reasonsArray}
                 datesFormatted={datesFormatted}
-                fetchSalahTrackingDataFromDB={fetchSalahTrackingDataFromDB}
                 setTableData={setTableData}
                 tableData={tableData}
                 fetchCalendarData={fetchCalendarData}

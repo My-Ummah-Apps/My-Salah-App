@@ -19,34 +19,28 @@ import NotificationsBottomSheet from "../components/BottomSheets/NotificationsBo
 // import Switch from "rc-switch";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
-const SettingsPage = ({
-  // title,
-  setHeading,
-  pageStyles,
-  // dbConnection,
-  modifyDataInUserPreferencesTable,
-  // checkAndOpenOrCloseDBConnection,
-  setDailyNotification,
-  dailyNotification,
-  setDailyNotificationTime,
-  dailyNotificationTime,
-}: {
-  // title: React.ReactNode;
+interface SettingsPageProps {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
-  // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   modifyDataInUserPreferencesTable: (
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
   setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
   dailyNotification: string;
   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
   dailyNotificationTime: string;
-}) => {
+}
+
+const SettingsPage = ({
+  setHeading,
+  pageStyles,
+  modifyDataInUserPreferencesTable,
+  setDailyNotification,
+  dailyNotification,
+  setDailyNotificationTime,
+  dailyNotificationTime,
+}: SettingsPageProps) => {
   useEffect(() => {
     setHeading("Settings");
   }, []);

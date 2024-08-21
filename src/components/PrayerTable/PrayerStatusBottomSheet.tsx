@@ -11,22 +11,7 @@ import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { SalahRecordsArray } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 
-const PrayerStatusBottomSheet = ({
-  dbConnection,
-  checkAndOpenOrCloseDBConnection,
-  setTableData,
-  tableData,
-  fetchCalendarData,
-  setReasonsArray,
-  reasonsArray,
-  clickedDate,
-  clickedSalah,
-  userGender,
-  showUpdateStatusModal,
-  setShowUpdateStatusModal,
-  setHasUserClickedDate,
-  hasUserClickedDate,
-}: {
+interface PrayerStatusBottomSheetProps {
   dbConnection: any;
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: any;
@@ -43,7 +28,24 @@ const PrayerStatusBottomSheet = ({
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   hasUserClickedDate: boolean;
-}) => {
+}
+
+const PrayerStatusBottomSheet = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
+  setTableData,
+  tableData,
+  fetchCalendarData,
+  setReasonsArray,
+  reasonsArray,
+  clickedDate,
+  clickedSalah,
+  userGender,
+  showUpdateStatusModal,
+  setShowUpdateStatusModal,
+  setHasUserClickedDate,
+  hasUserClickedDate,
+}: PrayerStatusBottomSheetProps) => {
   // ! BUG: On very first app launch, the reasons section does not slide in, after a refresh it starts working
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
@@ -65,7 +67,7 @@ const PrayerStatusBottomSheet = ({
   // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
-  let isDatabaseUpdating: boolean = false;
+  // let isDatabaseUpdating: boolean = false;
 
   const doesSalahAndDateExists = async (
     clickedSalah: string,
