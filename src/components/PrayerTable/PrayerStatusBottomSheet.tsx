@@ -85,7 +85,7 @@ const PrayerStatusBottomSheet = ({
         [clickedSalah, clickedDate]
       );
 
-      console.log("res is: ", res);
+      // console.log("res is: ", res);
 
       if (res && res.values && res.values.length === 0) {
         console.log("SALAH DATA NOT FOUND, RES.VALUES IS: ", res.values);

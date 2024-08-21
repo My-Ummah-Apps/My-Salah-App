@@ -38,38 +38,42 @@ const StatsPage = ({
     setHeading("Stats");
   }, []);
 
-  console.log("calenderData: ", calenderData);
-
-  // let jamaahStat = 0;
-  // let aloneStat = 0;
-  // let lateStat = 0;
-  // let missedStat = 0;
-  // let excusedStat = 0;
-
-  // const [showDonutChart, setShowDonutChart] = useState(false);
-  let showDonutChart;
-  let emptyArray = [];
-  // TODO: Amend below to calculate overall stats for donut chart
-  const calculateOverallStats = () => {
-    calenderData.forEach((item) => {
-      console.log("🚀 ~ calenderData.forEach ~ item:", Object.values(item));
-      const test = Object.values(item).map((item) => {
-        console.log("🚀 ~ test ~ item:", item[0].salahStatus);
-      });
-      for (let i = 0; i < Object.values(item).length; i++) {
-        emptyArray.push(item[i].salahStatus);
-      }
-    });
-  };
-
-  calculateOverallStats();
-
   let salahInJamaahDatesOverall: string[] = [];
   let salahMaleAloneDatesOverall: string[] = [];
   let salahFemaleAloneDatesOverall: string[] = [];
   let salahExcusedDatesOverall: string[] = [];
   let salahLateDatesOverall: string[] = [];
   let salahMissedDatesOverall: string[] = [];
+
+  console.log("calenderData: ", calenderData);
+
+  // const [showDonutChart, setShowDonutChart] = useState(false);
+  let showDonutChart;
+  let salahStatusesOverallArr: string[] = [];
+
+  const calculateOverallStats = () => {
+    calenderData.forEach((item) => {
+      Object.values(item).forEach((subArr) => {
+        subArr.forEach((obj) => {
+          salahStatusesOverallArr.push(obj.salahStatus);
+        });
+      });
+    });
+    console.log("emptyArray: ", salahStatusesOverallArr);
+
+    const filterSalahStatuses = (salahStatus: string) => {
+      return salahStatusesOverallArr.filter((status) => status === salahStatus);
+    };
+
+    salahInJamaahDatesOverall = filterSalahStatuses("group");
+    salahMaleAloneDatesOverall = filterSalahStatuses("male-alone");
+    salahFemaleAloneDatesOverall = filterSalahStatuses("female-alone");
+    salahExcusedDatesOverall = filterSalahStatuses("excused");
+    salahLateDatesOverall = filterSalahStatuses("late");
+    salahMissedDatesOverall = filterSalahStatuses("missed");
+  };
+
+  calculateOverallStats();
 
   // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   // let todaysDate = new Date();
