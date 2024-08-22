@@ -165,7 +165,7 @@ const Calendar = ({
     late: prayerStatusColors.lateStatusColor,
     missed: prayerStatusColors.missedStatusColor,
   };
-
+  // ! BUG: Whenever the prayer status is updated from the table the radial does not change, if a refresh is given on the prayer table page and THEN user navigates to the stats page, at that point the radial has changed, if a brand new status is added that works fine, its just when modfying an existing status that the radial does not update
   function determineRadialColors(date: Date) {
     if (date < userStartDateFormatted || date > todaysDate) {
       fajrColor = "transparent";
