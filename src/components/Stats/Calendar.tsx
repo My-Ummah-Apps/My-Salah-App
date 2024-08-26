@@ -4,7 +4,10 @@ import { CSSProperties } from "react";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import { prayerStatusColors } from "../../utils/prayerStatusColors";
+import {
+  prayerStatusColorsVars,
+  prayerStatusColorsHexCodes,
+} from "../../utils/prayerStatusColors";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -157,14 +160,6 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  const dict = {
-    group: prayerStatusColors.jamaahStatusColor,
-    "male-alone": prayerStatusColors.aloneMaleStatusColor,
-    "female-alone": prayerStatusColors.aloneFemaleStatusColor,
-    excused: prayerStatusColors.excusedStatusColor,
-    late: prayerStatusColors.lateStatusColor,
-    missed: prayerStatusColors.missedStatusColor,
-  };
   // ! BUG: Whenever the prayer status is updated from the table the radial does not change, if a refresh is given on the prayer table page and THEN user navigates to the stats page, at that point the radial has changed, if a brand new status is added that works fine, its just when modfying an existing status that the radial does not update
   function determineRadialColors(date: Date) {
     if (date < userStartDateFormatted || date > todaysDate) {
@@ -187,15 +182,30 @@ const Calendar = ({
       if (calenderData[key].hasOwnProperty(formattedDate)) {
         calenderData[key][formattedDate].forEach((item: SalahEntry) => {
           if (item.salahName === "Fajr") {
-            fajrColor = dict[item.salahStatus as keyof typeof dict];
+            fajrColor =
+              prayerStatusColorsHexCodes[
+                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
           } else if (item.salahName === "Dhuhr") {
-            zoharColor = dict[item.salahStatus as keyof typeof dict];
+            zoharColor =
+              prayerStatusColorsHexCodes[
+                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
           } else if (item.salahName === "Asar") {
-            asarColor = dict[item.salahStatus as keyof typeof dict];
+            asarColor =
+              prayerStatusColorsHexCodes[
+                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
           } else if (item.salahName === "Maghrib") {
-            maghribColor = dict[item.salahStatus as keyof typeof dict];
+            maghribColor =
+              prayerStatusColorsHexCodes[
+                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
           } else if (item.salahName === "Isha") {
-            ishaColor = dict[item.salahStatus as keyof typeof dict];
+            ishaColor =
+              prayerStatusColorsHexCodes[
+                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
           }
         });
       }

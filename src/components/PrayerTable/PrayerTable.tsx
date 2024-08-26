@@ -9,7 +9,7 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArray } from "../../types/types";
-import { prayerStatusColors } from "../../utils/prayerStatusColors";
+import { prayerStatusColorsVars } from "../../utils/prayerStatusColors";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -104,10 +104,10 @@ const PrayerTable = ({
                   <div
                     className={`w-[24px] h-[24px] ${iconStyles}
                         ${
-                          prayerStatusColors[
+                          prayerStatusColorsVars[
                             rowData.salahs[
                               salahName
-                            ] as keyof typeof prayerStatusColors
+                            ] as keyof typeof prayerStatusColorsVars
                           ]
                         }`}
                     onClick={() => {
