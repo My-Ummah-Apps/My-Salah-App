@@ -6,7 +6,6 @@ import { GoClock } from "react-icons/go";
 import { PiFlower } from "react-icons/pi";
 import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
-import { v4 as uuidv4 } from "uuid";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { SalahRecordsArray } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
@@ -590,7 +589,7 @@ const PrayerStatusBottomSheet = ({
           {/* {missedReasonsArray.map((item) => ( */}
           {reasonsArray.map((item) => (
             <p
-              key={uuidv4()}
+              key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
               style={{
                 backgroundColor: selectedReasons.includes(item) ? "#fff" : "",
               }}

@@ -4,10 +4,7 @@ import { CSSProperties } from "react";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import {
-  prayerStatusColorsVars,
-  prayerStatusColorsHexCodes,
-} from "../../utils/prayerStatusColors";
+import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -19,7 +16,6 @@ import {
   endOfWeek,
   startOfWeek,
   eachMonthOfInterval,
-  // setMonth,
 } from "date-fns";
 
 import { CalenderSalahArray, SalahEntry } from "../../types/types";

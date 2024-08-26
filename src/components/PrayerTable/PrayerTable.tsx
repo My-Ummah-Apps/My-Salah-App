@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-
-import { v4 as uuidv4 } from "uuid";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
@@ -82,7 +80,7 @@ const PrayerTable = ({
           />
           {salahNamesArr.map((salahName) => (
             <Column
-              key={salahName + uuidv4}
+              key={salahName}
               style={{ marginLeft: "0" }}
               className="text-sm"
               label={salahName}

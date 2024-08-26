@@ -1,15 +1,14 @@
 // import { useState, useEffect } from "react";
 
-import { v4 as uuidv4 } from "uuid";
 import Sheet from "react-modal-sheet";
-import { GoPerson } from "react-icons/go";
-import { GoPeople } from "react-icons/go";
-import { GoSkip } from "react-icons/go";
-import { PiFlower } from "react-icons/pi";
-import { CalenderSalahArray, SalahStatus } from "../../types/types";
+// import { GoPerson } from "react-icons/go";
+// import { GoPeople } from "react-icons/go";
+// import { GoSkip } from "react-icons/go";
+// import { PiFlower } from "react-icons/pi";
+import { SalahStatus } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
-import { divide } from "lodash";
+
 import { SalahNames } from "../../types/types";
 import { prayerStatusColorsVars } from "../../utils/prayerStatusColors";
 
@@ -32,16 +31,17 @@ const BottomSheetSingleDateView = ({
 }: BottomSheetSingleDateViewProps) => {
   //
   interface clickedDateObj {
-    id: number | null;
     date: string;
+    id: number | null;
     salahName: SalahNames;
     salahStatus: SalahStatus;
-    reasons: string;
     notes: string;
+    reasons: string;
   }
 
   console.log("BOTTOM DATE SHEET HAS RENDERED");
   const [clickedDateData, setClickedDateData] = useState<clickedDateObj[]>([]);
+  console.log("🚀 ~ clickedDateData:", clickedDateData);
 
   const prayerNamesOrder: SalahNames[] = [
     "Fajr",
@@ -60,12 +60,14 @@ const BottomSheetSingleDateView = ({
       const data = await dbConnection.current.query(query, [clickedDate]);
       console.log("🚀 ~ grabSingleDateData ~ data:", data.values);
 
-      const sortedData = data.values.sort((a, b) => {
-        // console.log("🚀 ~ sortedData ~ a:", a);
-        // console.log("🚀 ~ sortedData ~ b:", b);
-        prayerNamesOrder.indexOf(a.salahName) -
-          prayerNamesOrder.indexOf(b.salahName);
-      });
+      const sortedData: clickedDateObj[] = data.values.sort(
+        (a: clickedDateObj, b: clickedDateObj) => {
+          console.log("🚀 ~ sortedData ~ a:", a);
+          console.log("🚀 ~ sortedData ~ b:", b);
+          prayerNamesOrder.indexOf(a.salahName) -
+            prayerNamesOrder.indexOf(b.salahName);
+        }
+      );
 
       const placeholderData: clickedDateObj[] = prayerNamesOrder.map(
         (salah) => {
@@ -98,7 +100,7 @@ const BottomSheetSingleDateView = ({
           }
         }
       );
-      console.log("🚀 ~ placeholderData ~ placeholderData:", placeholderData);
+
       setClickedDateData(placeholderData);
     } catch (error) {
       console.error(error);
@@ -117,9 +119,6 @@ const BottomSheetSingleDateView = ({
     // console.log("🚀 ~ useEffect ~ placeholderData:", placeholderData);
   }, [clickedDate]);
 
-  let datesExists;
-  const iconStyles =
-    "grow p-3 icon-and-text-wrap rounded-3xl flex flex-row items-center justify-center";
   return (
     <div className="">
       <Sheet
@@ -134,21 +133,23 @@ const BottomSheetSingleDateView = ({
           <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
           <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
             <Sheet.Scroller>
-              <section className="mx-5 mb-20 sheet-content-wrap">
+              <section className="mx-5 sheet-content-wrap">
                 {clickedDateData.map((item) => {
                   return (
                     <>
-                      <div className="flex justify-between my-5">
-                        <div>{item.salahName}</div>
+                      <div className="flex items-center justify-between my-5">
+                        <div className="w-1/2 text-lg text-white">
+                          {item.salahName}
+                        </div>
                         <div
                           className={`${
                             prayerStatusColorsVars[item.salahStatus]
-                          }`}
+                          } px-2 py-3 rounded-2xl text-white grow icon-and-text-wrap flex flex-row items-center justify-center w-1/2`}
                         >
                           {item.salahStatus}
                         </div>
                       </div>
-                      <div className="">
+                      <div className="border-[var(--border-bottom-color)] border-b pb-10 mb-10">
                         <div className="my-3">Reasons: {item.reasons}</div>
                         <div>Notes: {item.notes}</div>
                       </div>
