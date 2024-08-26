@@ -1,6 +1,6 @@
 // import React, { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { prayerStatusColors } from "../../utils/prayerStatusColors";
+import { prayerStatusColorsDonutChart } from "../../utils/prayerStatusColors";
 import { userGenderType } from "../../types/types";
 
 interface CustomizedLabelProps {
@@ -88,16 +88,16 @@ const DonutPieChart = ({
     //   : ["green", "purple", "orange", "red"];
     userGender === "male"
       ? [
-          prayerStatusColors.jamaahStatusColor,
-          prayerStatusColors.aloneMaleStatusColor,
-          prayerStatusColors.lateStatusColor,
-          prayerStatusColors.missedStatusColor,
+          prayerStatusColorsDonutChart.jamaahStatusColor,
+          prayerStatusColorsDonutChart.aloneMaleStatusColor,
+          prayerStatusColorsDonutChart.lateStatusColor,
+          prayerStatusColorsDonutChart.missedStatusColor,
         ]
       : [
-          prayerStatusColors.aloneFemaleStatusColor,
-          prayerStatusColors.excusedStatusColor,
-          prayerStatusColors.lateStatusColor,
-          prayerStatusColors.missedStatusColor,
+          prayerStatusColorsDonutChart.aloneFemaleStatusColor,
+          prayerStatusColorsDonutChart.excusedStatusColor,
+          prayerStatusColorsDonutChart.lateStatusColor,
+          prayerStatusColorsDonutChart.missedStatusColor,
         ];
   return (
     <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2 ">

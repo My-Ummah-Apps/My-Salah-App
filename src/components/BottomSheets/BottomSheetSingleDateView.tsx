@@ -29,6 +29,7 @@ const BottomSheetSingleDateView = ({
   setShowDailySalahDataModal,
   clickedDate,
 }: BottomSheetSingleDateViewProps) => {
+  //
   interface clickedDateObj {
     id: number | null;
     date: string;
@@ -132,15 +133,19 @@ const BottomSheetSingleDateView = ({
           <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
           <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
             <Sheet.Scroller>
-              <section className="mb-20 sheet-content-wrap">
+              <section className="mx-5 mb-20 sheet-content-wrap">
                 {clickedDateData.map((item) => {
                   return (
-                    <div className="m-5">
-                      <div>{item.salahName}</div>
-                      <div>{item.salahStatus}</div>
-                      <div>{item.reasons}</div>
-                      <div>{item.notes}</div>
-                    </div>
+                    <>
+                      <div className="flex justify-between my-5">
+                        <div>{item.salahName}</div>
+                        <div className="">{item.salahStatus}</div>
+                      </div>
+                      <div className="">
+                        <div className="my-3">Reasons: {item.reasons}</div>
+                        <div>Notes: {item.notes}</div>
+                      </div>
+                    </>
                   );
                 })}
               </section>

@@ -38,7 +38,7 @@ const StatsPage = ({
   let salahLateDatesOverall: string[] = [];
   let salahMissedDatesOverall: string[] = [];
 
-  console.log("calenderData: ", calenderData);
+  // console.log("calenderData: ", calenderData);
 
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let showDonutChart;

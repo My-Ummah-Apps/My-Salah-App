@@ -9,6 +9,7 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArray } from "../../types/types";
+import { prayerStatusColors } from "../../utils/prayerStatusColors";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -53,14 +54,6 @@ const PrayerTable = ({
   };
 
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
-  const dict = {
-    group: "bg-[color:var(--jamaah-status-color)]",
-    "male-alone": "bg-[color:var(--alone-male-status-color)]",
-    "female-alone": "bg-[color:var(--alone-female-status-color)]",
-    excused: "bg-[color:var(--excused-status-color)]",
-    late: "bg-[color:var(--late-status-color)]",
-    missed: "bg-[color:var(--missed-status-color)]",
-  };
 
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
 
@@ -111,7 +104,11 @@ const PrayerTable = ({
                   <div
                     className={`w-[24px] h-[24px] ${iconStyles}
                         ${
-                          dict[rowData.salahs[salahName] as keyof typeof dict]
+                          prayerStatusColors[
+                            rowData.salahs[
+                              salahName
+                            ] as keyof typeof prayerStatusColors
+                          ]
                         }`}
                     onClick={() => {
                       setShowUpdateStatusModal(true);
