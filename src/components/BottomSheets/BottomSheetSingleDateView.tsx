@@ -11,6 +11,7 @@ import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
 import { divide } from "lodash";
 import { SalahNames } from "../../types/types";
+import { prayerStatusColorsVars } from "../../utils/prayerStatusColors";
 
 interface BottomSheetSingleDateViewProps {
   dbConnection: any;
@@ -139,7 +140,13 @@ const BottomSheetSingleDateView = ({
                     <>
                       <div className="flex justify-between my-5">
                         <div>{item.salahName}</div>
-                        <div className="">{item.salahStatus}</div>
+                        <div
+                          className={`${
+                            prayerStatusColorsVars[item.salahStatus]
+                          }`}
+                        >
+                          {item.salahStatus}
+                        </div>
                       </div>
                       <div className="">
                         <div className="my-3">Reasons: {item.reasons}</div>

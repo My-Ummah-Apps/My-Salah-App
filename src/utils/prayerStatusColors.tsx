@@ -5,7 +5,8 @@ export const prayerStatusColorsHexCodes = {
   excused: "#b317ae",
   late: "#ea580c",
   missed: "#b62e2e",
-} as const;
+  "": "transparent",
+};
 
 export const prayerStatusColorsVars = {
   group: "bg-[color:var(--jamaah-status-color)]",
@@ -14,4 +15,5 @@ export const prayerStatusColorsVars = {
   excused: "bg-[color:var(--excused-status-color)]",
   late: "bg-[color:var(--late-status-color)]",
   missed: "bg-[color:var(--missed-status-color)]",
-} as const;
+  "": "transparent",
+};
