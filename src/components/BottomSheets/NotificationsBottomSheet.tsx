@@ -87,7 +87,6 @@ const NotificationsBottomSheet = ({
   // };
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
     setDailyNotificationTime(e.target.value);
     const [hour, minute] = e.target.value.split(":").map(Number);
     scheduleDailyNotification(hour, minute);

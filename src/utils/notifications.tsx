@@ -1,7 +1,6 @@
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Capacitor } from "@capacitor/core";
 
-console.log("NOTIFICATIONS LOADED");
 let requestPermission;
 let checkPermission;
 let userNotificationPermission;

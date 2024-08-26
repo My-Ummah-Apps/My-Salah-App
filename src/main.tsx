@@ -19,11 +19,9 @@ window.addEventListener("DOMContentLoaded", async () => {
       const jeepSqliteEl = document.createElement("jeep-sqlite");
       document.body.appendChild(jeepSqliteEl);
       await customElements.whenDefined("jeep-sqlite");
-      console.log(`after customElements.whenDefined`);
 
       // Initialize the Web store
       await sqlite.initWebStore();
-      console.log(`after initWebStore`);
     }
 
     const container = document.getElementById("root");
@@ -34,8 +32,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       </React.StrictMode>
     );
   } catch (e) {
-    console.log("ERROR");
-    console.log(e);
+    console.error(e);
   }
 });
 

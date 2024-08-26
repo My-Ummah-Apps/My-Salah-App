@@ -39,9 +39,7 @@ const BottomSheetSingleDateView = ({
     reasons: string;
   }
 
-  console.log("BOTTOM DATE SHEET HAS RENDERED");
   const [clickedDateData, setClickedDateData] = useState<clickedDateObj[]>([]);
-  console.log("🚀 ~ clickedDateData:", clickedDateData);
 
   const prayerNamesOrder: SalahNames[] = [
     "Fajr",
@@ -58,12 +56,9 @@ const BottomSheetSingleDateView = ({
       const query = "SELECT * FROM salahDataTable WHERE date = ?";
 
       const data = await dbConnection.current.query(query, [clickedDate]);
-      console.log("🚀 ~ grabSingleDateData ~ data:", data.values);
 
       const sortedData: clickedDateObj[] = data.values.sort(
         (a: clickedDateObj, b: clickedDateObj) => {
-          console.log("🚀 ~ sortedData ~ a:", a);
-          console.log("🚀 ~ sortedData ~ b:", b);
           prayerNamesOrder.indexOf(a.salahName) -
             prayerNamesOrder.indexOf(b.salahName);
         }
@@ -74,10 +69,8 @@ const BottomSheetSingleDateView = ({
           // console.log("🚀 ~ placeholderData ~ item:", salah);
           // console.log("🚀 ~ clickedDateData ~ clickedDateData:", clickedDateData);
           const dataCheck = sortedData.find((obj) => {
-            console.log(obj);
             return obj.salahName === salah;
           });
-          console.log("🚀 ~ dataCheck ~ dataCheck:", dataCheck);
 
           if (dataCheck) {
             return {

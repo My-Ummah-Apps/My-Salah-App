@@ -121,7 +121,11 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const DBResultCalenderData = await dbConnection.current?.query(
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection or dbConnection.current do not exist");
+      }
+
+      const DBResultCalenderData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`
       );
 
@@ -181,8 +185,6 @@ const App = () => {
   //   }
   // }, [tableData]);
 
-  console.log("YO ", tableData[0], calenderData[0]);
-
   const [userGender, setUserGender] = useState<userGenderType>("male");
   const [dailyNotification, setDailyNotification] = useState<string>("");
   const [dailyNotificationTime, setDailyNotificationTime] =
@@ -207,20 +209,20 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
+      if (!dbConnection.current) {
+        throw new Error("dbConnection does not exist");
+      }
       // const query = `SELECT * FROM userPreferencesTable`;
-      const DBResultPreferences = await dbConnection.current?.query(
+      const DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
       );
 
-      // const DBResultPreferences2 = await dbConnection.current?.query(
-      //   `SELECT * FROM salahDataTable`
-      // );
-
-      // console.log("DBResultPreferences (userPreferencesTable) IS: ");
-      // console.log(DBResultPreferences);
+      if (!DBResultPreferences) {
+        throw new Error("DBResultPreferences does not exist");
+      }
 
       if (
-        DBResultPreferences?.values &&
+        DBResultPreferences.values &&
         DBResultPreferences.values.length === 0
       ) {
         const insertQuery = `
@@ -239,31 +241,35 @@ const App = () => {
           "dailyNotification", "0",
           "dailyNotificationTime", "21:00",
           "haptics", "0",
-          "reasonsArray", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
+          "reasons", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
           "showReasons", "0",
         ];
-        await dbConnection.current?.query(insertQuery, params);
-        // await dbConnection.current?.execute(insertQuery);
+        await dbConnection.current.query(insertQuery, params);
 
         setShowIntroModal(true);
       }
 
-      const userGenderRow = DBResultPreferences?.values?.find(
+      if (!DBResultPreferences.values) {
+        throw new Error("DBResultPreferences.values does not exist");
+      }
+
+      const userGenderRow = DBResultPreferences.values.find(
         (row) => row.preferenceName === "userGender"
       );
 
-      const dailyNotificationRow = DBResultPreferences?.values?.find(
+      const dailyNotificationRow = DBResultPreferences.values.find(
         (row) => row.preferenceName === "dailyNotification"
       );
-      console.log("dailyNotificationRow", dailyNotificationRow);
-      const dailyNotificationTimeRow = DBResultPreferences?.values?.find(
+
+      const dailyNotificationTimeRow = DBResultPreferences.values.find(
         (row) => row.preferenceName === "dailyNotificationTime"
       );
 
-      const reasons = DBResultPreferences?.values?.find(
-        (row) => row.preferenceName === "reasonsArray"
+      const reasons = DBResultPreferences.values.find(
+        (row) => row.preferenceName === "reasons"
       );
       console.log("reasons: ", reasons);
+
       setReasonsArray(reasons.preferenceValue.split(","));
 
       if (userGenderRow) {
@@ -313,8 +319,6 @@ const App = () => {
         datesFormatted
       );
 
-      console.log("DBResultSalahData:", DBResultSalahData);
-
       for (let i = 0; i < datesFormatted.length; i++) {
         let singleSalahObj: SalahRecord = {
           date: datesFormatted[i],
@@ -360,12 +364,13 @@ const App = () => {
     value: string,
     preference: PreferenceType
   ) => {
-    console.log("value is: " + value);
     try {
       await checkAndOpenOrCloseDBConnection("open");
       const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-      await dbConnection.current?.run(query, [value, preference]);
-      console.log("🚀 ~ App ~ value:", value);
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection or dbConnection.current do not exist");
+      }
+      await dbConnection.current.run(query, [value, preference]);
     } catch (error) {
       console.error(error);
     } finally {

@@ -157,7 +157,6 @@ const PrayerStatusBottomSheet = ({
           query += `, reasons`;
           const stringifiedReasons = selectedReasons.join(", ");
           // values.push(...reasons);
-          console.log("🚀 ~ reasons:", stringifiedReasons);
           values.push(stringifiedReasons);
         }
 
@@ -180,27 +179,21 @@ const PrayerStatusBottomSheet = ({
 
         setTableData([...tableData]);
         await fetchCalendarData();
-
-        console.log("amendedData ", findDateWithinData);
       } else if (salahAndDateExist) {
-        console.log("EDITING ITEM...");
-
         let query = `UPDATE salahDataTable SET salahStatus = ?`;
         const values = [salahStatus];
 
         // await dbConnection.current?.run(query, [salahStatus, clickedDate]);
 
         if (selectedReasons !== undefined && selectedReasons.length > 0) {
-          console.log("REASONS ARE NOT UNDEFINED");
           const stringifiedReasons = selectedReasons.join(", ");
           query += `, reasons = ?`;
           // values.push(...reasons);
-          console.log("🚀 ~ reasons:", stringifiedReasons);
+
           values.push(stringifiedReasons);
         }
 
         if (notes !== undefined && notes !== "") {
-          console.log("NOTES ARE NOT UNDEFINED");
           query += `, notes = ?`;
           values.push(notes);
         }
@@ -208,8 +201,6 @@ const PrayerStatusBottomSheet = ({
         query += ` WHERE date = ? AND salahName = ?`;
         values.push(clickedDate, clickedSalah);
 
-        // console.log("🚀 ~ query:", query);
-        // console.log("🚀 ~ values:", values);
         await dbConnection.current.query(query, values);
 
         if (findDateWithinData) {
