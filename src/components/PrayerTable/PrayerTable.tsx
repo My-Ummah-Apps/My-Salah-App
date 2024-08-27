@@ -7,7 +7,7 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArray } from "../../types/types";
-import { prayerStatusColorsVars } from "../../utils/prayerStatusColors";
+import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -100,14 +100,15 @@ const PrayerTable = ({
                   />
                 ) : (
                   <div
-                    className={`w-[24px] h-[24px] ${iconStyles}
-                        ${
-                          prayerStatusColorsVars[
-                            rowData.salahs[
-                              salahName
-                            ] as keyof typeof prayerStatusColorsVars
-                          ]
-                        }`}
+                    style={{
+                      backgroundColor:
+                        prayerStatusColorsHexCodes[
+                          rowData.salahs[
+                            salahName
+                          ] as keyof typeof prayerStatusColorsHexCodes
+                        ],
+                    }}
+                    className={`w-[24px] h-[24px] ${iconStyles}`}
                     onClick={() => {
                       setShowUpdateStatusModal(true);
                       setClickedDate(rowData.date);

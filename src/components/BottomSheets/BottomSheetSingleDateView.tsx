@@ -10,7 +10,7 @@ import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
 
 import { SalahNames } from "../../types/types";
-import { prayerStatusColorsVars } from "../../utils/prayerStatusColors";
+import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
 
 interface BottomSheetSingleDateViewProps {
   dbConnection: any;
@@ -135,9 +135,13 @@ const BottomSheetSingleDateView = ({
                           {item.salahName}
                         </div>
                         <div
-                          className={`${
-                            prayerStatusColorsVars[item.salahStatus]
-                          } px-2 py-3 rounded-2xl text-white grow icon-and-text-wrap flex flex-row items-center justify-center w-1/2`}
+                          style={{
+                            backgroundColor:
+                              prayerStatusColorsHexCodes[item.salahStatus],
+                          }}
+                          className={
+                            "px-2 py-3 rounded-2xl text-white grow icon-and-text-wrap flex flex-row items-center justify-center w-1/2"
+                          }
                         >
                           {item.salahStatus}
                         </div>

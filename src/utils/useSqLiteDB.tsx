@@ -7,7 +7,7 @@ import {
 } from "@capacitor-community/sqlite";
 
 const useSQLiteDB = () => {
-  console.log("useSQLiteDB HAS RUN");
+  // console.log("useSQLiteDB HAS RUN");
   const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection
   const dbConnection = useRef<SQLiteDBConnection>(); // This is the connection to the database itself, will deal with READ/INSERT etc
   const [isDatabaseInitialised, setisDatabaseInitialised] =
@@ -18,7 +18,7 @@ const useSQLiteDB = () => {
       try {
         // if (sqliteConnection && dbConnection) return;
         if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so return out of the function
-        console.log("INITIALISING DATABASE");
+        // console.log("INITIALISING DATABASE");
 
         sqliteConnection.current = new SQLiteConnection(CapacitorSQLite); // Create a new SQLiteConnection instance and assign it to sqliteConnection.current.
         const connectionConsistency =

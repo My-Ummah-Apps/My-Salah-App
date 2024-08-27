@@ -447,10 +447,6 @@ const PrayerStatusBottomSheet = ({
                             );
                           }
                           setSelectedReasons(selectedReasonsArray);
-                          console.log(
-                            "selectedReasonsArray ",
-                            selectedReasonsArray
-                          );
                         }}
                         // border border-gray-700 b-1 rounded-xl
                         className="p-2 m-1 text-xs bg-[rgba(0, 0, 0, 1)] bg-gray-800/70 rounded-xl"

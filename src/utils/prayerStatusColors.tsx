@@ -7,13 +7,3 @@ export const prayerStatusColorsHexCodes = {
   missed: "#b62e2e",
   "": "transparent",
 };
-
-export const prayerStatusColorsVars = {
-  group: "bg-[color:var(--jamaah-status-color)]",
-  "male-alone": "bg-[color:var(--alone-male-status-color)]",
-  "female-alone": "bg-[color:var(--alone-female-status-color)]",
-  excused: "bg-[color:var(--excused-status-color)]",
-  late: "bg-[color:var(--late-status-color)]",
-  missed: "bg-[color:var(--missed-status-color)]",
-  "": "transparent",
-};
