@@ -13,8 +13,6 @@ const useSQLiteDB = () => {
   const [isDatabaseInitialised, setisDatabaseInitialised] =
     useState<boolean>(false);
 
-  //   console.log(dbConnection.current);
-
   useEffect(() => {
     const initialiseDB = async () => {
       try {
@@ -59,7 +57,7 @@ const useSQLiteDB = () => {
 
         await initialiseTables();
         setisDatabaseInitialised(true);
-        console.log("Database initialisation complete");
+        // console.log("Database initialisation complete");
       } catch (error) {
         console.error("Error initializing database: " + error);
       }
@@ -73,13 +71,15 @@ const useSQLiteDB = () => {
     // });
 
     // Cleanup function to close the database connection when the component unmounts
-    const cleanUp = async () => {
-      await checkAndOpenOrCloseDBConnection("close");
-    };
-    return () => {
-      console.log("cleanup within initialiseDB has run");
-      cleanUp();
-    };
+    // ? Unsure if the below cleanup function is needed
+    // const cleanUp = async () => {
+
+    //   await checkAndOpenOrCloseDBConnection("close");
+    // };
+    // return () => {
+    //   console.log("cleanup within initialiseDB has run");
+    //   cleanUp();
+    // };
   }, []);
 
   async function checkAndOpenOrCloseDBConnection(
@@ -92,10 +92,7 @@ const useSQLiteDB = () => {
         );
       }
 
-      console.log("dbConnection.current exists");
-
       const isDatabaseOpen = await dbConnection.current.isDBOpen();
-      console.log("isDatabaseOpen", isDatabaseOpen.result);
 
       // TODO: The below eliminates errors for now which occurs if the app is trying to open the database but its already open and close it when its already closed, further investigation is needed however to see why attempts are being made to open/close the database when its already opened/closed
       if (
@@ -111,14 +108,14 @@ const useSQLiteDB = () => {
         );
       } else if (action === "open" && isDatabaseOpen.result === false) {
         await dbConnection.current.open();
-        console.log(
-          "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
-        );
+        // console.log(
+        //   "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
+        // );
       } else if (action === "close" && isDatabaseOpen.result === true) {
         await dbConnection.current.close();
-        console.log(
-          "Database connection closed within checkAndOpenOrCloseDBConnection function"
-        );
+        // console.log(
+        //   "Database connection closed within checkAndOpenOrCloseDBConnection function"
+        // );
       } else {
         throw new Error(
           `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
@@ -129,11 +126,11 @@ const useSQLiteDB = () => {
     }
   }
 
-  // here is where you can check and update table structure
+  // This is where you can check and update table structure
   const initialiseTables = async () => {
-    console.log("INITIALISING TABLES...");
+    // console.log("INITIALISING TABLES...");
     try {
-      console.log("ATTEMPTING TO OPEN CONNECTION...");
+      // console.log("ATTEMPTING TO OPEN CONNECTION...");
 
       if (!dbConnection.current) {
         throw new Error(
@@ -141,10 +138,9 @@ const useSQLiteDB = () => {
         );
       }
 
-      // await dbConnection.current.open(); // Attempt to open the database connection if it exists for database (in this case, CRUD) operations
       await checkAndOpenOrCloseDBConnection("open");
 
-      // SQL query to create the 'salahtracking' table if it doesn't already exist
+      // SQL query to create the 'salahDataTable' table if it doesn't already exist
       const salahDataTable = `
         CREATE TABLE IF NOT EXISTS salahDataTable(
         id INTEGER PRIMARY KEY NOT NULL,
@@ -173,10 +169,13 @@ const useSQLiteDB = () => {
           );
         }
 
-        (await dbConnection.current.isDBOpen()).result &&
-          (await dbConnection.current.close()); // Check if the database is still open and close it if necessary
+        const isDatabaseOpen = await dbConnection.current.isDBOpen();
+        if (isDatabaseOpen.result) {
+          await checkAndOpenOrCloseDBConnection("close");
+        }
+
         // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
-        console.log("CLEANUP WITHIN PERFORMSQLACTION");
+        // console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
         console.error(error);
       }

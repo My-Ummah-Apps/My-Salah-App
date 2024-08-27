@@ -217,13 +217,15 @@ const App = () => {
         `SELECT * FROM userPreferencesTable`
       );
 
-      if (!DBResultPreferences || !DBResultPreferences.values) {
+      let DBResultPreferencesValues = DBResultPreferences.values;
+
+      if (!DBResultPreferences || !DBResultPreferencesValues) {
         throw new Error(
-          "DBResultPreferences or DBResultPreferences.values does not exist"
+          "DBResultPreferences or DBResultPreferencesValues does not exist"
         );
       }
 
-      if (DBResultPreferences.values.length === 0) {
+      if (DBResultPreferencesValues.length === 0) {
         const insertQuery = `
           INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
           VALUES 
@@ -236,7 +238,7 @@ const App = () => {
           `;
         // prettier-ignore
         const params = [
-          "userGender", "",
+          "userGender", "male",
           "dailyNotification", "0",
           "dailyNotificationTime", "21:00",
           "haptics", "0",
@@ -247,49 +249,46 @@ const App = () => {
         DBResultPreferences = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
         );
-
+        DBResultPreferencesValues = DBResultPreferences.values;
         setShowIntroModal(true);
       }
 
-      if (!DBResultPreferences.values) {
-        throw new Error("DBResultPreferences does not exist");
+      if (!DBResultPreferencesValues) {
+        throw new Error("DBResultPreferencesValues does not exist");
       }
 
-      const assignPreference = (preference: string) => {
-        if (!DBResultPreferences.values) {
-          throw new Error("DBResultPreferences does not exist");
-        }
-
-        return DBResultPreferences.values.find(
+      const assignPreference = (
+        preference: string
+      ): {
+        preferenceName: string;
+        preferenceValue: string;
+      } | null => {
+        let res = DBResultPreferencesValues.find(
           (row) => row.preferenceName === preference
         );
+
+        if (res) {
+          return res;
+        } else {
+          console.error("row does not exist");
+          return null;
+        }
       };
 
       const userGenderRow = assignPreference("userGender");
-      console.log(
-        "🚀 ~ fetchUserPreferencesFromDB ~ userGenderRow:",
-        userGenderRow
+      const dailyNotificationRow = assignPreference("dailyNotification");
+      const dailyNotificationTimeRow = assignPreference(
+        "dailyNotificationTime"
       );
-
-      // const userGenderRow = DBResultPreferences.values.find(
-      //   (row) => row.preferenceName === "userGender"
-      // );
-
-      const dailyNotificationRow = DBResultPreferences.values.find(
-        (row) => row.preferenceName === "dailyNotification"
-      );
-
-      const dailyNotificationTimeRow = DBResultPreferences.values.find(
-        (row) => row.preferenceName === "dailyNotificationTime"
-      );
-
-      const reasons = DBResultPreferences.values.find(
-        (row) => row.preferenceName === "reasons"
-      );
-      console.log("reasons: ", reasons);
+      const reasons = assignPreference("reasons");
 
       if (userGenderRow) {
-        setUserGender(userGenderRow.preferenceValue);
+        const gender = userGenderRow.preferenceValue as userGenderType;
+        if (gender === "male" || gender === "female") {
+          setUserGender(gender);
+        } else {
+          console.error(`Invalid gender value: ${gender}`);
+        }
       } else {
         console.error("userGenderRow row not found");
       }
@@ -311,7 +310,6 @@ const App = () => {
       } else {
         console.error("dailyNotificationTime row not found");
       }
-      // }
     } catch (error) {
       console.error("ERROR IN fetchUserPreferencesFromDB FUNCTION: " + error);
     } finally {
