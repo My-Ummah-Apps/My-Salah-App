@@ -253,6 +253,7 @@ const App = () => {
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
 
   const [renderTable, setRenderTable] = useState(false);
+  // TODO: Some of the below code should only be running on initial app launch
   let userStartDate: string | null = "01.01.01";
   const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
   const todaysDate = new Date();
@@ -298,6 +299,7 @@ const App = () => {
           (?, ?)
           `;
         // prettier-ignore
+        // TODO: Add userStartDate below
         const params = [
           "userGender", "male",
           "dailyNotification", "0",
