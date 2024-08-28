@@ -167,7 +167,7 @@ const PrayerStatusBottomSheet = ({
         }
 
         query += `) VALUES (${values.map(() => "?").join(", ")})`;
-
+        // ? Is better to use .query or .execute?
         await dbConnection.current.query(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
 
@@ -210,6 +210,7 @@ const PrayerStatusBottomSheet = ({
         }
 
         setTableData([...tableData]);
+        await fetchCalendarData();
       }
     } catch (error) {
       console.error(error);

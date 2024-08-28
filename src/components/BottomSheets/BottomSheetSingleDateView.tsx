@@ -113,54 +113,52 @@ const BottomSheetSingleDateView = ({
   }, [clickedDate]);
 
   return (
-    <div className="">
-      <Sheet
-        // style={{ backgroundColor: "rgb(33, 36, 38)" }}
-        isOpen={showDailySalahDataModal}
-        tweenConfig={{ ease: "easeOut", duration: 0.3 }} // Adjust duration to slow down or speed up the animation
-        onClose={() => {
-          setShowDailySalahDataModal(false);
-        }}
-      >
-        <Sheet.Container>
-          <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
-          <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
-            <Sheet.Scroller>
-              <section className="mx-5 sheet-content-wrap">
-                {clickedDateData.map((item) => {
-                  return (
-                    <>
-                      <div className="flex items-center justify-between my-5">
-                        <div className="w-1/2 text-lg text-white">
-                          {item.salahName}
-                        </div>
-                        <div
-                          style={{
-                            backgroundColor:
-                              prayerStatusColorsHexCodes[item.salahStatus],
-                          }}
-                          className={
-                            "px-2 py-3 rounded-2xl text-white grow icon-and-text-wrap flex flex-row items-center justify-center w-1/2"
-                          }
-                        >
-                          {item.salahStatus}
-                        </div>
+    <Sheet
+      // style={{ backgroundColor: "rgb(33, 36, 38)" }}
+      isOpen={showDailySalahDataModal}
+      tweenConfig={{ ease: "easeOut", duration: 0.3 }} // Adjust duration to slow down or speed up the animation
+      onClose={() => {
+        setShowDailySalahDataModal(false);
+      }}
+    >
+      <Sheet.Container>
+        <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
+        <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+          <Sheet.Scroller>
+            <section className="mx-5 sheet-content-wrap">
+              {clickedDateData.map((item) => {
+                return (
+                  <div key={item.date + item.salahName}>
+                    <div className="flex items-center justify-between my-5">
+                      <div className="w-1/2 text-lg text-white">
+                        {item.salahName}
                       </div>
-                      <div className="border-[var(--border-bottom-color)] border-b pb-10 mb-10">
-                        <div className="my-3">Reasons: {item.reasons}</div>
-                        <div>Notes: {item.notes}</div>
+                      <div
+                        style={{
+                          backgroundColor:
+                            prayerStatusColorsHexCodes[item.salahStatus],
+                        }}
+                        className={
+                          "px-2 py-3 rounded-2xl text-white grow icon-and-text-wrap flex flex-row items-center justify-center w-1/2"
+                        }
+                      >
+                        {item.salahStatus}
                       </div>
-                    </>
-                  );
-                })}
-              </section>
-            </Sheet.Scroller>
-          </Sheet.Content>
-        </Sheet.Container>
+                    </div>
+                    <div className="border-[var(--border-bottom-color)] border-b pb-10 mb-10">
+                      <div className="my-3">Reasons: {item.reasons}</div>
+                      <div>Notes: {item.notes}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </section>
+          </Sheet.Scroller>
+        </Sheet.Content>
+      </Sheet.Container>
 
-        {/* <Sheet.Backdrop onTap={close} /> */}
-      </Sheet>
-    </div>
+      {/* <Sheet.Backdrop onTap={close} /> */}
+    </Sheet>
   );
 };
 
