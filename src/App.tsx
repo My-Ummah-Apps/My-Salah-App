@@ -106,6 +106,7 @@ const App = () => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
+        await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
         setTableData(await fetchSalahTrackingDataFromDB());
         await fetchUserPreferencesFromDB();
         setRenderTable(true);
@@ -114,6 +115,66 @@ const App = () => {
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
+
+  // ! _________________________________________REMOVE BELOW ONCE TRANSFER IS COMPLETE___________________________________________
+
+  const oldSalahData =
+    '[{"salahName":"Fajr","completedDates":[{"28.08.24":{"status":"group","reasons":[],"notes":""}},{"21.08.24":{"status":"male-alone","reasons":["Shopping","Movies"],"notes":"asdasdasd"}},{"24.08.24":{"status":"missed","reasons":["Movies","TV"],"notes":"asdasd"}}]},{"salahName":"Dhuhr","completedDates":[{"28.08.24":{"status":"male-alone","reasons":["Movies","Leisure"],"notes":""}},{"22.08.24":{"status":"group","reasons":[],"notes":"asdasdas"}}]},{"salahName":"Asar","completedDates":[{"28.08.24":{"status":"late","reasons":[],"notes":""}},{"25.08.24":{"status":"male-alone","reasons":["Education","Leisure"],"notes":"asdasd"}}]},{"salahName":"Maghrib","completedDates":[{"20.08.24":{"status":"late","reasons":["Work","Movies"],"notes":"asdasdasd"}},{"27.08.24":{"status":"group","reasons":[],"notes":"asdad"}}]},{"salahName":"Isha","completedDates":[{"28.08.24":{"status":"late","reasons":["Movies","Family"],"notes":""}},{"23.08.24":{"status":"late","reasons":["Movies","Leisure"],"notes":"asdasd"}}]}]';
+
+  localStorage.setItem("storedSalahTrackingData", oldSalahData);
+
+  const executeTransfer = async () => {
+    if (localStorage.getItem("storedSalahTrackingData")) {
+      const oldData = localStorage.getItem("storedSalahTrackingData");
+      if (oldData) {
+        const parsedOldData = JSON.parse(oldData);
+        try {
+          console.log("🚀 ~ executeTransfer ~ parsedOldData:", parsedOldData);
+
+          await checkAndOpenOrCloseDBConnection("open");
+          for (const salah of parsedOldData) {
+            const { salahName, completedDates } = salah;
+
+            for (const dateObj of completedDates) {
+              const [date, details] = Object.entries(dateObj)[0]; // Extract date and details
+              const { status, reasons, notes } = details;
+
+              // Convert reasons array to a comma-separated string
+              const reasonsString = reasons.join(",");
+
+              // Insert the data into the SQLite table
+              const insertQuery = `
+                  INSERT INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
+                  VALUES (?, ?, ?, ?, ?);
+                `;
+
+              if (!dbConnection.current) {
+                throw new Error("dbConnection.current does not exist");
+              }
+
+              await dbConnection.current.query(insertQuery, [
+                date,
+                salahName,
+                status,
+                reasonsString,
+                notes,
+              ]);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          try {
+            checkAndOpenOrCloseDBConnection("close");
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      }
+    }
+  };
+
+  //! ____________________________________________________________________________________________________________________________
 
   // ? Is it possible to use table data for the calender also? could remove the below function
   const fetchCalendarData = async () => {
