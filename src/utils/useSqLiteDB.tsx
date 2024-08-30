@@ -149,13 +149,12 @@ const useSQLiteDB = () => {
         salahStatus TEXT NOT NULL, 
         reasons TEXT DEFAULT '', 
         notes TEXT DEFAULT ''
-        );
+        ) STRICT;
         `;
       const userPreferencesTable = `CREATE TABLE IF NOT EXISTS userPreferencesTable(
         preferenceName TEXT PRIMARY KEY NOT NULL, 
         preferenceValue TEXT NOT NULL DEFAULT ''
-       
-        )`;
+        ) STRICT`;
 
       await dbConnection.current.execute(userPreferencesTable);
       await dbConnection.current.execute(salahDataTable); // Execute the SQL query to create the table in the database

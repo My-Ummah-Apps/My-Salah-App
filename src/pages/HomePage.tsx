@@ -20,7 +20,7 @@ interface HomePageProps {
   fetchCalendarData: () => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
-  datesFormatted: string[];
+  datesFromStartToToday: string[];
   userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   userStartDate: string;
@@ -36,7 +36,7 @@ const HomePage = ({
   fetchCalendarData,
   setReasonsArray,
   reasonsArray,
-  datesFormatted,
+  datesFromStartToToday,
   userGender,
   setHeading,
   pageStyles,
@@ -61,7 +61,7 @@ const HomePage = ({
         renderTable={renderTable}
         setReasonsArray={setReasonsArray}
         reasonsArray={reasonsArray}
-        datesFormatted={datesFormatted}
+        datesFromStartToToday={datesFromStartToToday}
         setTableData={setTableData}
         tableData={tableData}
         fetchCalendarData={fetchCalendarData}

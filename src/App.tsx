@@ -107,8 +107,8 @@ const App = () => {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
         await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
-        setTableData(await fetchSalahTrackingDataFromDB());
         await fetchUserPreferencesFromDB();
+        setTableData(await fetchSalahTrackingDataFromDB());
         setRenderTable(true);
         fetchCalendarData();
       };
@@ -118,16 +118,18 @@ const App = () => {
 
   // ! _________________________________________REMOVE BELOW ONCE TRANSFER IS COMPLETE___________________________________________
 
-  const oldSalahData =
-    '[{"salahName":"Fajr","completedDates":[{"28.08.24":{"status":"group","reasons":[],"notes":""}},{"21.08.24":{"status":"male-alone","reasons":["Shopping","Movies"],"notes":"asdasdasd"}},{"24.08.24":{"status":"missed","reasons":["Movies","TV"],"notes":"asdasd"}}]},{"salahName":"Dhuhr","completedDates":[{"28.08.24":{"status":"male-alone","reasons":["Movies","Leisure"],"notes":""}},{"22.08.24":{"status":"group","reasons":[],"notes":"asdasdas"}}]},{"salahName":"Asar","completedDates":[{"28.08.24":{"status":"late","reasons":[],"notes":""}},{"25.08.24":{"status":"male-alone","reasons":["Education","Leisure"],"notes":"asdasd"}}]},{"salahName":"Maghrib","completedDates":[{"20.08.24":{"status":"late","reasons":["Work","Movies"],"notes":"asdasdasd"}},{"27.08.24":{"status":"group","reasons":[],"notes":"asdad"}}]},{"salahName":"Isha","completedDates":[{"28.08.24":{"status":"late","reasons":["Movies","Family"],"notes":""}},{"23.08.24":{"status":"late","reasons":["Movies","Leisure"],"notes":"asdasd"}}]}]';
+  // const oldSalahData =
+  //   '[{"salahName":"Fajr","completedDates":[{"28.08.24":{"status":"group","reasons":[],"notes":""}},{"21.08.24":{"status":"male-alone","reasons":["Shopping","Movies"],"notes":"asdasdasd"}},{"24.08.24":{"status":"missed","reasons":["Movies","TV"],"notes":"asdasd"}}]},{"salahName":"Dhuhr","completedDates":[{"28.08.24":{"status":"male-alone","reasons":["Movies","Leisure"],"notes":""}},{"22.08.24":{"status":"group","reasons":[],"notes":"asdasdas"}}]},{"salahName":"Asar","completedDates":[{"28.08.24":{"status":"late","reasons":[],"notes":""}},{"25.08.24":{"status":"male-alone","reasons":["Education","Leisure"],"notes":"asdasd"}}]},{"salahName":"Maghrib","completedDates":[{"20.08.24":{"status":"late","reasons":["Work","Movies"],"notes":"asdasdasd"}},{"27.08.24":{"status":"group","reasons":[],"notes":"asdad"}}]},{"salahName":"Isha","completedDates":[{"28.08.24":{"status":"late","reasons":["Movies","Family"],"notes":""}},{"23.08.24":{"status":"late","reasons":["Movies","Leisure"],"notes":"asdasd"}}]}]';
 
-  localStorage.setItem("storedSalahTrackingData", oldSalahData);
+  // localStorage.setItem("storedSalahTrackingData", oldSalahData);
 
   const executeTransfer = async () => {
     if (localStorage.getItem("storedSalahTrackingData")) {
-      const oldData = localStorage.getItem("storedSalahTrackingData");
-      if (oldData) {
-        const parsedOldData = JSON.parse(oldData);
+      const storedSalahTrackingData = localStorage.getItem(
+        "storedSalahTrackingData"
+      );
+      if (storedSalahTrackingData) {
+        const parsedOldData = JSON.parse(storedSalahTrackingData);
         try {
           console.log("🚀 ~ executeTransfer ~ parsedOldData:", parsedOldData);
 
@@ -170,6 +172,8 @@ const App = () => {
             console.error(error);
           }
         }
+        localStorage.setItem("salahBackUpData", storedSalahTrackingData);
+        localStorage.removeItem("storedSalahTrackingData");
       }
     }
   };
@@ -251,23 +255,27 @@ const App = () => {
   const [dailyNotificationTime, setDailyNotificationTime] =
     useState<string>("");
   const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-
+  const [userStartDate, setUserStartDate] = useState<string>("");
+  const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>([
+    "30.08.24",
+  ]);
   const [renderTable, setRenderTable] = useState(false);
-  // TODO: Some of the below code should only be running on initial app launch
-  let userStartDate: string | null = "01.01.01";
-  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  const todaysDate = new Date();
-  const datesBetweenUserStartDateAndToday = eachDayOfInterval({
-    start: userStartDateFormatted,
-    end: todaysDate,
-  });
-  const datesFormatted = datesBetweenUserStartDateAndToday.map((date) =>
-    format(date, "dd.MM.yy")
-  );
-  datesFormatted.reverse();
+
+  // let userStartDate: string | null = "01.01.01";
+  // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
+  // const todaysDate = new Date();
+  // const datesBetweenUserStartDateAndToday = eachDayOfInterval({
+  //   start: userStartDateFormatted,
+  //   end: todaysDate,
+  // });
+  // const datesFromStartToToday = datesBetweenUserStartDateAndToday.map((date) =>
+  //   format(date, "dd.MM.yy")
+  // );
+  // datesFromStartToToday.reverse();
 
   const fetchUserPreferencesFromDB = async () => {
-    console.log("fetchUserPreferencesFromDB FUNCTION HAS EXECUTED");
+    const todaysDate: Date = new Date();
+
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
@@ -277,6 +285,10 @@ const App = () => {
 
       let DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
+      );
+      console.log(
+        "🚀 ~ fetchUserPreferencesFromDB ~ DBResultPreferences:",
+        DBResultPreferences
       );
 
       let DBResultPreferencesValues = DBResultPreferences.values;
@@ -288,6 +300,9 @@ const App = () => {
       }
 
       if (DBResultPreferencesValues.length === 0) {
+        // const userStartDate = format(todaysDate, "yyyy-MM-dd");
+        const userStartDate = format(todaysDate, "dd.MM.yy");
+
         const insertQuery = `
           INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
           VALUES 
@@ -296,12 +311,13 @@ const App = () => {
           (?, ?),
           (?, ?),
           (?, ?),
-          (?, ?)
+          (?, ?),
+          (?, ?);
           `;
         // prettier-ignore
-        // TODO: Add userStartDate below
         const params = [
           "userGender", "male",
+          "userStartDate", "01.01.24",
           "dailyNotification", "0",
           "dailyNotificationTime", "21:00",
           "haptics", "0",
@@ -312,6 +328,7 @@ const App = () => {
         DBResultPreferences = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
         );
+        // TODO: Set type for DBResultPreferencesValues
         DBResultPreferencesValues = DBResultPreferences.values;
         setShowIntroModal(true);
       }
@@ -326,19 +343,21 @@ const App = () => {
         preferenceName: string;
         preferenceValue: string;
       } | null => {
-        let res = DBResultPreferencesValues.find(
+        // TODO: Set types for preferenceQuery
+        let preferenceQuery = DBResultPreferencesValues.find(
           (row) => row.preferenceName === preference
         );
 
-        if (res) {
-          return res;
+        if (preferenceQuery) {
+          return preferenceQuery;
         } else {
-          console.error("row does not exist");
+          console.error("preferenceQuery row does not exist");
           return null;
         }
       };
 
       const userGenderRow = assignPreference("userGender");
+      const userStartDate = assignPreference("userStartDate");
       const dailyNotificationRow = assignPreference("dailyNotification");
       const dailyNotificationTimeRow = assignPreference(
         "dailyNotificationTime"
@@ -354,6 +373,36 @@ const App = () => {
         }
       } else {
         console.error("userGenderRow row not found");
+      }
+
+      if (userStartDate) {
+        const userStartDateFormatted: Date = parse(
+          userStartDate.preferenceValue,
+          "dd.MM.yy",
+          new Date()
+        );
+
+        console.log(
+          "🚀 ~ fetchUserPreferencesFromDB ~ userStartDate:",
+          userStartDate
+        );
+
+        const datesArray: string[] = eachDayOfInterval({
+          start: userStartDateFormatted,
+          end: todaysDate,
+        })
+          .map((date) => format(date, "dd.MM.yy"))
+          .reverse();
+        // ! BUG: There is something wrong with setDatesFromStartToToday, it is being given all relevant dates however the app won't work, rowGetter in prayerTable component is being given an empty array, when giving setDatesFromStartToToday a date manually (check above where a date has been manually passed in when the state is initialised) it renders the date and the app starts, once this bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
+        // setDatesFromStartToToday(datesArray);
+        console.log(
+          "🚀 ~ fetchUserPreferencesFromDB ~ datesArray:",
+          datesArray
+        );
+        setUserStartDate(userStartDate.preferenceValue);
+        console.log("userStartDate ", userStartDate.preferenceValue);
+      } else {
+        console.error("userStartDate row not found");
       }
 
       if (reasons) {
@@ -390,7 +439,7 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const placeholders = datesFormatted.map(() => "?").join(", ");
+      const placeholders = datesFromStartToToday.map(() => "?").join(", ");
       const query = `SELECT * FROM salahDataTable WHERE date IN (${placeholders})`;
       // const query = `SELECT * FROM salahDataTable`;
 
@@ -400,12 +449,12 @@ const App = () => {
 
       const DBResultSalahData = await dbConnection.current.query(
         query,
-        datesFormatted
+        datesFromStartToToday
       );
-
-      for (let i = 0; i < datesFormatted.length; i++) {
+      console.log("datesFromStartToToday: ", datesFromStartToToday);
+      for (let i = 0; i < datesFromStartToToday.length; i++) {
         let singleSalahObj: SalahRecord = {
-          date: datesFormatted[i],
+          date: datesFromStartToToday[i],
           salahs: {
             Fajr: "",
             Dhuhr: "",
@@ -415,7 +464,7 @@ const App = () => {
           },
         };
 
-        const currentDate = datesFormatted[i];
+        const currentDate = datesFromStartToToday[i];
 
         if (DBResultSalahData.values && DBResultSalahData.values.length > 0) {
           for (let i = 0; i < DBResultSalahData.values.length; i++) {
@@ -520,34 +569,6 @@ const App = () => {
 
   const [heading, setHeading] = useState("");
 
-  // const [currentWeek, setCurrentWeek] = useState(0);
-  // const today: Date = new Date();
-  // const startDate: Date = subDays(today, currentWeek);
-
-  // useEffect(() => {
-  //   const storedSalahTrackingData = localStorage.getItem(
-  //     "storedSalahTrackingData"
-  //   );
-  // }, []);
-
-  // const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
-  //   (accumulatorArray, salah) => {
-  //     for (let i = 0; i < salah.completedDates.length; i++) {
-  //       Object.values(salah.completedDates[i]);
-  //       if (
-  //         Object.values(salah.completedDates[i])[0].status !== "missed" &&
-  //         Object.values(salah.completedDates[i])[0].status !== "blank"
-  //       ) {
-  //         accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
-  //       }
-  //     }
-  //     return accumulatorArray;
-  //   },
-  //   []
-  // );
-
-  // console.log(salahFulfilledDates);
-
   // let datesFrequency: { [date: string]: number } = {};
   // salahFulfilledDates.forEach((date) => {
   //   datesFrequency[date] = (datesFrequency[date] || 0) + 1;
@@ -633,7 +654,7 @@ const App = () => {
                 renderTable={renderTable}
                 setReasonsArray={setReasonsArray}
                 reasonsArray={reasonsArray}
-                datesFormatted={datesFormatted}
+                datesFromStartToToday={datesFromStartToToday}
                 setTableData={setTableData}
                 tableData={tableData}
                 fetchCalendarData={fetchCalendarData}

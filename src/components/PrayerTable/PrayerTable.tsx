@@ -22,7 +22,7 @@ interface PrayerTableProps {
   fetchCalendarData: () => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
-  datesFormatted: string[];
+  datesFromStartToToday: string[];
   userGender: string;
 }
 
@@ -35,7 +35,7 @@ const PrayerTable = ({
   fetchCalendarData,
   setReasonsArray,
   reasonsArray,
-  datesFormatted,
+  datesFromStartToToday,
   userGender,
 }: PrayerTableProps) => {
   // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", tableData);
@@ -48,6 +48,7 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
+    console.log(tableData);
     return tableData[index];
   };
 
@@ -63,7 +64,7 @@ const PrayerTable = ({
             textTransform: "none",
           }}
           className="text-center"
-          rowCount={datesFormatted.length}
+          rowCount={datesFromStartToToday.length}
           rowGetter={rowGetter}
           rowHeight={100}
           headerHeight={40}
