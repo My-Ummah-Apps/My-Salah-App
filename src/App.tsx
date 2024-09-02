@@ -94,6 +94,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   const [tableData, setTableData] = useState<SalahRecordsArray>([]);
   const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
+  const [userGender, setUserGender] = useState<userGenderType>("male");
+  const [dailyNotification, setDailyNotification] = useState<string>("");
+  const [dailyNotificationTime, setDailyNotificationTime] =
+    useState<string>("");
+  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
+  const [userStartDate, setUserStartDate] = useState<string>("");
+  const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>(
+    []
+  );
+  const [renderTable, setRenderTable] = useState(false);
 
   // console.log("APP COMPONENT HAS RENDERED");
   const {
@@ -107,10 +117,10 @@ const App = () => {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
         await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
-        await fetchUserPreferencesFromDB();
-        setTableData(await fetchSalahTrackingDataFromDB());
+        await fetchDataFromDB();
+        // setTimeout(() => {
         setRenderTable(true);
-        fetchCalendarData();
+        // }, 2000);
       };
       initialiseAndLoadData();
     }
@@ -180,9 +190,7 @@ const App = () => {
 
   //! ____________________________________________________________________________________________________________________________
 
-  // ? Is it possible to use table data for the calender also? could remove the below function
-  const fetchCalendarData = async () => {
-    console.log("fetchCalendarData has run");
+  const fetchDataFromDB = async () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
@@ -190,54 +198,76 @@ const App = () => {
         throw new Error("dbConnection or dbConnection.current do not exist");
       }
 
-      const DBResultCalenderData = await dbConnection.current.query(
+      const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`
       );
 
-      let calenderDataArr: CalenderSalahArray = [];
+      const DBResultPreferences = await dbConnection.current.query(
+        `SELECT * FROM userPreferencesTable`
+      );
 
-      if (DBResultCalenderData && DBResultCalenderData.values) {
-        const DBResultCalenderDataValues = DBResultCalenderData.values;
-
-        DBResultCalenderDataValues.forEach((obj) => {
-          if (
-            !calenderDataArr.some((calenderObj) =>
-              calenderObj.hasOwnProperty(obj.date)
-            )
-          ) {
-            let currentDate = obj.date;
-            const filteredDBResultCalenderDataValues =
-              DBResultCalenderDataValues.filter(
-                (obj) => obj.date === currentDate
-              );
-
-            let singleSalahObj: CalenderSalahArrayObject = {
-              [currentDate]: [],
-            };
-
-            filteredDBResultCalenderDataValues.forEach((obj) => {
-              let singleObj: SalahEntry = {
-                salahName: obj.salahName,
-                salahStatus: obj.salahStatus,
-              };
-              singleSalahObj[obj.date].push(singleObj);
-            });
-
-            calenderDataArr.push(singleSalahObj);
-          }
-        });
+      if (DBResultPreferences && DBResultPreferences.values) {
+        await fetchUserPreferencesFromDB(DBResultPreferences);
+      } else {
+        throw new Error(
+          "DBResultPreferences or DBResultPreferences.values do not exist"
+        );
       }
 
-      setCalenderData(calenderDataArr);
+      if (DBResultAllSalahData && DBResultAllSalahData.values) {
+        setTableData(await fetchSalahTrackingDataFromDB(DBResultAllSalahData));
+        await fetchCalendarData(DBResultAllSalahData);
+      } else {
+        throw new Error(
+          "DBResultAllSalahData or DBResultAllSalahData.values do not exist"
+        );
+      }
     } catch (error) {
-      console.error("error fetching calender tableData: ", error);
+      console.error(error);
     } finally {
       try {
-        await checkAndOpenOrCloseDBConnection("close");
+        console.log("DATABSE FETCH COMPLETE, CLOSING CONNECTION");
+        checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.error("error closing database connection", error);
+        console.error(error);
       }
     }
+  };
+
+  const fetchCalendarData = async (DBResultCalenderData) => {
+    console.log("fetchCalendarData has run");
+
+    let calenderDataArr: CalenderSalahArray = [];
+
+    const DBResultCalenderDataValues = DBResultCalenderData.values;
+
+    DBResultCalenderDataValues.forEach((obj) => {
+      if (
+        !calenderDataArr.some((calenderObj) =>
+          calenderObj.hasOwnProperty(obj.date)
+        )
+      ) {
+        let currentDate = obj.date;
+        const filteredDBResultCalenderDataValues =
+          DBResultCalenderDataValues.filter((obj) => obj.date === currentDate);
+
+        let singleSalahObj: CalenderSalahArrayObject = {
+          [currentDate]: [],
+        };
+
+        filteredDBResultCalenderDataValues.forEach((obj) => {
+          let singleObj: SalahEntry = {
+            salahName: obj.salahName,
+            salahStatus: obj.salahStatus,
+          };
+          singleSalahObj[obj.date].push(singleObj);
+        });
+
+        calenderDataArr.push(singleSalahObj);
+      }
+    });
+
+    setCalenderData(calenderDataArr);
   };
   // const executeFetchCalendarDataFunc = async () => {
   //   await fetchCalendarData();
@@ -250,16 +280,18 @@ const App = () => {
   //   }
   // }, [tableData]);
 
-  const [userGender, setUserGender] = useState<userGenderType>("male");
-  const [dailyNotification, setDailyNotification] = useState<string>("");
-  const [dailyNotificationTime, setDailyNotificationTime] =
-    useState<string>("");
-  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  const [userStartDate, setUserStartDate] = useState<string>("");
-  const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>([
-    "30.08.24",
-  ]);
-  const [renderTable, setRenderTable] = useState(false);
+  useEffect(() => {
+    console.log("LENGTH:", datesFromStartToToday.length);
+
+    if (datesFromStartToToday.length !== 0) {
+      console.log(
+        "🚀 ~ useEffect ~ datesFromStartToToday:",
+        datesFromStartToToday
+      );
+
+      // setRenderTable(true);
+    }
+  }, [datesFromStartToToday]);
 
   // let userStartDate: string | null = "01.01.01";
   // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
@@ -271,39 +303,23 @@ const App = () => {
   // const datesFromStartToToday = datesBetweenUserStartDateAndToday.map((date) =>
   //   format(date, "dd.MM.yy")
   // );
-  // datesFromStartToToday.reverse();
 
-  const fetchUserPreferencesFromDB = async () => {
+  const fetchUserPreferencesFromDB = async (DBResultPreferences) => {
     const todaysDate: Date = new Date();
+    console.log("DBResultPreferences.values ", DBResultPreferences.values);
 
-    try {
-      await checkAndOpenOrCloseDBConnection("open");
+    console.log(
+      "🚀 ~ fetchUserPreferencesFromDB ~ DBResultPreferences:",
+      DBResultPreferences
+    );
 
-      if (!dbConnection.current) {
-        throw new Error("dbConnection.current does not exist");
-      }
+    let DBResultPreferencesValues = DBResultPreferences.values;
 
-      let DBResultPreferences = await dbConnection.current.query(
-        `SELECT * FROM userPreferencesTable`
-      );
-      console.log(
-        "🚀 ~ fetchUserPreferencesFromDB ~ DBResultPreferences:",
-        DBResultPreferences
-      );
+    if (DBResultPreferencesValues.length === 0) {
+      // const userStartDate = format(todaysDate, "yyyy-MM-dd");
+      const userStartDate = format(todaysDate, "dd.MM.yy");
 
-      let DBResultPreferencesValues = DBResultPreferences.values;
-
-      if (!DBResultPreferences || !DBResultPreferencesValues) {
-        throw new Error(
-          "DBResultPreferences or DBResultPreferencesValues does not exist"
-        );
-      }
-
-      if (DBResultPreferencesValues.length === 0) {
-        // const userStartDate = format(todaysDate, "yyyy-MM-dd");
-        const userStartDate = format(todaysDate, "dd.MM.yy");
-
-        const insertQuery = `
+      const insertQuery = `
           INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
           VALUES 
           (?, ?),
@@ -314,183 +330,179 @@ const App = () => {
           (?, ?),
           (?, ?);
           `;
-        // prettier-ignore
-        const params = [
+      // prettier-ignore
+      const params = [
           "userGender", "male",
-          "userStartDate", "01.01.24",
+          "userStartDate", userStartDate,
           "dailyNotification", "0",
           "dailyNotificationTime", "21:00",
           "haptics", "0",
           "reasons", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
           "showReasons", "0",
         ];
-        await dbConnection.current.query(insertQuery, params);
-        DBResultPreferences = await dbConnection.current.query(
-          `SELECT * FROM userPreferencesTable`
-        );
-        // TODO: Set type for DBResultPreferencesValues
-        DBResultPreferencesValues = DBResultPreferences.values;
-        setShowIntroModal(true);
-      }
-
-      if (!DBResultPreferencesValues) {
-        throw new Error("DBResultPreferencesValues does not exist");
-      }
-
-      const assignPreference = (
-        preference: string
-      ): {
-        preferenceName: string;
-        preferenceValue: string;
-      } | null => {
-        // TODO: Set types for preferenceQuery
-        let preferenceQuery = DBResultPreferencesValues.find(
-          (row) => row.preferenceName === preference
-        );
-
-        if (preferenceQuery) {
-          return preferenceQuery;
-        } else {
-          console.error("preferenceQuery row does not exist");
-          return null;
-        }
-      };
-
-      const userGenderRow = assignPreference("userGender");
-      const userStartDate = assignPreference("userStartDate");
-      const dailyNotificationRow = assignPreference("dailyNotification");
-      const dailyNotificationTimeRow = assignPreference(
-        "dailyNotificationTime"
-      );
-      const reasons = assignPreference("reasons");
-
-      if (userGenderRow) {
-        const gender = userGenderRow.preferenceValue as userGenderType;
-        if (gender === "male" || gender === "female") {
-          setUserGender(gender);
-        } else {
-          console.error(`Invalid gender value: ${gender}`);
-        }
-      } else {
-        console.error("userGenderRow row not found");
-      }
-
-      if (userStartDate) {
-        const userStartDateFormatted: Date = parse(
-          userStartDate.preferenceValue,
-          "dd.MM.yy",
-          new Date()
-        );
-
-        console.log(
-          "🚀 ~ fetchUserPreferencesFromDB ~ userStartDate:",
-          userStartDate
-        );
-
-        const datesArray: string[] = eachDayOfInterval({
-          start: userStartDateFormatted,
-          end: todaysDate,
-        })
-          .map((date) => format(date, "dd.MM.yy"))
-          .reverse();
-        // ! BUG: There is something wrong with setDatesFromStartToToday, it is being given all relevant dates however the app won't work, rowGetter in prayerTable component is being given an empty array, when giving setDatesFromStartToToday a date manually (check above where a date has been manually passed in when the state is initialised) it renders the date and the app starts, once this bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
-        // setDatesFromStartToToday(datesArray);
-        console.log(
-          "🚀 ~ fetchUserPreferencesFromDB ~ datesArray:",
-          datesArray
-        );
-        setUserStartDate(userStartDate.preferenceValue);
-        console.log("userStartDate ", userStartDate.preferenceValue);
-      } else {
-        console.error("userStartDate row not found");
-      }
-
-      if (reasons) {
-        setReasonsArray(reasons.preferenceValue.split(","));
-      } else {
-        console.error("reasons row not found");
-      }
-
-      if (dailyNotificationRow) {
-        setDailyNotification(dailyNotificationRow.preferenceValue);
-      } else {
-        console.error("dailyNotification row not found");
-      }
-
-      if (dailyNotificationTimeRow) {
-        setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
-      } else {
-        console.error("dailyNotificationTime row not found");
-      }
-    } catch (error) {
-      console.error("ERROR IN fetchUserPreferencesFromDB FUNCTION: " + error);
-    } finally {
       try {
-        await checkAndOpenOrCloseDBConnection("close");
+        await checkAndOpenOrCloseDBConnection("open");
+        if (dbConnection && dbConnection.current) {
+          await dbConnection.current.query(insertQuery, params);
+          DBResultPreferences = await dbConnection.current.query(
+            `SELECT * FROM userPreferencesTable`
+          );
+        } else {
+          console.error("dbConnection or dbConnection.current does not exist");
+        }
       } catch (error) {
-        console.error("ERROR CLOSING DATABASE CONNECTION: " + error);
+        console.error(error);
+      } finally {
+        try {
+          checkAndOpenOrCloseDBConnection("close");
+        } catch (error) {
+          console.error(error);
+        }
       }
+      // TODO: Set type for DBResultPreferencesValues
+      DBResultPreferencesValues = DBResultPreferences.values;
+      setShowIntroModal(true);
     }
+
+    if (!DBResultPreferencesValues) {
+      throw new Error("DBResultPreferencesValues does not exist");
+    }
+
+    const assignPreference = (
+      preference: string
+    ): {
+      preferenceName: string;
+      preferenceValue: string;
+    } | null => {
+      // TODO: Set types for preferenceQuery
+      let preferenceQuery = DBResultPreferencesValues.find(
+        (row) => row.preferenceName === preference
+      );
+
+      if (preferenceQuery) {
+        return preferenceQuery;
+      } else {
+        console.error("preferenceQuery row does not exist");
+        return null;
+      }
+    };
+
+    const userGenderRow = assignPreference("userGender");
+    const userStartDate = assignPreference("userStartDate");
+    const dailyNotificationRow = assignPreference("dailyNotification");
+    const dailyNotificationTimeRow = assignPreference("dailyNotificationTime");
+    const reasons = assignPreference("reasons");
+
+    if (userGenderRow) {
+      const gender = userGenderRow.preferenceValue as userGenderType;
+      if (gender === "male" || gender === "female") {
+        setUserGender(gender);
+      } else {
+        console.error(`Invalid gender value: ${gender}`);
+      }
+    } else {
+      console.error("userGenderRow row not found");
+    }
+
+    if (userStartDate) {
+      const userStartDateFormatted: Date = parse(
+        userStartDate.preferenceValue,
+        "dd.MM.yy",
+        new Date()
+      );
+
+      const datesArray: string[] = eachDayOfInterval({
+        start: userStartDateFormatted,
+        end: todaysDate,
+      })
+        .map((date) => format(date, "dd.MM.yy"))
+        .reverse();
+
+      console.log("datesArray: ", datesArray);
+
+      setDatesFromStartToToday(datesArray);
+      // ! BUG: setDatesFromStartToToday is not updating the state in time for the table to render. It is being given all relevant dates however the app won't work, rowGetter in prayerTable component is being given an empty array, when giving setDatesFromStartToToday a date manually (check above where a date has been manually passed in when the state is initialised) it renders the date and the app starts, once this bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
+
+      console.log(
+        "🚀 ~ fetchUserPreferencesFromDB ~ datesFromStartToToday:",
+        datesFromStartToToday
+      );
+
+      setUserStartDate(userStartDate.preferenceValue);
+      console.log("userStartDate ", userStartDate.preferenceValue);
+    } else {
+      console.error("userStartDate row not found");
+    }
+
+    if (reasons) {
+      setReasonsArray(reasons.preferenceValue.split(","));
+    } else {
+      console.error("reasons row not found");
+    }
+
+    if (dailyNotificationRow) {
+      setDailyNotification(dailyNotificationRow.preferenceValue);
+    } else {
+      console.error("dailyNotification row not found");
+    }
+
+    if (dailyNotificationTimeRow) {
+      setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
+    } else {
+      console.error("dailyNotificationTime row not found");
+    }
+    // } catch (error) {
+    //   console.error("ERROR IN fetchUserPreferencesFromDB FUNCTION: " + error);
+    // } finally {
+    //   try {
+    //     await checkAndOpenOrCloseDBConnection("close");
+    //   } catch (error) {
+    //     console.error("ERROR CLOSING DATABASE CONNECTION: " + error);
+    //   }
+    // }
   };
 
   let singleSalahObjArr: SalahRecordsArray = [];
-  const fetchSalahTrackingDataFromDB = async (): Promise<SalahRecordsArray> => {
+  const fetchSalahTrackingDataFromDB = async (
+    DBResultSalahData
+  ): Promise<SalahRecordsArray> => {
+    console.log("🚀 ~ App ~ DBResultSalahData:", DBResultSalahData);
     console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
-    try {
-      await checkAndOpenOrCloseDBConnection("open");
 
-      const placeholders = datesFromStartToToday.map(() => "?").join(", ");
-      const query = `SELECT * FROM salahDataTable WHERE date IN (${placeholders})`;
-      // const query = `SELECT * FROM salahDataTable`;
+    console.log("datesFromStartToToday: ", datesFromStartToToday);
+    for (let i = 0; i < datesFromStartToToday.length; i++) {
+      let singleSalahObj: SalahRecord = {
+        date: datesFromStartToToday[i],
+        salahs: {
+          Fajr: "",
+          Dhuhr: "",
+          Asar: "",
+          Maghrib: "",
+          Isha: "",
+        },
+      };
 
-      if (!dbConnection.current) {
-        throw new Error(`dbConnection.current is: ${dbConnection.current}`);
-      }
+      const currentDate = datesFromStartToToday[i];
 
-      const DBResultSalahData = await dbConnection.current.query(
-        query,
-        datesFromStartToToday
-      );
-      console.log("datesFromStartToToday: ", datesFromStartToToday);
-      for (let i = 0; i < datesFromStartToToday.length; i++) {
-        let singleSalahObj: SalahRecord = {
-          date: datesFromStartToToday[i],
-          salahs: {
-            Fajr: "",
-            Dhuhr: "",
-            Asar: "",
-            Maghrib: "",
-            Isha: "",
-          },
-        };
-
-        const currentDate = datesFromStartToToday[i];
-
-        if (DBResultSalahData.values && DBResultSalahData.values.length > 0) {
-          for (let i = 0; i < DBResultSalahData.values.length; i++) {
-            if (DBResultSalahData.values[i].date === currentDate) {
-              let salahName: SalahNames = DBResultSalahData.values[i].salahName;
-              let salahStatus: SalahStatus =
-                DBResultSalahData.values[i].salahStatus;
-              singleSalahObj.salahs[salahName] = salahStatus;
-            }
+      if (DBResultSalahData.values && DBResultSalahData.values.length > 0) {
+        for (let i = 0; i < DBResultSalahData.values.length; i++) {
+          if (DBResultSalahData.values[i].date === currentDate) {
+            let salahName: SalahNames = DBResultSalahData.values[i].salahName;
+            let salahStatus: SalahStatus =
+              DBResultSalahData.values[i].salahStatus;
+            singleSalahObj.salahs[salahName] = salahStatus;
           }
         }
-
-        singleSalahObjArr.push(singleSalahObj);
       }
 
-      return singleSalahObjArr;
-    } catch (error) {
-      console.error("ERROR IN fetchSalahTrackingDataFromDB FUNCTION: " + error);
-      return [];
-    } finally {
-      try {
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
+      singleSalahObjArr.push(singleSalahObj);
     }
+    console.log(
+      "🚀 ~ window.addEventListener ~ singleSalahObjArr:",
+      singleSalahObjArr
+    );
+
+    return singleSalahObjArr;
   };
 
   const modifyDataInUserPreferencesTable = async (

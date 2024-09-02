@@ -48,7 +48,7 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    console.log(tableData);
+    console.log("tableData: ", tableData);
     return tableData[index];
   };
 

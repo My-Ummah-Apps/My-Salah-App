@@ -57,7 +57,10 @@ const useSQLiteDB = () => {
 
         await initialiseTables();
         setisDatabaseInitialised(true);
-        // console.log("Database initialisation complete");
+        console.log(
+          "Database initialisation complete, dbConnection is: ",
+          dbConnection
+        );
       } catch (error) {
         console.error("Error initializing database: " + error);
       }
