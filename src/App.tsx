@@ -280,18 +280,22 @@ const App = () => {
   //   }
   // }, [tableData]);
 
-  useEffect(() => {
-    console.log("LENGTH:", datesFromStartToToday.length);
+  // useEffect(() => {
+  //   setRenderTable(true);
+  // });
 
-    if (datesFromStartToToday.length !== 0) {
-      console.log(
-        "🚀 ~ useEffect ~ datesFromStartToToday:",
-        datesFromStartToToday
-      );
+  // useEffect(() => {
+  //   console.log("LENGTH:", datesFromStartToToday.length);
+  //   setRenderTable(true);
+  //   if (datesFromStartToToday.length !== 0) {
+  //     console.log(
+  //       "🚀 ~ useEffect ~ datesFromStartToToday:",
+  //       datesFromStartToToday
+  //     );
 
-      // setRenderTable(true);
-    }
-  }, [datesFromStartToToday]);
+  //     // setRenderTable(true);
+  //   }
+  // }, [datesFromStartToToday]);
 
   // let userStartDate: string | null = "01.01.01";
   // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
@@ -421,8 +425,11 @@ const App = () => {
       console.log("datesArray: ", datesArray);
 
       setDatesFromStartToToday(datesArray);
-      // ! BUG: setDatesFromStartToToday is not updating the state in time for the table to render. It is being given all relevant dates however the app won't work, rowGetter in prayerTable component is being given an empty array, when giving setDatesFromStartToToday a date manually (check above where a date has been manually passed in when the state is initialised) it renders the date and the app starts, once this bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
+      // ! BUG: setDatesFromStartToToday is not updating the state in time for the table to render it seems, have currently put in a check in the homepage for the table to NOT render if the state is empty
 
+      // ! once the above bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
+
+      // ! The below log shows an empty array, should have atleast one date, sometimes one date does come up (for today), unsure whats causing this bug needs further investigation, hitting cmd+save sometimes makes the below come up with a date, but then hitting refresh in the browser makes it dissapear, then hitting cmd+save brings the date up again along with the table row for todays date...
       console.log(
         "🚀 ~ fetchUserPreferencesFromDB ~ datesFromStartToToday:",
         datesFromStartToToday

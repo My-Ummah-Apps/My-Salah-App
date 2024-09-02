@@ -54,21 +54,23 @@ const HomePage = ({
     <section className={`home-page-wrap ${pageStyles}`}>
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
-      {/* <NextSalahTime /> */}
-      <PrayerTable
-        dbConnection={dbConnection}
-        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-        renderTable={renderTable}
-        setReasonsArray={setReasonsArray}
-        reasonsArray={reasonsArray}
-        datesFromStartToToday={datesFromStartToToday}
-        setTableData={setTableData}
-        tableData={tableData}
-        fetchCalendarData={fetchCalendarData}
-        userGender={userGender}
-        // userStartDate={userStartDate}
-        // startDate={startDate}
-      />
+
+      {tableData.length > 0 && (
+        <PrayerTable
+          dbConnection={dbConnection}
+          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+          renderTable={renderTable}
+          setReasonsArray={setReasonsArray}
+          reasonsArray={reasonsArray}
+          datesFromStartToToday={datesFromStartToToday}
+          setTableData={setTableData}
+          tableData={tableData}
+          fetchCalendarData={fetchCalendarData}
+          userGender={userGender}
+          // userStartDate={userStartDate}
+          // startDate={startDate}
+        />
+      )}
     </section>
   );
 };
