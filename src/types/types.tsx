@@ -55,3 +55,14 @@ export type userGenderType = "male" | "female";
 // [tableRowDate]: { status: salahStatus, reasons: [], notes: "" }
 
 export type currentStartDateType = number;
+
+export type DBResultDataObj = {
+  id: number;
+  date: string;
+  salahName: string;
+  salahStatus: string;
+  reasons: string;
+  notes: string;
+};
+
+export type DBResultDataObjArray = DBResultDataObj[];

@@ -92,6 +92,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 const App = () => {
+  console.log("APP.TSX HAS RENDERED...");
+
   const [tableData, setTableData] = useState<SalahRecordsArray>([]);
   const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
   const [userGender, setUserGender] = useState<userGenderType>("male");
@@ -119,7 +121,7 @@ const App = () => {
         await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
         await fetchDataFromDB();
         // setTimeout(() => {
-        setRenderTable(true);
+        //   setRenderTable(true);
         // }, 2000);
       };
       initialiseAndLoadData();
@@ -191,6 +193,7 @@ const App = () => {
   //! ____________________________________________________________________________________________________________________________
 
   const fetchDataFromDB = async () => {
+    console.log("fetchDataFromDB has run");
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
@@ -215,8 +218,11 @@ const App = () => {
       }
 
       if (DBResultAllSalahData && DBResultAllSalahData.values) {
-        setTableData(await fetchSalahTrackingDataFromDB(DBResultAllSalahData));
-        await fetchCalendarData(DBResultAllSalahData);
+        // setTableData(await handleSalahTrackingDataFromDB(DBResultAllSalahData));
+        console.log("DBResultAllSalahData ", DBResultAllSalahData.values);
+
+        await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        await handleCalendarData(DBResultAllSalahData.values);
       } else {
         throw new Error(
           "DBResultAllSalahData or DBResultAllSalahData.values do not exist"
@@ -226,7 +232,7 @@ const App = () => {
       console.error(error);
     } finally {
       try {
-        console.log("DATABSE FETCH COMPLETE, CLOSING CONNECTION");
+        console.log("DATABASE FETCH COMPLETE, CLOSING CONNECTION");
         checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.error(error);
@@ -234,22 +240,21 @@ const App = () => {
     }
   };
 
-  const fetchCalendarData = async (DBResultCalenderData) => {
-    console.log("fetchCalendarData has run");
+  const handleCalendarData = async (DBResultCalenderData: any) => {
+    console.log("handleCalendarData has run");
 
     let calenderDataArr: CalenderSalahArray = [];
 
-    const DBResultCalenderDataValues = DBResultCalenderData.values;
-
-    DBResultCalenderDataValues.forEach((obj) => {
+    DBResultCalenderData.forEach((obj) => {
       if (
         !calenderDataArr.some((calenderObj) =>
           calenderObj.hasOwnProperty(obj.date)
         )
       ) {
         let currentDate = obj.date;
-        const filteredDBResultCalenderDataValues =
-          DBResultCalenderDataValues.filter((obj) => obj.date === currentDate);
+        const filteredDBResultCalenderDataValues = DBResultCalenderData.filter(
+          (obj) => obj.date === currentDate
+        );
 
         let singleSalahObj: CalenderSalahArrayObject = {
           [currentDate]: [],
@@ -269,48 +274,10 @@ const App = () => {
 
     setCalenderData(calenderDataArr);
   };
-  // const executeFetchCalendarDataFunc = async () => {
-  //   await fetchCalendarData();
-  // };
-
-  // useEffect(() => {
-  //   console.log("USEEFFECT FOR fetchCalendarData has run");
-  //   if (isDatabaseInitialised) {
-  //     fetchCalendarData();
-  //   }
-  // }, [tableData]);
-
-  // useEffect(() => {
-  //   setRenderTable(true);
-  // });
-
-  // useEffect(() => {
-  //   console.log("LENGTH:", datesFromStartToToday.length);
-  //   setRenderTable(true);
-  //   if (datesFromStartToToday.length !== 0) {
-  //     console.log(
-  //       "🚀 ~ useEffect ~ datesFromStartToToday:",
-  //       datesFromStartToToday
-  //     );
-
-  //     // setRenderTable(true);
-  //   }
-  // }, [datesFromStartToToday]);
-
-  // let userStartDate: string | null = "01.01.01";
-  // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  // const todaysDate = new Date();
-  // const datesBetweenUserStartDateAndToday = eachDayOfInterval({
-  //   start: userStartDateFormatted,
-  //   end: todaysDate,
-  // });
-  // const datesFromStartToToday = datesBetweenUserStartDateAndToday.map((date) =>
-  //   format(date, "dd.MM.yy")
-  // );
 
   const fetchUserPreferencesFromDB = async (DBResultPreferences) => {
     const todaysDate: Date = new Date();
-    console.log("DBResultPreferences.values ", DBResultPreferences.values);
+    console.log("DBResultPreferences ", DBResultPreferences);
 
     console.log(
       "🚀 ~ fetchUserPreferencesFromDB ~ DBResultPreferences:",
@@ -423,8 +390,9 @@ const App = () => {
         .reverse();
 
       console.log("datesArray: ", datesArray);
-
+      console.log("UPDATING DATESFROMSTART STATE");
       setDatesFromStartToToday(datesArray);
+      // setDatesFromStartToToday(["03.09.24", "02.09.24", "01.09.24"]);
       // ! BUG: setDatesFromStartToToday is not updating the state in time for the table to render it seems, have currently put in a check in the homepage for the table to NOT render if the state is empty
 
       // ! once the above bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
@@ -458,23 +426,14 @@ const App = () => {
     } else {
       console.error("dailyNotificationTime row not found");
     }
-    // } catch (error) {
-    //   console.error("ERROR IN fetchUserPreferencesFromDB FUNCTION: " + error);
-    // } finally {
-    //   try {
-    //     await checkAndOpenOrCloseDBConnection("close");
-    //   } catch (error) {
-    //     console.error("ERROR CLOSING DATABASE CONNECTION: " + error);
-    //   }
-    // }
   };
 
   let singleSalahObjArr: SalahRecordsArray = [];
-  const fetchSalahTrackingDataFromDB = async (
+  const handleSalahTrackingDataFromDB = async (
     DBResultSalahData
   ): Promise<SalahRecordsArray> => {
     console.log("🚀 ~ App ~ DBResultSalahData:", DBResultSalahData);
-    console.log("fetchSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
+    console.log("handleSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
 
     console.log("datesFromStartToToday: ", datesFromStartToToday);
     for (let i = 0; i < datesFromStartToToday.length; i++) {
@@ -491,16 +450,16 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
-      if (DBResultSalahData.values && DBResultSalahData.values.length > 0) {
-        for (let i = 0; i < DBResultSalahData.values.length; i++) {
-          if (DBResultSalahData.values[i].date === currentDate) {
-            let salahName: SalahNames = DBResultSalahData.values[i].salahName;
-            let salahStatus: SalahStatus =
-              DBResultSalahData.values[i].salahStatus;
+      if (DBResultSalahData && DBResultSalahData.length > 0) {
+        for (let i = 0; i < DBResultSalahData.length; i++) {
+          if (DBResultSalahData[i].date === currentDate) {
+            let salahName: SalahNames = DBResultSalahData[i].salahName;
+            let salahStatus: SalahStatus = DBResultSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
           }
         }
       }
+      console.log("DBResultSalahData: ", DBResultSalahData);
 
       singleSalahObjArr.push(singleSalahObj);
     }
@@ -508,9 +467,22 @@ const App = () => {
       "🚀 ~ window.addEventListener ~ singleSalahObjArr:",
       singleSalahObjArr
     );
-
-    return singleSalahObjArr;
+    setTableData(singleSalahObjArr);
+    // return singleSalahObjArr;
   };
+
+  useEffect(() => {
+    console.log("tableData in useEffect is:", tableData);
+
+    if (tableData.length > 0) {
+      console.log(
+        "🚀 ~ useEffect ~ datesFromStartToToday:",
+        datesFromStartToToday
+      );
+      console.log("TABLEDATA: ", tableData);
+      setRenderTable(true);
+    }
+  }, [tableData]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,
@@ -671,12 +643,12 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 renderTable={renderTable}
+                handleCalendarData={handleCalendarData}
                 setReasonsArray={setReasonsArray}
                 reasonsArray={reasonsArray}
                 datesFromStartToToday={datesFromStartToToday}
                 setTableData={setTableData}
                 tableData={tableData}
-                fetchCalendarData={fetchCalendarData}
                 userGender={userGender}
                 userStartDate={userStartDate}
                 setHeading={setHeading}

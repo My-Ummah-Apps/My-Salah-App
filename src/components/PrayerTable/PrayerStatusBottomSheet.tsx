@@ -14,7 +14,7 @@ interface PrayerStatusBottomSheetProps {
   dbConnection: any;
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: any;
-  fetchCalendarData: () => Promise<void>;
+  handleCalendarData: () => Promise<void>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -34,7 +34,7 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setTableData,
   tableData,
-  fetchCalendarData,
+  handleCalendarData,
   setReasonsArray,
   reasonsArray,
   clickedDate,
@@ -178,7 +178,7 @@ const PrayerStatusBottomSheet = ({
         }
 
         setTableData([...tableData]);
-        await fetchCalendarData();
+        await handleCalendarData();
       } else if (salahAndDateExist) {
         let query = `UPDATE salahDataTable SET salahStatus = ?`;
         const values = [salahStatus];
@@ -210,7 +210,7 @@ const PrayerStatusBottomSheet = ({
         }
 
         setTableData([...tableData]);
-        await fetchCalendarData();
+        await handleCalendarData();
       }
     } catch (error) {
       console.error(error);

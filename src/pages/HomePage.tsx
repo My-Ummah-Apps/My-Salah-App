@@ -17,7 +17,7 @@ interface HomePageProps {
   renderTable: boolean;
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: any;
-  fetchCalendarData: () => Promise<void>;
+  handleCalendarData: () => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFromStartToToday: string[];
@@ -33,7 +33,7 @@ const HomePage = ({
   renderTable,
   setTableData,
   tableData,
-  fetchCalendarData,
+  handleCalendarData,
   setReasonsArray,
   reasonsArray,
   datesFromStartToToday,
@@ -44,7 +44,7 @@ const HomePage = ({
   useEffect(() => {
     setHeading("Home");
   }, []);
-
+  console.log("HOMEPAGE Component has rendered...");
   // setHeading("Home");
 
   // const today: Date = new Date();
@@ -55,6 +55,9 @@ const HomePage = ({
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
 
+      {/* {tableData.length > 0 && ( */}
+      {/* <div>Loading Data...</div> */}
+      {/* {tableData.length > 0 && ( */}
       {tableData.length > 0 && (
         <PrayerTable
           dbConnection={dbConnection}
@@ -65,12 +68,14 @@ const HomePage = ({
           datesFromStartToToday={datesFromStartToToday}
           setTableData={setTableData}
           tableData={tableData}
-          fetchCalendarData={fetchCalendarData}
+          handleCalendarData={handleCalendarData}
           userGender={userGender}
           // userStartDate={userStartDate}
           // startDate={startDate}
         />
       )}
+
+      {/* )} */}
     </section>
   );
 };

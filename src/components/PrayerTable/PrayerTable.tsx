@@ -19,7 +19,7 @@ interface PrayerTableProps {
   renderTable: boolean;
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: SalahRecordsArray;
-  fetchCalendarData: () => Promise<void>;
+  handleCalendarData: () => Promise<void>;
   setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   reasonsArray: string[];
   datesFromStartToToday: string[];
@@ -32,7 +32,7 @@ const PrayerTable = ({
   renderTable,
   setTableData,
   tableData,
-  fetchCalendarData,
+  handleCalendarData,
   setReasonsArray,
   reasonsArray,
   datesFromStartToToday,
@@ -58,73 +58,73 @@ const PrayerTable = ({
 
   return (
     <section className="relative">
-      {renderTable === true ? (
-        <Table
-          style={{
-            textTransform: "none",
-          }}
-          className="text-center"
-          rowCount={datesFromStartToToday.length}
-          rowGetter={rowGetter}
-          rowHeight={100}
-          headerHeight={40}
-          height={800}
-          width={510}
-        >
+      {/* {renderTable === true ? ( */}
+      <Table
+        style={{
+          textTransform: "none",
+        }}
+        className="text-center"
+        rowCount={datesFromStartToToday.length}
+        rowGetter={rowGetter}
+        rowHeight={100}
+        headerHeight={40}
+        height={800}
+        width={510}
+      >
+        <Column
+          style={{ marginLeft: "0" }}
+          className="text-sm text-left"
+          label=""
+          dataKey="date"
+          width={120}
+          flexGrow={1}
+        />
+        {salahNamesArr.map((salahName) => (
           <Column
+            key={salahName}
             style={{ marginLeft: "0" }}
-            className="text-sm text-left"
-            label=""
-            dataKey="date"
+            className="text-sm"
+            label={salahName}
+            dataKey={""}
             width={120}
             flexGrow={1}
+            cellRenderer={({ rowData }) => {
+              return rowData.salahs[salahName] === "" ? (
+                <LuDot
+                  className={`w-[24px] h-[24px]`}
+                  onClick={() => {
+                    setShowUpdateStatusModal(true);
+                    setClickedDate(rowData.date);
+                    setClickedSalah(salahName);
+                    setHasUserClickedDate(true);
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    backgroundColor:
+                      prayerStatusColorsHexCodes[
+                        rowData.salahs[
+                          salahName
+                        ] as keyof typeof prayerStatusColorsHexCodes
+                      ],
+                  }}
+                  className={`w-[24px] h-[24px] ${iconStyles}`}
+                  onClick={() => {
+                    setShowUpdateStatusModal(true);
+                    setClickedDate(rowData.date);
+                    setClickedSalah(salahName);
+                    setHasUserClickedDate(true);
+                  }}
+                ></div>
+              );
+            }}
           />
-          {salahNamesArr.map((salahName) => (
-            <Column
-              key={salahName}
-              style={{ marginLeft: "0" }}
-              className="text-sm"
-              label={salahName}
-              dataKey={""}
-              width={120}
-              flexGrow={1}
-              cellRenderer={({ rowData }) => {
-                return rowData.salahs[salahName] === "" ? (
-                  <LuDot
-                    className={`w-[24px] h-[24px]`}
-                    onClick={() => {
-                      setShowUpdateStatusModal(true);
-                      setClickedDate(rowData.date);
-                      setClickedSalah(salahName);
-                      setHasUserClickedDate(true);
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      backgroundColor:
-                        prayerStatusColorsHexCodes[
-                          rowData.salahs[
-                            salahName
-                          ] as keyof typeof prayerStatusColorsHexCodes
-                        ],
-                    }}
-                    className={`w-[24px] h-[24px] ${iconStyles}`}
-                    onClick={() => {
-                      setShowUpdateStatusModal(true);
-                      setClickedDate(rowData.date);
-                      setClickedSalah(salahName);
-                      setHasUserClickedDate(true);
-                    }}
-                  ></div>
-                );
-              }}
-            />
-          ))}
-        </Table>
-      ) : (
-        <div>Loading Data...</div>
-      )}
+        ))}
+      </Table>
+      {/* // ) : (
+      //   <div>Loading Data...</div>
+      // )} */}
 
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
       {showUpdateStatusModal && (
@@ -132,7 +132,7 @@ const PrayerTable = ({
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           setTableData={setTableData}
           tableData={tableData}
-          fetchCalendarData={fetchCalendarData}
+          handleCalendarData={handleCalendarData}
           setReasonsArray={setReasonsArray}
           reasonsArray={reasonsArray}
           clickedDate={clickedDate}
