@@ -52,7 +52,7 @@ const HomePage = ({
   useEffect(() => {
     setHeading("Home");
   }, []);
-  console.log("HOMEPAGE Component has rendered...");
+  console.log("HOMEPAGE Component has rendered..., tableData is: ", tableData);
   // setHeading("Home");
 
   // const today: Date = new Date();
@@ -65,25 +65,25 @@ const HomePage = ({
 
       {/* {tableData.length > 0 && ( */}
       {/* <div>Loading Data...</div> */}
+      {/* {renderTable && ( */}
       {/* {tableData.length > 0 && ( */}
-      {tableData.length > 0 && (
-        <PrayerTable
-          dbConnection={dbConnection}
-          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          renderTable={renderTable}
-          setUserPreferences={setUserPreferences}
-          userPreferences={userPreferences}
-          // setReasonsArray={setReasonsArray}
-          // reasonsArray={reasonsArray}
-          datesFromStartToToday={datesFromStartToToday}
-          setTableData={setTableData}
-          tableData={tableData}
-          handleCalendarData={handleCalendarData}
-          // userGender={userGender}
-          // userStartDate={userStartDate}
-          // startDate={startDate}
-        />
-      )}
+      <PrayerTable
+        dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        renderTable={renderTable}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
+        // setReasonsArray={setReasonsArray}
+        // reasonsArray={reasonsArray}
+        datesFromStartToToday={datesFromStartToToday}
+        setTableData={setTableData}
+        tableData={tableData}
+        handleCalendarData={handleCalendarData}
+        // userGender={userGender}
+        // userStartDate={userStartDate}
+        // startDate={startDate}
+      />
+      {/* // )} */}
 
       {/* )} */}
     </section>

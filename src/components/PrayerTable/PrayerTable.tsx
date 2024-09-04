@@ -31,7 +31,6 @@ interface PrayerTableProps {
 const PrayerTable = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  renderTable,
   setTableData,
   tableData,
   handleCalendarData,
@@ -41,7 +40,12 @@ const PrayerTable = ({
   // reasonsArray,
   datesFromStartToToday, // userGender,
 }: PrayerTableProps) => {
-  // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", tableData);
+  console.log(
+    "PRAYER TABLE COMPONENT RENDERED AND TABLE DATA IS: ",
+    tableData,
+    " and datesFromStartToToday is: , ",
+    datesFromStartToToday
+  );
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
@@ -51,7 +55,7 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    console.log("tableData: ", tableData);
+    console.log("tableData in rowGetter: ", tableData);
     return tableData[index];
   };
 

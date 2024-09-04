@@ -40,6 +40,7 @@ import StatsPage from "./pages/StatsPage";
 // import { platform } from "os";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
+import { table } from "console";
 
 window.addEventListener("DOMContentLoaded", async () => {
   // try {
@@ -220,7 +221,10 @@ const App = () => {
       );
 
       if (DBResultPreferences && DBResultPreferences.values) {
-        await fetchUserPreferencesFromDB(DBResultPreferences);
+        await fetchUserPreferencesFromDB(
+          DBResultPreferences,
+          DBResultAllSalahData
+        );
       } else {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
@@ -230,7 +234,7 @@ const App = () => {
       if (DBResultAllSalahData && DBResultAllSalahData.values) {
         // setTableData(await handleSalahTrackingDataFromDB(DBResultAllSalahData));
         console.log("DBResultAllSalahData ", DBResultAllSalahData.values);
-        await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        // await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
         await handleCalendarData(DBResultAllSalahData.values);
       } else {
         throw new Error(
@@ -249,44 +253,12 @@ const App = () => {
     }
   };
 
-  const handleCalendarData = async (DBResultCalenderData: any) => {
-    console.log("handleCalendarData has run");
-
-    let calenderDataArr: CalenderSalahArray = [];
-
-    DBResultCalenderData.forEach((obj) => {
-      if (
-        !calenderDataArr.some((calenderObj) =>
-          calenderObj.hasOwnProperty(obj.date)
-        )
-      ) {
-        let currentDate = obj.date;
-        const filteredDBResultCalenderDataValues = DBResultCalenderData.filter(
-          (obj) => obj.date === currentDate
-        );
-
-        let singleSalahObj: CalenderSalahArrayObject = {
-          [currentDate]: [],
-        };
-
-        filteredDBResultCalenderDataValues.forEach((obj) => {
-          let singleObj: SalahEntry = {
-            salahName: obj.salahName,
-            salahStatus: obj.salahStatus,
-          };
-          singleSalahObj[obj.date].push(singleObj);
-        });
-
-        calenderDataArr.push(singleSalahObj);
-      }
-    });
-
-    setCalenderData(calenderDataArr);
-  };
-
-  const fetchUserPreferencesFromDB = async (DBResultPreferences) => {
+  const fetchUserPreferencesFromDB = async (
+    DBResultPreferences,
+    DBResultAllSalahData
+  ) => {
     const todaysDate: Date = new Date();
-    console.log("DBResultPreferences ", DBResultPreferences);
+    console.log("DBResultAllSalahData ", DBResultAllSalahData);
 
     console.log(
       "🚀 ~ fetchUserPreferencesFromDB ~ DBResultPreferences:",
@@ -320,6 +292,7 @@ const App = () => {
           "reasons", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
           "showReasons", "0",
         ];
+
       try {
         await checkAndOpenOrCloseDBConnection("open");
         if (dbConnection && dbConnection.current) {
@@ -406,15 +379,14 @@ const App = () => {
       // setDatesFromStartToToday(datesArray);
       const dates = ["04.09.24", "03.09.24", "02.09.24", "01.09.24"];
       setDatesFromStartToToday([...dates]);
-      // await handleSalahTrackingDataFromDB(dates);
-      // ! BUG: datesFromStartToToday is returning empty and not being filled with data on page refresh, once cmd + save is hit the state updates
-
-      // ! The below log shows an empty array, should have atleast one date, sometimes one date does come up (for today), unsure whats causing this bug needs further investigation, hitting cmd+save sometimes makes the below come up with a date, but then hitting refresh in the browser makes it dissapear, then hitting cmd+save brings the date up again along with the table row for todays date...
       console.log(
         "🚀 ~ fetchUserPreferencesFromDB ~ datesFromStartToToday:",
         datesFromStartToToday
       );
-      // ! once the above bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
+
+      await handleSalahTrackingDataFromDB(DBResultAllSalahData, dates);
+
+      // ! need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
 
       // setUserStartDate(userStartDate.preferenceValue);
       setUserPreferences((userPreferences) => ({
@@ -456,11 +428,51 @@ const App = () => {
       console.error("dailyNotificationTime row not found");
     }
   };
-  const singleSalahObjArr: SalahRecordsArray = [];
+
+  const handleCalendarData = async (DBResultCalenderData: any) => {
+    console.log(
+      "handleCalendarData has run, DBResultCalenderData is: ",
+      DBResultCalenderData
+    );
+
+    let calenderDataArr: CalenderSalahArray = [];
+
+    DBResultCalenderData.forEach((obj) => {
+      if (
+        !calenderDataArr.some((calenderObj) =>
+          calenderObj.hasOwnProperty(obj.date)
+        )
+      ) {
+        let currentDate = obj.date;
+        const filteredDBResultCalenderDataValues = DBResultCalenderData.filter(
+          (obj) => obj.date === currentDate
+        );
+
+        let singleSalahObj: CalenderSalahArrayObject = {
+          [currentDate]: [],
+        };
+
+        filteredDBResultCalenderDataValues.forEach((obj) => {
+          let singleObj: SalahEntry = {
+            salahName: obj.salahName,
+            salahStatus: obj.salahStatus,
+          };
+          singleSalahObj[obj.date].push(singleObj);
+        });
+
+        calenderDataArr.push(singleSalahObj);
+      }
+    });
+
+    setCalenderData(calenderDataArr);
+  };
 
   const handleSalahTrackingDataFromDB = async (
-    DBResultSalahData
+    DBResultSalahData,
+    datesFromStartToToday
   ): Promise<SalahRecordsArray> => {
+    const singleSalahObjArr: SalahRecordsArray = [];
+    // ! BUG: Although DBResultSalahData is being updated with each salah status being entered and it persists between renders, tableData does not persist the data so on page refresh the table cells are lost, if user navigates away from the table page and then comes back to the table page the table cells do still show the correct data, its only on page refresh the tableData loses all data
     console.log("🚀 ~ App ~ DBResultSalahData:", DBResultSalahData);
     console.log(
       "handleSalahTrackingDataFromDB FUNCTION HAS EXECUTED, datesFromStartToToday as follows:",
@@ -491,37 +503,51 @@ const App = () => {
           }
         }
       }
-      console.log("DBResultSalahData: ", DBResultSalahData);
+      // console.log("DBResultSalahData: ", DBResultSalahData);
 
       singleSalahObjArr.push(singleSalahObj);
     }
-    console.log(
-      "🚀 ~ window.addEventListener ~ singleSalahObjArr:",
-      singleSalahObjArr
-    );
-    // setTableData(singleSalahObjArr);
     setTableData([...singleSalahObjArr]);
+    console.log("🚀 singleSalahObjArr:", singleSalahObjArr);
+    console.log("tableData: ", tableData);
+
+    // setTableData(singleSalahObjArr);
+    // setTableData([
+    //   {
+    //     date: "04.09.24",
+    //     salahs: {
+    //       Fajr: "excused",
+    //       Dhuhr: "",
+    //       Asar: "",
+    //       Maghrib: "",
+    //       Isha: "",
+    //     },
+    //   },
+    //   {
+    //     date: "05.09.24",
+    //     salahs: {
+    //       Fajr: "",
+    //       Dhuhr: "late",
+    //       Asar: "",
+    //       Maghrib: "",
+    //       Isha: "",
+    //     },
+    //   },
+    // ]);
     // return singleSalahObjArr;
   };
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  useEffect(() => {
-    console.log("datesFromStartToToday has changed", datesFromStartToToday);
-    // fetchDataFromDB();
-    // setTableData([...singleSalahObjArr]);
-    // forceUpdate();
-  }, [datesFromStartToToday]);
 
   useEffect(() => {
     console.log("tableData in useEffect is:", tableData);
 
-    if (tableData.length > 0) {
-      console.log(
-        "🚀 ~ useEffect ~ datesFromStartToToday:",
-        datesFromStartToToday
-      );
-      console.log("TABLEDATA: ", tableData);
-      setRenderTable(true);
-    }
+    // if (tableData.length > 0) {
+    //   console.log(
+    //     "🚀 ~ useEffect ~ datesFromStartToToday:",
+    //     datesFromStartToToday
+    //   );
+    //   console.log("TABLEDATA: ", tableData);
+    //   setRenderTable(true);
+    // }
   }, [tableData]);
 
   const modifyDataInUserPreferencesTable = async (
