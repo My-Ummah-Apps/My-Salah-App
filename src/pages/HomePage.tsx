@@ -1,6 +1,10 @@
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
-import { SalahRecordsArray, DBConnectionStateType } from "../types/types";
+import {
+  SalahRecordsArray,
+  DBConnectionStateType,
+  userPreferences,
+} from "../types/types";
 import { useEffect } from "react";
 
 // import { subDays } from "date-fns";
@@ -18,12 +22,14 @@ interface HomePageProps {
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: any;
   handleCalendarData: () => Promise<void>;
-  setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
-  reasonsArray: string[];
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
+  userPreferences: userPreferences;
+  // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
+  // reasonsArray: string[];
   datesFromStartToToday: string[];
-  userGender: string;
+  // userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
-  userStartDate: string;
+  // userStartDate: string;
   pageStyles: string;
 }
 
@@ -34,10 +40,12 @@ const HomePage = ({
   setTableData,
   tableData,
   handleCalendarData,
-  setReasonsArray,
-  reasonsArray,
+  setUserPreferences,
+  userPreferences,
+  // setReasonsArray,
+  // reasonsArray,
   datesFromStartToToday,
-  userGender,
+  // userGender,
   setHeading,
   pageStyles,
 }: HomePageProps) => {
@@ -63,13 +71,15 @@ const HomePage = ({
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           renderTable={renderTable}
-          setReasonsArray={setReasonsArray}
-          reasonsArray={reasonsArray}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+          // setReasonsArray={setReasonsArray}
+          // reasonsArray={reasonsArray}
           datesFromStartToToday={datesFromStartToToday}
           setTableData={setTableData}
           tableData={tableData}
           handleCalendarData={handleCalendarData}
-          userGender={userGender}
+          // userGender={userGender}
           // userStartDate={userStartDate}
           // startDate={startDate}
         />

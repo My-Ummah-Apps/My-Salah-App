@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
-import { DBConnectionStateType } from "../../types/types";
+import { DBConnectionStateType, userPreferences } from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
@@ -20,10 +20,12 @@ interface PrayerTableProps {
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: SalahRecordsArray;
   handleCalendarData: () => Promise<void>;
-  setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
-  reasonsArray: string[];
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
+  userPreferences: userPreferences;
+  // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
+  // reasonsArray: string[];
   datesFromStartToToday: string[];
-  userGender: string;
+  // userGender: string;
 }
 
 const PrayerTable = ({
@@ -33,10 +35,11 @@ const PrayerTable = ({
   setTableData,
   tableData,
   handleCalendarData,
-  setReasonsArray,
-  reasonsArray,
-  datesFromStartToToday,
-  userGender,
+  setUserPreferences,
+  userPreferences,
+  // setReasonsArray,
+  // reasonsArray,
+  datesFromStartToToday, // userGender,
 }: PrayerTableProps) => {
   // console.log("PRAYER TABLE COMPONENT RENDERED AND DATA IS: ", tableData);
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
@@ -133,12 +136,14 @@ const PrayerTable = ({
           setTableData={setTableData}
           tableData={tableData}
           handleCalendarData={handleCalendarData}
-          setReasonsArray={setReasonsArray}
-          reasonsArray={reasonsArray}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+          // setReasonsArray={setReasonsArray}
+          // reasonsArray={reasonsArray}
           clickedDate={clickedDate}
           clickedSalah={clickedSalah}
           dbConnection={dbConnection}
-          userGender={userGender}
+          // userGender={userGender}
           setShowUpdateStatusModal={setShowUpdateStatusModal}
           showUpdateStatusModal={showUpdateStatusModal}
           setHasUserClickedDate={setHasUserClickedDate}

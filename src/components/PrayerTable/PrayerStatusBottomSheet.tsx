@@ -7,7 +7,7 @@ import { PiFlower } from "react-icons/pi";
 import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
-import { SalahRecordsArray } from "../../types/types";
+import { SalahRecordsArray, userPreferences } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 
 interface PrayerStatusBottomSheetProps {
@@ -18,11 +18,13 @@ interface PrayerStatusBottomSheetProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
-  reasonsArray: string[];
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
+  userPreferences: userPreferences;
+  // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
+  // reasonsArray: string[];
   clickedDate: string;
   clickedSalah: string;
-  userGender: string;
+  // userGender: string;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,11 +37,13 @@ const PrayerStatusBottomSheet = ({
   setTableData,
   tableData,
   handleCalendarData,
-  setReasonsArray,
-  reasonsArray,
+  setUserPreferences,
+  userPreferences,
+  // setReasonsArray,
+  // reasonsArray,
   clickedDate,
   clickedSalah,
-  userGender,
+  // userGender,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
   setHasUserClickedDate,
@@ -303,7 +307,7 @@ const PrayerStatusBottomSheet = ({
                   // ref={modalSheetPrayerStatusesWrap}
                   className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs modal-sheet-prayer-statuses-wrap `}
                 >
-                  {userGender === "male" ? (
+                  {userPreferences.userGender === "male" ? (
                     <>
                       <div
                         onClick={() => {
@@ -342,7 +346,7 @@ const PrayerStatusBottomSheet = ({
                       </div>
                     </>
                   )}
-                  {userGender === "male" ? (
+                  {userPreferences.userGender === "male" ? (
                     <>
                       <div
                         onClick={() => {
@@ -425,7 +429,7 @@ const PrayerStatusBottomSheet = ({
                   </div>
                   <div className="flex flex-wrap ">
                     {/* {missedReasonsArray.map((item) => ( */}
-                    {reasonsArray.map((item) => (
+                    {userPreferences.reasonsArray.map((item) => (
                       <p
                         key={item}
                         style={{
@@ -472,11 +476,14 @@ const PrayerStatusBottomSheet = ({
                       className="mt-10 bg-blue-700"
                       onClick={() => {
                         const updatedReasonsArray = [
-                          ...reasonsArray,
+                          ...userPreferences.reasonsArray,
                           customReason,
                         ];
-
-                        setReasonsArray(updatedReasonsArray);
+                        // setReasonsArray(updatedReasonsArray);
+                        setUserPreferences((userPreferences) => ({
+                          ...userPreferences,
+                          reasonsArray: updatedReasonsArray,
+                        }));
                         setShowAddCustomReasonInputBox(false);
                         localStorage.setItem(
                           "storedReasonsArray",
@@ -575,7 +582,7 @@ const PrayerStatusBottomSheet = ({
         </div>
         <div className="flex flex-wrap">
           {/* {missedReasonsArray.map((item) => ( */}
-          {reasonsArray.map((item) => (
+          {userPreferences.reasonsArray.map((item) => (
             <p
               key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
               style={{

@@ -6,7 +6,7 @@ import Modal from "react-modal";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
-import { PreferenceType } from "../types/types";
+import { PreferenceType, userPreferences } from "../types/types";
 // import { DBConnectionStateType } from "../types/types";
 
 // import {
@@ -26,20 +26,24 @@ interface SettingsPageProps {
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
-  setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
-  dailyNotification: string;
-  setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
-  dailyNotificationTime: string;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
+  userPreferences: userPreferences;
+  // setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
+  // dailyNotification: string;
+  //   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
+  //   dailyNotificationTime: string;
 }
 
 const SettingsPage = ({
   setHeading,
   pageStyles,
   modifyDataInUserPreferencesTable,
-  setDailyNotification,
-  dailyNotification,
-  setDailyNotificationTime,
-  dailyNotificationTime,
+  // setDailyNotification,
+  // dailyNotification,
+  // setDailyNotificationTime,
+  // dailyNotificationTime,
+  setUserPreferences,
+  userPreferences,
 }: SettingsPageProps) => {
   useEffect(() => {
     setHeading("Settings");
@@ -83,10 +87,12 @@ const SettingsPage = ({
             // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
             setHandleNotificationsModal={setHandleNotificationsModal}
             handleNotificationsModal={handleNotificationsModal}
-            setDailyNotification={setDailyNotification}
-            dailyNotification={dailyNotification}
-            setDailyNotificationTime={setDailyNotificationTime}
-            dailyNotificationTime={dailyNotificationTime}
+            setUserPreferences={setUserPreferences}
+            userPreferences={userPreferences}
+            // setDailyNotification={setDailyNotification}
+            // dailyNotification={dailyNotification}
+            // setDailyNotificationTime={setDailyNotificationTime}
+            // dailyNotificationTime={dailyNotificationTime}
           />
         </div>{" "}
         {/* <SettingIndividual

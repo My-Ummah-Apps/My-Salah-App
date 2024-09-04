@@ -3,6 +3,14 @@
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
+export interface userPreferences {
+  userGender: userGenderType;
+  userStartDate: string;
+  dailyNotification: string;
+  dailyNotificationTime: string;
+  reasonsArray: string[];
+}
+
 export type SalahStatus =
   | "group"
   | "male-alone"

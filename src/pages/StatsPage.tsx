@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 
 import Calendar from "../components/Stats/Calendar";
-import { CalenderSalahArray, userGenderType } from "../types/types";
+import {
+  CalenderSalahArray,
+  userGenderType,
+  userPreferences,
+} from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
 // import StreakCount from "../components/Stats/StreakCount";
@@ -11,8 +15,9 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  userGender: userGenderType;
-  userStartDate: string;
+  userPreferences: userPreferences;
+  // userGender: userGenderType;
+  // userStartDate: string;
   calenderData: CalenderSalahArray;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
@@ -21,8 +26,9 @@ interface StatsPageProps {
 const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  userGender,
-  userStartDate,
+  // userGender,
+  // userStartDate,
+  userPreferences,
   calenderData,
   setHeading,
   pageStyles,
@@ -91,7 +97,7 @@ const StatsPage = ({
       {/* <StreakCount styles={{}} /> */}
       {showDonutChart === true ? (
         <DonutPieChart
-          userGender={userGender}
+          userGender={userPreferences.userGender}
           salahStatusStatistics={salahStatusStatistics}
         />
       ) : (
@@ -100,7 +106,7 @@ const StatsPage = ({
       <Calendar
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-        userStartDate={userStartDate}
+        userStartDate={userPreferences.userStartDate}
         calenderData={calenderData}
       />{" "}
     </section>

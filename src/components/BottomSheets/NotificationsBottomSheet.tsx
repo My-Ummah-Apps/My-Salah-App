@@ -4,19 +4,20 @@ import Sheet from "react-modal-sheet";
 import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { PreferenceType } from "../../types/types";
+import { PreferenceType, userPreferences } from "../../types/types";
 
 const NotificationsBottomSheet = ({
   setHandleNotificationsModal,
   handleNotificationsModal,
   // dbConnection,
   modifyDataInUserPreferencesTable,
-  // checkAndOpenOrCloseDBConnection,
-  setDailyNotification,
-  dailyNotification,
-  setDailyNotificationTime,
-  dailyNotificationTime,
-}: {
+  setUserPreferences,
+  userPreferences, // checkAndOpenOrCloseDBConnection,
+  // setDailyNotification,
+} // dailyNotification,
+// setDailyNotificationTime,
+// dailyNotificationTime,
+: {
   setHandleNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleNotificationsModal: boolean;
   // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -24,11 +25,13 @@ const NotificationsBottomSheet = ({
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
+  userPreferences: userPreferences;
   // checkAndOpenOrCloseDBConnection: (action: string) => Promise<void>;
-  setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
-  dailyNotification: string;
-  setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
-  dailyNotificationTime: string;
+  // setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
+  // dailyNotification: string;
+  // setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
+  // dailyNotificationTime: string;
 }) => {
   const scheduleDailyNotification = async (hour: number, minute: number) => {
     await LocalNotifications.schedule({
@@ -87,7 +90,11 @@ const NotificationsBottomSheet = ({
   // };
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDailyNotificationTime(e.target.value);
+    // setDailyNotificationTime(e.target.value);
+    setUserPreferences((userPreferences) => ({
+      ...userPreferences,
+      dailyNotificationTime: e.target.value,
+    }));
     const [hour, minute] = e.target.value.split(":").map(Number);
     scheduleDailyNotification(hour, minute);
     modifyDataInUserPreferencesTable(e.target.value, "dailyNotificationTime");
@@ -95,8 +102,11 @@ const NotificationsBottomSheet = ({
   };
 
   useEffect(() => {
-    modifyDataInUserPreferencesTable(dailyNotification, "dailyNotification");
-  }, [dailyNotification]);
+    modifyDataInUserPreferencesTable(
+      userPreferences.dailyNotification,
+      "dailyNotification"
+    );
+  }, [userPreferences.dailyNotification]);
 
   return (
     <Sheet
@@ -112,16 +122,23 @@ const NotificationsBottomSheet = ({
             <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
               <p>Turn on Daily Notification</p>{" "}
               <Switch
-                checked={dailyNotification === "1" ? true : false}
+                checked={
+                  userPreferences.dailyNotification === "1" ? true : false
+                }
                 className={undefined}
                 disabled={undefined}
                 handleColor="white"
                 name={undefined}
                 offColor="white"
                 onChange={() => {
-                  setDailyNotification((prevValue) => {
-                    return prevValue === "1" ? "0" : "1";
-                  });
+                  // setDailyNotification((prevValue) => {
+                  //   return prevValue === "1" ? "0" : "1";
+                  // });
+                  setUserPreferences((userPreferences) => ({
+                    ...userPreferences,
+                    dailyNotification:
+                      userPreferences.dailyNotification === "1" ? "0" : "1",
+                  }));
                 }}
                 onColor="lightblue"
                 pendingOffColor={undefined}
@@ -130,7 +147,7 @@ const NotificationsBottomSheet = ({
                 style={undefined}
               />
             </div>
-            {dailyNotification === "1" ? (
+            {userPreferences.dailyNotification === "1" ? (
               <div className="flex items-center justify-between p-3">
                 <p>Set Time</p>
                 {/* <p> */}
@@ -141,14 +158,14 @@ const NotificationsBottomSheet = ({
                   }}
                   style={{ backgroundColor: "transparent" }}
                   className={`${
-                    dailyNotification ? "slideUp" : ""
+                    userPreferences.dailyNotification ? "slideUp" : ""
                   } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] `}
                   type="time"
                   id="appt"
                   name="appt"
                   min="09:00"
                   max="18:00"
-                  value={dailyNotificationTime}
+                  value={userPreferences.dailyNotification}
                   required
                 />
                 {/* </p> */}

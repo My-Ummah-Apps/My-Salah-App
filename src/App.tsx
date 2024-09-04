@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
@@ -11,6 +11,7 @@ import {
   SalahRecord,
   SalahRecordsArray,
   SalahStatus,
+  userPreferences,
 } from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
@@ -96,16 +97,25 @@ const App = () => {
 
   const [tableData, setTableData] = useState<SalahRecordsArray>([]);
   const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
-  const [userGender, setUserGender] = useState<userGenderType>("male");
-  const [dailyNotification, setDailyNotification] = useState<string>("");
-  const [dailyNotificationTime, setDailyNotificationTime] =
-    useState<string>("");
-  const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  const [userStartDate, setUserStartDate] = useState<string>("");
   const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>(
     []
   );
   const [renderTable, setRenderTable] = useState(false);
+
+  // const [userGender, setUserGender] = useState<userGenderType>("male");
+  // const [dailyNotification, setDailyNotification] = useState<string>("");
+  // const [dailyNotificationTime, setDailyNotificationTime] =
+  //   useState<string>("");
+  // const [reasonsArray, setReasonsArray] = useState<string[]>([]);
+  // const [userStartDate, setUserStartDate] = useState<string>("");
+
+  const [userPreferences, setUserPreferences] = useState<userPreferences>({
+    userGender: "male",
+    userStartDate: "",
+    dailyNotification: "",
+    dailyNotificationTime: "",
+    reasonsArray: [],
+  });
 
   // console.log("APP COMPONENT HAS RENDERED");
   const {
@@ -220,7 +230,6 @@ const App = () => {
       if (DBResultAllSalahData && DBResultAllSalahData.values) {
         // setTableData(await handleSalahTrackingDataFromDB(DBResultAllSalahData));
         console.log("DBResultAllSalahData ", DBResultAllSalahData.values);
-
         await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
         await handleCalendarData(DBResultAllSalahData.values);
       } else {
@@ -367,7 +376,10 @@ const App = () => {
     if (userGenderRow) {
       const gender = userGenderRow.preferenceValue as userGenderType;
       if (gender === "male" || gender === "female") {
-        setUserGender(gender);
+        setUserPreferences((userPreferences) => ({
+          ...userPreferences,
+          userGender: gender,
+        }));
       } else {
         console.error(`Invalid gender value: ${gender}`);
       }
@@ -391,49 +403,69 @@ const App = () => {
 
       console.log("datesArray: ", datesArray);
       console.log("UPDATING DATESFROMSTART STATE");
-      setDatesFromStartToToday(datesArray);
-      // setDatesFromStartToToday(["03.09.24", "02.09.24", "01.09.24"]);
-      // ! BUG: setDatesFromStartToToday is not updating the state in time for the table to render it seems, have currently put in a check in the homepage for the table to NOT render if the state is empty
-
-      // ! once the above bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
+      // setDatesFromStartToToday(datesArray);
+      const dates = ["04.09.24", "03.09.24", "02.09.24", "01.09.24"];
+      setDatesFromStartToToday([...dates]);
+      // await handleSalahTrackingDataFromDB(dates);
+      // ! BUG: datesFromStartToToday is returning empty and not being filled with data on page refresh, once cmd + save is hit the state updates
 
       // ! The below log shows an empty array, should have atleast one date, sometimes one date does come up (for today), unsure whats causing this bug needs further investigation, hitting cmd+save sometimes makes the below come up with a date, but then hitting refresh in the browser makes it dissapear, then hitting cmd+save brings the date up again along with the table row for todays date...
       console.log(
         "🚀 ~ fetchUserPreferencesFromDB ~ datesFromStartToToday:",
         datesFromStartToToday
       );
+      // ! once the above bug is resolved also need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
 
-      setUserStartDate(userStartDate.preferenceValue);
+      // setUserStartDate(userStartDate.preferenceValue);
+      setUserPreferences((userPreferences) => ({
+        ...userPreferences,
+        userStartDate: userStartDate.preferenceValue,
+      }));
       console.log("userStartDate ", userStartDate.preferenceValue);
     } else {
       console.error("userStartDate row not found");
     }
 
     if (reasons) {
-      setReasonsArray(reasons.preferenceValue.split(","));
+      // setReasonsArray(reasons.preferenceValue.split(","));
+      setUserPreferences((userPreferences) => ({
+        ...userPreferences,
+        reasonsArray: reasons.preferenceValue.split(","),
+      }));
     } else {
       console.error("reasons row not found");
     }
 
     if (dailyNotificationRow) {
-      setDailyNotification(dailyNotificationRow.preferenceValue);
+      // setDailyNotification(dailyNotificationRow.preferenceValue);
+      setUserPreferences((userPreferences) => ({
+        ...userPreferences,
+        dailyNotification: dailyNotificationRow.preferenceValue,
+      }));
     } else {
       console.error("dailyNotification row not found");
     }
 
     if (dailyNotificationTimeRow) {
-      setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
+      // setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
+      setUserPreferences((userPreferences) => ({
+        ...userPreferences,
+        dailyNotificationTime: dailyNotificationTimeRow.preferenceValue,
+      }));
     } else {
       console.error("dailyNotificationTime row not found");
     }
   };
+  const singleSalahObjArr: SalahRecordsArray = [];
 
-  let singleSalahObjArr: SalahRecordsArray = [];
   const handleSalahTrackingDataFromDB = async (
     DBResultSalahData
   ): Promise<SalahRecordsArray> => {
     console.log("🚀 ~ App ~ DBResultSalahData:", DBResultSalahData);
-    console.log("handleSalahTrackingDataFromDB FUNCTION HAS EXECUTED");
+    console.log(
+      "handleSalahTrackingDataFromDB FUNCTION HAS EXECUTED, datesFromStartToToday as follows:",
+      datesFromStartToToday
+    );
 
     console.log("datesFromStartToToday: ", datesFromStartToToday);
     for (let i = 0; i < datesFromStartToToday.length; i++) {
@@ -467,9 +499,17 @@ const App = () => {
       "🚀 ~ window.addEventListener ~ singleSalahObjArr:",
       singleSalahObjArr
     );
-    setTableData(singleSalahObjArr);
+    // setTableData(singleSalahObjArr);
+    setTableData([...singleSalahObjArr]);
     // return singleSalahObjArr;
   };
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  useEffect(() => {
+    console.log("datesFromStartToToday has changed", datesFromStartToToday);
+    // fetchDataFromDB();
+    // setTableData([...singleSalahObjArr]);
+    // forceUpdate();
+  }, [datesFromStartToToday]);
 
   useEffect(() => {
     console.log("tableData in useEffect is:", tableData);
@@ -644,13 +684,15 @@ const App = () => {
                 }
                 renderTable={renderTable}
                 handleCalendarData={handleCalendarData}
-                setReasonsArray={setReasonsArray}
-                reasonsArray={reasonsArray}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+                // setReasonsArray={setReasonsArray}
+                // reasonsArray={reasonsArray}
                 datesFromStartToToday={datesFromStartToToday}
                 setTableData={setTableData}
                 tableData={tableData}
-                userGender={userGender}
-                userStartDate={userStartDate}
+                // userGender={userGender}
+                // userStartDate={userStartDate}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
               />
@@ -665,10 +707,12 @@ const App = () => {
                 modifyDataInUserPreferencesTable={
                   modifyDataInUserPreferencesTable
                 }
-                setDailyNotification={setDailyNotification}
-                setDailyNotificationTime={setDailyNotificationTime}
-                dailyNotificationTime={dailyNotificationTime}
-                dailyNotification={dailyNotification}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+                // setDailyNotification={setDailyNotification}
+                // setDailyNotificationTime={setDailyNotificationTime}
+                // dailyNotificationTime={dailyNotificationTime}
+                // dailyNotification={dailyNotification}
               />
             }
           />
@@ -680,8 +724,9 @@ const App = () => {
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }
-                userGender={userGender}
-                userStartDate={userStartDate}
+                userPreferences={userPreferences}
+                // userGender={userGender}
+                // userStartDate={userStartDate}
                 calenderData={calenderData}
                 pageStyles={pageStyles}
                 setHeading={setHeading}
@@ -713,7 +758,11 @@ const App = () => {
                 <h1 className="text-4xl">Select your gender</h1>
                 <p
                   onClick={async () => {
-                    setUserGender("male");
+                    // setUserGender("male");
+                    setUserPreferences((userPreferences) => ({
+                      ...userPreferences,
+                      userGender: "male",
+                    }));
                     // localStorage.setItem("userGender", "male");
                     await modifyDataInUserPreferencesTable(
                       "male",
@@ -728,7 +777,11 @@ const App = () => {
                 <p
                   onClick={async () => {
                     // localStorage.setItem("userGender", "female");
-                    setUserGender("female");
+                    // setUserGender("female");
+                    setUserPreferences((userPreferences) => ({
+                      ...userPreferences,
+                      userGender: "female",
+                    }));
                     await modifyDataInUserPreferencesTable(
                       "female",
                       "userGender"
