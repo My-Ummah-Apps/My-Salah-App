@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
-import { DBConnectionStateType, userPreferences } from "../../types/types";
+import {
+  CalenderSalahArray,
+  DBConnectionStateType,
+  userPreferences,
+} from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
@@ -19,7 +23,9 @@ interface PrayerTableProps {
   renderTable: boolean;
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: SalahRecordsArray;
-  handleCalendarData: () => Promise<void>;
+  setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
+  handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
+  handleCalendarData: (DBResultAllSalahData) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
   userPreferences: userPreferences;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -33,6 +39,8 @@ const PrayerTable = ({
   checkAndOpenOrCloseDBConnection,
   setTableData,
   tableData,
+  setCalendarData,
+  handleSalahTrackingDataFromDB,
   handleCalendarData,
   setUserPreferences,
   userPreferences,
@@ -140,15 +148,14 @@ const PrayerTable = ({
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           setTableData={setTableData}
           tableData={tableData}
+          setCalendarData={setCalendarData}
+          handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
           handleCalendarData={handleCalendarData}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
-          // setReasonsArray={setReasonsArray}
-          // reasonsArray={reasonsArray}
           clickedDate={clickedDate}
           clickedSalah={clickedSalah}
           dbConnection={dbConnection}
-          // userGender={userGender}
           setShowUpdateStatusModal={setShowUpdateStatusModal}
           showUpdateStatusModal={showUpdateStatusModal}
           setHasUserClickedDate={setHasUserClickedDate}

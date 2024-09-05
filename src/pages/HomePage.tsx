@@ -4,6 +4,7 @@ import {
   SalahRecordsArray,
   DBConnectionStateType,
   userPreferences,
+  CalenderSalahArray,
 } from "../types/types";
 import { useEffect } from "react";
 
@@ -20,8 +21,10 @@ interface HomePageProps {
   ) => Promise<void>;
   renderTable: boolean;
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
   tableData: any;
-  handleCalendarData: () => Promise<void>;
+  handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
+  handleCalendarData: (DBResultAllSalahData) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
   userPreferences: userPreferences;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -38,7 +41,9 @@ const HomePage = ({
   checkAndOpenOrCloseDBConnection,
   renderTable,
   setTableData,
+  setCalendarData,
   tableData,
+  handleSalahTrackingDataFromDB,
   handleCalendarData,
   setUserPreferences,
   userPreferences,
@@ -73,15 +78,12 @@ const HomePage = ({
         renderTable={renderTable}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
-        // setReasonsArray={setReasonsArray}
-        // reasonsArray={reasonsArray}
         datesFromStartToToday={datesFromStartToToday}
         setTableData={setTableData}
         tableData={tableData}
+        setCalendarData={setCalendarData}
+        handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
         handleCalendarData={handleCalendarData}
-        // userGender={userGender}
-        // userStartDate={userStartDate}
-        // startDate={startDate}
       />
       {/* // )} */}
 

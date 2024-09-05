@@ -97,7 +97,7 @@ const App = () => {
   console.log("APP.TSX HAS RENDERED...");
 
   const [tableData, setTableData] = useState<SalahRecordsArray>([]);
-  const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
+  const [calenderData, setCalendarData] = useState<CalenderSalahArray>([]);
   // const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>(
   //   []
   // );
@@ -221,18 +221,18 @@ const App = () => {
       );
 
       if (DBResultPreferences && DBResultPreferences.values) {
-        await fetchUserPreferencesFromDB(DBResultPreferences);
+        await handleUserPreferencesDataFromDB(DBResultPreferences);
       } else {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
         );
       }
 
+      console.log("YO: ", userPreferences.userStartDate);
+
       if (DBResultAllSalahData && DBResultAllSalahData.values) {
-        setTableData(
-          await handleSalahTrackingDataFromDB(DBResultAllSalahData.values)
-        );
-        await handleCalendarData(DBResultAllSalahData.values);
+        handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        handleCalendarData(DBResultAllSalahData.values);
       } else {
         throw new Error(
           "DBResultAllSalahData or DBResultAllSalahData.values do not exist"
@@ -250,7 +250,7 @@ const App = () => {
     }
   };
 
-  const fetchUserPreferencesFromDB = async (DBResultPreferences) => {
+  const handleUserPreferencesDataFromDB = async (DBResultPreferences) => {
     const todaysDate: Date = new Date();
 
     let DBResultPreferencesValues = DBResultPreferences.values;
@@ -400,9 +400,8 @@ const App = () => {
     userStartDateForSalahTrackingFunc = userPreferences.userStartDate;
   }, [userPreferences.userStartDate]);
 
-  const handleSalahTrackingDataFromDB = async (
-    DBResultSalahData
-  ): Promise<SalahRecordsArray> => {
+  const handleSalahTrackingDataFromDB = (DBResultAllSalahData) => {
+    // ! Below logic for creating datesFromStartToToday might need to be placed elsewhere, as this function is being called from another component also and the below logic is causing issues, this and the logic in the calendar function need to be double checked, are these only required when the app is first launched? If so there is no need to re-run all this logic, so might need to abstract these away, in actual fact, why can't both handleSalahTrackingDataFromDB and handleCalendarData be combined? Ultimately they both need to re-render together to reflect correct data, at the very least they need to be combined, best case scenario? Both components work off the exact same data instead of different data as is currently the case, remember that whether its the table component or calendar component, both components are only looking at the salah status to paint the correct color, the rest of the data such as notes / reasons isn't needed by them until the user clicks on a specific cell or date, which is when the sheet modals fetch said data and display to the user
     const singleSalahObjArr: SalahRecordsArray = [];
     console.log("🚀 ~ App ~ userStartDate:", userStartDateForSalahTrackingFunc);
     const todaysDate = new Date();
@@ -410,6 +409,11 @@ const App = () => {
       userStartDateForSalahTrackingFunc,
       "dd.MM.yy",
       new Date()
+    );
+
+    console.log(
+      "userStartDateFormattedToDateObject: ",
+      userPreferences.userStartDate
     );
 
     const datesFromStartToToday: string[] = eachDayOfInterval({
@@ -433,11 +437,11 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
-      if (DBResultSalahData && DBResultSalahData.length > 0) {
-        for (let i = 0; i < DBResultSalahData.length; i++) {
-          if (DBResultSalahData[i].date === currentDate) {
-            let salahName: SalahNames = DBResultSalahData[i].salahName;
-            let salahStatus: SalahStatus = DBResultSalahData[i].salahStatus;
+      if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
+        for (let i = 0; i < DBResultAllSalahData.length; i++) {
+          if (DBResultAllSalahData[i].date === currentDate) {
+            let salahName: SalahNames = DBResultAllSalahData[i].salahName;
+            let salahStatus: SalahStatus = DBResultAllSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
           }
         }
@@ -445,26 +449,25 @@ const App = () => {
 
       singleSalahObjArr.push(singleSalahObj);
     }
-
-    return singleSalahObjArr;
+    setTableData([...singleSalahObjArr]);
   };
 
-  const handleCalendarData = async (DBResultCalenderData: any) => {
+  const handleCalendarData = (DBResultAllSalahData: any) => {
     console.log(
-      "handleCalendarData has run, DBResultCalenderData is: ",
-      DBResultCalenderData
+      "handleCalendarData has run, DBResultAllSalahData is: ",
+      DBResultAllSalahData
     );
 
     let calenderDataArr: CalenderSalahArray = [];
 
-    DBResultCalenderData.forEach((obj) => {
+    DBResultAllSalahData.forEach((obj) => {
       if (
         !calenderDataArr.some((calenderObj) =>
           calenderObj.hasOwnProperty(obj.date)
         )
       ) {
         let currentDate = obj.date;
-        const filteredDBResultCalenderDataValues = DBResultCalenderData.filter(
+        const filteredDBResultCalenderDataValues = DBResultAllSalahData.filter(
           (obj) => obj.date === currentDate
         );
 
@@ -483,22 +486,12 @@ const App = () => {
         calenderDataArr.push(singleSalahObj);
       }
     });
+    // return calenderDataArr;
+    // ! BUG: calenderDataArr is being updated, but re-render is not taking place, only on page refresh does the calendar update
+    console.log("Calender beings set", calenderDataArr);
 
-    setCalenderData(calenderDataArr);
+    setCalendarData([...calenderDataArr]);
   };
-
-  useEffect(() => {
-    console.log("tableData in useEffect is:", tableData);
-
-    // if (tableData.length > 0) {
-    //   console.log(
-    //     "🚀 ~ useEffect ~ datesFromStartToToday:",
-    //     datesFromStartToToday
-    //   );
-    //   console.log("TABLEDATA: ", tableData);
-    //   setRenderTable(true);
-    // }
-  }, [tableData]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,
@@ -662,13 +655,10 @@ const App = () => {
                 handleCalendarData={handleCalendarData}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
-                // setReasonsArray={setReasonsArray}
-                // reasonsArray={reasonsArray}
-                // datesFromStartToToday={datesFromStartToToday}
                 setTableData={setTableData}
                 tableData={tableData}
-                // userGender={userGender}
-                // userStartDate={userStartDate}
+                handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
+                setCalendarData={setCalendarData}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
               />
@@ -685,10 +675,6 @@ const App = () => {
                 }
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
-                // setDailyNotification={setDailyNotification}
-                // setDailyNotificationTime={setDailyNotificationTime}
-                // dailyNotificationTime={dailyNotificationTime}
-                // dailyNotification={dailyNotification}
               />
             }
           />
@@ -701,8 +687,6 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 userPreferences={userPreferences}
-                // userGender={userGender}
-                // userStartDate={userStartDate}
                 calenderData={calenderData}
                 pageStyles={pageStyles}
                 setHeading={setHeading}

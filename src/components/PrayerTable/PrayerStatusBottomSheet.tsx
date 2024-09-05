@@ -14,17 +14,16 @@ interface PrayerStatusBottomSheetProps {
   dbConnection: any;
   setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   tableData: any;
-  handleCalendarData: () => Promise<void>;
+  setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
+  handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
+  handleCalendarData: (DBResultAllSalahData) => Promise<void>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
   userPreferences: userPreferences;
-  // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
-  // reasonsArray: string[];
   clickedDate: string;
   clickedSalah: string;
-  // userGender: string;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,14 +35,13 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setTableData,
   tableData,
+  setCalendarData,
+  handleSalahTrackingDataFromDB,
   handleCalendarData,
   setUserPreferences,
   userPreferences,
-  // setReasonsArray,
-  // reasonsArray,
   clickedDate,
   clickedSalah,
-  // userGender,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
   setHasUserClickedDate,
@@ -152,6 +150,10 @@ const PrayerStatusBottomSheet = ({
         clickedDate
       );
 
+      const DBResultAllSalahData = await dbConnection.current.query(
+        `SELECT * FROM salahDataTable`
+      );
+
       if (!salahAndDateExist) {
         let query = `INSERT INTO salahDataTable(date, salahName, salahStatus`;
         const values = [clickedDate, clickedSalah, salahStatus];
@@ -180,9 +182,11 @@ const PrayerStatusBottomSheet = ({
         } else {
           console.error(`Date ${clickedDate} not found in tableData`);
         }
-
-        setTableData([...tableData]);
-        await handleCalendarData();
+        // ! BUG: While setTableData is updating the table component, this really needs to be handled by handleSalahTrackingDataFromDB which isn't currently working, something to do with the userStartDate, handleCalenderData isn't working either, these need to work to ensure everything stays in sync with the database
+        setTableData((prev) => [...prev]);
+        // setCalendarData((prev) => [...prev]);
+        // handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        handleCalendarData(DBResultAllSalahData.values);
       } else if (salahAndDateExist) {
         let query = `UPDATE salahDataTable SET salahStatus = ?`;
         const values = [salahStatus];
@@ -213,9 +217,12 @@ const PrayerStatusBottomSheet = ({
           console.error(`Date ${clickedDate} not found in tableData`);
         }
 
-        setTableData([...tableData]);
+        setTableData((prev) => [...prev]);
+        // setCalendarData((prev) => [...prev]);
+        console.log(">>>>", DBResultAllSalahData);
 
-        await handleCalendarData();
+        // handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        handleCalendarData(DBResultAllSalahData.values);
       }
       console.log("tableData in sheet: ", tableData);
     } catch (error) {
