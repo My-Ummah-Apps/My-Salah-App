@@ -265,7 +265,7 @@ const App = () => {
             </p>
           </>
         </dialog> */}
-        ;
+
         <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
           {/* <div></div> */}
