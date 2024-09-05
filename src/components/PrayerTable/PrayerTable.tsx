@@ -71,7 +71,8 @@ const PrayerTable = ({
           textTransform: "none",
         }}
         className="text-center"
-        rowCount={datesFromStartToToday.length}
+        // rowCount={datesFromStartToToday.length}
+        rowCount={tableData.length}
         rowGetter={rowGetter}
         rowHeight={100}
         headerHeight={40}

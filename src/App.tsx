@@ -98,9 +98,9 @@ const App = () => {
 
   const [tableData, setTableData] = useState<SalahRecordsArray>([]);
   const [calenderData, setCalenderData] = useState<CalenderSalahArray>([]);
-  const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>(
-    []
-  );
+  // const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>(
+  //   []
+  // );
   const [renderTable, setRenderTable] = useState(false);
 
   // const [userGender, setUserGender] = useState<userGenderType>("male");
@@ -221,10 +221,7 @@ const App = () => {
       );
 
       if (DBResultPreferences && DBResultPreferences.values) {
-        await fetchUserPreferencesFromDB(
-          DBResultPreferences,
-          DBResultAllSalahData
-        );
+        await fetchUserPreferencesFromDB(DBResultPreferences);
       } else {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
@@ -232,9 +229,9 @@ const App = () => {
       }
 
       if (DBResultAllSalahData && DBResultAllSalahData.values) {
-        // setTableData(await handleSalahTrackingDataFromDB(DBResultAllSalahData));
-        console.log("DBResultAllSalahData ", DBResultAllSalahData.values);
-        // await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        setTableData(
+          await handleSalahTrackingDataFromDB(DBResultAllSalahData.values)
+        );
         await handleCalendarData(DBResultAllSalahData.values);
       } else {
         throw new Error(
@@ -253,17 +250,8 @@ const App = () => {
     }
   };
 
-  const fetchUserPreferencesFromDB = async (
-    DBResultPreferences,
-    DBResultAllSalahData
-  ) => {
+  const fetchUserPreferencesFromDB = async (DBResultPreferences) => {
     const todaysDate: Date = new Date();
-    console.log("DBResultAllSalahData ", DBResultAllSalahData);
-
-    console.log(
-      "🚀 ~ fetchUserPreferencesFromDB ~ DBResultPreferences:",
-      DBResultPreferences
-    );
 
     let DBResultPreferencesValues = DBResultPreferences.values;
 
@@ -361,38 +349,15 @@ const App = () => {
     }
 
     if (userStartDate) {
-      const userStartDateFormatted: Date = parse(
-        userStartDate.preferenceValue,
-        "dd.MM.yy",
-        new Date()
-      );
-
-      const datesArray: string[] = eachDayOfInterval({
-        start: userStartDateFormatted,
-        end: todaysDate,
-      })
-        .map((date) => format(date, "dd.MM.yy"))
-        .reverse();
-
-      console.log("datesArray: ", datesArray);
-      console.log("UPDATING DATESFROMSTART STATE");
-      // setDatesFromStartToToday(datesArray);
-      const dates = ["04.09.24", "03.09.24", "02.09.24", "01.09.24"];
-      setDatesFromStartToToday([...dates]);
-      console.log(
-        "🚀 ~ fetchUserPreferencesFromDB ~ datesFromStartToToday:",
-        datesFromStartToToday
-      );
-
-      await handleSalahTrackingDataFromDB(DBResultAllSalahData, dates);
-
       // ! need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
 
-      // setUserStartDate(userStartDate.preferenceValue);
       setUserPreferences((userPreferences) => ({
         ...userPreferences,
         userStartDate: userStartDate.preferenceValue,
       }));
+
+      userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
+      // await handleSalahTrackingDataFromDB(DBResultAllSalahData);
       console.log("userStartDate ", userStartDate.preferenceValue);
     } else {
       console.error("userStartDate row not found");
@@ -427,6 +392,61 @@ const App = () => {
     } else {
       console.error("dailyNotificationTime row not found");
     }
+  };
+
+  // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
+  let userStartDateForSalahTrackingFunc: string;
+  useEffect(() => {
+    userStartDateForSalahTrackingFunc = userPreferences.userStartDate;
+  }, [userPreferences.userStartDate]);
+
+  const handleSalahTrackingDataFromDB = async (
+    DBResultSalahData
+  ): Promise<SalahRecordsArray> => {
+    const singleSalahObjArr: SalahRecordsArray = [];
+    console.log("🚀 ~ App ~ userStartDate:", userStartDateForSalahTrackingFunc);
+    const todaysDate = new Date();
+    const userStartDateFormattedToDateObject: Date = parse(
+      userStartDateForSalahTrackingFunc,
+      "dd.MM.yy",
+      new Date()
+    );
+
+    const datesFromStartToToday: string[] = eachDayOfInterval({
+      start: userStartDateFormattedToDateObject,
+      end: todaysDate,
+    })
+      .map((date) => format(date, "dd.MM.yy"))
+      .reverse();
+
+    for (let i = 0; i < datesFromStartToToday.length; i++) {
+      let singleSalahObj: SalahRecord = {
+        date: datesFromStartToToday[i],
+        salahs: {
+          Fajr: "",
+          Dhuhr: "",
+          Asar: "",
+          Maghrib: "",
+          Isha: "",
+        },
+      };
+
+      const currentDate = datesFromStartToToday[i];
+
+      if (DBResultSalahData && DBResultSalahData.length > 0) {
+        for (let i = 0; i < DBResultSalahData.length; i++) {
+          if (DBResultSalahData[i].date === currentDate) {
+            let salahName: SalahNames = DBResultSalahData[i].salahName;
+            let salahStatus: SalahStatus = DBResultSalahData[i].salahStatus;
+            singleSalahObj.salahs[salahName] = salahStatus;
+          }
+        }
+      }
+
+      singleSalahObjArr.push(singleSalahObj);
+    }
+
+    return singleSalahObjArr;
   };
 
   const handleCalendarData = async (DBResultCalenderData: any) => {
@@ -465,76 +485,6 @@ const App = () => {
     });
 
     setCalenderData(calenderDataArr);
-  };
-
-  const handleSalahTrackingDataFromDB = async (
-    DBResultSalahData,
-    datesFromStartToToday
-  ): Promise<SalahRecordsArray> => {
-    const singleSalahObjArr: SalahRecordsArray = [];
-    // ! BUG: Although DBResultSalahData is being updated with each salah status being entered and it persists between renders, tableData does not persist the data so on page refresh the table cells are lost, if user navigates away from the table page and then comes back to the table page the table cells do still show the correct data, its only on page refresh the tableData loses all data
-    console.log("🚀 ~ App ~ DBResultSalahData:", DBResultSalahData);
-    console.log(
-      "handleSalahTrackingDataFromDB FUNCTION HAS EXECUTED, datesFromStartToToday as follows:",
-      datesFromStartToToday
-    );
-
-    console.log("datesFromStartToToday: ", datesFromStartToToday);
-    for (let i = 0; i < datesFromStartToToday.length; i++) {
-      let singleSalahObj: SalahRecord = {
-        date: datesFromStartToToday[i],
-        salahs: {
-          Fajr: "",
-          Dhuhr: "",
-          Asar: "",
-          Maghrib: "",
-          Isha: "",
-        },
-      };
-
-      const currentDate = datesFromStartToToday[i];
-
-      if (DBResultSalahData && DBResultSalahData.length > 0) {
-        for (let i = 0; i < DBResultSalahData.length; i++) {
-          if (DBResultSalahData[i].date === currentDate) {
-            let salahName: SalahNames = DBResultSalahData[i].salahName;
-            let salahStatus: SalahStatus = DBResultSalahData[i].salahStatus;
-            singleSalahObj.salahs[salahName] = salahStatus;
-          }
-        }
-      }
-      // console.log("DBResultSalahData: ", DBResultSalahData);
-
-      singleSalahObjArr.push(singleSalahObj);
-    }
-    setTableData([...singleSalahObjArr]);
-    console.log("🚀 singleSalahObjArr:", singleSalahObjArr);
-    console.log("tableData: ", tableData);
-
-    // setTableData(singleSalahObjArr);
-    // setTableData([
-    //   {
-    //     date: "04.09.24",
-    //     salahs: {
-    //       Fajr: "excused",
-    //       Dhuhr: "",
-    //       Asar: "",
-    //       Maghrib: "",
-    //       Isha: "",
-    //     },
-    //   },
-    //   {
-    //     date: "05.09.24",
-    //     salahs: {
-    //       Fajr: "",
-    //       Dhuhr: "late",
-    //       Asar: "",
-    //       Maghrib: "",
-    //       Isha: "",
-    //     },
-    //   },
-    // ]);
-    // return singleSalahObjArr;
   };
 
   useEffect(() => {
@@ -714,7 +664,7 @@ const App = () => {
                 userPreferences={userPreferences}
                 // setReasonsArray={setReasonsArray}
                 // reasonsArray={reasonsArray}
-                datesFromStartToToday={datesFromStartToToday}
+                // datesFromStartToToday={datesFromStartToToday}
                 setTableData={setTableData}
                 tableData={tableData}
                 // userGender={userGender}

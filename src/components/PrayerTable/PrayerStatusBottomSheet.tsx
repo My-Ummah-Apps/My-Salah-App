@@ -214,8 +214,10 @@ const PrayerStatusBottomSheet = ({
         }
 
         setTableData([...tableData]);
+
         await handleCalendarData();
       }
+      console.log("tableData in sheet: ", tableData);
     } catch (error) {
       console.error(error);
     } finally {
