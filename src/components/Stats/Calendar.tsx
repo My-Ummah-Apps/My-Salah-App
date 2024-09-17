@@ -36,11 +36,14 @@ const Calendar = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   calenderData,
+  tableData,
   userStartDate,
 }: CalenderProps) => {
   // useEffect(() => {
   //   console.log("calendarData: ", calenderData);
   // }, [calenderData]);
+  console.log("TABLEDATA IN CALENDER COMPONENT: ", tableData);
+  console.log("calenderData:", calenderData);
 
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
@@ -174,36 +177,41 @@ const Calendar = ({
 
     let formattedDate = format(date, "dd.MM.yy");
 
-    for (let key in calenderData) {
-      if (calenderData[key].hasOwnProperty(formattedDate)) {
-        calenderData[key][formattedDate].forEach((item: SalahEntry) => {
-          if (item.salahName === "Fajr") {
+    for (let key in tableData) {
+      if (tableData[key].date === formattedDate) {
+        const matchedData = tableData[key].salahs;
+
+        for (const [prayer, prayerStatus] of Object.entries(matchedData)) {
+          console.log(prayer, prayerStatus);
+          if (prayer === "Fajr") {
+            console.log("FAJR, and its status is:", prayerStatus);
+
             fajrColor =
               prayerStatusColorsHexCodes[
-                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
-          } else if (item.salahName === "Dhuhr") {
+          } else if (prayer === "Dhuhr") {
             zoharColor =
               prayerStatusColorsHexCodes[
-                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
-          } else if (item.salahName === "Asar") {
+          } else if (prayer === "Asar") {
             asarColor =
               prayerStatusColorsHexCodes[
-                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
-          } else if (item.salahName === "Maghrib") {
+          } else if (prayer === "Maghrib") {
             maghribColor =
               prayerStatusColorsHexCodes[
-                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
-          } else if (item.salahName === "Isha") {
+          } else if (prayer === "Isha") {
             ishaColor =
               prayerStatusColorsHexCodes[
-                item.salahStatus as keyof typeof prayerStatusColorsHexCodes
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
           }
-        });
+        }
       }
     }
 

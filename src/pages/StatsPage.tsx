@@ -30,6 +30,7 @@ const StatsPage = ({
   // userStartDate,
   userPreferences,
   calenderData,
+  tableData,
   setHeading,
   pageStyles,
 }: StatsPageProps) => {
@@ -108,6 +109,7 @@ const StatsPage = ({
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         userStartDate={userPreferences.userStartDate}
         calenderData={calenderData}
+        tableData={tableData}
       />{" "}
     </section>
   );

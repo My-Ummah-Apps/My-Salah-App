@@ -603,25 +603,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
-        {/* <dialog
-          className="w-4/5 mx-auto text-white bg-gray-800 my-[50%] p-5"
-          open
-        >
-          <>
-            <h1 className="text-2xl">Changelog</h1>
-            <br></br>
-            <p>
-              Version 1.0.9:<br></br>
-              -FEATURE: Selecting a calender date now shows daily performance
-              for that date + notes and reasons (if they were entered)\n\n Beta
-              Version 1.0.8 Changelog:\n\n - Added notifications option within
-              the settings page, please test it out and let me know if you
-              encounter any issues / have any feedback.\n\n As usual, any other
-              issues / bugs etc drop me a message.\n\n Jazakallahu Khair
-            </p>
-          </>
-        </dialog> */}
-
         <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
           {/* <div></div> */}
@@ -687,6 +668,7 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 userPreferences={userPreferences}
+                tableData={tableData}
                 calenderData={calenderData}
                 pageStyles={pageStyles}
                 setHeading={setHeading}
