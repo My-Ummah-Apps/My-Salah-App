@@ -21,11 +21,10 @@ interface PrayerTableProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  tableData: SalahRecordsArray;
+  setFetchedSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  fetchedSalahData: SalahRecordsArray;
   setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
   handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
-  handleCalendarData: (DBResultAllSalahData) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
   userPreferences: userPreferences;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -37,11 +36,10 @@ interface PrayerTableProps {
 const PrayerTable = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  setTableData,
-  tableData,
+  setFetchedSalahData,
+  fetchedSalahData,
   setCalendarData,
   handleSalahTrackingDataFromDB,
-  handleCalendarData,
   setUserPreferences,
   userPreferences,
   // setReasonsArray,
@@ -50,7 +48,7 @@ const PrayerTable = ({
 }: PrayerTableProps) => {
   console.log(
     "PRAYER TABLE COMPONENT RENDERED AND TABLE DATA IS: ",
-    tableData,
+    fetchedSalahData,
     " and datesFromStartToToday is: , ",
     datesFromStartToToday
   );
@@ -63,8 +61,8 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    // console.log("tableData in rowGetter: ", tableData);
-    return tableData[index];
+    // console.log("fetchedSalahData in rowGetter: ", fetchedSalahData);
+    return fetchedSalahData[index];
   };
 
   const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
@@ -80,7 +78,7 @@ const PrayerTable = ({
         }}
         className="text-center"
         // rowCount={datesFromStartToToday.length}
-        rowCount={tableData.length}
+        rowCount={fetchedSalahData.length}
         rowGetter={rowGetter}
         rowHeight={100}
         headerHeight={40}
@@ -146,11 +144,10 @@ const PrayerTable = ({
       {showUpdateStatusModal && (
         <PrayerStatusBottomSheet
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          setTableData={setTableData}
-          tableData={tableData}
+          setFetchedSalahData={setFetchedSalahData}
+          fetchedSalahData={fetchedSalahData}
           setCalendarData={setCalendarData}
           handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
-          handleCalendarData={handleCalendarData}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
           clickedDate={clickedDate}

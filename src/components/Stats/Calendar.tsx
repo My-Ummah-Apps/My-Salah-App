@@ -28,22 +28,16 @@ interface CalenderProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  calenderData: CalenderSalahArray;
   userStartDate: string;
 }
 
 const Calendar = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  calenderData,
-  tableData,
+  fetchedSalahData,
   userStartDate,
 }: CalenderProps) => {
-  // useEffect(() => {
-  //   console.log("calendarData: ", calenderData);
-  // }, [calenderData]);
-  console.log("TABLEDATA IN CALENDER COMPONENT: ", tableData);
-  console.log("calenderData:", calenderData);
+  console.log("fetchedSalahData IN CALENDER COMPONENT: ", fetchedSalahData);
 
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
@@ -177,9 +171,9 @@ const Calendar = ({
 
     let formattedDate = format(date, "dd.MM.yy");
 
-    for (let key in tableData) {
-      if (tableData[key].date === formattedDate) {
-        const matchedData = tableData[key].salahs;
+    for (let key in fetchedSalahData) {
+      if (fetchedSalahData[key].date === formattedDate) {
+        const matchedData = fetchedSalahData[key].salahs;
 
         for (const [prayer, prayerStatus] of Object.entries(matchedData)) {
           console.log(prayer, prayerStatus);

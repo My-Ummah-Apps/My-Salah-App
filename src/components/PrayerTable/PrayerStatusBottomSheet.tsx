@@ -12,11 +12,10 @@ import { DBConnectionStateType } from "../../types/types";
 
 interface PrayerStatusBottomSheetProps {
   dbConnection: any;
-  setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  tableData: any;
+  setFetchedSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  fetchedSalahData: any;
   setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
   handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
-  handleCalendarData: (DBResultAllSalahData) => Promise<void>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -33,11 +32,10 @@ interface PrayerStatusBottomSheetProps {
 const PrayerStatusBottomSheet = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  setTableData,
-  tableData,
+  setFetchedSalahData,
+  fetchedSalahData,
   setCalendarData,
   handleSalahTrackingDataFromDB,
-  handleCalendarData,
   setUserPreferences,
   userPreferences,
   clickedDate,
@@ -138,7 +136,7 @@ const PrayerStatusBottomSheet = ({
   ) => {
     // console.log("addOrModifySalah HAS RUN");
 
-    const findDateWithinData = tableData.find(
+    const findDateWithinData = fetchedSalahData.find(
       (obj: any) => obj.date === clickedDate
     );
 
@@ -180,13 +178,11 @@ const PrayerStatusBottomSheet = ({
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
         } else {
-          console.error(`Date ${clickedDate} not found in tableData`);
+          console.error(`Date ${clickedDate} not found in fetchedSalahData`);
         }
-        // ! BUG: While setTableData is updating the table component, this really needs to be handled by handleSalahTrackingDataFromDB which isn't currently working, something to do with the userStartDate, handleCalenderData isn't working either, these need to work to ensure everything stays in sync with the database
-        setTableData((prev) => [...prev]);
-        // setCalendarData((prev) => [...prev]);
+
+        setFetchedSalahData((prev) => [...prev]);
         // handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
-        handleCalendarData(DBResultAllSalahData.values);
       } else if (salahAndDateExist) {
         let query = `UPDATE salahDataTable SET salahStatus = ?`;
         const values = [salahStatus];
@@ -214,17 +210,16 @@ const PrayerStatusBottomSheet = ({
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;
         } else {
-          console.error(`Date ${clickedDate} not found in tableData`);
+          console.error(`Date ${clickedDate} not found in fetchedSalahData`);
         }
 
-        setTableData((prev) => [...prev]);
+        setFetchedSalahData((prev) => [...prev]);
         // setCalendarData((prev) => [...prev]);
         console.log(">>>>", DBResultAllSalahData);
 
         // handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
-        handleCalendarData(DBResultAllSalahData.values);
       }
-      console.log("tableData in sheet: ", tableData);
+      console.log("fetchedSalahData in sheet: ", fetchedSalahData);
     } catch (error) {
       console.error(error);
     } finally {

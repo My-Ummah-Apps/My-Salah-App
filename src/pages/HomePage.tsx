@@ -20,11 +20,10 @@ interface HomePageProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setTableData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  setFetchedSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
   setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
-  tableData: any;
+  fetchedSalahData: any;
   handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
-  handleCalendarData: (DBResultAllSalahData) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
   userPreferences: userPreferences;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -40,11 +39,10 @@ const HomePage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   renderTable,
-  setTableData,
+  setFetchedSalahData,
   setCalendarData,
-  tableData,
+  fetchedSalahData,
   handleSalahTrackingDataFromDB,
-  handleCalendarData,
   setUserPreferences,
   userPreferences,
   // setReasonsArray,
@@ -57,7 +55,10 @@ const HomePage = ({
   useEffect(() => {
     setHeading("Home");
   }, []);
-  console.log("HOMEPAGE Component has rendered..., tableData is: ", tableData);
+  console.log(
+    "HOMEPAGE Component has rendered..., fetchedSalahData is: ",
+    fetchedSalahData
+  );
   // setHeading("Home");
 
   // const today: Date = new Date();
@@ -68,10 +69,10 @@ const HomePage = ({
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
 
-      {/* {tableData.length > 0 && ( */}
+      {/* {fetchedSalahData.length > 0 && ( */}
       {/* <div>Loading Data...</div> */}
       {/* {renderTable && ( */}
-      {/* {tableData.length > 0 && ( */}
+      {/* {fetchedSalahData.length > 0 && ( */}
       <PrayerTable
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
@@ -79,11 +80,10 @@ const HomePage = ({
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
         datesFromStartToToday={datesFromStartToToday}
-        setTableData={setTableData}
-        tableData={tableData}
+        setFetchedSalahData={setFetchedSalahData}
+        fetchedSalahData={fetchedSalahData}
         setCalendarData={setCalendarData}
         handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
-        handleCalendarData={handleCalendarData}
       />
       {/* // )} */}
 

@@ -96,8 +96,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   console.log("APP.TSX HAS RENDERED...");
 
-  const [tableData, setTableData] = useState<SalahRecordsArray>([]);
-  const [calenderData, setCalendarData] = useState<CalenderSalahArray>([]);
+  const [fetchedSalahData, setFetchedSalahData] = useState<SalahRecordsArray>(
+    []
+  );
+
   // const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>(
   //   []
   // );
@@ -232,7 +234,6 @@ const App = () => {
 
       if (DBResultAllSalahData && DBResultAllSalahData.values) {
         handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
-        handleCalendarData(DBResultAllSalahData.values);
       } else {
         throw new Error(
           "DBResultAllSalahData or DBResultAllSalahData.values do not exist"
@@ -401,7 +402,6 @@ const App = () => {
   }, [userPreferences.userStartDate]);
 
   const handleSalahTrackingDataFromDB = (DBResultAllSalahData) => {
-    // ! Below logic for creating datesFromStartToToday might need to be placed elsewhere, as this function is being called from another component also and the below logic is causing issues, this and the logic in the calendar function need to be double checked, are these only required when the app is first launched? If so there is no need to re-run all this logic, so might need to abstract these away, in actual fact, why can't both handleSalahTrackingDataFromDB and handleCalendarData be combined? Ultimately they both need to re-render together to reflect correct data, at the very least they need to be combined, best case scenario? Both components work off the exact same data instead of different data as is currently the case, remember that whether its the table component or calendar component, both components are only looking at the salah status to paint the correct color, the rest of the data such as notes / reasons isn't needed by them until the user clicks on a specific cell or date, which is when the sheet modals fetch said data and display to the user
     const singleSalahObjArr: SalahRecordsArray = [];
     console.log("🚀 ~ App ~ userStartDate:", userStartDateForSalahTrackingFunc);
     const todaysDate = new Date();
@@ -449,48 +449,7 @@ const App = () => {
 
       singleSalahObjArr.push(singleSalahObj);
     }
-    setTableData([...singleSalahObjArr]);
-  };
-
-  const handleCalendarData = (DBResultAllSalahData: any) => {
-    console.log(
-      "handleCalendarData has run, DBResultAllSalahData is: ",
-      DBResultAllSalahData
-    );
-
-    let calenderDataArr: CalenderSalahArray = [];
-
-    DBResultAllSalahData.forEach((obj) => {
-      if (
-        !calenderDataArr.some((calenderObj) =>
-          calenderObj.hasOwnProperty(obj.date)
-        )
-      ) {
-        let currentDate = obj.date;
-        const filteredDBResultCalenderDataValues = DBResultAllSalahData.filter(
-          (obj) => obj.date === currentDate
-        );
-
-        let singleSalahObj: CalenderSalahArrayObject = {
-          [currentDate]: [],
-        };
-
-        filteredDBResultCalenderDataValues.forEach((obj) => {
-          let singleObj: SalahEntry = {
-            salahName: obj.salahName,
-            salahStatus: obj.salahStatus,
-          };
-          singleSalahObj[obj.date].push(singleObj);
-        });
-
-        calenderDataArr.push(singleSalahObj);
-      }
-    });
-    // return calenderDataArr;
-    // ! BUG: calenderDataArr is being updated, but re-render is not taking place, only on page refresh does the calendar update
-    console.log("Calender beings set", calenderDataArr);
-
-    setCalendarData([...calenderDataArr]);
+    setFetchedSalahData([...singleSalahObjArr]);
   };
 
   const modifyDataInUserPreferencesTable = async (
@@ -633,13 +592,11 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 renderTable={renderTable}
-                handleCalendarData={handleCalendarData}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
-                setTableData={setTableData}
-                tableData={tableData}
+                setFetchedSalahData={setFetchedSalahData}
+                fetchedSalahData={fetchedSalahData}
                 handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
-                setCalendarData={setCalendarData}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
               />
@@ -668,8 +625,7 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 userPreferences={userPreferences}
-                tableData={tableData}
-                calenderData={calenderData}
+                fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
                 setHeading={setHeading}
               />

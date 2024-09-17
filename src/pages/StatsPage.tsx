@@ -18,7 +18,6 @@ interface StatsPageProps {
   userPreferences: userPreferences;
   // userGender: userGenderType;
   // userStartDate: string;
-  calenderData: CalenderSalahArray;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
 }
@@ -29,8 +28,7 @@ const StatsPage = ({
   // userGender,
   // userStartDate,
   userPreferences,
-  calenderData,
-  tableData,
+  fetchedSalahData,
   setHeading,
   pageStyles,
 }: StatsPageProps) => {
@@ -45,12 +43,10 @@ const StatsPage = ({
   let salahLateDatesOverall: string[] = [];
   let salahMissedDatesOverall: string[] = [];
 
-  // console.log("calenderData: ", calenderData);
-
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let showDonutChart;
   let salahStatusesOverallArr: string[] = [];
-
+  // !TODO: Switch calenderData to fetchedSalahData
   const calculateOverallStats = () => {
     calenderData.forEach((item) => {
       Object.values(item).forEach((subArr) => {
@@ -73,7 +69,7 @@ const StatsPage = ({
     salahMissedDatesOverall = filterSalahStatuses("missed");
   };
 
-  calculateOverallStats();
+  // calculateOverallStats();
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
@@ -108,8 +104,7 @@ const StatsPage = ({
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         userStartDate={userPreferences.userStartDate}
-        calenderData={calenderData}
-        tableData={tableData}
+        fetchedSalahData={fetchedSalahData}
       />{" "}
     </section>
   );
