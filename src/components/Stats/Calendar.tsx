@@ -18,7 +18,7 @@ import {
   eachMonthOfInterval,
 } from "date-fns";
 
-import { CalenderSalahArray, SalahEntry } from "../../types/types";
+import { CalenderSalahArray, SalahRecordsArray } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 // import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
@@ -29,6 +29,7 @@ interface CalenderProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   userStartDate: string;
+  fetchedSalahData: SalahRecordsArray;
 }
 
 const Calendar = ({

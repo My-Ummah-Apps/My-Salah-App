@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import Calendar from "../components/Stats/Calendar";
 import {
+  SalahRecordsArray,
   // CalenderSalahArray,
   SalahStatus,
   // userGenderType,
@@ -17,7 +18,7 @@ interface StatsPageProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   userPreferences: userPreferences;
-
+  fetchedSalahData: SalahRecordsArray;
   // userGender: userGenderType;
   // userStartDate: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;

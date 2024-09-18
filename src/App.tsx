@@ -6,6 +6,7 @@ import Sheet from "react-modal-sheet";
 import {
   CalenderSalahArray,
   CalenderSalahArrayObject,
+  DBResultDataObj,
   SalahEntry,
   SalahNames,
   SalahRecord,
@@ -131,7 +132,7 @@ const App = () => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
-        await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
+        // await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
         await fetchDataFromDB();
         // setTimeout(() => {
         //   setRenderTable(true);
@@ -401,7 +402,9 @@ const App = () => {
     userStartDateForSalahTrackingFunc = userPreferences.userStartDate;
   }, [userPreferences.userStartDate]);
 
-  const handleSalahTrackingDataFromDB = (DBResultAllSalahData) => {
+  const handleSalahTrackingDataFromDB = (
+    DBResultAllSalahData: DBResultDataObj[]
+  ) => {
     const singleSalahObjArr: SalahRecordsArray = [];
     console.log("🚀 ~ App ~ userStartDate:", userStartDateForSalahTrackingFunc);
     const todaysDate = new Date();
@@ -441,6 +444,7 @@ const App = () => {
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
           if (DBResultAllSalahData[i].date === currentDate) {
             let salahName: SalahNames = DBResultAllSalahData[i].salahName;
+
             let salahStatus: SalahStatus = DBResultAllSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
           }
