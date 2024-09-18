@@ -2,8 +2,9 @@ import { useEffect } from "react";
 
 import Calendar from "../components/Stats/Calendar";
 import {
-  CalenderSalahArray,
-  userGenderType,
+  // CalenderSalahArray,
+  SalahStatus,
+  // userGenderType,
   userPreferences,
 } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
@@ -46,17 +47,16 @@ const StatsPage = ({
 
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let showDonutChart;
-  let salahStatusesOverallArr: string[] = [];
+  let salahStatusesOverallArr: SalahStatus[] = [];
   // TODO: Test the below code to ensure stats are being calculated correctly
   const calculateOverallStats = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
       Object.values(fetchedSalahData[i].salahs).forEach((status) => {
-        if (status !== "") {
-          salahStatusesOverallArr.push(status);
+        if (status !== "" && typeof status === "string") {
+          salahStatusesOverallArr.push(status as SalahStatus);
         }
       });
     }
-    console.log(salahStatusesOverallArr);
 
     const filterSalahStatuses = (salahStatus: string) => {
       return salahStatusesOverallArr.filter((status) => status === salahStatus);

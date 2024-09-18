@@ -5,5 +5,5 @@ export const prayerStatusColorsHexCodes = {
   excused: "#b317ae",
   late: "#ea580c",
   missed: "#b62e2e",
-  "": "transparent",
+  "": "#585858",
 };

@@ -88,12 +88,6 @@ const Calendar = ({
   // );
   // Need to modify the below so depending on the month being rendered, it either shows the overall statuses for each date for every salah or shows the status for the particular date for one salah only
 
-  let fajrColor = "";
-  let zoharColor = "";
-  let asarColor = "";
-  let maghribColor = "";
-  let ishaColor = "";
-
   // const countCompletedDates = (date: string, salahName?: string) => {
   //   const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
   //     string[]
@@ -151,7 +145,12 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  // ! BUG: Whenever the prayer status is updated from the table the radial does not change, if a refresh is given on the prayer table page and THEN user navigates to the stats page, at that point the radial has changed, if a brand new status is added that works fine, its just when modfying an existing status that the radial does not update
+  let fajrColor = "";
+  let zoharColor = "";
+  let asarColor = "";
+  let maghribColor = "";
+  let ishaColor = "";
+
   function determineRadialColors(date: Date) {
     if (date < userStartDateFormatted || date > todaysDate) {
       fajrColor = "transparent";
@@ -161,11 +160,12 @@ const Calendar = ({
       ishaColor = "transparent";
       return;
     }
-    fajrColor = "#585858";
-    zoharColor = "#585858";
-    asarColor = "#585858";
-    maghribColor = "#585858";
-    ishaColor = "#585858";
+
+    // fajrColor = "#585858";
+    // zoharColor = "#585858";
+    // asarColor = "#585858";
+    // maghribColor = "#585858";
+    // ishaColor = "#585858";
 
     let formattedDate = format(date, "dd.MM.yy");
 
@@ -255,9 +255,9 @@ const Calendar = ({
                   const formattedDate = format(day, "dd.MM.yy");
 
                   setClickedDate(formattedDate);
+                  setShowDailySalahDataModal(true);
                   // console.log("CLICKED DATE IS: " + clickedDate);
                   // showDailySalahData(clickedDate);
-                  setShowDailySalahDataModal(true);
                   // console.log(showDailySalahDataModal);
                 }
               }}
