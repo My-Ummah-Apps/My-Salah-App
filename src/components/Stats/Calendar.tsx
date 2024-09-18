@@ -37,8 +37,6 @@ const Calendar = ({
   fetchedSalahData,
   userStartDate,
 }: CalenderProps) => {
-  console.log("fetchedSalahData IN CALENDER COMPONENT: ", fetchedSalahData);
-
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
   useEffect(() => {
@@ -176,10 +174,7 @@ const Calendar = ({
         const matchedData = fetchedSalahData[key].salahs;
 
         for (const [prayer, prayerStatus] of Object.entries(matchedData)) {
-          console.log(prayer, prayerStatus);
           if (prayer === "Fajr") {
-            console.log("FAJR, and its status is:", prayerStatus);
-
             fajrColor =
               prayerStatusColorsHexCodes[
                 prayerStatus as keyof typeof prayerStatusColorsHexCodes
@@ -264,7 +259,6 @@ const Calendar = ({
                   // showDailySalahData(clickedDate);
                   setShowDailySalahDataModal(true);
                   // console.log(showDailySalahDataModal);
-                  console.log("TRIGGERED");
                 }
               }}
               key={uuidv4()}

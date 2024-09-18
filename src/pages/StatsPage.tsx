@@ -16,6 +16,7 @@ interface StatsPageProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   userPreferences: userPreferences;
+
   // userGender: userGenderType;
   // userStartDate: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -46,16 +47,16 @@ const StatsPage = ({
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let showDonutChart;
   let salahStatusesOverallArr: string[] = [];
-  // !TODO: Switch calenderData to fetchedSalahData
+  // TODO: Test the below code to ensure stats are being calculated correctly
   const calculateOverallStats = () => {
-    calenderData.forEach((item) => {
-      Object.values(item).forEach((subArr) => {
-        subArr.forEach((obj) => {
-          salahStatusesOverallArr.push(obj.salahStatus);
-        });
+    for (let i = 0; i < fetchedSalahData.length; i++) {
+      Object.values(fetchedSalahData[i].salahs).forEach((status) => {
+        if (status !== "") {
+          salahStatusesOverallArr.push(status);
+        }
       });
-    });
-    // console.log("emptyArray: ", salahStatusesOverallArr);
+    }
+    console.log(salahStatusesOverallArr);
 
     const filterSalahStatuses = (salahStatus: string) => {
       return salahStatusesOverallArr.filter((status) => status === salahStatus);
@@ -69,7 +70,7 @@ const StatsPage = ({
     salahMissedDatesOverall = filterSalahStatuses("missed");
   };
 
-  // calculateOverallStats();
+  calculateOverallStats();
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
