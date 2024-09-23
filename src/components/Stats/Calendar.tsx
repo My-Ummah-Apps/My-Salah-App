@@ -115,13 +115,12 @@ const Calendar = ({
 
   // userStartDate = "17.01.11";
 
-  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-
+  const userStartDateParsed = parse(userStartDate, "yyyy-MM-dd", new Date());
   const todaysDate = new Date();
 
   // Generate an array of all the months between the start and end dates
   const monthsBetween = eachMonthOfInterval({
-    start: userStartDateFormatted,
+    start: userStartDateParsed,
     end: todaysDate,
   });
 
@@ -153,7 +152,7 @@ const Calendar = ({
   let ishaColor = "";
 
   function determineRadialColors(date: Date) {
-    if (date < userStartDateFormatted || date > todaysDate) {
+    if (date < userStartDateParsed || date > todaysDate) {
       fajrColor = "transparent";
       zoharColor = "transparent";
       asarColor = "transparent";
@@ -168,7 +167,8 @@ const Calendar = ({
     // maghribColor = "#585858";
     // ishaColor = "#585858";
 
-    let formattedDate = format(date, "dd.MM.yy");
+    let formattedDate = format(date, "yyyy-MM-dd");
+    console.log(fetchedSalahData);
 
     for (let key in fetchedSalahData) {
       if (fetchedSalahData[key].date === formattedDate) {
