@@ -253,8 +253,7 @@ const Calendar = ({
             <div
               onClick={() => {
                 if (day <= todaysDate) {
-                  const formattedDate = format(day, "dd.MM.yy");
-
+                  const formattedDate = format(day, "yyyy-MM-dd");
                   setClickedDate(formattedDate);
                   setShowDailySalahDataModal(true);
                   // console.log("CLICKED DATE IS: " + clickedDate);
