@@ -55,10 +55,10 @@ const HomePage = ({
   useEffect(() => {
     setHeading("Home");
   }, []);
-  console.log(
-    "HOMEPAGE Component has rendered..., fetchedSalahData is: ",
-    fetchedSalahData
-  );
+  // console.log(
+  //   "HOMEPAGE Component has rendered..., fetchedSalahData is: ",
+  //   fetchedSalahData
+  // );
   // setHeading("Home");
 
   // const today: Date = new Date();

@@ -165,7 +165,6 @@ const PrayerStatusBottomSheet = ({
         }
 
         if (notes !== undefined && notes !== "") {
-          // console.log("NOTES ARE NOT UNDEFINED");
           query += `, notes`;
           values.push(notes);
         }

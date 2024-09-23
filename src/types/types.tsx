@@ -43,6 +43,11 @@ export type PreferenceType =
   | "reasonsArray"
   | "showReasons";
 
+export type PreferenceObj = {
+  preferenceName: PreferenceType;
+  preferenceValue: string;
+};
+
 export type SalahNames = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
 
 export interface SalahEntry {
@@ -67,8 +72,8 @@ export type currentStartDateType = number;
 export type DBResultDataObj = {
   id: number;
   date: string;
-  salahName: string;
-  salahStatus: string;
+  salahName: SalahNames;
+  salahStatus: SalahStatus;
   reasons: string;
   notes: string;
 };

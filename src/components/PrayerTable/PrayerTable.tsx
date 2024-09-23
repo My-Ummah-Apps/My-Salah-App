@@ -12,6 +12,7 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArray } from "../../types/types";
 import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
+import { format, parse } from "date-fns";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -46,12 +47,12 @@ const PrayerTable = ({
   // reasonsArray,
   datesFromStartToToday, // userGender,
 }: PrayerTableProps) => {
-  console.log(
-    "PRAYER TABLE COMPONENT RENDERED AND TABLE DATA IS: ",
-    fetchedSalahData,
-    " and datesFromStartToToday is: , ",
-    datesFromStartToToday
-  );
+  // console.log(
+  //   "PRAYER TABLE COMPONENT RENDERED AND TABLE DATA IS: ",
+  //   fetchedSalahData,
+  //   " and datesFromStartToToday is: , ",
+  //   datesFromStartToToday
+  // );
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
@@ -61,7 +62,7 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    // console.log("fetchedSalahData in rowGetter: ", fetchedSalahData);
+    // console.log("fetchedSalahData in rowGetter: ", fetchedSalahData[index]);
     return fetchedSalahData[index];
   };
 
@@ -90,6 +91,11 @@ const PrayerTable = ({
           className="text-sm text-left"
           label=""
           dataKey="date"
+          cellRenderer={({ rowData }) => {
+            const parsedDate = parse(rowData.date, "yyyy-MM-dd", new Date());
+            const formattedParsedDate = format(parsedDate, "dd.MM.yy");
+            return formattedParsedDate;
+          }}
           width={120}
           flexGrow={1}
         />

@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
@@ -7,6 +7,7 @@ import {
   CalenderSalahArray,
   CalenderSalahArrayObject,
   DBResultDataObj,
+  PreferenceObj,
   SalahEntry,
   SalahNames,
   SalahRecord,
@@ -169,7 +170,7 @@ const App = () => {
 
               // Convert reasons array to a comma-separated string
               const reasonsString = reasons.join(",");
-
+              const dateToDateObject = parse(date);
               // Insert the data into the SQLite table
               const insertQuery = `
                   INSERT INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
@@ -231,10 +232,8 @@ const App = () => {
         );
       }
 
-      console.log("YO: ", userPreferences.userStartDate);
-
       if (DBResultAllSalahData && DBResultAllSalahData.values) {
-        handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       } else {
         throw new Error(
           "DBResultAllSalahData or DBResultAllSalahData.values do not exist"
@@ -252,14 +251,17 @@ const App = () => {
     }
   };
 
-  const handleUserPreferencesDataFromDB = async (DBResultPreferences) => {
-    const todaysDate: Date = new Date();
-
+  const handleUserPreferencesDataFromDB = async (
+    // DBResultPreferences: PreferenceObj[]
+    DBResultPreferences
+  ) => {
     let DBResultPreferencesValues = DBResultPreferences.values;
 
     if (DBResultPreferencesValues.length === 0) {
       // const userStartDate = format(todaysDate, "yyyy-MM-dd");
-      const userStartDate = format(todaysDate, "dd.MM.yy");
+      // const todaysDate: Date = new Date();
+      const userStartDate = format(new Date(), "yyyy-MM-dd");
+      // const userStartDate = format(new Date(), "dd.MM.yy");
 
       const insertQuery = `
           INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
@@ -351,8 +353,6 @@ const App = () => {
     }
 
     if (userStartDate) {
-      // ! need to change the userStartDate in the params array above (line 320) as its manually set at the moment, this needs to be dynamic + it is going to be passed in as yyyy-mm-dd format so this will also require for adjustments to be made throughout the app
-
       setUserPreferences((userPreferences) => ({
         ...userPreferences,
         userStartDate: userStartDate.preferenceValue,
@@ -402,28 +402,23 @@ const App = () => {
     userStartDateForSalahTrackingFunc = userPreferences.userStartDate;
   }, [userPreferences.userStartDate]);
 
-  const handleSalahTrackingDataFromDB = (
+  const handleSalahTrackingDataFromDB = async (
     DBResultAllSalahData: DBResultDataObj[]
   ) => {
     const singleSalahObjArr: SalahRecordsArray = [];
-    console.log("🚀 ~ App ~ userStartDate:", userStartDateForSalahTrackingFunc);
     const todaysDate = new Date();
+
     const userStartDateFormattedToDateObject: Date = parse(
       userStartDateForSalahTrackingFunc,
-      "dd.MM.yy",
+      "yyyy-MM-dd",
       new Date()
-    );
-
-    console.log(
-      "userStartDateFormattedToDateObject: ",
-      userPreferences.userStartDate
     );
 
     const datesFromStartToToday: string[] = eachDayOfInterval({
       start: userStartDateFormattedToDateObject,
       end: todaysDate,
     })
-      .map((date) => format(date, "dd.MM.yy"))
+      .map((date) => format(date, "yyyy-MM-dd"))
       .reverse();
 
     for (let i = 0; i < datesFromStartToToday.length; i++) {
@@ -440,11 +435,11 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
+      // ? Below if statement potentially needs to be moved as it's currently being called on every loop
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
           if (DBResultAllSalahData[i].date === currentDate) {
             let salahName: SalahNames = DBResultAllSalahData[i].salahName;
-
             let salahStatus: SalahStatus = DBResultAllSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
           }
