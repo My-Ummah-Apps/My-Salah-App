@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useReducer, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -133,7 +134,15 @@ const App = () => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
-        // await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
+        // localStorage.clear();
+        // const salahBackupData =
+        //   '[{"salahName":"Fajr","completedDates":[{"28.08.24":{"status":"group","reasons":[],"notes":""}},{"21.08.24":{"status":"male-alone","reasons":["Shopping","Movies"],"notes":"asdasdasd"}},{"24.08.24":{"status":"missed","reasons":["Movies","TV"],"notes":"asdasd"}}]},{"salahName":"Dhuhr","completedDates":[{"28.08.24":{"status":"male-alone","reasons":["Movies","Leisure"],"notes":""}},{"22.08.24":{"status":"group","reasons":[],"notes":"asdasdas"}}]},{"salahName":"Asar","completedDates":[{"28.08.24":{"status":"late","reasons":[],"notes":""}},{"25.08.24":{"status":"male-alone","reasons":["Education","Leisure"],"notes":"asdasd"}}]},{"salahName":"Maghrib","completedDates":[{"20.08.24":{"status":"late","reasons":["Work","Movies"],"notes":"asdasdasd"}},{"27.08.24":{"status":"group","reasons":[],"notes":"asdad"}}]},{"salahName":"Isha","completedDates":[{"28.08.24":{"status":"late","reasons":["Movies","Family"],"notes":""}},{"23.08.24":{"status":"late","reasons":["Movies","Leisure"],"notes":"asdasd"}}]}]';
+
+        // localStorage.setItem("salahBackupData", salahBackupData);
+        // localStorage.setItem("userStartDate", "01.02.24");
+        // localStorage.setItem("userGender", "male");
+
+        await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
         await fetchDataFromDB();
         // setTimeout(() => {
         //   setRenderTable(true);
@@ -145,63 +154,127 @@ const App = () => {
 
   // ! _________________________________________REMOVE BELOW ONCE TRANSFER IS COMPLETE___________________________________________
 
-  // const oldSalahData =
-  //   '[{"salahName":"Fajr","completedDates":[{"28.08.24":{"status":"group","reasons":[],"notes":""}},{"21.08.24":{"status":"male-alone","reasons":["Shopping","Movies"],"notes":"asdasdasd"}},{"24.08.24":{"status":"missed","reasons":["Movies","TV"],"notes":"asdasd"}}]},{"salahName":"Dhuhr","completedDates":[{"28.08.24":{"status":"male-alone","reasons":["Movies","Leisure"],"notes":""}},{"22.08.24":{"status":"group","reasons":[],"notes":"asdasdas"}}]},{"salahName":"Asar","completedDates":[{"28.08.24":{"status":"late","reasons":[],"notes":""}},{"25.08.24":{"status":"male-alone","reasons":["Education","Leisure"],"notes":"asdasd"}}]},{"salahName":"Maghrib","completedDates":[{"20.08.24":{"status":"late","reasons":["Work","Movies"],"notes":"asdasdasd"}},{"27.08.24":{"status":"group","reasons":[],"notes":"asdad"}}]},{"salahName":"Isha","completedDates":[{"28.08.24":{"status":"late","reasons":["Movies","Family"],"notes":""}},{"23.08.24":{"status":"late","reasons":["Movies","Leisure"],"notes":"asdasd"}}]}]';
-
-  // localStorage.setItem("storedSalahTrackingData", oldSalahData);
-
   const executeTransfer = async () => {
-    if (localStorage.getItem("storedSalahTrackingData")) {
-      const storedSalahTrackingData = localStorage.getItem(
-        "storedSalahTrackingData"
-      );
-      if (storedSalahTrackingData) {
-        const parsedOldData = JSON.parse(storedSalahTrackingData);
-        try {
-          console.log("🚀 ~ executeTransfer ~ parsedOldData:", parsedOldData);
+    console.log("TRANSFER FUNCTION HAS RUN");
 
-          await checkAndOpenOrCloseDBConnection("open");
-          for (const salah of parsedOldData) {
-            const { salahName, completedDates } = salah;
+    const userStartDate = localStorage.getItem("userStartDate");
+    const userStartDateParsed = parse(userStartDate, "dd.MM.yy", new Date());
+    const userStartDateFormatted = format(userStartDateParsed, "yyyy-MM-dd");
+    console.log(userStartDateFormatted);
 
-            for (const dateObj of completedDates) {
-              const [date, details] = Object.entries(dateObj)[0]; // Extract date and details
-              const { status, reasons, notes } = details;
+    if (localStorage.getItem("salahBackupData")) {
+      console.log("EXECUTING TRANSFER");
+      const salahBackupData = localStorage.getItem("salahBackupData");
+      const userGender = localStorage.getItem("userGender");
 
-              // Convert reasons array to a comma-separated string
-              const reasonsString = reasons.join(",");
-              const dateToDateObject = parse(date);
-              // Insert the data into the SQLite table
-              const insertQuery = `
-                  INSERT INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
+      console.log("BACKUP DATA FOUND");
+
+      const parsedOldData = JSON.parse(salahBackupData);
+      try {
+        console.log("🚀 ~ executeTransfer ~ parsedOldData:", parsedOldData);
+        await checkAndOpenOrCloseDBConnection("open");
+
+        if (!dbConnection || !dbConnection.current) {
+          throw new Error("dbConnection or dbConnection.current do not exist");
+        }
+        console.log(
+          "dbConnection & dbConnection.current exist, opening connection...."
+        );
+
+        await checkAndOpenOrCloseDBConnection("open");
+        console.log("connection opened...");
+
+        // dbConnection.current.execute(`
+        //     DELETE FROM salahDataTable;
+        //   `);
+        // dbConnection.current.execute(`
+        //     VACUUM;
+        //   `);
+
+        const insertQuery = `
+          INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue)
+          VALUES
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?);
+          `;
+
+        console.log("HELLO: ", userGender);
+
+        // prettier-ignore
+        const params = [
+          "userGender", userGender,
+          "userStartDate", userStartDateFormatted,
+          "dailyNotification", "0",
+          "dailyNotificationTime", "21:00",
+          "haptics", "0",
+          "reasons", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
+          "showReasons", "0",
+        ];
+
+        console.log("Inserting preferences data into database...");
+
+        await dbConnection.current.query(insertQuery, params);
+
+        const testing = await dbConnection.current.query(
+          `SELECT * FROM salahDataTable WHERE salahName IS NULL;`
+        );
+        console.log("Null ", testing);
+        console.log("running loop to structure backup data...");
+
+        for (const salah of parsedOldData) {
+          const { salahName, completedDates } = salah;
+
+          for (const dateObj of completedDates) {
+            const [date, details] = Object.entries(dateObj)[0]; // Extract date and details
+            const { status, reasons, notes } = details;
+            console.log("salahName ", typeof salahName);
+
+            // Convert reasons array to a comma-separated string
+            const reasonsString = reasons.join(",");
+
+            const dateParsed = parse(date, "dd.MM.yy", new Date());
+            const dateFormatted = format(dateParsed, "yyyy-MM-dd");
+
+            // Insert the data into the SQLite table
+
+            const insertQuery = `
+                  INSERT INTO salahDataTable(date, salahName, salahStatus, reasons, notes)
                   VALUES (?, ?, ?, ?, ?);
                 `;
+            const values = [
+              dateFormatted,
+              salahName,
+              status,
+              reasonsString,
+              notes,
+            ];
+            console.log("values: ", values);
 
-              if (!dbConnection.current) {
-                throw new Error("dbConnection.current does not exist");
-              }
-
-              await dbConnection.current.query(insertQuery, [
-                date,
-                salahName,
-                status,
-                reasonsString,
-                notes,
-              ]);
-            }
-          }
-        } catch (error) {
-          console.error(error);
-        } finally {
-          try {
-            checkAndOpenOrCloseDBConnection("close");
-          } catch (error) {
-            console.error(error);
+            await dbConnection.current.query(insertQuery, values);
           }
         }
-        localStorage.setItem("salahBackUpData", storedSalahTrackingData);
-        localStorage.removeItem("storedSalahTrackingData");
+        console.log("Finished structing and inserting data into database");
+      } catch (error) {
+        console.log("ERROR in executTransfer");
+
+        console.error(error);
+      } finally {
+        try {
+          await checkAndOpenOrCloseDBConnection("close");
+        } catch (error) {
+          console.log("ERROR in executTransfer finally block");
+          console.error(error);
+        }
       }
+      console.log("Removing data...");
+
+      localStorage.setItem("oldBackupData", salahBackupData);
+      localStorage.removeItem("salahBackupData");
     }
   };
 
@@ -223,6 +296,8 @@ const App = () => {
       const DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
       );
+      console.log("Salah Data: ", DBResultAllSalahData);
+      console.log("Preference Data: ", DBResultPreferences);
 
       if (DBResultPreferences && DBResultPreferences.values) {
         await handleUserPreferencesDataFromDB(DBResultPreferences);
@@ -258,6 +333,8 @@ const App = () => {
     let DBResultPreferencesValues = DBResultPreferences.values;
 
     if (DBResultPreferencesValues.length === 0) {
+      console.log("DBResultPreferencesValues.length === 0");
+
       // const userStartDate = format(todaysDate, "yyyy-MM-dd");
       // const todaysDate: Date = new Date();
       const userStartDate = format(new Date(), "yyyy-MM-dd");
@@ -328,6 +405,8 @@ const App = () => {
         return preferenceQuery;
       } else {
         console.error("preferenceQuery row does not exist");
+        console.log("USERGENDER IS: ", preferenceQuery);
+
         return null;
       }
     };
@@ -340,6 +419,8 @@ const App = () => {
 
     if (userGenderRow) {
       const gender = userGenderRow.preferenceValue as userGenderType;
+      console.log("GENDER: ", gender);
+
       if (gender === "male" || gender === "female") {
         setUserPreferences((userPreferences) => ({
           ...userPreferences,

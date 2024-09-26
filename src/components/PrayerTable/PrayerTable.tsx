@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
 import {

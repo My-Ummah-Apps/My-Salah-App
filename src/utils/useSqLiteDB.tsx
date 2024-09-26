@@ -159,6 +159,13 @@ const useSQLiteDB = () => {
         preferenceValue TEXT NOT NULL DEFAULT ''
         ) STRICT`;
 
+      // await dbConnection.current.execute(`
+      //     DROP TABLE IF EXISTS salahDataTable;
+      //   `);
+      // await dbConnection.current.execute(`
+      //     DROP TABLE IF EXISTS userPreferencesTable;
+      //   `);
+
       await dbConnection.current.execute(userPreferencesTable);
       await dbConnection.current.execute(salahDataTable); // Execute the SQL query to create the table in the database
     } catch (error) {
@@ -174,6 +181,7 @@ const useSQLiteDB = () => {
         const isDatabaseOpen = await dbConnection.current.isDBOpen();
         if (isDatabaseOpen.result) {
           await checkAndOpenOrCloseDBConnection("close");
+          // await dbConnection.current.execute(`VACUUM`);
         }
 
         // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
