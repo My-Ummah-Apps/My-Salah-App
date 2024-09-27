@@ -1,4 +1,3 @@
-// @ts-nocheck
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
 import {
@@ -70,23 +69,25 @@ const HomePage = ({
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
 
-      {/* {fetchedSalahData.length > 0 && ( */}
-      {/* <div>Loading Data...</div> */}
-      {/* {renderTable && ( */}
-      {/* {fetchedSalahData.length > 0 && ( */}
-      <PrayerTable
-        dbConnection={dbConnection}
-        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-        renderTable={renderTable}
-        setUserPreferences={setUserPreferences}
-        userPreferences={userPreferences}
-        datesFromStartToToday={datesFromStartToToday}
-        setFetchedSalahData={setFetchedSalahData}
-        fetchedSalahData={fetchedSalahData}
-        setCalendarData={setCalendarData}
-        handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
-      />
-      {/* // )} */}
+      {renderTable ? (
+        <PrayerTable
+          dbConnection={dbConnection}
+          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+          renderTable={renderTable}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+          datesFromStartToToday={datesFromStartToToday}
+          setFetchedSalahData={setFetchedSalahData}
+          fetchedSalahData={fetchedSalahData}
+          setCalendarData={setCalendarData}
+          handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
+        />
+      ) : (
+        <div>
+          Executing transfer, please do not close application or move away from
+          this page
+        </div>
+      )}
 
       {/* )} */}
     </section>

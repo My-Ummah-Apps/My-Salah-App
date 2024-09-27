@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Sheet from "react-modal-sheet";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect, useReducer, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -135,14 +134,18 @@ const App = () => {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
         // localStorage.clear();
-        // const salahBackupData =
+        // const storedSalahTrackingData =
         //   '[{"salahName":"Fajr","completedDates":[{"28.08.24":{"status":"group","reasons":[],"notes":""}},{"21.08.24":{"status":"male-alone","reasons":["Shopping","Movies"],"notes":"asdasdasd"}},{"24.08.24":{"status":"missed","reasons":["Movies","TV"],"notes":"asdasd"}}]},{"salahName":"Dhuhr","completedDates":[{"28.08.24":{"status":"male-alone","reasons":["Movies","Leisure"],"notes":""}},{"22.08.24":{"status":"group","reasons":[],"notes":"asdasdas"}}]},{"salahName":"Asar","completedDates":[{"28.08.24":{"status":"late","reasons":[],"notes":""}},{"25.08.24":{"status":"male-alone","reasons":["Education","Leisure"],"notes":"asdasd"}}]},{"salahName":"Maghrib","completedDates":[{"20.08.24":{"status":"late","reasons":["Work","Movies"],"notes":"asdasdasd"}},{"27.08.24":{"status":"group","reasons":[],"notes":"asdad"}}]},{"salahName":"Isha","completedDates":[{"28.08.24":{"status":"late","reasons":["Movies","Family"],"notes":""}},{"23.08.24":{"status":"late","reasons":["Movies","Leisure"],"notes":"asdasd"}}]}]';
 
-        // localStorage.setItem("salahBackupData", salahBackupData);
+        // localStorage.setItem(
+        //   "storedSalahTrackingData",
+        //   storedSalahTrackingData
+        // );
         // localStorage.setItem("userStartDate", "01.02.24");
         // localStorage.setItem("userGender", "male");
 
         await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
+        setRenderTable(true);
         await fetchDataFromDB();
         // setTimeout(() => {
         //   setRenderTable(true);
@@ -162,14 +165,16 @@ const App = () => {
     const userStartDateFormatted = format(userStartDateParsed, "yyyy-MM-dd");
     console.log(userStartDateFormatted);
 
-    if (localStorage.getItem("salahBackupData")) {
+    if (localStorage.getItem("storedSalahTrackingData")) {
       console.log("EXECUTING TRANSFER");
-      const salahBackupData = localStorage.getItem("salahBackupData");
+      const storedSalahTrackingData = localStorage.getItem(
+        "storedSalahTrackingData"
+      );
       const userGender = localStorage.getItem("userGender");
 
       console.log("BACKUP DATA FOUND");
 
-      const parsedOldData = JSON.parse(salahBackupData);
+      const parsedOldData = JSON.parse(storedSalahTrackingData);
       try {
         console.log("🚀 ~ executeTransfer ~ parsedOldData:", parsedOldData);
         await checkAndOpenOrCloseDBConnection("open");
@@ -273,8 +278,8 @@ const App = () => {
       }
       console.log("Removing data...");
 
-      localStorage.setItem("oldBackupData", salahBackupData);
-      localStorage.removeItem("salahBackupData");
+      localStorage.setItem("oldBackupData", storedSalahTrackingData);
+      localStorage.removeItem("storedSalahTrackingData");
     }
   };
 
