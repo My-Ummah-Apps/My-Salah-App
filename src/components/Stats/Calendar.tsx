@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { salahTrackingEntryType } from "../../types/types";
 import { CSSProperties } from "react";
 
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import _ from "lodash";
+import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -17,29 +16,31 @@ import {
   endOfWeek,
   startOfWeek,
   eachMonthOfInterval,
-  // setMonth,
 } from "date-fns";
-import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
+
+import {
+  SalahRecordsArrayType,
+  DBConnectionStateType,
+} from "../../types/types";
+
+// import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
+import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
+
+interface CalenderProps {
+  dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
+  userStartDate: string;
+  fetchedSalahData: SalahRecordsArrayType;
+}
 
 const Calendar = ({
-  // setShowCalendarOneMonth,
-  // showCalendarOneMonth,
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
+  fetchedSalahData,
   userStartDate,
-  // setSalahTrackingArray,
-  salahTrackingArray, // setCurrentWeek,
-  // startDate,
-}: {
-  // setShowCalendarOneMonth: React.Dispatch<React.SetStateAction<boolean>>;
-  // showCalendarOneMonth: boolean;
-  userStartDate: string;
-  setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingEntryType[]>
-  >;
-  salahTrackingArray: salahTrackingEntryType[];
-  startDate: Date;
-  // setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  // currentWeek: number;
-}) => {
+}: CalenderProps) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
   useEffect(() => {
@@ -51,9 +52,9 @@ const Calendar = ({
     //   );
     // }
   });
-  salahTrackingArray;
+
   const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
-  console.log(showDailySalahDataModal);
+  // console.log(showDailySalahDataModal);
   const [clickedDate, setClickedDate] = useState<string>("");
 
   // useEffect(() => {
@@ -67,15 +68,6 @@ const Calendar = ({
   // };
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
-
-  // const p = salahTrackingArray.map((item) => {
-  //   const array = item.completedDates;
-  //   // console.log(Object.keys(item.completedDates[0])[0]);
-  //   return item;
-  //   // array.forEach((item) => console.log(item.notes));
-  //   // return item;
-  // });
-  // console.log(p);
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
@@ -100,12 +92,6 @@ const Calendar = ({
   // );
   // Need to modify the below so depending on the month being rendered, it either shows the overall statuses for each date for every salah or shows the status for the particular date for one salah only
 
-  let fajrColor = "green";
-  let zoharColor = "blue";
-  let asarColor = "red";
-  let maghribColor = "yellow";
-  let ishaColor = "orange";
-
   // const countCompletedDates = (date: string, salahName?: string) => {
   //   const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
   //     string[]
@@ -128,39 +114,17 @@ const Calendar = ({
 
   //   // let sameDatesArrayLength = sameDatesArray.length;
 
-  //   let color;
-
-  //   // if (salahName) {
-  //   //   if (sameDatesArrayLength === 0) {
-  //   //     color = "transparent";
-  //   //   } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-  //   //     color = { fajrColor };
-  //   //   }
-  //   // } else if (!salahName) {
-  //   //   if (sameDatesArrayLength === 0) {
-  //   //     color = { asarColor };
-  //   //   } else if (sameDatesArrayLength > 0 && sameDatesArrayLength < 5) {
-  //   //     color = { zoharColor };
-  //   //   } else if (sameDatesArrayLength === 5) {
-  //   //     color = { ishaColor };
-  //   //   }
-  //   // }
-
-  //   // sameDatesArray = [];
-  //   return color;
   // };
 
-  let todaysDate = new Date();
   // userStartDate = "17.01.11";
 
-  const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-
-  const endDate = new Date();
+  const userStartDateParsed = parse(userStartDate, "yyyy-MM-dd", new Date());
+  const todaysDate = new Date();
 
   // Generate an array of all the months between the start and end dates
   const monthsBetween = eachMonthOfInterval({
-    start: userStartDateFormatted,
-    end: endDate,
+    start: userStartDateParsed,
+    end: todaysDate,
   });
 
   // Format the months
@@ -168,14 +132,6 @@ const Calendar = ({
     format(month, "MMMM yyyy")
   );
   formattedMonths.reverse();
-
-  // if (currentYear.getFullYear === userStartDateFormatted.getFullYear) {
-  //   // userStartDateFormatted.setMonth(userStartDateFormatted.getMonth() - 1);
-  //   monthsInYear = monthsInYear.filter(
-  //     // (month) => month < userStartDateFormatted
-  //      isAfter(month, p)
-  //   );
-  // }
 
   // const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
   // console.log(monthStrings);
@@ -192,24 +148,14 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  function generateRadialColor(status: { [date: string]: string }) {
-    return Object.values(status)[0] === "male-alone"
-      ? "var(--alone-male-status-color)"
-      : Object.values(status)[0] === "group"
-      ? "var(--jamaah-status-color)"
-      : Object.values(status)[0] === "female-alone"
-      ? "var(--alone-female-status-color)"
-      : Object.values(status)[0] === "excused"
-      ? "var(--excused-status-color)"
-      : Object.values(status)[0] === "missed"
-      ? "var(--missed-status-color)"
-      : Object.values(status)[0] === "late"
-      ? "var(--late-status-color)"
-      : "";
-  }
+  let fajrColor = "";
+  let zoharColor = "";
+  let asarColor = "";
+  let maghribColor = "";
+  let ishaColor = "";
 
   function determineRadialColors(date: Date) {
-    if (date < userStartDateFormatted || date > todaysDate) {
+    if (date < userStartDateParsed || date > todaysDate) {
       fajrColor = "transparent";
       zoharColor = "transparent";
       asarColor = "transparent";
@@ -217,44 +163,44 @@ const Calendar = ({
       ishaColor = "transparent";
       return;
     }
-    fajrColor = "#585858";
-    zoharColor = "#585858";
-    asarColor = "#585858";
-    maghribColor = "#585858";
-    ishaColor = "#585858";
 
-    salahTrackingArray.forEach((item) => {
-      let formattedDate = format(date, "dd.MM.yy");
-      let completedDates = item.completedDates;
+    let formattedDate = format(date, "yyyy-MM-dd");
 
-      for (let key in completedDates) {
-        if (completedDates[key].hasOwnProperty(formattedDate)) {
-          if (Object.keys(completedDates[key])[0] === formattedDate) {
-            if (item.salahName === "Fajr") {
-              fajrColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Dhuhr") {
-              zoharColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Asar") {
-              asarColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Maghrib") {
-              maghribColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            } else if (item.salahName === "Isha") {
-              ishaColor = generateRadialColor({
-                formattedDate: completedDates[key][formattedDate].status,
-              });
-            }
+    for (let key in fetchedSalahData) {
+      if (fetchedSalahData[key].date === formattedDate) {
+        const matchedData = fetchedSalahData[key].salahs;
+
+        for (const [prayer, prayerStatus] of Object.entries(matchedData)) {
+          if (prayer === "Fajr") {
+            fajrColor =
+              prayerStatusColorsHexCodes[
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
+          } else if (prayer === "Dhuhr") {
+            zoharColor =
+              prayerStatusColorsHexCodes[
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
+          } else if (prayer === "Asar") {
+            asarColor =
+              prayerStatusColorsHexCodes[
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
+          } else if (prayer === "Maghrib") {
+            maghribColor =
+              prayerStatusColorsHexCodes[
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
+          } else if (prayer === "Isha") {
+            ishaColor =
+              prayerStatusColorsHexCodes[
+                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              ];
           }
         }
       }
-    });
+    }
+
     return null;
   }
 
@@ -303,14 +249,12 @@ const Calendar = ({
             <div
               onClick={() => {
                 if (day <= todaysDate) {
-                  const formattedDate = format(day, "dd.MM.yy");
-
+                  const formattedDate = format(day, "yyyy-MM-dd");
                   setClickedDate(formattedDate);
+                  setShowDailySalahDataModal(true);
                   // console.log("CLICKED DATE IS: " + clickedDate);
                   // showDailySalahData(clickedDate);
-                  setShowDailySalahDataModal(true);
                   // console.log(showDailySalahDataModal);
-                  console.log("TRIGGERED");
                 }
               }}
               key={uuidv4()}
@@ -391,13 +335,45 @@ const Calendar = ({
     </div>
   );
 
+  // const isItemLoaded = (index) => !!itemStatusMap[index];
+  // const loadMoreItems = async (startIndex: number, stopIndex: number) => {};
+
   return (
     // <div
     //   // style={{ height: singleMonthDivHeight }}
     //   className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md"
     // >
     <>
-      <AutoSizer disableHeight className="auto-sizer">
+      {/* <InfiniteLoader
+        // isRowLoaded={isRowLoaded}
+        // loadMoreRows={loadMoreRows}
+        // rowCount={monthsBetween.length}
+        isItemLoaded={isItemLoaded}
+        itemCount={monthsBetween.length}
+        loadMoreItems={loadMoreItems}
+      > */}
+      {/* {({ onRowsRendered, registerChild }) => ( */}
+      <AutoSizer disableHeight>
+        {({ width }) => (
+          <List
+            // style={{ borderRadius: "0.5rem" }}
+            className="list rounded-2xl"
+            // height={330}
+            height={370}
+            itemCount={monthsBetween.length}
+            // itemCount
+            itemSize={300}
+            layout="horizontal"
+            width={width}
+            direction="rtl"
+          >
+            {Column}
+          </List>
+        )}
+      </AutoSizer>
+      {/* )} */}
+      {/* </InfiniteLoader> */}
+      {/* <AutoSizer disableHeight className="auto-sizer">
         {({ width }) => (
           <List
             // style={{ borderRadius: "0.5rem" }}
@@ -413,11 +389,12 @@ const Calendar = ({
             {Column}
           </List>
         )}
-      </AutoSizer>
-      <DailyOverviewBottomSheet
+      </AutoSizer> */}
+      <BottomSheetSingleDateView
+        dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setShowDailySalahDataModal={setShowDailySalahDataModal}
         showDailySalahDataModal={showDailySalahDataModal}
-        salahTrackingArray={salahTrackingArray}
         clickedDate={clickedDate}
       />
     </>

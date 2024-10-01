@@ -1,5 +1,3 @@
-import { salahTrackingEntryType } from "../../types/types";
-
 import { AiOutlineStop } from "react-icons/ai";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
@@ -23,7 +21,6 @@ const StatCard = ({
     borderBottomRightRadius: string;
     bgColor: string;
   };
-  salahTrackingArray: salahTrackingEntryType[];
   salahFulfilledDates: string[];
   stat: number;
 }) => {

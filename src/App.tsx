@@ -1,33 +1,38 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import { v4 as uuidv4 } from "uuid";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 // import Notifications from "./utils/notifications";
-import { salahTrackingEntryType } from "./types/types";
-import { subDays, format } from "date-fns";
+import {
+  DBResultDataObjType,
+  PreferenceObjType,
+  userPreferencesType,
+  SalahNamesType,
+  SalahRecordType,
+  SalahRecordsArrayType,
+  SalahStatusType,
+} from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
 // import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
-// import { Keyboard } from "@capacitor/keyboard";
-
-// interface salahTrackingEntryType {
-//   salahName: string;
-//   completedDates: { [date: string]: string }[] | [];
-// }
-
-// const days = ["M", "T", "W", "T", "F", "S", "S"];
+import { format, parse, eachDayOfInterval } from "date-fns";
+import { PreferenceType } from "./types/types";
+import { userGenderType } from "./types/types";
 
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 // import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
-import QiblahDirection from "./pages/QiblahDirection";
+// import QiblahDirection from "./pages/QiblahDirection";
+// import { platform } from "os";
 // import StreakCount from "./components/Stats/StreakCount";
+import useSQLiteDB from "./utils/useSqLiteDB";
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+  // try {
+
   if (Capacitor.isNativePlatform()) {
     // STATUS BAR FUNCTIONALITY
 
@@ -76,10 +81,311 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-if (Capacitor.isNativePlatform()) {
-}
-
 const App = () => {
+  console.log("APP.TSX HAS RENDERED...");
+
+  const [fetchedSalahData, setFetchedSalahData] =
+    useState<SalahRecordsArrayType>([]);
+
+  const [renderTable, setRenderTable] = useState(false);
+
+  const [userPreferences, setUserPreferences] = useState<userPreferencesType>({
+    userGender: "male",
+    userStartDate: "",
+    dailyNotification: "",
+    dailyNotificationTime: "",
+    reasonsArray: [],
+  });
+
+  // console.log("APP COMPONENT HAS RENDERED");
+  const {
+    isDatabaseInitialised,
+    dbConnection,
+    checkAndOpenOrCloseDBConnection,
+  } = useSQLiteDB();
+
+  useEffect(() => {
+    if (isDatabaseInitialised === true) {
+      const initialiseAndLoadData = async () => {
+        console.log("DATABASE HAS INITIALISED");
+
+        setRenderTable(true);
+        await fetchDataFromDB();
+      };
+      initialiseAndLoadData();
+    }
+  }, [isDatabaseInitialised]);
+
+  const fetchDataFromDB = async () => {
+    console.log("fetchDataFromDB has run");
+    try {
+      await checkAndOpenOrCloseDBConnection("open");
+
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection or dbConnection.current do not exist");
+      }
+
+      const DBResultAllSalahData = await dbConnection.current.query(
+        `SELECT * FROM salahDataTable`
+      );
+
+      const DBResultPreferences = await dbConnection.current.query(
+        `SELECT * FROM userPreferencesTable`
+      );
+      console.log("Salah Data: ", DBResultAllSalahData);
+      console.log("Preference Data: ", DBResultPreferences);
+
+      if (DBResultPreferences && DBResultPreferences.values) {
+        await handleUserPreferencesDataFromDB(DBResultPreferences.values);
+      } else {
+        throw new Error(
+          "DBResultPreferences or DBResultPreferences.values do not exist"
+        );
+      }
+
+      if (DBResultAllSalahData && DBResultAllSalahData.values) {
+        await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+      } else {
+        throw new Error(
+          "DBResultAllSalahData or DBResultAllSalahData.values do not exist"
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      try {
+        console.log("DATABASE FETCH COMPLETE, CLOSING CONNECTION");
+        checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleUserPreferencesDataFromDB = async (
+    // DBResultPreferences: PreferenceObjType[]
+    DBResultPreferences: PreferenceObjType[]
+  ) => {
+    let DBResultPreferencesValues = DBResultPreferences;
+
+    if (DBResultPreferencesValues.length === 0) {
+      const userStartDate = format(new Date(), "yyyy-MM-dd");
+
+      const insertQuery = `
+          INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
+          VALUES 
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?),
+          (?, ?);
+          `;
+      // prettier-ignore
+      const params = [
+          "userGender", "male",
+          "userStartDate", userStartDate,
+          "dailyNotification", "0",
+          "dailyNotificationTime", "21:00",
+          "haptics", "0",
+          "reasons", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
+          "showReasons", "0",
+        ];
+
+      try {
+        await checkAndOpenOrCloseDBConnection("open");
+        if (dbConnection && dbConnection.current) {
+          await dbConnection.current.query(insertQuery, params);
+          const DBResultPreferencesQuery = await dbConnection.current.query(
+            `SELECT * FROM userPreferencesTable`
+          );
+
+          DBResultPreferencesValues =
+            DBResultPreferencesQuery.values as PreferenceObjType[];
+        } else {
+          console.error("dbConnection or dbConnection.current does not exist");
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        try {
+          checkAndOpenOrCloseDBConnection("close");
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      setShowIntroModal(true);
+    }
+
+    if (!DBResultPreferencesValues) {
+      throw new Error("DBResultPreferencesValues does not exist");
+    }
+
+    const assignPreference = (
+      preference: string
+    ): {
+      preferenceName: string;
+      preferenceValue: string;
+    } | null => {
+      let preferenceQuery = DBResultPreferencesValues.find(
+        (row) => row.preferenceName === preference
+      );
+
+      if (preferenceQuery) {
+        return preferenceQuery;
+      } else {
+        console.error("preferenceQuery row does not exist");
+        console.log("USERGENDER IS: ", preferenceQuery);
+
+        return null;
+      }
+    };
+
+    const userGenderRow = assignPreference("userGender");
+    const userStartDate = assignPreference("userStartDate");
+    const dailyNotificationRow = assignPreference("dailyNotification");
+    const dailyNotificationTimeRow = assignPreference("dailyNotificationTime");
+    const reasons = assignPreference("reasons");
+
+    if (userGenderRow) {
+      const gender = userGenderRow.preferenceValue as userGenderType;
+      console.log("GENDER: ", gender);
+
+      if (gender === "male" || gender === "female") {
+        setUserPreferences((userPreferences: userPreferencesType) => ({
+          ...userPreferences,
+          userGender: gender,
+        }));
+      } else {
+        console.error(`Invalid gender value: ${gender}`);
+      }
+    } else {
+      console.error("userGenderRow row not found");
+    }
+
+    if (userStartDate) {
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        userStartDate: userStartDate.preferenceValue,
+      }));
+
+      userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
+      // await handleSalahTrackingDataFromDB(DBResultAllSalahData);
+      console.log("userStartDate ", userStartDate.preferenceValue);
+    } else {
+      console.error("userStartDate row not found");
+    }
+
+    if (reasons) {
+      // setReasonsArray(reasons.preferenceValue.split(","));
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        reasonsArray: reasons.preferenceValue.split(","),
+      }));
+    } else {
+      console.error("reasons row not found");
+    }
+
+    if (dailyNotificationRow) {
+      // setDailyNotification(dailyNotificationRow.preferenceValue);
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        dailyNotification: dailyNotificationRow.preferenceValue,
+      }));
+    } else {
+      console.error("dailyNotification row not found");
+    }
+
+    if (dailyNotificationTimeRow) {
+      // setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        dailyNotificationTime: dailyNotificationTimeRow.preferenceValue,
+      }));
+    } else {
+      console.error("dailyNotificationTime row not found");
+    }
+  };
+
+  // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
+  let userStartDateForSalahTrackingFunc: string;
+  useEffect(() => {
+    userStartDateForSalahTrackingFunc = userPreferences.userStartDate;
+  }, [userPreferences.userStartDate]);
+
+  const handleSalahTrackingDataFromDB = async (
+    DBResultAllSalahData: DBResultDataObjType[]
+  ) => {
+    const singleSalahObjArr: SalahRecordsArrayType = [];
+    const todaysDate = new Date();
+
+    const userStartDateFormattedToDateObject: Date = parse(
+      userStartDateForSalahTrackingFunc,
+      "yyyy-MM-dd",
+      new Date()
+    );
+
+    const datesFromStartToToday: string[] = eachDayOfInterval({
+      start: userStartDateFormattedToDateObject,
+      end: todaysDate,
+    })
+      .map((date) => format(date, "yyyy-MM-dd"))
+      .reverse();
+
+    for (let i = 0; i < datesFromStartToToday.length; i++) {
+      let singleSalahObj: SalahRecordType = {
+        date: datesFromStartToToday[i],
+        salahs: {
+          Fajr: "",
+          Dhuhr: "",
+          Asar: "",
+          Maghrib: "",
+          Isha: "",
+        },
+      };
+
+      const currentDate = datesFromStartToToday[i];
+
+      // ? Below if statement potentially needs to be moved as it's currently being called on every loop
+      if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
+        for (let i = 0; i < DBResultAllSalahData.length; i++) {
+          if (DBResultAllSalahData[i].date === currentDate) {
+            let salahName: SalahNamesType = DBResultAllSalahData[i].salahName;
+            let salahStatus: SalahStatusType =
+              DBResultAllSalahData[i].salahStatus;
+            singleSalahObj.salahs[salahName] = salahStatus;
+          }
+        }
+      }
+
+      singleSalahObjArr.push(singleSalahObj);
+    }
+    setFetchedSalahData([...singleSalahObjArr]);
+  };
+
+  const modifyDataInUserPreferencesTable = async (
+    value: string,
+    preference: PreferenceType
+  ) => {
+    try {
+      await checkAndOpenOrCloseDBConnection("open");
+      const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection or dbConnection.current do not exist");
+      }
+      await dbConnection.current.run(query, [value, preference]);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   // CHANGELOG FUNCTIONALITY
   const betaAppVersion = "1.0.8";
 
@@ -128,144 +434,46 @@ const App = () => {
   //   }
   // });
 
-  // let userGender: string | null = localStorage.getItem("userGender");
-  let userGender: any = localStorage.getItem("userGender");
-
-  useEffect(() => {
-    if (!userGender) {
-      setShowIntroModal(true);
-    }
-  }, []);
-
   // const todaysDate = new Date("2024-01-01");
-  const todaysDate = new Date();
-  let userStartDate: string | null = localStorage.getItem("userStartDate");
-  // let userStartDate: string | null = "01.01.24";
-  if (!userStartDate) {
-    userStartDate = format(todaysDate, "dd.MM.yy");
-    localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
-  }
-  // useEffect(() => {
-  //   console.log("trrue");
-  //   if (!userStartDate) {
-  //     userStartDate = format(todaysDate, "dd.MM.yy");
-  //     localStorage.setItem("userStartDate", format(todaysDate, "dd.MM.yy"));
-  //   }
-  // }, []);
 
-  const [streakCounter, setStreakCounter] = useState(0);
-  streakCounter;
-  const [salahTrackingArray, setSalahTrackingArray] = useState<
-    salahTrackingEntryType[]
-  >([]);
+  // const [streakCounter, setStreakCounter] = useState(0);
+
   const [heading, setHeading] = useState("");
 
-  const [currentWeek, setCurrentWeek] = useState(0);
-  const today: Date = new Date();
-  const startDate: Date = subDays(today, currentWeek);
+  // let datesFrequency: { [date: string]: number } = {};
+  // salahFulfilledDates.forEach((date) => {
+  //   datesFrequency[date] = (datesFrequency[date] || 0) + 1;
+  // });
 
-  useEffect(() => {
-    const storedSalahTrackingData = localStorage.getItem(
-      "storedSalahTrackingData"
-    );
+  // const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
+  //   datesFrequency[date] === 5 ? true : false
+  // );
 
-    storedSalahTrackingData
-      ? setSalahTrackingArray(JSON.parse(storedSalahTrackingData))
-      : setSalahTrackingArray([
-          {
-            salahName: "Fajr",
-            completedDates: [],
-          },
-          {
-            salahName: "Dhuhr",
-            completedDates: [],
-          },
-          {
-            salahName: "Asar",
-            completedDates: [],
-          },
-          {
-            salahName: "Maghrib",
-            completedDates: [],
-          },
-          {
-            salahName: "Isha",
-            completedDates: [],
-          },
-        ]);
-  }, []);
+  // let streakCount = 0;
+  // function checkStreak() {
+  //   // const todaysDate = new Date();
 
-  const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
-    (accumulatorArray, salah) => {
-      for (let i = 0; i < salah.completedDates.length; i++) {
-        Object.values(salah.completedDates[i]);
-        if (
-          Object.values(salah.completedDates[i])[0].status !== "missed" &&
-          Object.values(salah.completedDates[i])[0].status !== "blank"
-        ) {
-          accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
-        }
-      }
-      return accumulatorArray;
-    },
-    []
-  );
+  //   for (let i = 0; i < datesFrequencyReduced.length; i++) {
+  //     let formattedDate = subDays(todaysDate, i);
 
-  // console.log(salahFulfilledDates);
+  //     if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {
+  //       streakCount += 1;
+  //     } else {
+  //       break;
+  //     }
+  //   }
+  //   setStreakCounter(streakCount);
+  // }
 
-  let datesFrequency: { [date: string]: number } = {};
-  salahFulfilledDates.forEach((date) => {
-    datesFrequency[date] = (datesFrequency[date] || 0) + 1;
-  });
-
-  const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
-    datesFrequency[date] === 5 ? true : false
-  );
-
-  let streakCount = 0;
-  function checkStreak() {
-    // const todaysDate = new Date();
-
-    for (let i = 0; i < datesFrequencyReduced.length; i++) {
-      let formattedDate = subDays(todaysDate, i);
-
-      if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {
-        streakCount += 1;
-      } else {
-        break;
-      }
-    }
-    setStreakCounter(streakCount);
-  }
-
-  useEffect(() => {
-    checkStreak();
-  }, [datesFrequencyReduced]);
+  // useEffect(() => {
+  //   checkStreak();
+  // }, [datesFrequencyReduced]);
 
   const pageStyles: string = `py-[9vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
 
   return (
     <BrowserRouter>
       <section className="app">
-        {/* <dialog
-          className="w-4/5 mx-auto text-white bg-gray-800 my-[50%] p-5"
-          open
-        >
-          <>
-            <h1 className="text-2xl">Changelog</h1>
-            <br></br>
-            <p>
-              Version 1.0.9:<br></br>
-              -FEATURE: Selecting a calender date now shows daily performance
-              for that date + notes and reasons (if they were entered)\n\n Beta
-              Version 1.0.8 Changelog:\n\n - Added notifications option within
-              the settings page, please test it out and let me know if you
-              encounter any issues / have any feedback.\n\n As usual, any other
-              issues / bugs etc drop me a message.\n\n Jazakallahu Khair
-            </p>
-          </>
-        </dialog> */}
-
         <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
           {" "}
           {/* <div></div> */}
@@ -291,17 +499,17 @@ const App = () => {
             index
             element={
               <HomePage
-                // title={<h1 className={h1ClassStyles}>{"Home"}</h1>}
-                // title={heading}
-                userGender={userGender}
-                userStartDate={userStartDate}
+                dbConnection={dbConnection}
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
+                renderTable={renderTable}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+                setFetchedSalahData={setFetchedSalahData}
+                fetchedSalahData={fetchedSalahData}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
-                startDate={startDate}
-                setSalahTrackingArray={setSalahTrackingArray}
-                salahTrackingArray={salahTrackingArray}
-                // setCurrentWeek={setCurrentWeek}
-                // currentWeek={currentWeek}
               />
             }
           />
@@ -310,8 +518,12 @@ const App = () => {
             element={
               <SettingsPage
                 setHeading={setHeading}
-                // title={<h1 className={h1ClassStyles}>{"Settings"}</h1>}
                 pageStyles={pageStyles}
+                modifyDataInUserPreferencesTable={
+                  modifyDataInUserPreferencesTable
+                }
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
               />
             }
           />
@@ -319,20 +531,18 @@ const App = () => {
             path="/StatsPage"
             element={
               <StatsPage
-                userGender={userGender}
-                userStartDate={userStartDate}
-                // title={<h1 className={h1ClassStyles}>{"Stats"}</h1>}
+                dbConnection={dbConnection}
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
+                userPreferences={userPreferences}
+                fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
                 setHeading={setHeading}
-                setCurrentWeek={setCurrentWeek}
-                startDate={startDate}
-                setSalahTrackingArray={setSalahTrackingArray}
-                salahTrackingArray={salahTrackingArray}
-                currentWeek={currentWeek}
               />
             }
           />
-          <Route
+          {/* <Route
             path="/QiblahDirection"
             element={
               <QiblahDirection
@@ -341,7 +551,7 @@ const App = () => {
                 pageStyles={pageStyles}
               />
             }
-          />
+          /> */}
         </Routes>
         <Sheet
           isOpen={showIntroModal}
@@ -356,8 +566,19 @@ const App = () => {
               <section className="p-5 text-center">
                 <h1 className="text-4xl">Select your gender</h1>
                 <p
-                  onClick={() => {
-                    localStorage.setItem("userGender", "male");
+                  onClick={async () => {
+                    // setUserGender("male");
+                    setUserPreferences(
+                      (userPreferences: userPreferencesType) => ({
+                        ...userPreferences,
+                        userGender: "male",
+                      })
+                    );
+                    // localStorage.setItem("userGender", "male");
+                    await modifyDataInUserPreferencesTable(
+                      "male",
+                      "userGender"
+                    );
                     setShowIntroModal(false);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-blue-800 rounded-2xl"
@@ -365,8 +586,19 @@ const App = () => {
                   Male
                 </p>
                 <p
-                  onClick={() => {
-                    localStorage.setItem("userGender", "female");
+                  onClick={async () => {
+                    // localStorage.setItem("userGender", "female");
+                    // setUserGender("female");
+                    setUserPreferences(
+                      (userPreferences: userPreferencesType) => ({
+                        ...userPreferences,
+                        userGender: "female",
+                      })
+                    );
+                    await modifyDataInUserPreferencesTable(
+                      "female",
+                      "userGender"
+                    );
                     setShowIntroModal(false);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-pink-400 rounded-2xl"

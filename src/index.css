@@ -25,7 +25,6 @@
   /* --card-border-radius:  */
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
-  /* --late-status-color: #a95223; */
   --late-status-color: #ea580c;
   --alone-male-status-color: #bcaa4b;
   --alone-female-status-color: #448b75;
@@ -139,6 +138,8 @@ td {
 
 .ReactVirtualized__Table__rowColumn {
   margin-right: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .ReactVirtualized__Grid__innerScrollContainer {

@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 // @ts-ignore
 import Switch from "react-ios-switch";
 import Modal from "react-modal";
+// import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
+import { PreferenceType, userPreferencesType } from "../types/types";
+// import { DBConnectionStateType } from "../types/types";
 
 // import {
 //   checkNotificationPermissions,
@@ -16,15 +19,32 @@ import NotificationsBottomSheet from "../components/BottomSheets/NotificationsBo
 // import Switch from "rc-switch";
 // import { StatusBar, Style } from "@capacitor/status-bar";
 
-const SettingsPage = ({
-  // title,
-  setHeading,
-  pageStyles,
-}: {
-  // title: React.ReactNode;
+interface SettingsPageProps {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
-}) => {
+  modifyDataInUserPreferencesTable: (
+    value: string,
+    preference: PreferenceType
+  ) => Promise<void>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
+  // setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
+  // dailyNotification: string;
+  //   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
+  //   dailyNotificationTime: string;
+}
+
+const SettingsPage = ({
+  setHeading,
+  pageStyles,
+  modifyDataInUserPreferencesTable,
+  // setDailyNotification,
+  // dailyNotification,
+  // setDailyNotificationTime,
+  // dailyNotificationTime,
+  setUserPreferences,
+  userPreferences,
+}: SettingsPageProps) => {
   useEffect(() => {
     setHeading("Settings");
   }, []);
@@ -62,8 +82,17 @@ const SettingsPage = ({
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
           <NotificationsBottomSheet
+            // dbConnection={dbConnection}
+            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+            // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
             setHandleNotificationsModal={setHandleNotificationsModal}
             handleNotificationsModal={handleNotificationsModal}
+            setUserPreferences={setUserPreferences}
+            userPreferences={userPreferences}
+            // setDailyNotification={setDailyNotification}
+            // dailyNotification={dailyNotification}
+            // setDailyNotificationTime={setDailyNotificationTime}
+            // dailyNotificationTime={dailyNotificationTime}
           />
         </div>{" "}
         {/* <SettingIndividual

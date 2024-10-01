@@ -1,49 +1,42 @@
-// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import { useEffect } from "react";
-import { salahTrackingEntryType } from "../types/types";
-// import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
+
 import Calendar from "../components/Stats/Calendar";
-
-// import { eachDayOfInterval, parse } from "date-fns";
-
+import {
+  SalahRecordsArrayType,
+  SalahStatusType,
+  // userGenderType,
+  userPreferencesType,
+} from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
-
+import { DBConnectionStateType } from "../types/types";
 // import StreakCount from "../components/Stats/StreakCount";
 
-const StatsPage = ({
-  userGender,
-  setHeading,
-  userStartDate,
-  pageStyles,
-  startDate,
-  setSalahTrackingArray,
-  salahTrackingArray,
-} // setCurrentWeek,
-// currentWeek,
-: {
-  userGender: string;
+interface StatsPageProps {
+  dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
+  userPreferences: userPreferencesType;
+  fetchedSalahData: SalahRecordsArrayType;
+  // userGender: userGenderType;
+  // userStartDate: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
-  userStartDate: string;
   pageStyles: string;
-  startDate: Date;
-  setSalahTrackingArray: React.Dispatch<
-    React.SetStateAction<salahTrackingEntryType[]>
-  >;
-  salahTrackingArray: salahTrackingEntryType[];
-  setCurrentWeek: React.Dispatch<React.SetStateAction<number>>;
-  currentWeek: number;
-}) => {
+}
+
+const StatsPage = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
+  // userGender,
+  // userStartDate,
+  userPreferences,
+  fetchedSalahData,
+  setHeading,
+  pageStyles,
+}: StatsPageProps) => {
   useEffect(() => {
     setHeading("Stats");
   }, []);
-  // let jamaahStat = 0;
-  // let aloneStat = 0;
-  // let lateStat = 0;
-  // let missedStat = 0;
-  // let excusedStat = 0;
-
-  // const [showDonutChart, setShowDonutChart] = useState(false);
-  let showDonutChart;
 
   let salahInJamaahDatesOverall: string[] = [];
   let salahMaleAloneDatesOverall: string[] = [];
@@ -52,67 +45,32 @@ const StatsPage = ({
   let salahLateDatesOverall: string[] = [];
   let salahMissedDatesOverall: string[] = [];
 
-  // const userStartDateFormatted = parse(userStartDate, "dd.MM.yy", new Date());
-  // let todaysDate = new Date();
-  // let amountOfDaysBetweenStartDateAndToday = eachDayOfInterval({
-  //   start: userStartDateFormatted,
-  //   end: todaysDate,
-  // });
-  // let totalPossibleSalah = amountOfDaysBetweenStartDateAndToday.length * 5;
-  // console.log(totalPossibleSalah);
-
-  // const salahFulfilledDates = salahTrackingArray.reduce<string[]>(
-  //   (accumulatorArray, salah) => {
-  //     for (let i = 0; i < salah.completedDates.length; i++) {
-  //       accumulatorArray.push(Object.keys(salah.completedDates[i])[0]);
-  //     }
-  //     return accumulatorArray;
-  //   },
-  //   []
-  // );
-
-  function getSalahStatusDates(status: string, array: string[]) {
-    // let statToUpdate = 0;
-    salahTrackingArray.forEach((salah) => {
-      for (let i = 0; i < salah.completedDates.length; i++) {
-        if (Object.values(salah.completedDates[i])[0].status === status) {
-          array.push(Object.keys(salah.completedDates[i])[0]);
+  // const [showDonutChart, setShowDonutChart] = useState(false);
+  let showDonutChart;
+  let salahStatusesOverallArr: SalahStatusType[] = [];
+  // TODO: Test the below code to ensure stats are being calculated correctly
+  const calculateOverallStats = () => {
+    for (let i = 0; i < fetchedSalahData.length; i++) {
+      Object.values(fetchedSalahData[i].salahs).forEach((status) => {
+        if (status !== "" && typeof status === "string") {
+          salahStatusesOverallArr.push(status as SalahStatusType);
         }
-      }
-    });
+      });
+    }
 
-    // statToUpdate = Math.round(
-    //   (salahFulfilledDates.length / totalPossibleSalah) * 100
-    // );
+    const filterSalahStatuses = (salahStatus: string) => {
+      return salahStatusesOverallArr.filter((status) => status === salahStatus);
+    };
 
-    // console.log(totalPossibleSalah);
-    // Below will potentially be useful when adding individual salah stats
-    // if (array.length > 0) {
-    //   statToUpdate = Math.round(
-    //     (array.length / (salahFulfilledDates.length + array.length)) * 100
-    //   );
-    // }
+    salahInJamaahDatesOverall = filterSalahStatuses("group");
+    salahMaleAloneDatesOverall = filterSalahStatuses("male-alone");
+    salahFemaleAloneDatesOverall = filterSalahStatuses("female-alone");
+    salahExcusedDatesOverall = filterSalahStatuses("excused");
+    salahLateDatesOverall = filterSalahStatuses("late");
+    salahMissedDatesOverall = filterSalahStatuses("missed");
+  };
 
-    // status === "group"
-    //   ? (jamaahStat = statToUpdate)
-    //   : status === "male-alone" || status === "female-alone"
-    //   ? (aloneStat = statToUpdate)
-    //   : status === "late"
-    //   ? (lateStat = statToUpdate)
-    //   : status === "missed"
-    //   ? (missedStat = statToUpdate)
-    //   : status === "excused"
-    //   ? (excusedStat = statToUpdate)
-    //   : null;
-  }
-
-  getSalahStatusDates("group", salahInJamaahDatesOverall);
-  userGender === "male"
-    ? getSalahStatusDates("male-alone", salahMaleAloneDatesOverall)
-    : getSalahStatusDates("female-alone", salahFemaleAloneDatesOverall);
-  getSalahStatusDates("late", salahLateDatesOverall);
-  getSalahStatusDates("missed", salahMissedDatesOverall);
-  getSalahStatusDates("excused", salahExcusedDatesOverall);
+  calculateOverallStats();
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
@@ -125,45 +83,29 @@ const StatsPage = ({
     salahLateDatesOverall: salahLateDatesOverall.length,
   };
 
-  // console.log(
-  //   Object.values(salahStatusStatistics).some((num) => num > 0)
-  // );
-  // console.log(Object.values(salahStatusStatistics));
-
   for (let key in salahStatusStatistics) {
-    // console.log(
-    //   salahStatusStatistics[key as keyof typeof salahStatusStatistics]
-    // );
     if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
       showDonutChart = true;
       break;
     }
   }
 
-  // const salahStatusStatisticsLengthCheck = Object.values(
-  //   salahStatusStatistics
-  // ).some((length) => length > 0);
-
-  // setShowDonutChart(salahStatusStatisticsLengthCheck);
-
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
       {showDonutChart === true ? (
         <DonutPieChart
-          userGender={userGender}
+          userGender={userPreferences.userGender}
           salahStatusStatistics={salahStatusStatistics}
         />
       ) : (
         ""
       )}
       <Calendar
-        userStartDate={userStartDate}
-        setSalahTrackingArray={setSalahTrackingArray}
-        salahTrackingArray={salahTrackingArray}
-        startDate={startDate}
-        // setCurrentWeek={setCurrentWeek}
-        // currentWeek={currentWeek}
+        dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        userStartDate={userPreferences.userStartDate}
+        fetchedSalahData={fetchedSalahData}
       />{" "}
     </section>
   );
