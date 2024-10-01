@@ -18,8 +18,11 @@ import {
   eachMonthOfInterval,
 } from "date-fns";
 
-import { CalenderSalahArray, SalahRecordsArray } from "../../types/types";
-import { DBConnectionStateType } from "../../types/types";
+import {
+  SalahRecordsArrayType,
+  DBConnectionStateType,
+} from "../../types/types";
+
 // import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
 
@@ -29,7 +32,7 @@ interface CalenderProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   userStartDate: string;
-  fetchedSalahData: SalahRecordsArray;
+  fetchedSalahData: SalahRecordsArrayType;
 }
 
 const Calendar = ({
@@ -161,14 +164,7 @@ const Calendar = ({
       return;
     }
 
-    // fajrColor = "#585858";
-    // zoharColor = "#585858";
-    // asarColor = "#585858";
-    // maghribColor = "#585858";
-    // ishaColor = "#585858";
-
     let formattedDate = format(date, "yyyy-MM-dd");
-    console.log(fetchedSalahData);
 
     for (let key in fetchedSalahData) {
       if (fetchedSalahData[key].date === formattedDate) {

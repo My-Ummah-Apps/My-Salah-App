@@ -1,10 +1,9 @@
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 // import NextSalahTime from "../components/NextSalahTime";
 import {
-  SalahRecordsArray,
+  SalahRecordsArrayType,
   DBConnectionStateType,
-  userPreferences,
-  CalenderSalahArray,
+  userPreferencesType,
 } from "../types/types";
 import { useEffect } from "react";
 
@@ -20,15 +19,14 @@ interface HomePageProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setFetchedSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
+  setFetchedSalahData: React.Dispatch<
+    React.SetStateAction<SalahRecordsArrayType>
+  >;
   fetchedSalahData: any;
-  handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
-  userPreferences: userPreferences;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   // reasonsArray: string[];
-  datesFromStartToToday: string[];
   // userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   // userStartDate: string;
@@ -40,14 +38,11 @@ const HomePage = ({
   checkAndOpenOrCloseDBConnection,
   renderTable,
   setFetchedSalahData,
-  setCalendarData,
   fetchedSalahData,
-  handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
   // setReasonsArray,
   // reasonsArray,
-  datesFromStartToToday,
   // userGender,
   setHeading,
   pageStyles,
@@ -76,11 +71,8 @@ const HomePage = ({
           renderTable={renderTable}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
-          datesFromStartToToday={datesFromStartToToday}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}
-          setCalendarData={setCalendarData}
-          handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
         />
       ) : (
         <div>

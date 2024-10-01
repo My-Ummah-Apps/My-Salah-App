@@ -6,7 +6,7 @@ import Modal from "react-modal";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
-import { PreferenceType, userPreferences } from "../types/types";
+import { PreferenceType, userPreferencesType } from "../types/types";
 // import { DBConnectionStateType } from "../types/types";
 
 // import {
@@ -26,8 +26,8 @@ interface SettingsPageProps {
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
-  userPreferences: userPreferences;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
   // setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
   // dailyNotification: string;
   //   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;

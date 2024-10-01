@@ -4,7 +4,7 @@ import Sheet from "react-modal-sheet";
 import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { PreferenceType, userPreferences } from "../../types/types";
+import { PreferenceType, userPreferencesType } from "../../types/types";
 
 const NotificationsBottomSheet = ({
   setHandleNotificationsModal,
@@ -12,12 +12,11 @@ const NotificationsBottomSheet = ({
   // dbConnection,
   modifyDataInUserPreferencesTable,
   setUserPreferences,
-  userPreferences, // checkAndOpenOrCloseDBConnection,
-  // setDailyNotification,
-} // dailyNotification,
+  userPreferences, // checkAndOpenOrCloseDBConnection, // dailyNotification,
+}: // setDailyNotification,
 // setDailyNotificationTime,
 // dailyNotificationTime,
-: {
+{
   setHandleNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleNotificationsModal: boolean;
   // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -25,8 +24,8 @@ const NotificationsBottomSheet = ({
     value: string,
     preference: PreferenceType
   ) => Promise<void>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
-  userPreferences: userPreferences;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
   // checkAndOpenOrCloseDBConnection: (action: string) => Promise<void>;
   // setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
   // dailyNotification: string;

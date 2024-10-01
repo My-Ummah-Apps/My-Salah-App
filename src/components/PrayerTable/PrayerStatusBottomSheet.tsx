@@ -7,20 +7,20 @@ import { PiFlower } from "react-icons/pi";
 import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
-import { SalahRecordsArray, userPreferences } from "../../types/types";
+import { SalahRecordsArrayType, userPreferencesType } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 
 interface PrayerStatusBottomSheetProps {
   dbConnection: any;
-  setFetchedSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
+  setFetchedSalahData: React.Dispatch<
+    React.SetStateAction<SalahRecordsArrayType>
+  >;
   fetchedSalahData: any;
-  setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
-  handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
-  userPreferences: userPreferences;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
   clickedDate: string;
   clickedSalah: string;
   showUpdateStatusModal: boolean;
@@ -34,8 +34,6 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  setCalendarData,
-  handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
   clickedDate,
@@ -148,9 +146,9 @@ const PrayerStatusBottomSheet = ({
         clickedDate
       );
 
-      const DBResultAllSalahData = await dbConnection.current.query(
-        `SELECT * FROM salahDataTable`
-      );
+      // const DBResultAllSalahData = await dbConnection.current.query(
+      //   `SELECT * FROM salahDataTable`
+      // );
 
       if (!salahAndDateExist) {
         let query = `INSERT INTO salahDataTable(date, salahName, salahStatus`;
@@ -181,7 +179,6 @@ const PrayerStatusBottomSheet = ({
         }
 
         setFetchedSalahData((prev) => [...prev]);
-        // handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       } else if (salahAndDateExist) {
         let query = `UPDATE salahDataTable SET salahStatus = ?`;
         const values = [salahStatus];
@@ -213,10 +210,6 @@ const PrayerStatusBottomSheet = ({
         }
 
         setFetchedSalahData((prev) => [...prev]);
-        // setCalendarData((prev) => [...prev]);
-        console.log(">>>>", DBResultAllSalahData);
-
-        // handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       }
       console.log("fetchedSalahData in sheet: ", fetchedSalahData);
     } catch (error) {

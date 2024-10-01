@@ -1,19 +1,16 @@
-import { useState, useEffect, useReducer, useRef } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 // import Notifications from "./utils/notifications";
 import {
-  CalenderSalahArray,
-  CalenderSalahArrayObject,
-  DBResultDataObj,
-  PreferenceObj,
-  SalahEntry,
-  SalahNames,
-  SalahRecord,
-  SalahRecordsArray,
-  SalahStatus,
-  userPreferences,
+  DBResultDataObjType,
+  PreferenceObjType,
+  userPreferencesType,
+  SalahNamesType,
+  SalahRecordType,
+  SalahRecordsArrayType,
+  SalahStatusType,
 } from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
@@ -23,16 +20,6 @@ import { Capacitor } from "@capacitor/core";
 import { format, parse, eachDayOfInterval } from "date-fns";
 import { PreferenceType } from "./types/types";
 import { userGenderType } from "./types/types";
-// import { initialiseDatabase } from "./utils/SQLiteService";
-
-// import { Keyboard } from "@capacitor/keyboard";
-
-// interface salahTrackingEntryType {
-//   salahName: string;
-//   completedDates: { [date: string]: string }[] | [];
-// }
-
-// const days = ["M", "T", "W", "T", "F", "S", "S"];
 
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
@@ -42,7 +29,6 @@ import StatsPage from "./pages/StatsPage";
 // import { platform } from "os";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
-import { table } from "console";
 
 window.addEventListener("DOMContentLoaded", async () => {
   // try {
@@ -98,23 +84,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   console.log("APP.TSX HAS RENDERED...");
 
-  const [fetchedSalahData, setFetchedSalahData] = useState<SalahRecordsArray>(
-    []
-  );
+  const [fetchedSalahData, setFetchedSalahData] =
+    useState<SalahRecordsArrayType>([]);
 
-  // const [datesFromStartToToday, setDatesFromStartToToday] = useState<string[]>(
-  //   []
-  // );
   const [renderTable, setRenderTable] = useState(false);
 
-  // const [userGender, setUserGender] = useState<userGenderType>("male");
-  // const [dailyNotification, setDailyNotification] = useState<string>("");
-  // const [dailyNotificationTime, setDailyNotificationTime] =
-  //   useState<string>("");
-  // const [reasonsArray, setReasonsArray] = useState<string[]>([]);
-  // const [userStartDate, setUserStartDate] = useState<string>("");
-
-  const [userPreferences, setUserPreferences] = useState<userPreferences>({
+  const [userPreferences, setUserPreferences] = useState<userPreferencesType>({
     userGender: "male",
     userStartDate: "",
     dailyNotification: "",
@@ -133,157 +108,13 @@ const App = () => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
         console.log("DATABASE HAS INITIALISED");
-        // localStorage.clear();
-        // const storedSalahTrackingData =
-        //   '[{"salahName":"Fajr","completedDates":[{"28.08.24":{"status":"group","reasons":[],"notes":""}},{"21.08.24":{"status":"male-alone","reasons":["Shopping","Movies"],"notes":"asdasdasd"}},{"24.08.24":{"status":"missed","reasons":["Movies","TV"],"notes":"asdasd"}}]},{"salahName":"Dhuhr","completedDates":[{"28.08.24":{"status":"male-alone","reasons":["Movies","Leisure"],"notes":""}},{"22.08.24":{"status":"group","reasons":[],"notes":"asdasdas"}}]},{"salahName":"Asar","completedDates":[{"28.08.24":{"status":"late","reasons":[],"notes":""}},{"25.08.24":{"status":"male-alone","reasons":["Education","Leisure"],"notes":"asdasd"}}]},{"salahName":"Maghrib","completedDates":[{"20.08.24":{"status":"late","reasons":["Work","Movies"],"notes":"asdasdasd"}},{"27.08.24":{"status":"group","reasons":[],"notes":"asdad"}}]},{"salahName":"Isha","completedDates":[{"28.08.24":{"status":"late","reasons":["Movies","Family"],"notes":""}},{"23.08.24":{"status":"late","reasons":["Movies","Leisure"],"notes":"asdasd"}}]}]';
 
-        // localStorage.setItem(
-        //   "storedSalahTrackingData",
-        //   storedSalahTrackingData
-        // );
-        // localStorage.setItem("userStartDate", "01.02.24");
-        // localStorage.setItem("userGender", "male");
-
-        await executeTransfer(); // ! REMOVE ONCE TRANSFER IS COMPLETE
         setRenderTable(true);
         await fetchDataFromDB();
-        // setTimeout(() => {
-        //   setRenderTable(true);
-        // }, 2000);
       };
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
-
-  // ! _________________________________________REMOVE BELOW ONCE TRANSFER IS COMPLETE___________________________________________
-
-  const executeTransfer = async () => {
-    console.log("TRANSFER FUNCTION HAS RUN");
-
-    const userStartDate = localStorage.getItem("userStartDate");
-    const userStartDateParsed = parse(userStartDate, "dd.MM.yy", new Date());
-    const userStartDateFormatted = format(userStartDateParsed, "yyyy-MM-dd");
-    console.log(userStartDateFormatted);
-
-    if (localStorage.getItem("storedSalahTrackingData")) {
-      console.log("EXECUTING TRANSFER");
-      const storedSalahTrackingData = localStorage.getItem(
-        "storedSalahTrackingData"
-      );
-      const userGender = localStorage.getItem("userGender");
-
-      console.log("BACKUP DATA FOUND");
-
-      const parsedOldData = JSON.parse(storedSalahTrackingData);
-      try {
-        console.log("🚀 ~ executeTransfer ~ parsedOldData:", parsedOldData);
-        await checkAndOpenOrCloseDBConnection("open");
-
-        if (!dbConnection || !dbConnection.current) {
-          throw new Error("dbConnection or dbConnection.current do not exist");
-        }
-        console.log(
-          "dbConnection & dbConnection.current exist, opening connection...."
-        );
-
-        await checkAndOpenOrCloseDBConnection("open");
-        console.log("connection opened...");
-
-        // dbConnection.current.execute(`
-        //     DELETE FROM salahDataTable;
-        //   `);
-        // dbConnection.current.execute(`
-        //     VACUUM;
-        //   `);
-
-        const insertQuery = `
-          INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue)
-          VALUES
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?);
-          `;
-
-        console.log("HELLO: ", userGender);
-
-        // prettier-ignore
-        const params = [
-          "userGender", userGender,
-          "userStartDate", userStartDateFormatted,
-          "dailyNotification", "0",
-          "dailyNotificationTime", "21:00",
-          "haptics", "0",
-          "reasons", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
-          "showReasons", "0",
-        ];
-
-        console.log("Inserting preferences data into database...");
-
-        await dbConnection.current.query(insertQuery, params);
-
-        const testing = await dbConnection.current.query(
-          `SELECT * FROM salahDataTable WHERE salahName IS NULL;`
-        );
-        console.log("Null ", testing);
-        console.log("running loop to structure backup data...");
-
-        for (const salah of parsedOldData) {
-          const { salahName, completedDates } = salah;
-
-          for (const dateObj of completedDates) {
-            const [date, details] = Object.entries(dateObj)[0]; // Extract date and details
-            const { status, reasons, notes } = details;
-            console.log("salahName ", typeof salahName);
-
-            // Convert reasons array to a comma-separated string
-            const reasonsString = reasons.join(",");
-
-            const dateParsed = parse(date, "dd.MM.yy", new Date());
-            const dateFormatted = format(dateParsed, "yyyy-MM-dd");
-
-            // Insert the data into the SQLite table
-
-            const insertQuery = `
-                  INSERT INTO salahDataTable(date, salahName, salahStatus, reasons, notes)
-                  VALUES (?, ?, ?, ?, ?);
-                `;
-            const values = [
-              dateFormatted,
-              salahName,
-              status,
-              reasonsString,
-              notes,
-            ];
-            console.log("values: ", values);
-
-            await dbConnection.current.query(insertQuery, values);
-          }
-        }
-        console.log("Finished structing and inserting data into database");
-      } catch (error) {
-        console.log("ERROR in executTransfer");
-
-        console.error(error);
-      } finally {
-        try {
-          await checkAndOpenOrCloseDBConnection("close");
-        } catch (error) {
-          console.log("ERROR in executTransfer finally block");
-          console.error(error);
-        }
-      }
-      console.log("Removing data...");
-
-      localStorage.setItem("oldBackupData", storedSalahTrackingData);
-      localStorage.removeItem("storedSalahTrackingData");
-    }
-  };
-
-  //! ____________________________________________________________________________________________________________________________
 
   const fetchDataFromDB = async () => {
     console.log("fetchDataFromDB has run");
@@ -305,7 +136,7 @@ const App = () => {
       console.log("Preference Data: ", DBResultPreferences);
 
       if (DBResultPreferences && DBResultPreferences.values) {
-        await handleUserPreferencesDataFromDB(DBResultPreferences);
+        await handleUserPreferencesDataFromDB(DBResultPreferences.values);
       } else {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
@@ -332,18 +163,13 @@ const App = () => {
   };
 
   const handleUserPreferencesDataFromDB = async (
-    // DBResultPreferences: PreferenceObj[]
-    DBResultPreferences
+    // DBResultPreferences: PreferenceObjType[]
+    DBResultPreferences: PreferenceObjType[]
   ) => {
-    let DBResultPreferencesValues = DBResultPreferences.values;
+    let DBResultPreferencesValues = DBResultPreferences;
 
     if (DBResultPreferencesValues.length === 0) {
-      console.log("DBResultPreferencesValues.length === 0");
-
-      // const userStartDate = format(todaysDate, "yyyy-MM-dd");
-      // const todaysDate: Date = new Date();
       const userStartDate = format(new Date(), "yyyy-MM-dd");
-      // const userStartDate = format(new Date(), "dd.MM.yy");
 
       const insertQuery = `
           INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
@@ -371,9 +197,12 @@ const App = () => {
         await checkAndOpenOrCloseDBConnection("open");
         if (dbConnection && dbConnection.current) {
           await dbConnection.current.query(insertQuery, params);
-          DBResultPreferences = await dbConnection.current.query(
+          const DBResultPreferencesQuery = await dbConnection.current.query(
             `SELECT * FROM userPreferencesTable`
           );
+
+          DBResultPreferencesValues =
+            DBResultPreferencesQuery.values as PreferenceObjType[];
         } else {
           console.error("dbConnection or dbConnection.current does not exist");
         }
@@ -387,7 +216,7 @@ const App = () => {
         }
       }
       // TODO: Set type for DBResultPreferencesValues
-      DBResultPreferencesValues = DBResultPreferences.values;
+      // DBResultPreferencesValues = DBResultPreferences.values;
       setShowIntroModal(true);
     }
 
@@ -427,7 +256,7 @@ const App = () => {
       console.log("GENDER: ", gender);
 
       if (gender === "male" || gender === "female") {
-        setUserPreferences((userPreferences) => ({
+        setUserPreferences((userPreferences: userPreferencesType) => ({
           ...userPreferences,
           userGender: gender,
         }));
@@ -439,7 +268,7 @@ const App = () => {
     }
 
     if (userStartDate) {
-      setUserPreferences((userPreferences) => ({
+      setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         userStartDate: userStartDate.preferenceValue,
       }));
@@ -453,7 +282,7 @@ const App = () => {
 
     if (reasons) {
       // setReasonsArray(reasons.preferenceValue.split(","));
-      setUserPreferences((userPreferences) => ({
+      setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         reasonsArray: reasons.preferenceValue.split(","),
       }));
@@ -463,7 +292,7 @@ const App = () => {
 
     if (dailyNotificationRow) {
       // setDailyNotification(dailyNotificationRow.preferenceValue);
-      setUserPreferences((userPreferences) => ({
+      setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         dailyNotification: dailyNotificationRow.preferenceValue,
       }));
@@ -473,7 +302,7 @@ const App = () => {
 
     if (dailyNotificationTimeRow) {
       // setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
-      setUserPreferences((userPreferences) => ({
+      setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         dailyNotificationTime: dailyNotificationTimeRow.preferenceValue,
       }));
@@ -489,9 +318,9 @@ const App = () => {
   }, [userPreferences.userStartDate]);
 
   const handleSalahTrackingDataFromDB = async (
-    DBResultAllSalahData: DBResultDataObj[]
+    DBResultAllSalahData: DBResultDataObjType[]
   ) => {
-    const singleSalahObjArr: SalahRecordsArray = [];
+    const singleSalahObjArr: SalahRecordsArrayType = [];
     const todaysDate = new Date();
 
     const userStartDateFormattedToDateObject: Date = parse(
@@ -508,7 +337,7 @@ const App = () => {
       .reverse();
 
     for (let i = 0; i < datesFromStartToToday.length; i++) {
-      let singleSalahObj: SalahRecord = {
+      let singleSalahObj: SalahRecordType = {
         date: datesFromStartToToday[i],
         salahs: {
           Fajr: "",
@@ -525,8 +354,9 @@ const App = () => {
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
           if (DBResultAllSalahData[i].date === currentDate) {
-            let salahName: SalahNames = DBResultAllSalahData[i].salahName;
-            let salahStatus: SalahStatus = DBResultAllSalahData[i].salahStatus;
+            let salahName: SalahNamesType = DBResultAllSalahData[i].salahName;
+            let salahStatus: SalahStatusType =
+              DBResultAllSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
           }
         }
@@ -681,7 +511,6 @@ const App = () => {
                 userPreferences={userPreferences}
                 setFetchedSalahData={setFetchedSalahData}
                 fetchedSalahData={fetchedSalahData}
-                handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
               />
@@ -742,10 +571,12 @@ const App = () => {
                 <p
                   onClick={async () => {
                     // setUserGender("male");
-                    setUserPreferences((userPreferences) => ({
-                      ...userPreferences,
-                      userGender: "male",
-                    }));
+                    setUserPreferences(
+                      (userPreferences: userPreferencesType) => ({
+                        ...userPreferences,
+                        userGender: "male",
+                      })
+                    );
                     // localStorage.setItem("userGender", "male");
                     await modifyDataInUserPreferencesTable(
                       "male",
@@ -761,10 +592,12 @@ const App = () => {
                   onClick={async () => {
                     // localStorage.setItem("userGender", "female");
                     // setUserGender("female");
-                    setUserPreferences((userPreferences) => ({
-                      ...userPreferences,
-                      userGender: "female",
-                    }));
+                    setUserPreferences(
+                      (userPreferences: userPreferencesType) => ({
+                        ...userPreferences,
+                        userGender: "female",
+                      })
+                    );
                     await modifyDataInUserPreferencesTable(
                       "female",
                       "userGender"

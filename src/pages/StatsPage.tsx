@@ -2,11 +2,10 @@ import { useEffect } from "react";
 
 import Calendar from "../components/Stats/Calendar";
 import {
-  SalahRecordsArray,
-  // CalenderSalahArray,
-  SalahStatus,
+  SalahRecordsArrayType,
+  SalahStatusType,
   // userGenderType,
-  userPreferences,
+  userPreferencesType,
 } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
@@ -17,8 +16,8 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  userPreferences: userPreferences;
-  fetchedSalahData: SalahRecordsArray;
+  userPreferences: userPreferencesType;
+  fetchedSalahData: SalahRecordsArrayType;
   // userGender: userGenderType;
   // userStartDate: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -48,13 +47,13 @@ const StatsPage = ({
 
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let showDonutChart;
-  let salahStatusesOverallArr: SalahStatus[] = [];
+  let salahStatusesOverallArr: SalahStatusType[] = [];
   // TODO: Test the below code to ensure stats are being calculated correctly
   const calculateOverallStats = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
       Object.values(fetchedSalahData[i].salahs).forEach((status) => {
         if (status !== "" && typeof status === "string") {
-          salahStatusesOverallArr.push(status as SalahStatus);
+          salahStatusesOverallArr.push(status as SalahStatusType);
         }
       });
     }

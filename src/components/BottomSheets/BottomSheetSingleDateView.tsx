@@ -5,11 +5,11 @@ import Sheet from "react-modal-sheet";
 // import { GoPeople } from "react-icons/go";
 // import { GoSkip } from "react-icons/go";
 // import { PiFlower } from "react-icons/pi";
-import { SalahStatus } from "../../types/types";
+import { SalahStatusType } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
 
-import { SalahNames } from "../../types/types";
+import { SalahNamesType } from "../../types/types";
 import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
 
 interface BottomSheetSingleDateViewProps {
@@ -33,15 +33,15 @@ const BottomSheetSingleDateView = ({
   interface clickedDateObj {
     date: string;
     id: number | null;
-    salahName: SalahNames;
-    salahStatus: SalahStatus;
+    salahName: SalahNamesType;
+    salahStatus: SalahStatusType;
     notes: string;
     reasons: string;
   }
 
   const [clickedDateData, setClickedDateData] = useState<clickedDateObj[]>([]);
 
-  const prayerNamesOrder: SalahNames[] = [
+  const prayerNamesOrder: SalahNamesType[] = [
     "Fajr",
     "Dhuhr",
     "Asar",

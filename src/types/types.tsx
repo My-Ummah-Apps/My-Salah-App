@@ -3,7 +3,7 @@
 //   completedDates: { [date: string]: string }[] | [];
 // }
 
-export interface userPreferences {
+export interface userPreferencesType {
   userGender: userGenderType;
   userStartDate: string;
   dailyNotification: string;
@@ -11,7 +11,7 @@ export interface userPreferences {
   reasonsArray: string[];
 }
 
-export type SalahStatus =
+export type SalahStatusType =
   | "group"
   | "male-alone"
   | "female-alone"
@@ -20,46 +20,47 @@ export type SalahStatus =
   | "excused"
   | "";
 
-interface Salahs {
-  Fajr: SalahStatus;
-  Dhuhr: SalahStatus;
-  Asar: SalahStatus;
-  Maghrib: SalahStatus;
-  Isha: SalahStatus;
+interface SalahsType {
+  Fajr: SalahStatusType;
+  Dhuhr: SalahStatusType;
+  Asar: SalahStatusType;
+  Maghrib: SalahStatusType;
+  Isha: SalahStatusType;
 }
 
-export interface SalahRecord {
+export interface SalahRecordType {
   date: string;
-  salahs: Salahs;
+  salahs: SalahsType;
 }
 
-export type SalahRecordsArray = SalahRecord[];
+export type SalahRecordsArrayType = SalahRecordType[];
 
 export type PreferenceType =
+  | "userStartDate"
   | "userGender"
   | "dailyNotification"
   | "dailyNotificationTime"
   | "haptics"
-  | "reasonsArray"
+  | "reasons"
   | "showReasons";
 
-export type PreferenceObj = {
+export type PreferenceObjType = {
   preferenceName: PreferenceType;
   preferenceValue: string;
 };
 
-export type SalahNames = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
+export type SalahNamesType = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
 
-export interface SalahEntry {
-  salahName: SalahNames;
-  salahStatus: SalahStatus;
+export interface SalahEntryType {
+  salahName: SalahNamesType;
+  salahStatus: SalahStatusType;
 }
 
-export interface CalenderSalahArrayObject {
-  [date: string]: SalahEntry[];
-}
+// export interface CalenderSalahArrayObject {
+//   [date: string]: SalahEntry[];
+// }
 
-export type CalenderSalahArray = CalenderSalahArrayObject[];
+// export type CalenderSalahArray = CalenderSalahArrayObject[];
 
 export type DBConnectionStateType = "open" | "close";
 
@@ -69,13 +70,13 @@ export type userGenderType = "male" | "female";
 
 export type currentStartDateType = number;
 
-export type DBResultDataObj = {
+export type DBResultDataObjType = {
   id: number;
   date: string;
-  salahName: SalahNames;
-  salahStatus: SalahStatus;
+  salahName: SalahNamesType;
+  salahStatus: SalahStatusType;
   reasons: string;
   notes: string;
 };
 
-export type DBResultDataObjArray = DBResultDataObj[];
+export type DBResultDataObjArrayType = DBResultDataObjType[];

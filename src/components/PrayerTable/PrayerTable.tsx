@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
-import {
-  CalenderSalahArray,
-  DBConnectionStateType,
-  userPreferences,
-} from "../../types/types";
+import { DBConnectionStateType, userPreferencesType } from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
-import { SalahRecordsArray } from "../../types/types";
+import { SalahRecordsArrayType } from "../../types/types";
 import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
 import { format, parse } from "date-fns";
 
@@ -22,15 +18,14 @@ interface PrayerTableProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   renderTable: boolean;
-  setFetchedSalahData: React.Dispatch<React.SetStateAction<SalahRecordsArray>>;
-  fetchedSalahData: SalahRecordsArray;
-  setCalendarData: React.Dispatch<React.SetStateAction<CalenderSalahArray>>;
-  handleSalahTrackingDataFromDB: (DBResultAllSalahData) => Promise<void>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferences>>;
-  userPreferences: userPreferences;
+  setFetchedSalahData: React.Dispatch<
+    React.SetStateAction<SalahRecordsArrayType>
+  >;
+  fetchedSalahData: SalahRecordsArrayType;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   // reasonsArray: string[];
-  datesFromStartToToday: string[];
   // userGender: string;
 }
 
@@ -39,20 +34,9 @@ const PrayerTable = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  setCalendarData,
-  handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
-  // setReasonsArray,
-  // reasonsArray,
-  datesFromStartToToday, // userGender,
 }: PrayerTableProps) => {
-  // console.log(
-  //   "PRAYER TABLE COMPONENT RENDERED AND TABLE DATA IS: ",
-  //   fetchedSalahData,
-  //   " and datesFromStartToToday is: , ",
-  //   datesFromStartToToday
-  // );
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
@@ -152,8 +136,6 @@ const PrayerTable = ({
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}
-          setCalendarData={setCalendarData}
-          handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
           clickedDate={clickedDate}
