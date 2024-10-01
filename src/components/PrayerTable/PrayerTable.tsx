@@ -78,7 +78,13 @@ const PrayerTable = ({
           cellRenderer={({ rowData }) => {
             const parsedDate = parse(rowData.date, "yyyy-MM-dd", new Date());
             const formattedParsedDate = format(parsedDate, "dd.MM.yy");
-            return formattedParsedDate;
+            const day = format(parsedDate, "EEEE");
+            return (
+              <section>
+                <p>{formattedParsedDate}</p>
+                <p>{day}</p>
+              </section>
+            );
           }}
           width={120}
           flexGrow={1}

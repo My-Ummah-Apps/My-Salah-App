@@ -215,8 +215,6 @@ const App = () => {
           console.error(error);
         }
       }
-      // TODO: Set type for DBResultPreferencesValues
-      // DBResultPreferencesValues = DBResultPreferences.values;
       setShowIntroModal(true);
     }
 
@@ -230,7 +228,6 @@ const App = () => {
       preferenceName: string;
       preferenceValue: string;
     } | null => {
-      // TODO: Set types for preferenceQuery
       let preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
