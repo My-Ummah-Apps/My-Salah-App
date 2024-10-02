@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
+import { changeLogs, LATEST_APP_VERSION } from "./utils/changelog";
+import { TWEEN_CONFIG } from "./utils/constants";
 // import Notifications from "./utils/notifications";
 import {
   DBResultDataObjType,
@@ -83,6 +85,17 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 const App = () => {
   console.log("APP.TSX HAS RENDERED...");
+  const [showChangelogModal, setShowChangelogModal] = useState(false);
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("localSavedCountersArray") &&
+      localStorage.getItem("appVersion") !== LATEST_APP_VERSION
+    ) {
+      setShowChangelogModal(true);
+      localStorage.setItem("appVersion", LATEST_APP_VERSION);
+    }
+  }, []);
 
   const [fetchedSalahData, setFetchedSalahData] =
     useState<SalahRecordsArrayType>([]);
@@ -611,6 +624,51 @@ const App = () => {
           <Sheet.Backdrop />
         </Sheet>
         <NavBar />
+        <Sheet
+          disableDrag={true}
+          isOpen={showChangelogModal}
+          onClose={() => setShowChangelogModal(false)}
+          detent="full-height"
+          tweenConfig={TWEEN_CONFIG}
+        >
+          <Sheet.Container>
+            {/* <Sheet.Header /> */}
+            <Sheet.Content className="sheet-changelog">
+              <h1>Whats new?</h1>
+              {changeLogs.map((item) => (
+                <section key={item} className="changelog-content-wrap">
+                  {/* <p>v{item.versionNum}</p> */}
+                  <p>
+                    {item.versionNum === LATEST_APP_VERSION
+                      ? `v${item.versionNum} - Latest Version`
+                      : `v${item.versionNum}`}
+                  </p>
+                  {item.changes.map((item) => (
+                    <section
+                      key={item.heading}
+                      // style={{ border: `1px solid ${activeBackgroundColor}` }}
+                      className="changelog-individual-change-wrap"
+                    >
+                      <h2>{item.heading}</h2>
+                      <p>{item.text}</p>
+                    </section>
+                  ))}
+                </section>
+              ))}
+              <button
+                onClick={() => setShowChangelogModal(false)}
+                className="sheet-changelog-close-btn"
+              >
+                Close
+              </button>
+              {/* <SheetCloseBtn closeModalState={setShowChangelogModal} /> */}
+            </Sheet.Content>
+          </Sheet.Container>
+          <Sheet.Backdrop
+            // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+            onTap={() => setShowChangelogModal(false)}
+          />
+        </Sheet>
       </section>
     </BrowserRouter>
   );
