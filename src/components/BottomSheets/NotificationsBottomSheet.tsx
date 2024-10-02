@@ -53,6 +53,8 @@ const NotificationsBottomSheet = ({
     });
   };
 
+  console.log("NOTIFICATION TIME: ", userPreferences.dailyNotificationTime);
+
   // async function checkNotificationPermissions() {
   //   const checkPermission = await LocalNotifications.checkPermissions();
   //   const userNotificationPermission = checkPermission.display;
@@ -157,14 +159,18 @@ const NotificationsBottomSheet = ({
                   }}
                   style={{ backgroundColor: "transparent" }}
                   className={`${
-                    userPreferences.dailyNotification ? "slideUp" : ""
+                    userPreferences.dailyNotification === "1" ? "slideUp" : ""
                   } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] `}
                   type="time"
                   id="appt"
                   name="appt"
                   min="09:00"
                   max="18:00"
-                  value={userPreferences.dailyNotification}
+                  value={
+                    userPreferences.dailyNotificationTime
+                    // ? userPreferences.dailyNotificationTime
+                    // : "21:00"
+                  }
                   required
                 />
                 {/* </p> */}
