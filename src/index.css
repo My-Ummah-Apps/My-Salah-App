@@ -89,6 +89,14 @@ td {
   }
 }
 
+.react-modal-sheet-container {
+  background-color: var(--primary-color) !important;
+}
+
+.sheet-changelog:last-child {
+  margin-bottom: 6rem;
+}
+
 .modal-sheet-prayer-statuses-wrap {
   /* transition: bottom 420ms; */
 }
@@ -96,9 +104,7 @@ td {
 .prayer-status-modal-reasons-wrap {
   /* max-height: 0; */
   opacity: 0;
-  transition:
-    max-height 0.5s ease-in-out,
-    fadeIn 5s ease-in;
+  transition: max-height 0.5s ease-in-out, fadeIn 5s ease-in;
 }
 
 .calendar-single-month-wrap {

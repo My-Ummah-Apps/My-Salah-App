@@ -85,13 +85,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 const App = () => {
   console.log("APP.TSX HAS RENDERED...");
-  const [showChangelogModal, setShowChangelogModal] = useState(false);
+  const [showChangelogModal, setShowChangelogModal] = useState(true);
 
   useEffect(() => {
-    if (
-      localStorage.getItem("localSavedCountersArray") &&
-      localStorage.getItem("appVersion") !== LATEST_APP_VERSION
-    ) {
+    if (localStorage.getItem("appVersion") !== LATEST_APP_VERSION) {
       setShowChangelogModal(true);
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
@@ -625,19 +622,19 @@ const App = () => {
         </Sheet>
         <NavBar />
         <Sheet
-          disableDrag={true}
+          disableDrag={false}
           isOpen={showChangelogModal}
           onClose={() => setShowChangelogModal(false)}
           detent="full-height"
+          // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
           tweenConfig={TWEEN_CONFIG}
         >
           <Sheet.Container>
             {/* <Sheet.Header /> */}
-            <Sheet.Content className="sheet-changelog">
-              <h1>Whats new?</h1>
-              {changeLogs.map((item) => (
-                <section key={item} className="changelog-content-wrap">
-                  {/* <p>v{item.versionNum}</p> */}
+            <Sheet.Content className="overflow-scroll sheet-changelog">
+              <h1 className="mx-8 mt-8 mb-4 text-2xl ">Whats new?</h1>
+              {changeLogs.map((item, i) => (
+                <section key={item.changes[i].heading} className="mx-6 mt-4">
                   <p>
                     {item.versionNum === LATEST_APP_VERSION
                       ? `v${item.versionNum} - Latest Version`
@@ -647,9 +644,12 @@ const App = () => {
                     <section
                       key={item.heading}
                       // style={{ border: `1px solid ${activeBackgroundColor}` }}
-                      className="changelog-individual-change-wrap"
+                      className="mt-4 mb-4 p-4 border border-[var(--border-form)] rounded-xl
+"
                     >
-                      <h2>{item.heading}</h2>
+                      <h2 className="mb-2 text-lg font-medium ">
+                        {item.heading}
+                      </h2>
                       <p>{item.text}</p>
                     </section>
                   ))}
@@ -657,7 +657,8 @@ const App = () => {
               ))}
               <button
                 onClick={() => setShowChangelogModal(false)}
-                className="sheet-changelog-close-btn"
+                className="text-base fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2 border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-6
+"
               >
                 Close
               </button>
