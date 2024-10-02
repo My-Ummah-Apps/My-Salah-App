@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
@@ -38,9 +38,6 @@ const PrayerTable = ({
   userPreferences,
 }: PrayerTableProps) => {
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const userLocale = navigator.language || navigator.userLanguage;
-  }, []);
 
   const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);

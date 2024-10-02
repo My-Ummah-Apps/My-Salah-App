@@ -5,7 +5,6 @@ import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
-import { v4 as uuidv4 } from "uuid";
 
 import {
   format,
@@ -230,10 +229,12 @@ const Calendar = ({
           {formattedMonths[index]}
         </p>
         <div className="grid grid-cols-7 px-2 mb-3 place-items-center days-row-wrap">
-          {days.map((day) => {
+          {days.map((day, i) => {
+            // ? Below is being console.logged twice with day formattedMonths[index] + i duplicated , but React isn't // ?complaining about duplicate keys being created?
+            console.log(day + formattedMonths[index] + i);
             return (
               <div
-                key={uuidv4()}
+                key={day + formattedMonths[index] + i}
                 className="w-5 h-5 text-sm font-semibold text-center individual-day"
               >
                 {day}
@@ -241,10 +242,7 @@ const Calendar = ({
             );
           })}
         </div>
-        <div
-          className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap"
-          key={uuidv4()}
-        >
+        <div className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap">
           {monthlyDates(formattedMonths[index]).map((day) => (
             <div
               onClick={() => {
@@ -257,7 +255,7 @@ const Calendar = ({
                   // console.log(showDailySalahDataModal);
                 }
               }}
-              key={uuidv4()}
+              key={format(day, "yyyy-MM-dd")}
               className="relative flex items-center justify-center individual-date"
             >
               {determineRadialColors(day)}
