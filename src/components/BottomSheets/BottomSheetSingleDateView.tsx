@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 
 import { SalahNamesType } from "../../types/types";
 import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
+import { TWEEN_CONFIG } from "../../utils/constants";
 
 interface BottomSheetSingleDateViewProps {
   dbConnection: any;
@@ -115,7 +116,8 @@ const BottomSheetSingleDateView = ({
     <Sheet
       // style={{ backgroundColor: "rgb(33, 36, 38)" }}
       isOpen={showDailySalahDataModal}
-      tweenConfig={{ ease: "easeOut", duration: 0.3 }} // Adjust duration to slow down or speed up the animation
+      // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
+      tweenConfig={TWEEN_CONFIG}
       onClose={() => {
         setShowDailySalahDataModal(false);
       }}
@@ -156,7 +158,10 @@ const BottomSheetSingleDateView = ({
         </Sheet.Content>
       </Sheet.Container>
 
-      {/* <Sheet.Backdrop onTap={close} /> */}
+      <Sheet.Backdrop
+        // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        onTap={() => setShowDailySalahDataModal(false)}
+      />
     </Sheet>
   );
 };

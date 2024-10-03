@@ -46,7 +46,7 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    console.log("fetchedSalahData in rowGetter: ", fetchedSalahData[index]);
+    // console.log("fetchedSalahData in rowGetter: ", fetchedSalahData[index]);
     return fetchedSalahData[index];
   };
 
@@ -79,15 +79,13 @@ const PrayerTable = ({
             const parsedDate = parse(rowData.date, "yyyy-MM-dd", new Date());
             // const formattedParsedDate = format(parsedDate, "dd.MM.yy");
             // const formattedParsedDate = new Date(rowData.date);
+            const userLocale = navigator.language || "en-US";
 
-            const formattedParsedDate = new Intl.DateTimeFormat(
-              navigator.language,
-              {
-                year: "2-digit",
-                month: "2-digit",
-                day: "2-digit",
-              }
-            )
+            const formattedParsedDate = new Intl.DateTimeFormat(userLocale, {
+              year: "2-digit",
+              month: "2-digit",
+              day: "2-digit",
+            })
               .format(parsedDate)
               .replace(/\//g, ".");
             const day = format(parsedDate, "EE");

@@ -49,8 +49,7 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  const [handleNotificationsModal, setHandleNotificationsModal] =
-    useState(false);
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
 
   const link = (url: string) => {
     window.location.href = url;
@@ -69,7 +68,7 @@ const SettingsPage = ({
           // style={{ display: "none" }}
           className={` flex items-center justify-between  shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-[1rem] rounded-md`}
           onClick={() => {
-            setHandleNotificationsModal(true);
+            setShowNotificationsModal(true);
           }}
         >
           <div className="mx-2">
@@ -85,8 +84,8 @@ const SettingsPage = ({
             // dbConnection={dbConnection}
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
             // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-            setHandleNotificationsModal={setHandleNotificationsModal}
-            handleNotificationsModal={handleNotificationsModal}
+            setShowNotificationsModal={setShowNotificationsModal}
+            showNotificationsModal={showNotificationsModal}
             setUserPreferences={setUserPreferences}
             userPreferences={userPreferences}
             // setDailyNotification={setDailyNotification}

@@ -9,6 +9,7 @@ import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { SalahRecordsArrayType, userPreferencesType } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
+import { TWEEN_CONFIG } from "../../utils/constants";
 
 interface PrayerStatusBottomSheetProps {
   dbConnection: any;
@@ -284,7 +285,8 @@ const PrayerStatusBottomSheet = ({
           setHasUserClickedDate(false);
         }}
         detent="content-height"
-        tweenConfig={{ ease: "easeOut", duration: 0.3 }} // Adjust duration to slow down or speed up the animation
+        // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
+        // tweenConfig={TWEEN_CONFIG}
       >
         <Sheet.Container
           className="react-modal-sheet-container"
@@ -531,7 +533,10 @@ const PrayerStatusBottomSheet = ({
             </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>
-        <Sheet.Backdrop onTap={close} />
+        <Sheet.Backdrop
+          // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+          onTap={() => setShowUpdateStatusModal(false)}
+        />
       </Sheet>
       <div
         className="absolute z-[-100]"

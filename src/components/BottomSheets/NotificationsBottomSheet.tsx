@@ -5,10 +5,11 @@ import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { PreferenceType, userPreferencesType } from "../../types/types";
+import { TWEEN_CONFIG } from "../../utils/constants";
 
 const NotificationsBottomSheet = ({
-  setHandleNotificationsModal,
-  handleNotificationsModal,
+  setShowNotificationsModal,
+  showNotificationsModal,
   // dbConnection,
   modifyDataInUserPreferencesTable,
   setUserPreferences,
@@ -17,8 +18,8 @@ const NotificationsBottomSheet = ({
 // setDailyNotificationTime,
 // dailyNotificationTime,
 {
-  setHandleNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
-  handleNotificationsModal: boolean;
+  setShowNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showNotificationsModal: boolean;
   // dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   modifyDataInUserPreferencesTable: (
     value: string,
@@ -53,7 +54,7 @@ const NotificationsBottomSheet = ({
     });
   };
 
-  console.log("NOTIFICATION TIME: ", userPreferences.dailyNotificationTime);
+  // console.log("NOTIFICATION TIME: ", userPreferences.dailyNotificationTime);
 
   // async function checkNotificationPermissions() {
   //   const checkPermission = await LocalNotifications.checkPermissions();
@@ -112,9 +113,10 @@ const NotificationsBottomSheet = ({
   return (
     <Sheet
       detent="content-height"
-      tweenConfig={{ ease: "easeOut", duration: 0.3 }}
-      isOpen={handleNotificationsModal}
-      onClose={() => setHandleNotificationsModal(false)}
+      // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
+      tweenConfig={TWEEN_CONFIG}
+      isOpen={showNotificationsModal}
+      onClose={() => setShowNotificationsModal(false)}
     >
       <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
         <Sheet.Header />
@@ -179,7 +181,10 @@ const NotificationsBottomSheet = ({
           </div>
         </Sheet.Content>
       </Sheet.Container>
-      <Sheet.Backdrop />
+      <Sheet.Backdrop
+        // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        onTap={() => setShowNotificationsModal(false)}
+      />
     </Sheet>
   );
 };

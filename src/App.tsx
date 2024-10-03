@@ -85,7 +85,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 const App = () => {
   console.log("APP.TSX HAS RENDERED...");
-  const [showChangelogModal, setShowChangelogModal] = useState(true);
+  const [showChangelogModal, setShowChangelogModal] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("appVersion") !== LATEST_APP_VERSION) {
@@ -246,8 +246,6 @@ const App = () => {
         return preferenceQuery;
       } else {
         console.error("preferenceQuery row does not exist");
-        console.log("USERGENDER IS: ", preferenceQuery);
-
         return null;
       }
     };
@@ -260,7 +258,6 @@ const App = () => {
 
     if (userGenderRow) {
       const gender = userGenderRow.preferenceValue as userGenderType;
-      console.log("GENDER: ", gender);
 
       if (gender === "male" || gender === "female") {
         setUserPreferences((userPreferences: userPreferencesType) => ({
@@ -282,7 +279,7 @@ const App = () => {
 
       userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
       // await handleSalahTrackingDataFromDB(DBResultAllSalahData);
-      console.log("userStartDate ", userStartDate.preferenceValue);
+      // console.log("userStartDate ", userStartDate.preferenceValue);
     } else {
       console.error("userStartDate row not found");
     }
@@ -622,7 +619,6 @@ const App = () => {
         </Sheet>
         <NavBar />
         <Sheet
-          disableDrag={false}
           isOpen={showChangelogModal}
           onClose={() => setShowChangelogModal(false)}
           detent="full-height"

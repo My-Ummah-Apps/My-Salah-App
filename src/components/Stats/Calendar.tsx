@@ -231,7 +231,7 @@ const Calendar = ({
         <div className="grid grid-cols-7 px-2 mb-3 place-items-center days-row-wrap">
           {days.map((day, i) => {
             // ? Below is being console.logged twice with day formattedMonths[index] + i duplicated , but React isn't // ?complaining about duplicate keys being created?
-            console.log(day + formattedMonths[index] + i);
+            // console.log(day + formattedMonths[index] + i);
             return (
               <div
                 key={day + formattedMonths[index] + i}
