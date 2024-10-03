@@ -22,7 +22,7 @@ interface HomePageProps {
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
-  fetchedSalahData: any;
+  fetchedSalahData: SalahRecordsArrayType;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
