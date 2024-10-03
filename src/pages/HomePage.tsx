@@ -75,10 +75,7 @@ const HomePage = ({
           fetchedSalahData={fetchedSalahData}
         />
       ) : (
-        <div>
-          Executing transfer, please do not close application or move away from
-          this page
-        </div>
+        <div>Loading Data...</div>
       )}
 
       {/* )} */}

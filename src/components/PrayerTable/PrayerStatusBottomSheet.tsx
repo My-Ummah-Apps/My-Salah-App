@@ -276,7 +276,7 @@ const PrayerStatusBottomSheet = ({
   }
 
   return (
-    <div className="sheet-prayer-update-wrap">
+    <>
       <Sheet
         // rootId="root"
         isOpen={showUpdateStatusModal}
@@ -286,7 +286,7 @@ const PrayerStatusBottomSheet = ({
         }}
         detent="content-height"
         // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
-        // tweenConfig={TWEEN_CONFIG}
+        tweenConfig={TWEEN_CONFIG}
       >
         <Sheet.Container
           className="react-modal-sheet-container"
@@ -607,7 +607,7 @@ const PrayerStatusBottomSheet = ({
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

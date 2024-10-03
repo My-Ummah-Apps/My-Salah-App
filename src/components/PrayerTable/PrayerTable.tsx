@@ -147,22 +147,22 @@ const PrayerTable = ({
       // )} */}
 
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
-      {showUpdateStatusModal && (
-        <PrayerStatusBottomSheet
-          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          setFetchedSalahData={setFetchedSalahData}
-          fetchedSalahData={fetchedSalahData}
-          setUserPreferences={setUserPreferences}
-          userPreferences={userPreferences}
-          clickedDate={clickedDate}
-          clickedSalah={clickedSalah}
-          dbConnection={dbConnection}
-          setShowUpdateStatusModal={setShowUpdateStatusModal}
-          showUpdateStatusModal={showUpdateStatusModal}
-          setHasUserClickedDate={setHasUserClickedDate}
-          hasUserClickedDate={hasUserClickedDate}
-        />
-      )}
+      {/* {showUpdateStatusModal && ( */}
+      <PrayerStatusBottomSheet
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        setFetchedSalahData={setFetchedSalahData}
+        fetchedSalahData={fetchedSalahData}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
+        clickedDate={clickedDate}
+        clickedSalah={clickedSalah}
+        dbConnection={dbConnection}
+        setShowUpdateStatusModal={setShowUpdateStatusModal}
+        showUpdateStatusModal={showUpdateStatusModal}
+        setHasUserClickedDate={setHasUserClickedDate}
+        hasUserClickedDate={hasUserClickedDate}
+      />
+      {/* )} */}
     </section>
   );
 };
