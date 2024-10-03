@@ -17,6 +17,8 @@ interface PrayerStatusBottomSheetProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: any;
+  // setClickedSalah: React.Dispatch<React.SetStateAction<string>>;
+  // setClickedDate: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -35,6 +37,8 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
+  // setClickedSalah,
+  // setClickedDate,
   setUserPreferences,
   userPreferences,
   clickedDate,
@@ -44,7 +48,12 @@ const PrayerStatusBottomSheet = ({
   setHasUserClickedDate,
   hasUserClickedDate,
 }: PrayerStatusBottomSheetProps) => {
-  // ! BUG: On very first app launch, the reasons section does not slide in, after a refresh it starts working
+  // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
+  // console.log("🚀 ~ hasUserClickedDate:", hasUserClickedDate);
+  // console.log("🚀 ~ clickedSalah:", clickedSalah);
+  // console.log("🚀 ~ clickedDate:", clickedDate);
+  // console.log("🚀 ~ userPreferences:", userPreferences);
+  // console.log("🚀 ~ fetchedSalahData:", fetchedSalahData);
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
@@ -62,7 +71,7 @@ const PrayerStatusBottomSheet = ({
     useState(false);
 
   let selectedReasonsArray = selectedReasons;
-  // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
+
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   // let isDatabaseUpdating: boolean = false;
@@ -85,7 +94,7 @@ const PrayerStatusBottomSheet = ({
         [clickedSalah, clickedDate]
       );
 
-      // console.log("res is: ", res);
+      console.log("res is: ", res);
 
       if (res && res.values && res.values.length === 0) {
         setSalahStatus("");
@@ -114,17 +123,18 @@ const PrayerStatusBottomSheet = ({
   };
 
   useEffect(() => {
-    const checkDB = async () => {
+    const checkDBForSalah = async () => {
       try {
         await doesSalahAndDateExists(clickedSalah, clickedDate);
       } catch (error) {
         console.error(error);
       }
     };
+    console.log("Running checkDBForSalah()");
 
-    checkDB();
+    checkDBForSalah();
   }, []);
-  // }, [clickedDate]);
+  // }, [hasUserClickedDate]);
 
   const addOrModifySalah = async (
     clickedDate: string,
@@ -283,6 +293,9 @@ const PrayerStatusBottomSheet = ({
         onClose={() => {
           setShowUpdateStatusModal(false);
           setHasUserClickedDate(false);
+          // setClickedDate("");
+          // setSalahStatus("");
+          // setClickedSalah("");
         }}
         detent="content-height"
         // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
