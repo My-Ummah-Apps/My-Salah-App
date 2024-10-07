@@ -6,9 +6,13 @@ PODS:
     - SQLCipher
     - ZIPFoundation
   - CapacitorCordova (6.0.0)
+  - CapacitorDialog (6.0.1):
+    - Capacitor
   - CapacitorKeyboard (6.0.0):
     - Capacitor
   - CapacitorLocalNotifications (6.0.0):
+    - Capacitor
+  - CapacitorNativeSettings (6.0.1):
     - Capacitor
   - CapacitorShare (6.0.0):
     - Capacitor
@@ -27,8 +31,10 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
+  - CapacitorNativeSettings (from `../../node_modules/capacitor-native-settings`)
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
@@ -45,10 +51,14 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/sqlite"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorDialog:
+    :path: "../../node_modules/@capacitor/dialog"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorLocalNotifications:
     :path: "../../node_modules/@capacitor/local-notifications"
+  CapacitorNativeSettings:
+    :path: "../../node_modules/capacitor-native-settings"
   CapacitorShare:
     :path: "../../node_modules/@capacitor/share"
   CapacitorSplashScreen:
@@ -60,14 +70,16 @@ SPEC CHECKSUMS:
   Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
   CapacitorCommunitySqlite: d0b543e12a06ee6fd0dc287c389e6b435ec4acdf
   CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorDialog: ad752191fdb22a8d0ac199b0754b8a021d86dbf9
   CapacitorKeyboard: deacbd09d8d1029c3681197fb05d206b721d5f73
   CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
+  CapacitorNativeSettings: 1ce5585ff07b161616cd0a795702637316677af2
   CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
   CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
   CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
   SQLCipher: 30a8e81afa6128e600b17ffa77d0f92fa05ed208
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 2f77a5d04662de427ac18ce9d65644eab10b7ab5
+PODFILE CHECKSUM: 0aee56d34c7dd452d974827d7c15daf1a715bbad
 
 COCOAPODS: 1.15.2
