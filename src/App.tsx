@@ -117,8 +117,6 @@ const App = () => {
   useEffect(() => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
-        console.log("DATABASE HAS INITIALISED");
-
         setRenderTable(true);
         await fetchDataFromDB();
       };
@@ -127,7 +125,6 @@ const App = () => {
   }, [isDatabaseInitialised]);
 
   const fetchDataFromDB = async () => {
-    console.log("fetchDataFromDB has run");
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
@@ -142,8 +139,6 @@ const App = () => {
       const DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
       );
-      console.log("Salah Data: ", DBResultAllSalahData);
-      console.log("Preference Data: ", DBResultPreferences);
 
       if (DBResultPreferences && DBResultPreferences.values) {
         await handleUserPreferencesDataFromDB(DBResultPreferences.values);
@@ -164,7 +159,6 @@ const App = () => {
       console.error(error);
     } finally {
       try {
-        console.log("DATABASE FETCH COMPLETE, CLOSING CONNECTION");
         checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.error(error);
@@ -279,7 +273,6 @@ const App = () => {
 
       userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
       // await handleSalahTrackingDataFromDB(DBResultAllSalahData);
-      // console.log("userStartDate ", userStartDate.preferenceValue);
     } else {
       console.error("userStartDate row not found");
     }
@@ -387,7 +380,6 @@ const App = () => {
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
-        console.log("CONNECTION CLOSING...");
       } catch (error) {
         console.error(error);
       }

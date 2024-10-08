@@ -86,10 +86,10 @@ const NotificationsBottomSheet = ({
     if (userNotificationPermission === "denied") {
       showNotificationsAlert();
     } else if (userNotificationPermission === "granted") {
-      setDailyNotification(!dailyNotification);
       if (dailyNotification === true) {
         cancelNotification(1);
       }
+      setDailyNotification(!dailyNotification);
       modifyDataInUserPreferencesTable(
         dailyNotification === true ? "1" : "0",
         "dailyNotification"
@@ -164,11 +164,10 @@ const NotificationsBottomSheet = ({
             {dailyNotification === true ? (
               <div className="flex items-center justify-between p-3">
                 <p>Set Time</p>
-                {/* <p> */}
+
                 <input
                   onChange={(e) => {
                     handleTimeChange(e);
-                    // console.log(e.currentTarget);
                   }}
                   style={{ backgroundColor: "transparent" }}
                   className={`${
@@ -182,7 +181,6 @@ const NotificationsBottomSheet = ({
                   value={userPreferences.dailyNotificationTime}
                   required
                 />
-                {/* </p> */}
               </div>
             ) : null}
           </div>
