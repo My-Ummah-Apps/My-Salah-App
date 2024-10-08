@@ -15,7 +15,8 @@
     "@capacitor/android": "^6.1.2",
     "@capacitor/core": "^6.0.0",
     "@capacitor/dialog": "^6.0.1",
-    "@capacitor/ios": "^6.0.0",
+    "@capacitor/filesystem": "^6.0.1",
+    "@capacitor/ios": "6.1.2",
     "@capacitor/keyboard": "^6.0.0",
     "@capacitor/local-notifications": "^6.0.0",
     "@capacitor/share": "^6.0.0",
@@ -59,7 +60,7 @@
     "vaul": "^0.9.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "^6.0.0",
+    "@capacitor/cli": "6.1.2",
     "@types/node": "^20.12.9",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",

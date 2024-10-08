@@ -518,6 +518,10 @@ const App = () => {
             element={
               <SettingsPage
                 setHeading={setHeading}
+                dbConnection={dbConnection}
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
                 pageStyles={pageStyles}
                 modifyDataInUserPreferencesTable={
                   modifyDataInUserPreferencesTable

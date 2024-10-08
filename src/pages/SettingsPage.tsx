@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 // import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Switch from "react-ios-switch";
@@ -7,20 +8,18 @@ import Modal from "react-modal";
 // import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import { PreferenceType, userPreferencesType } from "../types/types";
+import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 // import { DBConnectionStateType } from "../types/types";
-
-// import {
-//   checkNotificationPermissions,
-//   requestPermissionFunction,
-// } from "../utils/notifications";
 
 import { MdOutlineChevronRight } from "react-icons/md";
 import NotificationsBottomSheet from "../components/BottomSheets/NotificationsBottomSheet";
-// import Switch from "rc-switch";
-// import { StatusBar, Style } from "@capacitor/status-bar";
 
 interface SettingsPageProps {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
+  dbConnection: any;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   pageStyles: string;
   modifyDataInUserPreferencesTable: (
     value: string,
@@ -28,26 +27,40 @@ interface SettingsPageProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  // setDailyNotification: React.Dispatch<React.SetStateAction<string>>;
-  // dailyNotification: string;
-  //   setDailyNotificationTime: React.Dispatch<React.SetStateAction<string>>;
-  //   dailyNotificationTime: string;
 }
 
 const SettingsPage = ({
   setHeading,
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
   pageStyles,
   modifyDataInUserPreferencesTable,
-  // setDailyNotification,
-  // dailyNotification,
-  // setDailyNotificationTime,
-  // dailyNotificationTime,
   setUserPreferences,
   userPreferences,
 }: SettingsPageProps) => {
   useEffect(() => {
     setHeading("Settings");
   }, []);
+
+  // ! CONTINUE FROM HERE
+  const exportDB = async () => {
+    try {
+      let exportedFile = await dbConnection.current.exportToJson("full");
+    } catch (error) {
+      console.log("Error within exportDB: ", error);
+    }
+  };
+
+  const writeDBFile = async () => {
+    console.log("clicked");
+
+    await Filesystem.writeFile({
+      path: "text-txt.txt",
+      data: "yo",
+      directory: Directory.Documents,
+      encoding: Encoding.UTF8,
+    });
+  };
 
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
 
@@ -60,13 +73,9 @@ const SettingsPage = ({
 
   return (
     <section className={pageStyles}>
-      <div className="text-center settings-page-header ">
-        {/* <h1>{title}</h1> */}
-      </div>
       <div className="settings-page-options-wrap">
         <div
-          // style={{ display: "none" }}
-          className={` flex items-center justify-between  shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-[1rem] rounded-md`}
+          className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
           onClick={() => {
             setShowNotificationsModal(true);
           }}
@@ -88,6 +97,15 @@ const SettingsPage = ({
             userPreferences={userPreferences}
           />
         </div>{" "}
+        <div className="px-1 py-3 mb-5">
+          <SettingIndividual
+            headingText={"Export Data"}
+            subText={"Generates a file that contains all your data."}
+            onClick={() => {
+              writeDBFile();
+            }}
+          />
+        </div>
         {/* 
         {Capacitor.getPlatform() === "android" ? (
           <SettingIndividual
