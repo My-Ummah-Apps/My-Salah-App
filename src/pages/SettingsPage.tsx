@@ -81,29 +81,13 @@ const SettingsPage = ({
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
           <NotificationsBottomSheet
-            // dbConnection={dbConnection}
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-            // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
             setShowNotificationsModal={setShowNotificationsModal}
             showNotificationsModal={showNotificationsModal}
             setUserPreferences={setUserPreferences}
             userPreferences={userPreferences}
-            // setDailyNotification={setDailyNotification}
-            // dailyNotification={dailyNotification}
-            // setDailyNotificationTime={setDailyNotificationTime}
-            // dailyNotificationTime={dailyNotificationTime}
           />
         </div>{" "}
-        {/* <SettingIndividual
-          indvidualStyles={"my-[1rem] rounded-md"}
-          headingText={"Notifications"}
-          subText={"Set Notifications"}
-          onClick={() => {
-            // checkNotificationPermissions();
-            // handleOpenModal2();
-            alert("Notifications clicked");
-          }}
-        /> */}
         {/* 
         {Capacitor.getPlatform() === "android" ? (
           <SettingIndividual
