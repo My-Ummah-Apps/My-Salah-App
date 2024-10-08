@@ -76,28 +76,34 @@ const NotificationsBottomSheet = ({
     });
   };
 
+  const cancelNotification = async (id: number) => {
+    await LocalNotifications.cancel({ notifications: [{ id: id }] });
+  };
+
   async function checkNotificationPermissions() {
     const checkPermission = await LocalNotifications.checkPermissions();
     const userNotificationPermission = checkPermission.display;
     if (userNotificationPermission === "denied") {
-      // alert("Please turn notifications back on from within system settings");
       showNotificationsAlert();
-      setDailyNotification(false);
     } else if (userNotificationPermission === "granted") {
       setDailyNotification(!dailyNotification);
+      if (dailyNotification === true) {
+        cancelNotification(1);
+      }
+      modifyDataInUserPreferencesTable(
+        dailyNotification === true ? "1" : "0",
+        "dailyNotification"
+      );
     } else if (
       userNotificationPermission === "prompt" ||
       userNotificationPermission === "prompt-with-rationale"
     ) {
-      setDailyNotification(false);
       requestPermissionFunction();
     }
   }
 
   const requestPermissionFunction = async () => {
     const requestPermission = await LocalNotifications.requestPermissions();
-    console.log("requestPermission: ", requestPermission);
-
     if (requestPermission.display === "granted") {
       setDailyNotification(true);
       modifyDataInUserPreferencesTable("1", "dailyNotification");
@@ -105,7 +111,6 @@ const NotificationsBottomSheet = ({
       requestPermission.display === "prompt" ||
       requestPermission.display === "denied"
     ) {
-      setDailyNotification(false);
       modifyDataInUserPreferencesTable("0", "dailyNotification");
     }
   };
@@ -121,20 +126,9 @@ const NotificationsBottomSheet = ({
   };
 
   useEffect(() => {
-    modifyDataInUserPreferencesTable(
-      userPreferences.dailyNotification,
-      "dailyNotification"
-    );
-  }, [userPreferences.dailyNotification]);
-
-  const cancelNotification = async (id: number) => {
-    console.log(
-      "Daily notification is: ",
-      dailyNotification,
-      "CANCELLING NOTIFICATIONS"
-    );
-    await LocalNotifications.cancel({ notifications: [{ id: id }] });
-  };
+    const val = dailyNotification === true ? "1" : "0";
+    modifyDataInUserPreferencesTable(val, "dailyNotification");
+  }, [dailyNotification]);
 
   return (
     <Sheet
@@ -150,7 +144,6 @@ const NotificationsBottomSheet = ({
             <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
               <p>Turn on Daily Notification</p>{" "}
               <Switch
-                // checked={dailyNotification}
                 checked={dailyNotification}
                 className={undefined}
                 disabled={undefined}
@@ -158,15 +151,7 @@ const NotificationsBottomSheet = ({
                 name={undefined}
                 offColor="white"
                 onChange={() => {
-                  if (dailyNotification === true) {
-                    cancelNotification(1);
-                  }
                   checkNotificationPermissions();
-                  // setUserPreferences((userPreferences) => ({
-                  //   ...userPreferences,
-                  //   dailyNotification:
-                  //     userPreferences.dailyNotification === "1" ? "0" : "1",
-                  // }));
                 }}
                 onColor="lightblue"
                 pendingOffColor={undefined}
@@ -175,7 +160,7 @@ const NotificationsBottomSheet = ({
                 style={undefined}
               />
             </div>
-            {/* {userPreferences.dailyNotification === "1" ? ( */}
+
             {dailyNotification === true ? (
               <div className="flex items-center justify-between p-3">
                 <p>Set Time</p>
@@ -187,7 +172,6 @@ const NotificationsBottomSheet = ({
                   }}
                   style={{ backgroundColor: "transparent" }}
                   className={`${
-                    // userPreferences.dailyNotification === "1" ? "slideUp" : ""
                     dailyNotification === true ? "slideUp" : ""
                   } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] `}
                   type="time"

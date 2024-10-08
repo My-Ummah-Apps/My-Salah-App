@@ -387,6 +387,7 @@ const App = () => {
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
+        console.log("CONNECTION CLOSING...");
       } catch (error) {
         console.error(error);
       }
