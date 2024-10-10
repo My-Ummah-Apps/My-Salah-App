@@ -5,17 +5,23 @@ import { useState, useEffect } from "react";
 import Switch from "react-ios-switch";
 import Modal from "react-modal";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-// import { Share } from "@capacitor/share";
+import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
-import { PreferenceType, userPreferencesType } from "../types/types";
+import {
+  DBConnectionStateType,
+  PreferenceType,
+  userPreferencesType,
+} from "../types/types";
 import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 // import { DBConnectionStateType } from "../types/types";
 
 import { MdOutlineChevronRight } from "react-icons/md";
 import NotificationsBottomSheet from "../components/BottomSheets/NotificationsBottomSheet";
+import { SQLiteConnection } from "@capacitor-community/sqlite";
 
 interface SettingsPageProps {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
+  sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -31,6 +37,7 @@ interface SettingsPageProps {
 
 const SettingsPage = ({
   setHeading,
+  sqliteConnection,
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   pageStyles,
@@ -42,24 +49,88 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  // ! CONTINUE FROM HERE
   const exportDB = async () => {
     try {
-      let exportedFile = await dbConnection.current.exportToJson("full");
+      if (!sqliteConnection.current) {
+        throw new Error("sqliteConnection does not exist");
+      }
+      await checkAndOpenOrCloseDBConnection("open");
+      dbConnection.curr;
+      const rawBackupData = await dbConnection.current.exportToJson("full");
+      const exportedDBAsJson = JSON.stringify(rawBackupData.export);
+
+      try {
+        await sqliteConnection.current.isJsonValid(exportedDBAsJson);
+      } catch (error) {
+        throw new Error("Invalid JSON format: " + error);
+      }
+
+      await Filesystem.writeFile({
+        path: "mysalahapp-backup.json",
+        data: exportedDBAsJson,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8,
+      });
+
+      // await Share.share({
+      //   title: "mysalahapp-backup",
+      //   text: exportedDBAsJson,
+      //   dialogTitle: "Share your database backup",
+      // });
     } catch (error) {
-      console.log("Error within exportDB: ", error);
+      console.error(error);
+      // alert(error);
+    } finally {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error(error);
+        // alert(error);
+      }
+    }
+  };
+  // ! Continue from below, created test json file to test in web browser
+  const handleDBImport = async (e) => {
+    const file = e.target.files[0];
+    console.log("file: ");
+    console.log(file);
+
+    // if (!file) {
+    //   console.error("No file selected");
+    //   return;
+    // }
+
+    try {
+      const reader = new FileReader();
+
+      reader.onload = async (e) => {
+        // if (!e.target) {
+        //   console.log("e.target does not exist");
+        //   return;
+        // }
+        console.log("File content: ", e);
+        const fileContent = e.target.result;
+
+        // try {
+        //   const jsonData = JSON.parse(fileContent);
+        //   await sqliteConnection.current.importFromJson({
+        //     jsonstring: fileContent,
+        //   });
+        //   console.log("Database imported successfully");
+        // } catch (error) {
+        //   console.error("Error parsing JSON or importing data:", error);
+        // }
+      };
+
+      // const importedDBJsonData = await dbConnection.current.importFromJson();
+    } catch (error) {
+      console.error("Error reading the selected file: ", error);
     }
   };
 
   const writeDBFile = async () => {
     console.log("clicked");
-
-    await Filesystem.writeFile({
-      path: "text-txt.txt",
-      data: "yo",
-      directory: Directory.Documents,
-      encoding: Encoding.UTF8,
-    });
+    await exportDB();
   };
 
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
@@ -97,10 +168,30 @@ const SettingsPage = ({
             userPreferences={userPreferences}
           />
         </div>{" "}
-        <div className="px-1 py-3 mb-5">
+        <div
+          onClick={(e) => {
+            handleDBImport(e);
+          }}
+          className="px-1 pb-3"
+        >
+          {/* <label for="backupfile">Select a file:</label> */}
+          <input
+            className=""
+            onChange={handleDBImport}
+            type="file"
+            // accept=".json"
+            id="backupfile"
+            name="backupfile"
+          ></input>
+          <SettingIndividual
+            headingText={"Import Data"}
+            subText={"Supports backups exported by this app"}
+          />
+        </div>
+        <div className="px-1 pb-3 mb-5">
           <SettingIndividual
             headingText={"Export Data"}
-            subText={"Generates a file that contains all your data."}
+            subText={"Generates a file that contains all your data"}
             onClick={() => {
               writeDBFile();
             }}

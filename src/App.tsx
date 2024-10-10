@@ -110,6 +110,7 @@ const App = () => {
   // console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
+    sqliteConnection,
     dbConnection,
     checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
@@ -518,6 +519,7 @@ const App = () => {
             element={
               <SettingsPage
                 setHeading={setHeading}
+                sqliteConnection={sqliteConnection}
                 dbConnection={dbConnection}
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection

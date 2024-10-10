@@ -16,7 +16,7 @@ PODS:
     - Capacitor
   - CapacitorNativeSettings (6.0.1):
     - Capacitor
-  - CapacitorShare (6.0.0):
+  - CapacitorShare (6.0.2):
     - Capacitor
   - CapacitorSplashScreen (6.0.0):
     - Capacitor
@@ -80,7 +80,7 @@ SPEC CHECKSUMS:
   CapacitorKeyboard: deacbd09d8d1029c3681197fb05d206b721d5f73
   CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
   CapacitorNativeSettings: 1ce5585ff07b161616cd0a795702637316677af2
-  CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
+  CapacitorShare: 591ae4693d85686ceb590db8e8b44aa014ec6490
   CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
   CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
   SQLCipher: 30a8e81afa6128e600b17ffa77d0f92fa05ed208

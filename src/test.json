@@ -1,0 +1,39 @@
+{
+  "database": "mysalahappdatabase",
+  "mode": "full",
+  "version": 1,
+  "encrypted": false,
+  "tables": [
+    {
+      "schema": [
+        { "value": "TEXT PRIMARY KEY NOT NULL", "column": "preferenceName" },
+        { "value": "TEXT NOT NULL DEFAULT ''", "column": "preferenceValue" }
+      ],
+      "values": [
+        ["userGender", "male"],
+        ["userStartDate", "2024-10-08"],
+        ["dailyNotification", "1"],
+        ["dailyNotificationTime", "10:58"],
+        ["haptics", "0"],
+        [
+          "reasons",
+          "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work"
+        ],
+        ["showReasons", "0"]
+      ],
+      "name": "userPreferencesTable"
+    },
+    {
+      "values": [[1, "2024-10-08", "Dhuhr", "group", "", ""]],
+      "schema": [
+        { "column": "id", "value": "INTEGER PRIMARY KEY NOT NULL" },
+        { "column": "date", "value": "TEXT NOT NULL" },
+        { "column": "salahName", "value": "TEXT NOT NULL" },
+        { "column": "salahStatus", "value": "TEXT NOT NULL" },
+        { "column": "reasons", "value": "TEXT DEFAULT ''" },
+        { "column": "notes", "value": "TEXT DEFAULT ''" }
+      ],
+      "name": "salahDataTable"
+    }
+  ]
+}
