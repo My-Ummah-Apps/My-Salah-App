@@ -55,7 +55,6 @@ const SettingsPage = ({
         throw new Error("sqliteConnection does not exist");
       }
       await checkAndOpenOrCloseDBConnection("open");
-      dbConnection.curr;
       const rawBackupData = await dbConnection.current.exportToJson("full");
       const exportedDBAsJson = JSON.stringify(rawBackupData.export);
 
@@ -64,6 +63,8 @@ const SettingsPage = ({
       } catch (error) {
         throw new Error("Invalid JSON format: " + error);
       }
+
+      console.log(exportedDBAsJson);
 
       await Filesystem.writeFile({
         path: "mysalahapp-backup.json",
@@ -89,42 +90,42 @@ const SettingsPage = ({
       }
     }
   };
-  // ! Continue from below, created test json file to test in web browser
-  const handleDBImport = async (e) => {
-    const file = e.target.files[0];
-    console.log("file: ");
-    console.log(file);
 
-    // if (!file) {
-    //   console.error("No file selected");
-    //   return;
-    // }
+  const handleDBImport = async (e) => {
+    console.log("E: ", e);
 
     try {
+      await checkAndOpenOrCloseDBConnection("close");
       const reader = new FileReader();
-
+      // let fileContent;
       reader.onload = async (e) => {
-        // if (!e.target) {
-        //   console.log("e.target does not exist");
-        //   return;
-        // }
-        console.log("File content: ", e);
-        const fileContent = e.target.result;
+        if (!sqliteConnection.current) {
+          throw new Error("sqliteConnection does not exist");
+        }
+        const fileContent = e.target?.result;
+        console.log("File content:", fileContent);
 
-        // try {
-        //   const jsonData = JSON.parse(fileContent);
-        //   await sqliteConnection.current.importFromJson({
-        //     jsonstring: fileContent,
-        //   });
-        //   console.log("Database imported successfully");
-        // } catch (error) {
-        //   console.error("Error parsing JSON or importing data:", error);
-        // }
+        try {
+          await sqliteConnection.current.isJsonValid(fileContent);
+          console.log("JSON is valid");
+        } catch (error) {
+          throw new Error("JSON is not valid");
+        }
+
+        await sqliteConnection.current.importFromJson(fileContent);
       };
+      reader.onerror = (error) => {
+        console.error("Error reading file: ", error);
+      };
+      const file = e.target.files[0];
 
-      // const importedDBJsonData = await dbConnection.current.importFromJson();
+      if (file) {
+        reader.readAsText(file);
+      } else {
+        throw new Error("No file selected");
+      }
     } catch (error) {
-      console.error("Error reading the selected file: ", error);
+      console.error(error);
     }
   };
 
@@ -169,9 +170,9 @@ const SettingsPage = ({
           />
         </div>{" "}
         <div
-          onClick={(e) => {
-            handleDBImport(e);
-          }}
+          // onClick={(e) => {
+          //   handleDBImport(e);
+          // }}
           className="px-1 pb-3"
         >
           {/* <label for="backupfile">Select a file:</label> */}

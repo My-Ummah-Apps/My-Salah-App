@@ -1,30 +1,30 @@
 {
   "database": "mysalahappdatabase",
-  "mode": "full",
   "version": 1,
   "encrypted": false,
+  "mode": "full",
   "tables": [
     {
+      "name": "userPreferencesTable",
       "schema": [
-        { "value": "TEXT PRIMARY KEY NOT NULL", "column": "preferenceName" },
-        { "value": "TEXT NOT NULL DEFAULT ''", "column": "preferenceValue" }
+        { "column": "preferenceName", "value": "TEXT PRIMARY KEY NOT NULL" },
+        { "column": "preferenceValue", "value": "TEXT NOT NULL DEFAULT ''" }
       ],
       "values": [
         ["userGender", "male"],
-        ["userStartDate", "2024-10-08"],
+        ["userStartDate", "2024-10-02"],
         ["dailyNotification", "1"],
-        ["dailyNotificationTime", "10:58"],
+        ["dailyNotificationTime", "21:00"],
         ["haptics", "0"],
         [
           "reasons",
           "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work"
         ],
         ["showReasons", "0"]
-      ],
-      "name": "userPreferencesTable"
+      ]
     },
     {
-      "values": [[1, "2024-10-08", "Dhuhr", "group", "", ""]],
+      "name": "salahDataTable",
       "schema": [
         { "column": "id", "value": "INTEGER PRIMARY KEY NOT NULL" },
         { "column": "date", "value": "TEXT NOT NULL" },
@@ -33,7 +33,39 @@
         { "column": "reasons", "value": "TEXT DEFAULT ''" },
         { "column": "notes", "value": "TEXT DEFAULT ''" }
       ],
-      "name": "salahDataTable"
+      "values": [
+        [1, "2024-10-02", "Asar", "group", "", ""],
+        [2, "2024-10-02", "Fajr", "male-alone", "", ""],
+        [3, "2024-10-03", "Dhuhr", "male-alone", "", ""],
+        [4, "2024-10-03", "Fajr", "missed", ", Movies, Leisure", ""],
+        [5, "2024-10-02", "Dhuhr", "male-alone", "", ""],
+        [6, "2024-10-02", "Maghrib", "male-alone", "", ""],
+        [7, "2024-10-13", "Fajr", "group", "", ""],
+        [8, "2024-10-13", "Dhuhr", "late", "", ""],
+        [9, "2024-10-13", "Maghrib", "male-alone", "", ""],
+        [10, "2024-10-13", "Asar", "group", "", ""],
+        [11, "2024-10-13", "Isha", "group", "", ""],
+        [12, "2024-10-12", "Fajr", "group", "", ""],
+        [13, "2024-10-12", "Dhuhr", "late", "", ""],
+        [14, "2024-10-12", "Asar", "group", "", ""],
+        [15, "2024-10-12", "Maghrib", "group", "", ""],
+        [16, "2024-10-12", "Isha", "missed", "", ""],
+        [17, "2024-10-11", "Fajr", "group", "", ""],
+        [18, "2024-10-11", "Dhuhr", "male-alone", "", ""],
+        [19, "2024-10-11", "Asar", "group", "", ""],
+        [20, "2024-10-11", "Maghrib", "group", "", ""],
+        [21, "2024-10-11", "Isha", "group", "", ""],
+        [22, "2024-10-10", "Fajr", "group", "", ""],
+        [23, "2024-10-10", "Dhuhr", "group", "", ""],
+        [24, "2024-10-10", "Asar", "group", "", ""],
+        [25, "2024-10-10", "Maghrib", "group", "", ""],
+        [26, "2024-10-10", "Isha", "group", "", ""],
+        [27, "2024-10-09", "Fajr", "male-alone", "", ""],
+        [28, "2024-10-09", "Dhuhr", "missed", "", ""],
+        [29, "2024-10-09", "Asar", "missed", "", ""],
+        [30, "2024-10-09", "Maghrib", "late", "", ""],
+        [31, "2024-10-09", "Isha", "group", "", ""]
+      ]
     }
   ]
 }
