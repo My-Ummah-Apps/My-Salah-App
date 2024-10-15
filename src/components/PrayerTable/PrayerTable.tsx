@@ -37,6 +37,8 @@ const PrayerTable = ({
   setUserPreferences,
   userPreferences,
 }: PrayerTableProps) => {
+  console.log("Prayer Table Has Re-rendered");
+
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);

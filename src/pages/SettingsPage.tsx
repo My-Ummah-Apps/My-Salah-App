@@ -40,6 +40,7 @@ const SettingsPage = ({
   sqliteConnection,
   dbConnection,
   checkAndOpenOrCloseDBConnection,
+  fetchDataFromDB,
   pageStyles,
   modifyDataInUserPreferencesTable,
   setUserPreferences,
@@ -56,6 +57,9 @@ const SettingsPage = ({
       }
       await checkAndOpenOrCloseDBConnection("open");
       const rawBackupData = await dbConnection.current.exportToJson("full");
+      rawBackupData.export.overwrite = true;
+      console.log("rawBackupData overwrite is: ", rawBackupData);
+
       const exportedDBAsJson = JSON.stringify(rawBackupData.export);
 
       try {
@@ -97,13 +101,15 @@ const SettingsPage = ({
     try {
       await checkAndOpenOrCloseDBConnection("close");
       const reader = new FileReader();
-      // let fileContent;
       reader.onload = async (e) => {
         if (!sqliteConnection.current) {
           throw new Error("sqliteConnection does not exist");
         }
         const fileContent = e.target?.result;
         console.log("File content:", fileContent);
+        if (typeof fileContent !== "string") {
+          throw new Error("File content is not a string");
+        }
 
         try {
           await sqliteConnection.current.isJsonValid(fileContent);
@@ -113,6 +119,7 @@ const SettingsPage = ({
         }
 
         await sqliteConnection.current.importFromJson(fileContent);
+        await fetchDataFromDB();
       };
       reader.onerror = (error) => {
         console.error("Error reading file: ", error);
@@ -129,10 +136,10 @@ const SettingsPage = ({
     }
   };
 
-  const writeDBFile = async () => {
-    console.log("clicked");
-    await exportDB();
-  };
+  // const writeDBFile = async () => {
+  //   console.log("clicked");
+  //   await exportDB();
+  // };
 
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
 
@@ -193,8 +200,8 @@ const SettingsPage = ({
           <SettingIndividual
             headingText={"Export Data"}
             subText={"Generates a file that contains all your data"}
-            onClick={() => {
-              writeDBFile();
+            onClick={async () => {
+              await exportDB();
             }}
           />
         </div>

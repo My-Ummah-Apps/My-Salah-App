@@ -524,6 +524,7 @@ const App = () => {
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }
+                fetchDataFromDB={fetchDataFromDB}
                 pageStyles={pageStyles}
                 modifyDataInUserPreferencesTable={
                   modifyDataInUserPreferencesTable
