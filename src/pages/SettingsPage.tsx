@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Switch from "react-ios-switch";
 import Modal from "react-modal";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { Share } from "@capacitor/share";
+// import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import {
   DBConnectionStateType,
@@ -26,6 +26,7 @@ interface SettingsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
+  fetchDataFromDB: () => Promise<void>;
   pageStyles: string;
   modifyDataInUserPreferencesTable: (
     value: string,
@@ -50,6 +51,37 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
+  const checkPermissionsFileAccess = async () => {
+    const permissionCheck = await Filesystem.checkPermissions();
+    console.log("permissionCheck: ", permissionCheck);
+    if (permissionCheck.publicStorage === "granted") {
+      await exportDB();
+      alert("exporting Database...");
+      return;
+    } else if (permissionCheck.publicStorage === "denied") {
+      alert("Please turn file permissions back on from within system settings");
+      return;
+    } else if (
+      permissionCheck.publicStorage === "prompt" ||
+      "prompt-with-rationale"
+    ) {
+      await requestPermissionsFileAccess();
+    }
+  };
+
+  const requestPermissionsFileAccess = async () => {
+    const requestPermission = await Filesystem.requestPermissions();
+    if (requestPermission.publicStorage === "granted") {
+      await exportDB();
+    } else if (
+      requestPermission.publicStorage === "prompt" ||
+      requestPermission.publicStorage === "prompt-with-rationale" ||
+      requestPermission.publicStorage === "denied"
+    ) {
+      console.log("user has denied file access");
+    }
+  };
+
   const exportDB = async () => {
     try {
       if (!sqliteConnection.current) {
@@ -69,9 +101,16 @@ const SettingsPage = ({
       }
 
       console.log(exportedDBAsJson);
+      const date = new Date();
+      const formattedDate = date
+        .toISOString()
+        .replace(/T/, "-")
+        .replace(/[:]/g, "-")
+        .slice(0, 19);
+      console.log("Date: ", formattedDate);
 
       await Filesystem.writeFile({
-        path: "mysalahapp-backup.json",
+        path: `mysalahapp-backup-${formattedDate}.json`,
         data: exportedDBAsJson,
         directory: Directory.Documents,
         encoding: Encoding.UTF8,
@@ -95,7 +134,7 @@ const SettingsPage = ({
     }
   };
 
-  const handleDBImport = async (e) => {
+  const handleDBImport = async (e: any) => {
     console.log("E: ", e);
 
     try {
@@ -201,7 +240,8 @@ const SettingsPage = ({
             headingText={"Export Data"}
             subText={"Generates a file that contains all your data"}
             onClick={async () => {
-              await exportDB();
+              await checkPermissionsFileAccess();
+              // await exportDB();
             }}
           />
         </div>

@@ -109,6 +109,7 @@ const NotificationsBottomSheet = ({
       modifyDataInUserPreferencesTable("1", "dailyNotification");
     } else if (
       requestPermission.display === "prompt" ||
+      requestPermission.display === "prompt-with-rationale" ||
       requestPermission.display === "denied"
     ) {
       modifyDataInUserPreferencesTable("0", "dailyNotification");
