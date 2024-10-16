@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
 
 const SettingIndividual = ({
@@ -6,13 +5,11 @@ const SettingIndividual = ({
   subText,
   indvidualStyles,
   onClick,
-}: // onChange,
-{
+}: {
   headingText: string;
   subText: string;
   indvidualStyles?: string;
   onClick?: () => void;
-  // onChange?: (e: any) => Promise<void>;
 }) => {
   return (
     <>

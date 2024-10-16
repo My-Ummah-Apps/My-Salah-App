@@ -143,7 +143,7 @@ const BottomSheetSingleDateView = ({
                           "px-2 py-3 rounded-2xl text-white grow icon-and-text-wrap flex flex-row items-center justify-center w-1/2"
                         }
                       >
-                        {item.salahStatus}
+                        {item.salahStatus || "No Data"}
                       </div>
                     </div>
                     <div className="border-[var(--border-bottom-color)] border-b pb-10 mb-10">

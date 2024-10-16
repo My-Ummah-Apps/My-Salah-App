@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // import { Capacitor } from "@capacitor/core";
 // @ts-ignore
@@ -51,6 +51,16 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
+  const importDBRef = useRef<HTMLInputElement | null>(null);
+
+  const triggerInput = () => {
+    if (importDBRef.current) {
+      importDBRef.current.click();
+    } else {
+      console.error("importDBRef.current does not exist");
+    }
+  };
+
   const handleExportDB = async () => {
     try {
       if (!sqliteConnection.current) {
@@ -90,7 +100,7 @@ const SettingsPage = ({
           dialogTitle: "Share your database backup",
         });
       } catch (error) {
-        console.log("Error sharing file: ", error);
+        console.error("Error sharing file: ", error);
         throw new Error("Error sharing file:");
       }
       await Filesystem.deleteFile({
@@ -119,7 +129,6 @@ const SettingsPage = ({
           throw new Error("sqliteConnection does not exist");
         }
         const fileContent = e.target?.result;
-        console.log("File content:", fileContent);
         if (typeof fileContent !== "string") {
           throw new Error("File content is not a string");
         }
@@ -148,11 +157,6 @@ const SettingsPage = ({
       console.error(error);
     }
   };
-
-  // const writeDBFile = async () => {
-  //   console.log("clicked");
-  //   await exportDB();
-  // };
 
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
 
@@ -189,25 +193,20 @@ const SettingsPage = ({
             userPreferences={userPreferences}
           />
         </div>{" "}
-        <div
-          // onClick={(e) => {
-          //   handleDBImport(e);
-          // }}
-          className="px-1 pb-3"
-        >
-          {/* <label for="backupfile">Select a file:</label> */}
+        <div className="px-1 pb-3">
           <input
-            ref={"import-input"}
+            ref={importDBRef}
             className="hidden"
             onChange={handleDBImport}
             type="file"
-            // accept=".json"
+            accept=".json"
             id="backupfile"
             name="backupfile"
           ></input>
           <SettingIndividual
             headingText={"Import Data"}
             subText={"Supports backups exported by this app"}
+            onClick={triggerInput}
           />
         </div>
         <div className="px-1 pb-3 mb-5">
@@ -215,7 +214,6 @@ const SettingsPage = ({
             headingText={"Export Data"}
             subText={"Generates a file that contains all your data"}
             onClick={async () => {
-              // await checkPermissionsFileAccess();
               await handleExportDB();
             }}
           />
