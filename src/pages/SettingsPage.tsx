@@ -51,37 +51,6 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  // const checkPermissionsFileAccess = async () => {
-  //   const permissionCheck = await Filesystem.checkPermissions();
-  //   console.log("permissionCheck: ", permissionCheck);
-  //   if (permissionCheck.publicStorage === "granted") {
-  //     await exportDB();
-  //     alert("exporting Database...");
-  //     return;
-  //   } else if (permissionCheck.publicStorage === "denied") {
-  //     alert("Please turn file permissions back on from within system settings");
-  //     return;
-  //   } else if (
-  //     permissionCheck.publicStorage === "prompt" ||
-  //     "prompt-with-rationale"
-  //   ) {
-  //     await requestPermissionsFileAccess();
-  //   }
-  // };
-
-  // const requestPermissionsFileAccess = async () => {
-  //   const requestPermission = await Filesystem.requestPermissions();
-  //   if (requestPermission.publicStorage === "granted") {
-  //     await exportDB();
-  //   } else if (
-  //     requestPermission.publicStorage === "prompt" ||
-  //     requestPermission.publicStorage === "prompt-with-rationale" ||
-  //     requestPermission.publicStorage === "denied"
-  //   ) {
-  //     console.log("user has denied file access");
-  //   }
-  // };
-
   const handleExportDB = async () => {
     try {
       if (!sqliteConnection.current) {
@@ -98,7 +67,6 @@ const SettingsPage = ({
         throw new Error("Invalid JSON format: " + error);
       }
 
-      console.log("exportedDBAsJson: ", exportedDBAsJson);
       const date = new Date();
       const formattedDate = date
         .toISOString()
@@ -109,7 +77,7 @@ const SettingsPage = ({
       const writeResult = await Filesystem.writeFile({
         path: `mysalahapp-backup-${formattedDate}.json`,
         data: exportedDBAsJson,
-        directory: Directory.Documents,
+        directory: Directory.Cache,
         encoding: Encoding.UTF8,
       });
 
@@ -127,7 +95,7 @@ const SettingsPage = ({
       }
       await Filesystem.deleteFile({
         path: filePath,
-        directory: Directory.Documents,
+        directory: Directory.Cache,
       });
     } catch (error) {
       console.error(error);
@@ -229,7 +197,8 @@ const SettingsPage = ({
         >
           {/* <label for="backupfile">Select a file:</label> */}
           <input
-            className=""
+            ref={"import-input"}
+            className="hidden"
             onChange={handleDBImport}
             type="file"
             // accept=".json"
