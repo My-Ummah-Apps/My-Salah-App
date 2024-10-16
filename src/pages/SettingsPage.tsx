@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Switch from "react-ios-switch";
 import Modal from "react-modal";
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-// import { Share } from "@capacitor/share";
+import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import {
   DBConnectionStateType,
@@ -51,38 +51,38 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  const checkPermissionsFileAccess = async () => {
-    const permissionCheck = await Filesystem.checkPermissions();
-    console.log("permissionCheck: ", permissionCheck);
-    if (permissionCheck.publicStorage === "granted") {
-      await exportDB();
-      alert("exporting Database...");
-      return;
-    } else if (permissionCheck.publicStorage === "denied") {
-      alert("Please turn file permissions back on from within system settings");
-      return;
-    } else if (
-      permissionCheck.publicStorage === "prompt" ||
-      "prompt-with-rationale"
-    ) {
-      await requestPermissionsFileAccess();
-    }
-  };
+  // const checkPermissionsFileAccess = async () => {
+  //   const permissionCheck = await Filesystem.checkPermissions();
+  //   console.log("permissionCheck: ", permissionCheck);
+  //   if (permissionCheck.publicStorage === "granted") {
+  //     await exportDB();
+  //     alert("exporting Database...");
+  //     return;
+  //   } else if (permissionCheck.publicStorage === "denied") {
+  //     alert("Please turn file permissions back on from within system settings");
+  //     return;
+  //   } else if (
+  //     permissionCheck.publicStorage === "prompt" ||
+  //     "prompt-with-rationale"
+  //   ) {
+  //     await requestPermissionsFileAccess();
+  //   }
+  // };
 
-  const requestPermissionsFileAccess = async () => {
-    const requestPermission = await Filesystem.requestPermissions();
-    if (requestPermission.publicStorage === "granted") {
-      await exportDB();
-    } else if (
-      requestPermission.publicStorage === "prompt" ||
-      requestPermission.publicStorage === "prompt-with-rationale" ||
-      requestPermission.publicStorage === "denied"
-    ) {
-      console.log("user has denied file access");
-    }
-  };
+  // const requestPermissionsFileAccess = async () => {
+  //   const requestPermission = await Filesystem.requestPermissions();
+  //   if (requestPermission.publicStorage === "granted") {
+  //     await exportDB();
+  //   } else if (
+  //     requestPermission.publicStorage === "prompt" ||
+  //     requestPermission.publicStorage === "prompt-with-rationale" ||
+  //     requestPermission.publicStorage === "denied"
+  //   ) {
+  //     console.log("user has denied file access");
+  //   }
+  // };
 
-  const exportDB = async () => {
+  const handleExportDB = async () => {
     try {
       if (!sqliteConnection.current) {
         throw new Error("sqliteConnection does not exist");
@@ -90,8 +90,6 @@ const SettingsPage = ({
       await checkAndOpenOrCloseDBConnection("open");
       const rawBackupData = await dbConnection.current.exportToJson("full");
       rawBackupData.export.overwrite = true;
-      console.log("rawBackupData overwrite is: ", rawBackupData);
-
       const exportedDBAsJson = JSON.stringify(rawBackupData.export);
 
       try {
@@ -100,36 +98,44 @@ const SettingsPage = ({
         throw new Error("Invalid JSON format: " + error);
       }
 
-      console.log(exportedDBAsJson);
+      console.log("exportedDBAsJson: ", exportedDBAsJson);
       const date = new Date();
       const formattedDate = date
         .toISOString()
         .replace(/T/, "-")
         .replace(/[:]/g, "-")
         .slice(0, 19);
-      console.log("Date: ", formattedDate);
 
-      await Filesystem.writeFile({
+      const writeResult = await Filesystem.writeFile({
         path: `mysalahapp-backup-${formattedDate}.json`,
         data: exportedDBAsJson,
         directory: Directory.Documents,
         encoding: Encoding.UTF8,
       });
 
-      // await Share.share({
-      //   title: "mysalahapp-backup",
-      //   text: exportedDBAsJson,
-      //   dialogTitle: "Share your database backup",
-      // });
+      const filePath = writeResult.uri;
+
+      try {
+        await Share.share({
+          title: "mysalahapp-backup",
+          files: [filePath],
+          dialogTitle: "Share your database backup",
+        });
+      } catch (error) {
+        console.log("Error sharing file: ", error);
+        throw new Error("Error sharing file:");
+      }
+      await Filesystem.deleteFile({
+        path: filePath,
+        directory: Directory.Documents,
+      });
     } catch (error) {
       console.error(error);
-      // alert(error);
     } finally {
       try {
         await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
-        console.error(error);
-        // alert(error);
+        console.error("Error closing DB connection: ", error);
       }
     }
   };
@@ -240,8 +246,8 @@ const SettingsPage = ({
             headingText={"Export Data"}
             subText={"Generates a file that contains all your data"}
             onClick={async () => {
-              await checkPermissionsFileAccess();
-              // await exportDB();
+              // await checkPermissionsFileAccess();
+              await handleExportDB();
             }}
           />
         </div>

@@ -1,26 +1,18 @@
-import { useState } from "react";
-// import { Capacitor } from "@capacitor/core";
-// @ts-ignore
-
-// @ts-ignore
-// import Switch from "react-ios-switch";
-// import { Share } from "@capacitor/share";
-// import { FaHandHoldingHeart } from "react-icons/fa";
-
-// import { StatusBar, Style } from "@capacitor/status-bar";
+// import { useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
-// import Switch from "rc-switch";
 
 const SettingIndividual = ({
   headingText,
   subText,
   indvidualStyles,
   onClick,
-}: {
+}: // onChange,
+{
   headingText: string;
   subText: string;
   indvidualStyles?: string;
-  onClick: () => void;
+  onClick?: () => void;
+  // onChange?: (e: any) => Promise<void>;
 }) => {
   return (
     <>
@@ -36,6 +28,7 @@ const SettingIndividual = ({
             {subText}
           </p>
         </div>
+
         <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
       </div>
     </>
