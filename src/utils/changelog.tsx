@@ -1,8 +1,22 @@
-export const LATEST_APP_VERSION = "2.2";
+export const LATEST_APP_VERSION = "2.3";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Import / Export Functionality",
+        text: (
+          <>
+            <strong>Feature</strong>: Added import/export functionality for
+            seamless data backup and restoration
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "2.2",
     changes: [
       {
         heading: "Notification Time Modification",

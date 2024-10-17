@@ -630,7 +630,10 @@ const App = () => {
             <Sheet.Content className="overflow-scroll sheet-changelog">
               <h1 className="mx-8 mt-8 mb-4 text-2xl ">Whats new?</h1>
               {changeLogs.map((item, i) => (
-                <section key={item.changes[i].heading} className="mx-6 mt-4">
+                <section
+                  key={item.changes[i].heading}
+                  className="mx-6 mt-4 changelog-individual-log"
+                >
                   <p>
                     {item.versionNum === LATEST_APP_VERSION
                       ? `v${item.versionNum} - Latest Version`

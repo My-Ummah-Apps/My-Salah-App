@@ -97,6 +97,10 @@ td {
   margin-bottom: 6rem;
 }
 
+.changelog-individual-log: first-child {
+  border-color: red;
+}
+
 .modal-sheet-prayer-statuses-wrap {
   /* transition: bottom 420ms; */
 }
