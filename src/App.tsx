@@ -85,7 +85,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 const App = () => {
   console.log("APP.TSX HAS RENDERED...");
-  const [showChangelogModal, setShowChangelogModal] = useState(false);
+  const [showChangelogModal, setShowChangelogModal] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("appVersion") !== LATEST_APP_VERSION) {
@@ -628,7 +628,7 @@ const App = () => {
           <Sheet.Container>
             {/* <Sheet.Header /> */}
             <Sheet.Content className="overflow-scroll sheet-changelog">
-              <h1 className="mx-8 mt-8 mb-4 text-2xl ">Whats new?</h1>
+              <h1 className="mx-8 mt-8 mb-4 text-2xl">Whats new?</h1>
               {changeLogs.map((item, i) => (
                 <section
                   key={item.changes[i].heading}
