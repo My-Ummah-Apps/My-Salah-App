@@ -168,6 +168,8 @@ const SettingsPage = ({
           await fetchDataFromDB();
         } catch (error) {
           console.error("Error importing backup file", error);
+          // Below is in the finally block but had to be duplicated here otherwise wouldn't close on Android
+          diaglogElement.current?.close();
           showToast(`Unable to import file - ${error}`, "long");
           throw new Error("Error importing backup file");
         }
@@ -229,29 +231,12 @@ const SettingsPage = ({
             userPreferences={userPreferences}
           />
         </div>{" "}
-        <div className="px-1 pb-3">
-          <input
-            ref={importDBRef}
-            className="hidden"
-            onChange={handleDBImport}
-            type="file"
-            accept=".json"
-            id="backupfile"
-            name="backupfile"
-          ></input>
-          <dialog
-            className="fixed z-50 w-1/2 p-3 text-white transform -translate-x-1/2 rounded-lg shadow-lg -translate-y-3/4 bg-zinc-950 top-3/4 left-1/2"
-            ref={diaglogElement}
-          >
-            {dialogElementText}
-          </dialog>
+        <div className="my-5">
           <SettingIndividual
             headingText={"Import Data"}
             subText={"Supports backups exported by this app"}
             onClick={triggerInput}
           />
-        </div>
-        <div className="px-1 pb-3 mb-5">
           <SettingIndividual
             headingText={"Export Data"}
             subText={"Generates a file that contains all your data"}
@@ -260,6 +245,21 @@ const SettingsPage = ({
             }}
           />
         </div>
+        <input
+          ref={importDBRef}
+          className="hidden"
+          onChange={handleDBImport}
+          type="file"
+          accept=".json"
+          id="backupfile"
+          name="backupfile"
+        ></input>
+        <dialog
+          className="fixed z-50 w-1/2 p-3 text-white transform -translate-x-1/2 rounded-lg shadow-lg -translate-y-3/4 bg-zinc-950 top-3/4 left-1/2"
+          ref={diaglogElement}
+        >
+          {dialogElementText}
+        </dialog>
         {/* 
         {Capacitor.getPlatform() === "android" ? (
           <SettingIndividual
