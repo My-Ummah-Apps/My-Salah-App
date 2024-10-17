@@ -18,6 +18,8 @@ import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 import { MdOutlineChevronRight } from "react-icons/md";
 import NotificationsBottomSheet from "../components/BottomSheets/NotificationsBottomSheet";
 import { SQLiteConnection } from "@capacitor-community/sqlite";
+import { Capacitor } from "@capacitor/core";
+import { Toast } from "@capacitor/toast";
 
 interface SettingsPageProps {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -52,6 +54,8 @@ const SettingsPage = ({
   }, []);
 
   const importDBRef = useRef<HTMLInputElement | null>(null);
+  const diaglogElement = useRef<HTMLDialogElement | null>(null);
+  const [dialogElementText, setDialogElementText] = useState<string>("");
 
   const triggerInput = () => {
     if (importDBRef.current) {
@@ -61,7 +65,15 @@ const SettingsPage = ({
     }
   };
 
-  const handleExportDB = async () => {
+  const showToast = async (text: string, duration: "short" | "long") => {
+    await Toast.show({
+      text: text,
+      position: "center",
+      duration: duration,
+    });
+  };
+
+  const handleDBExport = async () => {
     try {
       if (!sqliteConnection.current) {
         throw new Error("sqliteConnection does not exist");
@@ -92,17 +104,21 @@ const SettingsPage = ({
       });
 
       const filePath = writeResult.uri;
-
-      try {
-        await Share.share({
-          title: "mysalahapp-backup",
-          files: [filePath],
-          dialogTitle: "Share your database backup",
-        });
-      } catch (error) {
-        console.error("Error sharing file: ", error);
-        throw new Error("Error sharing file:");
+      diaglogElement.current?.showModal();
+      setDialogElementText("Generating file, please wait...");
+      if (Capacitor.isNativePlatform()) {
+        try {
+          await Share.share({
+            title: "mysalahapp-backup",
+            files: [filePath],
+            dialogTitle: "Share your database backup",
+          });
+        } catch (error) {
+          console.error("Error sharing file: ", error);
+          throw new Error("Error sharing file");
+        }
       }
+
       await Filesystem.deleteFile({
         path: filePath,
         directory: Directory.Cache,
@@ -111,6 +127,8 @@ const SettingsPage = ({
       console.error(error);
     } finally {
       try {
+        diaglogElement.current?.close();
+        setDialogElementText("");
         await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.error("Error closing DB connection: ", error);
@@ -118,9 +136,7 @@ const SettingsPage = ({
     }
   };
 
-  const handleDBImport = async (e: any) => {
-    console.log("E: ", e);
-
+  const handleDBImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       await checkAndOpenOrCloseDBConnection("close");
       const reader = new FileReader();
@@ -128,7 +144,10 @@ const SettingsPage = ({
         if (!sqliteConnection.current) {
           throw new Error("sqliteConnection does not exist");
         }
-        const fileContent = e.target?.result;
+        if (!e.target) {
+          throw new Error("e.target is null");
+        }
+        const fileContent = e.target.result;
         if (typeof fileContent !== "string") {
           throw new Error("File content is not a string");
         }
@@ -137,15 +156,29 @@ const SettingsPage = ({
           await sqliteConnection.current.isJsonValid(fileContent);
           console.log("JSON is valid");
         } catch (error) {
+          showToast(`File not recognised, file is invalid - ${error}`, "long");
           throw new Error("JSON is not valid");
         }
-
-        await sqliteConnection.current.importFromJson(fileContent);
-        await fetchDataFromDB();
+        try {
+          diaglogElement.current?.showModal();
+          setDialogElementText("Importing file, please wait...");
+          await sqliteConnection.current.importFromJson(fileContent);
+          diaglogElement.current?.close();
+          showToast("Import Successful", "short");
+          await fetchDataFromDB();
+        } catch (error) {
+          console.error("Error importing backup file", error);
+          showToast(`Unable to import file - ${error}`, "long");
+          throw new Error("Error importing backup file");
+        }
       };
       reader.onerror = (error) => {
         console.error("Error reading file: ", error);
       };
+      if (!e.target.files) {
+        throw new Error("e.target.files does not exist");
+      }
+
       const file = e.target.files[0];
 
       if (file) {
@@ -155,6 +188,9 @@ const SettingsPage = ({
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      diaglogElement.current?.close();
+      setDialogElementText("");
     }
   };
 
@@ -203,6 +239,12 @@ const SettingsPage = ({
             id="backupfile"
             name="backupfile"
           ></input>
+          <dialog
+            className="fixed z-50 w-1/2 p-3 text-white transform -translate-x-1/2 rounded-lg shadow-lg -translate-y-3/4 bg-zinc-950 top-3/4 left-1/2"
+            ref={diaglogElement}
+          >
+            {dialogElementText}
+          </dialog>
           <SettingIndividual
             headingText={"Import Data"}
             subText={"Supports backups exported by this app"}
@@ -214,7 +256,7 @@ const SettingsPage = ({
             headingText={"Export Data"}
             subText={"Generates a file that contains all your data"}
             onClick={async () => {
-              await handleExportDB();
+              await handleDBExport();
             }}
           />
         </div>

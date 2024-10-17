@@ -22,6 +22,7 @@
     "@capacitor/share": "^6.0.2",
     "@capacitor/splash-screen": "^6.0.0",
     "@capacitor/status-bar": "^6.0.0",
+    "@capacitor/toast": "^6.0.2",
     "@emotion/is-prop-valid": "^1.3.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
