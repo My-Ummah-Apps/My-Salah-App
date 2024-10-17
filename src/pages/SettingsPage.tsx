@@ -19,7 +19,7 @@ import { MdOutlineChevronRight } from "react-icons/md";
 import NotificationsBottomSheet from "../components/BottomSheets/NotificationsBottomSheet";
 import { SQLiteConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
-import { Toast } from "@capacitor/toast";
+import { showToast } from "../utils/constants";
 
 interface SettingsPageProps {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -63,14 +63,6 @@ const SettingsPage = ({
     } else {
       console.error("importDBRef.current does not exist");
     }
-  };
-
-  const showToast = async (text: string, duration: "short" | "long") => {
-    await Toast.show({
-      text: text,
-      position: "center",
-      duration: duration,
-    });
   };
 
   const handleDBExport = async () => {
