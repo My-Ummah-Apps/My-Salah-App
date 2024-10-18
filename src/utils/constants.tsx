@@ -6,6 +6,8 @@ export const TWEEN_CONFIG = {
   duration: 0.3,
 };
 
+export const sheetHeaderHeight = { height: "60px" };
+
 export const showToast = async (text: string, duration: "short" | "long") => {
   await Toast.show({
     text: text,

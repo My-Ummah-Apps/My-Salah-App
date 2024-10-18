@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 import { changeLogs, LATEST_APP_VERSION } from "./utils/changelog";
-import { TWEEN_CONFIG } from "./utils/constants";
+import { sheetHeaderHeight, TWEEN_CONFIG } from "./utils/constants";
 // import Notifications from "./utils/notifications";
 import {
   DBResultDataObjType,
@@ -567,7 +567,7 @@ const App = () => {
           disableDrag={true}
         >
           <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
-            <Sheet.Header />
+            <Sheet.Header style={sheetHeaderHeight} />
             <Sheet.Content>
               {" "}
               <section className="p-5 text-center">

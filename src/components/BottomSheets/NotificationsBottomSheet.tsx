@@ -12,7 +12,7 @@ import {
 } from "capacitor-native-settings";
 
 import { PreferenceType, userPreferencesType } from "../../types/types";
-import { TWEEN_CONFIG } from "../../utils/constants";
+import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
 
 const NotificationsBottomSheet = ({
   setShowNotificationsModal,
@@ -139,7 +139,7 @@ const NotificationsBottomSheet = ({
       onClose={() => setShowNotificationsModal(false)}
     >
       <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
-        <Sheet.Header />
+        <Sheet.Header style={sheetHeaderHeight} />
         <Sheet.Content>
           <div className="h-[50vh]">
             <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">

@@ -10,6 +10,7 @@ import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { SalahRecordsArrayType, userPreferencesType } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import { TWEEN_CONFIG } from "../../utils/constants";
+import { sheetHeaderHeight } from "../../utils/constants";
 
 interface PrayerStatusBottomSheetProps {
   dbConnection: any;
@@ -17,8 +18,8 @@ interface PrayerStatusBottomSheetProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: any;
-  // setClickedSalah: React.Dispatch<React.SetStateAction<string>>;
-  // setClickedDate: any;
+  setClickedSalah: React.Dispatch<React.SetStateAction<string>>;
+  setClickedDate: React.Dispatch<React.SetStateAction<string>>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -37,8 +38,8 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  // setClickedSalah,
-  // setClickedDate,
+  setClickedSalah,
+  setClickedDate,
   setUserPreferences,
   userPreferences,
   clickedDate,
@@ -285,14 +286,15 @@ PrayerStatusBottomSheetProps) => {
     <>
       <Sheet
         // rootId="root"
+        disableDrag={false}
         onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
         onClose={() => {
           setShowUpdateStatusModal(false);
           // setHasUserClickedDate(false);
-          // setClickedDate("");
-          // setSalahStatus("");
-          // setClickedSalah("");
+          setClickedDate("");
+          setSalahStatus("");
+          setClickedSalah("");
         }}
         detent="content-height"
         // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
@@ -303,12 +305,12 @@ PrayerStatusBottomSheetProps) => {
           ref={sheetRef}
           style={{ backgroundColor: "rgb(33, 36, 38)" }}
         >
-          <Sheet.Header />
+          <Sheet.Header style={sheetHeaderHeight} />
           <Sheet.Content>
             <Sheet.Scroller>
               {" "}
-              <section className="w-[90%] mx-auto mt-5 mb-20 rounded-lg text-white">
-                <h1 className="mb-5 text-3xl text-center">
+              <section className="w-[90%] mx-auto mb-20 rounded-lg text-white">
+                <h1 className="mb-10 text-3xl text-center">
                   How did you pray {clickedSalah}?
                 </h1>
                 <div

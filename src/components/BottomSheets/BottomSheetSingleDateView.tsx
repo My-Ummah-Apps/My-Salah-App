@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 
 import { SalahNamesType } from "../../types/types";
 import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
-import { TWEEN_CONFIG } from "../../utils/constants";
+import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
 
 interface BottomSheetSingleDateViewProps {
   dbConnection: any;
@@ -123,7 +123,9 @@ const BottomSheetSingleDateView = ({
       }}
     >
       <Sheet.Container>
-        <Sheet.Header style={{ backgroundColor: "rgb(33, 36, 38)" }} />
+        <Sheet.Header
+          style={{ ...sheetHeaderHeight, backgroundColor: "rgb(33, 36, 38)" }}
+        />
         <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Scroller>
             <section className="mx-5 sheet-content-wrap">
