@@ -52,7 +52,8 @@ const PrayerTable = ({
     return fetchedSalahData[index];
   };
 
-  const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
+  const iconStyles =
+    "inline-block rounded-md text-white w-[24px] h-[24px] shadow-md";
 
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
 

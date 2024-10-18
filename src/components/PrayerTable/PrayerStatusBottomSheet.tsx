@@ -293,8 +293,8 @@ PrayerStatusBottomSheetProps) => {
           setShowUpdateStatusModal(false);
           // setHasUserClickedDate(false);
           setClickedDate("");
-          setSalahStatus("");
           setClickedSalah("");
+          setSalahStatus("");
         }}
         detent="content-height"
         // tweenConfig={{ ease: "easeOut", duration: 0.3 }}

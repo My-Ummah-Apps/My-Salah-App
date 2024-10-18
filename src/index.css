@@ -93,12 +93,8 @@ td {
   background-color: var(--primary-color) !important;
 }
 
-.sheet-changelog:last-child {
-  margin-bottom: 6rem;
-}
-
-.changelog-individual-log: first-child {
-  border-color: red;
+.changelog-individual-log:first-of-type {
+  color: #fb9605;
 }
 
 .modal-sheet-prayer-statuses-wrap {

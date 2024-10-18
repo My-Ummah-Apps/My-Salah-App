@@ -628,40 +628,43 @@ const App = () => {
           <Sheet.Container>
             {/* <Sheet.Header /> */}
             <Sheet.Content className="overflow-scroll sheet-changelog">
-              <h1 className="mx-8 mt-8 mb-4 text-2xl ">Whats new?</h1>
-              {changeLogs.map((item, i) => (
-                <section
-                  key={item.changes[i].heading}
-                  className="mx-6 mt-4 changelog-individual-log"
+              <Sheet.Scroller>
+                <h1 className="mx-8 mt-8 mb-4 text-2xl ">Whats new?</h1>
+                {changeLogs.map((item, i) => (
+                  <section
+                    key={item.changes[i].heading}
+                    className="mx-6 mt-4 changelog-individual-log"
+                    // style={{ borderColor: i === 0 ? "red" : "" }}
+                  >
+                    <p>
+                      {item.versionNum === LATEST_APP_VERSION
+                        ? `v${item.versionNum} - Latest Version`
+                        : `v${item.versionNum}`}
+                    </p>
+                    {item.changes.map((item) => (
+                      <section
+                        key={item.heading}
+                        // style={{ border: `1px solid ${activeBackgroundColor}` }}
+                        className="mt-4 mb-4 p-4 border border-[var(--border-form)] rounded-xl
+"
+                      >
+                        <h2 className="mb-2 text-lg font-medium">
+                          {item.heading}
+                        </h2>
+                        <p>{item.text}</p>
+                      </section>
+                    ))}
+                  </section>
+                ))}
+                <button
+                  onClick={() => setShowChangelogModal(false)}
+                  className="text-base fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2 border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-6
+"
                 >
-                  <p>
-                    {item.versionNum === LATEST_APP_VERSION
-                      ? `v${item.versionNum} - Latest Version`
-                      : `v${item.versionNum}`}
-                  </p>
-                  {item.changes.map((item) => (
-                    <section
-                      key={item.heading}
-                      // style={{ border: `1px solid ${activeBackgroundColor}` }}
-                      className="mt-4 mb-4 p-4 border border-[var(--border-form)] rounded-xl
-"
-                    >
-                      <h2 className="mb-2 text-lg font-medium ">
-                        {item.heading}
-                      </h2>
-                      <p>{item.text}</p>
-                    </section>
-                  ))}
-                </section>
-              ))}
-              <button
-                onClick={() => setShowChangelogModal(false)}
-                className="text-base fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2 border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-6
-"
-              >
-                Close
-              </button>
-              {/* <SheetCloseBtn closeModalState={setShowChangelogModal} /> */}
+                  Close
+                </button>
+                {/* <SheetCloseBtn closeModalState={setShowChangelogModal} /> */}
+              </Sheet.Scroller>
             </Sheet.Content>
           </Sheet.Container>
           <Sheet.Backdrop
