@@ -41,7 +41,7 @@ const PrayerTable = ({
 
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
-  const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
+  // const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
 
   const [clickedDate, setClickedDate] = useState<string>("");
@@ -118,7 +118,7 @@ const PrayerTable = ({
                     setShowUpdateStatusModal(true);
                     setClickedDate(rowData.date);
                     setClickedSalah(salahName);
-                    setHasUserClickedDate(true);
+                    // setHasUserClickedDate(true);
                   }}
                 />
               ) : (
@@ -136,7 +136,7 @@ const PrayerTable = ({
                     setShowUpdateStatusModal(true);
                     setClickedDate(rowData.date);
                     setClickedSalah(salahName);
-                    setHasUserClickedDate(true);
+                    // setHasUserClickedDate(true);
                   }}
                 ></div>
               );
@@ -149,24 +149,22 @@ const PrayerTable = ({
       // )} */}
 
       {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
-      {showUpdateStatusModal && (
-        <PrayerStatusBottomSheet
-          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          setFetchedSalahData={setFetchedSalahData}
-          // setClickedSalah={setClickedSalah}
-          // setClickedDate={setClickedDate}
-          fetchedSalahData={fetchedSalahData}
-          setUserPreferences={setUserPreferences}
-          userPreferences={userPreferences}
-          clickedDate={clickedDate}
-          clickedSalah={clickedSalah}
-          dbConnection={dbConnection}
-          setShowUpdateStatusModal={setShowUpdateStatusModal}
-          showUpdateStatusModal={showUpdateStatusModal}
-          setHasUserClickedDate={setHasUserClickedDate}
-          hasUserClickedDate={hasUserClickedDate}
-        />
-      )}
+      {/* {showUpdateStatusModal && ( */}
+      <PrayerStatusBottomSheet
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        setFetchedSalahData={setFetchedSalahData}
+        fetchedSalahData={fetchedSalahData}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
+        clickedDate={clickedDate}
+        clickedSalah={clickedSalah}
+        dbConnection={dbConnection}
+        setShowUpdateStatusModal={setShowUpdateStatusModal}
+        showUpdateStatusModal={showUpdateStatusModal}
+        // setHasUserClickedDate={setHasUserClickedDate}
+        // hasUserClickedDate={hasUserClickedDate}
+      />
+      {/* )} */}
     </section>
   );
 };

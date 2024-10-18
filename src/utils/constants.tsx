@@ -2,7 +2,7 @@ import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 
 export const TWEEN_CONFIG = {
-  ease: "easeIn" as EasingDefinition,
+  ease: "easeInOut" as EasingDefinition,
   duration: 0.3,
 };
 

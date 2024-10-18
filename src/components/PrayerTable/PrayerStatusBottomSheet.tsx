@@ -28,8 +28,8 @@ interface PrayerStatusBottomSheetProps {
   clickedSalah: string;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
-  hasUserClickedDate: boolean;
+  // setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
+  // hasUserClickedDate: boolean;
 }
 
 const PrayerStatusBottomSheet = ({
@@ -45,15 +45,10 @@ const PrayerStatusBottomSheet = ({
   clickedSalah,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
-  setHasUserClickedDate,
-  hasUserClickedDate,
-}: PrayerStatusBottomSheetProps) => {
-  // console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
-  // console.log("🚀 ~ hasUserClickedDate:", hasUserClickedDate);
-  // console.log("🚀 ~ clickedSalah:", clickedSalah);
-  // console.log("🚀 ~ clickedDate:", clickedDate);
-  // console.log("🚀 ~ userPreferences:", userPreferences);
-  // console.log("🚀 ~ fetchedSalahData:", fetchedSalahData);
+}: // setHasUserClickedDate,
+// hasUserClickedDate,
+PrayerStatusBottomSheetProps) => {
+  console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
@@ -122,19 +117,14 @@ const PrayerStatusBottomSheet = ({
     return false;
   };
 
-  useEffect(() => {
-    const checkDBForSalah = async () => {
-      try {
-        await doesSalahAndDateExists(clickedSalah, clickedDate);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const checkDBForSalah = async () => {
     console.log("Running checkDBForSalah()");
-
-    checkDBForSalah();
-  }, []);
-  // }, [hasUserClickedDate]);
+    try {
+      await doesSalahAndDateExists(clickedSalah, clickedDate);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const addOrModifySalah = async (
     clickedDate: string,
@@ -235,27 +225,33 @@ const PrayerStatusBottomSheet = ({
   };
 
   useEffect(() => {
+    console.log("REASONS USEEFFECT HAS RUN");
+
     // console.log(modalSheetPrayerReasonsWrap.current);
     // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
     if (
       modalSheetPrayerReasonsWrap.current &&
       modalSheetHiddenPrayerReasonsWrap.current
     ) {
-      // console.log(modalSheetPrayerReasonsWrap.current);
-      // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+      console.log(modalSheetPrayerReasonsWrap.current);
+      console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
       if (
         salahStatus === "male-alone" ||
         salahStatus === "late" ||
         salahStatus === "missed"
       ) {
+        console.log("SHOWING REASONS");
         modalSheetPrayerReasonsWrap.current.style.maxHeight =
           modalSheetHiddenPrayerReasonsWrap.current.offsetHeight + "px";
         modalSheetPrayerReasonsWrap.current.style.opacity = "1";
       } else {
+        console.log("HIDING REASONS");
         modalSheetPrayerReasonsWrap.current.style.maxHeight = "0";
       }
+    } else {
+      console.log("REASONS WRAP IS NULL");
     }
-  }, [hasUserClickedDate, salahStatus]);
+  }, [showUpdateStatusModal, salahStatus]);
 
   if (Capacitor.getPlatform() === "ios") {
     Keyboard.setResizeMode({
@@ -289,10 +285,11 @@ const PrayerStatusBottomSheet = ({
     <>
       <Sheet
         // rootId="root"
+        onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
         onClose={() => {
           setShowUpdateStatusModal(false);
-          setHasUserClickedDate(false);
+          // setHasUserClickedDate(false);
           // setClickedDate("");
           // setSalahStatus("");
           // setClickedSalah("");
