@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { SalahNamesType } from "../../types/types";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
 import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
+import format from "date-fns/format";
 
 interface BottomSheetSingleDateViewProps {
   dbConnection: any;
@@ -49,6 +50,12 @@ const BottomSheetSingleDateView = ({
     "Maghrib",
     "Isha",
   ];
+
+  const formatDateWithOrdinal = (clickedDate: string) => {
+    const date = new Date(clickedDate);
+    const formattedDate = format(date, "do MMMM yyyy");
+    return formattedDate;
+  };
 
   const grabSingleDateData = async (clickedDate: string) => {
     try {
@@ -129,6 +136,9 @@ const BottomSheetSingleDateView = ({
         <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Scroller>
             <section className="mx-5 sheet-content-wrap">
+              <h1 className="py-5 text-2xl text-center">
+                {formatDateWithOrdinal(clickedDate)}
+              </h1>
               {clickedDateData.map((item) => {
                 return (
                   <div key={item.date + item.salahName}>
