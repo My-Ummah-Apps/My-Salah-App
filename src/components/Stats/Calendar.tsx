@@ -115,8 +115,6 @@ const Calendar = ({
 
   // };
 
-  // userStartDate = "17.01.11";
-
   const userStartDateParsed = parse(userStartDate, "yyyy-MM-dd", new Date());
   const todaysDate = new Date();
 
@@ -333,24 +331,8 @@ const Calendar = ({
     </div>
   );
 
-  // const isItemLoaded = (index) => !!itemStatusMap[index];
-  // const loadMoreItems = async (startIndex: number, stopIndex: number) => {};
-
   return (
-    // <div
-    //   // style={{ height: singleMonthDivHeight }}
-    //   className="bg-[color:var(--card-bg-color)] calender-list-wrap mb-3 rounded-md"
-    // >
     <>
-      {/* <InfiniteLoader
-        // isRowLoaded={isRowLoaded}
-        // loadMoreRows={loadMoreRows}
-        // rowCount={monthsBetween.length}
-        isItemLoaded={isItemLoaded}
-        itemCount={monthsBetween.length}
-        loadMoreItems={loadMoreItems}
-      > */}
-      {/* {({ onRowsRendered, registerChild }) => ( */}
       <AutoSizer disableHeight>
         {({ width }) => (
           <List
@@ -369,25 +351,6 @@ const Calendar = ({
           </List>
         )}
       </AutoSizer>
-      {/* )} */}
-      {/* </InfiniteLoader> */}
-      {/* <AutoSizer disableHeight className="auto-sizer">
-        {({ width }) => (
-          <List
-            // style={{ borderRadius: "0.5rem" }}
-            className="list rounded-2xl"
-            // height={330}
-            height={370}
-            itemCount={monthsBetween.length}
-            itemSize={300}
-            layout="horizontal"
-            width={width}
-            direction="rtl"
-          >
-            {Column}
-          </List>
-        )}
-      </AutoSizer> */}
       <BottomSheetSingleDateView
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
@@ -396,7 +359,6 @@ const Calendar = ({
         clickedDate={clickedDate}
       />
     </>
-    // </div>
   );
 };
 
