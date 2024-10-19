@@ -80,41 +80,6 @@ const Calendar = ({
     );
   };
 
-  // const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<string[]>(
-  //   (accumulatorArray, salah) => {
-  //     salah.completedDates.forEach((item) => {
-  //       accumulatorArray.push(Object.keys(item)[0]);
-  //     });
-  //     return accumulatorArray;
-  //   },
-  //   []
-  // );
-  // Need to modify the below so depending on the month being rendered, it either shows the overall statuses for each date for every salah or shows the status for the particular date for one salah only
-
-  // const countCompletedDates = (date: string, salahName?: string) => {
-  //   const allDatesWithinSalahTrackingArray = salahTrackingArray.reduce<
-  //     string[]
-  //   >((accumulatorArray, salah) => {
-  //     if (salah.salahName === salahName) {
-  //       salah.completedDates.forEach((item) => {
-  //         accumulatorArray.push(Object.keys(item)[0]);
-  //       });
-  //     } else if (!salahName) {
-  //       salah.completedDates.forEach((item) => {
-  //         accumulatorArray.push(Object.keys(item)[0]);
-  //       });
-  //     }
-  //     return accumulatorArray;
-  //   }, []);
-
-  //   // let sameDatesArray = allDatesWithinSalahTrackingArray.filter(
-  //   //   (currentDate) => currentDate === date
-  //   // );
-
-  //   // let sameDatesArrayLength = sameDatesArray.length;
-
-  // };
-
   const userStartDateParsed = parse(userStartDate, "yyyy-MM-dd", new Date());
   const todaysDate = new Date();
 
@@ -215,8 +180,6 @@ const Calendar = ({
         width: monthsBetween.length === 1 ? "100%" : style.width,
         borderRight: "1px solid rgb(0, 0, 0, 0.2)",
       }}
-      // bg-[color:var(--card-bg-color)]
-
       className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
     >
       <div
@@ -241,91 +204,87 @@ const Calendar = ({
           })}
         </div>
         <div className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap">
-          {monthlyDates(formattedMonths[index]).map((day) => (
-            <div
-              onClick={() => {
-                if (day <= todaysDate) {
-                  const formattedDate = format(day, "yyyy-MM-dd");
-                  setClickedDate(formattedDate);
-                  setShowDailySalahDataModal(true);
-                  // console.log("CLICKED DATE IS: " + clickedDate);
-                  // showDailySalahData(clickedDate);
-                  // console.log(showDailySalahDataModal);
-                }
-              }}
-              key={format(day, "yyyy-MM-dd")}
-              className="relative flex items-center justify-center individual-date"
-            >
-              {determineRadialColors(day)}
-              <svg
-                className="absolute"
-                xmlns="http://www.w3.org/2000/svg"
-                id="svg"
-                viewBox="0 0 150 150"
-                style={{ height: "35px", width: "35px" }}
-              >
-                <desc>Created with Snap</desc>
-                <defs />
-                <path
-                  d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
-                  style={{
-                    strokeWidth: "11px",
-                    strokeLinecap: "round",
+          {monthlyDates(formattedMonths[index]).map(
+            (date) =>
+              isDayInSpecificMonth(date, formattedMonths[index]) && (
+                <div
+                  onClick={() => {
+                    if (date <= todaysDate) {
+                      const formattedDate = format(date, "yyyy-MM-dd");
+                      setClickedDate(formattedDate);
+                      setShowDailySalahDataModal(true);
+                    }
                   }}
-                  fill="none"
-                  stroke={zoharColor}
-                />
-                <path
-                  d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
-                  style={{
-                    strokeWidth: "11px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={asarColor}
-                />
-                <path
-                  d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
-                  style={{
-                    strokeWidth: "11px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={maghribColor}
-                />
-                <path
-                  d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
-                  style={{
-                    strokeWidth: "11px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={ishaColor}
-                />
-                <path
-                  d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
-                  style={{
-                    strokeWidth: "11px",
-                    strokeLinecap: "round",
-                  }}
-                  fill="none"
-                  stroke={fajrColor}
-                />
-              </svg>
-              <p
-                //
-                className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white  ${
-                  isDayInSpecificMonth(day, formattedMonths[index])
-                    ? "white"
-                    : "text-gray-600"
-                }
+                  key={format(date, "yyyy-MM-dd")}
+                  className="relative flex items-center justify-center individual-date"
+                >
+                  {determineRadialColors(date)}
+                  <svg
+                    className="absolute"
+                    xmlns="http://www.w3.org/2000/svg"
+                    id="svg"
+                    viewBox="0 0 150 150"
+                    style={{ height: "35px", width: "35px" }}
+                  >
+                    <desc>Created with Snap</desc>
+                    <defs />
+                    <path
+                      d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={zoharColor}
+                    />
+                    <path
+                      d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={asarColor}
+                    />
+                    <path
+                      d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={maghribColor}
+                    />
+                    <path
+                      d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={ishaColor}
+                    />
+                    <path
+                      d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={fajrColor}
+                    />
+                  </svg>
+                  <p
+                    //
+                    className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white
               `}
-              >
-                {format(day, "d")}
-                {/* {format(day, "dd")} */}
-              </p>
-            </div>
-          ))}
+                  >
+                    {format(date, "d")}
+                    {/* {format(day, "dd")} */}
+                  </p>
+                </div>
+              )
+          )}
         </div>
       </div>
     </div>
