@@ -1,6 +1,6 @@
 // import React, { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
+import { prayerStatusColorsHexCodes } from "../../utils/constants";
 import { userGenderType } from "../../types/types";
 
 interface CustomizedLabelProps {

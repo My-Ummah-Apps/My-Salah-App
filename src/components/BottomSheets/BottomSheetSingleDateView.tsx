@@ -10,7 +10,7 @@ import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
 
 import { SalahNamesType } from "../../types/types";
-import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
+import { prayerStatusColorsHexCodes } from "../../utils/constants";
 import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
 
 interface BottomSheetSingleDateViewProps {

@@ -7,7 +7,7 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArrayType } from "../../types/types";
-import { prayerStatusColorsHexCodes } from "../../utils/prayerStatusColors";
+import { prayerStatusColorsHexCodes } from "../../utils/constants";
 import { format, parse } from "date-fns";
 
 // import StreakCount from "../Stats/StreakCount";
