@@ -41,6 +41,8 @@ const BottomSheetSingleDateView = ({
     reasons: string;
   }
 
+  console.log("BOTTOM SINGLE DATE SHEET HAS RENDERED");
+
   const [clickedDateData, setClickedDateData] = useState<clickedDateObj[]>([]);
 
   const prayerNamesOrder: SalahNamesType[] = [
@@ -58,9 +60,11 @@ const BottomSheetSingleDateView = ({
   };
 
   const grabSingleDateData = async (clickedDate: string) => {
+    console.log("YO ", clickedDate);
+
     try {
       await checkAndOpenOrCloseDBConnection("open");
-
+      // formatDateWithOrdinal(clickedDate);
       const query = `SELECT * FROM salahDataTable WHERE date = ?`;
       const data = await dbConnection.current.query(query, [clickedDate]);
 
@@ -114,7 +118,10 @@ const BottomSheetSingleDateView = ({
   };
 
   useEffect(() => {
-    grabSingleDateData(clickedDate);
+    if (clickedDate) {
+      grabSingleDateData(clickedDate);
+    }
+    // formatDateWithOrdinal(clickedDate);
     // setClickedDateData(placeholderData);
     // console.log("🚀 ~ useEffect ~ placeholderData:", placeholderData);
   }, [clickedDate]);
@@ -137,7 +144,7 @@ const BottomSheetSingleDateView = ({
           <Sheet.Scroller>
             <section className="mx-5 sheet-content-wrap">
               <h1 className="py-5 text-2xl text-center">
-                {formatDateWithOrdinal(clickedDate)}
+                {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
               </h1>
               {clickedDateData.map((item) => {
                 return (
