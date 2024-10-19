@@ -401,23 +401,6 @@ const App = () => {
   // const appRef = useRef();
   // console.log(appRef);
   // if (Capacitor.isNativePlatform()) {
-
-  //   window.addEventListener("keyboardWillShow", (e) => {
-  //     // const app: any = document.querySelector(".app");
-  //     console.log("SHOWING");
-  //     console.log("APP IS: ");
-  //     console.log(appRef);
-  //     console.log((e as any).keyboardHeight);
-  //     appRef.current.style.marginBottom = (e as any).keyboardHeight + "px";
-  //   });
-  //   window.addEventListener("keyboardWillHide", (e) => {
-  //     // const app: any = document.querySelector(".app");
-  //     console.log("HIDING");
-  //     console.log("APP IS: ");
-  //     console.log(appRef);
-  //     appRef.current.style.marginBottom = "0px";
-  //   });
-  // }
   // let launchCount: number | null = localStorage.getItem("launch-count");
   // useEffect(() => {
   //   if (launchCount > 14) {
