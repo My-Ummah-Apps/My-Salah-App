@@ -36,50 +36,11 @@ window.addEventListener("DOMContentLoaded", async () => {
   // try {
 
   if (Capacitor.isNativePlatform()) {
-    // STATUS BAR FUNCTIONALITY
-
-    // const setStatusBarStyleDark = async () => {
-    //   await StatusBar.setStyle({ style: Style.Dark });
-    // };
-
-    // const setStatusBarStyleLight = async () => {
-    //   await StatusBar.setStyle({ style: Style.Light });
-    // };
-
-    // let statusBarThemeColor;
-    // if (localStorage.getItem("theme") == null) {
-    //   localStorage.setItem("theme", JSON.stringify("light"));
-    //   setStatusBarStyleLight();
-    //   statusBarThemeColor = "#EDEDED";
-    // } else if (JSON.parse(localStorage.getItem("theme")) == "dark") {
-    //   setStatusBarStyleDark();
-    //   statusBarThemeColor = "#242424";
-    //   document.body.classList.add("dark");
-    // } else if (JSON.parse(localStorage.getItem("theme")) == "light") {
-    //   setStatusBarStyleLight();
-    //   statusBarThemeColor = "#EDEDED";
-    //   document.body.classList.remove("dark");
-    // }
-
     setTimeout(() => {
       SplashScreen.hide({
         fadeOutDuration: 250,
       });
     }, 500);
-
-    if (Capacitor.getPlatform() === "ios") {
-      return;
-    } else if (Capacitor.getPlatform() === "android") {
-      setTimeout(() => {
-        // StatusBar.setStyle({ style: Style.Light });
-        // if (statusBarThemeColor == "#EDEDED") {
-        //   StatusBar.setStyle({ style: Style.Light });
-        // } else if (statusBarThemeColor == "#242424") {
-        //   StatusBar.setStyle({ style: Style.Dark });
-        // }
-        // StatusBar.setBackgroundColor({ color: statusBarThemeColor });
-      }, 1000);
-    }
   }
 });
 
@@ -220,7 +181,6 @@ const App = () => {
           console.error(error);
         }
       }
-      setShowIntroModal(true);
     }
 
     if (!DBResultPreferencesValues) {
