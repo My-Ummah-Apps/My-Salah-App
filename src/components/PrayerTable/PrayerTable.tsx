@@ -75,15 +75,12 @@ const PrayerTable = ({
       >
         <Column
           style={{ marginLeft: "0" }}
-          className="text-sm text-left"
+          className="text-left"
           label=""
           dataKey="date"
           cellRenderer={({ rowData }) => {
             const parsedDate = parse(rowData.date, "yyyy-MM-dd", new Date());
-            // const formattedParsedDate = format(parsedDate, "dd.MM.yy");
-            // const formattedParsedDate = new Date(rowData.date);
             const userLocale = navigator.language || "en-US";
-
             const formattedParsedDate = new Intl.DateTimeFormat(userLocale, {
               year: "2-digit",
               month: "2-digit",
@@ -94,8 +91,8 @@ const PrayerTable = ({
             const day = format(parsedDate, "EE");
             return (
               <section>
-                <p>{formattedParsedDate}</p>
-                <p>{day}</p>
+                <p className="text-sm">{formattedParsedDate}</p>
+                <p className="text-sm">{day}</p>
               </section>
             );
           }}

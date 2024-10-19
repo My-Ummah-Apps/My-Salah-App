@@ -83,10 +83,8 @@ PrayerStatusBottomSheetProps) => {
       await checkAndOpenOrCloseDBConnection("open");
 
       const res = await dbConnection.current.query(
-        `
-      SELECT * FROM salahDataTable 
-      WHERE salahName = ? AND date = ?;
-    `,
+        `SELECT * FROM salahDataTable 
+      WHERE salahName = ? AND date = ?;`,
         [clickedSalah, clickedDate]
       );
 
@@ -153,6 +151,7 @@ PrayerStatusBottomSheetProps) => {
       // );
 
       if (!salahAndDateExist) {
+        // TODO: Change below query variable name to something more suitable
         let query = `INSERT INTO salahDataTable(date, salahName, salahStatus`;
         const values = [clickedDate, clickedSalah, salahStatus];
 
@@ -171,7 +170,7 @@ PrayerStatusBottomSheetProps) => {
 
         query += `) VALUES (${values.map(() => "?").join(", ")})`;
         // ? Is better to use .query or .execute?
-        await dbConnection.current.query(query, values); // If .query isn't working, try .execute instead
+        await dbConnection.current.run(query, values); // If .query isn't working, try .execute instead
         // await db?.execute(query, values);
 
         if (findDateWithinData) {
@@ -203,7 +202,7 @@ PrayerStatusBottomSheetProps) => {
         query += ` WHERE date = ? AND salahName = ?`;
         values.push(clickedDate, clickedSalah);
 
-        await dbConnection.current.query(query, values);
+        await dbConnection.current.run(query, values);
 
         if (findDateWithinData) {
           findDateWithinData.salahs[clickedSalah] = salahStatus;

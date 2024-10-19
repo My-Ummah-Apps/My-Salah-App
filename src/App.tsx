@@ -166,7 +166,7 @@ const App = () => {
       try {
         await checkAndOpenOrCloseDBConnection("open");
         if (dbConnection && dbConnection.current) {
-          await dbConnection.current.query(insertQuery, params);
+          await dbConnection.current.run(insertQuery, params);
           const DBResultPreferencesQuery = await dbConnection.current.query(
             `SELECT * FROM userPreferencesTable`
           );
@@ -335,6 +335,7 @@ const App = () => {
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
+      // TODO: Change below variable name to something more suitable
       const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
       if (!dbConnection || !dbConnection.current) {
         throw new Error("dbConnection or dbConnection.current do not exist");

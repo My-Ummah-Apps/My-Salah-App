@@ -54,7 +54,7 @@ const BottomSheetSingleDateView = ({
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const query = "SELECT * FROM salahDataTable WHERE date = ?";
+      const query = `SELECT * FROM salahDataTable WHERE date = ?`;
       const data = await dbConnection.current.query(query, [clickedDate]);
 
       const sortedData: clickedDateObj[] = data.values.sort(
