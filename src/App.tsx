@@ -4,7 +4,6 @@ import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 import { changeLogs, LATEST_APP_VERSION } from "./utils/changelog";
 import { sheetHeaderHeight, TWEEN_CONFIG } from "./utils/constants";
-// import Notifications from "./utils/notifications";
 import {
   DBResultDataObjType,
   PreferenceObjType,
@@ -16,7 +15,6 @@ import {
 } from "./types/types";
 
 // import { StatusBar, Style } from "@capacitor/status-bar";
-// import { LocalNotifications } from "@capacitor/local-notifications";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 import { format, parse, eachDayOfInterval } from "date-fns";
@@ -28,13 +26,10 @@ import SettingsPage from "./pages/SettingsPage";
 // import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
-// import { platform } from "os";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
 
 window.addEventListener("DOMContentLoaded", async () => {
-  // try {
-
   if (Capacitor.isNativePlatform()) {
     setTimeout(() => {
       SplashScreen.hide({
@@ -49,9 +44,18 @@ const App = () => {
   const [showChangelogModal, setShowChangelogModal] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("appVersion") !== LATEST_APP_VERSION) {
+    if (
+      localStorage.getItem("appVersion") &&
+      localStorage.getItem("appVersion") !== LATEST_APP_VERSION
+    ) {
       setShowChangelogModal(true);
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem("existingUser")) {
+      setShowIntroModal(true);
     }
   }, []);
 
@@ -348,14 +352,6 @@ const App = () => {
   };
 
   // CHANGELOG FUNCTIONALITY
-  const betaAppVersion = "1.0.8";
-
-  useEffect(() => {
-    const storedBetaAppVersion = localStorage.getItem("storedBetaAppVersion");
-    if (betaAppVersion !== storedBetaAppVersion) {
-      localStorage.setItem("storedBetaAppVersion", betaAppVersion);
-    }
-  }, []);
 
   const [showIntroModal, setShowIntroModal] = useState(false);
   // const appRef = useRef();
@@ -524,12 +520,13 @@ const App = () => {
                         userGender: "male",
                       })
                     );
-                    // localStorage.setItem("userGender", "male");
                     await modifyDataInUserPreferencesTable(
                       "male",
                       "userGender"
                     );
                     setShowIntroModal(false);
+                    localStorage.setItem("existingUser", "existingUser");
+                    localStorage.setItem("appVersion", LATEST_APP_VERSION);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-blue-800 rounded-2xl"
                 >
@@ -537,7 +534,6 @@ const App = () => {
                 </p>
                 <p
                   onClick={async () => {
-                    // localStorage.setItem("userGender", "female");
                     // setUserGender("female");
                     setUserPreferences(
                       (userPreferences: userPreferencesType) => ({
@@ -550,6 +546,8 @@ const App = () => {
                       "userGender"
                     );
                     setShowIntroModal(false);
+                    localStorage.setItem("existingUser", "existingUser");
+                    localStorage.setItem("appVersion", LATEST_APP_VERSION);
                   }}
                   className="p-2 m-4 text-2xl text-white bg-pink-400 rounded-2xl"
                 >
