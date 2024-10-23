@@ -88,6 +88,11 @@ const NotificationsBottomSheet = ({
     } else if (userNotificationPermission === "granted") {
       if (dailyNotification === true) {
         cancelNotification(1);
+      } else if (dailyNotification === false) {
+        const [hour, minute] = userPreferences.dailyNotificationTime
+          .split(":")
+          .map(Number);
+        scheduleDailyNotification(hour, minute);
       }
       setDailyNotification(!dailyNotification);
       modifyDataInUserPreferencesTable(

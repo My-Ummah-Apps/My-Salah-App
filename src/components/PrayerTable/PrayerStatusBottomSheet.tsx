@@ -9,7 +9,10 @@ import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { SalahRecordsArrayType, userPreferencesType } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
-import { TWEEN_CONFIG } from "../../utils/constants";
+import {
+  prayerStatusColorsHexCodes,
+  TWEEN_CONFIG,
+} from "../../utils/constants";
 import { sheetHeaderHeight } from "../../utils/constants";
 
 interface PrayerStatusBottomSheetProps {
@@ -326,9 +329,12 @@ PrayerStatusBottomSheetProps) => {
                           // setNotes("");
                           // setReasonsArray([]);
                         }}
+                        style={{
+                          backgroundColor: prayerStatusColorsHexCodes.group,
+                        }}
                         className={`${
                           salahStatus === "group" ? "border border-white" : ""
-                        } px-5 py-3 bg-[color:var(--jamaah-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        } px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         {" "}
                         <GoPeople className="w-full mb-1 text-3xl" />
@@ -343,11 +349,15 @@ PrayerStatusBottomSheetProps) => {
                           // setShowReasons(false);
                           // setReasonsArray([]);
                         }}
+                        style={{
+                          backgroundColor:
+                            prayerStatusColorsHexCodes["female-alone"],
+                        }}
                         className={`${
                           salahStatus === "female-alone"
                             ? "border border-white"
                             : ""
-                        } px-5 py-3 bg-[color:var(--alone-female-status-color)] icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        } px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         {" "}
                         <GoPerson className="w-full mb-1 text-3xl" />
@@ -363,11 +373,15 @@ PrayerStatusBottomSheetProps) => {
                           // setShowReasons(true);
                           // setReasonsArray(reasonsArray);
                         }}
+                        style={{
+                          backgroundColor:
+                            prayerStatusColorsHexCodes["male-alone"],
+                        }}
                         className={`${
                           salahStatus === "male-alone"
                             ? "border border-white"
                             : ""
-                        } px-5 py-3  bg-[color:var(--alone-male-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         <GoPerson className="w-full mb-1 text-3xl" />
                         <p className="inline">On Time</p>
@@ -381,9 +395,12 @@ PrayerStatusBottomSheetProps) => {
                           // setShowReasons(false);
                           // setReasonsArray([]);
                         }}
+                        style={{
+                          backgroundColor: prayerStatusColorsHexCodes.excused,
+                        }}
                         className={`${
                           salahStatus === "excused" ? "border border-white" : ""
-                        } px-5 py-3  bg-[color:var(--excused-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         <PiFlower className="w-full mb-1 text-3xl" />
                         <p className="inline">Excused</p>
@@ -396,9 +413,12 @@ PrayerStatusBottomSheetProps) => {
                       // setShowReasons(true);
                       // setReasonsArray(reasonsArray);
                     }}
+                    style={{
+                      backgroundColor: prayerStatusColorsHexCodes.late,
+                    }}
                     className={`${
                       salahStatus === "late" ? "border border-white" : ""
-                    } px-5 py-3 bg-[color:var(--late-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                    } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
                     <GoClock className="w-full mb-1 text-3xl" />
                     <p className="inline">Late</p>
@@ -409,9 +429,12 @@ PrayerStatusBottomSheetProps) => {
                       // setShowReasons(true);
                       // setReasonsArray(reasonsArray);
                     }}
+                    style={{
+                      backgroundColor: prayerStatusColorsHexCodes.missed,
+                    }}
                     className={`${
                       salahStatus === "missed" ? "border border-white" : ""
-                    } px-5 py-3 bg-[color:var(--missed-status-color)] icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                    } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
                     <GoSkip className="w-full mb-1 text-3xl" />
                     <p className="inline">Missed</p>
