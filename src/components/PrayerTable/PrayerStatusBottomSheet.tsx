@@ -573,7 +573,7 @@ PrayerStatusBottomSheetProps) => {
         />
       </Sheet>
       <div
-        className="absolute z-[-100]"
+        className="duplicate-reasons z-[-100] absolute bottom-0"
         ref={modalSheetHiddenPrayerReasonsWrap}
       >
         <div

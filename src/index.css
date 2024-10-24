@@ -49,6 +49,10 @@ body {
   overflow-x: hidden; */
 }
 
+.capitalize-first-letter::first-letter {
+  text-transform: uppercase;
+}
+
 .react-modal-sheet-container {
   transition: margin-bottom 420ms;
 }
@@ -94,7 +98,7 @@ td {
 }
 
 .changelog-individual-log:first-of-type {
-  color: #fb9605;
+  color: rgb(92 107 192);
 }
 
 .modal-sheet-prayer-statuses-wrap {

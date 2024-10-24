@@ -1,8 +1,32 @@
-export const LATEST_APP_VERSION = "2.3";
+export const LATEST_APP_VERSION = "2.4";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Minor Bug Fixes",
+        text: (
+          <>
+            <strong>Fixed</strong>: Addressed several minor bugs, including
+            prayer status sheet not animating on the main page
+          </>
+        ),
+      },
+      {
+        heading: "Various Improvements",
+        text: (
+          <>
+            <strong>Improvements:</strong>: Adjusted calendar styling by
+            removing unnecessary radials for a cleaner look, additional reasons
+            added when selecting alone/late/missed options for a Salah.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "2.3",
     changes: [
       {
         heading: "Import / Export Functionality",

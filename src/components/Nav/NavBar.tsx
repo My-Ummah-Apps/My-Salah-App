@@ -21,7 +21,7 @@ const NavBar = () => {
   const activeBackgroundColor = "grey";
 
   return (
-    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full bg-[var(--secondary-color)] navbar-wrap pb-env-safe-area-inset-bottom rounded-t-2xl">
+    <div className="fixed bottom-0 left-0 z-10 flex items-center justify-around w-full bg-[var(--secondary-color)] navbar-wrap pb-env-safe-area-inset-bottom">
       <NavLink
         onClick={() => {
           setActivePage("settings");

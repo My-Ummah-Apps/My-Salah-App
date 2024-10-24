@@ -190,7 +190,7 @@ const App = () => {
     if (!DBResultPreferencesValues) {
       throw new Error("DBResultPreferencesValues does not exist");
     }
-    // ! Remove below once existing users have been updated
+    // ! Remove below once the ability for users to remove and add their own reasons is introduced
     const updatedReasons =
       "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
@@ -246,7 +246,7 @@ const App = () => {
     }
 
     if (reasons) {
-      // ! Remove below if statement once existing users have been updated
+      // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
       if (reasons.preferenceValue !== updatedReasons) {
         await modifyDataInUserPreferencesTable(updatedReasons, "reasons");
       }
@@ -299,6 +299,7 @@ const App = () => {
     );
 
     const datesFromStartToToday: string[] = eachDayOfInterval({
+      // start: userStartDateFormattedToDateObject,
       start: userStartDateFormattedToDateObject,
       end: todaysDate,
     })
@@ -576,12 +577,12 @@ const App = () => {
         >
           <Sheet.Container>
             {/* <Sheet.Header /> */}
-            <Sheet.Content className="overflow-scroll sheet-changelog">
+            <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
               <Sheet.Scroller>
                 <h1 className="mx-8 mt-8 mb-4 text-2xl ">Whats new?</h1>
                 {changeLogs.map((item, i) => (
                   <section
-                    key={item.changes[i].heading}
+                    key={i}
                     className="mx-6 mt-4 changelog-individual-log"
                     // style={{ borderColor: i === 0 ? "red" : "" }}
                   >
