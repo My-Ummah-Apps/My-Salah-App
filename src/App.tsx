@@ -159,7 +159,7 @@ const App = () => {
           "dailyNotification", "0",
           "dailyNotificationTime", "21:00",
           "haptics", "0",
-          "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming/Leisure,Guests,Health/Fatigue,Shopping,Sleep,Sports,Travel,TV,Other,Work",
+          "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
           "showReasons", "0",
         ];
 
@@ -190,6 +190,9 @@ const App = () => {
     if (!DBResultPreferencesValues) {
       throw new Error("DBResultPreferencesValues does not exist");
     }
+    // ! Remove below once existing users have been updated
+    const updatedReasons =
+      "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
     const assignPreference = (
       preference: string
@@ -243,6 +246,10 @@ const App = () => {
     }
 
     if (reasons) {
+      // ! Remove below if statement once existing users have been updated
+      if (reasons.preferenceValue !== updatedReasons) {
+        await modifyDataInUserPreferencesTable(updatedReasons, "reasons");
+      }
       // setReasonsArray(reasons.preferenceValue.split(","));
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,

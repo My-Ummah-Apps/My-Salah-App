@@ -209,7 +209,8 @@ const Calendar = ({
               isDayInSpecificMonth(date, formattedMonths[index]) && (
                 <div
                   onClick={() => {
-                    if (date <= todaysDate) {
+                    // if (date <= todaysDate) {
+                    if (date >= userStartDateParsed && date <= todaysDate) {
                       const formattedDate = format(date, "yyyy-MM-dd");
                       setClickedDate(formattedDate);
                       setShowDailySalahDataModal(true);
