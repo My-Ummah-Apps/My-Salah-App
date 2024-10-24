@@ -159,7 +159,7 @@ const App = () => {
           "dailyNotification", "0",
           "dailyNotificationTime", "21:00",
           "haptics", "0",
-          "reasons", "Alarm,Education,Family,Friends,Gaming,Guests,Leisure,Movies,Shopping,Sleep,Sports,Travel,TV,Work",
+          "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming/Leisure,Guests,Health/Fatigue,Shopping,Sleep,Sports,Travel,TV,Other,Work",
           "showReasons", "0",
         ];
 

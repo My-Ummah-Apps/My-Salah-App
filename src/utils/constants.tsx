@@ -17,9 +17,9 @@ export const TWEEN_CONFIG = {
 // };
 
 export const prayerStatusColorsHexCodes = {
-  group: "#1ee8b6",
-  "male-alone": "#f5e31d",
-  "female-alone": "#1ee8b6",
+  group: "#0ec188",
+  "male-alone": "rgb(216, 204, 24)",
+  "female-alone": "#fde334",
   excused: "#9c1ae7",
   late: "#f27c14",
   missed: "#f7093b",
