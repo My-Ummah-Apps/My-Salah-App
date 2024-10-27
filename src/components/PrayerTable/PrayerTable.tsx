@@ -58,90 +58,101 @@ const PrayerTable = ({
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
 
   return (
-    <section className="relative">
+    <section className="relative h-[80vh]">
       {/* {renderTable === true ? ( */}
-      <Table
-        style={{
-          textTransform: "none",
-        }}
-        className="text-center"
-        // rowCount={datesFromStartToToday.length}
-        rowCount={fetchedSalahData.length}
-        rowGetter={rowGetter}
-        rowHeight={100}
-        headerHeight={40}
-        height={800}
-        width={510}
-      >
-        <Column
-          style={{ marginLeft: "0" }}
-          className="text-left"
-          label=""
-          dataKey="date"
-          cellRenderer={({ rowData }) => {
-            const parsedDate = parse(rowData.date, "yyyy-MM-dd", new Date());
-            const userLocale = navigator.language || "en-US";
-            const formattedParsedDate = new Intl.DateTimeFormat(userLocale, {
-              year: "2-digit",
-              month: "2-digit",
-              day: "2-digit",
-            })
-              .format(parsedDate)
-              .replace(/\//g, ".");
-            const day = format(parsedDate, "EE");
-            return (
-              <section>
-                <p className="text-sm">{formattedParsedDate}</p>
-                <p className="text-sm">{day}</p>
-              </section>
-            );
-          }}
-          width={120}
-          flexGrow={1}
-        />
-        {salahNamesArr.map((salahName) => (
-          <Column
-            key={salahName}
-            style={{ marginLeft: "0" }}
-            className="text-sm"
-            label={salahName}
-            dataKey={""}
-            width={120}
-            flexGrow={1}
-            cellRenderer={({ rowData }) => {
-              return rowData.salahs[salahName] === "" ? (
-                <LuDot
-                  className={`w-[24px] h-[24px]`}
-                  onClick={() => {
-                    setShowUpdateStatusModal(true);
-                    setClickedDate(rowData.date);
-                    setClickedSalah(salahName);
-                    // setHasUserClickedDate(true);
-                  }}
-                />
-              ) : (
-                <div
-                  style={{
-                    backgroundColor:
-                      prayerStatusColorsHexCodes[
-                        rowData.salahs[
-                          salahName
-                        ] as keyof typeof prayerStatusColorsHexCodes
-                      ],
-                  }}
-                  className={`w-[24px] h-[24px] ${iconStyles}`}
-                  onClick={() => {
-                    setShowUpdateStatusModal(true);
-                    setClickedDate(rowData.date);
-                    setClickedSalah(salahName);
-                    // setHasUserClickedDate(true);
-                  }}
-                ></div>
-              );
+      <AutoSizer>
+        {({ height, width }) => (
+          <Table
+            style={{
+              textTransform: "none",
             }}
-          />
-        ))}
-      </Table>
+            className="text-center"
+            // rowCount={datesFromStartToToday.length}
+            rowCount={fetchedSalahData.length}
+            rowGetter={rowGetter}
+            rowHeight={100}
+            headerHeight={40}
+            height={height}
+            width={width}
+          >
+            <Column
+              style={{ marginLeft: "0" }}
+              className="text-left"
+              label=""
+              dataKey="date"
+              cellRenderer={({ rowData }) => {
+                const parsedDate = parse(
+                  rowData.date,
+                  "yyyy-MM-dd",
+                  new Date()
+                );
+                const userLocale = navigator.language || "en-US";
+                const formattedParsedDate = new Intl.DateTimeFormat(
+                  userLocale,
+                  {
+                    year: "2-digit",
+                    month: "2-digit",
+                    day: "2-digit",
+                  }
+                )
+                  .format(parsedDate)
+                  .replace(/\//g, ".");
+                const day = format(parsedDate, "EE");
+                return (
+                  <section>
+                    <p className="text-sm">{formattedParsedDate}</p>
+                    <p className="text-sm">{day}</p>
+                  </section>
+                );
+              }}
+              width={120}
+              flexGrow={1}
+            />
+            {salahNamesArr.map((salahName) => (
+              <Column
+                key={salahName}
+                style={{ marginLeft: "0" }}
+                className="text-sm"
+                label={salahName}
+                dataKey={""}
+                width={120}
+                flexGrow={1}
+                cellRenderer={({ rowData }) => {
+                  return rowData.salahs[salahName] === "" ? (
+                    <LuDot
+                      className={`w-[24px] h-[24px]`}
+                      onClick={() => {
+                        setShowUpdateStatusModal(true);
+                        setClickedDate(rowData.date);
+                        setClickedSalah(salahName);
+                        // setHasUserClickedDate(true);
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        backgroundColor:
+                          prayerStatusColorsHexCodes[
+                            rowData.salahs[
+                              salahName
+                            ] as keyof typeof prayerStatusColorsHexCodes
+                          ],
+                      }}
+                      className={`w-[24px] h-[24px] ${iconStyles}`}
+                      onClick={() => {
+                        setShowUpdateStatusModal(true);
+                        setClickedDate(rowData.date);
+                        setClickedSalah(salahName);
+                        // setHasUserClickedDate(true);
+                      }}
+                    ></div>
+                  );
+                }}
+              />
+            ))}
+          </Table>
+        )}
+      </AutoSizer>
       {/* // ) : (
       //   <div>Loading Data...</div>
       // )} */}

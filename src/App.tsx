@@ -291,9 +291,9 @@ const App = () => {
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
     const todaysDate = new Date();
-
     const userStartDateFormattedToDateObject: Date = parse(
       userStartDateForSalahTrackingFunc,
+      // "2024-08-01",
       "yyyy-MM-dd",
       new Date()
     );
@@ -418,7 +418,8 @@ const App = () => {
   //   checkStreak();
   // }, [datesFrequencyReduced]);
 
-  const pageStyles: string = `py-[9vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
+  // const pageStyles: string = `pt-[9vh] pb-[2vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
+  const pageStyles: string = `pt-[9vh] pb-[5rem] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
 
   return (
     <BrowserRouter>

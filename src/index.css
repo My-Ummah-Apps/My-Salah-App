@@ -126,6 +126,7 @@ td {
 
 .ReactVirtualized__Grid__innerScrollContainer {
   max-width: 95vw !important;
+  /* margin-bottom: 20rem !important; */
 }
 
 .ReactVirtualized__Table__headerRow {
@@ -160,6 +161,7 @@ td {
   content: "";
   display: inline-block;
   margin-right: 0.3rem;
+  border-radius: 0.2rem;
   width: 10px; /* Adjust the size as needed */
   height: 10px; /* Adjust the size as needed */
   /* background-color: red; */
