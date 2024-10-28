@@ -142,12 +142,10 @@ const BottomSheetSingleDateView = ({
       }}
     >
       <Sheet.Container>
-        <Sheet.Header
-          style={{ ...sheetHeaderHeight, backgroundColor: "rgb(33, 36, 38)" }}
-        />
+        <Sheet.Header style={sheetHeaderHeight} />
         <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Scroller>
-            <section className="mx-5 text-white sheet-content-wrap">
+            <section className="mx-5 text-white mb-14 sheet-content-wrap">
               <h1 className="py-5 text-2xl text-center">
                 {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
               </h1>
@@ -159,7 +157,7 @@ const BottomSheetSingleDateView = ({
                     //   backgroundColor:
                     //     prayerStatusColorsHexCodes[item.salahStatus],
                     // }}
-                    className="p-2 mb-5 rounded-lg border-[var(--border-bottom-color)] border-b"
+                    className="p-2 mb-5  border-[var(--border-bottom-color)] border-b"
                   >
                     <div className="flex items-center justify-between my-5">
                       <div
@@ -178,11 +176,13 @@ const BottomSheetSingleDateView = ({
                             prayerStatusColorsHexCodes[item.salahStatus],
                         }}
                         className={
-                          "capitalize-first-letter w-1/4 rounded-2xl p-2 text-center"
+                          "capitalize-first-letter w-4/12 rounded-xl p-2 text-center"
                         }
                       >
-                        {item.salahStatus === "male-alone"
-                          ? "alone"
+                        {item.salahStatus === "group"
+                          ? "In Jamaah"
+                          : item.salahStatus === "male-alone"
+                          ? "On Time"
                           : item.salahStatus === "female-alone"
                           ? "prayed"
                           : item.salahStatus || "No Data"}
@@ -203,20 +203,26 @@ const BottomSheetSingleDateView = ({
                     </div>
                     {item.reasons.length > 0 && (
                       <div className="flex flex-wrap">
-                        {item.reasons
-                          .split(",")
-                          .map(
-                            (reason) =>
-                              reason.length > 0 && (
-                                <p className={`${reasonsStyles} mb-5`}>
-                                  {reason}
-                                </p>
-                              )
-                          )}
+                        {item.reasons.split(",").map(
+                          (reason) =>
+                            reason.length > 0 && (
+                              <p
+                                // style={{
+                                //   backgroundColor:
+                                //     prayerStatusColorsHexCodes[
+                                //       item.salahStatus
+                                //     ],
+                                // }}
+                                className={`${reasonsStyles}`}
+                              >
+                                {reason}
+                              </p>
+                            )
+                        )}
                       </div>
                     )}
                     {item.notes.length > 0 && (
-                      <div className="ml-2 text-sm">{item.notes}</div>
+                      <div className="pb-3 my-5 ml-2 text-sm">{item.notes}</div>
                     )}
                   </div>
                 );
@@ -225,7 +231,6 @@ const BottomSheetSingleDateView = ({
           </Sheet.Scroller>
         </Sheet.Content>
       </Sheet.Container>
-
       <Sheet.Backdrop
         // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
         onTap={() => setShowDailySalahDataModal(false)}
