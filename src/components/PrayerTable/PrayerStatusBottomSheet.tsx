@@ -11,6 +11,7 @@ import { SalahRecordsArrayType, userPreferencesType } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
   prayerStatusColorsHexCodes,
+  reasonsStyles,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import { sheetHeaderHeight } from "../../utils/constants";
@@ -303,7 +304,7 @@ PrayerStatusBottomSheetProps) => {
         tweenConfig={TWEEN_CONFIG}
       >
         <Sheet.Container
-          className="react-modal-sheet-container"
+          // className="react-modal-sheet-container"
           ref={sheetRef}
           style={{ backgroundColor: "rgb(33, 36, 38)" }}
         >
@@ -459,7 +460,7 @@ PrayerStatusBottomSheetProps) => {
                       {/* + */}
                     </p>
                   </div>
-                  <div className="flex flex-wrap ">
+                  <div className="flex flex-wrap">
                     {/* {missedReasonsArray.map((item) => ( */}
                     {userPreferences.reasonsArray.map((item) => (
                       <p
@@ -469,6 +470,7 @@ PrayerStatusBottomSheetProps) => {
                             ? "#2563eb"
                             : "",
                         }}
+                        className={reasonsStyles}
                         onClick={() => {
                           if (!selectedReasonsArray.includes(item)) {
                             selectedReasonsArray = [...selectedReasons, item];
@@ -486,7 +488,6 @@ PrayerStatusBottomSheetProps) => {
                           setSelectedReasons(selectedReasonsArray);
                         }}
                         // border border-gray-700 b-1 rounded-xl
-                        className="p-2 m-1 text-xs bg-[rgba(0, 0, 0, 1)] bg-gray-800/70 rounded-xl"
                       >
                         {item}
                       </p>

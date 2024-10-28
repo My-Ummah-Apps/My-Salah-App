@@ -93,8 +93,13 @@ td {
   }
 }
 
-.react-modal-sheet-container {
+.react-modal-sheet-scroller,
+.react-modal-sheet-header {
   background-color: var(--primary-color) !important;
+}
+
+.test {
+  background-color: red !important;
 }
 
 .changelog-individual-log:first-of-type {

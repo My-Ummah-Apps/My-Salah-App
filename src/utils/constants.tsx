@@ -6,6 +6,9 @@ export const TWEEN_CONFIG = {
   duration: 0.5,
 };
 
+export const reasonsStyles =
+  "p-2 m-1 text-xs bg-[rgba(0, 0, 0, 1)] bg-gray-800/70 rounded-xl";
+
 export const prayerStatusColorsHexCodes = {
   group: "#448b75",
   "male-alone": "#bcaa4b",
@@ -26,7 +29,10 @@ export const prayerStatusColorsHexCodes = {
 //   "": "#585858",
 // };
 
-export const sheetHeaderHeight = { height: "60px" };
+export const sheetHeaderHeight = {
+  height: "60px",
+  // backgroundColor: "black",
+};
 
 export const showToast = async (text: string, duration: "short" | "long") => {
   await Toast.show({

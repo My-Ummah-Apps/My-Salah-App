@@ -10,7 +10,10 @@ import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
 
 import { SalahNamesType } from "../../types/types";
-import { prayerStatusColorsHexCodes } from "../../utils/constants";
+import {
+  prayerStatusColorsHexCodes,
+  reasonsStyles,
+} from "../../utils/constants";
 import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
 import format from "date-fns/format";
 
@@ -74,6 +77,8 @@ const BottomSheetSingleDateView = ({
             prayerNamesOrder.indexOf(b.salahName);
         }
       );
+
+      console.log("DATA: ", data.values);
 
       const placeholderData: clickedDateObj[] = prayerNamesOrder.map(
         (salah) => {
@@ -142,15 +147,29 @@ const BottomSheetSingleDateView = ({
         />
         <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Scroller>
-            <section className="mx-5 sheet-content-wrap">
+            <section className="mx-5 text-white sheet-content-wrap">
               <h1 className="py-5 text-2xl text-center">
                 {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
               </h1>
               {clickedDateData.map((item) => {
                 return (
-                  <div key={item.date + item.salahName}>
+                  <div
+                    key={item.date + item.salahName}
+                    // style={{
+                    //   backgroundColor:
+                    //     prayerStatusColorsHexCodes[item.salahStatus],
+                    // }}
+                    className="p-2 mb-5 rounded-lg border-[var(--border-bottom-color)] border-b"
+                  >
                     <div className="flex items-center justify-between my-5">
-                      <div className="w-1/2 text-lg text-white">
+                      <div
+                        style={{
+                          borderLeft: `3px solid ${
+                            prayerStatusColorsHexCodes[item.salahStatus]
+                          }`,
+                        }}
+                        className="w-1/2 px-2 py-1 text-lg text-white"
+                      >
                         {item.salahName}
                       </div>
                       <div
@@ -159,7 +178,7 @@ const BottomSheetSingleDateView = ({
                             prayerStatusColorsHexCodes[item.salahStatus],
                         }}
                         className={
-                          "capitalize-first-letter px-2 py-3 rounded-2xl text-white grow text-center w-1/2"
+                          "capitalize-first-letter w-1/4 rounded-2xl p-2 text-center"
                         }
                       >
                         {item.salahStatus === "male-alone"
@@ -167,12 +186,38 @@ const BottomSheetSingleDateView = ({
                           : item.salahStatus === "female-alone"
                           ? "prayed"
                           : item.salahStatus || "No Data"}
+                        {/* {item.salahStatus === "group" ? (
+                          <GoPeople
+                            style={{
+                              color:
+                                prayerStatusColorsHexCodes[item.salahStatus],
+                              fontSize: "2rem",
+                            }}
+                          />
+                        ) : item.salahStatus === "female-alone" ? (
+                          "prayed"
+                        ) : (
+                          item.salahStatus || "No Data"
+                        )} */}
                       </div>
                     </div>
-                    <div className="border-[var(--border-bottom-color)] border-b pb-10 mb-10">
-                      <div className="my-3">Reasons: {item.reasons}</div>
-                      <div>Notes: {item.notes}</div>
-                    </div>
+                    {item.reasons.length > 0 && (
+                      <div className="flex flex-wrap">
+                        {item.reasons
+                          .split(",")
+                          .map(
+                            (reason) =>
+                              reason.length > 0 && (
+                                <p className={`${reasonsStyles} mb-5`}>
+                                  {reason}
+                                </p>
+                              )
+                          )}
+                      </div>
+                    )}
+                    {item.notes.length > 0 && (
+                      <div className="ml-2 text-sm">{item.notes}</div>
+                    )}
                   </div>
                 );
               })}
