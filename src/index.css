@@ -38,6 +38,17 @@
   user-select: none;
 }
 
+/* body,
+html {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+} */
+
+/* html body {
+  overflow: hidden;
+} */
+
 body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -45,6 +56,7 @@ body {
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);
   color: rgb(184, 184, 184);
+  overflow: auto;
   /* overflow-y: hidden;
   overflow-x: hidden; */
 }
@@ -163,7 +175,7 @@ td {
   content: "";
   display: inline-block;
   margin-right: 0.3rem;
-  border-radius: 0.2rem;
+  border-radius: 0.15rem;
   width: 10px; /* Adjust the size as needed */
   height: 10px; /* Adjust the size as needed */
   /* background-color: red; */

@@ -7,12 +7,6 @@ import {
 } from "../types/types";
 import { useEffect } from "react";
 
-// import { subDays } from "date-fns";
-// interface salahTrackingEntryType {
-//   salahName: string;
-//   completedDates: { [date: string]: string }[] | [];
-// }
-
 interface HomePageProps {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
@@ -50,14 +44,6 @@ const HomePage = ({
   useEffect(() => {
     setHeading("Home");
   }, []);
-  // console.log(
-  //   "HOMEPAGE Component has rendered..., fetchedSalahData is: ",
-  //   fetchedSalahData
-  // );
-  // setHeading("Home");
-
-  // const today: Date = new Date();
-  // const startDate = subDays(today, currentStartDate);
 
   return (
     <section className={`home-page-wrap ${pageStyles}`}>
