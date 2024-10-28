@@ -94,12 +94,9 @@ td {
 }
 
 .react-modal-sheet-scroller,
-.react-modal-sheet-header {
+.react-modal-sheet-header,
+.react-modal-sheet-container {
   background-color: var(--primary-color) !important;
-}
-
-.test {
-  background-color: red !important;
 }
 
 .changelog-individual-log:first-of-type {
