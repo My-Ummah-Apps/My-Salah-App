@@ -24,6 +24,7 @@
     "@capacitor/status-bar": "^6.0.1",
     "@capacitor/toast": "^6.0.2",
     "@emotion/is-prop-valid": "^1.3.1",
+    "@hugotomazi/capacitor-navigation-bar": "^4.0.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@types/lodash": "^4.17.0",

@@ -20,6 +20,7 @@ def capacitor_pods
   pod 'CapacitorSplashScreen', :path => '../../node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
   pod 'CapacitorToast', :path => '../../node_modules/@capacitor/toast'
+  pod 'HugotomaziCapacitorNavigationBar', :path => '../../node_modules/@hugotomazi/capacitor-navigation-bar'
   pod 'CapacitorNativeSettings', :path => '../../node_modules/capacitor-native-settings'
 end
 

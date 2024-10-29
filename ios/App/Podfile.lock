@@ -24,6 +24,8 @@ PODS:
     - Capacitor
   - CapacitorToast (6.0.2):
     - Capacitor
+  - HugotomaziCapacitorNavigationBar (4.0.1):
+    - Capacitor
   - SQLCipher (4.6.0):
     - SQLCipher/standard (= 4.6.0)
   - SQLCipher/common (4.6.0)
@@ -44,6 +46,7 @@ DEPENDENCIES:
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
+  - "HugotomaziCapacitorNavigationBar (from `../../node_modules/@hugotomazi/capacitor-navigation-bar`)"
 
 SPEC REPOS:
   trunk:
@@ -75,6 +78,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorToast:
     :path: "../../node_modules/@capacitor/toast"
+  HugotomaziCapacitorNavigationBar:
+    :path: "../../node_modules/@hugotomazi/capacitor-navigation-bar"
 
 SPEC CHECKSUMS:
   Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
@@ -89,9 +94,10 @@ SPEC CHECKSUMS:
   CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
   CapacitorStatusBar: b81d4fb5d4e0064c712018071b3ab4b810b39a63
   CapacitorToast: cfd82cd5afdc3f027ad4a8859f909ae4a327f3c3
+  HugotomaziCapacitorNavigationBar: 57d7cd51c65ef5e40159bafb0095ee99fab432ba
   SQLCipher: 30a8e81afa6128e600b17ffa77d0f92fa05ed208
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 0cdee737dccae4b0cc826d1c5e9cb518b81fc51e
+PODFILE CHECKSUM: 4c596e660610dc7c674df0f74d33dc378ffa82ac
 
 COCOAPODS: 1.15.2

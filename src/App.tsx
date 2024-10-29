@@ -15,6 +15,7 @@ import {
 } from "./types/types";
 
 import { StatusBar } from "@capacitor/status-bar";
+import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 import { format, parse, eachDayOfInterval } from "date-fns";
@@ -39,9 +40,11 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (Capacitor.isNativePlatform()) {
+    const STATUS_AND_NAV_BAR_COLOR = "#161515";
     if (Capacitor.getPlatform() === "android") {
       setTimeout(() => {
-        StatusBar.setBackgroundColor({ color: "#161515" });
+        StatusBar.setBackgroundColor({ color: STATUS_AND_NAV_BAR_COLOR });
+        NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
       }, 1000);
     }
   }
