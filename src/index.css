@@ -38,6 +38,11 @@
   user-select: none;
 }
 
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  display: none;
+}
+
 /* body,
 html {
   position: fixed;
