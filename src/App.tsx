@@ -29,6 +29,7 @@ import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -113,12 +114,54 @@ const App = () => {
         `SELECT * FROM salahDataTable`
       );
 
-      const DBResultPreferences = await dbConnection.current.query(
+      let DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
       );
 
       if (DBResultPreferences && DBResultPreferences.values) {
-        await handleUserPreferencesDataFromDB(DBResultPreferences.values);
+        console.log("DBResultPreference:", DBResultPreferences);
+        // TODO: Turn below into a helper function
+        const checkPermission = await LocalNotifications.checkPermissions();
+        const userNotificationPermission = checkPermission.display;
+        console.log("PERMISSION: ", userNotificationPermission);
+
+        const notificationValue = DBResultPreferences.values.find(
+          (row) => row.preferenceName === "dailyNotification"
+        ).preferenceValue;
+
+        if (
+          userNotificationPermission !== "granted" &&
+          notificationValue === "1"
+        ) {
+          console.log(
+            "USER HAS TURNED OFF NOTIFICATION IN OS SETTINGS CHANGING DB DATA TO 0"
+          );
+          try {
+            await modifyDataInUserPreferencesTable("0", "dailyNotification");
+            await checkAndOpenOrCloseDBConnection("open");
+            DBResultPreferences = await dbConnection.current.query(
+              `SELECT * FROM userPreferencesTable`
+            );
+            console.log("YO: ", DBResultPreferences);
+            console.log("DBResultPreferences: ", DBResultPreferences);
+          } catch (error) {
+            console.error(
+              "Error modifying dailyNotification value in database:",
+              error
+            );
+          }
+        } else {
+          console.log("NO CHANGES HERE SKIPPING...");
+        }
+        try {
+          if (DBResultPreferences.values) {
+            await handleUserPreferencesDataFromDB(DBResultPreferences.values);
+          } else {
+            throw new Error("DBResultPreferences.values not found");
+          }
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
@@ -144,7 +187,6 @@ const App = () => {
   };
 
   const handleUserPreferencesDataFromDB = async (
-    // DBResultPreferences: PreferenceObjType[]
     DBResultPreferences: PreferenceObjType[]
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
@@ -201,6 +243,40 @@ const App = () => {
     if (!DBResultPreferencesValues) {
       throw new Error("DBResultPreferencesValues does not exist");
     }
+
+    // console.log("DBResultPreference:", DBResultPreferences);
+
+    // const checkPermission = await LocalNotifications.checkPermissions();
+    // const userNotificationPermission = checkPermission.display;
+    // console.log("PERMISSION: ", userNotificationPermission);
+
+    // const notificationValue = DBResultPreferences.find(
+    //   (row) => row.preferenceName === "dailyNotification"
+    // )?.preferenceValue;
+    // if (userNotificationPermission !== "granted" && notificationValue === "1") {
+    //   console.log(
+    //     "USER HAS TURNED OFF NOTIFICATION IN OS SETTINGS CHANGING DB DATA TO 0"
+    //   );
+    //   try {
+    //     await modifyDataInUserPreferencesTable("0", "dailyNotification");
+    //     DBResultPreferences = DBResultPreferences.map((pref) => {
+    //       if (pref.preferenceName === "dailyNotification") {
+    //         return { ...pref, preferenceValue: "0" };
+    //       } else {
+    //         return pref;
+    //       }
+    //     });
+    //     console.log("DBResultPreferences: ", DBResultPreferences);
+    //   } catch (error) {
+    //     console.error(
+    //       "Error modifying dailyNotification value in database:",
+    //       error
+    //     );
+    //   }
+    // } else {
+    //   console.log("NO CHANGES HERE SKIPPING...");
+    // }
+
     // ! Remove below once the ability for users to remove and add their own reasons is introduced
     const updatedReasons =
       "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
@@ -271,7 +347,6 @@ const App = () => {
     }
 
     if (dailyNotificationRow) {
-      // setDailyNotification(dailyNotificationRow.preferenceValue);
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         dailyNotification: dailyNotificationRow.preferenceValue,
@@ -281,7 +356,6 @@ const App = () => {
     }
 
     if (dailyNotificationTimeRow) {
-      // setDailyNotificationTime(dailyNotificationTimeRow.preferenceValue);
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         dailyNotificationTime: dailyNotificationTimeRow.preferenceValue,
@@ -310,7 +384,6 @@ const App = () => {
     );
 
     const datesFromStartToToday: string[] = eachDayOfInterval({
-      // start: userStartDateFormattedToDateObject,
       start: userStartDateFormattedToDateObject,
       end: todaysDate,
     })
