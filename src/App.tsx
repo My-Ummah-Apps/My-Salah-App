@@ -30,6 +30,7 @@ import StatsPage from "./pages/StatsPage";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import { checkNotificationPermissions } from "./utils/notifications";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -121,8 +122,11 @@ const App = () => {
       if (DBResultPreferences && DBResultPreferences.values) {
         console.log("DBResultPreference:", DBResultPreferences);
         // TODO: Turn below into a helper function
-        const checkPermission = await LocalNotifications.checkPermissions();
-        const userNotificationPermission = checkPermission.display;
+        // const checkPermission = await LocalNotifications.checkPermissions();
+        // const userNotificationPermission = checkPermission.display;
+        // const { display: userNotificationPermission } =
+        //   await LocalNotifications.checkPermissions();
+        const userNotificationPermission = await checkNotificationPermissions();
         console.log("PERMISSION: ", userNotificationPermission);
         console.log(DBResultPreferences);
         // TODO: The below needs an additional check, as if the user does not select a gender and then relaunches the app, the gender prompt dissapears as values have been set and the length is no longer zero

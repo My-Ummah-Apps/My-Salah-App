@@ -12,7 +12,11 @@ import {
 } from "capacitor-native-settings";
 
 import { PreferenceType, userPreferencesType } from "../../types/types";
-import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
+import {
+  checkNotificationPermissions,
+  sheetHeaderHeight,
+  TWEEN_CONFIG,
+} from "../../utils/constants";
 
 const NotificationsBottomSheet = ({
   setShowNotificationsModal,
@@ -86,27 +90,13 @@ const NotificationsBottomSheet = ({
     await LocalNotifications.cancel({ notifications: [{ id: id }] });
   };
 
-  // useEffect(() => {
-  //   const checkPermissionFunc = async () => {
-  //     const checkPermission = await LocalNotifications.checkPermissions();
-  //     const userNotificationPermission = checkPermission.display;
-  //     // if (userNotificationPermission === "denied" && dailyNotification === true) {
-  //     if (
-  //       userNotificationPermission === "denied" &&
-  //       userPreferences.dailyNotification === "1"
-  //     ) {
-  //       modifyDataInUserPreferencesTable("0", "dailyNotification");
-  //       setDailyNotification(false);
-  //     }
-  //   };
-  //   checkPermissionFunc();
-  // }, []);
-
-  async function checkNotificationPermissions() {
-    const checkPermission = await LocalNotifications.checkPermissions();
-    const userNotificationPermission = checkPermission.display;
+  async function handleNotificationPermissions() {
+    // const checkPermission = await LocalNotifications.checkPermissions();
+    // const userNotificationPermission = checkPermission.display;
+    // const { display: userNotificationPermission } =
+    //   await LocalNotifications.checkPermissions();
+    const userNotificationPermission = await checkNotificationPermissions();
     console.log("userNotificationPermission: ", userNotificationPermission);
-
     console.log("DAILYNOTIFICATION STATE: ", dailyNotificationToggle);
 
     if (userNotificationPermission === "denied") {
@@ -189,7 +179,7 @@ const NotificationsBottomSheet = ({
                 name={undefined}
                 offColor="white"
                 onChange={() => {
-                  checkNotificationPermissions();
+                  handleNotificationPermissions();
                 }}
                 onColor="lightblue"
                 pendingOffColor={undefined}

@@ -1,5 +1,6 @@
 import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 export const TWEEN_CONFIG = {
   ease: "easeInOut" as EasingDefinition,
@@ -18,6 +19,15 @@ export const prayerStatusColorsHexCodes = {
   missed: "#b62e2e",
   "": "#585858",
 };
+
+export const checkNotificationPermissions = async () => {
+  const { display: userNotificationPermission } =
+    await LocalNotifications.checkPermissions();
+  return userNotificationPermission;
+};
+
+export const { display: userNotificationPermission } =
+  await LocalNotifications.checkPermissions();
 
 // export const prayerStatusColorsHexCodes = {
 //   group: "#0ec188",
