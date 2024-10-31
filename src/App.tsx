@@ -124,6 +124,11 @@ const App = () => {
         const checkPermission = await LocalNotifications.checkPermissions();
         const userNotificationPermission = checkPermission.display;
         console.log("PERMISSION: ", userNotificationPermission);
+        console.log(DBResultPreferences);
+        // TODO: The below needs an additional check, as if the user does not select a gender and then relaunches the app, the gender prompt dissapears as values have been set and the length is no longer zero
+        // if (DBResultPreferences.values.length === 0) {
+        //   setShowIntroModal(true);
+        // }
 
         const notificationValue =
           DBResultPreferences.values.length > 0

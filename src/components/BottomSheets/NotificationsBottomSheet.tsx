@@ -30,9 +30,8 @@ const NotificationsBottomSheet = ({
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }) => {
-  const [dailyNotification, setDailyNotification] = useState<boolean>(
-    userPreferences.dailyNotification === "1" ? true : false
-  );
+  const [dailyNotificationToggle, setDailyNotificationToggle] =
+    useState<boolean>(userPreferences.dailyNotification === "1" ? true : false);
 
   console.log(
     "userPreferences.dailyNotification: ",
@@ -61,6 +60,8 @@ const NotificationsBottomSheet = ({
   };
 
   const scheduleDailyNotification = async (hour: number, minute: number) => {
+    console.log("SCHEDULING NOTIFICATION");
+
     await LocalNotifications.schedule({
       notifications: [
         {
@@ -104,20 +105,30 @@ const NotificationsBottomSheet = ({
   async function checkNotificationPermissions() {
     const checkPermission = await LocalNotifications.checkPermissions();
     const userNotificationPermission = checkPermission.display;
+    console.log("userNotificationPermission: ", userNotificationPermission);
+
+    console.log("DAILYNOTIFICATION STATE: ", dailyNotificationToggle);
+
     if (userNotificationPermission === "denied") {
+      console.log("PERMISSION DENIED");
+
       showNotificationsAlert();
     } else if (userNotificationPermission === "granted") {
-      if (dailyNotification === true) {
+      console.log("PERMISSION GRANTED");
+
+      if (dailyNotificationToggle === true) {
         cancelNotification(1);
-      } else if (dailyNotification === false) {
+      } else if (dailyNotificationToggle === false) {
+        console.log("TOGGLE DETECTED, SETTING NOTICIATION TIME");
+
         const [hour, minute] = userPreferences.dailyNotificationTime
           .split(":")
           .map(Number);
         scheduleDailyNotification(hour, minute);
       }
-      setDailyNotification(!dailyNotification);
+      setDailyNotificationToggle(!dailyNotificationToggle);
       modifyDataInUserPreferencesTable(
-        dailyNotification === true ? "1" : "0",
+        dailyNotificationToggle === true ? "1" : "0",
         "dailyNotification"
       );
     } else if (
@@ -131,7 +142,7 @@ const NotificationsBottomSheet = ({
   const requestPermissionFunction = async () => {
     const requestPermission = await LocalNotifications.requestPermissions();
     if (requestPermission.display === "granted") {
-      setDailyNotification(true);
+      setDailyNotificationToggle(true);
       modifyDataInUserPreferencesTable("1", "dailyNotification");
     } else if (
       requestPermission.display === "prompt" ||
@@ -153,9 +164,9 @@ const NotificationsBottomSheet = ({
   };
 
   useEffect(() => {
-    const val = dailyNotification === true ? "1" : "0";
-    modifyDataInUserPreferencesTable(val, "dailyNotification");
-  }, [dailyNotification]);
+    const notificationValue = dailyNotificationToggle === true ? "1" : "0";
+    modifyDataInUserPreferencesTable(notificationValue, "dailyNotification");
+  }, [dailyNotificationToggle]);
 
   return (
     <Sheet
@@ -171,7 +182,7 @@ const NotificationsBottomSheet = ({
             <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
               <p>Turn on Daily Notification</p>{" "}
               <Switch
-                checked={dailyNotification}
+                checked={dailyNotificationToggle}
                 className={undefined}
                 disabled={undefined}
                 handleColor="white"
@@ -188,7 +199,7 @@ const NotificationsBottomSheet = ({
               />
             </div>
 
-            {dailyNotification === true ? (
+            {dailyNotificationToggle === true ? (
               <div className="flex items-center justify-between p-3">
                 <p>Set Time</p>
 
@@ -198,7 +209,7 @@ const NotificationsBottomSheet = ({
                   }}
                   style={{ backgroundColor: "transparent" }}
                   className={`${
-                    dailyNotification === true ? "slideUp" : ""
+                    dailyNotificationToggle === true ? "slideUp" : ""
                   } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
                   type="time"
                   id="appt"
