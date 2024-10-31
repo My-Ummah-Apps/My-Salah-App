@@ -462,7 +462,7 @@ PrayerStatusBottomSheetProps) => {
                   </div>
                   <div className="flex flex-wrap">
                     {/* {missedReasonsArray.map((item) => ( */}
-                    {userPreferences.reasonsArray.map((item) => (
+                    {userPreferences.reasonsArray.sort().map((item) => (
                       <p
                         key={item}
                         style={{
@@ -618,7 +618,7 @@ PrayerStatusBottomSheetProps) => {
         </div>
         <div className="flex flex-wrap">
           {/* {missedReasonsArray.map((item) => ( */}
-          {userPreferences.reasonsArray.map((item) => (
+          {userPreferences.reasonsArray.sort().map((item) => (
             <p
               key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
               style={{

@@ -202,11 +202,16 @@ const BottomSheetSingleDateView = ({
                       </div>
                     </div>
                     {item.reasons.length > 0 && (
-                      <div className="flex flex-wrap items-center text-sm">
-                        <p className="pr-2">Reasons: </p>
-                        {item.reasons.split(",").map(
-                          (reason) =>
-                            reason.length > 0 && (
+                      // <section className="mb-2 text-sm">
+                      <div className="flex flex-wrap items-center">
+                        <p className="pr-2 my-3 text-sm">Reasons: </p>
+                        {item.reasons
+                          .split(",")
+                          .filter((reason) => reason.length > 0)
+                          .sort()
+                          .map(
+                            (reason) => (
+                              // reason.length > 0 && (
                               <p
                                 // style={{
                                 //   backgroundColor:
@@ -219,11 +224,13 @@ const BottomSheetSingleDateView = ({
                                 {reason}
                               </p>
                             )
-                        )}
+                            // )
+                          )}
                       </div>
+                      // {/* </section> */}
                     )}
                     {item.notes.length > 0 && (
-                      <div className="flex pb-3 my-5 text-sm whitespace-normal text-wrap">
+                      <div className="flex pb-3 my-5 text-sm">
                         {/* <p className="pr-2">Notes: </p> */}
                         <p className="max-w-full break-words">{item.notes}</p>
                       </div>
