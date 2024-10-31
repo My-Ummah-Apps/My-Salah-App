@@ -202,7 +202,8 @@ const BottomSheetSingleDateView = ({
                       </div>
                     </div>
                     {item.reasons.length > 0 && (
-                      <div className="flex flex-wrap">
+                      <div className="flex flex-wrap items-center text-sm">
+                        <p className="pr-2">Reasons: </p>
                         {item.reasons.split(",").map(
                           (reason) =>
                             reason.length > 0 && (
@@ -222,7 +223,10 @@ const BottomSheetSingleDateView = ({
                       </div>
                     )}
                     {item.notes.length > 0 && (
-                      <div className="pb-3 my-5 ml-2 text-sm">{item.notes}</div>
+                      <div className="flex pb-3 my-5 text-sm whitespace-normal text-wrap">
+                        {/* <p className="pr-2">Notes: </p> */}
+                        <p className="max-w-full break-words">{item.notes}</p>
+                      </div>
                     )}
                   </div>
                 );
