@@ -34,6 +34,11 @@ const NotificationsBottomSheet = ({
     userPreferences.dailyNotification === "1" ? true : false
   );
 
+  console.log(
+    "userPreferences.dailyNotification: ",
+    userPreferences.dailyNotification
+  );
+
   const showNotificationsAlert = async () => {
     const { value } = await Dialog.confirm({
       title: "Open Settings",
@@ -80,21 +85,21 @@ const NotificationsBottomSheet = ({
     await LocalNotifications.cancel({ notifications: [{ id: id }] });
   };
 
-  useEffect(() => {
-    const checkPermissionFunc = async () => {
-      const checkPermission = await LocalNotifications.checkPermissions();
-      const userNotificationPermission = checkPermission.display;
-      // if (userNotificationPermission === "denied" && dailyNotification === true) {
-      if (
-        userNotificationPermission === "denied" &&
-        userPreferences.dailyNotification === "1"
-      ) {
-        modifyDataInUserPreferencesTable("0", "dailyNotification");
-        setDailyNotification(false);
-      }
-    };
-    checkPermissionFunc();
-  }, []);
+  // useEffect(() => {
+  //   const checkPermissionFunc = async () => {
+  //     const checkPermission = await LocalNotifications.checkPermissions();
+  //     const userNotificationPermission = checkPermission.display;
+  //     // if (userNotificationPermission === "denied" && dailyNotification === true) {
+  //     if (
+  //       userNotificationPermission === "denied" &&
+  //       userPreferences.dailyNotification === "1"
+  //     ) {
+  //       modifyDataInUserPreferencesTable("0", "dailyNotification");
+  //       setDailyNotification(false);
+  //     }
+  //   };
+  //   checkPermissionFunc();
+  // }, []);
 
   async function checkNotificationPermissions() {
     const checkPermission = await LocalNotifications.checkPermissions();

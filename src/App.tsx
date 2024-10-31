@@ -125,9 +125,12 @@ const App = () => {
         const userNotificationPermission = checkPermission.display;
         console.log("PERMISSION: ", userNotificationPermission);
 
-        const notificationValue = DBResultPreferences.values.find(
-          (row) => row.preferenceName === "dailyNotification"
-        ).preferenceValue;
+        const notificationValue =
+          DBResultPreferences.values.length > 0
+            ? DBResultPreferences.values.find(
+                (row) => row.preferenceName === "dailyNotification"
+              ).preferenceValue
+            : null;
 
         if (
           userNotificationPermission !== "granted" &&
