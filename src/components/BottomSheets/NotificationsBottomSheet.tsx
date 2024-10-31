@@ -91,17 +91,12 @@ const NotificationsBottomSheet = ({
   };
 
   async function handleNotificationPermissions() {
-    // const checkPermission = await LocalNotifications.checkPermissions();
-    // const userNotificationPermission = checkPermission.display;
-    // const { display: userNotificationPermission } =
-    //   await LocalNotifications.checkPermissions();
     const userNotificationPermission = await checkNotificationPermissions();
     console.log("userNotificationPermission: ", userNotificationPermission);
     console.log("DAILYNOTIFICATION STATE: ", dailyNotificationToggle);
 
     if (userNotificationPermission === "denied") {
       console.log("PERMISSION DENIED");
-
       showNotificationsAlert();
     } else if (userNotificationPermission === "granted") {
       console.log("PERMISSION GRANTED");
@@ -117,10 +112,11 @@ const NotificationsBottomSheet = ({
         scheduleDailyNotification(hour, minute);
       }
       setDailyNotificationToggle(!dailyNotificationToggle);
-      modifyDataInUserPreferencesTable(
-        dailyNotificationToggle === true ? "1" : "0",
-        "dailyNotification"
-      );
+      console.log("TOGGLE AFTER TIME SET: ", dailyNotificationToggle);
+      // modifyDataInUserPreferencesTable(
+      //   dailyNotificationToggle === true ? "1" : "0",
+      //   "dailyNotification"
+      // );
     } else if (
       userNotificationPermission === "prompt" ||
       userNotificationPermission === "prompt-with-rationale"
@@ -130,14 +126,20 @@ const NotificationsBottomSheet = ({
   }
 
   const requestPermissionFunction = async () => {
-    const requestPermission = await LocalNotifications.requestPermissions();
-    if (requestPermission.display === "granted") {
+    // const requestPermission = await LocalNotifications.requestPermissions();
+    const { display: requestPermission } =
+      await LocalNotifications.requestPermissions();
+    if (requestPermission === "granted") {
       setDailyNotificationToggle(true);
-      modifyDataInUserPreferencesTable("1", "dailyNotification");
+      const [hour, minute] = userPreferences.dailyNotificationTime
+        .split(":")
+        .map(Number);
+      scheduleDailyNotification(hour, minute);
+      // modifyDataInUserPreferencesTable("1", "dailyNotification");
     } else if (
-      requestPermission.display === "prompt" ||
-      requestPermission.display === "prompt-with-rationale" ||
-      requestPermission.display === "denied"
+      requestPermission === "prompt" ||
+      requestPermission === "prompt-with-rationale" ||
+      requestPermission === "denied"
     ) {
       modifyDataInUserPreferencesTable("0", "dailyNotification");
     }
@@ -155,6 +157,10 @@ const NotificationsBottomSheet = ({
 
   useEffect(() => {
     const notificationValue = dailyNotificationToggle === true ? "1" : "0";
+    setUserPreferences({
+      ...userPreferences,
+      dailyNotification: notificationValue,
+    });
     modifyDataInUserPreferencesTable(notificationValue, "dailyNotification");
   }, [dailyNotificationToggle]);
 

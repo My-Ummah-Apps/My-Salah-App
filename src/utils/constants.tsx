@@ -26,9 +26,6 @@ export const checkNotificationPermissions = async () => {
   return userNotificationPermission;
 };
 
-export const { display: userNotificationPermission } =
-  await LocalNotifications.checkPermissions();
-
 // export const prayerStatusColorsHexCodes = {
 //   group: "#0ec188",
 //   "male-alone": "rgb(216, 204, 24)",

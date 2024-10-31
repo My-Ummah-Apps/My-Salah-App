@@ -3,7 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 import { changeLogs, LATEST_APP_VERSION } from "./utils/changelog";
-import { sheetHeaderHeight, TWEEN_CONFIG } from "./utils/constants";
+import {
+  checkNotificationPermissions,
+  sheetHeaderHeight,
+  TWEEN_CONFIG,
+} from "./utils/constants";
 import {
   DBResultDataObjType,
   PreferenceObjType,
@@ -29,8 +33,6 @@ import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
-import { LocalNotifications } from "@capacitor/local-notifications";
-import { checkNotificationPermissions } from "./utils/notifications";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -121,11 +123,6 @@ const App = () => {
 
       if (DBResultPreferences && DBResultPreferences.values) {
         console.log("DBResultPreference:", DBResultPreferences);
-        // TODO: Turn below into a helper function
-        // const checkPermission = await LocalNotifications.checkPermissions();
-        // const userNotificationPermission = checkPermission.display;
-        // const { display: userNotificationPermission } =
-        //   await LocalNotifications.checkPermissions();
         const userNotificationPermission = await checkNotificationPermissions();
         console.log("PERMISSION: ", userNotificationPermission);
         console.log(DBResultPreferences);
@@ -154,7 +151,6 @@ const App = () => {
             DBResultPreferences = await dbConnection.current.query(
               `SELECT * FROM userPreferencesTable`
             );
-            console.log("YO: ", DBResultPreferences);
             console.log("DBResultPreferences: ", DBResultPreferences);
           } catch (error) {
             console.error(
@@ -222,7 +218,7 @@ const App = () => {
           "userGender", "male",
           "userStartDate", userStartDate,
           "dailyNotification", "0",
-          "dailyNotificationTime", "21:00",
+          "dailyNotificationTime", "09:49",
           "haptics", "0",
           "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
           "showReasons", "0",
@@ -255,39 +251,6 @@ const App = () => {
     if (!DBResultPreferencesValues) {
       throw new Error("DBResultPreferencesValues does not exist");
     }
-
-    // console.log("DBResultPreference:", DBResultPreferences);
-
-    // const checkPermission = await LocalNotifications.checkPermissions();
-    // const userNotificationPermission = checkPermission.display;
-    // console.log("PERMISSION: ", userNotificationPermission);
-
-    // const notificationValue = DBResultPreferences.find(
-    //   (row) => row.preferenceName === "dailyNotification"
-    // )?.preferenceValue;
-    // if (userNotificationPermission !== "granted" && notificationValue === "1") {
-    //   console.log(
-    //     "USER HAS TURNED OFF NOTIFICATION IN OS SETTINGS CHANGING DB DATA TO 0"
-    //   );
-    //   try {
-    //     await modifyDataInUserPreferencesTable("0", "dailyNotification");
-    //     DBResultPreferences = DBResultPreferences.map((pref) => {
-    //       if (pref.preferenceName === "dailyNotification") {
-    //         return { ...pref, preferenceValue: "0" };
-    //       } else {
-    //         return pref;
-    //       }
-    //     });
-    //     console.log("DBResultPreferences: ", DBResultPreferences);
-    //   } catch (error) {
-    //     console.error(
-    //       "Error modifying dailyNotification value in database:",
-    //       error
-    //     );
-    //   }
-    // } else {
-    //   console.log("NO CHANGES HERE SKIPPING...");
-    // }
 
     // ! Remove below once the ability for users to remove and add their own reasons is introduced
     const updatedReasons =
@@ -439,7 +402,6 @@ const App = () => {
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
-      // TODO: Change below variable name to something more suitable
       const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
       if (!dbConnection || !dbConnection.current) {
         throw new Error("dbConnection or dbConnection.current do not exist");
