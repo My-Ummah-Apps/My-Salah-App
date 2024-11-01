@@ -204,7 +204,7 @@ const BottomSheetSingleDateView = ({
                     {item.reasons.length > 0 && (
                       // <section className="mb-2 text-sm">
                       <div className="flex flex-wrap items-center">
-                        <p className="pr-2 my-3 text-sm">Reasons: </p>
+                        <p className="pr-2 my-3 text-sm">Reason/s: </p>
                         {item.reasons
                           .split(",")
                           .filter((reason) => reason.length > 0)

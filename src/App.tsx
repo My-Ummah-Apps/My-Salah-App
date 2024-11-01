@@ -218,7 +218,7 @@ const App = () => {
           "userGender", "male",
           "userStartDate", userStartDate,
           "dailyNotification", "0",
-          "dailyNotificationTime", "09:49",
+          "dailyNotificationTime", "21:00",
           "haptics", "0",
           "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
           "showReasons", "0",

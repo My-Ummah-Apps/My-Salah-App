@@ -57,6 +57,7 @@ PrayerStatusBottomSheetProps) => {
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
+  const counterNameField = useRef<HTMLTextAreaElement | null>(null);
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState("");
@@ -71,6 +72,26 @@ PrayerStatusBottomSheetProps) => {
     useState(false);
 
   let selectedReasonsArray = selectedReasons;
+
+  useEffect(() => {
+    if (counterNameField.current) {
+      counterNameField.current.style.height = "1px";
+      counterNameField.current.style.height = `${
+        counterNameField.current.scrollHeight + 0.5
+      }px`;
+    } else {
+      console.error("counterNameField.current does not exist");
+    }
+  });
+
+  const increaseTextAreaHeight = (e: any) => {
+    if (counterNameField.current) {
+      // counterNameField.current.style.height = "auto";
+      counterNameField.current.style.height = `${e.target.scrollHeight}px`;
+    } else {
+      console.error("counterNameField.current does not exist");
+    }
+  };
 
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
@@ -447,7 +468,7 @@ PrayerStatusBottomSheetProps) => {
               salahStatus === "missed" ? ( */}
                 <div
                   ref={modalSheetPrayerReasonsWrap}
-                  className="my-8 overflow-x-hidden prayer-status-modal-reasons-wrap"
+                  className="mb-5 overflow-x-hidden mt-7 prayer-status-modal-reasons-wrap"
                 >
                   <div className="flex justify-between">
                     <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
@@ -533,15 +554,21 @@ PrayerStatusBottomSheetProps) => {
                   className="text-sm notes-wrap"
                   //  useRef={notesBoxRef}
                 >
-                  <h2 className="mt-3">Notes (Optional)</h2>
+                  {/* <h2 className="mt-3">Notes (Optional)</h2> */}
                   <textarea
+                    dir="auto"
+                    placeholder="Notes (Optional)"
+                    ref={counterNameField}
                     value={notes}
-                    onChange={handleNotes}
+                    onChange={(e) => {
+                      handleNotes(e);
+                      increaseTextAreaHeight(e);
+                    }}
                     style={{ resize: "vertical" }}
                     // wrap="hard"
                     rows={3}
                     // cols={1}
-                    className="w-full p-1 mt-3 bg-transparent border rounded-md "
+                    className="w-full p-2 border outline-none resize-none bg-[rgb(35,35,35)] border-hidden rounded-xl max-h-14 focus:border-gray-500"
                   />
                 </div>
                 <button
