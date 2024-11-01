@@ -25,7 +25,7 @@ export const changeLogs = [
             </strong>{" "}
             - Enhanced styling for the single-date sheet in the calendar view
             <br />
-            - Status and handlebar colors now amtch the app's background on
+            - Status and handlebar colors now match the app's background on
             Android for a more consistent look
             <br />- Changelog can now be viewed at any time from the settings
             page
@@ -46,9 +46,8 @@ export const changeLogs = [
             settings wasn't properly reflected in the app settings. <br />
             - Updated notification permission checks on app reinstall to ensure
             accurate toggle behavior in settings. <br />
-            - Fixed issues with the prayer table display when app data or cache
-            is cleared. <br />- Addressed ITMS-90899 warning for Macs with Apple
-            silicon support. <br />- Improved notes entry field in the status
+            - Fixed issues with the prayer table not rendering when app data or
+            cache is cleared. <br />- Improved notes entry field in the status
             update sheet which now expands dynamically as the user types, with a
             max height for readability.
           </>
