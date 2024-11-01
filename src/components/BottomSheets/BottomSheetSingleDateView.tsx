@@ -44,7 +44,7 @@ const BottomSheetSingleDateView = ({
     reasons: string;
   }
 
-  console.log("BOTTOM SINGLE DATE SHEET HAS RENDERED");
+  // console.log("BOTTOM SINGLE DATE SHEET HAS RENDERED");
 
   const [clickedDateData, setClickedDateData] = useState<clickedDateObj[]>([]);
 
@@ -63,8 +63,6 @@ const BottomSheetSingleDateView = ({
   };
 
   const grabSingleDateData = async (clickedDate: string) => {
-    console.log("YO ", clickedDate);
-
     try {
       await checkAndOpenOrCloseDBConnection("open");
       // formatDateWithOrdinal(clickedDate);
@@ -78,12 +76,8 @@ const BottomSheetSingleDateView = ({
         }
       );
 
-      console.log("DATA: ", data.values);
-
       const placeholderData: clickedDateObj[] = prayerNamesOrder.map(
         (salah) => {
-          // console.log("🚀 ~ placeholderData ~ item:", salah);
-          // console.log("🚀 ~ clickedDateData ~ clickedDateData:", clickedDateData);
           const dataCheck = sortedData.find((obj) => {
             return obj.salahName === salah;
           });
@@ -128,7 +122,6 @@ const BottomSheetSingleDateView = ({
     }
     // formatDateWithOrdinal(clickedDate);
     // setClickedDateData(placeholderData);
-    // console.log("🚀 ~ useEffect ~ placeholderData:", placeholderData);
   }, [clickedDate]);
 
   return (
@@ -204,7 +197,7 @@ const BottomSheetSingleDateView = ({
                     {item.reasons.length > 0 && (
                       // <section className="mb-2 text-sm">
                       <div className="flex flex-wrap items-center">
-                        <p className="pr-2 my-3 text-sm">Reason/s: </p>
+                        <p className="pr-2 my-3 text-sm">Reason(s): </p>
                         {item.reasons
                           .split(",")
                           .filter((reason) => reason.length > 0)

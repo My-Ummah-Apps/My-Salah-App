@@ -55,7 +55,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 const App = () => {
-  console.log("APP.TSX HAS RENDERED...");
+  // console.log("APP.TSX HAS RENDERED...");
   const [showChangelogModal, setShowChangelogModal] = useState(false);
 
   useEffect(() => {
@@ -87,7 +87,6 @@ const App = () => {
     reasonsArray: [],
   });
 
-  // console.log("APP COMPONENT HAS RENDERED");
   const {
     isDatabaseInitialised,
     sqliteConnection,
@@ -122,10 +121,7 @@ const App = () => {
       );
 
       if (DBResultPreferences && DBResultPreferences.values) {
-        console.log("DBResultPreference:", DBResultPreferences);
         const userNotificationPermission = await checkNotificationPermissions();
-        console.log("PERMISSION: ", userNotificationPermission);
-        console.log(DBResultPreferences);
         // TODO: The below needs an additional check, as if the user does not select a gender and then relaunches the app, the gender prompt dissapears as values have been set and the length is no longer zero
         // if (DBResultPreferences.values.length === 0) {
         //   setShowIntroModal(true);
@@ -142,24 +138,18 @@ const App = () => {
           userNotificationPermission !== "granted" &&
           notificationValue === "1"
         ) {
-          console.log(
-            "USER HAS TURNED OFF NOTIFICATION IN OS SETTINGS CHANGING DB DATA TO 0"
-          );
           try {
             await modifyDataInUserPreferencesTable("0", "dailyNotification");
             await checkAndOpenOrCloseDBConnection("open");
             DBResultPreferences = await dbConnection.current.query(
               `SELECT * FROM userPreferencesTable`
             );
-            console.log("DBResultPreferences: ", DBResultPreferences);
           } catch (error) {
             console.error(
               "Error modifying dailyNotification value in database:",
               error
             );
           }
-        } else {
-          console.log("NO CHANGES HERE SKIPPING...");
         }
         try {
           if (DBResultPreferences.values) {
@@ -168,7 +158,7 @@ const App = () => {
             throw new Error("DBResultPreferences.values not found");
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       } else {
         throw new Error(
@@ -578,7 +568,7 @@ const App = () => {
             <Sheet.Content>
               {" "}
               <section className="p-5 text-center">
-                <h1 className="text-4xl">Select your gender</h1>
+                <h1 className="text-4xl">I am a...</h1>
                 <p
                   onClick={async () => {
                     // setUserGender("male");
@@ -598,7 +588,7 @@ const App = () => {
                   }}
                   className="p-2 m-4 text-2xl text-white bg-blue-800 rounded-2xl"
                 >
-                  Male
+                  Brother
                 </p>
                 <p
                   onClick={async () => {
@@ -619,7 +609,7 @@ const App = () => {
                   }}
                   className="p-2 m-4 text-2xl text-white bg-pink-400 rounded-2xl"
                 >
-                  Female
+                  Sister
                 </p>
               </section>
             </Sheet.Content>
@@ -660,7 +650,7 @@ const App = () => {
                         <h2 className="mb-2 text-lg font-medium">
                           {item.heading}
                         </h2>
-                        <p>{item.text}</p>
+                        <p className="text-sm">{item.text}</p>
                       </section>
                     ))}
                   </section>

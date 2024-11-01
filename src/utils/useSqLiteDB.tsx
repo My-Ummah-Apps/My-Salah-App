@@ -7,7 +7,6 @@ import {
 } from "@capacitor-community/sqlite";
 
 const useSQLiteDB = () => {
-  // console.log("useSQLiteDB HAS RUN");
   const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection
   const dbConnection = useRef<SQLiteDBConnection>(); // This is the connection to the database itself, will deal with READ/INSERT etc
   const [isDatabaseInitialised, setisDatabaseInitialised] =
@@ -18,7 +17,6 @@ const useSQLiteDB = () => {
       try {
         // if (sqliteConnection && dbConnection) return;
         if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so return out of the function
-        // console.log("INITIALISING DATABASE");
 
         sqliteConnection.current = new SQLiteConnection(CapacitorSQLite); // Create a new SQLiteConnection instance and assign it to sqliteConnection.current.
         const connectionConsistency =
@@ -38,13 +36,9 @@ const useSQLiteDB = () => {
               "mysalahappdatabase",
               false
             );
-
-          console.log("connectionConsistency.result && isConn both true");
         } else {
           // If the dbConnection does not exist then create a new connection (additionally, if the "mysalahappdatabase" database does not exist, create it at the same time as establishing the new connection)
-          console.log(
-            "connectionConsistency.result && isConn not true therefore CREATING / CONNECTING TO DATABASE"
-          );
+
           dbConnection.current =
             await sqliteConnection.current.createConnection(
               "mysalahappdatabase",
@@ -57,10 +51,6 @@ const useSQLiteDB = () => {
 
         await initialiseTables();
         setisDatabaseInitialised(true);
-        console.log(
-          "Database initialisation complete, dbConnection is: ",
-          dbConnection
-        );
       } catch (error) {
         console.error("Error initializing database: " + error);
       }
@@ -80,7 +70,6 @@ const useSQLiteDB = () => {
     //   await checkAndOpenOrCloseDBConnection("close");
     // };
     // return () => {
-    //   console.log("cleanup within initialiseDB has run");
     //   cleanUp();
     // };
   }, []);
@@ -111,14 +100,8 @@ const useSQLiteDB = () => {
         );
       } else if (action === "open" && isDatabaseOpen.result === false) {
         await dbConnection.current.open();
-        // console.log(
-        //   "Database connection within checkAndOpenOrCloseDBConnection function opened successfully"
-        // );
       } else if (action === "close" && isDatabaseOpen.result === true) {
         await dbConnection.current.close();
-        // console.log(
-        //   "Database connection closed within checkAndOpenOrCloseDBConnection function"
-        // );
       } else {
         throw new Error(
           `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
@@ -131,10 +114,7 @@ const useSQLiteDB = () => {
 
   // This is where you can check and update table structure
   const initialiseTables = async () => {
-    // console.log("INITIALISING TABLES...");
     try {
-      // console.log("ATTEMPTING TO OPEN CONNECTION...");
-
       if (!dbConnection.current) {
         throw new Error(
           `Table not created/initialised within initialiseTables, dbConnection.current is ${dbConnection.current}`
@@ -178,7 +158,6 @@ const useSQLiteDB = () => {
         }
 
         // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
-        // console.log("CLEANUP WITHIN PERFORMSQLACTION");
       } catch (error) {
         console.error(error);
       }

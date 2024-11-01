@@ -37,8 +37,6 @@ const PrayerTable = ({
   setUserPreferences,
   userPreferences,
 }: PrayerTableProps) => {
-  console.log("Prayer Table Has Re-rendered");
-
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   // const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
@@ -48,7 +46,6 @@ const PrayerTable = ({
   const [clickedSalah, setClickedSalah] = useState<string>("");
 
   const rowGetter = ({ index }: any) => {
-    // console.log("fetchedSalahData in rowGetter: ", fetchedSalahData[index]);
     return fetchedSalahData[index];
   };
 

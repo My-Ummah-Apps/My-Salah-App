@@ -41,37 +41,15 @@ const Calendar = ({
   userStartDate,
 }: CalenderProps) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
-  // const [singleMonthDivHeight, setSingleMonthDivHeight] = useState(0);
-  useEffect(() => {
-    // console.log(calenderSingleMonthHeightRef.current);
-    // if (calenderSingleMonthHeightRef.current) {
-    //   // console.log(calenderSingleMonthHeightRef.current.clientHeight);
-    //   setSingleMonthDivHeight(
-    //     calenderSingleMonthHeightRef.current.clientHeight
-    //   );
-    // }
-  });
 
   const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
-  // console.log(showDailySalahDataModal);
   const [clickedDate, setClickedDate] = useState<string>("");
-
-  // useEffect(() => {
-  //   setClickedDate(clickedDate);
-  // }, [clickedDate]);
-
-  // const getSingleMonthDivHeight = () => {
-  //   // setSingleMonthDivHeight(e.target.clientHeight);
-  //   console.log("hi");
-  //   console.log(singleMonthDivHeight);
-  // };
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
   const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
-    // console.log(currentMonth);
     const parsedCurrentMonth = parse(currentMonth, "MMMM yyyy", new Date());
     const dayMonth = startOfMonth(dayToCheck);
     return (
@@ -95,8 +73,6 @@ const Calendar = ({
   );
   formattedMonths.reverse();
 
-  // const monthStrings = monthsInYear.map((month) => format(month, "MMM-yyyy"));
-  // console.log(monthStrings);
   let firstDayOfMonth;
   const monthlyDates = (month: string) => {
     firstDayOfMonth = parse(month, "MMMM yyyy", new Date()); // Returns the following type of object: Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time)

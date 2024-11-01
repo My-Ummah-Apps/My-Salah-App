@@ -53,11 +53,10 @@ const PrayerStatusBottomSheet = ({
 }: // setHasUserClickedDate,
 // hasUserClickedDate,
 PrayerStatusBottomSheetProps) => {
-  console.log("BOTTOM SHEET HAS BEEN TRIGGERED");
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
-  const counterNameField = useRef<HTMLTextAreaElement | null>(null);
+  const notesTextArea = useRef<HTMLTextAreaElement | null>(null);
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState("");
@@ -74,22 +73,22 @@ PrayerStatusBottomSheetProps) => {
   let selectedReasonsArray = selectedReasons;
 
   useEffect(() => {
-    if (counterNameField.current) {
-      counterNameField.current.style.height = "1px";
-      counterNameField.current.style.height = `${
-        counterNameField.current.scrollHeight + 0.5
+    if (notesTextArea.current) {
+      notesTextArea.current.style.height = "1px";
+      notesTextArea.current.style.height = `${
+        notesTextArea.current.scrollHeight + 0.5
       }px`;
     } else {
-      console.error("counterNameField.current does not exist");
+      console.error("notesTextArea.current does not exist");
     }
   });
 
   const increaseTextAreaHeight = (e: any) => {
-    if (counterNameField.current) {
-      // counterNameField.current.style.height = "auto";
-      counterNameField.current.style.height = `${e.target.scrollHeight}px`;
+    if (notesTextArea.current) {
+      // notesTextArea.current.style.height = "auto";
+      notesTextArea.current.style.height = `${e.target.scrollHeight}px`;
     } else {
-      console.error("counterNameField.current does not exist");
+      console.error("notesTextArea.current does not exist");
     }
   };
 
@@ -101,9 +100,6 @@ PrayerStatusBottomSheetProps) => {
     clickedSalah: string,
     clickedDate: string
   ): Promise<boolean> => {
-    // console.log("doesSalahAndDateExists HAS RUN ", clickedSalah, clickedDate);
-    // console.log("isDatabaseUpdating? ", isDatabaseUpdating);
-
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
@@ -113,15 +109,12 @@ PrayerStatusBottomSheetProps) => {
         [clickedSalah, clickedDate]
       );
 
-      console.log("res is: ", res);
-
       if (res && res.values && res.values.length === 0) {
         setSalahStatus("");
         setNotes("");
         setSelectedReasons([]);
         return false;
       } else if (res && res.values && res.values.length > 0) {
-        // console.log("SALAH DATA FOUND, RES.VALUES IS: ", res.values);
         setSalahStatus(res.values[0].salahStatus);
         setNotes(res.values[0].notes);
         setSelectedReasons(res.values[0].reasons.split(", "));
@@ -142,7 +135,6 @@ PrayerStatusBottomSheetProps) => {
   };
 
   const checkDBForSalah = async () => {
-    console.log("Running checkDBForSalah()");
     try {
       await doesSalahAndDateExists(clickedSalah, clickedDate);
     } catch (error) {
@@ -157,8 +149,6 @@ PrayerStatusBottomSheetProps) => {
     selectedReasons?: string[],
     notes?: string
   ) => {
-    // console.log("addOrModifySalah HAS RUN");
-
     const findDateWithinData = fetchedSalahData.find(
       (obj: any) => obj.date === clickedDate
     );
@@ -181,7 +171,6 @@ PrayerStatusBottomSheetProps) => {
         const values = [clickedDate, clickedSalah, salahStatus];
 
         if (selectedReasons !== undefined && selectedReasons.length > 0) {
-          // console.log("REASONS ARE NOT UNDEFINED");
           query += `, reasons`;
           const stringifiedReasons = selectedReasons.join(", ");
           // values.push(...reasons);
@@ -237,7 +226,6 @@ PrayerStatusBottomSheetProps) => {
 
         setFetchedSalahData((prev) => [...prev]);
       }
-      console.log("fetchedSalahData in sheet: ", fetchedSalahData);
     } catch (error) {
       console.error(error);
     } finally {
@@ -250,31 +238,25 @@ PrayerStatusBottomSheetProps) => {
   };
 
   useEffect(() => {
-    console.log("REASONS USEEFFECT HAS RUN");
-
     // console.log(modalSheetPrayerReasonsWrap.current);
     // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
     if (
       modalSheetPrayerReasonsWrap.current &&
       modalSheetHiddenPrayerReasonsWrap.current
     ) {
-      console.log(modalSheetPrayerReasonsWrap.current);
-      console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+      // console.log(modalSheetPrayerReasonsWrap.current);
+      // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
       if (
         salahStatus === "male-alone" ||
         salahStatus === "late" ||
         salahStatus === "missed"
       ) {
-        console.log("SHOWING REASONS");
         modalSheetPrayerReasonsWrap.current.style.maxHeight =
           modalSheetHiddenPrayerReasonsWrap.current.offsetHeight + "px";
         modalSheetPrayerReasonsWrap.current.style.opacity = "1";
       } else {
-        console.log("HIDING REASONS");
         modalSheetPrayerReasonsWrap.current.style.maxHeight = "0";
       }
-    } else {
-      console.log("REASONS WRAP IS NULL");
     }
   }, [showUpdateStatusModal, salahStatus]);
 
@@ -558,7 +540,7 @@ PrayerStatusBottomSheetProps) => {
                   <textarea
                     dir="auto"
                     placeholder="Notes (Optional)"
-                    ref={counterNameField}
+                    ref={notesTextArea}
                     value={notes}
                     onChange={(e) => {
                       handleNotes(e);

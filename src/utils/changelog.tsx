@@ -1,8 +1,56 @@
-export const LATEST_APP_VERSION = "2.4";
+export const LATEST_APP_VERSION = "2.5";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Notification Fixes",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved multiple issues with notifications
+            not working consistently. <br />
+            <strong>Note:</strong> If notifications haven’t been working, please
+            toggle them off and back on in settings to reactivate.
+          </>
+        ),
+      },
+      {
+        heading: "Minor UI & UX Enhancements",
+        text: (
+          <>
+            <strong>Improved:</strong> Enhanced styling for the single-date
+            sheet in the calendar view, including status and handlebar colors
+            matching the app's background on Android for a more consistent look.
+          </>
+        ),
+      },
+      {
+        heading: "General Bug Fixes",
+        text: (
+          <>
+            <strong>
+              Fixed:
+              <br />
+            </strong>
+            - Resolved an issue with the Android notification icon displaying an
+            exclamation mark instead of the app icon. <br />
+            - Fixed a permissions bug where blocking notifications in system
+            settings wasn't properly reflected in the app settings. <br />
+            - Updated notification permission checks on app reinstall to ensure
+            accurate toggle behavior in settings. <br />
+            - Fixed issues with the prayer table display when app data or cache
+            is cleared. <br />- Addressed ITMS-90899 warning for Macs with Apple
+            silicon support. <br />- Improved notes entry field in the status
+            update sheet which now expands dynamically as the user types, with a
+            max height for readability.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "2.4",
     changes: [
       {
         heading: "Minor Bug Fixes",
