@@ -36,6 +36,7 @@ interface SettingsPageProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  setShowChangelogModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SettingsPage = ({
@@ -48,6 +49,7 @@ const SettingsPage = ({
   modifyDataInUserPreferencesTable,
   setUserPreferences,
   userPreferences,
+  setShowChangelogModal,
 }: SettingsPageProps) => {
   useEffect(() => {
     setHeading("Settings");
@@ -283,6 +285,13 @@ const SettingsPage = ({
           subText={"Share application"}
           onClick={shareThisAppLink}
         /> */}
+        <SettingIndividual
+          headingText={"Changelog"}
+          subText={"View Changelog"}
+          onClick={() => {
+            setShowChangelogModal(true);
+          }}
+        />
         <SettingIndividual
           headingText={"Feedback"}
           subText={"Report Bugs"}

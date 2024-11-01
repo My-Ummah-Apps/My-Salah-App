@@ -79,7 +79,7 @@ PrayerStatusBottomSheetProps) => {
         notesTextArea.current.scrollHeight + 0.5
       }px`;
     } else {
-      console.error("notesTextArea.current does not exist");
+      console.log("notesTextArea.current does not exist");
     }
   });
 

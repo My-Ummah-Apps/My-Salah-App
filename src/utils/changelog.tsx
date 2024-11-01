@@ -19,9 +19,16 @@ export const changeLogs = [
         heading: "Minor UI & UX Enhancements",
         text: (
           <>
-            <strong>Improved:</strong> Enhanced styling for the single-date
-            sheet in the calendar view, including status and handlebar colors
-            matching the app's background on Android for a more consistent look.
+            <strong>
+              Improved:
+              <br />
+            </strong>{" "}
+            - Enhanced styling for the single-date sheet in the calendar view
+            <br />
+            - Status and handlebar colors now amtch the app's background on
+            Android for a more consistent look
+            <br />- Changelog can now be viewed at any time from the settings
+            page
           </>
         ),
       },

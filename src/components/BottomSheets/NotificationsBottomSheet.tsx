@@ -37,11 +37,6 @@ const NotificationsBottomSheet = ({
   const [dailyNotificationToggle, setDailyNotificationToggle] =
     useState<boolean>(userPreferences.dailyNotification === "1" ? true : false);
 
-  console.log(
-    "userPreferences.dailyNotification: ",
-    userPreferences.dailyNotification
-  );
-
   const showNotificationsAlert = async () => {
     const { value } = await Dialog.confirm({
       title: "Open Settings",
@@ -64,8 +59,6 @@ const NotificationsBottomSheet = ({
   };
 
   const scheduleDailyNotification = async (hour: number, minute: number) => {
-    console.log("SCHEDULING NOTIFICATION");
-
     await LocalNotifications.schedule({
       notifications: [
         {
@@ -92,27 +85,20 @@ const NotificationsBottomSheet = ({
 
   async function handleNotificationPermissions() {
     const userNotificationPermission = await checkNotificationPermissions();
-    console.log("userNotificationPermission: ", userNotificationPermission);
-    console.log("DAILYNOTIFICATION STATE: ", dailyNotificationToggle);
 
     if (userNotificationPermission === "denied") {
-      console.log("PERMISSION DENIED");
       showNotificationsAlert();
     } else if (userNotificationPermission === "granted") {
-      console.log("PERMISSION GRANTED");
-
       if (dailyNotificationToggle === true) {
         cancelNotification(1);
       } else if (dailyNotificationToggle === false) {
-        console.log("TOGGLE DETECTED, SETTING NOTICIATION TIME");
-
         const [hour, minute] = userPreferences.dailyNotificationTime
           .split(":")
           .map(Number);
         scheduleDailyNotification(hour, minute);
       }
       setDailyNotificationToggle(!dailyNotificationToggle);
-      console.log("TOGGLE AFTER TIME SET: ", dailyNotificationToggle);
+
       // modifyDataInUserPreferencesTable(
       //   dailyNotificationToggle === true ? "1" : "0",
       //   "dailyNotification"

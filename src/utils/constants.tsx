@@ -8,7 +8,7 @@ export const TWEEN_CONFIG = {
 };
 
 export const reasonsStyles =
-  "p-2 m-1 text-xs bg-[rgba(0, 0, 0, 1)] bg-gray-800/70 rounded-xl";
+  "p-2 m-1 text-xs bg-[rgb(35,35,35)] bg-gray-800/70 rounded-xl";
 
 export const prayerStatusColorsHexCodes = {
   group: "#448b75",
