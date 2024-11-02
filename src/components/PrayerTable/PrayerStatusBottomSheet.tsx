@@ -550,7 +550,7 @@ PrayerStatusBottomSheetProps) => {
                     // wrap="hard"
                     rows={3}
                     // cols={1}
-                    className="w-full p-2 border outline-none resize-none bg-[rgb(35,35,35)] border-hidden rounded-xl max-h-14 focus:border-gray-500"
+                    className="w-full p-2 border outline-none bg-[rgb(35,35,35)] border-hidden rounded-xl max-h-14 focus:border-gray-500"
                   />
                 </div>
                 <button

@@ -33,6 +33,7 @@ import StatsPage from "./pages/StatsPage";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -122,11 +123,16 @@ const App = () => {
       );
 
       if (DBResultPreferences && DBResultPreferences.values) {
-        const userNotificationPermission = await checkNotificationPermissions();
         // TODO: The below needs an additional check, as if the user does not select a gender and then relaunches the app, the gender prompt dissapears as values have been set and the length is no longer zero
         // if (DBResultPreferences.values.length === 0) {
         //   setShowIntroModal(true);
         // }
+        const userNotificationPermission = await checkNotificationPermissions();
+        const pendingRes = await LocalNotifications.getPending();
+        console.log("Notification props:");
+        const notificationRes = await LocalNotifications.checkPermissions();
+        console.log(notificationRes.display);
+        console.log(pendingRes.notifications);
 
         const notificationValue =
           DBResultPreferences.values.length > 0
@@ -134,6 +140,42 @@ const App = () => {
                 (row) => row.preferenceName === "dailyNotification"
               ).preferenceValue
             : null;
+
+        // * The below has been implemented as a last resort since on Android (atleast when installing via Android Studio) notifications stop working on reinstallation/update of the app, need to test whether this is still a problem when installing via the playstore, this issue doesn't exist on iOS
+        if (
+          Capacitor.getPlatform() === "android" &&
+          userNotificationPermission === "granted" &&
+          notificationValue === "1"
+          // &&localStorage.getItem("appVersion") !== LATEST_APP_VERSION
+        ) {
+          const dailyNotificationTime = DBResultPreferences.values.find(
+            (row) => row.preferenceName === "dailyNotificationTime"
+          );
+          const [hour, minute] = dailyNotificationTime.preferenceValue
+            .split(":")
+            .map(Number);
+
+          await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
+          await LocalNotifications.schedule({
+            notifications: [
+              {
+                id: 1,
+                title: "Daily Reminder",
+                body: `Did you log your prayers today?`,
+                schedule: {
+                  on: {
+                    hour: hour,
+                    minute: minute,
+                  },
+                  allowWhileIdle: true,
+                  repeats: true,
+                },
+                channelId: "daily-reminder",
+                // foreground: true, // iOS only
+              },
+            ],
+          });
+        }
 
         if (
           userNotificationPermission !== "granted" &&

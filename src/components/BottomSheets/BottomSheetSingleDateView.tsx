@@ -169,7 +169,7 @@ const BottomSheetSingleDateView = ({
                             prayerStatusColorsHexCodes[item.salahStatus],
                         }}
                         className={
-                          "capitalize-first-letter w-4/12 rounded-xl p-2 text-center"
+                          "capitalize-first-letter w-4/12 rounded-3xl p-2 text-center"
                         }
                       >
                         {item.salahStatus === "group"

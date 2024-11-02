@@ -58,22 +58,37 @@ const NotificationsBottomSheet = ({
     }
   };
 
+  const createNotificationChannel = async () => {
+    await LocalNotifications.createChannel({
+      id: "daily-reminder",
+      name: "Reminders",
+      importance: 4,
+      description: "General reminders",
+      sound: "default",
+      visibility: 1,
+      vibration: true,
+    });
+  };
+
   const scheduleDailyNotification = async (hour: number, minute: number) => {
+    await createNotificationChannel();
+
     await LocalNotifications.schedule({
       notifications: [
         {
+          id: 1,
           title: "Daily Reminder",
           body: `Did you log your prayers today?`,
-          id: 1,
           schedule: {
             on: {
               hour: hour,
               minute: minute,
             },
             allowWhileIdle: true,
-            // foreground: true, // iOS only
             repeats: true,
           },
+          channelId: "daily-reminder",
+          // foreground: true, // iOS only
         },
       ],
     });

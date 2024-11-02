@@ -66,6 +66,10 @@ body {
   overflow-x: hidden; */
 }
 
+textarea {
+  resize: none !important;
+}
+
 .capitalize-first-letter::first-letter {
   text-transform: uppercase;
 }
