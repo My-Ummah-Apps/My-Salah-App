@@ -145,8 +145,8 @@ const App = () => {
         if (
           Capacitor.getPlatform() === "android" &&
           userNotificationPermission === "granted" &&
-          notificationValue === "1"
-          // &&localStorage.getItem("appVersion") !== LATEST_APP_VERSION
+          notificationValue === "1" &&
+          localStorage.getItem("appVersion") !== LATEST_APP_VERSION
         ) {
           const dailyNotificationTime = DBResultPreferences.values.find(
             (row) => row.preferenceName === "dailyNotificationTime"
