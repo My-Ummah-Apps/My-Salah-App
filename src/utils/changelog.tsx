@@ -1,8 +1,23 @@
-export const LATEST_APP_VERSION = "2.5";
+export const LATEST_APP_VERSION = "2.6";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Fixed Calendar Date Alignment",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved an issue where calendar dates were
+            not correctly aligned with the weekday headers (Mon, Tue, Wed, etc).
+            Dates now display under the correct day.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "2.5",
     changes: [
       {
         heading: "Notification Fixes",
