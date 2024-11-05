@@ -44,10 +44,25 @@ const PrayerTable = ({
 
   const [clickedDate, setClickedDate] = useState<string>("");
   const [clickedSalah, setClickedSalah] = useState<string>("");
+  const [selectedSalahAndDate, setSelectedSalahAndDate] = useState([]);
+  const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
+  console.log("selectedSalahAndDate ", selectedSalahAndDate);
 
   const rowGetter = ({ index }: any) => {
     return fetchedSalahData[index];
   };
+
+  const objectStructure = [
+    {
+      "01.01.24": ["Dhuhr", "Asar", "Isha"],
+    },
+    {
+      "03.01.24": ["Fajr", "Asar", "Maghrib"],
+    },
+    {
+      "04.01.24": ["Asar", "Maghrib"],
+    },
+  ];
 
   const iconStyles =
     "inline-block rounded-md text-white w-[24px] h-[24px] shadow-md";
@@ -120,8 +135,16 @@ const PrayerTable = ({
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
                         setShowUpdateStatusModal(true);
-                        setClickedDate(rowData.date);
-                        setClickedSalah(salahName);
+                        // setClickedDate(rowData.date);
+                        // setClickedSalah(salahName);
+                        // 1. Check if date already exists
+                        // 2. If it does not, add it in along with the selected salah
+                        // 3. If it does exist, just add the salah to it
+
+                        setSelectedSalahAndDate((prev) => {
+                          return [...prev, { [rowData.date]: salahName }];
+                        });
+
                         // setHasUserClickedDate(true);
                       }}
                     />
@@ -138,8 +161,8 @@ const PrayerTable = ({
                       className={`w-[24px] h-[24px] ${iconStyles}`}
                       onClick={() => {
                         setShowUpdateStatusModal(true);
-                        setClickedDate(rowData.date);
-                        setClickedSalah(salahName);
+                        // setClickedDate(rowData.date);
+                        // setClickedSalah(salahName);
                         // setHasUserClickedDate(true);
                       }}
                     ></div>
@@ -162,9 +185,12 @@ const PrayerTable = ({
         fetchedSalahData={fetchedSalahData}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
-        setClickedDate={setClickedDate}
+        setSelectedSalahAndDate={setSelectedSalahAndDate}
+        selectedSalahAndDate={selectedSalahAndDate}
+        isMultiEditMode={isMultiEditMode}
+        // setClickedDate={setClickedDate}
         clickedDate={clickedDate}
-        setClickedSalah={setClickedSalah}
+        // setClickedSalah={setClickedSalah}
         clickedSalah={clickedSalah}
         dbConnection={dbConnection}
         setShowUpdateStatusModal={setShowUpdateStatusModal}

@@ -134,6 +134,9 @@ const useSQLiteDB = () => {
         notes TEXT DEFAULT ''
         ) STRICT;
         `;
+
+      const uniqueIndexQuery = `CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_date_salahName ON salahDataTable (date, salahName)`;
+
       const userPreferencesTable = `CREATE TABLE IF NOT EXISTS userPreferencesTable(
         preferenceName TEXT PRIMARY KEY NOT NULL, 
         preferenceValue TEXT NOT NULL DEFAULT ''
@@ -141,6 +144,7 @@ const useSQLiteDB = () => {
 
       await dbConnection.current.execute(userPreferencesTable);
       await dbConnection.current.execute(salahDataTable); // Execute the SQL query to create the table in the database
+      await dbConnection.current.execute(uniqueIndexQuery);
     } catch (error) {
       console.error(error);
     } finally {

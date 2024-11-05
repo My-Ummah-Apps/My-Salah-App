@@ -22,8 +22,8 @@ interface PrayerStatusBottomSheetProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: any;
-  setClickedSalah: React.Dispatch<React.SetStateAction<string>>;
-  setClickedDate: React.Dispatch<React.SetStateAction<string>>;
+  // setClickedSalah: React.Dispatch<React.SetStateAction<string>>;
+  // setClickedDate: React.Dispatch<React.SetStateAction<string>>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -33,6 +33,10 @@ interface PrayerStatusBottomSheetProps {
   clickedSalah: string;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
+  // TODO: Change the below types from any to relevant types
+  setSelectedSalahAndDate: any;
+  selectedSalahAndDate: any;
+  isMultiEditMode: boolean;
   // setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   // hasUserClickedDate: boolean;
 }
@@ -42,8 +46,11 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  setClickedSalah,
-  setClickedDate,
+  setSelectedSalahAndDate,
+  selectedSalahAndDate,
+  isMultiEditMode,
+  // setClickedSalah,
+  // setClickedDate,
   setUserPreferences,
   userPreferences,
   clickedDate,
@@ -101,7 +108,9 @@ PrayerStatusBottomSheetProps) => {
     clickedDate: string
   ): Promise<boolean> => {
     try {
-      await checkAndOpenOrCloseDBConnection("open");
+      // await checkAndOpenOrCloseDBConnection("open");
+
+      // TODO: Need to alter below functionality so that multiple dates and salah can be handled at the same time
 
       const res = await dbConnection.current.query(
         `SELECT * FROM salahDataTable 
@@ -296,10 +305,16 @@ PrayerStatusBottomSheetProps) => {
         onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
         onClose={() => {
+          // ! Below if statement isn't triggering for some reason even if set to if (true§)
+          if (isMultiEditMode === false) {
+            setSelectedSalahAndDate(["hi"]);
+            console.log("HELLO");
+          }
           setShowUpdateStatusModal(false);
+
           // setHasUserClickedDate(false);
-          setClickedDate("");
-          setClickedSalah("");
+          // setClickedDate("");
+          // setClickedSalah("");
           setSalahStatus("");
         }}
         detent="content-height"
