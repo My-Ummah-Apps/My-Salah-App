@@ -108,7 +108,7 @@ PrayerStatusBottomSheetProps) => {
     clickedDate: string
   ): Promise<boolean> => {
     try {
-      // await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection("open");
 
       // TODO: Need to alter below functionality so that multiple dates and salah can be handled at the same time
 
@@ -150,7 +150,7 @@ PrayerStatusBottomSheetProps) => {
       console.error(error);
     }
   };
-
+  console.log("selectedSalahAndDate: ", selectedSalahAndDate);
   const addOrModifySalah = async (
     clickedDate: string,
     clickedSalah: string,
@@ -158,83 +158,52 @@ PrayerStatusBottomSheetProps) => {
     selectedReasons?: string[],
     notes?: string
   ) => {
-    const findDateWithinData = fetchedSalahData.find(
-      (obj: any) => obj.date === clickedDate
-    );
+    // const findDateWithinData = fetchedSalahData.find(
+    //   (obj: any) => obj.date === clickedDate
+    // );
+
+    const rowsToInsert = [];
+
+    selectedSalahAndDate.forEach((item) => {
+      for (const [date, salahName] of Object.entries(item)) {
+        console.log(date, salahName);
+        rowsToInsert.push({ date: date, salahName: salahName });
+      }
+    });
+
+    console.log("rowsToInsert: ", rowsToInsert);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const salahAndDateExist = await doesSalahAndDateExists(
-        clickedSalah,
-        clickedDate
-      );
+      // await dbConnection.current.run("BEGIN TRANSACTION");
 
-      // const DBResultAllSalahData = await dbConnection.current.query(
-      //   `SELECT * FROM salahDataTable`
-      // );
+      // INSERT OR REPLACE INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
+      // VALUES
+      //   ("2024-01-01", "Fajr", "completed", "", "Woke up early"),
+      //   ("2024-01-02", "Dhuhr", "missed", "busy", ""),
+      //   ("2024-01-03", "Asr", "completed", "meeting", "Prayed at the office");
+      // await dbConnection.current.run("COMMIT");
 
-      if (!salahAndDateExist) {
-        // TODO: Change below query variable name to something more suitable
-        let query = `INSERT INTO salahDataTable(date, salahName, salahStatus`;
-        const values = [clickedDate, clickedSalah, salahStatus];
+      let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus`;
+      const values = [clickedDate, clickedSalah, salahStatus];
 
-        if (selectedReasons !== undefined && selectedReasons.length > 0) {
-          query += `, reasons`;
-          const stringifiedReasons = selectedReasons.join(", ");
-          // values.push(...reasons);
-          values.push(stringifiedReasons);
-        }
-
-        if (notes !== undefined && notes !== "") {
-          query += `, notes`;
-          values.push(notes);
-        }
-
-        query += `) VALUES (${values.map(() => "?").join(", ")})`;
-        // ? Is better to use .query or .execute?
-        await dbConnection.current.run(query, values); // If .query isn't working, try .execute instead
-        // await db?.execute(query, values);
-
-        if (findDateWithinData) {
-          findDateWithinData.salahs[clickedSalah] = salahStatus;
-        } else {
-          console.error(`Date ${clickedDate} not found in fetchedSalahData`);
-        }
-
-        setFetchedSalahData((prev) => [...prev]);
-      } else if (salahAndDateExist) {
-        let query = `UPDATE salahDataTable SET salahStatus = ?`;
-        const values = [salahStatus];
-
-        // await dbConnection.current?.run(query, [salahStatus, clickedDate]);
-
-        if (selectedReasons !== undefined && selectedReasons.length > 0) {
-          const stringifiedReasons = selectedReasons.join(", ");
-          query += `, reasons = ?`;
-          // values.push(...reasons);
-
-          values.push(stringifiedReasons);
-        }
-
-        if (notes !== undefined && notes !== "") {
-          query += `, notes = ?`;
-          values.push(notes);
-        }
-
-        query += ` WHERE date = ? AND salahName = ?`;
-        values.push(clickedDate, clickedSalah);
-
-        await dbConnection.current.run(query, values);
-
-        if (findDateWithinData) {
-          findDateWithinData.salahs[clickedSalah] = salahStatus;
-        } else {
-          console.error(`Date ${clickedDate} not found in fetchedSalahData`);
-        }
-
-        setFetchedSalahData((prev) => [...prev]);
+      if (selectedReasons !== undefined && selectedReasons.length > 0) {
+        query += `, reasons`;
+        const stringifiedReasons = selectedReasons.join(", ");
+        values.push(stringifiedReasons);
       }
+
+      if (notes !== undefined && notes !== "") {
+        query += `, notes`;
+        values.push(notes);
+      }
+
+      query += `) VALUES (${values.map(() => "?").join(", ")})`;
+
+      await dbConnection.current.run(query, values);
+
+      setFetchedSalahData((prev) => [...prev]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -297,6 +266,14 @@ PrayerStatusBottomSheetProps) => {
     });
   }
 
+  const onSheetClose = () => {
+    if (isMultiEditMode === false) {
+      setSelectedSalahAndDate([]);
+    }
+    setShowUpdateStatusModal(false);
+    setSalahStatus("");
+  };
+
   return (
     <>
       <Sheet
@@ -304,19 +281,7 @@ PrayerStatusBottomSheetProps) => {
         disableDrag={false}
         onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
-        onClose={() => {
-          // ! Below if statement isn't triggering for some reason even if set to if (true§)
-          if (isMultiEditMode === false) {
-            setSelectedSalahAndDate(["hi"]);
-            console.log("HELLO");
-          }
-          setShowUpdateStatusModal(false);
-
-          // setHasUserClickedDate(false);
-          // setClickedDate("");
-          // setClickedSalah("");
-          setSalahStatus("");
-        }}
+        onClose={onSheetClose}
         detent="content-height"
         // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
         tweenConfig={TWEEN_CONFIG}
@@ -594,7 +559,7 @@ PrayerStatusBottomSheetProps) => {
         </Sheet.Container>
         <Sheet.Backdrop
           // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
-          onTap={() => setShowUpdateStatusModal(false)}
+          onTap={onSheetClose}
         />
       </Sheet>
       <div
