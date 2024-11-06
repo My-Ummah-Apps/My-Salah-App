@@ -44,9 +44,10 @@ const PrayerTable = ({
 
   const [clickedDate, setClickedDate] = useState<string>("");
   const [clickedSalah, setClickedSalah] = useState<string>("");
-  const [selectedSalahAndDate, setSelectedSalahAndDate] = useState([]);
+  const [selectedSalahAndDate, setSelectedSalahAndDate] = useState({ "": [] });
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
-  console.log("selectedSalahAndDate ", selectedSalahAndDate);
+
+  // console.log("selectedSalahAndDate ", selectedSalahAndDate);
 
   const rowGetter = ({ index }: any) => {
     return fetchedSalahData[index];
@@ -56,12 +57,6 @@ const PrayerTable = ({
     {
       "01.01.24": ["Dhuhr", "Asar", "Isha"],
     },
-    {
-      "03.01.24": ["Fajr", "Asar", "Maghrib"],
-    },
-    {
-      "04.01.24": ["Asar", "Maghrib"],
-    },
   ];
 
   const iconStyles =
@@ -69,8 +64,33 @@ const PrayerTable = ({
 
   const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
 
+  // console.log("isMultiEditMode: ", isMultiEditMode);
+
   return (
-    <section className="relative h-[80vh]">
+    <section className="h-[80vh]">
+      {/* <section className="relative h-[80vh]"> */}
+      {isMultiEditMode && (
+        <section className="absolute top-0 left-0 h-[9vh] z-20 flex w-full p-5">
+          <section className="w-full text-right">
+            <button
+              className="pr-2"
+              onClick={() => {
+                setShowUpdateStatusModal(true);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                setIsMultiEditMode(false);
+                setSelectedSalahAndDate({});
+              }}
+            >
+              Cancel
+            </button>
+          </section>
+        </section>
+      )}
       {/* {renderTable === true ? ( */}
       <AutoSizer>
         {({ height, width }) => (
@@ -111,7 +131,12 @@ const PrayerTable = ({
                   .replace(/\//g, ".");
                 const day = format(parsedDate, "EE");
                 return (
-                  <section>
+                  <section
+                    onClick={() => {
+                      setIsMultiEditMode(true);
+                      setSelectedSalahAndDate({ [rowData.date]: [] });
+                    }}
+                  >
                     <p className="text-sm">{formattedParsedDate}</p>
                     <p className="text-sm">{day}</p>
                   </section>
@@ -134,17 +159,48 @@ const PrayerTable = ({
                     <LuDot
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
-                        setShowUpdateStatusModal(true);
-                        // setClickedDate(rowData.date);
-                        // setClickedSalah(salahName);
-                        // 1. Check if date already exists
-                        // 2. If it does not, add it in along with the selected salah
-                        // 3. If it does exist, just add the salah to it
-
-                        setSelectedSalahAndDate((prev) => {
-                          return [...prev, { [rowData.date]: salahName }];
+                        const selectedDatesArr = selectedSalahAndDate[
+                          rowData.date
+                        ]
+                          ? selectedSalahAndDate[rowData.date]
+                          : [];
+                        setSelectedSalahAndDate({
+                          [rowData.date]: selectedDatesArr,
                         });
+                        if (!isMultiEditMode) {
+                          setShowUpdateStatusModal(true);
+                          return;
+                        } else if (isMultiEditMode) {
+                          setSelectedSalahAndDate((prev) => {
+                            console.log(
+                              "prev[rowData.date]: ",
+                              prev[rowData.date]
+                            );
 
+                            if (selectedDatesArr.includes(salahName)) {
+                              console.log(
+                                "ARRAY DOES NOT INCLUDE SALAH, ADDING IN..."
+                              );
+                              // const res = [...selectedDatesArr, salahName];
+                              selectedDatesArr.push(salahName);
+                              console.log("UPDATED ARR: ", selectedDatesArr);
+
+                              return { [rowData.date]: selectedDatesArr };
+                            } else if (selectedDatesArr.includes(salahName)) {
+                              console.log("ALREADY HERE");
+                              const res = selectedDatesArr.filter(
+                                (name) => name !== salahName
+                              );
+                              // const res = [...selectedDatesArr, salahName];
+                              return { [rowData.date]: res };
+                            }
+                          });
+                          console.log(
+                            "SelectedSalahAndDate: ",
+                            selectedSalahAndDate
+                          );
+                        }
+                        // ! What was the below being used for?
                         // setHasUserClickedDate(true);
                       }}
                     />

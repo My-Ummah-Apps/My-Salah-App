@@ -150,7 +150,7 @@ PrayerStatusBottomSheetProps) => {
       console.error(error);
     }
   };
-  console.log("selectedSalahAndDate: ", selectedSalahAndDate);
+  // console.log("selectedSalahAndDate: ", selectedSalahAndDate);
   const addOrModifySalah = async (
     clickedDate: string,
     clickedSalah: string,
