@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
-import { DBConnectionStateType, userPreferencesType } from "../../types/types";
+import {
+  DBConnectionStateType,
+  SalahNamesType,
+  selectedSalahAndDateType,
+  userPreferencesType,
+} from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
@@ -44,7 +49,8 @@ const PrayerTable = ({
 
   const [clickedDate, setClickedDate] = useState<string>("");
   const [clickedSalah, setClickedSalah] = useState<string>("");
-  const [selectedSalahAndDate, setSelectedSalahAndDate] = useState({ "": [] });
+  const [selectedSalahAndDate, setSelectedSalahAndDate] =
+    useState<selectedSalahAndDateType>({ "": [] });
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
 
   // console.log("selectedSalahAndDate ", selectedSalahAndDate);
@@ -53,18 +59,47 @@ const PrayerTable = ({
     return fetchedSalahData[index];
   };
 
-  const objectStructure = [
-    {
-      "01.01.24": ["Dhuhr", "Asar", "Isha"],
-    },
-  ];
-
   const iconStyles =
     "inline-block rounded-md text-white w-[24px] h-[24px] shadow-md";
 
-  const salahNamesArr = ["Fajr", "Dhuhr", "Asar", "Maghrib", "Isha"];
+  const salahNamesArr: SalahNamesType[] = [
+    "Fajr",
+    "Dhuhr",
+    "Asar",
+    "Maghrib",
+    "Isha",
+  ];
 
   // console.log("isMultiEditMode: ", isMultiEditMode);
+
+  useEffect(() => {
+    console.log(selectedSalahAndDate);
+  }, [selectedSalahAndDate]);
+
+  const handleTableCellSelection = (
+    date: string,
+    salahName: SalahNamesType
+  ) => {
+    const selectedDatesArr = selectedSalahAndDate[date]
+      ? selectedSalahAndDate[date]
+      : [];
+    setSelectedSalahAndDate({
+      [date]: selectedDatesArr,
+    });
+
+    setSelectedSalahAndDate((prev) => {
+      const updatedArr = selectedDatesArr.includes(salahName)
+        ? selectedDatesArr.filter((salah) => salahName !== salah)
+        : [...selectedDatesArr, salahName];
+
+      return { ...prev, [date]: updatedArr };
+    });
+
+    if (!isMultiEditMode) {
+      setShowUpdateStatusModal(true);
+    } else if (isMultiEditMode) {
+    }
+  };
 
   return (
     <section className="h-[80vh]">
@@ -91,6 +126,7 @@ const PrayerTable = ({
           </section>
         </section>
       )}
+
       {/* {renderTable === true ? ( */}
       <AutoSizer>
         {({ height, width }) => (
@@ -159,49 +195,7 @@ const PrayerTable = ({
                     <LuDot
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
-                        const selectedDatesArr = selectedSalahAndDate[
-                          rowData.date
-                        ]
-                          ? selectedSalahAndDate[rowData.date]
-                          : [];
-                        setSelectedSalahAndDate({
-                          [rowData.date]: selectedDatesArr,
-                        });
-                        if (!isMultiEditMode) {
-                          setShowUpdateStatusModal(true);
-                          return;
-                        } else if (isMultiEditMode) {
-                          setSelectedSalahAndDate((prev) => {
-                            console.log(
-                              "prev[rowData.date]: ",
-                              prev[rowData.date]
-                            );
-
-                            if (selectedDatesArr.includes(salahName)) {
-                              console.log(
-                                "ARRAY DOES NOT INCLUDE SALAH, ADDING IN..."
-                              );
-                              // const res = [...selectedDatesArr, salahName];
-                              selectedDatesArr.push(salahName);
-                              console.log("UPDATED ARR: ", selectedDatesArr);
-
-                              return { [rowData.date]: selectedDatesArr };
-                            } else if (selectedDatesArr.includes(salahName)) {
-                              console.log("ALREADY HERE");
-                              const res = selectedDatesArr.filter(
-                                (name) => name !== salahName
-                              );
-                              // const res = [...selectedDatesArr, salahName];
-                              return { [rowData.date]: res };
-                            }
-                          });
-                          console.log(
-                            "SelectedSalahAndDate: ",
-                            selectedSalahAndDate
-                          );
-                        }
-                        // ! What was the below being used for?
-                        // setHasUserClickedDate(true);
+                        handleTableCellSelection([rowData.date], salahName);
                       }}
                     />
                   ) : (
