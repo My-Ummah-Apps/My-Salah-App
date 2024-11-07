@@ -110,7 +110,12 @@ const PrayerTable = ({
             <button
               className="pr-2"
               onClick={() => {
-                setShowUpdateStatusModal(true);
+                // TODO: Improve the alert below to something more native
+                const dateArrLength =
+                  Object.values(selectedSalahAndDate)[0].length;
+                dateArrLength > 0
+                  ? setShowUpdateStatusModal(true)
+                  : alert("Please select atleast one Salah");
               }}
             >
               Edit
@@ -210,7 +215,8 @@ const PrayerTable = ({
                       }}
                       className={`w-[24px] h-[24px] ${iconStyles}`}
                       onClick={() => {
-                        setShowUpdateStatusModal(true);
+                        handleTableCellSelection([rowData.date], salahName);
+                        // setShowUpdateStatusModal(true);
                         // setClickedDate(rowData.date);
                         // setClickedSalah(salahName);
                         // setHasUserClickedDate(true);
