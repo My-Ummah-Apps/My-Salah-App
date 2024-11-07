@@ -98,6 +98,7 @@ PrayerStatusBottomSheetProps) => {
       console.error("notesTextArea.current does not exist");
     }
   };
+  console.log("selectedSalahAndDate: ", selectedSalahAndDate);
 
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
@@ -162,17 +163,6 @@ PrayerStatusBottomSheetProps) => {
     //   (obj: any) => obj.date === clickedDate
     // );
 
-    const rowsToInsert = [];
-
-    selectedSalahAndDate.forEach((item) => {
-      for (const [date, salahName] of Object.entries(item)) {
-        console.log(date, salahName);
-        rowsToInsert.push({ date: date, salahName: salahName });
-      }
-    });
-
-    console.log("rowsToInsert: ", rowsToInsert);
-
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
@@ -180,10 +170,16 @@ PrayerStatusBottomSheetProps) => {
 
       // INSERT OR REPLACE INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
       // VALUES
-      //   ("2024-01-01", "Fajr", "completed", "", "Woke up early"),
-      //   ("2024-01-02", "Dhuhr", "missed", "busy", ""),
-      //   ("2024-01-03", "Asr", "completed", "meeting", "Prayed at the office");
+      //   ("2024-01-01", "Fajr", "completed"),
+      //   ("2024-01-02", "Dhuhr", "completed"),
+      //   ("2024-01-03", "Asr", "completed");
       // await dbConnection.current.run("COMMIT");
+      for (const item in selectedSalahAndDate) {
+        const query = [];
+        const date = Object.keys(selectedSalahAndDate)[0];
+        query.push(date);
+        console.log("query: ", query);
+      }
 
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus`;
       const values = [clickedDate, clickedSalah, salahStatus];

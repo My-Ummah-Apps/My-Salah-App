@@ -72,9 +72,9 @@ const PrayerTable = ({
 
   // console.log("isMultiEditMode: ", isMultiEditMode);
 
-  useEffect(() => {
-    console.log(selectedSalahAndDate);
-  }, [selectedSalahAndDate]);
+  // useEffect(() => {
+  //   console.log(selectedSalahAndDate);
+  // }, [selectedSalahAndDate]);
 
   const handleTableCellSelection = (
     date: string,
@@ -143,6 +143,7 @@ const PrayerTable = ({
             // rowCount={datesFromStartToToday.length}
             rowCount={fetchedSalahData.length}
             rowGetter={rowGetter}
+            // rowGetter={({ index }) => fetchedSalahData[index]}
             rowHeight={100}
             headerHeight={40}
             height={height}
