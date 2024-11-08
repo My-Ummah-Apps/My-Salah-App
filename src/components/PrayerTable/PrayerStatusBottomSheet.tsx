@@ -174,11 +174,19 @@ PrayerStatusBottomSheetProps) => {
       //   ("2024-01-02", "Dhuhr", "completed"),
       //   ("2024-01-03", "Asr", "completed");
       // await dbConnection.current.run("COMMIT");
-      for (const item in selectedSalahAndDate) {
-        const query = [];
-        const date = Object.keys(selectedSalahAndDate)[0];
-        query.push(date);
-        console.log("query: ", query);
+
+      const query1 = [];
+      const date = Object.keys(selectedSalahAndDate)[0];
+      const salahArr = [...Object.values(selectedSalahAndDate)].flat();
+
+      console.log("salahArr: ", salahArr);
+
+      console.log(salahArr);
+
+      for (let i = 0; i < salahArr.length; i++) {
+        // query1.push({ date: date, salah: salahArr[i] });
+        query1.push([date, salahArr[i], salahStatus]);
+        console.log("query1: ", query1);
       }
 
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus`;
