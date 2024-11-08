@@ -46,14 +46,11 @@ const PrayerTable = ({
 
   // const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-
-  const [clickedDate, setClickedDate] = useState<string>("");
-  const [clickedSalah, setClickedSalah] = useState<string>("");
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
     useState<selectedSalahAndDateType>({ "": [] });
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
 
-  // console.log("selectedSalahAndDate ", selectedSalahAndDate);
+  console.log("selectedSalahAndDate ", selectedSalahAndDate);
 
   const rowGetter = ({ index }: any) => {
     return fetchedSalahData[index];
@@ -218,8 +215,6 @@ const PrayerTable = ({
                       onClick={() => {
                         handleTableCellSelection([rowData.date], salahName);
                         // setShowUpdateStatusModal(true);
-                        // setClickedDate(rowData.date);
-                        // setClickedSalah(salahName);
                         // setHasUserClickedDate(true);
                       }}
                     ></div>
@@ -245,10 +240,6 @@ const PrayerTable = ({
         setSelectedSalahAndDate={setSelectedSalahAndDate}
         selectedSalahAndDate={selectedSalahAndDate}
         isMultiEditMode={isMultiEditMode}
-        // setClickedDate={setClickedDate}
-        clickedDate={clickedDate}
-        // setClickedSalah={setClickedSalah}
-        clickedSalah={clickedSalah}
         dbConnection={dbConnection}
         setShowUpdateStatusModal={setShowUpdateStatusModal}
         showUpdateStatusModal={showUpdateStatusModal}

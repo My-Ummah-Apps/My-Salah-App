@@ -29,8 +29,6 @@ interface PrayerStatusBottomSheetProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  clickedDate: string;
-  clickedSalah: string;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   // TODO: Change the below types from any to relevant types
@@ -49,12 +47,8 @@ const PrayerStatusBottomSheet = ({
   setSelectedSalahAndDate,
   selectedSalahAndDate,
   isMultiEditMode,
-  // setClickedSalah,
-  // setClickedDate,
   setUserPreferences,
   userPreferences,
-  clickedDate,
-  clickedSalah,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
 }: // setHasUserClickedDate,
@@ -98,25 +92,24 @@ PrayerStatusBottomSheetProps) => {
       console.error("notesTextArea.current does not exist");
     }
   };
-  console.log("selectedSalahAndDate: ", selectedSalahAndDate);
 
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   // let isDatabaseUpdating: boolean = false;
 
-  const doesSalahAndDateExists = async (
-    clickedSalah: string,
-    clickedDate: string
-  ): Promise<boolean> => {
+  const doesSalahAndDateExists = async (): Promise<boolean> => {
+    const selectedDate = Object.keys(selectedSalahAndDate)[0];
+    const selectedSalah = Object.values(selectedSalahAndDate)[0][0];
+    console.log("selectedDate: ", selectedDate);
+
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
       // TODO: Need to alter below functionality so that multiple dates and salah can be handled at the same time
-
       const res = await dbConnection.current.query(
         `SELECT * FROM salahDataTable 
-      WHERE salahName = ? AND date = ?;`,
-        [clickedSalah, clickedDate]
+      WHERE date = ? AND salahName = ?;`,
+        [selectedDate, selectedSalah]
       );
 
       if (res && res.values && res.values.length === 0) {
@@ -145,79 +138,104 @@ PrayerStatusBottomSheetProps) => {
   };
 
   const checkDBForSalah = async () => {
+    if (isMultiEditMode) return;
     try {
-      await doesSalahAndDateExists(clickedSalah, clickedDate);
+      await doesSalahAndDateExists();
     } catch (error) {
       console.error(error);
     }
   };
-  // console.log("selectedSalahAndDate: ", selectedSalahAndDate);
-  const addOrModifySalah = async (
-    clickedDate: string,
-    clickedSalah: string,
-    salahStatus: string,
-    selectedReasons?: string[],
-    notes?: string
-  ) => {
-    // const findDateWithinData = fetchedSalahData.find(
-    //   (obj: any) => obj.date === clickedDate
-    // );
 
-    try {
-      await checkAndOpenOrCloseDBConnection("open");
+  // (() => {
+  //   const values = [];
+  //   console.log("values inside IIFE:", values);
+  // })();
 
-      // await dbConnection.current.run("BEGIN TRANSACTION");
+  const addOrModifySalah = async () =>
+    // salahStatus: string,
+    // selectedReasons?: string[],
+    // notes?: string
+    {
+      const salahDBValues = [];
+      // const findDateWithinData = fetchedSalahData.find(
+      //   (obj: any) => obj.date === clickedDate
+      // );
 
-      // INSERT OR REPLACE INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
-      // VALUES
-      //   ("2024-01-01", "Fajr", "completed"),
-      //   ("2024-01-02", "Dhuhr", "completed"),
-      //   ("2024-01-03", "Asr", "completed");
-      // await dbConnection.current.run("COMMIT");
-
-      const query1 = [];
-      const date = Object.keys(selectedSalahAndDate)[0];
-      const salahArr = [...Object.values(selectedSalahAndDate)].flat();
-
-      console.log("salahArr: ", salahArr);
-
-      console.log(salahArr);
-
-      for (let i = 0; i < salahArr.length; i++) {
-        // query1.push({ date: date, salah: salahArr[i] });
-        query1.push([date, salahArr[i], salahStatus]);
-        console.log("query1: ", query1);
-      }
-
-      let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus`;
-      const values = [clickedDate, clickedSalah, salahStatus];
-
-      if (selectedReasons !== undefined && selectedReasons.length > 0) {
-        query += `, reasons`;
-        const stringifiedReasons = selectedReasons.join(", ");
-        values.push(stringifiedReasons);
-      }
-
-      if (notes !== undefined && notes !== "") {
-        query += `, notes`;
-        values.push(notes);
-      }
-
-      query += `) VALUES (${values.map(() => "?").join(", ")})`;
-
-      await dbConnection.current.run(query, values);
-
-      setFetchedSalahData((prev) => [...prev]);
-    } catch (error) {
-      console.error(error);
-    } finally {
       try {
-        await checkAndOpenOrCloseDBConnection("close");
+        await checkAndOpenOrCloseDBConnection("open");
+        // await dbConnection.current.execute("BEGIN TRANSACTION");
+        // await dbConnection.current.run("BEGIN TRANSACTION");
+
+        // INSERT OR REPLACE INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
+        // VALUES
+        //   ("2024-01-01", "Fajr", "completed"),
+        //   ("2024-01-02", "Dhuhr", "completed"),
+        //   ("2024-01-03", "Asr", "completed");
+        // await dbConnection.current.run("COMMIT");
+
+        const date = Object.keys(selectedSalahAndDate)[0];
+        const salahArr = Object.values(selectedSalahAndDate).flat();
+        const reasonsToInsert =
+          selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
+        for (let i = 0; i < salahArr.length; i++) {
+          salahDBValues.push([
+            date,
+            salahArr[i],
+            salahStatus,
+            reasonsToInsert,
+            notes,
+          ]);
+        }
+
+        let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
+        // const values = [clickedDate, clickedSalah, salahStatus];
+
+        // if (selectedReasons !== undefined && selectedReasons.length > 0) {
+        if (selectedReasons.length > 0) {
+          // !Have had to comment below out as its causing an empty string to be added to salahDBValues, requires further investigation
+          // console.log("SELECTED REASONS EXIST: ", selectedReasons);
+          // query += `, reasons`;
+          // const stringifiedReasons = selectedReasons.join(", ");
+          // salahDBValues.push(stringifiedReasons);
+        }
+
+        // if (notes !== undefined && notes !== "") {
+        // if (notes) {
+        //   query += `, notes`;
+        //   console.log("NOTES: ", notes);
+
+        //   salahDBValues.push(notes);
+        // }
+        const salahDBValuesSubArr = salahDBValues[0];
+        const placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
+        const placeholders = salahDBValues
+          .map((item) => `(${placeholder})`)
+          .join(",");
+
+        query += `) VALUES ${placeholders}`;
+        const flattenedSalahDBValues = salahDBValues.flat();
+        console.log("QUERY: ", query);
+        console.log("salahDBValues: ", salahDBValues);
+        console.log("FALTTENED VALUES: ", flattenedSalahDBValues);
+        await dbConnection.current.run(query, flattenedSalahDBValues);
+
+        // await dbConnection.current.execute("COMMIT");
+        console.log("ROWS INSERTED SUCCESSFULLY");
+        const DBResultAllSalahData = await dbConnection.current.query(
+          `SELECT * FROM salahDataTable`
+        );
+        console.log("UPDATED DATABASE: ", DBResultAllSalahData);
+        setFetchedSalahData((prev) => [...prev]);
       } catch (error) {
         console.error(error);
+      } finally {
+        try {
+          await checkAndOpenOrCloseDBConnection("close");
+        } catch (error) {
+          console.error(error);
+        }
       }
-    }
-  };
+    };
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);
@@ -301,7 +319,8 @@ PrayerStatusBottomSheetProps) => {
               {" "}
               <section className="w-[90%] mx-auto mb-20 rounded-lg text-white">
                 <h1 className="mb-10 text-3xl text-center">
-                  How did you pray {clickedSalah}?
+                  {/* How did you pray {clickedSalah}? */}
+                  How did you pray sort this out?
                 </h1>
                 <div
                   // ref={modalSheetPrayerStatusesWrap}
@@ -540,13 +559,12 @@ PrayerStatusBottomSheetProps) => {
                 <button
                   onClick={async () => {
                     if (salahStatus) {
-                      addOrModifySalah(
-                        clickedDate,
-                        clickedSalah,
-                        salahStatus,
-                        selectedReasons,
-                        notes
-                      );
+                      addOrModifySalah();
+                      // clickedDate,
+                      // clickedSalah,
+                      // salahStatus,
+                      // selectedReasons,
+                      // notes
 
                       setShowUpdateStatusModal(false);
                     }
