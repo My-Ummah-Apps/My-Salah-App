@@ -50,7 +50,7 @@ const HomePage = ({
   useEffect(() => {
     setHeading("Home");
   }, []);
-
+  // TODO: The below conditional shouldn't be needed
   return (
     <section className={`home-page-wrap ${pageStyles}`}>
       {/* <section className={`home-page-wrap`}> */}
@@ -71,7 +71,6 @@ const HomePage = ({
       ) : (
         <div>Loading Data...</div>
       )}
-
       {/* )} */}
     </section>
   );

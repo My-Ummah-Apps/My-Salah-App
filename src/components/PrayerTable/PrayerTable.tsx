@@ -182,9 +182,14 @@ const PrayerTable = ({
                 const day = format(parsedDate, "EE");
                 return (
                   <section
-                    onClick={() => {
+                    onClick={(e) => {
                       setIsMultiEditMode(true);
                       setSelectedSalahAndDate({ [rowData.date]: [] });
+                      console.log(e.target.offsetParent.ariaRowIndex);
+                      const testing = "2";
+                      if (e.target.offsetParent.ariaRowIndex === testing) {
+                        alert("hello");
+                      }
                     }}
                   >
                     <p className="text-sm">{formattedParsedDate}</p>
@@ -252,6 +257,7 @@ const PrayerTable = ({
         handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
         setSelectedSalahAndDate={setSelectedSalahAndDate}
         selectedSalahAndDate={selectedSalahAndDate}
+        setIsMultiEditMode={setIsMultiEditMode}
         isMultiEditMode={isMultiEditMode}
         dbConnection={dbConnection}
         setShowUpdateStatusModal={setShowUpdateStatusModal}

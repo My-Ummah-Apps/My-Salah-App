@@ -42,6 +42,7 @@ interface PrayerStatusBottomSheetProps {
   // TODO: Change the below types from any to relevant types
   setSelectedSalahAndDate: any;
   selectedSalahAndDate: any;
+  setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
   // setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
   // hasUserClickedDate: boolean;
@@ -55,6 +56,7 @@ const PrayerStatusBottomSheet = ({
   handleSalahTrackingDataFromDB,
   setSelectedSalahAndDate,
   selectedSalahAndDate,
+  setIsMultiEditMode,
   isMultiEditMode,
   setUserPreferences,
   userPreferences,
@@ -228,46 +230,21 @@ PrayerStatusBottomSheetProps) => {
         console.log("FALTTENED VALUES: ", flattenedSalahDBValues);
         await dbConnection.current.run(query, flattenedSalahDBValues);
 
-        // await dbConnection.current.execute("COMMIT");
-        console.log("ROWS INSERTED SUCCESSFULLY");
-        const DBResultAllSalahData = await dbConnection.current.query(
-          `SELECT * FROM salahDataTable`
-        );
-        console.log("UPDATED DATABASE: ", DBResultAllSalahData);
-        console.log("FETCHED DATA BEFORE: ", fetchedSalahData);
-
-        // setFetchedSalahData((prev) => [...prev]);
-        // ! The below works somewhat, but unsure if this is the best way to get the page to re-render, as this re-fetches everything from the database and then updates the state
-        // await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
-
-        const salahsToInsert = salahArr.reduce((acc, item) => {
-          acc[item] = salahStatus;
-          return acc;
-        }, {});
-        console.log("salahsToInsert: ", salahsToInsert);
-
-        const singleSalahObj: SalahRecordType = {
-          date: date,
-          salahs: salahsToInsert,
-        };
-        console.log("SINGLE OBJ: ", singleSalahObj);
-        console.log("FETCHED DATA BEFORE: ", fetchedSalahData);
-
-        const newData = fetchedSalahData.map((item) => {
-          if (Object.values(item)[0] === date) {
-            console.log("DATE MATCHED: ", date);
-            console.log("YO: ", Object.values(item)[1]);
+        fetchedSalahData.forEach((item) => {
+          const objDate = Object.values(item)[0];
+          if (objDate === date) {
+            const objDateArr = Object.values(item)[1];
+            Object.keys(objDateArr).forEach((element) => {
+              if (salahArr.includes(element)) {
+                objDateArr[element] = salahStatus;
+              }
+            });
           } else {
-            console.log("DATE NOT MATCHED");
-            return item;
+            // return item;
           }
         });
-        //! Issue with the below state is that it isn't updating the salah status property in the fetchedSalahData object, trying to change this above by diving into the object and making the changes needed
-        setFetchedSalahData((prev) => [...prev, singleSalahObj]);
-        // const test = [...newData, singleSalahObj];
-        // setFetchedSalahData(test);
-        // singleSalahObjArr.push(singleSalahObj);
-        // setFetchedSalahData([...singleSalahObjArr]);
+
+        setFetchedSalahData((prev) => [...prev]);
 
         console.log("FETCHED DATA AFTER: ", fetchedSalahData);
       } catch (error) {
@@ -335,6 +312,7 @@ PrayerStatusBottomSheetProps) => {
   const onSheetClose = () => {
     if (isMultiEditMode === false) {
       setSelectedSalahAndDate({});
+      console.log("CLEARING SELECTEDSALAHANDATE: ", setSelectedSalahAndDate);
     }
     setShowUpdateStatusModal(false);
     setSalahStatus("");
@@ -603,13 +581,9 @@ PrayerStatusBottomSheetProps) => {
                 <button
                   onClick={async () => {
                     if (salahStatus) {
-                      addOrModifySalah();
-                      // clickedDate,
-                      // clickedSalah,
-                      // salahStatus,
-                      // selectedReasons,
-                      // notes
-
+                      await addOrModifySalah();
+                      setSelectedSalahAndDate({});
+                      setIsMultiEditMode(false);
                       setShowUpdateStatusModal(false);
                     }
                   }}
