@@ -17,6 +17,10 @@ interface HomePageProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
+  handleSalahTrackingDataFromDB: (
+    DBResultAllSalahData: DBResultDataObjType[]
+  ) => Promise<void>;
+  singleSalahObjArr: any;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -33,6 +37,8 @@ const HomePage = ({
   renderTable,
   setFetchedSalahData,
   fetchedSalahData,
+  singleSalahObjArr,
+  handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
   // setReasonsArray,
@@ -57,6 +63,8 @@ const HomePage = ({
           renderTable={renderTable}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
+          singleSalahObjArr={singleSalahObjArr}
+          handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}
         />

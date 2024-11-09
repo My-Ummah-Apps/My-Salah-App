@@ -7,7 +7,11 @@ import { PiFlower } from "react-icons/pi";
 import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
-import { SalahRecordsArrayType, userPreferencesType } from "../../types/types";
+import {
+  SalahRecordsArrayType,
+  SalahRecordType,
+  userPreferencesType,
+} from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
   prayerStatusColorsHexCodes,
@@ -29,6 +33,10 @@ interface PrayerStatusBottomSheetProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  singleSalahObjArr: any;
+  handleSalahTrackingDataFromDB: (
+    DBResultAllSalahData: DBResultDataObjType[]
+  ) => Promise<void>;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   // TODO: Change the below types from any to relevant types
@@ -44,11 +52,13 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
+  handleSalahTrackingDataFromDB,
   setSelectedSalahAndDate,
   selectedSalahAndDate,
   isMultiEditMode,
   setUserPreferences,
   userPreferences,
+  singleSalahObjArr,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
 }: // setHasUserClickedDate,
@@ -113,9 +123,9 @@ PrayerStatusBottomSheetProps) => {
       );
 
       if (res && res.values && res.values.length === 0) {
-        setSalahStatus("");
-        setNotes("");
-        setSelectedReasons([]);
+        // setSalahStatus("");
+        // setNotes("");
+        // setSelectedReasons([]);
         return false;
       } else if (res && res.values && res.values.length > 0) {
         setSalahStatus(res.values[0].salahStatus);
@@ -145,11 +155,6 @@ PrayerStatusBottomSheetProps) => {
       console.error(error);
     }
   };
-
-  // (() => {
-  //   const values = [];
-  //   console.log("values inside IIFE:", values);
-  // })();
 
   const addOrModifySalah = async () =>
     // salahStatus: string,
@@ -206,14 +211,18 @@ PrayerStatusBottomSheetProps) => {
 
         //   salahDBValues.push(notes);
         // }
-        const salahDBValuesSubArr = salahDBValues[0];
-        const placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
-        const placeholders = salahDBValues
+        let salahDBValuesSubArr = "";
+        let placeholder = "";
+        let placeholders = "";
+        let flattenedSalahDBValues = "";
+        salahDBValuesSubArr = salahDBValues[0];
+        placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
+        placeholders = salahDBValues
           .map((item) => `(${placeholder})`)
           .join(",");
 
         query += `) VALUES ${placeholders}`;
-        const flattenedSalahDBValues = salahDBValues.flat();
+        flattenedSalahDBValues = salahDBValues.flat();
         console.log("QUERY: ", query);
         console.log("salahDBValues: ", salahDBValues);
         console.log("FALTTENED VALUES: ", flattenedSalahDBValues);
@@ -225,7 +234,42 @@ PrayerStatusBottomSheetProps) => {
           `SELECT * FROM salahDataTable`
         );
         console.log("UPDATED DATABASE: ", DBResultAllSalahData);
-        setFetchedSalahData((prev) => [...prev]);
+        console.log("FETCHED DATA BEFORE: ", fetchedSalahData);
+
+        // setFetchedSalahData((prev) => [...prev]);
+        // ! The below works somewhat, but unsure if this is the best way to get the page to re-render, as this re-fetches everything from the database and then updates the state
+        // await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+
+        const salahsToInsert = salahArr.reduce((acc, item) => {
+          acc[item] = salahStatus;
+          return acc;
+        }, {});
+        console.log("salahsToInsert: ", salahsToInsert);
+
+        const singleSalahObj: SalahRecordType = {
+          date: date,
+          salahs: salahsToInsert,
+        };
+        console.log("SINGLE OBJ: ", singleSalahObj);
+        console.log("FETCHED DATA BEFORE: ", fetchedSalahData);
+
+        const newData = fetchedSalahData.map((item) => {
+          if (Object.values(item)[0] === date) {
+            console.log("DATE MATCHED: ", date);
+            console.log("YO: ", Object.values(item)[1]);
+          } else {
+            console.log("DATE NOT MATCHED");
+            return item;
+          }
+        });
+        //! Issue with the below state is that it isn't updating the salah status property in the fetchedSalahData object, trying to change this above by diving into the object and making the changes needed
+        setFetchedSalahData((prev) => [...prev, singleSalahObj]);
+        // const test = [...newData, singleSalahObj];
+        // setFetchedSalahData(test);
+        // singleSalahObjArr.push(singleSalahObj);
+        // setFetchedSalahData([...singleSalahObjArr]);
+
+        console.log("FETCHED DATA AFTER: ", fetchedSalahData);
       } catch (error) {
         console.error(error);
       } finally {
@@ -290,7 +334,7 @@ PrayerStatusBottomSheetProps) => {
 
   const onSheetClose = () => {
     if (isMultiEditMode === false) {
-      setSelectedSalahAndDate([]);
+      setSelectedSalahAndDate({});
     }
     setShowUpdateStatusModal(false);
     setSalahStatus("");

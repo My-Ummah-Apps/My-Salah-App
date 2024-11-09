@@ -26,9 +26,13 @@ interface PrayerTableProps {
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
+  handleSalahTrackingDataFromDB: (
+    DBResultAllSalahData: DBResultDataObjType[]
+  ) => Promise<void>;
   fetchedSalahData: SalahRecordsArrayType;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  singleSalahObjArr: any;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   // reasonsArray: string[];
   // userGender: string;
@@ -39,9 +43,16 @@ const PrayerTable = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
+  singleSalahObjArr,
+  handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
 }: PrayerTableProps) => {
+  console.log(
+    "PRAYER TABLE COMPONENT HAS RENDERED, fetchedSalahData is: ",
+    fetchedSalahData
+  );
+
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   // const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
@@ -237,6 +248,8 @@ const PrayerTable = ({
         fetchedSalahData={fetchedSalahData}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
+        singleSalahObjArr={singleSalahObjArr}
+        handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
         setSelectedSalahAndDate={setSelectedSalahAndDate}
         selectedSalahAndDate={selectedSalahAndDate}
         isMultiEditMode={isMultiEditMode}

@@ -433,6 +433,7 @@ const App = () => {
       singleSalahObjArr.push(singleSalahObj);
     }
     setFetchedSalahData([...singleSalahObjArr]);
+    console.log("INITIAL singleSalahObjArr: ", singleSalahObjArr);
   };
 
   const modifyDataInUserPreferencesTable = async (
@@ -551,10 +552,12 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 renderTable={renderTable}
+                handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 setFetchedSalahData={setFetchedSalahData}
                 fetchedSalahData={fetchedSalahData}
+                // singleSalahObjArr={singleSalahObjArr}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
               />
