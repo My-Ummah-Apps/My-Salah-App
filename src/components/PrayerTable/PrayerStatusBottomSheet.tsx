@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import Sheet from "react-modal-sheet";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
@@ -28,8 +26,6 @@ interface PrayerStatusBottomSheetProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: any;
-  // setClickedSalah: React.Dispatch<React.SetStateAction<string>>;
-  // setClickedDate: React.Dispatch<React.SetStateAction<string>>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -45,8 +41,6 @@ interface PrayerStatusBottomSheetProps {
   selectedSalahAndDate: any;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
-  // setHasUserClickedDate: React.Dispatch<React.SetStateAction<boolean>>;
-  // hasUserClickedDate: boolean;
 }
 
 const PrayerStatusBottomSheet = ({
@@ -54,7 +48,6 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  handleSalahTrackingDataFromDB,
   setSelectedSalahAndDate,
   selectedSalahAndDate,
   setIsMultiEditMode,
@@ -63,9 +56,7 @@ const PrayerStatusBottomSheet = ({
   userPreferences,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
-}: // setHasUserClickedDate,
-// hasUserClickedDate,
-PrayerStatusBottomSheetProps) => {
+}: PrayerStatusBottomSheetProps) => {
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);

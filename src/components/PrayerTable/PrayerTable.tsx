@@ -1,10 +1,10 @@
-// @ts-nocheck
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
 import {
   DBConnectionStateType,
+  DBResultDataObjType,
   SalahNamesType,
   selectedSalahAndDateType,
   userPreferencesType,
@@ -182,14 +182,14 @@ const PrayerTable = ({
                 const day = format(parsedDate, "EE");
                 return (
                   <section
-                    onClick={(e) => {
+                    onClick={() => {
                       setIsMultiEditMode(true);
                       setSelectedSalahAndDate({ [rowData.date]: [] });
-                      console.log(e.target.offsetParent.ariaRowIndex);
-                      const testing = "2";
-                      if (e.target.offsetParent.ariaRowIndex === testing) {
-                        alert("hello");
-                      }
+                      // console.log(e.target.offsetParent.ariaRowIndex);
+                      // const testing = "2";
+                      // if (e.target.offsetParent.ariaRowIndex === testing) {
+                      //   alert("hello");
+                      // }
                     }}
                   >
                     <p className="text-sm">{formattedParsedDate}</p>
@@ -214,7 +214,7 @@ const PrayerTable = ({
                     <LuDot
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
-                        handleTableCellSelection([rowData.date], salahName);
+                        handleTableCellSelection(rowData.date, salahName);
                       }}
                     />
                   ) : (
@@ -229,7 +229,7 @@ const PrayerTable = ({
                       }}
                       className={`w-[24px] h-[24px] ${iconStyles}`}
                       onClick={() => {
-                        handleTableCellSelection([rowData.date], salahName);
+                        handleTableCellSelection(rowData.date, salahName);
                         // setShowUpdateStatusModal(true);
                         // setHasUserClickedDate(true);
                       }}

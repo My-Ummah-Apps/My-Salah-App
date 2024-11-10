@@ -3,6 +3,7 @@ import {
   SalahRecordsArrayType,
   DBConnectionStateType,
   userPreferencesType,
+  DBResultDataObjType,
 } from "../types/types";
 import { useEffect } from "react";
 
