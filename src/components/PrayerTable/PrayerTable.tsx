@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
@@ -33,10 +33,6 @@ interface PrayerTableProps {
   fetchedSalahData: SalahRecordsArrayType;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-
-  // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
-  // reasonsArray: string[];
-  // userGender: string;
 }
 
 const PrayerTable = ({
@@ -55,10 +51,16 @@ const PrayerTable = ({
 
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
-  // const [hasUserClickedDate, setHasUserClickedDate] = useState<boolean>(false);
+  const testObj = {
+    dates: [],
+    salahs: [],
+  };
+
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  const [selectedSalahAndDate, setSelectedSalahAndDate] =
-    useState<selectedSalahAndDateType>({ "": [] });
+  const [selectedSalahAndDate, setSelectedSalahAndDate] = useState({
+    selectedDates: [],
+    selectedSalahs: [],
+  });
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
 
   console.log("selectedSalahAndDate ", selectedSalahAndDate);
@@ -80,27 +82,18 @@ const PrayerTable = ({
 
   // console.log("isMultiEditMode: ", isMultiEditMode);
 
-  // useEffect(() => {
-  //   console.log(selectedSalahAndDate);
-  // }, [selectedSalahAndDate]);
-
-  const handleTableCellSelection = (
-    date: string,
-    salahName: SalahNamesType
-  ) => {
-    const selectedDatesArr = selectedSalahAndDate[date]
-      ? selectedSalahAndDate[date]
-      : [];
-    setSelectedSalahAndDate({
-      [date]: selectedDatesArr,
-    });
+  const handleTableCellSelection = (salahName: SalahNamesType) => {
+    console.log(selectedSalahAndDate.selectedDates);
+    const selectedDatesArr = selectedSalahAndDate.selectedDates;
+    const selectedSalahsArr = selectedSalahAndDate.selectedSalahs;
 
     setSelectedSalahAndDate((prev) => {
-      const updatedArr = selectedDatesArr.includes(salahName)
-        ? selectedDatesArr.filter((salah) => salahName !== salah)
-        : [...selectedDatesArr, salahName];
+      const updatedArr = selectedSalahsArr.includes(salahName)
+        ? selectedSalahsArr.filter((salah) => salahName !== salah)
+        : [...prev.selectedSalahs, salahName];
+      console.log("UPDATED ARRAY: ", updatedArr);
 
-      return { ...prev, [date]: updatedArr };
+      return { ...prev, selectedSalahs: updatedArr };
     });
 
     if (!isMultiEditMode) {
@@ -108,6 +101,10 @@ const PrayerTable = ({
     } else if (isMultiEditMode) {
     }
   };
+
+  useEffect(() => {
+    console.log("SELECTED SALAH AND DATE IN USEEFFECT: ", selectedSalahAndDate);
+  }, [selectedSalahAndDate]);
 
   return (
     <section className="h-[80vh]">
@@ -131,7 +128,7 @@ const PrayerTable = ({
             <button
               onClick={() => {
                 setIsMultiEditMode(false);
-                setSelectedSalahAndDate({});
+                setSelectedSalahAndDate([]);
               }}
             >
               Cancel
@@ -184,7 +181,11 @@ const PrayerTable = ({
                   <section
                     onClick={() => {
                       setIsMultiEditMode(true);
-                      setSelectedSalahAndDate({ [rowData.date]: [] });
+                      // setSelectedSalahAndDate({ [rowData.date]: [] });
+                      setSelectedSalahAndDate((prev) => ({
+                        ...prev,
+                        selectedDates: [rowData.date],
+                      }));
                       // console.log(e.target.offsetParent.ariaRowIndex);
                       // const testing = "2";
                       // if (e.target.offsetParent.ariaRowIndex === testing) {
@@ -210,11 +211,12 @@ const PrayerTable = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
+                  const dateClicked = rowData.date;
                   return rowData.salahs[salahName] === "" ? (
                     <LuDot
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
-                        handleTableCellSelection(rowData.date, salahName);
+                        handleTableCellSelection([salahName]);
                       }}
                     />
                   ) : (
@@ -229,7 +231,7 @@ const PrayerTable = ({
                       }}
                       className={`w-[24px] h-[24px] ${iconStyles}`}
                       onClick={() => {
-                        handleTableCellSelection(rowData.date, salahName);
+                        handleTableCellSelection([salahName]);
                         // setShowUpdateStatusModal(true);
                         // setHasUserClickedDate(true);
                       }}
