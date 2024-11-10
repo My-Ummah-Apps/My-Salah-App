@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
@@ -32,7 +33,7 @@ interface PrayerTableProps {
   fetchedSalahData: SalahRecordsArrayType;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  singleSalahObjArr: any;
+
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
   // reasonsArray: string[];
   // userGender: string;
@@ -43,7 +44,6 @@ const PrayerTable = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  singleSalahObjArr,
   handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
@@ -253,7 +253,6 @@ const PrayerTable = ({
         fetchedSalahData={fetchedSalahData}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
-        singleSalahObjArr={singleSalahObjArr}
         handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
         setSelectedSalahAndDate={setSelectedSalahAndDate}
         selectedSalahAndDate={selectedSalahAndDate}

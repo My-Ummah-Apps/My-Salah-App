@@ -1,5 +1,4 @@
 import PrayerTable from "../components/PrayerTable/PrayerTable";
-// import NextSalahTime from "../components/NextSalahTime";
 import {
   SalahRecordsArrayType,
   DBConnectionStateType,
@@ -20,7 +19,7 @@ interface HomePageProps {
   handleSalahTrackingDataFromDB: (
     DBResultAllSalahData: DBResultDataObjType[]
   ) => Promise<void>;
-  singleSalahObjArr: any;
+
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
@@ -37,13 +36,9 @@ const HomePage = ({
   renderTable,
   setFetchedSalahData,
   fetchedSalahData,
-  singleSalahObjArr,
   handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
-  // setReasonsArray,
-  // reasonsArray,
-  // userGender,
   setHeading,
   pageStyles,
 }: HomePageProps) => {
@@ -63,7 +58,6 @@ const HomePage = ({
           renderTable={renderTable}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
-          singleSalahObjArr={singleSalahObjArr}
           handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}

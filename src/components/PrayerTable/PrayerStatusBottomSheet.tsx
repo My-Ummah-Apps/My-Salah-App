@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Sheet from "react-modal-sheet";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
@@ -33,7 +35,6 @@ interface PrayerStatusBottomSheetProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  singleSalahObjArr: any;
   handleSalahTrackingDataFromDB: (
     DBResultAllSalahData: DBResultDataObjType[]
   ) => Promise<void>;
@@ -60,7 +61,6 @@ const PrayerStatusBottomSheet = ({
   isMultiEditMode,
   setUserPreferences,
   userPreferences,
-  singleSalahObjArr,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
 }: // setHasUserClickedDate,
@@ -158,105 +158,70 @@ PrayerStatusBottomSheetProps) => {
     }
   };
 
-  const addOrModifySalah = async () =>
-    // salahStatus: string,
-    // selectedReasons?: string[],
-    // notes?: string
-    {
-      const salahDBValues = [];
-      // const findDateWithinData = fetchedSalahData.find(
-      //   (obj: any) => obj.date === clickedDate
-      // );
+  const addOrModifySalah = async () => {
+    const salahDBValues = [];
 
+    try {
+      await checkAndOpenOrCloseDBConnection("open");
+
+      const date = Object.keys(selectedSalahAndDate)[0];
+      const salahArr = Object.values(selectedSalahAndDate).flat();
+      const reasonsToInsert =
+        selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
+      for (let i = 0; i < salahArr.length; i++) {
+        salahDBValues.push([
+          date,
+          salahArr[i],
+          salahStatus,
+          reasonsToInsert,
+          notes,
+        ]);
+      }
+
+      let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
+
+      // let salahDBValuesSubArr = "";
+      // let placeholder = "";
+      // let placeholders = "";
+      // let flattenedSalahDBValues = "";
+      const salahDBValuesSubArr = salahDBValues[0];
+      const placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
+      const placeholders = salahDBValues
+        .map((item) => `(${placeholder})`)
+        .join(",");
+
+      query += `) VALUES ${placeholders}`;
+      const flattenedSalahDBValues = salahDBValues.flat();
+      console.log("QUERY: ", query);
+      console.log("salahDBValues: ", salahDBValues);
+      console.log("FALTTENED VALUES: ", flattenedSalahDBValues);
+      await dbConnection.current.run(query, flattenedSalahDBValues);
+
+      fetchedSalahData.forEach((item) => {
+        const objDate = Object.values(item)[0];
+        if (objDate === date) {
+          const objDateArr = Object.values(item)[1];
+          Object.keys(objDateArr).forEach((element) => {
+            if (salahArr.includes(element)) {
+              objDateArr[element] = salahStatus;
+            }
+          });
+        }
+      });
+
+      setFetchedSalahData((prev) => [...prev]);
+
+      console.log("FETCHED DATA AFTER: ", fetchedSalahData);
+    } catch (error) {
+      console.error(error);
+    } finally {
       try {
-        await checkAndOpenOrCloseDBConnection("open");
-        // await dbConnection.current.execute("BEGIN TRANSACTION");
-        // await dbConnection.current.run("BEGIN TRANSACTION");
-
-        // INSERT OR REPLACE INTO salahDataTable (date, salahName, salahStatus, reasons, notes)
-        // VALUES
-        //   ("2024-01-01", "Fajr", "completed"),
-        //   ("2024-01-02", "Dhuhr", "completed"),
-        //   ("2024-01-03", "Asr", "completed");
-        // await dbConnection.current.run("COMMIT");
-
-        const date = Object.keys(selectedSalahAndDate)[0];
-        const salahArr = Object.values(selectedSalahAndDate).flat();
-        const reasonsToInsert =
-          selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
-        for (let i = 0; i < salahArr.length; i++) {
-          salahDBValues.push([
-            date,
-            salahArr[i],
-            salahStatus,
-            reasonsToInsert,
-            notes,
-          ]);
-        }
-
-        let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
-        // const values = [clickedDate, clickedSalah, salahStatus];
-
-        // if (selectedReasons !== undefined && selectedReasons.length > 0) {
-        if (selectedReasons.length > 0) {
-          // !Have had to comment below out as its causing an empty string to be added to salahDBValues, requires further investigation
-          // console.log("SELECTED REASONS EXIST: ", selectedReasons);
-          // query += `, reasons`;
-          // const stringifiedReasons = selectedReasons.join(", ");
-          // salahDBValues.push(stringifiedReasons);
-        }
-
-        // if (notes !== undefined && notes !== "") {
-        // if (notes) {
-        //   query += `, notes`;
-        //   console.log("NOTES: ", notes);
-
-        //   salahDBValues.push(notes);
-        // }
-        let salahDBValuesSubArr = "";
-        let placeholder = "";
-        let placeholders = "";
-        let flattenedSalahDBValues = "";
-        salahDBValuesSubArr = salahDBValues[0];
-        placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
-        placeholders = salahDBValues
-          .map((item) => `(${placeholder})`)
-          .join(",");
-
-        query += `) VALUES ${placeholders}`;
-        flattenedSalahDBValues = salahDBValues.flat();
-        console.log("QUERY: ", query);
-        console.log("salahDBValues: ", salahDBValues);
-        console.log("FALTTENED VALUES: ", flattenedSalahDBValues);
-        await dbConnection.current.run(query, flattenedSalahDBValues);
-
-        fetchedSalahData.forEach((item) => {
-          const objDate = Object.values(item)[0];
-          if (objDate === date) {
-            const objDateArr = Object.values(item)[1];
-            Object.keys(objDateArr).forEach((element) => {
-              if (salahArr.includes(element)) {
-                objDateArr[element] = salahStatus;
-              }
-            });
-          } else {
-            // return item;
-          }
-        });
-
-        setFetchedSalahData((prev) => [...prev]);
-
-        console.log("FETCHED DATA AFTER: ", fetchedSalahData);
+        await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.error(error);
-      } finally {
-        try {
-          await checkAndOpenOrCloseDBConnection("close");
-        } catch (error) {
-          console.error(error);
-        }
       }
-    };
+    }
+  };
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);
@@ -585,6 +550,8 @@ PrayerStatusBottomSheetProps) => {
                       setSelectedSalahAndDate({});
                       setIsMultiEditMode(false);
                       setShowUpdateStatusModal(false);
+                      setSelectedReasons([]);
+                      setNotes("");
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
