@@ -108,7 +108,6 @@ const PrayerStatusBottomSheet = ({
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      // TODO: Need to alter below functionality so that multiple dates and salah can be handled at the same time
       const res = await dbConnection.current.query(
         `SELECT * FROM salahDataTable 
       WHERE date = ? AND salahName = ?;`,
@@ -171,10 +170,6 @@ const PrayerStatusBottomSheet = ({
 
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
 
-      // let salahDBValuesSubArr = "";
-      // let placeholder = "";
-      // let placeholders = "";
-      // let flattenedSalahDBValues = "";
       const salahDBValuesSubArr = salahDBValues[0];
       const placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
       const placeholders = salahDBValues
