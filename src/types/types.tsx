@@ -56,8 +56,13 @@ export interface SalahEntryType {
   salahStatus: SalahStatusType;
 }
 
-export interface selectedSalahAndDateType {
-  [key: string]: SalahNamesType[];
+// export interface selectedSalahAndDateType {
+//   [key: string]: SalahNamesType[];
+// }
+
+export interface SelectedSalahAndDateType {
+  selectedDates: string[];
+  selectedSalahs: SalahNamesType[];
 }
 
 // export interface CalenderSalahArrayObject {

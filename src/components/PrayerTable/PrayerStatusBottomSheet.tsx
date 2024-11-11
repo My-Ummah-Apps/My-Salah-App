@@ -8,8 +8,10 @@ import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
+  DBResultDataObjType,
   SalahRecordsArrayType,
   SalahRecordType,
+  SelectedSalahAndDateType,
   userPreferencesType,
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
@@ -37,7 +39,7 @@ interface PrayerStatusBottomSheetProps {
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   // TODO: Change the below types from any to relevant types
-  setSelectedSalahAndDate: any;
+  setSelectedSalahAndDate: SelectedSalahAndDateType;
   selectedSalahAndDate: any;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
@@ -115,9 +117,6 @@ const PrayerStatusBottomSheet = ({
       );
 
       if (res && res.values && res.values.length === 0) {
-        // setSalahStatus("");
-        // setNotes("");
-        // setSelectedReasons([]);
         return false;
       } else if (res && res.values && res.values.length > 0) {
         setSalahStatus(res.values[0].salahStatus);
@@ -149,43 +148,47 @@ const PrayerStatusBottomSheet = ({
   };
 
   const addOrModifySalah = async () => {
-    const salahDBValues = [];
+    const salahDataToInsertIntoDB = [];
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const date = Object.keys(selectedSalahAndDate)[0];
-      const salahArr = Object.values(selectedSalahAndDate).flat();
+      // const date = Object.keys(selectedSalahAndDate)[0];
+      const salahArr = Object.values(selectedSalahAndDate.selectedSalahs);
+      // ! Unsure if this still needs to be applied to salahArr: .flat()
+      console.log("SALAHARR: ", salahArr);
+
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
-      for (let i = 0; i < salahArr.length; i++) {
-        salahDBValues.push([
-          date,
-          salahArr[i],
-          salahStatus,
-          reasonsToInsert,
-          notes,
-        ]);
+      for (let x = 0; x < selectedSalahAndDate.selectedDates.length; x++) {
+        for (let i = 0; i < salahArr.length; i++) {
+          salahDataToInsertIntoDB.push([
+            selectedSalahAndDate.selectedDates[x],
+            salahArr[i],
+            salahStatus,
+            reasonsToInsert,
+            notes,
+          ]);
+        }
       }
-
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
 
-      const salahDBValuesSubArr = salahDBValues[0];
+      const salahDBValuesSubArr = salahDataToInsertIntoDB[0];
       const placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
-      const placeholders = salahDBValues
+      const placeholders = salahDataToInsertIntoDB
         .map((item) => `(${placeholder})`)
         .join(",");
 
       query += `) VALUES ${placeholders}`;
-      const flattenedSalahDBValues = salahDBValues.flat();
+      const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
       console.log("QUERY: ", query);
-      console.log("salahDBValues: ", salahDBValues);
+      console.log("salahDataToInsertIntoDB: ", salahDataToInsertIntoDB);
       console.log("FALTTENED VALUES: ", flattenedSalahDBValues);
       await dbConnection.current.run(query, flattenedSalahDBValues);
 
       fetchedSalahData.forEach((item) => {
         const objDate = Object.values(item)[0];
-        if (objDate === date) {
+        if (selectedSalahAndDate.selectedDates.includes(objDate)) {
           const objDateArr = Object.values(item)[1];
           Object.keys(objDateArr).forEach((element) => {
             if (salahArr.includes(element)) {
@@ -262,7 +265,10 @@ const PrayerStatusBottomSheet = ({
 
   const onSheetClose = () => {
     if (isMultiEditMode === false) {
-      setSelectedSalahAndDate({});
+      setSelectedSalahAndDate({
+        selectedDates: [],
+        selectedSalahs: [],
+      });
       console.log("CLEARING SELECTEDSALAHANDATE: ", setSelectedSalahAndDate);
     }
     setShowUpdateStatusModal(false);
@@ -533,7 +539,10 @@ const PrayerStatusBottomSheet = ({
                   onClick={async () => {
                     if (salahStatus) {
                       await addOrModifySalah();
-                      setSelectedSalahAndDate({});
+                      setSelectedSalahAndDate({
+                        selectedDates: [],
+                        selectedSalahs: [],
+                      });
                       setIsMultiEditMode(false);
                       setShowUpdateStatusModal(false);
                       setSelectedReasons([]);

@@ -6,7 +6,7 @@ import {
   DBConnectionStateType,
   DBResultDataObjType,
   SalahNamesType,
-  selectedSalahAndDateType,
+  SelectedSalahAndDateType,
   userPreferencesType,
 } from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
@@ -51,16 +51,12 @@ const PrayerTable = ({
 
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
-  const testObj = {
-    dates: [],
-    salahs: [],
-  };
-
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  const [selectedSalahAndDate, setSelectedSalahAndDate] = useState({
-    selectedDates: [],
-    selectedSalahs: [],
-  });
+  const [selectedSalahAndDate, setSelectedSalahAndDate] =
+    useState<SelectedSalahAndDateType>({
+      selectedDates: [],
+      selectedSalahs: [],
+    });
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
 
   console.log("selectedSalahAndDate ", selectedSalahAndDate);
@@ -127,7 +123,10 @@ const PrayerTable = ({
             <button
               onClick={() => {
                 setIsMultiEditMode(false);
-                setSelectedSalahAndDate([]);
+                setSelectedSalahAndDate({
+                  selectedDates: [],
+                  selectedSalahs: [],
+                });
               }}
             >
               Cancel
