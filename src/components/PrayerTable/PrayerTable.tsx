@@ -83,17 +83,20 @@ const PrayerTable = ({
   // console.log("isMultiEditMode: ", isMultiEditMode);
 
   const handleTableCellSelection = (salahName: SalahNamesType) => {
-    console.log(selectedSalahAndDate.selectedDates);
-    const selectedDatesArr = selectedSalahAndDate.selectedDates;
-    const selectedSalahsArr = selectedSalahAndDate.selectedSalahs;
-
     setSelectedSalahAndDate((prev) => {
-      const updatedArr = selectedSalahsArr.includes(salahName)
-        ? selectedSalahsArr.filter((salah) => salahName !== salah)
-        : [...prev.selectedSalahs, salahName];
-      console.log("UPDATED ARRAY: ", updatedArr);
-
-      return { ...prev, selectedSalahs: updatedArr };
+      console.log("HELLO: ", prev.selectedSalahs);
+      if (!prev.selectedSalahs.includes(salahName)) {
+        prev.selectedSalahs.push(salahName);
+        return prev;
+      }
+      //   return prev.selectedSalahs.includes(salahName)
+      //     ? {
+      //         ...prev,
+      //         selectedSalahs: prev.selectedSalahs.filter(
+      //           (salah) => salahName !== salah
+      //         ),
+      //       }
+      //     : { ...prev, selectedSalahs: [...prev.selectedSalahs, salahName] };
     });
 
     if (!isMultiEditMode) {
