@@ -85,18 +85,14 @@ const PrayerTable = ({
   const handleTableCellSelection = (salahName: SalahNamesType) => {
     setSelectedSalahAndDate((prev) => {
       console.log("HELLO: ", prev.selectedSalahs);
-      if (!prev.selectedSalahs.includes(salahName)) {
-        prev.selectedSalahs.push(salahName);
-        return prev;
-      }
-      //   return prev.selectedSalahs.includes(salahName)
-      //     ? {
-      //         ...prev,
-      //         selectedSalahs: prev.selectedSalahs.filter(
-      //           (salah) => salahName !== salah
-      //         ),
-      //       }
-      //     : { ...prev, selectedSalahs: [...prev.selectedSalahs, salahName] };
+      return prev.selectedSalahs.includes(salahName)
+        ? {
+            ...prev,
+            selectedSalahs: prev.selectedSalahs.filter(
+              (salah) => salahName !== salah
+            ),
+          }
+        : { ...prev, selectedSalahs: [...prev.selectedSalahs, salahName] };
     });
 
     if (!isMultiEditMode) {
@@ -219,7 +215,7 @@ const PrayerTable = ({
                     <LuDot
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
-                        handleTableCellSelection([salahName]);
+                        handleTableCellSelection(salahName);
                       }}
                     />
                   ) : (
@@ -234,7 +230,7 @@ const PrayerTable = ({
                       }}
                       className={`w-[24px] h-[24px] ${iconStyles}`}
                       onClick={() => {
-                        handleTableCellSelection([salahName]);
+                        handleTableCellSelection(salahName);
                         // setShowUpdateStatusModal(true);
                         // setHasUserClickedDate(true);
                       }}
