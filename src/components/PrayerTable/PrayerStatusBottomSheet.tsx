@@ -10,7 +10,6 @@ import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
   DBResultDataObjType,
   SalahRecordsArrayType,
-  SalahRecordType,
   SelectedSalahAndDateType,
   userPreferencesType,
 } from "../../types/types";

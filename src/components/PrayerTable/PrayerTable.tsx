@@ -214,6 +214,10 @@ const PrayerTable = ({
                     <LuDot
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
+                        setSelectedSalahAndDate((prev) => ({
+                          ...prev,
+                          selectedDates: [rowData.date],
+                        }));
                         handleTableCellSelection(salahName);
                       }}
                     />
@@ -229,6 +233,10 @@ const PrayerTable = ({
                       }}
                       className={`w-[24px] h-[24px] ${iconStyles}`}
                       onClick={() => {
+                        setSelectedSalahAndDate((prev) => ({
+                          ...prev,
+                          selectedDates: [rowData.date],
+                        }));
                         handleTableCellSelection(salahName);
                         // setShowUpdateStatusModal(true);
                         // setHasUserClickedDate(true);
