@@ -209,7 +209,6 @@ const PrayerTable = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
-                  const dateClicked = rowData.date;
                   return rowData.salahs[salahName] === "" ? (
                     <LuDot
                       className={`w-[24px] h-[24px]`}

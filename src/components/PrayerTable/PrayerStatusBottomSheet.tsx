@@ -9,7 +9,9 @@ import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
   DBResultDataObjType,
+  SalahNamesType,
   SalahRecordsArrayType,
+  SalahRecordType,
   SelectedSalahAndDateType,
   userPreferencesType,
 } from "../../types/types";
@@ -38,8 +40,10 @@ interface PrayerStatusBottomSheetProps {
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   // TODO: Change the below types from any to relevant types
-  setSelectedSalahAndDate: SelectedSalahAndDateType;
-  selectedSalahAndDate: any;
+  setSelectedSalahAndDate: React.Dispatch<
+    React.SetStateAction<SelectedSalahAndDateType>
+  >;
+  selectedSalahAndDate: SelectedSalahAndDateType;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
 }
@@ -173,24 +177,25 @@ const PrayerStatusBottomSheet = ({
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
 
       const salahDBValuesSubArr = salahDataToInsertIntoDB[0];
-      const placeholder = salahDBValuesSubArr.map((item) => "?").join(", ");
+      const placeholder = salahDBValuesSubArr.map(() => "?").join(", ");
       const placeholders = salahDataToInsertIntoDB
-        .map((item) => `(${placeholder})`)
+        .map(() => `(${placeholder})`)
         .join(",");
 
       query += `) VALUES ${placeholders}`;
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
-      console.log("QUERY: ", query);
-      console.log("salahDataToInsertIntoDB: ", salahDataToInsertIntoDB);
-      console.log("FALTTENED VALUES: ", flattenedSalahDBValues);
+
       await dbConnection.current.run(query, flattenedSalahDBValues);
 
-      fetchedSalahData.forEach((item) => {
+      fetchedSalahData.forEach((item: SalahRecordType) => {
         const objDate = Object.values(item)[0];
+
         if (selectedSalahAndDate.selectedDates.includes(objDate)) {
           const objDateArr = Object.values(item)[1];
           Object.keys(objDateArr).forEach((element) => {
-            if (salahArr.includes(element)) {
+            const salahName = element as SalahNamesType;
+
+            if (salahArr.includes(salahName)) {
               objDateArr[element] = salahStatus;
             }
           });
