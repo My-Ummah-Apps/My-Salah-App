@@ -54,6 +54,7 @@ const PrayerTable = ({
     });
   const [isRowEditMode, setIsRowEditMode] = useState<boolean>(false);
   const [isSelectedRow, setIsSelectedRow] = useState<number | null>(null);
+  // const [toggleCheckbox, setToggleCheckbox] = useState<boolean>(false);
 
   // const rowGetter = ({ index }: any) => {
   //   return fetchedSalahData[index];
@@ -80,10 +81,16 @@ const PrayerTable = ({
 
   // console.log("isRowEditMode: ", isRowEditMode);
 
+  // const handleCheckboxChange = () => {
+
+  // }
+
   const handleTableCellSelection = (
     salahName: SalahNamesType,
     rowData: any
   ) => {
+    console.log("CLICKED: ", salahName, rowData);
+    // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => ({
       ...prev,
       selectedDates: [rowData.date],
@@ -160,7 +167,13 @@ const PrayerTable = ({
             //   // setIsSelectedRow(obj.index);
             // }}
             rowClassName={({ index }) => {
-              return isSelectedRow === index ? "selected-row" : "";
+              if (!isRowEditMode) {
+                return "";
+              } else {
+                return isSelectedRow === index
+                  ? "selected-row"
+                  : "not-selected-row";
+              }
             }}
             rowHeight={100}
             headerHeight={40}
@@ -169,7 +182,7 @@ const PrayerTable = ({
           >
             <Column
               style={{ marginLeft: "0" }}
-              className="text-left"
+              className="items-center text-left"
               label=""
               dataKey="date"
               cellRenderer={({ rowData, rowIndex }) => {
@@ -193,6 +206,7 @@ const PrayerTable = ({
                 return (
                   <section
                     onClick={() => {
+                      if (isRowEditMode) return;
                       setIsSelectedRow(rowIndex);
                       setIsRowEditMode(true);
                       setSelectedSalahAndDate((prev) => ({
@@ -213,34 +227,65 @@ const PrayerTable = ({
               <Column
                 key={salahName}
                 style={{ marginLeft: "0" }}
-                className="text-sm"
+                className="items-center text-sm"
                 label={salahName}
                 dataKey={""}
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData }) => {
-                  return rowData.salahs[salahName] === "" ? (
-                    <LuDot
-                      className={`w-[24px] h-[24px]`}
+                cellRenderer={({ rowData, rowIndex }) => {
+                  return (
+                    <section
                       onClick={() => {
+                        if (isRowEditMode) return;
                         handleTableCellSelection(salahName, rowData);
                       }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        backgroundColor:
-                          prayerStatusColorsHexCodes[
-                            rowData.salahs[
-                              salahName
-                            ] as keyof typeof prayerStatusColorsHexCodes
-                          ],
-                      }}
-                      className={`w-[24px] h-[24px] ${iconStyles}`}
-                      onClick={() => {
-                        handleTableCellSelection(salahName, rowData);
-                      }}
-                    ></div>
+                      className="flex flex-col h-full"
+                    >
+                      {rowData.salahs[salahName] === "" ? (
+                        <LuDot
+                          className={`w-[24px] h-[24px]`}
+                          // onClick={() => {
+                          //   handleTableCellSelection(salahName, rowData);
+                          // }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            backgroundColor:
+                              prayerStatusColorsHexCodes[
+                                rowData.salahs[
+                                  salahName
+                                ] as keyof typeof prayerStatusColorsHexCodes
+                              ],
+                          }}
+                          className={`w-[24px] h-[24px] ${iconStyles}`}
+                          // onClick={() => {
+                          //   console.log("SQUARE CLICKED");
+                          //   handleTableCellSelection(salahName, rowData);
+                          // }}
+                        ></div>
+                      )}
+                      {isSelectedRow === rowIndex && (
+                        <div
+                          // onClick={() => {
+                          //   handleTableCellSelection(salahName, rowData);
+                          // }}
+                          className="mt-2"
+                        >
+                          <input
+                            className="appearance-none w-4 h-4 rounded-full border-2 border-[#646464] bg-white checked:bg-[#4938ab] checked:border-transparent cursor-pointer"
+                            type="checkbox"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                            onChange={() => {
+                              handleTableCellSelection(salahName, rowData);
+                            }}
+                            // checked={toggleCheckbox}
+                          ></input>
+                        </div>
+                      )}
+                    </section>
                   );
                 }}
               />
@@ -248,11 +293,6 @@ const PrayerTable = ({
           </Table>
         )}
       </AutoSizer>
-      {/* // ) : (
-      //   <div>Loading Data...</div>
-      // )} */}
-
-      {/* <div className="flex flex-wrap" ref={modalSheetHiddenPrayerReasonsWrap}> */}
 
       <PrayerStatusBottomSheet
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}

@@ -70,6 +70,10 @@ body {
   background-color: gray;
 }
 
+.not-selected-row {
+  opacity: 0.2;
+}
+
 textarea {
   resize: none !important;
 }
@@ -175,6 +179,7 @@ td {
 }
 
 .ReactVirtualized__Table__rowColumn {
+  height: 100%;
   margin-right: 0;
   display: flex;
   justify-content: center;
