@@ -66,6 +66,10 @@ body {
   overflow-x: hidden; */
 }
 
+.selected-row {
+  background-color: gray;
+}
+
 textarea {
   resize: none !important;
 }

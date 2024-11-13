@@ -39,11 +39,12 @@ interface PrayerStatusBottomSheetProps {
   ) => Promise<void>;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
-  // TODO: Change the below types from any to relevant types
-  setSelectedSalahAndDate: React.Dispatch<
-    React.SetStateAction<SelectedSalahAndDateType>
-  >;
+  resetSelectedRow: () => void;
+  // setSelectedSalahAndDate: React.Dispatch<
+  //   React.SetStateAction<SelectedSalahAndDateType>
+  // >;
   selectedSalahAndDate: SelectedSalahAndDateType;
+  resetSelectedSalahAndDate: () => void;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
 }
@@ -53,8 +54,10 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  setSelectedSalahAndDate,
+  // setSelectedSalahAndDate,
   selectedSalahAndDate,
+  resetSelectedRow,
+  resetSelectedSalahAndDate,
   setIsMultiEditMode,
   isMultiEditMode,
   setUserPreferences,
@@ -108,7 +111,6 @@ const PrayerStatusBottomSheet = ({
   const doesSalahAndDateExists = async (): Promise<boolean> => {
     const selectedDate = Object.keys(selectedSalahAndDate)[0];
     const selectedSalah = Object.values(selectedSalahAndDate)[0][0];
-    console.log("selectedDate: ", selectedDate);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -159,7 +161,6 @@ const PrayerStatusBottomSheet = ({
       // const date = Object.keys(selectedSalahAndDate)[0];
       const salahArr = Object.values(selectedSalahAndDate.selectedSalahs);
       // ! Unsure if this still needs to be applied to salahArr: .flat()
-      console.log("SALAHARR: ", salahArr);
 
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
@@ -203,8 +204,6 @@ const PrayerStatusBottomSheet = ({
       });
 
       setFetchedSalahData((prev) => [...prev]);
-
-      console.log("FETCHED DATA AFTER: ", fetchedSalahData);
     } catch (error) {
       console.error(error);
     } finally {
@@ -269,11 +268,11 @@ const PrayerStatusBottomSheet = ({
 
   const onSheetClose = () => {
     if (isMultiEditMode === false) {
-      setSelectedSalahAndDate({
-        selectedDates: [],
-        selectedSalahs: [],
-      });
-      console.log("CLEARING SELECTEDSALAHANDATE: ", setSelectedSalahAndDate);
+      // setSelectedSalahAndDate({
+      //   selectedDates: [],
+      //   selectedSalahs: [],
+      // });
+      resetSelectedSalahAndDate();
     }
     setShowUpdateStatusModal(false);
     setSalahStatus("");
@@ -543,11 +542,13 @@ const PrayerStatusBottomSheet = ({
                   onClick={async () => {
                     if (salahStatus) {
                       await addOrModifySalah();
-                      setSelectedSalahAndDate({
-                        selectedDates: [],
-                        selectedSalahs: [],
-                      });
+                      // setSelectedSalahAndDate({
+                      //   selectedDates: [],
+                      //   selectedSalahs: [],
+                      // });
+                      resetSelectedSalahAndDate();
                       setIsMultiEditMode(false);
+                      resetSelectedRow();
                       setShowUpdateStatusModal(false);
                       setSelectedReasons([]);
                       setNotes("");

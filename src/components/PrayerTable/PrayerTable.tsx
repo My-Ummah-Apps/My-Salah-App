@@ -44,11 +44,6 @@ const PrayerTable = ({
   setUserPreferences,
   userPreferences,
 }: PrayerTableProps) => {
-  console.log(
-    "PRAYER TABLE COMPONENT HAS RENDERED, fetchedSalahData is: ",
-    fetchedSalahData
-  );
-
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
@@ -58,11 +53,18 @@ const PrayerTable = ({
       selectedSalahs: [],
     });
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
+  const [isSelectedRow, setIsSelectedRow] = useState<number | null>(null);
 
-  console.log("selectedSalahAndDate ", selectedSalahAndDate);
+  // const rowGetter = ({ index }: any) => {
+  //   return fetchedSalahData[index];
+  // };
 
-  const rowGetter = ({ index }: any) => {
-    return fetchedSalahData[index];
+  const resetSelectedSalahAndDate = () => {
+    setSelectedSalahAndDate({ selectedDates: [], selectedSalahs: [] });
+  };
+
+  const resetSelectedRow = () => {
+    setIsSelectedRow(null);
   };
 
   const iconStyles =
@@ -80,7 +82,6 @@ const PrayerTable = ({
 
   const handleTableCellSelection = (salahName: SalahNamesType) => {
     setSelectedSalahAndDate((prev) => {
-      console.log("HELLO: ", prev.selectedSalahs);
       return prev.selectedSalahs.includes(salahName)
         ? {
             ...prev,
@@ -96,10 +97,6 @@ const PrayerTable = ({
     } else if (isMultiEditMode) {
     }
   };
-
-  useEffect(() => {
-    console.log("SELECTED SALAH AND DATE IN USEEFFECT: ", selectedSalahAndDate);
-  }, [selectedSalahAndDate]);
 
   return (
     <section className="h-[80vh]">
@@ -123,10 +120,12 @@ const PrayerTable = ({
             <button
               onClick={() => {
                 setIsMultiEditMode(false);
-                setSelectedSalahAndDate({
-                  selectedDates: [],
-                  selectedSalahs: [],
-                });
+                // setSelectedSalahAndDate({
+                //   selectedDates: [],
+                //   selectedSalahs: [],
+                // });
+                resetSelectedRow();
+                resetSelectedSalahAndDate();
               }}
             >
               Cancel
@@ -141,12 +140,20 @@ const PrayerTable = ({
           <Table
             style={{
               textTransform: "none",
+              fontSize: "3rem",
             }}
             className="text-center"
             // rowCount={datesFromStartToToday.length}
             rowCount={fetchedSalahData.length}
-            rowGetter={rowGetter}
-            // rowGetter={({ index }) => fetchedSalahData[index]}
+            // rowGetter={rowGetter}
+            rowGetter={({ index }) => fetchedSalahData[index]}
+            onRowClick={(obj) => {
+              console.log("INDEX: ", obj.index);
+              // setIsSelectedRow(obj.index);
+            }}
+            rowClassName={({ index }) => {
+              return isSelectedRow === index ? "selected-row" : "";
+            }}
             rowHeight={100}
             headerHeight={40}
             height={height}
@@ -157,7 +164,7 @@ const PrayerTable = ({
               className="text-left"
               label=""
               dataKey="date"
-              cellRenderer={({ rowData }) => {
+              cellRenderer={({ rowData, rowIndex }) => {
                 const parsedDate = parse(
                   rowData.date,
                   "yyyy-MM-dd",
@@ -178,13 +185,14 @@ const PrayerTable = ({
                 return (
                   <section
                     onClick={() => {
+                      setIsSelectedRow(rowIndex);
                       setIsMultiEditMode(true);
                       // setSelectedSalahAndDate({ [rowData.date]: [] });
                       setSelectedSalahAndDate((prev) => ({
                         ...prev,
                         selectedDates: [rowData.date],
                       }));
-                      // console.log(e.target.offsetParent.ariaRowIndex);
+
                       // const testing = "2";
                       // if (e.target.offsetParent.ariaRowIndex === testing) {
                       //   alert("hello");
@@ -261,8 +269,10 @@ const PrayerTable = ({
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
         handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
-        setSelectedSalahAndDate={setSelectedSalahAndDate}
+        // setSelectedSalahAndDate={setSelectedSalahAndDate}
         selectedSalahAndDate={selectedSalahAndDate}
+        resetSelectedSalahAndDate={resetSelectedSalahAndDate}
+        resetSelectedRow={resetSelectedRow}
         setIsMultiEditMode={setIsMultiEditMode}
         isMultiEditMode={isMultiEditMode}
         dbConnection={dbConnection}
