@@ -107,9 +107,11 @@ const PrayerTable = ({
             <button
               className="pr-2"
               onClick={() => {
+                console.log(Object.values(selectedSalahAndDate)[1]);
+
                 // TODO: Improve the alert below to something more native
                 const dateArrLength =
-                  Object.values(selectedSalahAndDate)[0].length;
+                  Object.values(selectedSalahAndDate)[1].length;
                 dateArrLength > 0
                   ? setShowUpdateStatusModal(true)
                   : alert("Please select atleast one Salah");
