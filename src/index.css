@@ -38,6 +38,15 @@
   user-select: none;
 }
 
+*:focus {
+  outline: none;
+}
+input:focus,
+button:focus {
+  outline: none;
+  border: none;
+}
+
 input[type="time"]::-webkit-calendar-picker-indicator {
   background: none;
   display: none;
