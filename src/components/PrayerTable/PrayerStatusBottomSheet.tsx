@@ -45,8 +45,8 @@ interface PrayerStatusBottomSheetProps {
   // >;
   selectedSalahAndDate: SelectedSalahAndDateType;
   resetSelectedSalahAndDate: () => void;
-  setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-  isMultiEditMode: boolean;
+  setIsRowEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  isRowEditMode: boolean;
 }
 
 const PrayerStatusBottomSheet = ({
@@ -58,8 +58,8 @@ const PrayerStatusBottomSheet = ({
   selectedSalahAndDate,
   resetSelectedRow,
   resetSelectedSalahAndDate,
-  setIsMultiEditMode,
-  isMultiEditMode,
+  setIsRowEditMode,
+  isRowEditMode,
   setUserPreferences,
   userPreferences,
   showUpdateStatusModal,
@@ -144,7 +144,7 @@ const PrayerStatusBottomSheet = ({
   };
 
   const checkDBForSalah = async () => {
-    if (isMultiEditMode) return;
+    if (isRowEditMode) return;
     try {
       await doesSalahAndDateExists();
     } catch (error) {
@@ -267,7 +267,7 @@ const PrayerStatusBottomSheet = ({
   }
 
   const onSheetClose = () => {
-    if (isMultiEditMode === false) {
+    if (isRowEditMode === false) {
       // setSelectedSalahAndDate({
       //   selectedDates: [],
       //   selectedSalahs: [],
@@ -547,7 +547,7 @@ const PrayerStatusBottomSheet = ({
                       //   selectedSalahs: [],
                       // });
                       resetSelectedSalahAndDate();
-                      setIsMultiEditMode(false);
+                      setIsRowEditMode(false);
                       resetSelectedRow();
                       setShowUpdateStatusModal(false);
                       setSelectedReasons([]);

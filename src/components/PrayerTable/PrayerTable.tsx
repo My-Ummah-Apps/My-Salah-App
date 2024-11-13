@@ -52,7 +52,7 @@ const PrayerTable = ({
       selectedDates: [],
       selectedSalahs: [],
     });
-  const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
+  const [isRowEditMode, setIsRowEditMode] = useState<boolean>(false);
   const [isSelectedRow, setIsSelectedRow] = useState<number | null>(null);
 
   // const rowGetter = ({ index }: any) => {
@@ -78,9 +78,17 @@ const PrayerTable = ({
     "Isha",
   ];
 
-  // console.log("isMultiEditMode: ", isMultiEditMode);
+  // console.log("isRowEditMode: ", isRowEditMode);
 
-  const handleTableCellSelection = (salahName: SalahNamesType) => {
+  const handleTableCellSelection = (
+    salahName: SalahNamesType,
+    rowData: any
+  ) => {
+    setSelectedSalahAndDate((prev) => ({
+      ...prev,
+      selectedDates: [rowData.date],
+    }));
+
     setSelectedSalahAndDate((prev) => {
       return prev.selectedSalahs.includes(salahName)
         ? {
@@ -92,23 +100,21 @@ const PrayerTable = ({
         : { ...prev, selectedSalahs: [...prev.selectedSalahs, salahName] };
     });
 
-    if (!isMultiEditMode) {
+    if (!isRowEditMode) {
       setShowUpdateStatusModal(true);
-    } else if (isMultiEditMode) {
+    } else if (isRowEditMode) {
     }
   };
 
   return (
     <section className="h-[80vh]">
       {/* <section className="relative h-[80vh]"> */}
-      {isMultiEditMode && (
+      {isRowEditMode && (
         <section className="absolute top-0 left-0 h-[9vh] z-20 flex w-full p-5">
           <section className="w-full text-right">
             <button
               className="pr-2"
               onClick={() => {
-                console.log(Object.values(selectedSalahAndDate)[1]);
-
                 // TODO: Improve the alert below to something more native
                 const dateArrLength =
                   Object.values(selectedSalahAndDate)[1].length;
@@ -121,7 +127,7 @@ const PrayerTable = ({
             </button>
             <button
               onClick={() => {
-                setIsMultiEditMode(false);
+                setIsRowEditMode(false);
                 // setSelectedSalahAndDate({
                 //   selectedDates: [],
                 //   selectedSalahs: [],
@@ -149,10 +155,10 @@ const PrayerTable = ({
             rowCount={fetchedSalahData.length}
             // rowGetter={rowGetter}
             rowGetter={({ index }) => fetchedSalahData[index]}
-            onRowClick={(obj) => {
-              console.log("INDEX: ", obj.index);
-              // setIsSelectedRow(obj.index);
-            }}
+            // onRowClick={(obj) => {
+            //   console.log("INDEX: ", obj.index);
+            //   // setIsSelectedRow(obj.index);
+            // }}
             rowClassName={({ index }) => {
               return isSelectedRow === index ? "selected-row" : "";
             }}
@@ -188,17 +194,11 @@ const PrayerTable = ({
                   <section
                     onClick={() => {
                       setIsSelectedRow(rowIndex);
-                      setIsMultiEditMode(true);
-                      // setSelectedSalahAndDate({ [rowData.date]: [] });
+                      setIsRowEditMode(true);
                       setSelectedSalahAndDate((prev) => ({
                         ...prev,
                         selectedDates: [rowData.date],
                       }));
-
-                      // const testing = "2";
-                      // if (e.target.offsetParent.ariaRowIndex === testing) {
-                      //   alert("hello");
-                      // }
                     }}
                   >
                     <p className="text-sm">{formattedParsedDate}</p>
@@ -223,11 +223,7 @@ const PrayerTable = ({
                     <LuDot
                       className={`w-[24px] h-[24px]`}
                       onClick={() => {
-                        setSelectedSalahAndDate((prev) => ({
-                          ...prev,
-                          selectedDates: [rowData.date],
-                        }));
-                        handleTableCellSelection(salahName);
+                        handleTableCellSelection(salahName, rowData);
                       }}
                     />
                   ) : (
@@ -242,13 +238,7 @@ const PrayerTable = ({
                       }}
                       className={`w-[24px] h-[24px] ${iconStyles}`}
                       onClick={() => {
-                        setSelectedSalahAndDate((prev) => ({
-                          ...prev,
-                          selectedDates: [rowData.date],
-                        }));
-                        handleTableCellSelection(salahName);
-                        // setShowUpdateStatusModal(true);
-                        // setHasUserClickedDate(true);
+                        handleTableCellSelection(salahName, rowData);
                       }}
                     ></div>
                   );
@@ -275,8 +265,8 @@ const PrayerTable = ({
         selectedSalahAndDate={selectedSalahAndDate}
         resetSelectedSalahAndDate={resetSelectedSalahAndDate}
         resetSelectedRow={resetSelectedRow}
-        setIsMultiEditMode={setIsMultiEditMode}
-        isMultiEditMode={isMultiEditMode}
+        setIsRowEditMode={setIsRowEditMode}
+        isRowEditMode={isRowEditMode}
         dbConnection={dbConnection}
         setShowUpdateStatusModal={setShowUpdateStatusModal}
         showUpdateStatusModal={showUpdateStatusModal}
