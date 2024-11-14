@@ -17,7 +17,7 @@ import {
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
-  createLocalisedDate,
+  // createLocalisedDate,
   prayerStatusColorsHexCodes,
   reasonsStyles,
   TWEEN_CONFIG,
@@ -105,13 +105,29 @@ const PrayerStatusBottomSheet = ({
     }
   };
 
+  const resetStatusReasonsNotes = () => {
+    setSalahStatus("");
+    setSelectedReasons([]);
+    setNotes("");
+  };
+
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   // let isDatabaseUpdating: boolean = false;
 
+  useEffect(() => {
+    console.log(salahStatus);
+    console.log(notes);
+    console.log(selectedReasons);
+  }, [salahStatus, notes, selectedReasons]);
+
   const doesSalahAndDateExists = async (): Promise<boolean> => {
-    const selectedDate = Object.keys(selectedSalahAndDate)[0];
-    const selectedSalah = Object.values(selectedSalahAndDate)[0][0];
+    // const selectedDate = Object.keys(selectedSalahAndDate)[0];
+    // const selectedSalah = Object.values(selectedSalahAndDate)[0][0];
+    const selectedDate = selectedSalahAndDate.selectedDates[0];
+    const selectedSalah = selectedSalahAndDate.selectedSalahs[0];
+    console.log("selectedDate: ", selectedSalahAndDate.selectedDates[0]);
+    console.log("selectedSalah: ", selectedSalah);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -273,10 +289,12 @@ const PrayerStatusBottomSheet = ({
       //   selectedDates: [],
       //   selectedSalahs: [],
       // });
-      resetSelectedSalahAndDate();
+      // resetSelectedSalahAndDate();
     }
     setShowUpdateStatusModal(false);
-    setSalahStatus("");
+    resetSelectedSalahAndDate();
+    resetStatusReasonsNotes();
+    // setSalahStatus("");
   };
 
   return (
@@ -559,8 +577,8 @@ const PrayerStatusBottomSheet = ({
                       setIsRowEditMode(false);
                       resetSelectedRow();
                       setShowUpdateStatusModal(false);
-                      setSelectedReasons([]);
-                      setNotes("");
+                      // setSelectedReasons([]);
+                      // setNotes("");
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${

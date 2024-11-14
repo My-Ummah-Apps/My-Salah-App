@@ -17,7 +17,6 @@ import {
   createLocalisedDate,
   prayerStatusColorsHexCodes,
 } from "../../utils/constants";
-import { format, parse } from "date-fns";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -117,9 +116,9 @@ const PrayerTable = ({
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
-      {isRowEditMode && (
+      {/* {isRowEditMode && (
         <section className="">
-          <section className="text-sm text-right text-white">
+          <section className="absolute text-sm text-right text-white">
             <button
               className="px-2 py-1.5 m-1 text-sm font-medium text-teal-800 bg-teal-200 rounded-lg"
               onClick={() => {
@@ -145,7 +144,7 @@ const PrayerTable = ({
             </button>
           </section>
         </section>
-      )}
+      )} */}
 
       <AutoSizer>
         {({ height, width }) => (
@@ -179,7 +178,7 @@ const PrayerTable = ({
           >
             <Column
               style={{ marginLeft: "0" }}
-              className="relative items-center text-left"
+              className="items-center text-left "
               label=""
               dataKey="date"
               cellRenderer={({ rowData, rowIndex }) => {
@@ -205,6 +204,7 @@ const PrayerTable = ({
                 // const day = format(parsedDate, "EE");
                 return (
                   <section
+                    className=""
                     onClick={() => {
                       if (isRowEditMode) return;
                       setIsSelectedRow(rowIndex);
@@ -217,6 +217,33 @@ const PrayerTable = ({
                   >
                     <p className="text-sm">{formattedParsedDate}</p>
                     <p className="text-sm">{day}</p>
+                    {isRowEditMode && (
+                      <section className="fixed text-sm text-white top-[-2px] right-1">
+                        <button
+                          className="px-2 py-1.5 m-1 text-xs font-medium text-sky-900  bg-sky-400 rounded-md"
+                          onClick={() => {
+                            setIsRowEditMode(false);
+                            resetSelectedRow();
+                            resetSelectedSalahAndDate();
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-2 py-1.5 m-1 text-xs text-white bg-sky-700 rounded-md"
+                          onClick={() => {
+                            // TODO: Improve the alert below to something more native
+                            const dateArrLength =
+                              Object.values(selectedSalahAndDate)[1].length;
+                            dateArrLength > 0
+                              ? setShowUpdateStatusModal(true)
+                              : alert("Please select atleast one Salah");
+                          }}
+                        >
+                          Edit
+                        </button>
+                      </section>
+                    )}
                   </section>
                 );
               }}

@@ -95,6 +95,7 @@ body {
 
 .selected-row {
   opacity: 1;
+  /* position: relative !important; */
   /* animation: fadeIn 1s ease forwards; */
 }
 
@@ -297,7 +298,7 @@ td {
   outline: 0;
   flex-grow: 0;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: transparent;
   transition: background 300ms;
   cursor: pointer;
 }
@@ -314,7 +315,7 @@ td {
   border: 0;
   background-color: transparent;
   background-size: contain;
-  box-shadow: inset 0 0 0 1px #ccd3d8;
+  box-shadow: inset 0 0 0 1px #676767;
 }
 
 /* Checked */
