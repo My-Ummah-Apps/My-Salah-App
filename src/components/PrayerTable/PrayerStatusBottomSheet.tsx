@@ -316,17 +316,16 @@ const PrayerStatusBottomSheet = ({
           <Sheet.Content>
             <Sheet.Scroller>
               {" "}
-              <section className="w-[90%] mx-auto mb-20 rounded-lg text-white">
+              <section className="w-[90%] mx-auto mb-20 rounded-lg text-white font-light">
                 <h1 className="mb-10 text-3xl text-center">
                   {/* How did you pray {clickedSalah}? */}
                   How did you pray{" "}
                   {selectedSalahAndDate.selectedSalahs.join(", ")} on {""}
-                  {
-                    // ! The below is causing errors in console logs
-                    // createLocalisedDate(
-                    //   selectedSalahAndDate.selectedDates[0]
-                    // )[1]
-                  }
+                  {selectedSalahAndDate.selectedDates.length > 0
+                    ? createLocalisedDate(
+                        selectedSalahAndDate.selectedDates[0]
+                      )[1]
+                    : null}
                   ?
                 </h1>
                 <div

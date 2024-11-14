@@ -28,6 +28,8 @@ export const checkNotificationPermissions = async () => {
 };
 
 export const createLocalisedDate = (date: string) => {
+  console.log("DATE IS: ", date);
+
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
   const userLocale = navigator.language || "en-US";
   const formattedParsedDate = new Intl.DateTimeFormat(userLocale, {

@@ -93,6 +93,10 @@ body {
   }
 }
 
+.prayer-status-color-box {
+  animation: fadeIn 0.5s ease forwards;
+}
+
 .selected-row {
   opacity: 1;
   /* position: relative !important; */

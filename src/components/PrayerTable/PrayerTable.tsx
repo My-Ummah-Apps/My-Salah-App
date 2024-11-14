@@ -285,7 +285,7 @@ const PrayerTable = ({
                                 ] as keyof typeof prayerStatusColorsHexCodes
                               ],
                           }}
-                          className={`w-[24px] h-[24px] ${iconStyles}`}
+                          className={`w-[24px] h-[24px] ${iconStyles} prayer-status-color-box`}
                           // onClick={() => {
                           //   console.log("SQUARE CLICKED");
                           //   handleTableCellSelection(salahName, rowData);
