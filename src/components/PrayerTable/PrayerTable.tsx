@@ -13,7 +13,10 @@ import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
 
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArrayType } from "../../types/types";
-import { prayerStatusColorsHexCodes } from "../../utils/constants";
+import {
+  createLocalisedDate,
+  prayerStatusColorsHexCodes,
+} from "../../utils/constants";
 import { format, parse } from "date-fns";
 
 // import StreakCount from "../Stats/StreakCount";
@@ -68,8 +71,7 @@ const PrayerTable = ({
     setIsSelectedRow(null);
   };
 
-  const iconStyles =
-    "inline-block rounded-md text-white w-[24px] h-[24px] shadow-md";
+  const iconStyles = "rounded-md text-white w-[24px] h-[24px] shadow-md";
 
   const salahNamesArr: SalahNamesType[] = [
     "Fajr",
@@ -114,13 +116,22 @@ const PrayerTable = ({
   };
 
   return (
-    <section className="h-[80vh]">
-      {/* <section className="relative h-[80vh]"> */}
+    <section className="prayer-table-wrap h-[80vh]">
       {isRowEditMode && (
-        <section className="absolute top-0 left-0 h-[9vh] z-20 flex w-full p-5">
-          <section className="w-full text-right">
+        <section className="">
+          <section className="text-sm text-right text-white">
             <button
-              className="pr-2"
+              className="px-2 py-1.5 m-1 text-sm font-medium text-teal-800 bg-teal-200 rounded-lg"
+              onClick={() => {
+                setIsRowEditMode(false);
+                resetSelectedRow();
+                resetSelectedSalahAndDate();
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-2 py-1.5 m-1 text-sm font-medium text-white bg-teal-600 rounded-lg"
               onClick={() => {
                 // TODO: Improve the alert below to something more native
                 const dateArrLength =
@@ -132,24 +143,10 @@ const PrayerTable = ({
             >
               Edit
             </button>
-            <button
-              onClick={() => {
-                setIsRowEditMode(false);
-                // setSelectedSalahAndDate({
-                //   selectedDates: [],
-                //   selectedSalahs: [],
-                // });
-                resetSelectedRow();
-                resetSelectedSalahAndDate();
-              }}
-            >
-              Cancel
-            </button>
           </section>
         </section>
       )}
 
-      {/* {renderTable === true ? ( */}
       <AutoSizer>
         {({ height, width }) => (
           <Table
@@ -182,27 +179,30 @@ const PrayerTable = ({
           >
             <Column
               style={{ marginLeft: "0" }}
-              className="items-center text-left"
+              className="relative items-center text-left"
               label=""
               dataKey="date"
               cellRenderer={({ rowData, rowIndex }) => {
-                const parsedDate = parse(
-                  rowData.date,
-                  "yyyy-MM-dd",
-                  new Date()
+                const [day, formattedParsedDate] = createLocalisedDate(
+                  rowData.date
                 );
-                const userLocale = navigator.language || "en-US";
-                const formattedParsedDate = new Intl.DateTimeFormat(
-                  userLocale,
-                  {
-                    year: "2-digit",
-                    month: "2-digit",
-                    day: "2-digit",
-                  }
-                )
-                  .format(parsedDate)
-                  .replace(/\//g, ".");
-                const day = format(parsedDate, "EE");
+                // const parsedDate = parse(
+                //   rowData.date,
+                //   "yyyy-MM-dd",
+                //   new Date()
+                // );
+                // const userLocale = navigator.language || "en-US";
+                // const formattedParsedDate = new Intl.DateTimeFormat(
+                //   userLocale,
+                //   {
+                //     year: "2-digit",
+                //     month: "2-digit",
+                //     day: "2-digit",
+                //   }
+                // )
+                //   .format(parsedDate)
+                //   .replace(/\//g, ".");
+                // const day = format(parsedDate, "EE");
                 return (
                   <section
                     onClick={() => {
@@ -239,7 +239,7 @@ const PrayerTable = ({
                         if (isRowEditMode) return;
                         handleTableCellSelection(salahName, rowData);
                       }}
-                      className="flex flex-col h-full"
+                      // className="flex flex-col"
                     >
                       {rowData.salahs[salahName] === "" ? (
                         <LuDot
@@ -270,19 +270,24 @@ const PrayerTable = ({
                           // onClick={() => {
                           //   handleTableCellSelection(salahName, rowData);
                           // }}
-                          className="mt-2"
+                          className={`checkbox-wrap ${
+                            isSelectedRow === rowIndex
+                              ? "checkbox--wrap-slide-in"
+                              : ""
+                          } `}
                         >
-                          <input
-                            className="appearance-none w-4 h-4 rounded-full border-2 border-[#646464] bg-white checked:bg-[#4938ab] checked:border-transparent cursor-pointer"
-                            type="checkbox"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                            }}
-                            onChange={() => {
-                              handleTableCellSelection(salahName, rowData);
-                            }}
-                            // checked={toggleCheckbox}
-                          ></input>
+                          <label className="p-5">
+                            <input
+                              type="checkbox"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                              }}
+                              onChange={() => {
+                                handleTableCellSelection(salahName, rowData);
+                              }}
+                              // checked={toggleCheckbox}
+                            ></input>
+                          </label>
                         </div>
                       )}
                     </section>

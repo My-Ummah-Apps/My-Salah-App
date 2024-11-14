@@ -1,6 +1,7 @@
 import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import { format, parse } from "date-fns";
 
 export const TWEEN_CONFIG = {
   ease: "easeInOut" as EasingDefinition,
@@ -24,6 +25,19 @@ export const checkNotificationPermissions = async () => {
   const { display: userNotificationPermission } =
     await LocalNotifications.checkPermissions();
   return userNotificationPermission;
+};
+
+export const createLocalisedDate = (date: string) => {
+  const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+  const userLocale = navigator.language || "en-US";
+  const formattedParsedDate = new Intl.DateTimeFormat(userLocale, {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(parsedDate)
+    .replace(/\//g, ".");
+  return [format(parsedDate, "EE"), formattedParsedDate];
 };
 
 // export const prayerStatusColorsHexCodes = {

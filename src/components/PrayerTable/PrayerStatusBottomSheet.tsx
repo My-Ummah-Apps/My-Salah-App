@@ -17,6 +17,7 @@ import {
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
+  createLocalisedDate,
   prayerStatusColorsHexCodes,
   reasonsStyles,
   TWEEN_CONFIG,
@@ -302,7 +303,15 @@ const PrayerStatusBottomSheet = ({
               <section className="w-[90%] mx-auto mb-20 rounded-lg text-white">
                 <h1 className="mb-10 text-3xl text-center">
                   {/* How did you pray {clickedSalah}? */}
-                  How did you pray sort this out?
+                  How did you pray{" "}
+                  {selectedSalahAndDate.selectedSalahs.join(", ")} on {""}
+                  {
+                    // ! The below is causing errors in console logs
+                    // createLocalisedDate(
+                    //   selectedSalahAndDate.selectedDates[0]
+                    // )[1]
+                  }
+                  ?
                 </h1>
                 <div
                   // ref={modalSheetPrayerStatusesWrap}
