@@ -17,6 +17,7 @@ import {
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
+  createLocalisedDate,
   // createLocalisedDate,
   prayerStatusColorsHexCodes,
   reasonsStyles,
@@ -284,17 +285,14 @@ const PrayerStatusBottomSheet = ({
   }
 
   const onSheetClose = () => {
-    if (isRowEditMode === false) {
-      // setSelectedSalahAndDate({
-      //   selectedDates: [],
-      //   selectedSalahs: [],
-      // });
-      // resetSelectedSalahAndDate();
-    }
     setShowUpdateStatusModal(false);
     resetSelectedSalahAndDate();
     resetStatusReasonsNotes();
-    // setSalahStatus("");
+
+    if (isRowEditMode === true) {
+      setIsRowEditMode(false);
+      resetSelectedRow();
+    }
   };
 
   return (
