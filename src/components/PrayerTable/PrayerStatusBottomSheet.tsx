@@ -42,9 +42,6 @@ interface PrayerStatusBottomSheetProps {
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   resetSelectedRow: () => void;
-  // setSelectedSalahAndDate: React.Dispatch<
-  //   React.SetStateAction<SelectedSalahAndDateType>
-  // >;
   selectedSalahAndDate: SelectedSalahAndDateType;
   resetSelectedSalahAndDate: () => void;
   setIsRowEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -56,7 +53,6 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  // setSelectedSalahAndDate,
   selectedSalahAndDate,
   resetSelectedRow,
   resetSelectedSalahAndDate,
@@ -114,21 +110,9 @@ const PrayerStatusBottomSheet = ({
 
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
-  // let isDatabaseUpdating: boolean = false;
-
-  useEffect(() => {
-    console.log(salahStatus);
-    console.log(notes);
-    console.log(selectedReasons);
-  }, [salahStatus, notes, selectedReasons]);
-
   const doesSalahAndDateExists = async (): Promise<boolean> => {
-    // const selectedDate = Object.keys(selectedSalahAndDate)[0];
-    // const selectedSalah = Object.values(selectedSalahAndDate)[0][0];
     const selectedDate = selectedSalahAndDate.selectedDates[0];
     const selectedSalah = selectedSalahAndDate.selectedSalahs[0];
-    console.log("selectedDate: ", selectedSalahAndDate.selectedDates[0]);
-    console.log("selectedSalah: ", selectedSalah);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -316,8 +300,8 @@ const PrayerStatusBottomSheet = ({
           <Sheet.Content>
             <Sheet.Scroller>
               {" "}
-              <section className="w-[90%] mx-auto mb-20 rounded-lg text-white font-light">
-                <h1 className="mb-10 text-3xl text-center">
+              <section className="w-[90%] mx-auto mb-20 rounded-lg text-white">
+                <h1 className="mb-10 text-3xl font-light text-center">
                   {/* How did you pray {clickedSalah}? */}
                   How did you pray{" "}
                   {selectedSalahAndDate.selectedSalahs.join(", ")} on {""}

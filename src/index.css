@@ -105,7 +105,7 @@ body {
 
 .not-selected-row:not(.ReactVirtualized__Table__headerRow) {
   opacity: 0;
-  /* animation: fadeOut 1s ease forwards; */
+  animation: fadeOut 0.5s ease forwards;
 }
 
 .checkbox-wrap {

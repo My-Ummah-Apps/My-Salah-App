@@ -259,12 +259,15 @@ const PrayerTable = ({
                 dataKey={""}
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData, rowIndex }) => {
+                cellRenderer={({ rowData, rowIndex, columnIndex }) => {
                   return (
                     <section
-                      onClick={() => {
+                      onClick={(e) => {
                         if (isRowEditMode) return;
                         handleTableCellSelection(salahName, rowData);
+                        console.log(e.target);
+
+                        console.log(columnIndex);
                       }}
                       // className="flex flex-col"
                     >
