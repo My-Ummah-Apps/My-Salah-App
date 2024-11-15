@@ -146,6 +146,7 @@ const PrayerStatusBottomSheet = ({
   };
 
   const checkDBForSalah = async () => {
+    // TODO: Place the below conditional statement in the onOpenStart prop on the sheet
     if (isRowEditMode) return;
     try {
       await doesSalahAndDateExists();
@@ -166,6 +167,7 @@ const PrayerStatusBottomSheet = ({
 
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
+
       for (let x = 0; x < selectedSalahAndDate.selectedDates.length; x++) {
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([

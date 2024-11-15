@@ -6,7 +6,7 @@ import {
   DBConnectionStateType,
   DBResultDataObjType,
   SalahNamesType,
-  SelectedSalahAndDateType,
+  SelectedSalahAndDateArrayType,
   userPreferencesType,
 } from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
@@ -50,11 +50,8 @@ const PrayerTable = ({
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
-    useState<SelectedSalahAndDateType>({
-      selectedDates: [],
-      selectedSalahs: [],
-    });
-  const [isRowEditMode, setIsRowEditMode] = useState<boolean>(false);
+    useState<SelectedSalahAndDateArrayType>([]);
+  const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [isSelectedRow, setIsSelectedRow] = useState<number | null>(null);
   // const [toggleCheckbox, setToggleCheckbox] = useState<boolean>(false);
 
@@ -63,7 +60,7 @@ const PrayerTable = ({
   // };
 
   const resetSelectedSalahAndDate = () => {
-    setSelectedSalahAndDate({ selectedDates: [], selectedSalahs: [] });
+    setSelectedSalahAndDate([]);
   };
 
   const resetSelectedRow = () => {
@@ -80,7 +77,7 @@ const PrayerTable = ({
     "Isha",
   ];
 
-  // console.log("isRowEditMode: ", isRowEditMode);
+  // console.log("isMultiEditMode: ", isMultiEditMode);
 
   // const handleCheckboxChange = () => {
 
@@ -90,38 +87,50 @@ const PrayerTable = ({
     salahName: SalahNamesType,
     rowData: any
   ) => {
+    console.log("ROWDATA: ", rowData);
+
+    const dateExistenceCheck = selectedSalahAndDate.some(
+      (obj) => rowData.date in obj
+    );
+    console.log("dateExistenceCheck: ", dateExistenceCheck);
+
     // setToggleCheckbox((prev) => !prev);
-    setSelectedSalahAndDate((prev) => ({
-      ...prev,
-      selectedDates: [rowData.date],
-    }));
-
     setSelectedSalahAndDate((prev) => {
-      return prev.selectedSalahs.includes(salahName)
-        ? {
-            ...prev,
-            selectedSalahs: prev.selectedSalahs.filter(
-              (salah) => salahName !== salah
-            ),
-          }
-        : { ...prev, selectedSalahs: [...prev.selectedSalahs, salahName] };
+      return [
+        ...prev,
+        dateExistenceCheck
+          ? { ...rowData.date, salahName }
+          : { [rowData.date]: [salahName] },
+      ];
     });
+    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
 
-    if (!isRowEditMode) {
+    // setSelectedSalahAndDate((prev) => {
+    //   return prev.selectedSalahs.includes(salahName)
+    //     ? {
+    //         ...prev,
+    //         selectedSalahs: prev.selectedSalahs.filter(
+    //           (salah) => salahName !== salah
+    //         ),
+    //       }
+    //     : { ...prev, selectedSalahs: [...prev.selectedSalahs, salahName] };
+    // });
+
+    if (!isMultiEditMode) {
       setShowUpdateStatusModal(true);
-    } else if (isRowEditMode) {
+    } else if (isMultiEditMode) {
     }
   };
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
-      {/* {isRowEditMode && (
+      {/* {isMultiEditMode && (
         <section className="">
           <section className="absolute text-sm text-right text-white">
             <button
               className="px-2 py-1.5 m-1 text-sm font-medium text-teal-800 bg-teal-200 rounded-lg"
               onClick={() => {
-                setIsRowEditMode(false);
+                setIsMultiEditMode(false);
                 resetSelectedRow();
                 resetSelectedSalahAndDate();
               }}
@@ -162,7 +171,7 @@ const PrayerTable = ({
             //   // setIsSelectedRow(obj.index);
             // }}
             rowClassName={({ index }) => {
-              if (!isRowEditMode) {
+              if (!isMultiEditMode) {
                 return "";
               } else {
                 return isSelectedRow === index
@@ -206,9 +215,9 @@ const PrayerTable = ({
                   <section
                     className=""
                     onClick={() => {
-                      if (isRowEditMode) return;
+                      if (isMultiEditMode) return;
                       setIsSelectedRow(rowIndex);
-                      setIsRowEditMode(true);
+                      setIsMultiEditMode(true);
                       setSelectedSalahAndDate((prev) => ({
                         ...prev,
                         selectedDates: [rowData.date],
@@ -217,12 +226,12 @@ const PrayerTable = ({
                   >
                     <p className="text-sm">{formattedParsedDate}</p>
                     <p className="text-sm">{day}</p>
-                    {isRowEditMode && (
+                    {isMultiEditMode && (
                       <section className="fixed text-sm text-white top-[-2px] right-1">
                         <button
                           className="px-2 py-1.5 m-1 text-xs font-medium text-sky-900  bg-sky-400 rounded-md"
                           onClick={() => {
-                            setIsRowEditMode(false);
+                            setIsMultiEditMode(false);
                             resetSelectedRow();
                             resetSelectedSalahAndDate();
                           }}
@@ -265,7 +274,7 @@ const PrayerTable = ({
                       onClick={(e) => {
                         console.log("columnIndex: ", columnIndex);
 
-                        if (isRowEditMode) return;
+                        if (isMultiEditMode) return;
                         handleTableCellSelection(salahName, rowData);
                       }}
                       // className="flex flex-col"
@@ -294,7 +303,8 @@ const PrayerTable = ({
                           // }}
                         ></div>
                       )}
-                      {isSelectedRow === rowIndex && (
+                      {/* {isSelectedRow === rowIndex && ( */}
+                      {isMultiEditMode && (
                         <div
                           // onClick={() => {
                           //   handleTableCellSelection(salahName, rowData);
@@ -327,7 +337,7 @@ const PrayerTable = ({
           </Table>
         )}
       </AutoSizer>
-
+      {/* 
       <PrayerStatusBottomSheet
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
@@ -339,14 +349,14 @@ const PrayerTable = ({
         selectedSalahAndDate={selectedSalahAndDate}
         resetSelectedSalahAndDate={resetSelectedSalahAndDate}
         resetSelectedRow={resetSelectedRow}
-        setIsRowEditMode={setIsRowEditMode}
-        isRowEditMode={isRowEditMode}
+        setIsMultiEditMode={setIsMultiEditMode}
+        isMultiEditMode={isMultiEditMode}
         dbConnection={dbConnection}
         setShowUpdateStatusModal={setShowUpdateStatusModal}
         showUpdateStatusModal={showUpdateStatusModal}
         // setHasUserClickedDate={setHasUserClickedDate}
         // hasUserClickedDate={hasUserClickedDate}
-      />
+      /> */}
     </section>
   );
 };

@@ -97,17 +97,6 @@ body {
   animation: fadeIn 0.5s ease forwards;
 }
 
-.selected-row {
-  opacity: 1;
-  /* position: relative !important; */
-  /* animation: fadeIn 1s ease forwards; */
-}
-
-.not-selected-row:not(.ReactVirtualized__Table__headerRow) {
-  opacity: 0;
-  animation: fadeOut 0.5s ease forwards;
-}
-
 .checkbox-wrap {
   position: absolute;
   width: 100%;
