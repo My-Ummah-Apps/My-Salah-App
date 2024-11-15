@@ -90,7 +90,6 @@ const PrayerTable = ({
     salahName: SalahNamesType,
     rowData: any
   ) => {
-    console.log("CLICKED: ", salahName, rowData);
     // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => ({
       ...prev,
@@ -185,6 +184,7 @@ const PrayerTable = ({
                 const [day, formattedParsedDate] = createLocalisedDate(
                   rowData.date
                 );
+
                 // const parsedDate = parse(
                 //   rowData.date,
                 //   "yyyy-MM-dd",
@@ -263,11 +263,10 @@ const PrayerTable = ({
                   return (
                     <section
                       onClick={(e) => {
+                        console.log("columnIndex: ", columnIndex);
+
                         if (isRowEditMode) return;
                         handleTableCellSelection(salahName, rowData);
-                        console.log(e.target);
-
-                        console.log(columnIndex);
                       }}
                       // className="flex flex-col"
                     >
