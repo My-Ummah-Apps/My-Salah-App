@@ -17,6 +17,7 @@ import {
   createLocalisedDate,
   prayerStatusColorsHexCodes,
 } from "../../utils/constants";
+import { findIndex } from "lodash";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -83,25 +84,33 @@ const PrayerTable = ({
 
   // }
 
-  const handleTableCellSelection = (
-    salahName: SalahNamesType,
-    rowData: any
-  ) => {
+  const handleTableCellClick = (salahName: SalahNamesType, rowData: any) => {
     console.log("ROWDATA: ", rowData);
+    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
 
-    const dateExistenceCheck = selectedSalahAndDate.some(
+    const findDateIndex = selectedSalahAndDate.findIndex(
       (obj) => rowData.date in obj
     );
-    console.log("dateExistenceCheck: ", dateExistenceCheck);
+    console.log("findDateIndex: ", findDateIndex);
 
     // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => {
-      return [
-        ...prev,
-        dateExistenceCheck
-          ? { ...rowData.date, salahName }
-          : { [rowData.date]: [salahName] },
-      ];
+      const newArr = [...prev];
+
+      if (findDateIndex > -1) {
+        console.log(newArr[findDateIndex][rowData.date]);
+        let dateArr = newArr[findDateIndex][rowData.date];
+        if (dateArr.includes(salahName)) {
+          const filteredDateArr = dateArr.filter((item) => item === salahName);
+          dateArr = filteredDateArr;
+        } else {
+          // Add salahName in
+        }
+      } else {
+        // Create the object and push it in
+        newArr.push({ [rowData.date]: [salahName] });
+      }
+      return newArr;
     });
     console.log("selectedSalahAndDate: ", selectedSalahAndDate);
 
@@ -218,10 +227,10 @@ const PrayerTable = ({
                       if (isMultiEditMode) return;
                       setIsSelectedRow(rowIndex);
                       setIsMultiEditMode(true);
-                      setSelectedSalahAndDate((prev) => ({
-                        ...prev,
-                        selectedDates: [rowData.date],
-                      }));
+                      // setSelectedSalahAndDate((prev) => ({
+                      //   ...prev,
+                      //   selectedDates: [rowData.date],
+                      // }));
                     }}
                   >
                     <p className="text-sm">{formattedParsedDate}</p>
@@ -275,7 +284,7 @@ const PrayerTable = ({
                         console.log("columnIndex: ", columnIndex);
 
                         if (isMultiEditMode) return;
-                        handleTableCellSelection(salahName, rowData);
+                        handleTableCellClick(salahName, rowData);
                       }}
                       // className="flex flex-col"
                     >
@@ -283,7 +292,7 @@ const PrayerTable = ({
                         <LuDot
                           className={`w-[24px] h-[24px]`}
                           // onClick={() => {
-                          //   handleTableCellSelection(salahName, rowData);
+                          //   handleTableCellClick(salahName, rowData);
                           // }}
                         />
                       ) : (
@@ -299,7 +308,7 @@ const PrayerTable = ({
                           className={`w-[24px] h-[24px] ${iconStyles} prayer-status-color-box`}
                           // onClick={() => {
                           //   console.log("SQUARE CLICKED");
-                          //   handleTableCellSelection(salahName, rowData);
+                          //   handleTableCellClick(salahName, rowData);
                           // }}
                         ></div>
                       )}
@@ -307,7 +316,7 @@ const PrayerTable = ({
                       {isMultiEditMode && (
                         <div
                           // onClick={() => {
-                          //   handleTableCellSelection(salahName, rowData);
+                          //   handleTableCellClick(salahName, rowData);
                           // }}
                           className={`checkbox-wrap ${
                             isSelectedRow === rowIndex
@@ -322,7 +331,7 @@ const PrayerTable = ({
                                 e.stopPropagation();
                               }}
                               onChange={() => {
-                                handleTableCellSelection(salahName, rowData);
+                                handleTableCellClick(salahName, rowData);
                               }}
                               // checked={toggleCheckbox}
                             ></input>
