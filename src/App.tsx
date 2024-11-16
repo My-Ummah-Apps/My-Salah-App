@@ -126,7 +126,6 @@ const App = () => {
       const test = await dbConnection.current
         .query(`SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='salahDataTable';
 `);
-      console.log("INDEXES: ", test.values);
 
       if (DBResultPreferences && DBResultPreferences.values) {
         // TODO: The below needs an additional check, as if the user does not select a gender and then relaunches the app, the gender prompt dissapears as values have been set and the length is no longer zero
@@ -135,10 +134,7 @@ const App = () => {
         // }
         const userNotificationPermission = await checkNotificationPermissions();
         const pendingRes = await LocalNotifications.getPending();
-        console.log("Notification props:");
         const notificationRes = await LocalNotifications.checkPermissions();
-        console.log(notificationRes.display);
-        console.log(pendingRes.notifications);
 
         const notificationValue =
           DBResultPreferences.values.length > 0

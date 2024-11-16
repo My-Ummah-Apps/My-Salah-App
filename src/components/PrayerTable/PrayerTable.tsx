@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
@@ -84,9 +84,12 @@ const PrayerTable = ({
 
   // }
 
-  const handleTableCellClick = (salahName: SalahNamesType, rowData: any) => {
-    console.log("ROWDATA: ", rowData);
+  useEffect(() => {
     console.log("selectedSalahAndDate: ", selectedSalahAndDate);
+  }, [selectedSalahAndDate]);
+
+  const handleTableCellClick = (salahName: SalahNamesType, rowData: any) => {
+    // console.log("ROWDATA: ", rowData);
 
     const findDateIndex = selectedSalahAndDate.findIndex(
       (obj) => rowData.date in obj
@@ -98,13 +101,19 @@ const PrayerTable = ({
       const newArr = [...prev];
 
       if (findDateIndex > -1) {
-        console.log(newArr[findDateIndex][rowData.date]);
         let dateArr = newArr[findDateIndex][rowData.date];
+        console.log("DATE ARR: ", dateArr);
+
         if (dateArr.includes(salahName)) {
-          const filteredDateArr = dateArr.filter((item) => item === salahName);
-          dateArr = filteredDateArr;
+          dateArr = dateArr.filter((item) => item !== salahName);
+          newArr[findDateIndex][rowData.date] = dateArr;
+          if (dateArr.length === 0) {
+          }
         } else {
-          // Add salahName in
+          newArr.push({
+            ...newArr[findDateIndex],
+            [rowData.date]: [...dateArr, salahName],
+          });
         }
       } else {
         // Create the object and push it in
