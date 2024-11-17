@@ -98,25 +98,25 @@ const PrayerTable = ({
 
     // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => {
-      const newArr = [...prev];
+      let newArr = [...prev];
 
       if (findDateIndex > -1) {
         let dateArr = newArr[findDateIndex][rowData.date];
-        console.log("DATE ARR: ", dateArr);
 
         if (dateArr.includes(salahName)) {
           dateArr = dateArr.filter((item) => item !== salahName);
           newArr[findDateIndex][rowData.date] = dateArr;
           if (dateArr.length === 0) {
+            newArr = newArr.filter((obj) => {
+              if (!(rowData.date in obj)) {
+                return obj;
+              }
+            });
           }
         } else {
-          newArr.push({
-            ...newArr[findDateIndex],
-            [rowData.date]: [...dateArr, salahName],
-          });
+          newArr[findDateIndex][rowData.date].push(salahName);
         }
       } else {
-        // Create the object and push it in
         newArr.push({ [rowData.date]: [salahName] });
       }
       return newArr;
@@ -355,7 +355,7 @@ const PrayerTable = ({
           </Table>
         )}
       </AutoSizer>
-      {/* 
+
       <PrayerStatusBottomSheet
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
@@ -374,7 +374,7 @@ const PrayerTable = ({
         showUpdateStatusModal={showUpdateStatusModal}
         // setHasUserClickedDate={setHasUserClickedDate}
         // hasUserClickedDate={hasUserClickedDate}
-      /> */}
+      />
     </section>
   );
 };

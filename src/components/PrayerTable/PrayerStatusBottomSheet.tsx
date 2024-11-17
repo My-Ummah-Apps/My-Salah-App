@@ -44,8 +44,8 @@ interface PrayerStatusBottomSheetProps {
   resetSelectedRow: () => void;
   selectedSalahAndDate: SelectedSalahAndDateType;
   resetSelectedSalahAndDate: () => void;
-  setIsRowEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-  isRowEditMode: boolean;
+  setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  isMultiEditMode: boolean;
 }
 
 const PrayerStatusBottomSheet = ({
@@ -56,8 +56,8 @@ const PrayerStatusBottomSheet = ({
   selectedSalahAndDate,
   resetSelectedRow,
   resetSelectedSalahAndDate,
-  setIsRowEditMode,
-  isRowEditMode,
+  setIsMultiEditMode,
+  isMultiEditMode,
   setUserPreferences,
   userPreferences,
   showUpdateStatusModal,
@@ -111,8 +111,11 @@ const PrayerStatusBottomSheet = ({
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   const doesSalahAndDateExists = async (): Promise<boolean> => {
-    const selectedDate = selectedSalahAndDate.selectedDates[0];
-    const selectedSalah = selectedSalahAndDate.selectedSalahs[0];
+    // ! Continue from here
+    const selectedDate = Object.keys(selectedSalahAndDate[0]);
+    const selectedSalah = Object.keys(selectedSalahAndDate[0])[0];
+
+    console.log(selectedDate, selectedSalah);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -147,7 +150,7 @@ const PrayerStatusBottomSheet = ({
 
   const checkDBForSalah = async () => {
     // TODO: Place the below conditional statement in the onOpenStart prop on the sheet
-    if (isRowEditMode) return;
+    if (isMultiEditMode) return;
     try {
       await doesSalahAndDateExists();
     } catch (error) {
@@ -275,8 +278,8 @@ const PrayerStatusBottomSheet = ({
     resetSelectedSalahAndDate();
     resetStatusReasonsNotes();
 
-    if (isRowEditMode === true) {
-      setIsRowEditMode(false);
+    if (isMultiEditMode === true) {
+      setIsMultiEditMode(false);
       resetSelectedRow();
     }
   };
@@ -557,7 +560,7 @@ const PrayerStatusBottomSheet = ({
                       //   selectedSalahs: [],
                       // });
                       resetSelectedSalahAndDate();
-                      setIsRowEditMode(false);
+                      setIsMultiEditMode(false);
                       resetSelectedRow();
                       setShowUpdateStatusModal(false);
                       // setSelectedReasons([]);
