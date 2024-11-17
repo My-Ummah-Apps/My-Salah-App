@@ -88,36 +88,35 @@ const PrayerTable = ({
     console.log("selectedSalahAndDate: ", selectedSalahAndDate);
   }, [selectedSalahAndDate]);
 
-  const handleTableCellClick = (salahName: SalahNamesType, rowData: any) => {
-    // console.log("ROWDATA: ", rowData);
-
-    const findDateIndex = selectedSalahAndDate.findIndex(
-      (obj) => rowData.date in obj
-    );
-    console.log("findDateIndex: ", findDateIndex);
+  const handleTableCellClick = (
+    salahName: SalahNamesType,
+    rowDataDate: string
+  ) => {
+    console.log("rowDataDate: ", rowDataDate);
 
     // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => {
       let newArr = [...prev];
 
+      const findDateIndex = newArr.findIndex((obj) => rowDataDate in obj);
+      console.log("findDateIndex: ", findDateIndex);
+
       if (findDateIndex > -1) {
-        let dateArr = newArr[findDateIndex][rowData.date];
+        let dateArr = newArr[findDateIndex][rowDataDate];
 
         if (dateArr.includes(salahName)) {
           dateArr = dateArr.filter((item) => item !== salahName);
-          newArr[findDateIndex][rowData.date] = dateArr;
+          newArr[findDateIndex][rowDataDate] = dateArr;
           if (dateArr.length === 0) {
             newArr = newArr.filter((obj) => {
-              if (!(rowData.date in obj)) {
-                return obj;
-              }
+              return !(rowDataDate in obj);
             });
           }
         } else {
-          newArr[findDateIndex][rowData.date].push(salahName);
+          newArr[findDateIndex][rowDataDate].push(salahName);
         }
       } else {
-        newArr.push({ [rowData.date]: [salahName] });
+        newArr.push({ [rowDataDate]: [salahName] });
       }
       return newArr;
     });
@@ -293,7 +292,7 @@ const PrayerTable = ({
                         console.log("columnIndex: ", columnIndex);
 
                         if (isMultiEditMode) return;
-                        handleTableCellClick(salahName, rowData);
+                        handleTableCellClick(salahName, rowData.date);
                       }}
                       // className="flex flex-col"
                     >
@@ -340,7 +339,7 @@ const PrayerTable = ({
                                 e.stopPropagation();
                               }}
                               onChange={() => {
-                                handleTableCellClick(salahName, rowData);
+                                handleTableCellClick(salahName, rowData.date);
                               }}
                               // checked={toggleCheckbox}
                             ></input>
@@ -356,7 +355,7 @@ const PrayerTable = ({
         )}
       </AutoSizer>
 
-      <PrayerStatusBottomSheet
+      {/* <PrayerStatusBottomSheet
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
         fetchedSalahData={fetchedSalahData}
@@ -374,7 +373,7 @@ const PrayerTable = ({
         showUpdateStatusModal={showUpdateStatusModal}
         // setHasUserClickedDate={setHasUserClickedDate}
         // hasUserClickedDate={hasUserClickedDate}
-      />
+      /> */}
     </section>
   );
 };
