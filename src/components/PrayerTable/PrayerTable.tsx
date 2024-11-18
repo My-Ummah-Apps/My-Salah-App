@@ -105,8 +105,13 @@ const PrayerTable = ({
         let dateArr = newArr[findDateIndex][rowDataDate];
 
         if (dateArr.includes(salahName)) {
+          const updatedArr = dateArr.filter((item) => item !== salahName);
           dateArr = dateArr.filter((item) => item !== salahName);
-          newArr[findDateIndex][rowDataDate] = dateArr;
+          // newArr[findDateIndex][rowDataDate] = dateArr;
+          newArr[findDateIndex] = {
+            ...newArr[findDateIndex],
+            [rowDataDate]: dateArr,
+          };
           if (dateArr.length === 0) {
             newArr = newArr.filter((obj) => {
               return !(rowDataDate in obj);
@@ -259,8 +264,7 @@ const PrayerTable = ({
                           className="px-2 py-1.5 m-1 text-xs text-white bg-sky-700 rounded-md"
                           onClick={() => {
                             // TODO: Improve the alert below to something more native
-                            const dateArrLength =
-                              Object.values(selectedSalahAndDate)[1].length;
+                            const dateArrLength = selectedSalahAndDate.length;
                             dateArrLength > 0
                               ? setShowUpdateStatusModal(true)
                               : alert("Please select atleast one Salah");
@@ -355,7 +359,7 @@ const PrayerTable = ({
         )}
       </AutoSizer>
 
-      {/* <PrayerStatusBottomSheet
+      <PrayerStatusBottomSheet
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
         fetchedSalahData={fetchedSalahData}
@@ -373,7 +377,7 @@ const PrayerTable = ({
         showUpdateStatusModal={showUpdateStatusModal}
         // setHasUserClickedDate={setHasUserClickedDate}
         // hasUserClickedDate={hasUserClickedDate}
-      /> */}
+      />
     </section>
   );
 };

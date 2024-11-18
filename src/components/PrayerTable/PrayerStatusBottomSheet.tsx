@@ -309,12 +309,12 @@ const PrayerStatusBottomSheet = ({
                 <h1 className="mb-10 text-3xl font-light text-center">
                   {/* How did you pray {clickedSalah}? */}
                   How did you pray{" "}
-                  {selectedSalahAndDate.selectedSalahs.join(", ")} on {""}
+                  {/* {selectedSalahAndDate.selectedSalahs.join(", ")} on {""}
                   {selectedSalahAndDate.selectedDates.length > 0
                     ? createLocalisedDate(
                         selectedSalahAndDate.selectedDates[0]
                       )[1]
-                    : null}
+                    : null} */}
                   ?
                 </h1>
                 <div
