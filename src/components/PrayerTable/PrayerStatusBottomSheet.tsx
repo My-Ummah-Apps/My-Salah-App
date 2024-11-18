@@ -111,11 +111,10 @@ const PrayerStatusBottomSheet = ({
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   const doesSalahAndDateExists = async (): Promise<boolean> => {
-    // ! Continue from here
-    const selectedDate = Object.keys(selectedSalahAndDate[0]);
-    const selectedSalah = Object.keys(selectedSalahAndDate[0])[0];
+    const selectedDate = Object.keys(selectedSalahAndDate[0]).toString();
+    const selectedSalah = Object.values(selectedSalahAndDate[0]).toString();
 
-    console.log(selectedDate, selectedSalah);
+    console.log("HELLO: ", selectedDate, selectedSalah);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -165,7 +164,8 @@ const PrayerStatusBottomSheet = ({
       await checkAndOpenOrCloseDBConnection("open");
 
       // const date = Object.keys(selectedSalahAndDate)[0];
-      const salahArr = Object.values(selectedSalahAndDate.selectedSalahs);
+      // ! Continue from here
+      const salahArr = Object.values(selectedSalahAndDate[0]);
       // ! Unsure if this still needs to be applied to salahArr: .flat()
 
       const reasonsToInsert =
