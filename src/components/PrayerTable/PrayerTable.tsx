@@ -17,7 +17,6 @@ import {
   createLocalisedDate,
   prayerStatusColorsHexCodes,
 } from "../../utils/constants";
-import { findIndex } from "lodash";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -54,6 +53,7 @@ const PrayerTable = ({
     useState<SelectedSalahAndDateArrayType>([]);
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [isSelectedRow, setIsSelectedRow] = useState<number | null>(null);
+  const [selectedCells, setSelectedCells] = useState({});
   // const [toggleCheckbox, setToggleCheckbox] = useState<boolean>(false);
 
   // const rowGetter = ({ index }: any) => {
@@ -84,28 +84,27 @@ const PrayerTable = ({
 
   // }
 
-  useEffect(() => {
-    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
-  }, [selectedSalahAndDate]);
+  // useEffect(() => {
+  //   console.log("selectedSalahAndDate: ", selectedSalahAndDate);
+  // }, [selectedSalahAndDate]);
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
     rowDataDate: string
   ) => {
-    console.log("rowDataDate: ", rowDataDate);
+    // console.log("rowDataDate: ", rowDataDate);
 
     // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => {
       let newArr = [...prev];
 
       const findDateIndex = newArr.findIndex((obj) => rowDataDate in obj);
-      console.log("findDateIndex: ", findDateIndex);
 
       if (findDateIndex > -1) {
         let dateArr = newArr[findDateIndex][rowDataDate];
 
         if (dateArr.includes(salahName)) {
-          const updatedArr = dateArr.filter((item) => item !== salahName);
+          // const updatedArr = dateArr.filter((item) => item !== salahName);
           dateArr = dateArr.filter((item) => item !== salahName);
           // newArr[findDateIndex][rowDataDate] = dateArr;
           newArr[findDateIndex] = {
@@ -125,7 +124,7 @@ const PrayerTable = ({
       }
       return newArr;
     });
-    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
+    // console.log("selectedSalahAndDate: ", selectedSalahAndDate);
 
     // setSelectedSalahAndDate((prev) => {
     //   return prev.selectedSalahs.includes(salahName)
@@ -143,6 +142,10 @@ const PrayerTable = ({
     } else if (isMultiEditMode) {
     }
   };
+
+  useEffect(() => {
+    console.log("UPDATED CELLS STATE: ", selectedCells);
+  }, [selectedCells]);
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
@@ -211,10 +214,17 @@ const PrayerTable = ({
               className="items-center text-left "
               label=""
               dataKey="date"
-              cellRenderer={({ rowData, rowIndex }) => {
+              cellRenderer={({
+                rowData,
+                rowIndex,
+                columnData,
+                columnIndex,
+              }) => {
                 const [day, formattedParsedDate] = createLocalisedDate(
                   rowData.date
                 );
+                // console.log("columnData: ", rowData);
+                // console.log("columnIndex: ", columnIndex);
 
                 // const parsedDate = parse(
                 //   rowData.date,
@@ -294,6 +304,7 @@ const PrayerTable = ({
                     <section
                       onClick={(e) => {
                         console.log("columnIndex: ", columnIndex);
+                        console.log("rowIndex: ", rowIndex);
 
                         if (isMultiEditMode) return;
                         handleTableCellClick(salahName, rowData.date);
@@ -344,6 +355,30 @@ const PrayerTable = ({
                               }}
                               onChange={() => {
                                 handleTableCellClick(salahName, rowData.date);
+                                setSelectedCells((prev) => {
+                                  // ! Continue from here
+                                  // if (Object.keys(prev).length === 0) return {};
+                                  for (let [key, value] of Object.entries(
+                                    prev
+                                  )) {
+                                    console.log("key: ", key, "value: ", value);
+
+                                    if (
+                                      key === rowIndex &&
+                                      value === columnIndex
+                                    ) {
+                                      console.log("OBJECT EXISTS");
+
+                                      // ! Delete object
+                                    } else {
+                                      // ! Add object
+                                      console.log("OBJECT DOES NOT EXIST");
+
+                                      const obj = { [rowIndex]: columnIndex };
+                                      return { ...prev, obj };
+                                    }
+                                  }
+                                });
                               }}
                               // checked={toggleCheckbox}
                             ></input>
