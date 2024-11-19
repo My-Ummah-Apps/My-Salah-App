@@ -214,12 +214,7 @@ const PrayerTable = ({
               className="items-center text-left "
               label=""
               dataKey="date"
-              cellRenderer={({
-                rowData,
-                rowIndex,
-                columnData,
-                columnIndex,
-              }) => {
+              cellRenderer={({ rowData, rowIndex }) => {
                 const [day, formattedParsedDate] = createLocalisedDate(
                   rowData.date
                 );
@@ -299,13 +294,18 @@ const PrayerTable = ({
                 dataKey={""}
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData, rowIndex, columnIndex }) => {
+                cellRenderer={({ rowData, rowIndex }) => {
+                  // ! The idea is to make the checkbox checked or unchecked by checking if the cell (ie, the salahName and date) are in the selectedSalahAndDate array of objects, if they are, checkbox will be true, otherwise it will be false
+                  for (let key of selectedSalahAndDate) {
+                    console.log(
+                      "selectedSalahAndDate[key]: ",
+                      selectedSalahAndDate[key]
+                    );
+                  }
+
                   return (
                     <section
                       onClick={(e) => {
-                        console.log("columnIndex: ", columnIndex);
-                        console.log("rowIndex: ", rowIndex);
-
                         if (isMultiEditMode) return;
                         handleTableCellClick(salahName, rowData.date);
                       }}
@@ -350,35 +350,36 @@ const PrayerTable = ({
                           <label className="p-5">
                             <input
                               type="checkbox"
+                              // checked={true}
                               onClick={(e) => {
                                 e.stopPropagation();
                               }}
                               onChange={() => {
                                 handleTableCellClick(salahName, rowData.date);
-                                setSelectedCells((prev) => {
-                                  // ! Continue from here
-                                  // if (Object.keys(prev).length === 0) return {};
-                                  for (let [key, value] of Object.entries(
-                                    prev
-                                  )) {
-                                    console.log("key: ", key, "value: ", value);
+                                // setSelectedCells((prev) => {
+                                //   // ! Continue from here
+                                //   // if (Object.keys(prev).length === 0) return {};
+                                //   for (let [key, value] of Object.entries(
+                                //     prev
+                                //   )) {
+                                //     console.log("key: ", key, "value: ", value);
 
-                                    if (
-                                      key === rowIndex &&
-                                      value === columnIndex
-                                    ) {
-                                      console.log("OBJECT EXISTS");
+                                //     if (
+                                //       key === rowIndex &&
+                                //       value === columnIndex
+                                //     ) {
+                                //       console.log("OBJECT EXISTS");
 
-                                      // ! Delete object
-                                    } else {
-                                      // ! Add object
-                                      console.log("OBJECT DOES NOT EXIST");
+                                //       // ! Delete object
+                                //     } else {
+                                //       // ! Add object
+                                //       console.log("OBJECT DOES NOT EXIST");
 
-                                      const obj = { [rowIndex]: columnIndex };
-                                      return { ...prev, obj };
-                                    }
-                                  }
-                                });
+                                //       const obj = { [rowIndex]: columnIndex };
+                                //       return { ...prev, obj };
+                                //     }
+                                //   }
+                                // });
                               }}
                               // checked={toggleCheckbox}
                             ></input>
