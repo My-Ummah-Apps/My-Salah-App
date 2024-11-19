@@ -163,18 +163,18 @@ const PrayerStatusBottomSheet = ({
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      // const date = Object.keys(selectedSalahAndDate)[0];
-      // ! Continue from here
-      const salahArr = Object.values(selectedSalahAndDate[0]);
-      // ! Unsure if this still needs to be applied to salahArr: .flat()
-
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
-      for (let x = 0; x < selectedSalahAndDate.selectedDates.length; x++) {
+      for (let x = 0; x < selectedSalahAndDate.length; x++) {
+        const date = Object.keys(selectedSalahAndDate[x]).toString();
+        const salahArr = Object.values(
+          selectedSalahAndDate[x]
+        ).flat() as SalahNamesType[];
+
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([
-            selectedSalahAndDate.selectedDates[x],
+            date,
             salahArr[i],
             salahStatus,
             reasonsToInsert,
@@ -182,6 +182,8 @@ const PrayerStatusBottomSheet = ({
           ]);
         }
       }
+      console.log("salahDataToInsertIntoDB: ", salahDataToInsertIntoDB);
+
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
 
       const salahDBValuesSubArr = salahDataToInsertIntoDB[0];
@@ -192,22 +194,30 @@ const PrayerStatusBottomSheet = ({
 
       query += `) VALUES ${placeholders}`;
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
+      console.log("DATA BEING INSERTED INTO DB: ", flattenedSalahDBValues);
 
       await dbConnection.current.run(query, flattenedSalahDBValues);
 
       fetchedSalahData.forEach((item: SalahRecordType) => {
-        const objDate = Object.values(item)[0];
+        const dateFromAlreadyFetchedSalahData = item.date;
+        const salahsFromAlreadyFetchedSalahData = Object.keys(item.salahs);
 
-        if (selectedSalahAndDate.selectedDates.includes(objDate)) {
-          const objDateArr = Object.values(item)[1];
-          Object.keys(objDateArr).forEach((element) => {
-            const salahName = element as SalahNamesType;
+        selectedSalahAndDate.some((obj) => {
+          const dateFromSelectedSalahAndDate = Object.keys(obj)[0];
 
-            if (salahArr.includes(salahName)) {
-              objDateArr[element] = salahStatus;
-            }
-          });
-        }
+          if (
+            dateFromSelectedSalahAndDate === dateFromAlreadyFetchedSalahData
+          ) {
+            const selectedSalahsFromSelectedSalahAndDate =
+              Object.values(obj).flat();
+
+            salahsFromAlreadyFetchedSalahData.forEach((element) => {
+              if (selectedSalahsFromSelectedSalahAndDate.includes(element)) {
+                item.salahs[element] = salahStatus;
+              }
+            });
+          }
+        });
       });
 
       setFetchedSalahData((prev) => [...prev]);

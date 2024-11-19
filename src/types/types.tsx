@@ -61,7 +61,7 @@ export interface SalahEntryType {
 // }
 
 interface SelectedSalahAndDateType {
-  date: string[];
+  [key: string]: string[];
 }
 
 export type SelectedSalahAndDateArrayType = SelectedSalahAndDateType[];
