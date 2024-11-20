@@ -12,7 +12,7 @@ import {
   SalahNamesType,
   SalahRecordsArrayType,
   SalahRecordType,
-  SelectedSalahAndDateType,
+  SelectedSalahAndDateObjType,
   userPreferencesType,
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
@@ -42,7 +42,7 @@ interface PrayerStatusBottomSheetProps {
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   resetSelectedRow: () => void;
-  selectedSalahAndDate: SelectedSalahAndDateType;
+  selectedSalahAndDate: SelectedSalahAndDateObjType;
   resetSelectedSalahAndDate: () => void;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
@@ -111,10 +111,10 @@ const PrayerStatusBottomSheet = ({
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   const doesSalahAndDateExists = async (): Promise<boolean> => {
-    const selectedDate = Object.keys(selectedSalahAndDate[0]).toString();
-    const selectedSalah = Object.values(selectedSalahAndDate[0]).toString();
+    const selectedDate = Object.keys(selectedSalahAndDate).toString();
+    const selectedSalah = Object.values(selectedSalahAndDate).toString();
 
-    console.log("HELLO: ", selectedDate, selectedSalah);
+    console.log("SELECTED DATE AND SALAH: ", selectedDate, selectedSalah);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -166,11 +166,10 @@ const PrayerStatusBottomSheet = ({
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
-      for (let x = 0; x < selectedSalahAndDate.length; x++) {
-        const date = Object.keys(selectedSalahAndDate[x]).toString();
-        const salahArr = Object.values(
-          selectedSalahAndDate[x]
-        ).flat() as SalahNamesType[];
+      for (let [key, value] of Object.entries(selectedSalahAndDate)) {
+        // ! Continue from here
+        const date = selectedSalahAndDate[key];
+        const salahArr = selectedSalahAndDate[value];
 
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([

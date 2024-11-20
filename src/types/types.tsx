@@ -64,7 +64,11 @@ interface SelectedSalahAndDateType {
   [key: string]: string[];
 }
 
-export type SelectedSalahAndDateArrayType = SelectedSalahAndDateType[];
+export type SelectedSalahAndDateArrayType = SelectedSalahAndDateType{};
+
+export type SelectedSalahAndDateObjType = {
+  [date: string] : string[]
+}
 
 // export interface CalenderSalahArrayObject {
 //   [date: string]: SalahEntry[];

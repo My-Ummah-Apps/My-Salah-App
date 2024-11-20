@@ -7,6 +7,7 @@ import {
   DBResultDataObjType,
   SalahNamesType,
   SelectedSalahAndDateArrayType,
+  SelectedSalahAndDateObjType,
   userPreferencesType,
 } from "../../types/types";
 import PrayerStatusBottomSheet from "./PrayerStatusBottomSheet";
@@ -50,10 +51,10 @@ const PrayerTable = ({
 
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
-    useState<SelectedSalahAndDateArrayType>([]);
+    useState<SelectedSalahAndDateObjType>({});
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [isSelectedRow, setIsSelectedRow] = useState<number | null>(null);
-  const [selectedCells, setSelectedCells] = useState({});
+  // const [selectedCells, setSelectedCells] = useState({});
   // const [toggleCheckbox, setToggleCheckbox] = useState<boolean>(false);
 
   // const rowGetter = ({ index }: any) => {
@@ -61,7 +62,7 @@ const PrayerTable = ({
   // };
 
   const resetSelectedSalahAndDate = () => {
-    setSelectedSalahAndDate([]);
+    setSelectedSalahAndDate({});
   };
 
   const resetSelectedRow = () => {
@@ -78,74 +79,41 @@ const PrayerTable = ({
     "Isha",
   ];
 
-  // console.log("isMultiEditMode: ", isMultiEditMode);
-
-  // const handleCheckboxChange = () => {
-
-  // }
-
-  // useEffect(() => {
-  //   console.log("selectedSalahAndDate: ", selectedSalahAndDate);
-  // }, [selectedSalahAndDate]);
+  useEffect(() => {
+    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
+  }, [selectedSalahAndDate]);
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
     rowDataDate: string
   ) => {
-    // console.log("rowDataDate: ", rowDataDate);
-
     // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => {
-      let newArr = [...prev];
+      let newArr = { ...prev };
 
-      const findDateIndex = newArr.findIndex((obj) => rowDataDate in obj);
-
-      if (findDateIndex > -1) {
-        let dateArr = newArr[findDateIndex][rowDataDate];
-
-        if (dateArr.includes(salahName)) {
-          // const updatedArr = dateArr.filter((item) => item !== salahName);
-          dateArr = dateArr.filter((item) => item !== salahName);
-          // newArr[findDateIndex][rowDataDate] = dateArr;
-          newArr[findDateIndex] = {
-            ...newArr[findDateIndex],
-            [rowDataDate]: dateArr,
-          };
-          if (dateArr.length === 0) {
-            newArr = newArr.filter((obj) => {
-              return !(rowDataDate in obj);
-            });
-          }
-        } else {
-          newArr[findDateIndex][rowDataDate].push(salahName);
+      if (
+        selectedSalahAndDate[rowDataDate] &&
+        selectedSalahAndDate[rowDataDate].includes(salahName)
+      ) {
+        newArr[rowDataDate] = prev[rowDataDate].filter(
+          (item) => item !== salahName
+        );
+        if (newArr[rowDataDate].length === 0) {
+          delete newArr[rowDataDate];
         }
       } else {
-        newArr.push({ [rowDataDate]: [salahName] });
+        newArr[rowDataDate] = newArr[rowDataDate]
+          ? [...newArr[rowDataDate], salahName]
+          : [salahName];
       }
       return newArr;
     });
-    // console.log("selectedSalahAndDate: ", selectedSalahAndDate);
-
-    // setSelectedSalahAndDate((prev) => {
-    //   return prev.selectedSalahs.includes(salahName)
-    //     ? {
-    //         ...prev,
-    //         selectedSalahs: prev.selectedSalahs.filter(
-    //           (salah) => salahName !== salah
-    //         ),
-    //       }
-    //     : { ...prev, selectedSalahs: [...prev.selectedSalahs, salahName] };
-    // });
 
     if (!isMultiEditMode) {
       setShowUpdateStatusModal(true);
     } else if (isMultiEditMode) {
     }
   };
-
-  useEffect(() => {
-    console.log("UPDATED CELLS STATE: ", selectedCells);
-  }, [selectedCells]);
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
@@ -269,7 +237,8 @@ const PrayerTable = ({
                           className="px-2 py-1.5 m-1 text-xs text-white bg-sky-700 rounded-md"
                           onClick={() => {
                             // TODO: Improve the alert below to something more native
-                            const dateArrLength = selectedSalahAndDate.length;
+                            const dateArrLength =
+                              Object.keys(selectedSalahAndDate).length;
                             dateArrLength > 0
                               ? setShowUpdateStatusModal(true)
                               : alert("Please select atleast one Salah");
@@ -296,12 +265,12 @@ const PrayerTable = ({
                 flexGrow={1}
                 cellRenderer={({ rowData, rowIndex }) => {
                   // ! The idea is to make the checkbox checked or unchecked by checking if the cell (ie, the salahName and date) are in the selectedSalahAndDate array of objects, if they are, checkbox will be true, otherwise it will be false
-                  for (let key of selectedSalahAndDate) {
-                    console.log(
-                      "selectedSalahAndDate[key]: ",
-                      selectedSalahAndDate[key]
-                    );
-                  }
+                  // for (let key of selectedSalahAndDate) {
+                  //   console.log(
+                  //     "selectedSalahAndDate[key]: ",
+                  //     selectedSalahAndDate[key]
+                  //   );
+                  // }
 
                   return (
                     <section
