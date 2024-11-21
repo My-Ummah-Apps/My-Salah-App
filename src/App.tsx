@@ -384,8 +384,6 @@ const App = () => {
   const handleSalahTrackingDataFromDB = async (
     DBResultAllSalahData: DBResultDataObjType[]
   ) => {
-    console.log("DBResultAllSalahData: ", DBResultAllSalahData);
-
     const singleSalahObjArr: SalahRecordsArrayType = [];
     const todaysDate = new Date();
     const userStartDateFormattedToDateObject: Date = parse(
@@ -431,8 +429,11 @@ const App = () => {
       singleSalahObjArr.push(singleSalahObj);
     }
     setFetchedSalahData([...singleSalahObjArr]);
-    console.log("Fetched Salah Data: ", singleSalahObjArr);
   };
+
+  useEffect(() => {
+    console.log("FetchedSalahData: ", fetchedSalahData);
+  }, [fetchedSalahData]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,

@@ -6,7 +6,6 @@ import {
   DBConnectionStateType,
   DBResultDataObjType,
   SalahNamesType,
-  SelectedSalahAndDateArrayType,
   SelectedSalahAndDateObjType,
   userPreferencesType,
 } from "../../types/types";

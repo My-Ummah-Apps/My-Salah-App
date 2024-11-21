@@ -60,7 +60,6 @@ const PrayerStatusBottomSheet = ({
   isMultiEditMode,
   setUserPreferences,
   userPreferences,
-  handleSalahTrackingDataFromDB,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
 }: PrayerStatusBottomSheetProps) => {
@@ -195,13 +194,17 @@ const PrayerStatusBottomSheet = ({
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
 
       await dbConnection.current.run(query, flattenedSalahDBValues);
+      // ! Conitinue from here
+      for (let [key, value] of Object.entries(selectedSalahAndDate)) {
+        console.log("LEY: ", key);
 
-      const DBResultAllSalahData = await dbConnection.current.query(
-        `SELECT * FROM salahDataTable`
-      );
-      await handleSalahTrackingDataFromDB(DBResultAllSalahData);
+        for (const key1 of fetchedSalahData) {
+          if (key1.date === key) {
+          }
+        }
+      }
 
-      // setFetchedSalahData((prev) => [...prev]);
+      setFetchedSalahData((prev) => [...prev]);
     } catch (error) {
       console.error(error);
     } finally {
