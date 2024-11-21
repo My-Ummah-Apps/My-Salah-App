@@ -167,9 +167,10 @@ const PrayerStatusBottomSheet = ({
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
       for (let [key, value] of Object.entries(selectedSalahAndDate)) {
-        // ! Continue from here
-        const date = selectedSalahAndDate[key];
-        const salahArr = selectedSalahAndDate[value];
+        console.log("KEY, VALUE: ", key, value);
+
+        const date = key;
+        const salahArr = value;
 
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([
@@ -184,9 +185,13 @@ const PrayerStatusBottomSheet = ({
       console.log("salahDataToInsertIntoDB: ", salahDataToInsertIntoDB);
 
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
-
+      // TODO: See if below can be refactored
       const salahDBValuesSubArr = salahDataToInsertIntoDB[0];
+      console.log("salahDBValuesSubArr: ", salahDBValuesSubArr);
+
       const placeholder = salahDBValuesSubArr.map(() => "?").join(", ");
+      console.log("PLACEHOLDER: ", placeholder);
+
       const placeholders = salahDataToInsertIntoDB
         .map(() => `(${placeholder})`)
         .join(",");
@@ -200,23 +205,32 @@ const PrayerStatusBottomSheet = ({
       fetchedSalahData.forEach((item: SalahRecordType) => {
         const dateFromAlreadyFetchedSalahData = item.date;
         const salahsFromAlreadyFetchedSalahData = Object.keys(item.salahs);
+        console.log("ITEM: ", item);
+        // ! CONTINUE FROM HERE
+        if (
+          selectedSalahAndDate[item.date] &&
+          selectedSalahAndDate[item.date].includes(
+            salahsFromAlreadyFetchedSalahData
+          )
+        ) {
+        }
 
-        selectedSalahAndDate.some((obj) => {
-          const dateFromSelectedSalahAndDate = Object.keys(obj)[0];
+        // selectedSalahAndDate.some((obj) => {
+        //   const dateFromSelectedSalahAndDate = Object.keys(obj)[0];
 
-          if (
-            dateFromSelectedSalahAndDate === dateFromAlreadyFetchedSalahData
-          ) {
-            const selectedSalahsFromSelectedSalahAndDate =
-              Object.values(obj).flat();
+        //   if (
+        //     dateFromSelectedSalahAndDate === dateFromAlreadyFetchedSalahData
+        //   ) {
+        //     const selectedSalahsFromSelectedSalahAndDate =
+        //       Object.values(obj).flat();
 
-            salahsFromAlreadyFetchedSalahData.forEach((element) => {
-              if (selectedSalahsFromSelectedSalahAndDate.includes(element)) {
-                item.salahs[element] = salahStatus;
-              }
-            });
-          }
-        });
+        //     salahsFromAlreadyFetchedSalahData.forEach((element) => {
+        //       if (selectedSalahsFromSelectedSalahAndDate.includes(element)) {
+        //         item.salahs[element] = salahStatus;
+        //       }
+        //     });
+        //   }
+        // });
       });
 
       setFetchedSalahData((prev) => [...prev]);
