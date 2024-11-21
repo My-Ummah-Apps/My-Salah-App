@@ -384,6 +384,8 @@ const App = () => {
   const handleSalahTrackingDataFromDB = async (
     DBResultAllSalahData: DBResultDataObjType[]
   ) => {
+    console.log("DBResultAllSalahData: ", DBResultAllSalahData);
+
     const singleSalahObjArr: SalahRecordsArrayType = [];
     const todaysDate = new Date();
     const userStartDateFormattedToDateObject: Date = parse(
@@ -429,7 +431,7 @@ const App = () => {
       singleSalahObjArr.push(singleSalahObj);
     }
     setFetchedSalahData([...singleSalahObjArr]);
-    console.log("INITIAL singleSalahObjArr: ", singleSalahObjArr);
+    console.log("Fetched Salah Data: ", singleSalahObjArr);
   };
 
   const modifyDataInUserPreferencesTable = async (

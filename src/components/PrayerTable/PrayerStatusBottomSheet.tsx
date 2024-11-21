@@ -60,6 +60,7 @@ const PrayerStatusBottomSheet = ({
   isMultiEditMode,
   setUserPreferences,
   userPreferences,
+  handleSalahTrackingDataFromDB,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
 }: PrayerStatusBottomSheetProps) => {
@@ -167,7 +168,7 @@ const PrayerStatusBottomSheet = ({
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
       for (let [key, value] of Object.entries(selectedSalahAndDate)) {
-        console.log("KEY, VALUE: ", key, value);
+        // console.log("KEY, VALUE: ", key, value);
 
         const date = key;
         const salahArr = value;
@@ -182,58 +183,25 @@ const PrayerStatusBottomSheet = ({
           ]);
         }
       }
-      console.log("salahDataToInsertIntoDB: ", salahDataToInsertIntoDB);
 
       let query = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes`;
-      // TODO: See if below can be refactored
-      const salahDBValuesSubArr = salahDataToInsertIntoDB[0];
-      console.log("salahDBValuesSubArr: ", salahDBValuesSubArr);
 
-      const placeholder = salahDBValuesSubArr.map(() => "?").join(", ");
-      console.log("PLACEHOLDER: ", placeholder);
-
+      const placeholder = salahDataToInsertIntoDB[0].map(() => "?").join(", ");
       const placeholders = salahDataToInsertIntoDB
         .map(() => `(${placeholder})`)
         .join(",");
 
       query += `) VALUES ${placeholders}`;
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
-      console.log("DATA BEING INSERTED INTO DB: ", flattenedSalahDBValues);
 
       await dbConnection.current.run(query, flattenedSalahDBValues);
 
-      fetchedSalahData.forEach((item: SalahRecordType) => {
-        const dateFromAlreadyFetchedSalahData = item.date;
-        const salahsFromAlreadyFetchedSalahData = Object.keys(item.salahs);
-        console.log("ITEM: ", item);
-        // ! CONTINUE FROM HERE
-        if (
-          selectedSalahAndDate[item.date] &&
-          selectedSalahAndDate[item.date].includes(
-            salahsFromAlreadyFetchedSalahData
-          )
-        ) {
-        }
+      const DBResultAllSalahData = await dbConnection.current.query(
+        `SELECT * FROM salahDataTable`
+      );
+      await handleSalahTrackingDataFromDB(DBResultAllSalahData);
 
-        // selectedSalahAndDate.some((obj) => {
-        //   const dateFromSelectedSalahAndDate = Object.keys(obj)[0];
-
-        //   if (
-        //     dateFromSelectedSalahAndDate === dateFromAlreadyFetchedSalahData
-        //   ) {
-        //     const selectedSalahsFromSelectedSalahAndDate =
-        //       Object.values(obj).flat();
-
-        //     salahsFromAlreadyFetchedSalahData.forEach((element) => {
-        //       if (selectedSalahsFromSelectedSalahAndDate.includes(element)) {
-        //         item.salahs[element] = salahStatus;
-        //       }
-        //     });
-        //   }
-        // });
-      });
-
-      setFetchedSalahData((prev) => [...prev]);
+      // setFetchedSalahData((prev) => [...prev]);
     } catch (error) {
       console.error(error);
     } finally {
