@@ -166,11 +166,11 @@ const PrayerStatusBottomSheet = ({
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
-      for (let [key, value] of Object.entries(selectedSalahAndDate)) {
+      for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         // console.log("KEY, VALUE: ", key, value);
 
-        const date = key;
-        const salahArr = value;
+        // const date = key;
+        // const salahArr = value;
 
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([
@@ -194,12 +194,15 @@ const PrayerStatusBottomSheet = ({
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
 
       await dbConnection.current.run(query, flattenedSalahDBValues);
-      // ! Conitinue from here
-      for (let [key, value] of Object.entries(selectedSalahAndDate)) {
-        console.log("LEY: ", key);
 
-        for (const key1 of fetchedSalahData) {
-          if (key1.date === key) {
+      for (const obj of fetchedSalahData) {
+        for (const [date, salahArr] of Object.entries(selectedSalahAndDate)) {
+          if (obj.date === date) {
+            salahArr.forEach((item) => {
+              if (Object.keys(obj.salahs).includes(item)) {
+                obj.salahs[item] = salahStatus;
+              }
+            });
           }
         }
       }
