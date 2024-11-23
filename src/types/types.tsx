@@ -29,15 +29,15 @@ interface SalahsType {
 }
 
 export interface SalahRecordType {
-  [key: string]: SalahsType;
-  salahs: SalahsType
+  date: string;
+  salahs: SalahsType;
 }
 
-// export type SalahRecordsArrayType = SalahRecordType[];
+export type SalahRecordsArrayType = SalahRecordType[];
 
 export type SalahDataType = {
-  [date: string]: string[]
-}
+  [date: string]: string[];
+};
 
 export type PreferenceType =
   | "userStartDate"
@@ -68,11 +68,11 @@ export interface SalahEntryType {
 //   [key: string]: string[];
 // }
 
-export type SelectedSalahAndDateArrayType = SelectedSalahAndDateType{};
+// export type SelectedSalahAndDateArrayType = SelectedSalahAndDateType[];
 
 export type SelectedSalahAndDateObjType = {
-  [date: string] : string[]
-}
+  [date: string]: string[];
+};
 
 // export interface CalenderSalahArrayObject {
 //   [date: string]: SalahEntry[];

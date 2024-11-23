@@ -9,15 +9,12 @@ import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
   DBResultDataObjType,
-  SalahNamesType,
   SalahRecordsArrayType,
   SelectedSalahAndDateObjType,
   userPreferencesType,
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
-  createLocalisedDate,
-  // createLocalisedDate,
   prayerStatusColorsHexCodes,
   reasonsStyles,
   TWEEN_CONFIG,

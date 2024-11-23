@@ -261,29 +261,18 @@ const PrayerTable = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData, rowIndex }) => {
-                  // ! The idea is to make the checkbox checked or unchecked by checking if the cell (ie, the salahName and date) are in the selectedSalahAndDate array of objects, if they are, checkbox will be true, otherwise it will be false
-                  // for (let key of selectedSalahAndDate) {
-                  //   console.log(
-                  //     "selectedSalahAndDate[key]: ",
-                  //     selectedSalahAndDate[key]
-                  //   );
-                  // }
+                  let isChecked =
+                    selectedSalahAndDate[rowData.date]?.includes(salahName);
 
                   return (
                     <section
-                      onClick={(e) => {
+                      onClick={() => {
                         if (isMultiEditMode) return;
                         handleTableCellClick(salahName, rowData.date);
                       }}
-                      // className="flex flex-col"
                     >
                       {rowData.salahs[salahName] === "" ? (
-                        <LuDot
-                          className={`w-[24px] h-[24px]`}
-                          // onClick={() => {
-                          //   handleTableCellClick(salahName, rowData);
-                          // }}
-                        />
+                        <LuDot className={`w-[24px] h-[24px]`} />
                       ) : (
                         <div
                           style={{
@@ -295,18 +284,11 @@ const PrayerTable = ({
                               ],
                           }}
                           className={`w-[24px] h-[24px] ${iconStyles} prayer-status-color-box`}
-                          // onClick={() => {
-                          //   console.log("SQUARE CLICKED");
-                          //   handleTableCellClick(salahName, rowData);
-                          // }}
                         ></div>
                       )}
-                      {/* {isSelectedRow === rowIndex && ( */}
+
                       {isMultiEditMode && (
                         <div
-                          // onClick={() => {
-                          //   handleTableCellClick(salahName, rowData);
-                          // }}
                           className={`checkbox-wrap ${
                             isSelectedRow === rowIndex
                               ? "checkbox--wrap-slide-in"
@@ -316,38 +298,13 @@ const PrayerTable = ({
                           <label className="p-5">
                             <input
                               type="checkbox"
-                              // checked={true}
+                              checked={isChecked}
                               onClick={(e) => {
                                 e.stopPropagation();
                               }}
                               onChange={() => {
                                 handleTableCellClick(salahName, rowData.date);
-                                // setSelectedCells((prev) => {
-                                //   // ! Continue from here
-                                //   // if (Object.keys(prev).length === 0) return {};
-                                //   for (let [key, value] of Object.entries(
-                                //     prev
-                                //   )) {
-                                //     console.log("key: ", key, "value: ", value);
-
-                                //     if (
-                                //       key === rowIndex &&
-                                //       value === columnIndex
-                                //     ) {
-                                //       console.log("OBJECT EXISTS");
-
-                                //       // ! Delete object
-                                //     } else {
-                                //       // ! Add object
-                                //       console.log("OBJECT DOES NOT EXIST");
-
-                                //       const obj = { [rowIndex]: columnIndex };
-                                //       return { ...prev, obj };
-                                //     }
-                                //   }
-                                // });
                               }}
-                              // checked={toggleCheckbox}
                             ></input>
                           </label>
                         </div>
