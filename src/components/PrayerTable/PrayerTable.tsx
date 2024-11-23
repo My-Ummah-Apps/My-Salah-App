@@ -90,19 +90,17 @@ const PrayerTable = ({
     setSelectedSalahAndDate((prev) => {
       let newArr = { ...prev };
 
-      if (
-        selectedSalahAndDate[rowDataDate] &&
-        selectedSalahAndDate[rowDataDate].includes(salahName)
-      ) {
+      if (prev[rowDataDate] && prev[rowDataDate].includes(salahName)) {
         newArr[rowDataDate] = prev[rowDataDate].filter(
           (item) => item !== salahName
         );
+
         if (newArr[rowDataDate].length === 0) {
           delete newArr[rowDataDate];
         }
       } else {
-        newArr[rowDataDate] = newArr[rowDataDate]
-          ? [...newArr[rowDataDate], salahName]
+        newArr[rowDataDate] = prev[rowDataDate]
+          ? [...prev[rowDataDate], salahName]
           : [salahName];
       }
       return newArr;

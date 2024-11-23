@@ -29,7 +29,8 @@ interface SalahsType {
 }
 
 export interface SalahRecordType {
-  [date: string]: SalahsType;
+  [key: string]: SalahsType;
+  salahs: SalahsType
 }
 
 // export type SalahRecordsArrayType = SalahRecordType[];

@@ -11,7 +11,6 @@ import {
   DBResultDataObjType,
   SalahNamesType,
   SalahRecordsArrayType,
-  SalahRecordType,
   SelectedSalahAndDateObjType,
   userPreferencesType,
 } from "../../types/types";
@@ -167,11 +166,6 @@ const PrayerStatusBottomSheet = ({
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
-        // console.log("KEY, VALUE: ", key, value);
-
-        // const date = key;
-        // const salahArr = value;
-
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([
             date,
