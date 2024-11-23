@@ -196,14 +196,10 @@ const PrayerStatusBottomSheet = ({
       await dbConnection.current.run(query, flattenedSalahDBValues);
 
       for (const obj of fetchedSalahData) {
-        for (const [date, salahArr] of Object.entries(selectedSalahAndDate)) {
-          if (obj.date === date) {
-            salahArr.forEach((item) => {
-              if (Object.keys(obj.salahs).includes(item)) {
-                obj.salahs[item] = salahStatus;
-              }
-            });
-          }
+        if (selectedSalahAndDate[obj.date]) {
+          selectedSalahAndDate[obj.date].forEach((item) => {
+            obj.salahs[item] = salahStatus;
+          });
         }
       }
 
