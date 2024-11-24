@@ -2,6 +2,7 @@ import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { format, parse } from "date-fns";
+import { SalahNamesType } from "../types/types";
 
 export const TWEEN_CONFIG = {
   ease: "easeInOut" as EasingDefinition,
@@ -39,6 +40,23 @@ export const createLocalisedDate = (date: string) => {
     .replace(/\//g, ".");
   return [format(parsedDate, "EE"), formattedParsedDate];
 };
+
+export const salahNamesArr: SalahNamesType[] = [
+  "Fajr",
+  "Dhuhr",
+  "Asar",
+  "Maghrib",
+  "Isha",
+];
+
+export const validSalahStatuses = [
+  "group",
+  "male-alone",
+  "female-alone",
+  "late",
+  "missed",
+  "excused",
+];
 
 // export const prayerStatusColorsHexCodes = {
 //   group: "#0ec188",

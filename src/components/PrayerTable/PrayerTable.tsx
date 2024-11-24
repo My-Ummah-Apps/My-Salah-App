@@ -16,6 +16,7 @@ import { SalahRecordsArrayType } from "../../types/types";
 import {
   createLocalisedDate,
   prayerStatusColorsHexCodes,
+  salahNamesArr,
 } from "../../utils/constants";
 
 // import StreakCount from "../Stats/StreakCount";
@@ -70,13 +71,13 @@ const PrayerTable = ({
 
   const iconStyles = "rounded-md text-white w-[24px] h-[24px] shadow-md";
 
-  const salahNamesArr: SalahNamesType[] = [
-    "Fajr",
-    "Dhuhr",
-    "Asar",
-    "Maghrib",
-    "Isha",
-  ];
+  // const salahNamesArr: SalahNamesType[] = [
+  //   "Fajr",
+  //   "Dhuhr",
+  //   "Asar",
+  //   "Maghrib",
+  //   "Isha",
+  // ];
 
   useEffect(() => {
     console.log("selectedSalahAndDate: ", selectedSalahAndDate);
@@ -90,7 +91,8 @@ const PrayerTable = ({
     setSelectedSalahAndDate((prev) => {
       let newArr = { ...prev };
 
-      if (prev[rowDataDate] && prev[rowDataDate].includes(salahName)) {
+      // if (prev[rowDataDate] && prev[rowDataDate].includes(salahName)) {
+      if (prev[rowDataDate]?.includes(salahName)) {
         newArr[rowDataDate] = prev[rowDataDate].filter(
           (item) => item !== salahName
         );
@@ -162,7 +164,7 @@ const PrayerTable = ({
                     {isMultiEditMode && (
                       <section className="fixed text-sm text-white top-[-2px] right-1">
                         <button
-                          className="px-2 py-1.5 m-1 text-xs font-medium text-sky-900  bg-sky-400 rounded-md"
+                          className="px-2 py-1.5 m-1 text-xs font-medium text-white bg-transparent rounded-md border-gray border"
                           onClick={() => {
                             setIsMultiEditMode(false);
                             resetSelectedRow();
@@ -202,8 +204,11 @@ const PrayerTable = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData, rowIndex }) => {
-                  let isChecked =
-                    selectedSalahAndDate[rowData.date]?.includes(salahName);
+                  let isChecked = selectedSalahAndDate[rowData.date]?.includes(
+                    salahName
+                  )
+                    ? true
+                    : false;
 
                   return (
                     <section
@@ -240,9 +245,6 @@ const PrayerTable = ({
                             <input
                               type="checkbox"
                               checked={isChecked}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
                               onChange={() => {
                                 handleTableCellClick(salahName, rowData.date);
                               }}

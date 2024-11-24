@@ -9,6 +9,7 @@ import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
   DBResultDataObjType,
+  SalahNamesType,
   SalahRecordsArrayType,
   SelectedSalahAndDateObjType,
   userPreferencesType,
@@ -17,9 +18,12 @@ import { DBConnectionStateType } from "../../types/types";
 import {
   prayerStatusColorsHexCodes,
   reasonsStyles,
+  salahNamesArr,
   TWEEN_CONFIG,
+  validSalahStatuses,
 } from "../../utils/constants";
 import { sheetHeaderHeight } from "../../utils/constants";
+import { isValid, parse } from "date-fns";
 
 interface PrayerStatusBottomSheetProps {
   dbConnection: any;
@@ -163,6 +167,47 @@ const PrayerStatusBottomSheet = ({
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
+        const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+
+        if (!isValid(parsedDate)) {
+          console.error(
+            `Date is not valid: ${parsedDate},  skipping this iteration...`
+          );
+          continue;
+        }
+
+        if (
+          !salahArr.every((salahName) =>
+            salahNamesArr.includes(salahName as SalahNamesType)
+          )
+        ) {
+          console.error(
+            `Salah name is not valid: ${salahArr.join(
+              ", "
+            )}, skipping this iteration......`
+          );
+          continue;
+        }
+
+        if (!validSalahStatuses.includes(salahStatus)) {
+          console.error(
+            `salahStatus is not valid: ${salahStatus}, skipping this iteration...`
+          );
+          continue;
+        }
+        // let selectedReasons1 = ["work", "leisure"];
+        // ! The below is now picking up the issue where a trailing comma (I think thats what it is) is being inserted, so this is working as it now should, just need to remove this trailing comma issue
+        if (
+          !selectedReasons.every((reason) =>
+            userPreferences.reasonsArray.includes(reason)
+          )
+        ) {
+          console.error(
+            `reasons not valid: ${reasonsToInsert}, skipping this iteration...`
+          );
+          continue;
+        }
+
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([
             date,
