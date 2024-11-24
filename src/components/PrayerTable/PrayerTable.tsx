@@ -114,36 +114,6 @@ const PrayerTable = ({
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
-      {/* {isMultiEditMode && (
-        <section className="">
-          <section className="absolute text-sm text-right text-white">
-            <button
-              className="px-2 py-1.5 m-1 text-sm font-medium text-teal-800 bg-teal-200 rounded-lg"
-              onClick={() => {
-                setIsMultiEditMode(false);
-                resetSelectedRow();
-                resetSelectedSalahAndDate();
-              }}
-            >
-              Cancel
-            </button>
-            <button
-              className="px-2 py-1.5 m-1 text-sm font-medium text-white bg-teal-600 rounded-lg"
-              onClick={() => {
-                // TODO: Improve the alert below to something more native
-                const dateArrLength =
-                  Object.values(selectedSalahAndDate)[1].length;
-                dateArrLength > 0
-                  ? setShowUpdateStatusModal(true)
-                  : alert("Please select atleast one Salah");
-              }}
-            >
-              Edit
-            </button>
-          </section>
-        </section>
-      )} */}
-
       <AutoSizer>
         {({ height, width }) => (
           <Table
@@ -152,14 +122,8 @@ const PrayerTable = ({
               fontSize: "3rem",
             }}
             className="text-center"
-            // rowCount={datesFromStartToToday.length}
             rowCount={fetchedSalahData.length}
-            // rowGetter={rowGetter}
             rowGetter={({ index }) => fetchedSalahData[index]}
-            // onRowClick={(obj) => {
-            //   console.log("INDEX: ", obj.index);
-            //   // setIsSelectedRow(obj.index);
-            // }}
             rowClassName={({ index }) => {
               if (!isMultiEditMode) {
                 return "";
@@ -183,26 +147,7 @@ const PrayerTable = ({
                 const [day, formattedParsedDate] = createLocalisedDate(
                   rowData.date
                 );
-                // console.log("columnData: ", rowData);
-                // console.log("columnIndex: ", columnIndex);
 
-                // const parsedDate = parse(
-                //   rowData.date,
-                //   "yyyy-MM-dd",
-                //   new Date()
-                // );
-                // const userLocale = navigator.language || "en-US";
-                // const formattedParsedDate = new Intl.DateTimeFormat(
-                //   userLocale,
-                //   {
-                //     year: "2-digit",
-                //     month: "2-digit",
-                //     day: "2-digit",
-                //   }
-                // )
-                //   .format(parsedDate)
-                //   .replace(/\//g, ".");
-                // const day = format(parsedDate, "EE");
                 return (
                   <section
                     className=""
@@ -210,10 +155,6 @@ const PrayerTable = ({
                       if (isMultiEditMode) return;
                       setIsSelectedRow(rowIndex);
                       setIsMultiEditMode(true);
-                      // setSelectedSalahAndDate((prev) => ({
-                      //   ...prev,
-                      //   selectedDates: [rowData.date],
-                      // }));
                     }}
                   >
                     <p className="text-sm">{formattedParsedDate}</p>
@@ -325,7 +266,6 @@ const PrayerTable = ({
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
         handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
-        // setSelectedSalahAndDate={setSelectedSalahAndDate}
         selectedSalahAndDate={selectedSalahAndDate}
         resetSelectedSalahAndDate={resetSelectedSalahAndDate}
         resetSelectedRow={resetSelectedRow}
@@ -334,8 +274,6 @@ const PrayerTable = ({
         dbConnection={dbConnection}
         setShowUpdateStatusModal={setShowUpdateStatusModal}
         showUpdateStatusModal={showUpdateStatusModal}
-        // setHasUserClickedDate={setHasUserClickedDate}
-        // hasUserClickedDate={hasUserClickedDate}
       />
     </section>
   );
