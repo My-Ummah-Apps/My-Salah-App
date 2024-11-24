@@ -71,7 +71,6 @@ const App = () => {
 
   useEffect(() => {
     if (!localStorage.getItem("existingUser")) {
-      console.log("SHOWING CHANGELOG");
       setShowIntroModal(true);
     }
   }, []);
@@ -430,10 +429,6 @@ const App = () => {
     }
     setFetchedSalahData([...singleSalahObjArr]);
   };
-
-  useEffect(() => {
-    console.log("FetchedSalahData: ", fetchedSalahData);
-  }, [fetchedSalahData]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,

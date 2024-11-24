@@ -71,18 +71,6 @@ const PrayerTable = ({
 
   const iconStyles = "rounded-md text-white w-[24px] h-[24px] shadow-md";
 
-  // const salahNamesArr: SalahNamesType[] = [
-  //   "Fajr",
-  //   "Dhuhr",
-  //   "Asar",
-  //   "Maghrib",
-  //   "Isha",
-  // ];
-
-  useEffect(() => {
-    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
-  }, [selectedSalahAndDate]);
-
   const handleTableCellClick = (
     salahName: SalahNamesType,
     rowDataDate: string
