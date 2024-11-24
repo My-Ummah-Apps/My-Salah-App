@@ -108,13 +108,15 @@ const PrayerStatusBottomSheet = ({
     setNotes("");
   };
 
+  useEffect(() => {
+    console.log("selectedReasons ", selectedReasons);
+  }, [selectedReasons]);
+
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   const doesSalahAndDateExists = async (): Promise<boolean> => {
     const selectedDate = Object.keys(selectedSalahAndDate).toString();
     const selectedSalah = Object.values(selectedSalahAndDate).toString();
-
-    console.log("SELECTED DATE AND SALAH: ", selectedDate, selectedSalah);
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -130,7 +132,10 @@ const PrayerStatusBottomSheet = ({
       } else if (res && res.values && res.values.length > 0) {
         setSalahStatus(res.values[0].salahStatus);
         setNotes(res.values[0].notes);
-        setSelectedReasons(res.values[0].reasons.split(", "));
+        // setSelectedReasons(res.values[0].reasons.split(", "));
+        if (res.values[0].reasons.length > 0) {
+          setSelectedReasons(res.values[0].reasons.split(", "));
+        }
         return true;
       }
     } catch (error) {
@@ -166,6 +171,7 @@ const PrayerStatusBottomSheet = ({
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
+      console.log("selectedReasons: ", selectedReasons);
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         const parsedDate = parse(date, "yyyy-MM-dd", new Date());
 
