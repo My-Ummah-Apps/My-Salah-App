@@ -108,10 +108,6 @@ const PrayerStatusBottomSheet = ({
     setNotes("");
   };
 
-  useEffect(() => {
-    console.log("selectedReasons ", selectedReasons);
-  }, [selectedReasons]);
-
   // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
 
   const doesSalahAndDateExists = async (): Promise<boolean> => {
@@ -171,7 +167,6 @@ const PrayerStatusBottomSheet = ({
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
-      console.log("selectedReasons: ", selectedReasons);
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         const parsedDate = parse(date, "yyyy-MM-dd", new Date());
 
@@ -202,7 +197,7 @@ const PrayerStatusBottomSheet = ({
           continue;
         }
         // let selectedReasons1 = ["work", "leisure"];
-        // ! The below is now picking up the issue where a trailing comma (I think thats what it is) is being inserted, so this is working as it now should, just need to remove this trailing comma issue
+
         if (
           !selectedReasons.every((reason) =>
             userPreferences.reasonsArray.includes(reason)
