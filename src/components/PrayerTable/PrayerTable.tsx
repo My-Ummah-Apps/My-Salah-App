@@ -102,9 +102,9 @@ const PrayerTable = ({
   return (
     <section className="prayer-table-wrap h-[80vh]">
       {isMultiEditMode && (
-        <section className="absolute z-10 flex p-3 text-white transform -translate-x-1/2 rounded-full prayer-table-edit-cancel-btn-wrap bg-sky-700 top-3/4 left-1/2">
+        <section className="absolute z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-700 rounded-full prayer-table-edit-cancel-btn-wrap top-3/4 left-1/2">
           <button
-            className="px-2 mx-1 text-white"
+            className="px-2 text-white"
             onClick={() => {
               setIsMultiEditMode(false);
               resetSelectedSalahAndDate();
@@ -113,7 +113,7 @@ const PrayerTable = ({
             Cancel
           </button>
           <button
-            className="px-2 mx-1  text-white border-l border-[#adadad]"
+            className="px-2  text-white border-l border-[#adadad]"
             onClick={() => {
               // TODO: Improve the alert below to something more native
               const dateArrLength = Object.keys(selectedSalahAndDate).length;
