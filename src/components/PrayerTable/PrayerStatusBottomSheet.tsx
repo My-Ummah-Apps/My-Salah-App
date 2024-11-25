@@ -16,6 +16,7 @@ import {
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
+  createLocalisedDate,
   prayerStatusColorsHexCodes,
   reasonsStyles,
   salahNamesArr,
@@ -23,7 +24,7 @@ import {
   validSalahStatuses,
 } from "../../utils/constants";
 import { sheetHeaderHeight } from "../../utils/constants";
-import { isValid, parse } from "date-fns";
+import { isToday, isValid, isYesterday, parse } from "date-fns";
 
 interface PrayerStatusBottomSheetProps {
   dbConnection: any;
@@ -311,6 +312,18 @@ const PrayerStatusBottomSheet = ({
     }
   };
 
+  const determineDateRecency = (date: string) => {
+    const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+    if (isToday(parsedDate)) {
+      return "today";
+    } else if (isYesterday(parsedDate)) {
+      return "yesterday";
+    } else {
+      const [, formatDate] = createLocalisedDate(date);
+      return `on ${formatDate}`;
+    }
+  };
+
   return (
     <>
       <Sheet
@@ -334,15 +347,15 @@ const PrayerStatusBottomSheet = ({
               {" "}
               <section className="w-[90%] mx-auto mb-20 rounded-lg text-white">
                 <h1 className="mb-10 text-3xl font-light text-center">
-                  {/* How did you pray {clickedSalah}? */}
                   How did you pray{" "}
-                  {/* {selectedSalahAndDate.selectedSalahs.join(", ")} on {""}
-                  {selectedSalahAndDate.selectedDates.length > 0
-                    ? createLocalisedDate(
-                        selectedSalahAndDate.selectedDates[0]
-                      )[1]
-                    : null} */}
-                  ?
+                  {Object.keys(selectedSalahAndDate).length === 1 &&
+                  Object.values(selectedSalahAndDate)[0].length === 1
+                    ? `${Object.values(
+                        selectedSalahAndDate
+                      )} ${determineDateRecency(
+                        Object.keys(selectedSalahAndDate)[0]
+                      )}?`
+                    : `these Salah?`}
                 </h1>
                 <div
                   // ref={modalSheetPrayerStatusesWrap}

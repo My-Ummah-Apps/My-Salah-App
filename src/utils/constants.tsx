@@ -9,9 +9,7 @@ export const TWEEN_CONFIG = {
   duration: 0.5,
 };
 
-export const reasonsStyles =
-  "p-2 m-1 text-xs bg-[rgb(35,35,35)] bg-gray-800/70 rounded-xl";
-
+export const reasonsStyles = "p-2 m-1 text-xs bg-[rgb(39,39,39)] rounded-xl";
 export const prayerStatusColorsHexCodes = {
   group: "#448b75",
   "male-alone": "#bcaa4b",
