@@ -1,8 +1,25 @@
-export const LATEST_APP_VERSION = "2.6";
+export const LATEST_APP_VERSION = "2.7";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Multi-Edit Mode",
+        text: (
+          <>
+            <strong>Feature:</strong> Activate Multi-Edit Mode by tapping the
+            icon at the top-left of the table. This allows you to edit multiple
+            Salah entries across different dates at once, provided they share
+            the same status, reasons, and notes. Individual Salah editing
+            remains available with a simple tap.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "2.6",
     changes: [
       {
         heading: "Fixed Calendar Date Alignment",

@@ -289,9 +289,7 @@ const PrayerStatusBottomSheet = ({
         );
       }
     });
-    window.addEventListener("keyboardWillHide", (e) => {
-      e;
-
+    window.addEventListener("keyboardWillHide", () => {
       if (sheetRef.current) {
         sheetRef.current.style.setProperty(
           "margin-bottom",
