@@ -186,7 +186,7 @@ td {
 }
 
 .prayer-table-edit-cancel-btn-wrap {
-  animation: slideUp 0.3s ease-out;
+  /* animation: slideUp 0.3s ease-out; */
 }
 
 .react-modal-sheet-scroller,
@@ -291,8 +291,8 @@ td {
 /* CHECKBOX STYLING */
 
 [type="checkbox"] {
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 0.9rem;
+  height: 0.9rem;
   color: dodgerblue;
   vertical-align: middle;
   -webkit-appearance: none;
