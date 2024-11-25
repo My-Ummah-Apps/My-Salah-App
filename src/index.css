@@ -163,10 +163,12 @@ td {
 
 @keyframes slideUp {
   0% {
-    transform: translateY(0%);
+    transform: translate(-50%, 100%);
+    opacity: 0;
   }
   100% {
-    transform: translateY(-5%);
+    transform: translate(-50%, 25%);
+    opacity: 1;
   }
 }
 
@@ -177,6 +179,14 @@ td {
   100% {
     opacity: 1;
   }
+}
+
+.ReactVirtualized__Table__headerColumn:first-child::before {
+  /* content: "\f044"; */
+}
+
+.prayer-table-edit-cancel-btn-wrap {
+  animation: slideUp 0.3s ease-out;
 }
 
 .react-modal-sheet-scroller,
@@ -281,8 +291,8 @@ td {
 /* CHECKBOX STYLING */
 
 [type="checkbox"] {
-  width: 1rem;
-  height: 1rem;
+  width: 0.8rem;
+  height: 0.8rem;
   color: dodgerblue;
   vertical-align: middle;
   -webkit-appearance: none;

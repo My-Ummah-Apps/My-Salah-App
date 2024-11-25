@@ -41,7 +41,6 @@ interface PrayerStatusBottomSheetProps {
   ) => Promise<void>;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
-  resetSelectedRow: () => void;
   selectedSalahAndDate: SelectedSalahAndDateObjType;
   resetSelectedSalahAndDate: () => void;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,7 +53,6 @@ const PrayerStatusBottomSheet = ({
   setFetchedSalahData,
   fetchedSalahData,
   selectedSalahAndDate,
-  resetSelectedRow,
   resetSelectedSalahAndDate,
   setIsMultiEditMode,
   isMultiEditMode,
@@ -310,7 +308,6 @@ const PrayerStatusBottomSheet = ({
 
     if (isMultiEditMode === true) {
       setIsMultiEditMode(false);
-      resetSelectedRow();
     }
   };
 
@@ -585,16 +582,9 @@ const PrayerStatusBottomSheet = ({
                   onClick={async () => {
                     if (salahStatus) {
                       await addOrModifySalah();
-                      // setSelectedSalahAndDate({
-                      //   selectedDates: [],
-                      //   selectedSalahs: [],
-                      // });
                       resetSelectedSalahAndDate();
                       setIsMultiEditMode(false);
-                      resetSelectedRow();
                       setShowUpdateStatusModal(false);
-                      // setSelectedReasons([]);
-                      // setNotes("");
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${

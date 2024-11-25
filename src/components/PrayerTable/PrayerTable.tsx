@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
@@ -18,6 +18,7 @@ import {
   prayerStatusColorsHexCodes,
   salahNamesArr,
 } from "../../utils/constants";
+import { TbEdit } from "react-icons/tb";
 
 // import StreakCount from "../Stats/StreakCount";
 
@@ -53,7 +54,7 @@ const PrayerTable = ({
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
     useState<SelectedSalahAndDateObjType>({});
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
-  const [isSelectedRow, setIsSelectedRow] = useState<number | null>(null);
+
   // const [selectedCells, setSelectedCells] = useState({});
   // const [toggleCheckbox, setToggleCheckbox] = useState<boolean>(false);
 
@@ -63,10 +64,6 @@ const PrayerTable = ({
 
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
-  };
-
-  const resetSelectedRow = () => {
-    setIsSelectedRow(null);
   };
 
   const iconStyles = "rounded-md text-white w-[24px] h-[24px] shadow-md";
@@ -104,6 +101,31 @@ const PrayerTable = ({
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
+      {isMultiEditMode && (
+        <section className="absolute z-10 flex text-sm text-white transform -translate-x-1/2 rounded-full prayer-table-edit-cancel-btn-wrap bg-sky-700 translate-y-1/4 top-3/4 left-1/2 bottom-32">
+          <button
+            className="px-2 mx-1 text-xs text-white"
+            onClick={() => {
+              setIsMultiEditMode(false);
+              resetSelectedSalahAndDate();
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-2 mx-1 text-xs text-white border-l border-[#adadad]"
+            onClick={() => {
+              // TODO: Improve the alert below to something more native
+              const dateArrLength = Object.keys(selectedSalahAndDate).length;
+              dateArrLength > 0
+                ? setShowUpdateStatusModal(true)
+                : alert("Please select atleast one Salah");
+            }}
+          >
+            Edit
+          </button>
+        </section>
+      )}
       <AutoSizer>
         {({ height, width }) => (
           <Table
@@ -114,15 +136,6 @@ const PrayerTable = ({
             className="text-center"
             rowCount={fetchedSalahData.length}
             rowGetter={({ index }) => fetchedSalahData[index]}
-            rowClassName={({ index }) => {
-              if (!isMultiEditMode) {
-                return "";
-              } else {
-                return isSelectedRow === index
-                  ? "selected-row"
-                  : "not-selected-row";
-              }
-            }}
             rowHeight={100}
             headerHeight={40}
             height={height}
@@ -133,49 +146,26 @@ const PrayerTable = ({
               className="items-center text-left "
               label=""
               dataKey="date"
+              headerRenderer={() => (
+                <div
+                  onClick={() => {
+                    if (isMultiEditMode) return;
+                    setIsMultiEditMode(true);
+                  }}
+                  className="flex items-center justify-center text-lg multi-edit-icon"
+                >
+                  <TbEdit />
+                </div>
+              )}
               cellRenderer={({ rowData, rowIndex }) => {
                 const [day, formattedParsedDate] = createLocalisedDate(
                   rowData.date
                 );
 
                 return (
-                  <section
-                    className=""
-                    onClick={() => {
-                      if (isMultiEditMode) return;
-                      setIsSelectedRow(rowIndex);
-                      setIsMultiEditMode(true);
-                    }}
-                  >
+                  <section className="">
                     <p className="text-sm">{formattedParsedDate}</p>
                     <p className="text-sm">{day}</p>
-                    {isMultiEditMode && (
-                      <section className="fixed text-sm text-white top-[-2px] right-1">
-                        <button
-                          className="px-2 py-1.5 m-1 text-xs font-medium text-white bg-transparent rounded-md border-gray border"
-                          onClick={() => {
-                            setIsMultiEditMode(false);
-                            resetSelectedRow();
-                            resetSelectedSalahAndDate();
-                          }}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className="px-2 py-1.5 m-1 text-xs text-white bg-sky-700 rounded-md"
-                          onClick={() => {
-                            // TODO: Improve the alert below to something more native
-                            const dateArrLength =
-                              Object.keys(selectedSalahAndDate).length;
-                            dateArrLength > 0
-                              ? setShowUpdateStatusModal(true)
-                              : alert("Please select atleast one Salah");
-                          }}
-                        >
-                          Edit
-                        </button>
-                      </section>
-                    )}
                   </section>
                 );
               }}
@@ -222,13 +212,7 @@ const PrayerTable = ({
                       )}
 
                       {isMultiEditMode && (
-                        <div
-                          className={`checkbox-wrap ${
-                            isSelectedRow === rowIndex
-                              ? "checkbox--wrap-slide-in"
-                              : ""
-                          } `}
-                        >
+                        <div className={`checkbox-wrap`}>
                           <label className="p-5">
                             <input
                               type="checkbox"
@@ -258,7 +242,6 @@ const PrayerTable = ({
         handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
         selectedSalahAndDate={selectedSalahAndDate}
         resetSelectedSalahAndDate={resetSelectedSalahAndDate}
-        resetSelectedRow={resetSelectedRow}
         setIsMultiEditMode={setIsMultiEditMode}
         isMultiEditMode={isMultiEditMode}
         dbConnection={dbConnection}
