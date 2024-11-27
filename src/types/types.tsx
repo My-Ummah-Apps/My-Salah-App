@@ -71,7 +71,7 @@ export interface SalahEntryType {
 // export type SelectedSalahAndDateArrayType = SelectedSalahAndDateType[];
 
 export type SelectedSalahAndDateObjType = {
-  [date: string]: string[];
+  [date: string]: SalahNamesType[];
 };
 
 export type MissedSalahObjType = {

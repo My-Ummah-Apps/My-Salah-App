@@ -38,9 +38,7 @@ interface PrayerStatusBottomSheetProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  setMissedSalahList: React.Dispatch<
-    React.SetStateAction<MissedSalahObjType[]>
-  >;
+  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   selectedSalahAndDate: SelectedSalahAndDateObjType;
@@ -218,12 +216,77 @@ const PrayerStatusBottomSheet = ({
             reasonsToInsert,
             notes,
           ]);
+
           if (salahStatus === "missed") {
-            setMissedSalahList((prev) => {
-              // ! CONTINUE FROM HERE
-              const copy = {...prev}
-              const updatedMissedSalahList = prev[date] ?? prev[date] = [salahArr[i]] : prev[date].push(salahArr[i])
-            });
+            let salahSatusAlreadyMissed = false;
+            for (let obj of fetchedSalahData) {
+              if (obj.date === date) {
+                for (let salah of Object.keys(obj.salahs)) {
+                  if (salah === salahArr[i] && obj.salahs[salah] === "missed") {
+                    salahSatusAlreadyMissed = true;
+                    break;
+                  }
+                }
+                if (salahSatusAlreadyMissed) break;
+              }
+            }
+
+            if (!salahSatusAlreadyMissed) {
+              // !! Continue from here, counter on home page now increments correctly upwards, but does not increment downwards ie when a salah is changed from missed to something else, this if statement is not triggering when salah is changed from another status to missed, there might be somethiong wrong with the  if (salahStatus === "missed") { statement above, it needs to not only detect when the current status is missed, but also if the previous status was missed and is now being changed to something else
+              console.log("if (!salahSatusAlreadyMissed)");
+              setMissedSalahList((prev) => {
+                const copyOfMissedSalahList = { ...prev };
+                let amendedObj = {};
+                console.log(
+                  "copyOfMissedSalahList[date]: ",
+                  copyOfMissedSalahList[date]
+                );
+                if (copyOfMissedSalahList[date]?.includes(salahArr[i])) {
+                  const filteredArr = copyOfMissedSalahList[date].filter(
+                    (item) => item !== salahArr[i]
+                  );
+                  console.log(
+                    "copyOfMissedSalahList includes: ",
+                    copyOfMissedSalahList
+                  );
+                  amendedObj = {
+                    [date]: filteredArr,
+                  };
+                } else if (
+                  !copyOfMissedSalahList[date]?.includes(salahArr[i])
+                ) {
+                  console.log(
+                    "copyOfMissedSalahList does not includes: ",
+                    copyOfMissedSalahList
+                  );
+                  amendedObj = {
+                    [date]: [...copyOfMissedSalahList[date], salahArr[i]],
+                  };
+                } else if (!copyOfMissedSalahList[date]) {
+                  console.log(
+                    "copyOfMissedSalahList does not exist: ",
+                    copyOfMissedSalahList
+                  );
+                  amendedObj = {
+                    [date]: [salahArr[i]],
+                  };
+                }
+                console.log("amendedObj: ", amendedObj);
+
+                return { ...copyOfMissedSalahList, ...amendedObj };
+
+                // const updatedCopyOfMissedSalahList = copyOfMissedSalahList[date]
+                //   ? {
+                //       [date]: [...copyOfMissedSalahList[date], salahArr[i]],
+                //     }
+                //   : { [date]: [salahArr[i]] };
+
+                // return {
+                //   ...copyOfMissedSalahList,
+                //   ...updatedCopyOfMissedSalahList,
+                // };
+              });
+            }
           }
         }
       }

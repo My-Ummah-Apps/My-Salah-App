@@ -66,6 +66,10 @@ const App = () => {
   );
 
   useEffect(() => {
+    console.log("missedSalahList", missedSalahList);
+  }, [missedSalahList]);
+
+  useEffect(() => {
     if (
       localStorage.getItem("appVersion") &&
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
