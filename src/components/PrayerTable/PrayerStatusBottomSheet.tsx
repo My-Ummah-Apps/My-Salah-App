@@ -9,6 +9,7 @@ import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
   DBResultDataObjType,
+  MissedSalahObjType,
   SalahNamesType,
   SalahRecordsArrayType,
   SelectedSalahAndDateObjType,
@@ -37,9 +38,9 @@ interface PrayerStatusBottomSheetProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  handleSalahTrackingDataFromDB: (
-    DBResultAllSalahData: DBResultDataObjType[]
-  ) => Promise<void>;
+  setMissedSalahList: React.Dispatch<
+    React.SetStateAction<MissedSalahObjType[]>
+  >;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   selectedSalahAndDate: SelectedSalahAndDateObjType;
@@ -53,6 +54,7 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
+  setMissedSalahList,
   selectedSalahAndDate,
   resetSelectedSalahAndDate,
   setIsMultiEditMode,
@@ -216,6 +218,13 @@ const PrayerStatusBottomSheet = ({
             reasonsToInsert,
             notes,
           ]);
+          if (salahStatus === "missed") {
+            setMissedSalahList((prev) => {
+              // ! CONTINUE FROM HERE
+              const copy = {...prev}
+              const updatedMissedSalahList = prev[date] ?? prev[date] = [salahArr[i]] : prev[date].push(salahArr[i])
+            });
+          }
         }
       }
 

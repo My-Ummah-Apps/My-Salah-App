@@ -4,6 +4,7 @@ import {
   DBConnectionStateType,
   userPreferencesType,
   DBResultDataObjType,
+  MissedSalahObjType,
 } from "../types/types";
 import { useEffect } from "react";
 
@@ -17,17 +18,10 @@ interface HomePageProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  handleSalahTrackingDataFromDB: (
-    DBResultAllSalahData: DBResultDataObjType[]
-  ) => Promise<void>;
-
+  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  // setReasonsArray: React.Dispatch<React.SetStateAction<string[]>>;
-  // reasonsArray: string[];
-  // userGender: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
-  // userStartDate: string;
   pageStyles: string;
 }
 
@@ -37,9 +31,9 @@ const HomePage = ({
   renderTable,
   setFetchedSalahData,
   fetchedSalahData,
-  handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
+  setMissedSalahList,
   setHeading,
   pageStyles,
 }: HomePageProps) => {
@@ -59,7 +53,7 @@ const HomePage = ({
           renderTable={renderTable}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
-          handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
+          setMissedSalahList={setMissedSalahList}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}
         />

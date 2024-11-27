@@ -74,6 +74,10 @@ export type SelectedSalahAndDateObjType = {
   [date: string]: string[];
 };
 
+export type MissedSalahObjType = {
+  [date: string]: SalahNamesType[];
+};
+
 // export interface CalenderSalahArrayObject {
 //   [date: string]: SalahEntry[];
 // }

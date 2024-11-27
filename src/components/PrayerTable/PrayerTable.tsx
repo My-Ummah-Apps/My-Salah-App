@@ -5,6 +5,7 @@ AutoSizer;
 import {
   DBConnectionStateType,
   DBResultDataObjType,
+  MissedSalahObjType,
   SalahNamesType,
   SelectedSalahAndDateObjType,
   userPreferencesType,
@@ -31,10 +32,8 @@ interface PrayerTableProps {
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
-  handleSalahTrackingDataFromDB: (
-    DBResultAllSalahData: DBResultDataObjType[]
-  ) => Promise<void>;
   fetchedSalahData: SalahRecordsArrayType;
+  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }
@@ -44,9 +43,9 @@ const PrayerTable = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  handleSalahTrackingDataFromDB,
   setUserPreferences,
   userPreferences,
+  setMissedSalahList,
 }: PrayerTableProps) => {
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
@@ -266,7 +265,7 @@ const PrayerTable = ({
         fetchedSalahData={fetchedSalahData}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
-        handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
+        setMissedSalahList={setMissedSalahList}
         selectedSalahAndDate={selectedSalahAndDate}
         resetSelectedSalahAndDate={resetSelectedSalahAndDate}
         setIsMultiEditMode={setIsMultiEditMode}

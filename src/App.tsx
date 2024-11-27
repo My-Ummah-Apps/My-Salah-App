@@ -15,6 +15,7 @@ import {
   SalahRecordType,
   SalahRecordsArrayType,
   SalahStatusType,
+  MissedSalahObjType,
 } from "./types/types";
 
 import { StatusBar } from "@capacitor/status-bar";
@@ -32,6 +33,7 @@ import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
+import MissedPrayersListBottomSheet from "./components/BottomSheets/MissedPrayersListBottomSheet";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
@@ -58,6 +60,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 const App = () => {
   // console.log("APP.TSX HAS RENDERED...");
   const [showChangelogModal, setShowChangelogModal] = useState(false);
+  const [showMissedPrayersSheet, setShowMissedPrayersSheet] = useState(false);
+  const [missedSalahList, setMissedSalahList] = useState<MissedSalahObjType>(
+    {}
+  );
 
   useEffect(() => {
     if (
@@ -74,6 +80,10 @@ const App = () => {
       setShowIntroModal(true);
     }
   }, []);
+
+  const getMissedSalahCount = () => {
+    return Object.values(missedSalahList).flat().length;
+  };
 
   const [fetchedSalahData, setFetchedSalahData] =
     useState<SalahRecordsArrayType>([]);
@@ -384,6 +394,8 @@ const App = () => {
     DBResultAllSalahData: DBResultDataObjType[]
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
+    // const missedSalahObjArr: MissedSalahObjType[] = [];
+    const missedSalahObj: MissedSalahObjType = {};
     const todaysDate = new Date();
     const userStartDateFormattedToDateObject: Date = parse(
       userStartDateForSalahTrackingFunc,
@@ -413,7 +425,7 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
-      // ? Below if statement potentially needs to be moved as it's currently being called on every loop
+      // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
           if (DBResultAllSalahData[i].date === currentDate) {
@@ -421,6 +433,14 @@ const App = () => {
             let salahStatus: SalahStatusType =
               DBResultAllSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
+            // TODO: Add a conditional here, where 'if (salahStatus === "missed")'  only runs if the user has not turned the qadha salah setting off
+            if (salahStatus === "missed") {
+              if (DBResultAllSalahData[i].date in missedSalahObj) {
+                missedSalahObj[DBResultAllSalahData[i].date].push(salahName);
+              } else {
+                missedSalahObj[DBResultAllSalahData[i].date] = [salahName];
+              }
+            }
           }
         }
       }
@@ -428,7 +448,13 @@ const App = () => {
       singleSalahObjArr.push(singleSalahObj);
     }
     setFetchedSalahData([...singleSalahObjArr]);
+    // TODO: Add a conditional here, where setMissedSalahList only runs if the user has not turned the qadha salah setting off
+    setMissedSalahList({ ...missedSalahObj });
   };
+
+  useEffect(() => {
+    console.log("missedSalahList ", missedSalahList);
+  }, [missedSalahList]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,
@@ -517,10 +543,23 @@ const App = () => {
     <BrowserRouter>
       <section className="app">
         <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
-          {" "}
-          {/* <div></div> */}
+          <section>
+            <MissedPrayersListBottomSheet
+              setShowMissedPrayersSheet={setShowMissedPrayersSheet}
+              showMissedPrayersSheet={showMissedPrayersSheet}
+              setMissedSalahList={setMissedSalahList}
+              missedSalahList={missedSalahList}
+            />
+            <div
+              onClick={() => {
+                setShowMissedPrayersSheet(true);
+              }}
+            >
+              <p className="text-sm">{getMissedSalahCount()}</p>
+            </div>
+          </section>
           <h1 className="text-center w-[100%]">{heading}</h1>
-          {/* <p></p> */}
+          {/* <p>hi</p> */}
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
         </div>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
@@ -546,11 +585,11 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 renderTable={renderTable}
-                handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 setFetchedSalahData={setFetchedSalahData}
                 fetchedSalahData={fetchedSalahData}
+                setMissedSalahList={setMissedSalahList}
                 // singleSalahObjArr={singleSalahObjArr}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
