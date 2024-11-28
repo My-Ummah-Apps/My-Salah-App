@@ -5,6 +5,8 @@ import Sheet from "react-modal-sheet";
 import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
+  prayerStatusColorsHexCodes,
+  prayerTableIndividualSquareStyles,
   sheetHeaderHeight,
 } from "./utils/constants";
 import {
@@ -537,22 +539,33 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
-        <div className="fixed h-[9vh] z-20 flex justify-between w-full p-5 text-center header-wrap">
-          <section>
-            <MissedPrayersListBottomSheet
-              setShowMissedPrayersSheet={setShowMissedPrayersSheet}
-              showMissedPrayersSheet={showMissedPrayersSheet}
-              setMissedSalahList={setMissedSalahList}
-              missedSalahList={missedSalahList}
-            />
-            <div
-              onClick={() => {
-                setShowMissedPrayersSheet(true);
-              }}
-            >
-              <p className="text-sm">{getMissedSalahCount()}</p>
-            </div>
-          </section>
+        <div className="fixed h-[9vh] z-20 flex justify-between w-full py-5 text-center header-wrap">
+          {getMissedSalahCount() > 0 && (
+            <section>
+              <MissedPrayersListBottomSheet
+                setShowMissedPrayersSheet={setShowMissedPrayersSheet}
+                showMissedPrayersSheet={showMissedPrayersSheet}
+                setMissedSalahList={setMissedSalahList}
+                missedSalahList={missedSalahList}
+              />
+
+              <div
+                className="flex p-1 ml-2 bg-gray-800 rounded-lg"
+                onClick={() => {
+                  setShowMissedPrayersSheet(true);
+                }}
+              >
+                <p
+                  style={{
+                    backgroundColor: prayerStatusColorsHexCodes["missed"],
+                  }}
+                  // ${prayerTableIndividualSquareStyles}
+                  className={`w-[1.3rem] h-[1.3rem] rounded-md mr-2`}
+                ></p>
+                <p className="text-sm">{getMissedSalahCount()}</p>
+              </div>
+            </section>
+          )}
           <h1 className="text-center w-[100%]">{heading}</h1>
           {/* <p>hi</p> */}
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}

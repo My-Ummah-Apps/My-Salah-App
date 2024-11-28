@@ -17,7 +17,7 @@ import { SalahRecordsArrayType } from "../../types/types";
 import {
   createLocalisedDate,
   prayerStatusColorsHexCodes,
-  prayerTableIndividualSquareSize,
+  prayerTableIndividualSquareStyles,
   salahNamesArr,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
@@ -222,7 +222,7 @@ const PrayerTable = ({
                     >
                       {rowData.salahs[salahName] === "" ? (
                         <LuDot
-                          className={`${prayerTableIndividualSquareSize}`}
+                          className={`${prayerTableIndividualSquareStyles}`}
                         />
                       ) : (
                         <div
@@ -234,7 +234,7 @@ const PrayerTable = ({
                                 ] as keyof typeof prayerStatusColorsHexCodes
                               ],
                           }}
-                          className={`${prayerTableIndividualSquareSize} prayer-status-color-box`}
+                          className={`${prayerTableIndividualSquareStyles} prayer-status-color-box`}
                         ></div>
                       )}
 

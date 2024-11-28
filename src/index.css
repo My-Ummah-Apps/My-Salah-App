@@ -259,6 +259,7 @@ td {
 }
 
 .prayer-table-wrap {
+  margin-top: 1rem;
   position: static !important;
 }
 

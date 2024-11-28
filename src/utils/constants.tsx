@@ -79,4 +79,4 @@ export const showToast = async (text: string, duration: "short" | "long") => {
   });
 };
 
-export const prayerTableIndividualSquareSize = `w-[1.5rem] h-[1.5rem] rounded-md `;
+export const prayerTableIndividualSquareStyles = `w-[1.5rem] h-[1.5rem] rounded-md`;
