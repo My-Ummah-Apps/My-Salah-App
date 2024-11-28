@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
-  DBResultDataObjType,
   MissedSalahObjType,
   SalahNamesType,
   SalahRecordsArrayType,

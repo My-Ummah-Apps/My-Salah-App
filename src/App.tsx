@@ -6,7 +6,6 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   prayerStatusColorsHexCodes,
-  prayerTableIndividualSquareStyles,
   sheetHeaderHeight,
 } from "./utils/constants";
 import {
@@ -550,7 +549,7 @@ const App = () => {
               />
 
               <div
-                className="flex p-1 ml-2 bg-gray-800 rounded-lg"
+                className="flex items-center p-1 ml-2 bg-gray-800 rounded-lg"
                 onClick={() => {
                   setShowMissedPrayersSheet(true);
                 }}
@@ -560,9 +559,9 @@ const App = () => {
                     backgroundColor: prayerStatusColorsHexCodes["missed"],
                   }}
                   // ${prayerTableIndividualSquareStyles}
-                  className={`w-[1.3rem] h-[1.3rem] rounded-md mr-2`}
+                  className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
                 ></p>
-                <p className="text-sm">{getMissedSalahCount()}</p>
+                <p className="text-xs">{getMissedSalahCount()}</p>
               </div>
             </section>
           )}

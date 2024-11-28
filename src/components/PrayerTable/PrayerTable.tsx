@@ -4,7 +4,6 @@ import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
 import {
   DBConnectionStateType,
-  DBResultDataObjType,
   MissedSalahObjType,
   SalahNamesType,
   SelectedSalahAndDateObjType,
