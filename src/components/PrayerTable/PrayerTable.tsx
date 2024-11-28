@@ -17,6 +17,7 @@ import { SalahRecordsArrayType } from "../../types/types";
 import {
   createLocalisedDate,
   prayerStatusColorsHexCodes,
+  prayerTableIndividualSquareSize,
   salahNamesArr,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
@@ -64,8 +65,6 @@ const PrayerTable = ({
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
   };
-
-  const iconStyles = "rounded-md text-white w-[24px] h-[24px] shadow-md";
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
@@ -222,7 +221,9 @@ const PrayerTable = ({
                       }}
                     >
                       {rowData.salahs[salahName] === "" ? (
-                        <LuDot className={`w-[24px] h-[24px]`} />
+                        <LuDot
+                          className={`${prayerTableIndividualSquareSize}`}
+                        />
                       ) : (
                         <div
                           style={{
@@ -233,7 +234,7 @@ const PrayerTable = ({
                                 ] as keyof typeof prayerStatusColorsHexCodes
                               ],
                           }}
-                          className={`w-[24px] h-[24px] ${iconStyles} prayer-status-color-box`}
+                          className={`${prayerTableIndividualSquareSize} prayer-status-color-box`}
                         ></div>
                       )}
 
