@@ -12,6 +12,7 @@ import {
   MissedSalahObjType,
   SalahNamesType,
   SalahRecordsArrayType,
+  SalahStatusType,
   SelectedSalahAndDateObjType,
   userPreferencesType,
 } from "../../types/types";
@@ -32,7 +33,7 @@ interface PrayerStatusBottomSheetProps {
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
-  fetchedSalahData: any;
+  fetchedSalahData: SalahRecordsArrayType;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -216,84 +217,6 @@ const PrayerStatusBottomSheet = ({
             reasonsToInsert,
             notes,
           ]);
-
-          // if (salahStatus === "missed") {
-          let salahSatusAlreadyMissed = false;
-          for (let obj of fetchedSalahData) {
-            if (obj.date === date) {
-              for (let salah of Object.keys(obj.salahs)) {
-                if (salah === salahArr[i] && obj.salahs[salah] === "missed") {
-                  salahSatusAlreadyMissed = true;
-                  break;
-                }
-              }
-              if (salahSatusAlreadyMissed) break;
-            }
-          }
-          let amendedObj = {};
-          if (!salahSatusAlreadyMissed) {
-            // !! Continue from here, counter on home page now increments correctly upwards, but does not increment downwards ie when a salah is changed from missed to something else, this if statement is not triggering when salah is changed from another status to missed, if the previous status was missed and is now being changed to something else this also needs to be detected and count changed accordingly
-            console.log("if (!salahSatusAlreadyMissed)");
-            setMissedSalahList((prev) => {
-              const copyOfMissedSalahList = { ...prev };
-
-              console.log(
-                "copyOfMissedSalahList[date]: ",
-                copyOfMissedSalahList[date]
-              );
-              if (copyOfMissedSalahList[date]?.includes(salahArr[i])) {
-                const filteredArr = copyOfMissedSalahList[date].filter(
-                  (item) => item !== salahArr[i]
-                );
-                console.log(
-                  "copyOfMissedSalahList includes: ",
-                  copyOfMissedSalahList
-                );
-                amendedObj = {
-                  [date]: filteredArr,
-                };
-              } else if (!copyOfMissedSalahList[date]?.includes(salahArr[i])) {
-                console.log(
-                  "copyOfMissedSalahList does not includes: ",
-                  copyOfMissedSalahList
-                );
-                amendedObj = {
-                  [date]: [...copyOfMissedSalahList[date], salahArr[i]],
-                };
-              } else if (!copyOfMissedSalahList[date]) {
-                console.log(
-                  "copyOfMissedSalahList does not exist: ",
-                  copyOfMissedSalahList
-                );
-                amendedObj = {
-                  [date]: [salahArr[i]],
-                };
-              }
-              console.log("amendedObj: ", amendedObj);
-
-              return { ...copyOfMissedSalahList, ...amendedObj };
-
-              // const updatedCopyOfMissedSalahList = copyOfMissedSalahList[date]
-              //   ? {
-              //       [date]: [...copyOfMissedSalahList[date], salahArr[i]],
-              //     }
-              //   : { [date]: [salahArr[i]] };
-
-              // return {
-              //   ...copyOfMissedSalahList,
-              //   ...updatedCopyOfMissedSalahList,
-              // };
-            });
-          } else {
-            setMissedSalahList((prev) => {
-              const filteredSalahArr = prev[date].filter(
-                (salah) => salah !== salahArr[i]
-              );
-              amendedObj = { [date]: filteredSalahArr };
-              return { ...prev, ...amendedObj };
-            });
-          }
-          // }
         }
       }
 
@@ -312,7 +235,7 @@ const PrayerStatusBottomSheet = ({
       for (const obj of fetchedSalahData) {
         if (selectedSalahAndDate[obj.date]) {
           selectedSalahAndDate[obj.date].forEach((item) => {
-            obj.salahs[item] = salahStatus;
+            obj.salahs[item as SalahNamesType] = salahStatus as SalahStatusType;
           });
         }
       }
@@ -328,6 +251,20 @@ const PrayerStatusBottomSheet = ({
       }
     }
   };
+
+  useEffect(() => {
+    let copyOfMissedSalahList: MissedSalahObjType = {};
+    fetchedSalahData.forEach((obj) => {
+      for (let salahName in obj.salahs) {
+        if (obj.salahs[salahName as SalahNamesType] === "missed") {
+          const arr = copyOfMissedSalahList[obj.date] ?? [];
+          arr.push(salahName as SalahNamesType);
+          copyOfMissedSalahList[obj.date] = arr;
+        }
+      }
+    });
+    setMissedSalahList({ ...copyOfMissedSalahList });
+  }, [fetchedSalahData]);
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);

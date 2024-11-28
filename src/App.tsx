@@ -66,10 +66,6 @@ const App = () => {
   );
 
   useEffect(() => {
-    console.log("missedSalahList", missedSalahList);
-  }, [missedSalahList]);
-
-  useEffect(() => {
     if (
       localStorage.getItem("appVersion") &&
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
@@ -452,13 +448,8 @@ const App = () => {
       singleSalahObjArr.push(singleSalahObj);
     }
     setFetchedSalahData([...singleSalahObjArr]);
-    // TODO: Add a conditional here, where setMissedSalahList only runs if the user has not turned the qadha salah setting off
     setMissedSalahList({ ...missedSalahObj });
   };
-
-  useEffect(() => {
-    console.log("missedSalahList ", missedSalahList);
-  }, [missedSalahList]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,
