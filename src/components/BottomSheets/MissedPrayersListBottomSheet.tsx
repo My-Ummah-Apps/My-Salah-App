@@ -3,6 +3,7 @@ import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { CSSProperties } from "react";
 import { MissedSalahObjType } from "../../types/types";
+import { createLocalisedDate } from "../../utils/constants";
 
 interface MissedPrayersListBottomSheetProps {
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,10 +19,9 @@ const MissedPrayersListBottomSheet = ({
 }: //   setMissedSalahList,
 
 MissedPrayersListBottomSheetProps) => {
-  console.log("MISSED SALAH LIST: ", missedSalahList);
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const missedItem = Object.entries(missedSalahList)[index];
-    console.log("MISSED ITEM: ", missedItem);
+    const [key, values] = missedItem;
 
     return (
       <div
@@ -31,25 +31,19 @@ MissedPrayersListBottomSheetProps) => {
         }}
         className={`bg-[color:var(--card-bg-color)] pb-5 whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
       >
-        {Object.entries(missedSalahList).map((obj) => {
-          //   console.log(obj);
+        {values.map((salah) => {
           return (
             <>
-              <div className="flex justify-between px-4 py-8 m-3 bg-gray-800 rounded-2xl">
-                <div>{missedItem}</div>
-                {/* <div>{obj[1][index]}</div> */}
+              <div
+                onClick={() => {
+                  console.log(key, salah);
+                }}
+                className="flex justify-between px-4 py-8 m-3 bg-gray-800 rounded-2xl"
+              >
+                <div>{createLocalisedDate(key)[1]}</div>
+                <div>{salah}</div>
                 <button>{"Mark as late"}</button>
               </div>
-
-              {/* {obj[1].map((item, index) => {
-                return (
-                  <div className="flex justify-between px-4 py-8 m-3 bg-gray-800 rounded-2xl">
-                    <div>{obj[0]}</div>
-                    <div>{obj[1][index]}</div>
-                    <button>{"Mark as late"}</button>
-                  </div>
-                );
-              })} */}
             </>
           );
         })}
@@ -76,17 +70,13 @@ MissedPrayersListBottomSheetProps) => {
                 <AutoSizer disableHeight>
                   {({ width }) => (
                     <List
-                      // style={{ borderRadius: "0.5rem" }}
                       className=""
-                      // height={330}
                       // ! Re-check the below hardcoded value, could cause issues depending on device size
-                      height={500}
+                      height={1000}
                       itemCount={Object.entries(missedSalahList).length}
-                      // itemCount
-                      itemSize={300}
+                      itemSize={100}
                       layout="vertical"
                       width={width}
-                      //   direction="rtl"
                     >
                       {Row}
                     </List>
