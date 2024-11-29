@@ -52,7 +52,6 @@ const PrayerStatusBottomSheet = ({
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
-  setMissedSalahList,
   selectedSalahAndDate,
   resetSelectedSalahAndDate,
   setIsMultiEditMode,
@@ -250,20 +249,6 @@ const PrayerStatusBottomSheet = ({
       }
     }
   };
-
-  useEffect(() => {
-    let copyOfMissedSalahList: MissedSalahObjType = {};
-    fetchedSalahData.forEach((obj) => {
-      for (let salahName in obj.salahs) {
-        if (obj.salahs[salahName as SalahNamesType] === "missed") {
-          const arr = copyOfMissedSalahList[obj.date] ?? [];
-          arr.push(salahName as SalahNamesType);
-          copyOfMissedSalahList[obj.date] = arr;
-        }
-      }
-    });
-    setMissedSalahList({ ...copyOfMissedSalahList });
-  }, [fetchedSalahData]);
 
   useEffect(() => {
     // console.log(modalSheetPrayerReasonsWrap.current);

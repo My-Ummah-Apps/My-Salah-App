@@ -2,7 +2,7 @@ import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { format, parse } from "date-fns";
-import { SalahNamesType } from "../types/types";
+import { MissedSalahObjType, SalahNamesType } from "../types/types";
 
 export const TWEEN_CONFIG = {
   ease: "easeInOut" as EasingDefinition,
@@ -80,3 +80,7 @@ export const showToast = async (text: string, duration: "short" | "long") => {
 };
 
 export const prayerTableIndividualSquareStyles = `w-[1.5rem] h-[1.5rem] rounded-md`;
+
+export const getMissedSalahCount = (missedSalahList: MissedSalahObjType) => {
+  return Object.values(missedSalahList).flat().length;
+};

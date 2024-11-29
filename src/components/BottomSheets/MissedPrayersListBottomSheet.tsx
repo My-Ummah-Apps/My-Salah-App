@@ -2,10 +2,23 @@ import Sheet from "react-modal-sheet";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { CSSProperties } from "react";
-import { MissedSalahObjType } from "../../types/types";
-import { createLocalisedDate } from "../../utils/constants";
+import {
+  DBConnectionStateType,
+  MissedSalahObjType,
+  SalahNamesType,
+} from "../../types/types";
+import {
+  createLocalisedDate,
+  getMissedSalahCount,
+  prayerStatusColorsHexCodes,
+} from "../../utils/constants";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface MissedPrayersListBottomSheetProps {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  checkAndOpenOrCloseDBConnection: (
+    action: DBConnectionStateType
+  ) => Promise<void>;
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedPrayersSheet: boolean;
   setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
@@ -13,38 +26,66 @@ interface MissedPrayersListBottomSheetProps {
 }
 
 const MissedPrayersListBottomSheet = ({
+  dbConnection,
+  checkAndOpenOrCloseDBConnection,
   setShowMissedPrayersSheet,
   showMissedPrayersSheet,
   missedSalahList,
-}: //   setMissedSalahList,
+}: MissedPrayersListBottomSheetProps) => {
+  const modifySalahStatusInDB = async (
+    date: string,
+    salahName: SalahNamesType
+  ) => {
+    try {
+      if (!dbConnection.current) {
+        throw new Error("dbConnection.current does not exist");
+      }
+      await checkAndOpenOrCloseDBConnection("open");
+      const query = `UPDATE salahDataTable SET salahStatus = ? WHERE date = ? AND salahName = ?`;
+      const values = ["late", date, salahName];
+      await dbConnection.current.run(query, values);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
-MissedPrayersListBottomSheetProps) => {
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
     const missedItem = Object.entries(missedSalahList)[index];
-    const [key, values] = missedItem;
+    const [date, salahs] = missedItem;
 
     return (
       <div
         style={{
           ...style,
-          // width: monthsBetween.length === 1 ? "100%" : style.width,
         }}
         className={`bg-[color:var(--card-bg-color)] pb-5 whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
       >
-        {values.map((salah) => {
+        {salahs.map((salah, index) => {
           return (
-            <>
-              <div
+            <div
+              key={`${date}-${salah}-${index}`}
+              onClick={() => {
+                console.log(date, salah);
+              }}
+              className="flex justify-between px-4 py-8 mx-3 my-1 bg-gray-800 rounded-2xl"
+            >
+              <div>{createLocalisedDate(date)[1]}</div>
+              <div>{salah}</div>
+              <button
+                className="border-2 border-white rounded-md "
                 onClick={() => {
-                  console.log(key, salah);
+                  modifySalahStatusInDB(date, salah);
                 }}
-                className="flex justify-between px-4 py-8 m-3 bg-gray-800 rounded-2xl"
               >
-                <div>{createLocalisedDate(key)[1]}</div>
-                <div>{salah}</div>
-                <button>{"Mark as late"}</button>
-              </div>
-            </>
+                {"Mark as late"}
+              </button>
+            </div>
           );
         })}
       </div>
@@ -66,7 +107,11 @@ MissedPrayersListBottomSheetProps) => {
           <Sheet.Content>
             {" "}
             <Sheet.Scroller>
-              <section>
+              <section className="text-white">
+                <h1 className="mx-2 my-4 text-2xl text-center">
+                  You have {getMissedSalahCount(missedSalahList)} Salah to make
+                  up for
+                </h1>
                 <AutoSizer disableHeight>
                   {({ width }) => (
                     <List

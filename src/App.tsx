@@ -5,6 +5,7 @@ import Sheet from "react-modal-sheet";
 import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
+  getMissedSalahCount,
   prayerStatusColorsHexCodes,
   sheetHeaderHeight,
 } from "./utils/constants";
@@ -82,10 +83,6 @@ const App = () => {
     }
   }, []);
 
-  const getMissedSalahCount = () => {
-    return Object.values(missedSalahList).flat().length;
-  };
-
   const [fetchedSalahData, setFetchedSalahData] =
     useState<SalahRecordsArrayType>([]);
 
@@ -115,6 +112,20 @@ const App = () => {
       initialiseAndLoadData();
     }
   }, [isDatabaseInitialised]);
+
+  useEffect(() => {
+    let copyOfMissedSalahList: MissedSalahObjType = {};
+    fetchedSalahData.forEach((obj) => {
+      for (let salahName in obj.salahs) {
+        if (obj.salahs[salahName as SalahNamesType] === "missed") {
+          const arr = copyOfMissedSalahList[obj.date] ?? [];
+          arr.push(salahName as SalahNamesType);
+          copyOfMissedSalahList[obj.date] = arr;
+        }
+      }
+    });
+    setMissedSalahList({ ...copyOfMissedSalahList });
+  }, [fetchedSalahData]);
 
   const fetchDataFromDB = async () => {
     try {
@@ -539,9 +550,13 @@ const App = () => {
     <BrowserRouter>
       <section className="app">
         <div className="fixed h-[9vh] z-20 flex justify-between w-full py-5 text-center header-wrap">
-          {getMissedSalahCount() > 0 && (
+          {getMissedSalahCount(missedSalahList) > 0 && (
             <section>
               <MissedPrayersListBottomSheet
+                dbConnection={dbConnection}
+                checkAndOpenOrCloseDBConnection={
+                  checkAndOpenOrCloseDBConnection
+                }
                 setShowMissedPrayersSheet={setShowMissedPrayersSheet}
                 showMissedPrayersSheet={showMissedPrayersSheet}
                 setMissedSalahList={setMissedSalahList}
@@ -561,7 +576,9 @@ const App = () => {
                   // ${prayerTableIndividualSquareStyles}
                   className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
                 ></p>
-                <p className="text-xs">{getMissedSalahCount()}</p>
+                <p className="text-xs">
+                  {getMissedSalahCount(missedSalahList)}
+                </p>
               </div>
             </section>
           )}
