@@ -35,7 +35,6 @@ import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
 // import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
-import MissedPrayersListBottomSheet from "./components/BottomSheets/MissedPrayersListBottomSheet";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
@@ -66,6 +65,7 @@ const App = () => {
   const [missedSalahList, setMissedSalahList] = useState<MissedSalahObjType>(
     {}
   );
+  const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
 
   useEffect(() => {
     if (
@@ -549,43 +549,32 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
-        <div className="fixed h-[9vh] z-20 flex justify-between w-full py-5 text-center header-wrap">
+        <section className="fixed h-[9vh] z-20 flex justify-between w-full py-5 text-center header-wrap">
           {getMissedSalahCount(missedSalahList) > 0 && (
-            <section>
-              <MissedPrayersListBottomSheet
-                dbConnection={dbConnection}
-                checkAndOpenOrCloseDBConnection={
-                  checkAndOpenOrCloseDBConnection
+            <div
+              className="flex items-center p-1 ml-2 bg-gray-800 rounded-lg"
+              onClick={() => {
+                if (isMultiEditMode) {
+                  return;
                 }
-                setShowMissedPrayersSheet={setShowMissedPrayersSheet}
-                showMissedPrayersSheet={showMissedPrayersSheet}
-                setMissedSalahList={setMissedSalahList}
-                missedSalahList={missedSalahList}
-              />
-
-              <div
-                className="flex items-center p-1 ml-2 bg-gray-800 rounded-lg"
-                onClick={() => {
-                  setShowMissedPrayersSheet(true);
+                setShowMissedPrayersSheet(true);
+              }}
+            >
+              <p
+                style={{
+                  backgroundColor: prayerStatusColorsHexCodes["missed"],
                 }}
-              >
-                <p
-                  style={{
-                    backgroundColor: prayerStatusColorsHexCodes["missed"],
-                  }}
-                  // ${prayerTableIndividualSquareStyles}
-                  className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
-                ></p>
-                <p className="text-xs">
-                  {getMissedSalahCount(missedSalahList)}
-                </p>
-              </div>
-            </section>
+                // ${prayerTableIndividualSquareStyles}
+                className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
+              ></p>
+              <p className="text-xs">{getMissedSalahCount(missedSalahList)}</p>
+            </div>
           )}
-          <h1 className="text-center w-[100%]">{heading}</h1>
+          <h1 className="">{heading}</h1>
+          <div className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}></div>
           {/* <p>hi</p> */}
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
-        </div>
+        </section>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
           {heading}
         </h1> */}
@@ -614,9 +603,13 @@ const App = () => {
                 setFetchedSalahData={setFetchedSalahData}
                 fetchedSalahData={fetchedSalahData}
                 setMissedSalahList={setMissedSalahList}
-                // singleSalahObjArr={singleSalahObjArr}
                 setHeading={setHeading}
                 pageStyles={pageStyles}
+                setShowMissedPrayersSheet={setShowMissedPrayersSheet}
+                showMissedPrayersSheet={showMissedPrayersSheet}
+                missedSalahList={missedSalahList}
+                setIsMultiEditMode={setIsMultiEditMode}
+                isMultiEditMode={isMultiEditMode}
               />
             }
           />

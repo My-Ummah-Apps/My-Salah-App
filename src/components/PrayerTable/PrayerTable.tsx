@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 AutoSizer;
@@ -36,6 +35,14 @@ interface PrayerTableProps {
   setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  setSelectedSalahAndDate: React.Dispatch<
+    React.SetStateAction<SelectedSalahAndDateObjType>
+  >;
+  selectedSalahAndDate: SelectedSalahAndDateObjType;
+  setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  isMultiEditMode: boolean;
+  setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showUpdateStatusModal: boolean;
 }
 
 const PrayerTable = ({
@@ -46,20 +53,14 @@ const PrayerTable = ({
   setUserPreferences,
   userPreferences,
   setMissedSalahList,
+  setSelectedSalahAndDate,
+  selectedSalahAndDate,
+  setIsMultiEditMode,
+  isMultiEditMode,
+  setShowUpdateStatusModal,
+  showUpdateStatusModal,
 }: PrayerTableProps) => {
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
-
-  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  const [selectedSalahAndDate, setSelectedSalahAndDate] =
-    useState<SelectedSalahAndDateObjType>({});
-  const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
-
-  // const [selectedCells, setSelectedCells] = useState({});
-  // const [toggleCheckbox, setToggleCheckbox] = useState<boolean>(false);
-
-  // const rowGetter = ({ index }: any) => {
-  //   return fetchedSalahData[index];
-  // };
 
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});

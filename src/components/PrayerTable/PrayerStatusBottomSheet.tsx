@@ -488,7 +488,7 @@ const PrayerStatusBottomSheet = ({
                   className="mb-5 overflow-x-hidden mt-7 prayer-status-modal-reasons-wrap"
                 >
                   <div className="flex justify-between">
-                    <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+                    <h2 className="mb-3 text-sm">Reasons: </h2>
                     <p
                       onClick={() => {
                         // prompt();
@@ -571,10 +571,10 @@ const PrayerStatusBottomSheet = ({
                   className="text-sm notes-wrap"
                   //  useRef={notesBoxRef}
                 >
-                  {/* <h2 className="mt-3">Notes (Optional)</h2> */}
+                  {/* <h2 className="mt-3">Notes</h2> */}
                   <textarea
                     dir="auto"
-                    placeholder="Notes (Optional)"
+                    placeholder="Notes"
                     ref={notesTextArea}
                     value={notes}
                     onChange={(e) => {
@@ -632,7 +632,7 @@ const PrayerStatusBottomSheet = ({
         >
           <div className="overflow-x-hidden prayer-status-modal-reasons-wrap">
             <div className="flex justify-between">
-              <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+              <h2 className="mb-3 text-sm">Reasons: </h2>
               <p
                 onClick={() => {
                   // prompt();
@@ -645,7 +645,7 @@ const PrayerStatusBottomSheet = ({
           </div>
         </div>
         <div className="flex justify-between">
-          <h2 className="mb-3 text-sm">Reasons (Optional): </h2>
+          <h2 className="mb-3 text-sm">Reasons: </h2>
           <p
             onClick={() => {
               // prompt();

@@ -2,15 +2,17 @@ import Sheet from "react-modal-sheet";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { CSSProperties } from "react";
+import { CiCircleCheck } from "react-icons/ci";
 import {
   DBConnectionStateType,
   MissedSalahObjType,
   SalahNamesType,
+  SalahRecordsArrayType,
+  SelectedSalahAndDateObjType,
 } from "../../types/types";
 import {
   createLocalisedDate,
   getMissedSalahCount,
-  prayerStatusColorsHexCodes,
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
@@ -19,10 +21,17 @@ interface MissedPrayersListBottomSheetProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
+  setFetchedSalahData: React.Dispatch<
+    React.SetStateAction<SalahRecordsArrayType>
+  >;
+  fetchedSalahData: SalahRecordsArrayType;
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedPrayersSheet: boolean;
-  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
   missedSalahList: MissedSalahObjType;
+  setSelectedSalahAndDate: React.Dispatch<
+    React.SetStateAction<SelectedSalahAndDateObjType>
+  >;
+  //   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MissedPrayersListBottomSheet = ({
@@ -31,11 +40,17 @@ const MissedPrayersListBottomSheet = ({
   setShowMissedPrayersSheet,
   showMissedPrayersSheet,
   missedSalahList,
-}: MissedPrayersListBottomSheetProps) => {
+  setSelectedSalahAndDate,
+  setFetchedSalahData,
+  fetchedSalahData,
+}: //   setShowUpdateStatusModal,
+MissedPrayersListBottomSheetProps) => {
   const modifySalahStatusInDB = async (
     date: string,
     salahName: SalahNamesType
   ) => {
+    setSelectedSalahAndDate({ [date]: [salahName] });
+    // setShowUpdateStatusModal(true);
     try {
       if (!dbConnection.current) {
         throw new Error("dbConnection.current does not exist");
@@ -44,6 +59,23 @@ const MissedPrayersListBottomSheet = ({
       const query = `UPDATE salahDataTable SET salahStatus = ? WHERE date = ? AND salahName = ?`;
       const values = ["late", date, salahName];
       await dbConnection.current.run(query, values);
+
+      console.log("fetchedSalahData: ", fetchedSalahData);
+      setFetchedSalahData((prev) => {
+        const copy = prev;
+        for (let i = 0; i < prev.length; i++) {
+          if (prev[i].date === date) {
+            for (let salah in prev[i].salahs) {
+              console.log(salah);
+              if (salah === salahName) {
+                copy[i].salahs[salah] = "late";
+              }
+            }
+          }
+        }
+        return [...copy];
+        // if (Object.entries(prev)[0] === date)
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -78,12 +110,12 @@ const MissedPrayersListBottomSheet = ({
               <div>{createLocalisedDate(date)[1]}</div>
               <div>{salah}</div>
               <button
-                className="border-2 border-white rounded-md "
+                className=""
                 onClick={() => {
                   modifySalahStatusInDB(date, salah);
                 }}
               >
-                {"Mark as late"}
+                <CiCircleCheck className="text-4xl" />{" "}
               </button>
             </div>
           );
@@ -119,7 +151,7 @@ const MissedPrayersListBottomSheet = ({
                       // ! Re-check the below hardcoded value, could cause issues depending on device size
                       height={1000}
                       itemCount={Object.entries(missedSalahList).length}
-                      itemSize={100}
+                      itemSize={300}
                       layout="vertical"
                       width={width}
                     >

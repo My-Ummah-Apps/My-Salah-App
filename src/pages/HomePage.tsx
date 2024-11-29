@@ -1,11 +1,13 @@
+import MissedPrayersListBottomSheet from "../components/BottomSheets/MissedPrayersListBottomSheet";
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 import {
   SalahRecordsArrayType,
   DBConnectionStateType,
   userPreferencesType,
   MissedSalahObjType,
+  SelectedSalahAndDateObjType,
 } from "../types/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface HomePageProps {
   dbConnection: any;
@@ -17,11 +19,16 @@ interface HomePageProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
+  setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showMissedPrayersSheet: boolean;
+  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
+  missedSalahList: MissedSalahObjType;
+  setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  isMultiEditMode: boolean;
 }
 
 const HomePage = ({
@@ -32,13 +39,23 @@ const HomePage = ({
   fetchedSalahData,
   setUserPreferences,
   userPreferences,
-  setMissedSalahList,
   setHeading,
   pageStyles,
+  setShowMissedPrayersSheet,
+  showMissedPrayersSheet,
+  setMissedSalahList,
+  missedSalahList,
+  setIsMultiEditMode,
+  isMultiEditMode,
 }: HomePageProps) => {
   useEffect(() => {
     setHeading("Home");
   }, []);
+
+  const [selectedSalahAndDate, setSelectedSalahAndDate] =
+    useState<SelectedSalahAndDateObjType>({});
+  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+
   // TODO: The below conditional shouldn't be needed
   return (
     <section className={`home-page-wrap ${pageStyles}`}>
@@ -55,11 +72,28 @@ const HomePage = ({
           setMissedSalahList={setMissedSalahList}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}
+          setSelectedSalahAndDate={setSelectedSalahAndDate}
+          selectedSalahAndDate={selectedSalahAndDate}
+          setIsMultiEditMode={setIsMultiEditMode}
+          isMultiEditMode={isMultiEditMode}
+          setShowUpdateStatusModal={setShowUpdateStatusModal}
+          showUpdateStatusModal={showUpdateStatusModal}
         />
       ) : (
         <div>Loading Data...</div>
       )}
       {/* )} */}
+      <MissedPrayersListBottomSheet
+        dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        setFetchedSalahData={setFetchedSalahData}
+        fetchedSalahData={fetchedSalahData}
+        setShowMissedPrayersSheet={setShowMissedPrayersSheet}
+        showMissedPrayersSheet={showMissedPrayersSheet}
+        missedSalahList={missedSalahList}
+        setSelectedSalahAndDate={setSelectedSalahAndDate}
+        // setShowUpdateStatusModal={setShowUpdateStatusModal}
+      />
     </section>
   );
 };
