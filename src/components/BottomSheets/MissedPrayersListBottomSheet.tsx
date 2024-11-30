@@ -6,6 +6,7 @@ import { CiCircleCheck } from "react-icons/ci";
 import {
   DBConnectionStateType,
   MissedSalahObjType,
+  restructuredMissedSalahListProp,
   SalahNamesType,
   SalahRecordsArrayType,
   SelectedSalahAndDateObjType,
@@ -45,6 +46,14 @@ const MissedPrayersListBottomSheet = ({
   fetchedSalahData,
 }: //   setShowUpdateStatusModal,
 MissedPrayersListBottomSheetProps) => {
+  const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
+  for (let obj in missedSalahList) {
+    missedSalahList[obj].forEach((item) => {
+      restructuredMissedSalahList.push({ [obj]: item });
+    });
+  }
+  console.log("restructuredMissedSalahList: ", restructuredMissedSalahList);
+
   const modifySalahStatusInDB = async (
     date: string,
     salahName: SalahNamesType
@@ -60,7 +69,6 @@ MissedPrayersListBottomSheetProps) => {
       const values = ["late", date, salahName];
       await dbConnection.current.run(query, values);
 
-      console.log("fetchedSalahData: ", fetchedSalahData);
       setFetchedSalahData((prev) => {
         const copy = prev;
         for (let i = 0; i < prev.length; i++) {
@@ -74,7 +82,6 @@ MissedPrayersListBottomSheetProps) => {
           }
         }
         return [...copy];
-        // if (Object.entries(prev)[0] === date)
       });
     } catch (error) {
       console.error(error);
@@ -88,17 +95,32 @@ MissedPrayersListBottomSheetProps) => {
   };
 
   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
-    const missedItem = Object.entries(missedSalahList)[index];
-    const [date, salahs] = missedItem;
-
+    const date = Object.keys(restructuredMissedSalahList[index])[0];
+    const salah = Object.values(restructuredMissedSalahList[index])[0];
     return (
       <div
         style={{
           ...style,
         }}
-        className={`bg-[color:var(--card-bg-color)] pb-5 whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
+        className={` pb-5 whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
       >
-        {salahs.map((salah, index) => {
+        <div
+          key={`${date}-${index}`}
+          className="bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-1 rounded-2xl"
+        >
+          <div>{createLocalisedDate(date)[1]}</div>
+          <div>{salah}</div>
+          <button
+            className=""
+            onClick={() => {
+              modifySalahStatusInDB(date, salah);
+            }}
+          >
+            <CiCircleCheck className="text-4xl" />{" "}
+          </button>
+        </div>
+
+        {/* {salahs.map((salah, index) => {
           return (
             <div
               key={`${date}-${salah}-${index}`}
@@ -119,7 +141,7 @@ MissedPrayersListBottomSheetProps) => {
               </button>
             </div>
           );
-        })}
+        })} */}
       </div>
     );
   };
@@ -148,10 +170,10 @@ MissedPrayersListBottomSheetProps) => {
                   {({ width }) => (
                     <List
                       className=""
-                      // ! Re-check the below hardcoded value, could cause issues depending on device size
+                      // ! Re-check the below hardcoded height value, could cause issues depending on device size
                       height={1000}
                       itemCount={Object.entries(missedSalahList).length}
-                      itemSize={300}
+                      itemSize={110}
                       layout="vertical"
                       width={width}
                     >

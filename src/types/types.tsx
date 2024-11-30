@@ -79,6 +79,10 @@ export type MissedSalahObjType = {
   [date: string]: SalahNamesType[];
 };
 
+export interface restructuredMissedSalahListProp {
+  [date: string]: SalahNamesType;
+}
+
 // export interface CalenderSalahArrayObject {
 //   [date: string]: SalahEntry[];
 // }
