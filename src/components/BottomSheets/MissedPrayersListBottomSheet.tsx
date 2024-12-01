@@ -1,7 +1,8 @@
+// @ts-nocheck
 import Sheet from "react-modal-sheet";
-import { FixedSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { CSSProperties } from "react";
+// import { FixedSizeList as List } from "react-window";
+// import AutoSizer from "react-virtualized-auto-sizer";
+import { useState } from "react";
 import { CiCircleCheck } from "react-icons/ci";
 import {
   DBConnectionStateType,
@@ -13,9 +14,11 @@ import {
 } from "../../types/types";
 import {
   createLocalisedDate,
+  //   createLocalisedDate,
   getMissedSalahCount,
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+// import { AnimatePresence, motion } from "framer-motion";
 
 interface MissedPrayersListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -43,9 +46,10 @@ const MissedPrayersListBottomSheet = ({
   missedSalahList,
   setSelectedSalahAndDate,
   setFetchedSalahData,
-  fetchedSalahData,
-}: //   setShowUpdateStatusModal,
+}: //   fetchedSalahData,
+//   setShowUpdateStatusModal,
 MissedPrayersListBottomSheetProps) => {
+  //   const rowRef = useRef(null);
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
   for (let obj in missedSalahList) {
     missedSalahList[obj].forEach((item) => {
@@ -67,22 +71,25 @@ MissedPrayersListBottomSheetProps) => {
       await checkAndOpenOrCloseDBConnection("open");
       const query = `UPDATE salahDataTable SET salahStatus = ? WHERE date = ? AND salahName = ?`;
       const values = ["late", date, salahName];
+
       await dbConnection.current.run(query, values);
 
+      // setTimeout(() => {
       setFetchedSalahData((prev) => {
-        const copy = prev;
+        const copy = [...prev];
         for (let i = 0; i < prev.length; i++) {
-          if (prev[i].date === date) {
-            for (let salah in prev[i].salahs) {
-              console.log(salah);
+          if (copy[i].date === date) {
+            for (let salah in copy[i].salahs) {
               if (salah === salahName) {
                 copy[i].salahs[salah] = "late";
               }
             }
           }
         }
-        return [...copy];
+        return copy;
       });
+      //   setIsBeingRemoved(null);
+      //   }, 500);
     } catch (error) {
       console.error(error);
     } finally {
@@ -94,57 +101,46 @@ MissedPrayersListBottomSheetProps) => {
     }
   };
 
-  const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
-    const date = Object.keys(restructuredMissedSalahList[index])[0];
-    const salah = Object.values(restructuredMissedSalahList[index])[0];
-    return (
-      <div
-        style={{
-          ...style,
-        }}
-        className={` pb-5 whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
-      >
-        <div
-          key={`${date}-${index}`}
-          className="bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-1 rounded-2xl"
-        >
-          <div>{createLocalisedDate(date)[1]}</div>
-          <div>{salah}</div>
-          <button
-            className=""
-            onClick={() => {
-              modifySalahStatusInDB(date, salah);
-            }}
-          >
-            <CiCircleCheck className="text-4xl" />{" "}
-          </button>
-        </div>
+  const [isBeingRemoved, setIsBeingRemoved] = useState<Number | undefined>();
 
-        {/* {salahs.map((salah, index) => {
-          return (
-            <div
-              key={`${date}-${salah}-${index}`}
-              onClick={() => {
-                console.log(date, salah);
-              }}
-              className="flex justify-between px-4 py-8 mx-3 my-1 bg-gray-800 rounded-2xl"
-            >
-              <div>{createLocalisedDate(date)[1]}</div>
-              <div>{salah}</div>
-              <button
-                className=""
-                onClick={() => {
-                  modifySalahStatusInDB(date, salah);
-                }}
-              >
-                <CiCircleCheck className="text-4xl" />{" "}
-              </button>
-            </div>
-          );
-        })} */}
-      </div>
-    );
-  };
+  //   const Row = ({ index, style }: { index: number; style: CSSProperties }) => {
+  // const date = Object.keys(restructuredMissedSalahList[index])[0];
+  // const salah = Object.values(restructuredMissedSalahList[index])[0];
+  // return (
+  //   <motion.div
+  //     layout
+  //     key={index}
+  //     initial={{ opacity: 0, x: -50 }}
+  //     animate={{ opacity: 1, x: 0 }}
+  //     exit={{ opacity: 0, x: 50 }} // Exit animation
+  //     transition={{ duration: 0.3 }}
+  //     ref={rowRef}
+  //     style={{
+  //       ...style,
+  //     }}
+  //     className={`${
+  //       isBeingRemoved === index ? "removing-row" : ""
+  //     } pb-5 whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
+  //   >
+  //     <div
+  //       key={`${date}-${index}`}
+  //       className="bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-1 rounded-2xl"
+  //     >
+  //       <div>{createLocalisedDate(date)[1]}</div>
+  //       <div>{salah}</div>
+  //       <button
+  //         className=""
+  //         onClick={() => {
+  //           setIsBeingRemoved(index);
+  //           modifySalahStatusInDB(date, salah);
+  //         }}
+  //       >
+  //         <CiCircleCheck className="text-4xl" />{" "}
+  //       </button>
+  //     </div>
+  //   </motion.div>
+  // );
+  //   };
 
   return (
     <section>
@@ -166,21 +162,53 @@ MissedPrayersListBottomSheetProps) => {
                   You have {getMissedSalahCount(missedSalahList)} Salah to make
                   up for
                 </h1>
-                <AutoSizer disableHeight>
-                  {({ width }) => (
-                    <List
-                      className=""
-                      // ! Re-check the below hardcoded height value, could cause issues depending on device size
-                      height={1000}
-                      itemCount={Object.entries(missedSalahList).length}
-                      itemSize={110}
-                      layout="vertical"
-                      width={width}
+
+                {restructuredMissedSalahList.map((item, index) => {
+                  item;
+                  const date = Object.keys(
+                    restructuredMissedSalahList[index]
+                  )[0];
+                  const salah = Object.values(
+                    restructuredMissedSalahList[index]
+                  )[0];
+                  return (
+                    <div
+                      key={`${date}-${index}`}
+                      className={`${
+                        isBeingRemoved === index ? "removing-row" : ""
+                      } bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-1 rounded-2xl`}
                     >
-                      {Row}
-                    </List>
-                  )}
-                </AutoSizer>
+                      <div>{createLocalisedDate(date)[1]}</div>
+                      <div>{salah}</div>
+                      <button
+                        className=""
+                        onClick={() => {
+                          setIsBeingRemoved(index);
+                          modifySalahStatusInDB(date, salah);
+                        }}
+                      >
+                        <CiCircleCheck className="text-4xl" />{" "}
+                      </button>
+                    </div>
+                  );
+                })}
+                {/* <AnimatePresence>
+                  <AutoSizer disableHeight>
+                    {({ width }) => (
+                      <List
+                        className=""
+                        // ! Re-check the below hardcoded height value, could cause issues depending on device size
+                        height={800}
+                        itemCount={Object.entries(missedSalahList).length}
+                        itemSize={110}
+                        layout="vertical"
+                        width={width}
+                      >
+                        {Row}
+                      </List>
+                    )}
+                  </AutoSizer>
+                </AnimatePresence> */}
               </section>{" "}
             </Sheet.Scroller>
           </Sheet.Content>
@@ -192,3 +220,37 @@ MissedPrayersListBottomSheetProps) => {
 };
 
 export default MissedPrayersListBottomSheet;
+
+// Below is to test what performance is like with a thousand missed prayers being rendered
+//  const items = Array.from({ length: 1000 }, (_, i) => `Item ${i + 1}`);
+
+// return (
+//     <div>
+//       {items.map((_, index) => (
+//         <div
+//           key={index}
+//           style={{ padding: "8px", borderBottom: "1px solid #ccc" }}
+//         >
+//           <div
+//             className="flex justify-between"
+//             key={index}
+//             style={{
+//               padding: "8px",
+//               borderBottom: "1px solid #ccc",
+//             }}
+//           >
+//             <div>Date</div>
+//             <div>{"salah"}</div>
+//             <button
+//               className=""
+//               onClick={() => {
+//                 setIsBeingRemoved(index);
+//                 modifySalahStatusInDB(date, salah);
+//               }}
+//             ></button>
+//             <CiCircleCheck className="text-4xl" />{" "}
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//     );

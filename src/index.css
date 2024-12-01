@@ -93,6 +93,23 @@ body {
   }
 }
 
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+.removing-row {
+  /* opacity: 0;
+  transform: translateX(-100%); */
+  transition: slideOut 0.5s;
+}
+
 .prayer-status-color-box {
   animation: fadeIn 0.5s ease forwards;
 }
