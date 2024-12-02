@@ -550,26 +550,27 @@ const App = () => {
     <BrowserRouter>
       <section className="app">
         <section className="fixed h-[9vh] z-20 flex justify-between w-full py-5 text-center header-wrap">
-          {getMissedSalahCount(missedSalahList) > 0 && (
-            <div
-              className="flex items-center p-1 ml-2 bg-gray-800 rounded-lg"
-              onClick={() => {
-                if (isMultiEditMode) {
-                  return;
-                }
-                setShowMissedPrayersSheet(true);
+          <div
+            className={`${
+              getMissedSalahCount(missedSalahList) > 0 ? "visible" : "invisible"
+            } flex items-center p-1 ml-2 bg-gray-800 rounded-lg`}
+            onClick={() => {
+              if (isMultiEditMode) {
+                return;
+              }
+              setShowMissedPrayersSheet(true);
+            }}
+          >
+            <p
+              style={{
+                backgroundColor: prayerStatusColorsHexCodes["missed"],
               }}
-            >
-              <p
-                style={{
-                  backgroundColor: prayerStatusColorsHexCodes["missed"],
-                }}
-                // ${prayerTableIndividualSquareStyles}
-                className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
-              ></p>
-              <p className="text-xs">{getMissedSalahCount(missedSalahList)}</p>
-            </div>
-          )}
+              // ${prayerTableIndividualSquareStyles}
+              className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
+            ></p>
+            <p className="text-xs">{getMissedSalahCount(missedSalahList)}</p>
+          </div>
+
           <h1 className="">{heading}</h1>
           <div className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}></div>
           {/* <p>hi</p> */}
