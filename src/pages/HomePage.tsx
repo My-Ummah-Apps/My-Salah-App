@@ -1,4 +1,4 @@
-import MissedPrayersListBottomSheet from "../components/BottomSheets/MissedPrayersListBottomSheet";
+import BottomSheetMissedPrayersList from "../components/BottomSheets/BottomSheetMissedPrayersList";
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 import {
   SalahRecordsArrayType,
@@ -83,7 +83,7 @@ const HomePage = ({
         <div>Loading Data...</div>
       )}
       {/* )} */}
-      <MissedPrayersListBottomSheet
+      <BottomSheetMissedPrayersList
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
@@ -91,7 +91,7 @@ const HomePage = ({
         setShowMissedPrayersSheet={setShowMissedPrayersSheet}
         showMissedPrayersSheet={showMissedPrayersSheet}
         missedSalahList={missedSalahList}
-        setSelectedSalahAndDate={setSelectedSalahAndDate}
+        // setSelectedSalahAndDate={setSelectedSalahAndDate}
         // setShowUpdateStatusModal={setShowUpdateStatusModal}
       />
     </section>

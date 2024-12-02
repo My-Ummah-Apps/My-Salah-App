@@ -1,7 +1,7 @@
 import Sheet from "react-modal-sheet";
 // import { FixedSizeList as List } from "react-window";
 // import AutoSizer from "react-virtualized-auto-sizer";
-import { useState } from "react";
+
 import { CiCircleCheck } from "react-icons/ci";
 import {
   DBConnectionStateType,
@@ -9,7 +9,6 @@ import {
   restructuredMissedSalahListProp,
   SalahNamesType,
   SalahRecordsArrayType,
-  SelectedSalahAndDateObjType,
 } from "../../types/types";
 import {
   createLocalisedDate,
@@ -19,7 +18,6 @@ import {
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { AnimatePresence, motion } from "framer-motion";
-// import { AnimatePresence, motion } from "framer-motion";
 
 interface MissedPrayersListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -33,24 +31,21 @@ interface MissedPrayersListBottomSheetProps {
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedPrayersSheet: boolean;
   missedSalahList: MissedSalahObjType;
-  setSelectedSalahAndDate: React.Dispatch<
-    React.SetStateAction<SelectedSalahAndDateObjType>
-  >;
+  //   setSelectedSalahAndDate: React.Dispatch<
+  //     React.SetStateAction<SelectedSalahAndDateObjType>
+  //   >;
   //   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MissedPrayersListBottomSheet = ({
+const BottomSheetMissedPrayersList = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   setShowMissedPrayersSheet,
   showMissedPrayersSheet,
   missedSalahList,
-  setSelectedSalahAndDate,
+  //   setSelectedSalahAndDate,
   setFetchedSalahData,
-}: //   fetchedSalahData,
-//   setShowUpdateStatusModal,
-MissedPrayersListBottomSheetProps) => {
-  //   const rowRef = useRef(null);
+}: MissedPrayersListBottomSheetProps) => {
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
   for (let obj in missedSalahList) {
     missedSalahList[obj].forEach((item) => {
@@ -63,7 +58,8 @@ MissedPrayersListBottomSheetProps) => {
     date: string,
     salahName: SalahNamesType
   ) => {
-    setSelectedSalahAndDate({ [date]: [salahName] });
+    // ? setSelectedSalahAndDate is here because originally the prayer status bottom sheet was being triggered for users to then update the salah status, this has been removed and functionality has been streamlined however leaving this here as this may be added back in at some point as an additional option
+    // setSelectedSalahAndDate({ [date]: [salahName] });
     // setShowUpdateStatusModal(true);
     try {
       if (!dbConnection.current) {
@@ -157,7 +153,7 @@ MissedPrayersListBottomSheetProps) => {
   );
 };
 
-export default MissedPrayersListBottomSheet;
+export default BottomSheetMissedPrayersList;
 
 // Below is to test what performance is like with a thousand missed prayers being rendered
 //  const items = Array.from({ length: 1000 }, (_, i) => `Item ${i + 1}`);

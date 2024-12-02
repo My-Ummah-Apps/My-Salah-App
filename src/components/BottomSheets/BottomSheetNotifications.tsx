@@ -18,7 +18,7 @@ import {
   TWEEN_CONFIG,
 } from "../../utils/constants";
 
-const NotificationsBottomSheet = ({
+const BottomSheetNotifications = ({
   setShowNotificationsModal,
   showNotificationsModal,
   modifyDataInUserPreferencesTable,
@@ -229,4 +229,4 @@ const NotificationsBottomSheet = ({
   );
 };
 
-export default NotificationsBottomSheet;
+export default BottomSheetNotifications;

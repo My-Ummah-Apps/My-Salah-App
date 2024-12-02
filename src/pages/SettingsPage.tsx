@@ -16,7 +16,7 @@ import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 // import { DBConnectionStateType } from "../types/types";
 
 import { MdOutlineChevronRight } from "react-icons/md";
-import NotificationsBottomSheet from "../components/BottomSheets/NotificationsBottomSheet";
+import BottomSheetNotifications from "../components/BottomSheets/BottomSheetNotifications";
 import { SQLiteConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { showToast } from "../utils/constants";
@@ -217,7 +217,7 @@ const SettingsPage = ({
             </p>
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
-          <NotificationsBottomSheet
+          <BottomSheetNotifications
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
             setShowNotificationsModal={setShowNotificationsModal}
             showNotificationsModal={showNotificationsModal}

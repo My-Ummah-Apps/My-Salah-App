@@ -47,7 +47,7 @@ interface PrayerStatusBottomSheetProps {
   isMultiEditMode: boolean;
 }
 
-const PrayerStatusBottomSheet = ({
+const BottomSheetPrayerStatus = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
@@ -685,4 +685,4 @@ const PrayerStatusBottomSheet = ({
   );
 };
 
-export default PrayerStatusBottomSheet;
+export default BottomSheetPrayerStatus;
