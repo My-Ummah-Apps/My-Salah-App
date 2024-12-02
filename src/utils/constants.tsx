@@ -1,7 +1,7 @@
 import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { format, parse } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 import { MissedSalahObjType, SalahNamesType } from "../types/types";
 
 export const TWEEN_CONFIG = {
@@ -83,4 +83,9 @@ export const prayerTableIndividualSquareStyles = `w-[1.5rem] h-[1.5rem] rounded-
 
 export const getMissedSalahCount = (missedSalahList: MissedSalahObjType) => {
   return Object.values(missedSalahList).flat().length;
+};
+
+export const isValidDate = (date: string): boolean => {
+  const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+  return isValid(parsedDate);
 };

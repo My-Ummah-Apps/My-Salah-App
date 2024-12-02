@@ -18,6 +18,7 @@ import {
 import { DBConnectionStateType } from "../../types/types";
 import {
   createLocalisedDate,
+  isValidDate,
   prayerStatusColorsHexCodes,
   reasonsStyles,
   salahNamesArr,
@@ -166,11 +167,9 @@ const BottomSheetPrayerStatus = ({
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
-        const parsedDate = parse(date, "yyyy-MM-dd", new Date());
-
-        if (!isValid(parsedDate)) {
+        if (!isValidDate(date)) {
           console.error(
-            `Date is not valid: ${parsedDate},  skipping this iteration...`
+            `Date is not valid: ${date},  skipping this iteration...`
           );
           continue;
         }
