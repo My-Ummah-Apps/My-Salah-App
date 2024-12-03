@@ -38,18 +38,12 @@ const StatsPage = ({
     setHeading("Stats");
   }, []);
 
-  let salahInJamaahDatesOverall: string[] = [];
-  let salahMaleAloneDatesOverall: string[] = [];
-  let salahFemaleAloneDatesOverall: string[] = [];
-  let salahExcusedDatesOverall: string[] = [];
-  let salahLateDatesOverall: string[] = [];
-  let salahMissedDatesOverall: string[] = [];
-
   // const [showDonutChart, setShowDonutChart] = useState(false);
+  let salahStatusStatistics;
   let showDonutChart;
   let salahStatusesOverallArr: SalahStatusType[] = [];
   // TODO: Test the below code to ensure stats are being calculated correctly
-  const calculateOverallStats = () => {
+  const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
       Object.values(fetchedSalahData[i].salahs).forEach((status) => {
         if (status !== "" && typeof status === "string") {
@@ -57,30 +51,23 @@ const StatsPage = ({
         }
       });
     }
-
-    const filterSalahStatuses = (salahStatus: string) => {
-      return salahStatusesOverallArr.filter((status) => status === salahStatus);
-    };
-
-    salahInJamaahDatesOverall = filterSalahStatuses("group");
-    salahMaleAloneDatesOverall = filterSalahStatuses("male-alone");
-    salahFemaleAloneDatesOverall = filterSalahStatuses("female-alone");
-    salahExcusedDatesOverall = filterSalahStatuses("excused");
-    salahLateDatesOverall = filterSalahStatuses("late");
-    salahMissedDatesOverall = filterSalahStatuses("missed");
   };
 
-  calculateOverallStats();
+  getAllSalahStatuses();
+
+  const filterSalahStatuses = (salahStatus: string) => {
+    return salahStatusesOverallArr.filter((status) => status === salahStatus);
+  };
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
-  const salahStatusStatistics = {
-    salahInJamaahDatesOverall: salahInJamaahDatesOverall.length,
-    salahMaleAloneDatesOverall: salahMaleAloneDatesOverall.length,
-    salahFemaleAloneDatesOverall: salahFemaleAloneDatesOverall.length,
-    salahExcusedDatesOverall: salahExcusedDatesOverall.length,
-    salahMissedDatesOverall: salahMissedDatesOverall.length,
-    salahLateDatesOverall: salahLateDatesOverall.length,
+  salahStatusStatistics = {
+    salahInJamaahDatesOverall: filterSalahStatuses("group").length,
+    salahMaleAloneDatesOverall: filterSalahStatuses("male-alone").length,
+    salahFemaleAloneDatesOverall: filterSalahStatuses("female-alone").length,
+    salahExcusedDatesOverall: filterSalahStatuses("excused").length,
+    salahMissedDatesOverall: filterSalahStatuses("missed").length,
+    salahLateDatesOverall: filterSalahStatuses("late").length,
   };
 
   for (let key in salahStatusStatistics) {

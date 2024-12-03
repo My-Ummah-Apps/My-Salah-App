@@ -26,7 +26,7 @@ import {
   validSalahStatuses,
 } from "../../utils/constants";
 import { sheetHeaderHeight } from "../../utils/constants";
-import { isToday, isValid, isYesterday, parse } from "date-fns";
+import { isToday, isYesterday, parse } from "date-fns";
 
 interface PrayerStatusBottomSheetProps {
   dbConnection: any;

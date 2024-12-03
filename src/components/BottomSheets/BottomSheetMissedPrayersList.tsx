@@ -14,6 +14,7 @@ import {
   createLocalisedDate,
   //   createLocalisedDate,
   getMissedSalahCount,
+  isValidDate,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -64,6 +65,11 @@ const BottomSheetMissedPrayersList = ({
     try {
       if (!dbConnection.current) {
         throw new Error("dbConnection.current does not exist");
+      }
+      if (!isValidDate(date)) {
+        throw new Error(
+          `Unable to insert into database, date is not valid: ${date}`
+        );
       }
       await checkAndOpenOrCloseDBConnection("open");
       const query = `UPDATE salahDataTable SET salahStatus = ? WHERE date = ? AND salahName = ?`;
@@ -116,7 +122,7 @@ const BottomSheetMissedPrayersList = ({
                   to make up
                 </h1>
                 <AnimatePresence>
-                  {restructuredMissedSalahList.map((item, index) => {
+                  {restructuredMissedSalahList.map((item) => {
                     const date = Object.keys(item)[0];
                     const salah = Object.values(item)[0];
                     return (
@@ -124,20 +130,23 @@ const BottomSheetMissedPrayersList = ({
                         layout
                         initial={{ x: 0 }}
                         animate={{ x: 0 }}
-                        exit={{ x: "-100%", opacity: 0 }} // Slides out to the left, opacity stays at 1
+                        exit={{ x: "-100%", opacity: 0 }}
                         transition={{ duration: 0.2 }}
                         key={`${date}-${salah}`}
-                        className={` bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-3 rounded-2xl`}
+                        className={`bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-3 rounded-2xl`}
                       >
                         <div>{createLocalisedDate(date)[1]}</div>
                         <div>{salah}</div>
                         <button
-                          className=""
+                          className="rounded-full px-6bg-gray-800"
                           onClick={() => {
                             modifySalahStatusInDB(date, salah);
                           }}
                         >
-                          <CiCircleCheck className="text-4xl" />{" "}
+                          <section className="flex items-center justify-between w-full">
+                            <p className="">Prayed</p>
+                            <CiCircleCheck className="text-2xl" />{" "}
+                          </section>
                         </button>
                       </motion.div>
                     );
