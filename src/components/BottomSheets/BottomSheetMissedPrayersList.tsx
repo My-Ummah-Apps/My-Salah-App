@@ -2,7 +2,7 @@ import Sheet from "react-modal-sheet";
 // import { FixedSizeList as List } from "react-window";
 // import AutoSizer from "react-virtualized-auto-sizer";
 
-import { CiCircleCheck } from "react-icons/ci";
+// import { FaCheck } from "react-icons/fa6";
 import {
   DBConnectionStateType,
   MissedSalahObjType,
@@ -15,10 +15,12 @@ import {
   //   createLocalisedDate,
   getMissedSalahCount,
   isValidDate,
+  prayerStatusColorsHexCodes,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 interface MissedPrayersListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -47,13 +49,19 @@ const BottomSheetMissedPrayersList = ({
   //   setSelectedSalahAndDate,
   setFetchedSalahData,
 }: MissedPrayersListBottomSheetProps) => {
+  // const [boxColor, setBoxColor] = useState(
+  //   prayerStatusColorsHexCodes["missed"]
+  // );
+  const [isClickedItem, setIsClickedItem] = useState<string>();
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
   for (let obj in missedSalahList) {
     missedSalahList[obj].forEach((item) => {
       restructuredMissedSalahList.push({ [obj]: item });
     });
   }
-  console.log("restructuredMissedSalahList: ", restructuredMissedSalahList);
+  useEffect(() => {
+    console.log("isClickedItem: ", isClickedItem);
+  }, [isClickedItem]);
 
   const modifySalahStatusInDB = async (
     date: string,
@@ -77,6 +85,8 @@ const BottomSheetMissedPrayersList = ({
 
       await dbConnection.current.run(query, values);
 
+      // setBoxColor(prayerStatusColorsHexCodes["late"]);
+
       setFetchedSalahData((prev) => {
         const copy = [...prev];
         for (let i = 0; i < prev.length; i++) {
@@ -90,6 +100,9 @@ const BottomSheetMissedPrayersList = ({
         }
         return copy;
       });
+      // setTimeout(() => {
+      //   setIsClickedItem(null);
+      // }, 200);
     } catch (error) {
       console.error(error);
     } finally {
@@ -131,23 +144,50 @@ const BottomSheetMissedPrayersList = ({
                         initial={{ x: 0 }}
                         animate={{ x: 0 }}
                         exit={{ x: "-100%", opacity: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ delay: 0.4, duration: 0.4 }}
                         key={`${date}-${salah}`}
-                        className={`bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-3 rounded-2xl`}
+                        className={`bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
                       >
-                        <div>{createLocalisedDate(date)[1]}</div>
-                        <div>{salah}</div>
-                        <button
-                          className="rounded-full px-6bg-gray-800"
-                          onClick={() => {
-                            modifySalahStatusInDB(date, salah);
-                          }}
-                        >
-                          <section className="flex items-center justify-between w-full">
-                            <p className="">Prayed</p>
-                            <CiCircleCheck className="text-2xl" />{" "}
-                          </section>
-                        </button>
+                        <section className="flex items-center justify-between">
+                          <p
+                          // style={{
+                          //   textDecoration:
+                          //     isClickedItem === `${date}-${salah}`
+                          //       ? "line-through"
+                          //       : "",
+                          // }}
+                          >
+                            {salah}
+                          </p>
+                          <div
+                            style={{
+                              backgroundColor:
+                                isClickedItem === `${date}-${salah}`
+                                  ? prayerStatusColorsHexCodes["late"]
+                                  : prayerStatusColorsHexCodes["missed"],
+                            }}
+                            className={`w-[1.3rem] h-[1.3rem] rounded-md`}
+                          ></div>
+                        </section>
+                        <section className="flex items-center justify-between pt-4 mt-4 border-t-[1px] border-y-stone-700">
+                          {" "}
+                          <p className="text-sm opacity-80">
+                            {createLocalisedDate(date)[1]}
+                          </p>
+                          <button
+                            className="rounded-full bg-[rgb(50,50,50)]"
+                            onClick={() => {
+                              modifySalahStatusInDB(date, salah);
+                              // const test = `${date}-${salah}`
+                              setIsClickedItem(`${date}-${salah}`);
+                            }}
+                          >
+                            <section className="flex items-center justify-between w-full px-3 py-2 text-sm">
+                              {/* <FaCheck className="font-thin" />{" "} */}
+                              <p className="">Mark As Prayed</p>
+                            </section>
+                          </button>
+                        </section>
                       </motion.div>
                     );
                   })}
