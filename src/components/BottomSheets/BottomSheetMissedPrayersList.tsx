@@ -49,9 +49,8 @@ const BottomSheetMissedPrayersList = ({
   //   setSelectedSalahAndDate,
   setFetchedSalahData,
 }: MissedPrayersListBottomSheetProps) => {
-  // const [boxColor, setBoxColor] = useState(
-  //   prayerStatusColorsHexCodes["missed"]
-  // );
+  useEffect(() => {}, []);
+
   const [isClickedItem, setIsClickedItem] = useState<string>();
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
   for (let obj in missedSalahList) {
@@ -59,9 +58,6 @@ const BottomSheetMissedPrayersList = ({
       restructuredMissedSalahList.push({ [obj]: item });
     });
   }
-  useEffect(() => {
-    console.log("isClickedItem: ", isClickedItem);
-  }, [isClickedItem]);
 
   const modifySalahStatusInDB = async (
     date: string,
@@ -144,7 +140,11 @@ const BottomSheetMissedPrayersList = ({
                         initial={{ x: 0 }}
                         animate={{ x: 0 }}
                         exit={{ x: "-100%", opacity: 0 }}
-                        transition={{ delay: 0.4, duration: 0.4 }}
+                        transition={{
+                          delay: 0.3,
+                          duration: 0.2,
+                          layout: { duration: 0.2 },
+                        }}
                         key={`${date}-${salah}`}
                         className={`bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
                       >
@@ -184,7 +184,7 @@ const BottomSheetMissedPrayersList = ({
                           >
                             <section className="flex items-center justify-between w-full px-3 py-2 text-sm">
                               {/* <FaCheck className="font-thin" />{" "} */}
-                              <p className="">Mark As Prayed</p>
+                              <p className="">Mark As Done</p>
                             </section>
                           </button>
                         </section>

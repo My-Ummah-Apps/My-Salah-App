@@ -6,7 +6,6 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   getMissedSalahCount,
-  prayerStatusColorsHexCodes,
   sheetHeaderHeight,
 } from "./utils/constants";
 import {
@@ -37,6 +36,7 @@ import StatsPage from "./pages/StatsPage";
 import useSQLiteDB from "./utils/useSqLiteDB";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import MissedSalahCounter from "./components/Stats/MissedSalahCounter";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -549,31 +549,17 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
-        <section className="fixed h-[9vh] z-20 flex justify-between w-full py-5 text-center header-wrap">
-          <div
-            className={`${
-              getMissedSalahCount(missedSalahList) > 0 ? "visible" : "invisible"
-            } flex items-center p-1 ml-2 bg-gray-800 rounded-lg`}
-            onClick={() => {
-              if (isMultiEditMode) {
-                return;
-              }
-              setShowMissedPrayersSheet(true);
-            }}
-          >
-            <p
-              style={{
-                backgroundColor: prayerStatusColorsHexCodes["missed"],
-              }}
-              // ${prayerTableIndividualSquareStyles}
-              className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
-            ></p>
-            <p className="text-xs">{getMissedSalahCount(missedSalahList)}</p>
-          </div>
+        <section className="fixed h-[9vh] z-20 w-full py-5 header-wrap">
+          {getMissedSalahCount(missedSalahList) > 0 && heading === "Home" ? (
+            <MissedSalahCounter
+              setShowMissedPrayersSheet={setShowMissedPrayersSheet}
+              isMultiEditMode={isMultiEditMode}
+              missedSalahList={missedSalahList}
+            />
+          ) : null}
 
-          <h1 className="">{heading}</h1>
-          <div className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}></div>
-          {/* <p>hi</p> */}
+          <h1 className="text-center">{heading}</h1>
+          {/* <div className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}></div> */}
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
         </section>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
