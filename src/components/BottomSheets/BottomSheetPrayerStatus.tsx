@@ -161,6 +161,7 @@ const BottomSheetPrayerStatus = ({
     const salahDataToInsertIntoDB = [];
 
     try {
+      // ! Below request to open DB connection is potentially redundant since connection is already opened by the doesSalahAndDateExists function
       await checkAndOpenOrCloseDBConnection("open");
 
       const reasonsToInsert =

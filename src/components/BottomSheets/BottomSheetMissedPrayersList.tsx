@@ -34,10 +34,6 @@ interface MissedPrayersListBottomSheetProps {
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedPrayersSheet: boolean;
   missedSalahList: MissedSalahObjType;
-  //   setSelectedSalahAndDate: React.Dispatch<
-  //     React.SetStateAction<SelectedSalahAndDateObjType>
-  //   >;
-  //   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BottomSheetMissedPrayersList = ({
@@ -46,10 +42,33 @@ const BottomSheetMissedPrayersList = ({
   setShowMissedPrayersSheet,
   showMissedPrayersSheet,
   missedSalahList,
-  //   setSelectedSalahAndDate,
   setFetchedSalahData,
 }: MissedPrayersListBottomSheetProps) => {
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (!showMissedPrayersSheet) return;
+
+    const openDBConnection = async () => {
+      try {
+        await checkAndOpenOrCloseDBConnection("open");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const closeDBConnection = async () => {
+      try {
+        await checkAndOpenOrCloseDBConnection("close");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    openDBConnection();
+
+    return () => {
+      closeDBConnection();
+    };
+  }, [showMissedPrayersSheet]);
 
   const [isClickedItem, setIsClickedItem] = useState<string>();
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
@@ -63,51 +82,25 @@ const BottomSheetMissedPrayersList = ({
     date: string,
     salahName: SalahNamesType
   ) => {
-    // ? setSelectedSalahAndDate is here because originally the prayer status bottom sheet was being triggered for users to then update the salah status, this has been removed and functionality has been streamlined however leaving this here as this may be added back in at some point as an additional option
-    // setSelectedSalahAndDate({ [date]: [salahName] });
-    // setShowUpdateStatusModal(true);
-    try {
-      if (!dbConnection.current) {
-        throw new Error("dbConnection.current does not exist");
-      }
-      if (!isValidDate(date)) {
-        throw new Error(
-          `Unable to insert into database, date is not valid: ${date}`
-        );
-      }
-      await checkAndOpenOrCloseDBConnection("open");
-      const query = `UPDATE salahDataTable SET salahStatus = ? WHERE date = ? AND salahName = ?`;
-      const values = ["late", date, salahName];
-
-      await dbConnection.current.run(query, values);
-
-      // setBoxColor(prayerStatusColorsHexCodes["late"]);
-
-      setFetchedSalahData((prev) => {
-        const copy = [...prev];
-        for (let i = 0; i < prev.length; i++) {
-          if (copy[i].date === date) {
-            for (let salah in copy[i].salahs) {
-              if (salah === salahName) {
-                copy[i].salahs[salah] = "late";
-              }
+    const query = `UPDATE salahDataTable SET salahStatus = ? WHERE date = ? AND salahName = ?`;
+    const values = ["late", date, salahName];
+    if (!dbConnection.current) {
+      throw new Error("dbConnection.current does not exist");
+    }
+    await dbConnection.current.run(query, values);
+    setFetchedSalahData((prev) => {
+      const copy = [...prev];
+      for (let i = 0; i < prev.length; i++) {
+        if (copy[i].date === date) {
+          for (let salah in copy[i].salahs) {
+            if (salah === salahName) {
+              copy[i].salahs[salah] = "late";
             }
           }
         }
-        return copy;
-      });
-      // setTimeout(() => {
-      //   setIsClickedItem(null);
-      // }, 200);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      try {
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
       }
-    }
+      return copy;
+    });
   };
 
   return (
