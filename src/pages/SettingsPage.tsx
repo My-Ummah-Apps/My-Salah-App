@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 // import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Switch from "react-ios-switch";
-import Modal from "react-modal";
+
 // import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
@@ -257,7 +257,7 @@ const SettingsPage = ({
               {"Missed Salah Counter"}
             </p>
             <p className=" pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {"Toggle Missed Salah Counter"}
+              {"Show Missed Salah Counter"}
             </p>
           </div>
           <Switch

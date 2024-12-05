@@ -2,7 +2,6 @@ import Sheet from "react-modal-sheet";
 // import { FixedSizeList as List } from "react-window";
 // import AutoSizer from "react-virtualized-auto-sizer";
 
-// import { FaCheck } from "react-icons/fa6";
 import {
   DBConnectionStateType,
   MissedSalahObjType,
@@ -14,7 +13,6 @@ import {
   createLocalisedDate,
   //   createLocalisedDate,
   getMissedSalahCount,
-  isValidDate,
   prayerStatusColorsHexCodes,
   TWEEN_CONFIG,
 } from "../../utils/constants";

@@ -139,7 +139,7 @@ const App = () => {
         `SELECT * FROM salahDataTable`
       );
 
-      const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "0")`;
+      const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
       await dbConnection.current.run(query);
 
       let DBResultPreferences = await dbConnection.current.query(
@@ -562,7 +562,9 @@ const App = () => {
     <BrowserRouter>
       <section className="app">
         <section className="fixed h-[9vh] z-20 w-full py-5 header-wrap">
-          {getMissedSalahCount(missedSalahList) > 0 && heading === "Home" ? (
+          {getMissedSalahCount(missedSalahList) > 0 &&
+          heading === "Home" &&
+          userPreferences.showMissedSalahCount === "1" ? (
             <MissedSalahCounter
               setShowMissedPrayersSheet={setShowMissedPrayersSheet}
               isMultiEditMode={isMultiEditMode}
