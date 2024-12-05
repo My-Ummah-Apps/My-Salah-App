@@ -119,7 +119,7 @@ const BottomSheetMissedPrayersList = ({
             {" "}
             <Sheet.Scroller>
               <section className="text-white">
-                <h1 className="mx-2 my-4 text-2xl text-center">
+                <h1 className="mx-2 my-4 text-lg text-center">
                   You have {getMissedSalahCount(missedSalahList)} missed Salah
                   to make up
                 </h1>

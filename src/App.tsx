@@ -59,7 +59,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 const App = () => {
-  // console.log("APP.TSX HAS RENDERED...");
   const [showChangelogModal, setShowChangelogModal] = useState(false);
   const [showMissedPrayersSheet, setShowMissedPrayersSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<MissedSalahObjType>(

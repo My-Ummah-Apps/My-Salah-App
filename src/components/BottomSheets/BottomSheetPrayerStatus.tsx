@@ -101,14 +101,6 @@ const BottomSheetPrayerStatus = ({
     }
   };
 
-  const resetStatusReasonsNotes = () => {
-    setSalahStatus("");
-    setSelectedReasons([]);
-    setNotes("");
-  };
-
-  // const iconStyles = "inline-block rounded-md text-white w-[24px] h-[24px]";
-
   const doesSalahAndDateExists = async (): Promise<boolean> => {
     const selectedDate = Object.keys(selectedSalahAndDate).toString();
     const selectedSalah = Object.values(selectedSalahAndDate).toString();
@@ -299,10 +291,12 @@ const BottomSheetPrayerStatus = ({
     });
   }
 
-  const onSheetClose = () => {
+  const onSheetCloseCleanup = () => {
     setShowUpdateStatusModal(false);
     resetSelectedSalahAndDate();
-    resetStatusReasonsNotes();
+    setSalahStatus("");
+    setSelectedReasons([]);
+    setNotes("");
 
     if (isMultiEditMode === true) {
       setIsMultiEditMode(false);
@@ -328,7 +322,7 @@ const BottomSheetPrayerStatus = ({
         disableDrag={false}
         onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
-        onClose={onSheetClose}
+        onClose={onSheetCloseCleanup}
         detent="content-height"
         // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
         tweenConfig={TWEEN_CONFIG}
@@ -592,9 +586,7 @@ const BottomSheetPrayerStatus = ({
                   onClick={async () => {
                     if (salahStatus) {
                       await addOrModifySalah();
-                      resetSelectedSalahAndDate();
-                      setIsMultiEditMode(false);
-                      setShowUpdateStatusModal(false);
+                      onSheetCloseCleanup();
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
@@ -609,7 +601,7 @@ const BottomSheetPrayerStatus = ({
         </Sheet.Container>
         <Sheet.Backdrop
           // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
-          onTap={onSheetClose}
+          onTap={onSheetCloseCleanup}
         />
       </Sheet>
       <div
