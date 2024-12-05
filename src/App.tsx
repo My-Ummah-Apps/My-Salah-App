@@ -403,10 +403,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(userPreferences);
-  }, [userPreferences]);
-
   // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
   let userStartDateForSalahTrackingFunc: string;
   useEffect(() => {
@@ -489,6 +485,11 @@ const App = () => {
       console.error(error);
     } finally {
       try {
+        // const test = dbConnection.current.query(
+        //   "SELECT * from userPreferencesTable"
+        // );
+        // console.log("UPDATED PREFERENCES FROM DB: ", (await test).values);
+
         await checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.error(error);

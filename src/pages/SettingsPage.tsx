@@ -58,7 +58,12 @@ const SettingsPage = ({
   const importDBRef = useRef<HTMLInputElement | null>(null);
   const diaglogElement = useRef<HTMLDialogElement | null>(null);
   const [dialogElementText, setDialogElementText] = useState<string>("");
-
+  const [
+    isMissedSalahCounterOptionChecked,
+    setIsMissedSalahCounterOptionChecked,
+  ] = useState<boolean>(
+    userPreferences.showMissedSalahCount === "0" ? false : true
+  );
   const triggerInput = () => {
     if (importDBRef.current) {
       importDBRef.current.click();
@@ -196,8 +201,29 @@ const SettingsPage = ({
     window.location.href = url;
   };
 
-  const [showModal, setShowModal] = useState(false);
-  setShowModal;
+  useEffect(() => {
+    console.log("userPreferences: ", userPreferences.showMissedSalahCount);
+  }, [userPreferences]);
+
+  useEffect(() => {
+    const updateStateAndDB = async () => {
+      if (isMissedSalahCounterOptionChecked) {
+        setUserPreferences((userPreferences) => ({
+          ...userPreferences,
+          showMissedSalahCount: "1",
+        }));
+        modifyDataInUserPreferencesTable("1", "showMissedSalahCount");
+      } else {
+        setUserPreferences((userPreferences) => ({
+          ...userPreferences,
+          showMissedSalahCount: "0",
+        }));
+        modifyDataInUserPreferencesTable("0", "showMissedSalahCount");
+      }
+    };
+
+    updateStateAndDB();
+  }, [isMissedSalahCounterOptionChecked]);
 
   return (
     <section className={pageStyles}>
@@ -209,11 +235,9 @@ const SettingsPage = ({
           }}
         >
           <div className="mx-2">
-            <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] text-lg">
-              {"Notifications"}
-            </p>
-            <p className="support-sub-text pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {"Notification time"}
+            <p className="pt-[0.3rem] pb-[0.1rem] text-lg">{"Notifications"}</p>
+            <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+              {"Toggle Notifications"}
             </p>
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
@@ -223,6 +247,25 @@ const SettingsPage = ({
             showNotificationsModal={showNotificationsModal}
             setUserPreferences={setUserPreferences}
             userPreferences={userPreferences}
+          />
+        </div>{" "}
+        <div
+          className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+        >
+          <div className="mx-2">
+            <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
+              {"Missed Salah Counter"}
+            </p>
+            <p className=" pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+              {"Toggle Missed Salah Counter"}
+            </p>
+          </div>
+          <Switch
+            onColor="#3b82f6"
+            checked={isMissedSalahCounterOptionChecked}
+            onChange={async () => {
+              setIsMissedSalahCounterOptionChecked((prev) => !prev);
+            }}
           />
         </div>{" "}
         <div className="my-5">
@@ -316,13 +359,6 @@ const SettingsPage = ({
             // handleOpenModal4();
           }}
         /> */}
-        <Modal
-          //   style={modalStyles}
-          isOpen={showModal}
-          //   onRequestClose={handleCloseModal2}
-          closeTimeoutMS={250}
-          contentLabel="Modal #2 Global Style Override Example"
-        ></Modal>
         {/* <NotificationOptions
                     setMorningNotification={setMorningNotification}
                     morningNotification={morningNotification}

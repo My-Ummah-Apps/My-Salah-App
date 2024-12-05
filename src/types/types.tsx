@@ -12,6 +12,21 @@ export interface userPreferencesType {
   showMissedSalahCount: string;
 }
 
+export type PreferenceType =
+  | "userStartDate"
+  | "userGender"
+  | "dailyNotification"
+  | "dailyNotificationTime"
+  | "haptics"
+  | "reasons"
+  | "showReasons"
+  | "showMissedSalahCount";
+
+export type PreferenceObjType = {
+  preferenceName: PreferenceType;
+  preferenceValue: string;
+};
+
 export type SalahStatusType =
   | "group"
   | "male-alone"
@@ -38,20 +53,6 @@ export type SalahRecordsArrayType = SalahRecordType[];
 
 export type SalahDataType = {
   [date: string]: string[];
-};
-
-export type PreferenceType =
-  | "userStartDate"
-  | "userGender"
-  | "dailyNotification"
-  | "dailyNotificationTime"
-  | "haptics"
-  | "reasons"
-  | "showReasons";
-
-export type PreferenceObjType = {
-  preferenceName: PreferenceType;
-  preferenceValue: string;
 };
 
 export type SalahNamesType = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";

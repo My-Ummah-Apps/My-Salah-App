@@ -180,19 +180,12 @@ const BottomSheetNotifications = ({
               <p>Turn on Daily Notification</p>{" "}
               <Switch
                 checked={dailyNotificationToggle}
-                className={undefined}
-                disabled={undefined}
                 handleColor="white"
-                name={undefined}
                 offColor="white"
                 onChange={() => {
                   handleNotificationPermissions();
                 }}
                 onColor="lightblue"
-                pendingOffColor={undefined}
-                pendingOnColor={undefined}
-                readOnly={undefined}
-                style={undefined}
               />
             </div>
 
