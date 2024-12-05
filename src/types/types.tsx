@@ -9,6 +9,7 @@ export interface userPreferencesType {
   dailyNotification: string;
   dailyNotificationTime: string;
   reasonsArray: string[];
+  showMissedSalahCount: string;
 }
 
 export type SalahStatusType =

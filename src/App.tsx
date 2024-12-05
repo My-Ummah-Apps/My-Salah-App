@@ -93,6 +93,7 @@ const App = () => {
     dailyNotification: "",
     dailyNotificationTime: "",
     reasonsArray: [],
+    showMissedSalahCount: "",
   });
 
   const {
@@ -137,24 +138,20 @@ const App = () => {
       const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`
       );
-      console.log("DBResultAllSalahData: ", DBResultAllSalahData.values);
+
+      const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "0")`;
+      await dbConnection.current.run(query);
 
       let DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
       );
 
-      //       const test = await dbConnection.current
-      //         .query(`SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='salahDataTable';
-      // `);
+      console.log("DBResultPreferences: ", DBResultPreferences);
 
       if (DBResultPreferences && DBResultPreferences.values) {
         // TODO: The below needs an additional check, as if the user does not select a gender and then relaunches the app, the gender prompt dissapears as values have been set and the length is no longer zero
-        // if (DBResultPreferences.values.length === 0) {
-        //   setShowIntroModal(true);
-        // }
+
         const userNotificationPermission = await checkNotificationPermissions();
-        // const pendingRes = await LocalNotifications.getPending();
-        // const notificationRes = await LocalNotifications.checkPermissions();
 
         const notificationValue =
           DBResultPreferences.values.length > 0
@@ -197,7 +194,7 @@ const App = () => {
               },
             ],
           });
-        }
+        } // * Up until here, remove once its confirmed that this issue (noted above) only occurs when app is being installed from Android Studio and not the Play Store
 
         if (
           userNotificationPermission !== "granted" &&
@@ -281,6 +278,7 @@ const App = () => {
 
       try {
         await checkAndOpenOrCloseDBConnection("open");
+
         if (dbConnection && dbConnection.current) {
           await dbConnection.current.run(insertQuery, params);
           const DBResultPreferencesQuery = await dbConnection.current.query(
@@ -334,6 +332,7 @@ const App = () => {
     const dailyNotificationRow = assignPreference("dailyNotification");
     const dailyNotificationTimeRow = assignPreference("dailyNotificationTime");
     const reasons = assignPreference("reasons");
+    const showMissedSalahCount = assignPreference("showMissedSalahCount");
 
     if (userGenderRow) {
       const gender = userGenderRow.preferenceValue as userGenderType;
@@ -393,7 +392,20 @@ const App = () => {
     } else {
       console.error("dailyNotificationTime row not found");
     }
+
+    if (showMissedSalahCount) {
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        showMissedSalahCount: showMissedSalahCount.preferenceValue,
+      }));
+    } else {
+      console.error("showMissedSalahCount row not found");
+    }
   };
+
+  useEffect(() => {
+    console.log(userPreferences);
+  }, [userPreferences]);
 
   // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
   let userStartDateForSalahTrackingFunc: string;
