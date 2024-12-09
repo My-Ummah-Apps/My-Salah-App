@@ -1,8 +1,35 @@
-export const LATEST_APP_VERSION = "2.7";
+export const LATEST_APP_VERSION = "2.8";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Missed Salah Feature",
+        text: (
+          <>
+            <strong>Feature:</strong> Introduced a convenient feature allowing
+            easy completion of missed Salah. If any Salah is missed, a
+            notification will appear in the top-left corner of the home page.
+            Tapping on it will display a list of all missed Salah, which can
+            then be marked as completed individually.
+          </>
+        ),
+      },
+      {
+        heading: "Status Sheet Data Display Issue Resolved",
+        text: (
+          <>
+            <strong>Fixed:</strong> Fixed an issue where the status update sheet
+            was displaying data for a previous Salah that was just edited.
+          </>
+        ),
+      },
+    ],
+  },
+  ,
+  {
+    versionNum: "2.7",
     changes: [
       {
         heading: "Multi-Edit Mode",

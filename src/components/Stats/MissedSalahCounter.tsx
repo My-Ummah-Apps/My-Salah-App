@@ -17,7 +17,7 @@ const MissedSalahCounter = ({
 }: MissedSalahCounterProps) => {
   return (
     <div
-      className="absolute flex items-center p-1 ml-2 bg-[#313131] rounded-lg"
+      className="absolute flex items-center p-1 ml-2 bg-[#252525] rounded-lg"
       onClick={() => {
         if (isMultiEditMode) {
           return;

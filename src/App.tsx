@@ -139,101 +139,106 @@ const App = () => {
         `SELECT * FROM salahDataTable`
       );
 
-      const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
-      await dbConnection.current.run(query);
-
       let DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
       );
 
-      console.log("DBResultPreferences: ", DBResultPreferences);
-
-      if (DBResultPreferences && DBResultPreferences.values) {
-        // TODO: The below needs an additional check, as if the user does not select a gender and then relaunches the app, the gender prompt dissapears as values have been set and the length is no longer zero
-
-        const userNotificationPermission = await checkNotificationPermissions();
-
-        const notificationValue =
-          DBResultPreferences.values.length > 0
-            ? DBResultPreferences.values.find(
-                (row) => row.preferenceName === "dailyNotification"
-              ).preferenceValue
-            : null;
-
-        // * The below has been implemented as a last resort since on Android (atleast when installing via Android Studio) notifications stop working on reinstallation/update of the app, need to test whether this is still a problem when installing via the playstore, this issue doesn't exist on iOS
-        if (
-          Capacitor.getPlatform() === "android" &&
-          userNotificationPermission === "granted" &&
-          notificationValue === "1" &&
-          localStorage.getItem("appVersion") !== LATEST_APP_VERSION
-        ) {
-          const dailyNotificationTime = DBResultPreferences.values.find(
-            (row) => row.preferenceName === "dailyNotificationTime"
-          );
-          const [hour, minute] = dailyNotificationTime.preferenceValue
-            .split(":")
-            .map(Number);
-
-          await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
-          await LocalNotifications.schedule({
-            notifications: [
-              {
-                id: 1,
-                title: "Daily Reminder",
-                body: `Did you log your prayers today?`,
-                schedule: {
-                  on: {
-                    hour: hour,
-                    minute: minute,
-                  },
-                  allowWhileIdle: true,
-                  repeats: true,
-                },
-                channelId: "daily-reminder",
-                // foreground: true, // iOS only
-              },
-            ],
-          });
-        } // * Up until here, remove once its confirmed that this issue (noted above) only occurs when app is being installed from Android Studio and not the Play Store
-
-        if (
-          userNotificationPermission !== "granted" &&
-          notificationValue === "1"
-        ) {
-          try {
-            await modifyDataInUserPreferencesTable("0", "dailyNotification");
-            await checkAndOpenOrCloseDBConnection("open");
-            DBResultPreferences = await dbConnection.current.query(
-              `SELECT * FROM userPreferencesTable`
-            );
-          } catch (error) {
-            console.error(
-              "Error modifying dailyNotification value in database:",
-              error
-            );
-          }
-        }
-        try {
-          if (DBResultPreferences.values) {
-            await handleUserPreferencesDataFromDB(DBResultPreferences.values);
-          } else {
-            throw new Error("DBResultPreferences.values not found");
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      } else {
+      if (!DBResultPreferences || !DBResultPreferences.values) {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
         );
       }
-
-      if (DBResultAllSalahData && DBResultAllSalahData.values) {
-        await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
-      } else {
+      if (!DBResultAllSalahData || !DBResultAllSalahData.values) {
         throw new Error(
-          "DBResultAllSalahData or DBResultAllSalahData.values do not exist"
+          "DBResultAllSalahData or !DBResultAllSalahData.values do not exist"
         );
+      }
+
+      // const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
+      // await dbConnection.current.run(query);
+
+      // let doesDailyNotificationPrefExist = 0;
+      // doesDailyNotificationPrefExist = DBResultPreferences.values?.filter(
+      //   (item) => item.preferenceName === "dailyNotification"
+      // ).length;
+      // console.log(
+      //   "doesDailyNotificationPrefExist: ",
+      //   doesDailyNotificationPrefExist
+      // );
+
+      console.log("DBResultPreferences: ", DBResultPreferences.values);
+
+      const userNotificationPermission = await checkNotificationPermissions();
+
+      const notificationValue = DBResultPreferences.values.find(
+        (row) => row.preferenceName === "dailyNotification"
+      );
+
+      // * The below has been implemented as a last resort since on Android (atleast when installing via Android Studio) notifications stop working on reinstallation/update of the app, need to test whether this is still a problem when installing via the playstore, this issue doesn't exist on iOS
+      if (
+        Capacitor.getPlatform() === "android" &&
+        userNotificationPermission === "granted" &&
+        notificationValue === "1" &&
+        localStorage.getItem("appVersion") !== LATEST_APP_VERSION
+      ) {
+        const dailyNotificationTime = DBResultPreferences.values.find(
+          (row) => row.preferenceName === "dailyNotificationTime"
+        );
+        const [hour, minute] = dailyNotificationTime.preferenceValue
+          .split(":")
+          .map(Number);
+
+        await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              id: 1,
+              title: "Daily Reminder",
+              body: `Did you log your prayers today?`,
+              schedule: {
+                on: {
+                  hour: hour,
+                  minute: minute,
+                },
+                allowWhileIdle: true,
+                repeats: true,
+              },
+              channelId: "daily-reminder",
+              // foreground: true, // iOS only
+            },
+          ],
+        });
+      } // * Up until here, remove once its confirmed that this issue (noted above) only occurs when app is being installed from Android Studio and not the Play Store
+
+      if (
+        userNotificationPermission !== "granted" &&
+        notificationValue === "1"
+      ) {
+        try {
+          await modifyDataInUserPreferencesTable("0", "dailyNotification");
+          await checkAndOpenOrCloseDBConnection("open");
+          DBResultPreferences = await dbConnection.current.query(
+            `SELECT * FROM userPreferencesTable`
+          );
+        } catch (error) {
+          console.error(
+            "Error modifying dailyNotification value in database:",
+            error
+          );
+        }
+      }
+      try {
+        console.log("HELLO: ", DBResultPreferences);
+
+        // const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
+        // await dbConnection.current.run(query);
+        // DBResultPreferences = await dbConnection.current.query(
+        //   `SELECT * FROM userPreferencesTable`
+        // );
+        await handleUserPreferencesDataFromDB(DBResultPreferences.values);
+        await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+      } catch (error) {
+        console.error(error);
       }
     } catch (error) {
       console.error(error);
@@ -251,58 +256,73 @@ const App = () => {
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
 
-    if (DBResultPreferencesValues.length === 0) {
-      const userStartDate = format(new Date(), "yyyy-MM-dd");
+    try {
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("!dbConnection or !dbConnection.current do not exist");
+      }
+      await checkAndOpenOrCloseDBConnection("open");
 
-      const insertQuery = `
-          INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
-          VALUES 
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?),
-          (?, ?);
-          `;
-      // prettier-ignore
-      const params = [
-          "userGender", "male",
-          "userStartDate", userStartDate,
-          "dailyNotification", "0",
-          "dailyNotificationTime", "21:00",
-          "haptics", "0",
-          "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
-          "showReasons", "0",
-        ];
+      if (DBResultPreferencesValues.length === 0) {
+        const userStartDate = format(new Date(), "yyyy-MM-dd");
 
-      try {
-        await checkAndOpenOrCloseDBConnection("open");
+        const insertQuery = `
+            INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
+            VALUES 
+            (?, ?),
+            (?, ?),
+            (?, ?),
+            (?, ?),
+            (?, ?),
+            (?, ?),
+            (?, ?),
+            (?, ?),
+            (?, ?);
+            `;
+        // prettier-ignore
+        const params = [
+            "userGender", "male",
+            "userStartDate", userStartDate,
+            "dailyNotification", "0",
+            "dailyNotificationTime", "21:00",
+            "haptics", "0",
+            "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
+            "showReasons", "0",
+            "showMissedSalahCount", "1"
+          ];
 
-        if (dbConnection && dbConnection.current) {
-          await dbConnection.current.run(insertQuery, params);
-          const DBResultPreferencesQuery = await dbConnection.current.query(
-            `SELECT * FROM userPreferencesTable`
+        await dbConnection.current.run(insertQuery, params);
+        const DBResultPreferencesQuery = await dbConnection.current.query(
+          `SELECT * FROM userPreferencesTable`
+        );
+        if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
+          throw new Error(
+            "No values returned from the DBResultPreferencesQuery."
           );
-
-          DBResultPreferencesValues =
-            DBResultPreferencesQuery.values as PreferenceObjType[];
-        } else {
-          console.error("dbConnection or dbConnection.current does not exist");
         }
+        DBResultPreferencesValues =
+          DBResultPreferencesQuery.values as PreferenceObjType[];
+      } else if (DBResultPreferencesValues.length > 0) {
+        const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
+        await dbConnection.current.run(query);
+        const DBResultPreferencesQuery = await dbConnection.current.query(
+          `SELECT * FROM userPreferencesTable`
+        );
+        if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
+          throw new Error(
+            "No values returned from the DBResultPreferencesQuery."
+          );
+        }
+        DBResultPreferencesValues =
+          DBResultPreferencesQuery.values as PreferenceObjType[];
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      try {
+        checkAndOpenOrCloseDBConnection("close");
       } catch (error) {
         console.error(error);
-      } finally {
-        try {
-          checkAndOpenOrCloseDBConnection("close");
-        } catch (error) {
-          console.error(error);
-        }
       }
-    }
-
-    if (!DBResultPreferencesValues) {
-      throw new Error("DBResultPreferencesValues does not exist");
     }
 
     // ! Remove below once the ability for users to remove and add their own reasons is introduced
