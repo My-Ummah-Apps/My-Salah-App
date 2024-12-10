@@ -14,6 +14,7 @@ import {
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import {
   checkNotificationPermissions,
+  sheetBackdropColor,
   sheetHeaderHeight,
   TWEEN_CONFIG,
 } from "../../utils/constants";
@@ -215,7 +216,7 @@ const BottomSheetNotifications = ({
         </Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop
-        // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        style={sheetBackdropColor}
         onTap={() => setShowNotificationsModal(false)}
       />
     </Sheet>

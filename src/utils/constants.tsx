@@ -71,6 +71,10 @@ export const sheetHeaderHeight = {
   // backgroundColor: "black",
 };
 
+export const sheetBackdropColor = {
+  backgroundColor: "rgba(0, 0, 0, 0.7)",
+};
+
 export const showToast = async (text: string, duration: "short" | "long") => {
   await Toast.show({
     text: text,

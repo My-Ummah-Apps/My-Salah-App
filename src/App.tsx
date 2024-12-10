@@ -6,6 +6,7 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   getMissedSalahCount,
+  sheetBackdropColor,
   sheetHeaderHeight,
 } from "./utils/constants";
 import {
@@ -704,7 +705,7 @@ const App = () => {
               </section>
             </Sheet.Content>
           </Sheet.Container>
-          <Sheet.Backdrop />
+          <Sheet.Backdrop style={sheetBackdropColor} />
         </Sheet>
         <NavBar />
         <BottomSheetChangelog

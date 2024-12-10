@@ -14,6 +14,7 @@ import {
   //   createLocalisedDate,
   getMissedSalahCount,
   prayerStatusColorsHexCodes,
+  sheetBackdropColor,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -180,6 +181,7 @@ const BottomSheetMissedPrayersList = ({
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop
+          style={sheetBackdropColor}
           onTap={() => {
             setShowMissedPrayersSheet(false);
             // checkAndOpenOrCloseDBConnection("close");

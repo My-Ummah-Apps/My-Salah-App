@@ -12,7 +12,8 @@ export const changeLogs = [
             easy completion of missed Salah. If any Salah is missed, a
             notification will appear in the top-left corner of the home page.
             Tapping on it will display a list of all missed Salah, which can
-            then be marked as completed individually.
+            then be marked as completed individually, this feature can be turned
+            off from the settings page.
           </>
         ),
       },

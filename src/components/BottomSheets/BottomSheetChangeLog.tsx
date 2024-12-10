@@ -1,4 +1,4 @@
-import { TWEEN_CONFIG } from "../../utils/constants";
+import { sheetBackdropColor, TWEEN_CONFIG } from "../../utils/constants";
 import { changeLogs } from "../../utils/changelog";
 import { LATEST_APP_VERSION } from "../../utils/changelog";
 import Sheet from "react-modal-sheet";
@@ -61,7 +61,7 @@ const BottomSheetChangelog = ({
         </Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop
-        // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        style={sheetBackdropColor}
         onTap={() => setShowChangelogModal(false)}
       />
     </Sheet>

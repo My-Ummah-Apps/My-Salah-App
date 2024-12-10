@@ -13,6 +13,7 @@ import { SalahNamesType } from "../../types/types";
 import {
   prayerStatusColorsHexCodes,
   reasonsStyles,
+  sheetBackdropColor,
 } from "../../utils/constants";
 import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
 import format from "date-fns/format";
@@ -232,7 +233,7 @@ const BottomSheetSingleDateView = ({
         </Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop
-        // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        style={sheetBackdropColor}
         onTap={() => setShowDailySalahDataModal(false)}
       />
     </Sheet>

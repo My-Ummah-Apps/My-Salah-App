@@ -22,6 +22,7 @@ import {
   prayerStatusColorsHexCodes,
   reasonsStyles,
   salahNamesArr,
+  sheetBackdropColor,
   TWEEN_CONFIG,
   validSalahStatuses,
 } from "../../utils/constants";
@@ -611,7 +612,7 @@ const BottomSheetPrayerStatus = ({
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+          style={sheetBackdropColor}
           // onTap={onSheetCloseCleanup}
           onTap={() => setShowUpdateStatusModal(false)}
         />
