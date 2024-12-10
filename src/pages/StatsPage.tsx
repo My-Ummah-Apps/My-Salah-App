@@ -55,7 +55,7 @@ const StatsPage = ({
 
   getAllSalahStatuses();
 
-  const filterSalahStatuses = (salahStatus: string) => {
+  const filterSalahStatuses = (salahStatus: SalahStatusType) => {
     return salahStatusesOverallArr.filter((status) => status === salahStatus);
   };
 

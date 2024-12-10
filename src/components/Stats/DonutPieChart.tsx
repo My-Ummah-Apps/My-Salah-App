@@ -112,7 +112,9 @@ const DonutPieChart = ({
             labelLine={false}
             label={renderCustomizedLabel}
             outerRadius={90}
-            innerRadius={40}
+            innerRadius={45}
+            // cornerRadius={5}
+            // paddingAngle={5}
             fill="#8884d8"
             dataKey="value"
             stroke="none"
@@ -129,29 +131,40 @@ const DonutPieChart = ({
         </PieChart>
       </ResponsiveContainer>
       <div className="justify-center">
-        <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#448b75]">
-          {" "}
-          {userGender === "male" ? "In Jamaah" : "Prayed"}
-        </p>
-        {userGender === "male" ? (
-          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#bcaa4b]">
+        {salahStatusStatistics.salahFemaleAloneDatesOverall > 0 ||
+          (salahStatusStatistics.salahInJamaahDatesOverall > 0 && (
+            <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#448b75]">
+              {" "}
+              {userGender === "male" ? "In Jamaah" : "Prayed"}
+            </p>
+          ))}
+
+        {salahStatusStatistics.salahExcusedDatesOverall > 0 ||
+        salahStatusStatistics.salahMaleAloneDatesOverall > 0 ? (
+          userGender === "male" ? (
+            <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#bcaa4b]">
+              {" "}
+              Alone
+            </p>
+          ) : (
+            <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#dd42da]">
+              {" "}
+              Excused
+            </p>
+          )
+        ) : null}
+        {salahStatusStatistics.salahLateDatesOverall > 0 && (
+          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#ea580c]">
             {" "}
-            Alone
-          </p>
-        ) : (
-          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#dd42da]">
-            {" "}
-            Excused
+            Late
           </p>
         )}
-        <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#ea580c]">
-          {" "}
-          Late
-        </p>
-        <p className="donut-pie-chart-text pb-1 text-sm  before:bg-[#b62e2e]">
-          {" "}
-          Missed
-        </p>
+        {salahStatusStatistics.salahMissedDatesOverall > 0 && (
+          <p className="donut-pie-chart-text pb-1 text-sm  before:bg-[#b62e2e]">
+            {" "}
+            Missed
+          </p>
+        )}
       </div>
     </div>
   );
