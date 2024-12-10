@@ -213,6 +213,12 @@ const App = () => {
             "Error modifying dailyNotification value in database:",
             error
           );
+        } finally {
+          try {
+            await checkAndOpenOrCloseDBConnection("close");
+          } catch (error) {
+            console.error(error);
+          }
         }
       }
       try {
