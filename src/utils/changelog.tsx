@@ -27,7 +27,7 @@ export const changeLogs = [
       },
     ],
   },
-  ,
+
   {
     versionNum: "2.7",
     changes: [

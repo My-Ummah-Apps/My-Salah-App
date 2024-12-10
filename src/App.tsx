@@ -154,8 +154,6 @@ const App = () => {
         );
       }
 
-      console.log("DBResultPreferences: ", DBResultPreferences.values);
-
       const userNotificationPermission = await checkNotificationPermissions();
 
       const notificationValue = DBResultPreferences.values.find(
@@ -222,9 +220,11 @@ const App = () => {
         }
       }
       try {
-        console.log("HELLO: ", DBResultPreferences);
+        await handleUserPreferencesDataFromDB(
+          DBResultPreferences.values as PreferenceObjType[]
+        );
+        console.log("DBResultPreferences.values: ", DBResultPreferences.values);
 
-        await handleUserPreferencesDataFromDB(DBResultPreferences.values);
         await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       } catch (error) {
         console.error(error);

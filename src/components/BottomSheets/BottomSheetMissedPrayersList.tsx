@@ -42,24 +42,23 @@ const BottomSheetMissedPrayersList = ({
   missedSalahList,
   setFetchedSalahData,
 }: MissedPrayersListBottomSheetProps) => {
+  const openDBConnection = async () => {
+    try {
+      await checkAndOpenOrCloseDBConnection("open");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const closeDBConnection = async () => {
+    try {
+      await checkAndOpenOrCloseDBConnection("close");
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     if (!showMissedPrayersSheet) return;
-
-    const openDBConnection = async () => {
-      try {
-        await checkAndOpenOrCloseDBConnection("open");
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const closeDBConnection = async () => {
-      try {
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
     openDBConnection();
 
@@ -187,7 +186,12 @@ const BottomSheetMissedPrayersList = ({
             </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>
-        <Sheet.Backdrop onTap={() => setShowMissedPrayersSheet(false)} />
+        <Sheet.Backdrop
+          onTap={() => {
+            setShowMissedPrayersSheet(false);
+            closeDBConnection();
+          }}
+        />
       </Sheet>
     </section>
   );
