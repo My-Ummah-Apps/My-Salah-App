@@ -81,6 +81,20 @@ const BottomSheetPrayerStatus = ({
 
   let selectedReasonsArray = selectedReasons;
 
+  const onSheetCloseCleanup = () => {
+    checkAndOpenOrCloseDBConnection("close");
+    setShowUpdateStatusModal(false);
+    resetSelectedSalahAndDate();
+    setSalahStatus("");
+    setSelectedReasons([]);
+    setNotes("");
+
+    if (isMultiEditMode) {
+      setIsMultiEditMode(false);
+    }
+    console.log("Cleanup Operation Complete");
+  };
+
   useEffect(() => {
     if (!showUpdateStatusModal) return;
 
@@ -88,14 +102,9 @@ const BottomSheetPrayerStatus = ({
       await checkAndOpenOrCloseDBConnection("open");
     };
 
-    // const closeDBConnection = async () => {
-    //   await checkAndOpenOrCloseDBConnection("close");
-    // };
-
     openDBConnection();
 
     return () => {
-      // closeDBConnection();
       onSheetCloseCleanup();
     };
   }, [showUpdateStatusModal]);
@@ -302,20 +311,6 @@ const BottomSheetPrayerStatus = ({
       }
     });
   }
-
-  const onSheetCloseCleanup = () => {
-    checkAndOpenOrCloseDBConnection("close");
-    setShowUpdateStatusModal(false);
-    resetSelectedSalahAndDate();
-    setSalahStatus("");
-    setSelectedReasons([]);
-    setNotes("");
-
-    if (isMultiEditMode === true) {
-      setIsMultiEditMode(false);
-    }
-    console.log("Cleanup Operation Complete");
-  };
 
   const determineDateRecency = (date: string) => {
     const parsedDate = parse(date, "yyyy-MM-dd", new Date());
