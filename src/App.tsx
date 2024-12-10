@@ -154,18 +154,6 @@ const App = () => {
         );
       }
 
-      // const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
-      // await dbConnection.current.run(query);
-
-      // let doesDailyNotificationPrefExist = 0;
-      // doesDailyNotificationPrefExist = DBResultPreferences.values?.filter(
-      //   (item) => item.preferenceName === "dailyNotification"
-      // ).length;
-      // console.log(
-      //   "doesDailyNotificationPrefExist: ",
-      //   doesDailyNotificationPrefExist
-      // );
-
       console.log("DBResultPreferences: ", DBResultPreferences.values);
 
       const userNotificationPermission = await checkNotificationPermissions();
@@ -230,11 +218,6 @@ const App = () => {
       try {
         console.log("HELLO: ", DBResultPreferences);
 
-        // const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
-        // await dbConnection.current.run(query);
-        // DBResultPreferences = await dbConnection.current.query(
-        //   `SELECT * FROM userPreferencesTable`
-        // );
         await handleUserPreferencesDataFromDB(DBResultPreferences.values);
         await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       } catch (error) {
