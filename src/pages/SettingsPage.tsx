@@ -125,13 +125,9 @@ const SettingsPage = ({
     } catch (error) {
       console.error(error);
     } finally {
-      try {
-        diaglogElement.current?.close();
-        setDialogElementText("");
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error("Error closing DB connection: ", error);
-      }
+      diaglogElement.current?.close();
+      setDialogElementText("");
+      await checkAndOpenOrCloseDBConnection("close");
     }
   };
 

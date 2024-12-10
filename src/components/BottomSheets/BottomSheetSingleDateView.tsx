@@ -108,11 +108,7 @@ const BottomSheetSingleDateView = ({
     } catch (error) {
       console.error(error);
     } finally {
-      try {
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
+      await checkAndOpenOrCloseDBConnection("close");
     }
   };
 

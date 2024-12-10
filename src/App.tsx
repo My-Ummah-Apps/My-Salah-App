@@ -212,11 +212,7 @@ const App = () => {
             error
           );
         } finally {
-          try {
-            await checkAndOpenOrCloseDBConnection("close");
-          } catch (error) {
-            console.error(error);
-          }
+          await checkAndOpenOrCloseDBConnection("close");
         }
       }
       try {
@@ -232,11 +228,7 @@ const App = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      try {
-        checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
+      checkAndOpenOrCloseDBConnection("close");
     }
   };
 
@@ -307,11 +299,7 @@ const App = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      try {
-        checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
+      checkAndOpenOrCloseDBConnection("close");
     }
 
     // ! Remove below once the ability for users to remove and add their own reasons is introduced
@@ -493,20 +481,9 @@ const App = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      try {
-        // const test = dbConnection.current.query(
-        //   "SELECT * from userPreferencesTable"
-        // );
-        // console.log("UPDATED PREFERENCES FROM DB: ", (await test).values);
-
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
+      await checkAndOpenOrCloseDBConnection("close");
     }
   };
-
-  // CHANGELOG FUNCTIONALITY
 
   const [showIntroModal, setShowIntroModal] = useState(false);
   // const appRef = useRef();

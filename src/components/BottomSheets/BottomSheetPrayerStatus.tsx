@@ -81,8 +81,7 @@ const BottomSheetPrayerStatus = ({
 
   let selectedReasonsArray = selectedReasons;
 
-  const onSheetCloseCleanup = () => {
-    checkAndOpenOrCloseDBConnection("close");
+  const onSheetCloseCleanup = async () => {
     setShowUpdateStatusModal(false);
     resetSelectedSalahAndDate();
     setSalahStatus("");
@@ -92,6 +91,7 @@ const BottomSheetPrayerStatus = ({
     if (isMultiEditMode) {
       setIsMultiEditMode(false);
     }
+    await checkAndOpenOrCloseDBConnection("close");
     console.log("Cleanup Operation Complete");
   };
 
