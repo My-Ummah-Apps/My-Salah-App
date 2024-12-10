@@ -42,23 +42,16 @@ const BottomSheetMissedPrayersList = ({
   missedSalahList,
   setFetchedSalahData,
 }: MissedPrayersListBottomSheetProps) => {
-  const openDBConnection = async () => {
-    try {
-      await checkAndOpenOrCloseDBConnection("open");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const closeDBConnection = async () => {
-    try {
-      await checkAndOpenOrCloseDBConnection("close");
-    } catch (error) {
-      console.error(error);
-    }
-  };
   useEffect(() => {
     if (!showMissedPrayersSheet) return;
+
+    const openDBConnection = async () => {
+      await checkAndOpenOrCloseDBConnection("open");
+    };
+
+    const closeDBConnection = async () => {
+      await checkAndOpenOrCloseDBConnection("close");
+    };
 
     openDBConnection();
 
@@ -189,7 +182,7 @@ const BottomSheetMissedPrayersList = ({
         <Sheet.Backdrop
           onTap={() => {
             setShowMissedPrayersSheet(false);
-            closeDBConnection();
+            // checkAndOpenOrCloseDBConnection("close");
           }}
         />
       </Sheet>

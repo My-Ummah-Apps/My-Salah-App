@@ -82,6 +82,25 @@ const BottomSheetPrayerStatus = ({
   let selectedReasonsArray = selectedReasons;
 
   useEffect(() => {
+    if (!showUpdateStatusModal) return;
+
+    const openDBConnection = async () => {
+      await checkAndOpenOrCloseDBConnection("open");
+    };
+
+    // const closeDBConnection = async () => {
+    //   await checkAndOpenOrCloseDBConnection("close");
+    // };
+
+    openDBConnection();
+
+    return () => {
+      // closeDBConnection();
+      onSheetCloseCleanup();
+    };
+  }, [showUpdateStatusModal]);
+
+  useEffect(() => {
     if (notesTextArea.current) {
       notesTextArea.current.style.height = "1px";
       notesTextArea.current.style.height = `${
@@ -128,12 +147,8 @@ const BottomSheetPrayerStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
-      try {
-        // TODO: Below is stopping the database from being updated so have commented it out for now, this needs to be debugged
-        // await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
+      // TODO: Below is stopping the database from being updated so have commented it out for now, this needs to be debugged
+      // await checkAndOpenOrCloseDBConnection("close");
     }
 
     return false;
@@ -233,13 +248,10 @@ const BottomSheetPrayerStatus = ({
       setFetchedSalahData((prev) => [...prev]);
     } catch (error) {
       console.error(error);
-    } finally {
-      try {
-        await checkAndOpenOrCloseDBConnection("close");
-      } catch (error) {
-        console.error(error);
-      }
     }
+    // finally {
+    //   await checkAndOpenOrCloseDBConnection("close");
+    // }
   };
 
   useEffect(() => {
@@ -292,6 +304,7 @@ const BottomSheetPrayerStatus = ({
   }
 
   const onSheetCloseCleanup = () => {
+    checkAndOpenOrCloseDBConnection("close");
     setShowUpdateStatusModal(false);
     resetSelectedSalahAndDate();
     setSalahStatus("");
@@ -301,6 +314,7 @@ const BottomSheetPrayerStatus = ({
     if (isMultiEditMode === true) {
       setIsMultiEditMode(false);
     }
+    console.log("Cleanup Operation Complete");
   };
 
   const determineDateRecency = (date: string) => {
@@ -322,7 +336,8 @@ const BottomSheetPrayerStatus = ({
         disableDrag={false}
         onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
-        onClose={onSheetCloseCleanup}
+        // onClose={onSheetCloseCleanup}
+        onClose={() => setShowUpdateStatusModal(false)}
         detent="content-height"
         // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
         tweenConfig={TWEEN_CONFIG}
@@ -586,7 +601,8 @@ const BottomSheetPrayerStatus = ({
                   onClick={async () => {
                     if (salahStatus) {
                       await addOrModifySalah();
-                      onSheetCloseCleanup();
+                      setShowUpdateStatusModal(false);
+                      // onSheetCloseCleanup();
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
@@ -600,8 +616,9 @@ const BottomSheetPrayerStatus = ({
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop
-          // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
-          onTap={onSheetCloseCleanup}
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+          // onTap={onSheetCloseCleanup}
+          onTap={() => setShowUpdateStatusModal(false)}
         />
       </Sheet>
       <div
