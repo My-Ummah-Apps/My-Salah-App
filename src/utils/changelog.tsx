@@ -26,6 +26,16 @@ export const changeLogs = [
           </>
         ),
       },
+      {
+        heading: "Minor UI Enhancements",
+        text: (
+          <>
+            <strong>UI:</strong> Added a backdrop color to sheets for better
+            visibility. Donut chart labels now only appear when relevant data is
+            present.
+          </>
+        ),
+      },
     ],
   },
 
