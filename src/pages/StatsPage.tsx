@@ -9,6 +9,8 @@ import {
 } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
+import ReasonsCard from "../components/Stats/ReasonsCard";
+import { DBSQLiteValues } from "@capacitor-community/sqlite";
 // import StreakCount from "../components/Stats/StreakCount";
 
 interface StatsPageProps {
@@ -16,10 +18,9 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
+  // DBResultAllSalahData: DBSQLiteValues;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
-  // userGender: userGenderType;
-  // userStartDate: string;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
 }
@@ -27,8 +28,7 @@ interface StatsPageProps {
 const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  // userGender,
-  // userStartDate,
+  // DBResultAllSalahData,
   userPreferences,
   fetchedSalahData,
   setHeading,
@@ -52,6 +52,15 @@ const StatsPage = ({
       });
     }
   };
+  console.log(DBResultAllSalahData);
+
+  const getAllSalahReasons = () => {
+    for (let i = 0; i < DBResultAllSalahData?.values.length; i++) {
+      console.log(fetchedSalahData[i]);
+    }
+  };
+
+  getAllSalahReasons();
 
   getAllSalahStatuses();
 
@@ -94,6 +103,7 @@ const StatsPage = ({
         userStartDate={userPreferences.userStartDate}
         fetchedSalahData={fetchedSalahData}
       />{" "}
+      <ReasonsCard />
     </section>
   );
 };

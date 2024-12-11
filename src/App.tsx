@@ -38,6 +38,7 @@ import useSQLiteDB from "./utils/useSqLiteDB";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import MissedSalahCounter from "./components/Stats/MissedSalahCounter";
+import { DBSQLiteValues } from "@capacitor-community/sqlite";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -66,6 +67,7 @@ const App = () => {
     {}
   );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
+  const [salahReasons, setSalahReasons] = useState();
 
   useEffect(() => {
     if (
@@ -104,6 +106,9 @@ const App = () => {
     checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
 
+  // const [DBResultAllSalahData, setDBResultAllSalahData] =
+  //   useState<DBSQLiteValues>();
+
   useEffect(() => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
@@ -127,6 +132,7 @@ const App = () => {
     });
     setMissedSalahList({ ...copyOfMissedSalahList });
   }, [fetchedSalahData]);
+  // let DBResultAllSalahData: DBSQLiteValues;
 
   const fetchDataFromDB = async () => {
     try {
@@ -135,7 +141,12 @@ const App = () => {
       if (!dbConnection || !dbConnection.current) {
         throw new Error("dbConnection or dbConnection.current do not exist");
       }
-
+      // const test = await dbConnection.current.query(
+      //   `SELECT * FROM salahDataTable`
+      // );
+      // setDBResultAllSalahData(
+      //   await dbConnection.current.query(`SELECT * FROM salahDataTable`)
+      // );
       const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`
       );
@@ -220,7 +231,6 @@ const App = () => {
         await handleUserPreferencesDataFromDB(
           DBResultPreferences.values as PreferenceObjType[]
         );
-        console.log("DBResultPreferences.values: ", DBResultPreferences.values);
 
         await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       } catch (error) {
@@ -441,6 +451,16 @@ const App = () => {
       };
 
       const currentDate = datesFromStartToToday[i];
+      type salahReasonsType = {
+        "male-alone": string[];
+        late: string[];
+        missed: string[];
+      };
+      const salahReasons: salahReasonsType = {
+        "male-alone": [],
+        late: [],
+        missed: [],
+      };
 
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
@@ -459,6 +479,21 @@ const App = () => {
               }
             }
           }
+
+          if (
+            DBResultAllSalahData[i].salahStatus !== "group" &&
+            DBResultAllSalahData[i].reasons !== ""
+          ) {
+            console.log(
+              "DBResultAllSalahData[i].salahStatus: ",
+              DBResultAllSalahData[i].reasons
+            );
+
+            salahReasons[DBResultAllSalahData[i].salahStatus].push(
+              DBResultAllSalahData[i].reasons
+            );
+          }
+          console.log("salahReasons: ", salahReasons);
         }
       }
 
@@ -630,6 +665,7 @@ const App = () => {
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }
+                // DBResultAllSalahData={DBResultAllSalahData}
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
