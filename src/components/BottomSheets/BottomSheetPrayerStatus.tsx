@@ -183,6 +183,7 @@ const BottomSheetPrayerStatus = ({
 
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
+      console.log(selectedReasons);
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         if (!isValidDate(date)) {
@@ -515,6 +516,8 @@ const BottomSheetPrayerStatus = ({
                         }}
                         className={reasonsStyles}
                         onClick={() => {
+                          console.log(selectedReasons);
+
                           if (!selectedReasonsArray.includes(item)) {
                             selectedReasonsArray = [...selectedReasons, item];
                           } else if (selectedReasonsArray.includes(item)) {

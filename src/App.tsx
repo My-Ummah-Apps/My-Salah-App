@@ -18,6 +18,8 @@ import {
   SalahRecordsArrayType,
   SalahStatusType,
   MissedSalahObjType,
+  salahReasonsOverallStatsType,
+  salahReasonsOverallNumbersType,
 } from "./types/types";
 
 import { StatusBar } from "@capacitor/status-bar";
@@ -67,7 +69,13 @@ const App = () => {
     {}
   );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
-  const [salahReasons, setSalahReasons] = useState();
+
+  const [salahReasonsOverallNumbers, setSalahReasonsOverallStats] =
+    useState<salahReasonsOverallStatsType>({
+      "male-alone": [],
+      late: [],
+      missed: [],
+    });
 
   useEffect(() => {
     if (
@@ -451,16 +459,21 @@ const App = () => {
       };
 
       const currentDate = datesFromStartToToday[i];
-      type salahReasonsType = {
-        "male-alone": string[];
-        late: string[];
-        missed: string[];
+
+      // type salahReasonsType = {
+      //   "male-alone": string[];
+      //   late: string[];
+      //   missed: string[];
+      // };
+      const salahReasonsOverallNumbers: salahReasonsOverallNumbersType = {
+        "male-alone": {},
+        late: {},
+        missed: {},
       };
-      const salahReasons: salahReasonsType = {
-        "male-alone": [],
-        late: [],
-        missed: [],
-      };
+
+      const maleAloneReasons = [];
+      const lateReasons = [];
+      const missedReasons = [];
 
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
@@ -482,19 +495,39 @@ const App = () => {
 
           if (
             DBResultAllSalahData[i].salahStatus !== "group" &&
+            DBResultAllSalahData[i].salahStatus !== "excused" &&
+            DBResultAllSalahData[i].salahStatus !== "female-alone" &&
             DBResultAllSalahData[i].reasons !== ""
           ) {
-            console.log(
-              "DBResultAllSalahData[i].salahStatus: ",
-              DBResultAllSalahData[i].reasons
-            );
-
-            salahReasons[DBResultAllSalahData[i].salahStatus].push(
-              DBResultAllSalahData[i].reasons
-            );
+            const reasons = DBResultAllSalahData[i].reasons.split(", ");
+            // console.log("reasons: ", reasons);
+            if (DBResultAllSalahData[i].salahStatus === "male-alone") {
+              maleAloneReasons.push(reasons);
+            } else if (DBResultAllSalahData[i].salahStatus === "late") {
+              lateReasons.push(reasons);
+            } else if (DBResultAllSalahData[i].salahStatus === "missed") {
+              missedReasons.push(reasons);
+            }
           }
-          console.log("salahReasons: ", salahReasons);
         }
+        // console.log("maleAloneReasons: ", maleAloneReasons.flat());
+        // console.log("lateReasons: ", lateReasons.flat());
+        // console.log("missedReasons: ", missedReasons.flat());
+
+        maleAloneReasons.flat().forEach((item) => {
+          salahReasonsOverallNumbers["male-alone"][item] =
+            salahReasonsOverallNumbers["male-alone"][item] || 0 + 1;
+        });
+        lateReasons.flat().forEach((item) => {
+          salahReasonsOverallNumbers["late"][item] =
+            salahReasonsOverallNumbers["late"][item] || 0 + 1;
+        });
+        missedReasons.flat().forEach((item) => {
+          salahReasonsOverallNumbers["missed"][item] =
+            salahReasonsOverallNumbers["missed"][item] || 0 + 1;
+        });
+
+        setSalahReasonsOverallStats(salahReasonsOverallNumbers);
       }
 
       singleSalahObjArr.push(singleSalahObj);
@@ -502,6 +535,10 @@ const App = () => {
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
   };
+
+  useEffect(() => {
+    console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
+  }, [salahReasonsOverallNumbers]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,
@@ -665,6 +702,7 @@ const App = () => {
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }
+                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
                 // DBResultAllSalahData={DBResultAllSalahData}
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}

@@ -2,6 +2,8 @@ import { useEffect } from "react";
 
 import Calendar from "../components/Stats/Calendar";
 import {
+  salahReasonsOverallNumbersType,
+  salahReasonsOverallStatsType,
   SalahRecordsArrayType,
   SalahStatusType,
   // userGenderType,
@@ -10,7 +12,7 @@ import {
 import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
 import ReasonsCard from "../components/Stats/ReasonsCard";
-import { DBSQLiteValues } from "@capacitor-community/sqlite";
+
 // import StreakCount from "../components/Stats/StreakCount";
 
 interface StatsPageProps {
@@ -19,6 +21,7 @@ interface StatsPageProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   // DBResultAllSalahData: DBSQLiteValues;
+  salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -29,6 +32,7 @@ const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   // DBResultAllSalahData,
+  salahReasonsOverallNumbers,
   userPreferences,
   fetchedSalahData,
   setHeading,
@@ -52,15 +56,14 @@ const StatsPage = ({
       });
     }
   };
-  console.log(DBResultAllSalahData);
 
-  const getAllSalahReasons = () => {
-    for (let i = 0; i < DBResultAllSalahData?.values.length; i++) {
-      console.log(fetchedSalahData[i]);
-    }
-  };
+  // const getAllSalahReasons = () => {
+  //   for (let i = 0; i < DBResultAllSalahData?.values.length; i++) {
+  //     console.log(fetchedSalahData[i]);
+  //   }
+  // };
 
-  getAllSalahReasons();
+  // getAllSalahReasons();
 
   getAllSalahStatuses();
 
@@ -103,7 +106,9 @@ const StatsPage = ({
         userStartDate={userPreferences.userStartDate}
         fetchedSalahData={fetchedSalahData}
       />{" "}
-      <ReasonsCard />
+      <ReasonsCard salahReasonsOverallNumbers={salahReasonsOverallNumbers} />
+      <ReasonsCard salahReasonsOverallNumbers={salahReasonsOverallNumbers} />
+      <ReasonsCard salahReasonsOverallNumbers={salahReasonsOverallNumbers} />
     </section>
   );
 };

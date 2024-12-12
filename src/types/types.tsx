@@ -62,6 +62,12 @@ export interface SalahEntryType {
   salahStatus: SalahStatusType;
 }
 
+export type salahReasonsOverallNumbersType = {
+  "male-alone": {};
+  late: {};
+  missed: {};
+};
+
 // export interface selectedSalahAndDateType {
 //   [key: string]: SalahNamesType[];
 // }
