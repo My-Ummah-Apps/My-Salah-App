@@ -18,7 +18,6 @@ import {
   SalahRecordsArrayType,
   SalahStatusType,
   MissedSalahObjType,
-  salahReasonsOverallStatsType,
   salahReasonsOverallNumbersType,
 } from "./types/types";
 
@@ -40,7 +39,6 @@ import useSQLiteDB from "./utils/useSqLiteDB";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import MissedSalahCounter from "./components/Stats/MissedSalahCounter";
-import { DBSQLiteValues } from "@capacitor-community/sqlite";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -71,10 +69,10 @@ const App = () => {
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
 
   const [salahReasonsOverallNumbers, setSalahReasonsOverallStats] =
-    useState<salahReasonsOverallStatsType>({
-      "male-alone": [],
-      late: [],
-      missed: [],
+    useState<salahReasonsOverallNumbersType>({
+      "male-alone": {},
+      late: {},
+      missed: {},
     });
 
   useEffect(() => {
@@ -471,9 +469,9 @@ const App = () => {
         missed: {},
       };
 
-      const maleAloneReasons = [];
-      const lateReasons = [];
-      const missedReasons = [];
+      let maleAloneReasons: any[] = [];
+      let lateReasons: any[] = [];
+      let missedReasons: any[] = [];
 
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
@@ -510,28 +508,40 @@ const App = () => {
             }
           }
         }
-        // console.log("maleAloneReasons: ", maleAloneReasons.flat());
-        // console.log("lateReasons: ", lateReasons.flat());
-        // console.log("missedReasons: ", missedReasons.flat());
 
-        maleAloneReasons.flat().forEach((item) => {
-          salahReasonsOverallNumbers["male-alone"][item] =
-            salahReasonsOverallNumbers["male-alone"][item] || 0 + 1;
-        });
-        lateReasons.flat().forEach((item) => {
-          salahReasonsOverallNumbers["late"][item] =
-            salahReasonsOverallNumbers["late"][item] || 0 + 1;
-        });
-        missedReasons.flat().forEach((item) => {
-          salahReasonsOverallNumbers["missed"][item] =
-            salahReasonsOverallNumbers["missed"][item] || 0 + 1;
-        });
+        maleAloneReasons = maleAloneReasons.flat();
+        lateReasons = lateReasons.flat();
+        missedReasons = missedReasons.flat();
 
-        setSalahReasonsOverallStats(salahReasonsOverallNumbers);
+        // console.log("maleAloneReasons: ", maleAloneReasons);
+        // console.log("lateReasons: ", lateReasons);
+        console.log("missedReasons: ", missedReasons);
+
+        maleAloneReasons.forEach((item: string) => {
+          // console.log("ITEM: ", item);
+
+          if (!salahReasonsOverallNumbers["male-alone"][item]) {
+            salahReasonsOverallNumbers["male-alone"][item] = 0;
+          }
+          salahReasonsOverallNumbers["male-alone"][item] += 1;
+        });
+        lateReasons.forEach((item) => {
+          if (!salahReasonsOverallNumbers["late"][item]) {
+            salahReasonsOverallNumbers["late"][item] = 0;
+          }
+          salahReasonsOverallNumbers["late"][item] += 1;
+        });
+        missedReasons.forEach((item) => {
+          if (!salahReasonsOverallNumbers["missed"][item]) {
+            salahReasonsOverallNumbers["missed"][item] = 0;
+          }
+          salahReasonsOverallNumbers["missed"][item] += 1;
+        });
       }
 
       singleSalahObjArr.push(singleSalahObj);
     }
+    setSalahReasonsOverallStats(salahReasonsOverallNumbers);
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
   };

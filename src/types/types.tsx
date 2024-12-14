@@ -63,9 +63,9 @@ export interface SalahEntryType {
 }
 
 export type salahReasonsOverallNumbersType = {
-  "male-alone": {};
-  late: {};
-  missed: {};
+  "male-alone": { [reason: string]: number };
+  late: { [reason: string]: number };
+  missed: { [reason: string]: number };
 };
 
 // export interface selectedSalahAndDateType {

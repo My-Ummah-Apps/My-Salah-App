@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Calendar from "../components/Stats/Calendar";
 import {
   salahReasonsOverallNumbersType,
-  salahReasonsOverallStatsType,
   SalahRecordsArrayType,
   SalahStatusType,
   // userGenderType,
@@ -106,9 +105,18 @@ const StatsPage = ({
         userStartDate={userPreferences.userStartDate}
         fetchedSalahData={fetchedSalahData}
       />{" "}
-      <ReasonsCard salahReasonsOverallNumbers={salahReasonsOverallNumbers} />
-      <ReasonsCard salahReasonsOverallNumbers={salahReasonsOverallNumbers} />
-      <ReasonsCard salahReasonsOverallNumbers={salahReasonsOverallNumbers} />
+      <ReasonsCard
+        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+        status={"male-alone"}
+      />
+      <ReasonsCard
+        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+        status={"late"}
+      />
+      <ReasonsCard
+        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+        status={"missed"}
+      />
     </section>
   );
 };
