@@ -115,3 +115,10 @@ export type DBResultDataObjType = {
 };
 
 export type DBResultDataObjArrayType = DBResultDataObjType[];
+
+export type reasonsToShowType =
+  | ""
+  | "male-alone"
+  | "late"
+  | "missed"
+  | undefined;

@@ -1,12 +1,15 @@
 import Sheet from "react-modal-sheet";
 import { sheetBackdropColor, TWEEN_CONFIG } from "../../utils/constants";
-import { salahReasonsOverallNumbersType } from "../../types/types";
+import {
+  reasonsToShowType,
+  salahReasonsOverallNumbersType,
+} from "../../types/types";
 
 interface BottomSheetReasonsProps {
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showReasonsSheet: boolean;
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
-  status: "male-alone" | "late" | "missed" | "";
+  status: reasonsToShowType;
 }
 
 const BottomSheetReasons = ({
@@ -15,6 +18,7 @@ const BottomSheetReasons = ({
   salahReasonsOverallNumbers,
   status,
 }: BottomSheetReasonsProps) => {
+  if (!status) return;
   return (
     <Sheet
       isOpen={showReasonsSheet}
@@ -27,10 +31,6 @@ const BottomSheetReasons = ({
         <Sheet.Scroller>
           {/* <Sheet.Header /> */}
           <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
-            {/* <ReasonsList
-              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-              status={status}
-            /> */}
             <>
               <h1 className="mb-2 text-lg text-center">
                 Top Reasons For {status} Salah

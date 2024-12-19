@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 
@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 
 import Calendar from "../components/Stats/Calendar";
 import {
+  reasonsToShowType,
   salahReasonsOverallNumbersType,
   SalahRecordsArrayType,
   SalahStatusType,
@@ -19,6 +20,7 @@ import {
 import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
 import ReasonsCard from "../components/Stats/ReasonsCard";
+import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -50,6 +52,8 @@ const StatsPage = ({
   }, []);
   console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
+  const [showReasonsSheet, setShowReasonsSheet] = useState(false);
+  const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let salahStatusStatistics;
   let showDonutChart;
@@ -122,28 +126,41 @@ const StatsPage = ({
         spaceBetween={50}
         slidesPerView={1}
         modules={[Pagination]}
-        pagination={{ clickable: true }}
+        // pagination={{ clickable: true }}
       >
         <SwiperSlide>
           <ReasonsCard
+            setReasonsToShow={setReasonsToShow}
+            setShowReasonsSheet={setShowReasonsSheet}
             salahReasonsOverallNumbers={salahReasonsOverallNumbers}
             status={"male-alone"}
           />
         </SwiperSlide>
         <SwiperSlide>
           <ReasonsCard
+            setReasonsToShow={setReasonsToShow}
+            setShowReasonsSheet={setShowReasonsSheet}
             salahReasonsOverallNumbers={salahReasonsOverallNumbers}
             status={"late"}
           />
         </SwiperSlide>
         <SwiperSlide>
           <ReasonsCard
+            setReasonsToShow={setReasonsToShow}
+            setShowReasonsSheet={setShowReasonsSheet}
             salahReasonsOverallNumbers={salahReasonsOverallNumbers}
             status={"missed"}
           />
         </SwiperSlide>
         {/* ... */}
       </Swiper>
+      <BottomSheetReasons
+        // setReasonsToShow={setReasonsToShow}
+        setShowReasonsSheet={setShowReasonsSheet}
+        showReasonsSheet={showReasonsSheet}
+        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+        status={reasonsToShow}
+      />
     </section>
   );
 };

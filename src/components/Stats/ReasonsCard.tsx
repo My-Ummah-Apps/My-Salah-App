@@ -1,26 +1,28 @@
 import { useState } from "react";
-import { salahReasonsOverallNumbersType } from "../../types/types";
+import {
+  reasonsToShowType,
+  salahReasonsOverallNumbersType,
+} from "../../types/types";
 import BottomSheetReasons from "../BottomSheets/BottomSheetReasons";
 
 interface ReasonsCardProps {
+  setReasonsToShow: React.Dispatch<React.SetStateAction<reasonsToShowType>>;
+  setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  // showReasonsSheet: boolean;
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
   status: "male-alone" | "late" | "missed";
 }
 
 const ReasonsCard = ({
+  setReasonsToShow,
+  setShowReasonsSheet,
+  // showReasonsSheet,
   salahReasonsOverallNumbers,
   status,
 }: ReasonsCardProps) => {
-  const [showReasonsSheet, setShowReasonsSheet] = useState(false);
-
   return (
     <>
       <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-t-2xl p-2">
-        {/* <ReasonsList
-          salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-          status={status}
-          showReasonsSheet={showReasonsSheet}
-        /> */}
         <h1 className="mb-2 text-lg text-center">
           Top Reasons For {status} Salah
         </h1>
@@ -39,6 +41,7 @@ const ReasonsCard = ({
         {Object.entries(salahReasonsOverallNumbers[status]).length > 3 && (
           <button
             onClick={() => {
+              setReasonsToShow(status);
               setShowReasonsSheet(true);
             }}
             className="w-full mt-2 text-right"
@@ -47,12 +50,6 @@ const ReasonsCard = ({
           </button>
         )}
       </section>
-      <BottomSheetReasons
-        setShowReasonsSheet={setShowReasonsSheet}
-        showReasonsSheet={showReasonsSheet}
-        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-        status={status}
-      />
     </>
   );
 };
