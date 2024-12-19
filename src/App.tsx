@@ -68,7 +68,7 @@ const App = () => {
   );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
 
-  const [salahReasonsOverallNumbers, setSalahReasonsOverallStats] =
+  const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},
       late: {},
@@ -262,6 +262,8 @@ const App = () => {
 
       if (DBResultPreferencesValues.length === 0) {
         const userStartDate = format(new Date(), "yyyy-MM-dd");
+        // const remove_below = [];
+        // const userStartDate = "2023-01-01";
 
         const insertQuery = `
             INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
@@ -515,11 +517,9 @@ const App = () => {
 
         // console.log("maleAloneReasons: ", maleAloneReasons);
         // console.log("lateReasons: ", lateReasons);
-        console.log("missedReasons: ", missedReasons);
+        // console.log("missedReasons: ", missedReasons);
 
         maleAloneReasons.forEach((item: string) => {
-          // console.log("ITEM: ", item);
-
           if (!salahReasonsOverallNumbers["male-alone"][item]) {
             salahReasonsOverallNumbers["male-alone"][item] = 0;
           }
@@ -537,18 +537,16 @@ const App = () => {
           }
           salahReasonsOverallNumbers["missed"][item] += 1;
         });
+        setSalahReasonsOverallNumbers(salahReasonsOverallNumbers);
       }
+      console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
       singleSalahObjArr.push(singleSalahObj);
     }
-    setSalahReasonsOverallStats(salahReasonsOverallNumbers);
+
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
   };
-
-  useEffect(() => {
-    console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
-  }, [salahReasonsOverallNumbers]);
 
   const modifyDataInUserPreferencesTable = async (
     value: string,

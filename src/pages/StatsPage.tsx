@@ -40,6 +40,7 @@ const StatsPage = ({
   useEffect(() => {
     setHeading("Stats");
   }, []);
+  console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
   // const [showDonutChart, setShowDonutChart] = useState(false);
   let salahStatusStatistics;
@@ -51,6 +52,10 @@ const StatsPage = ({
       Object.values(fetchedSalahData[i].salahs).forEach((status) => {
         if (status !== "" && typeof status === "string") {
           salahStatusesOverallArr.push(status as SalahStatusType);
+          console.log(
+            "salahReasonsOverallNumbers: ",
+            salahReasonsOverallNumbers
+          );
         }
       });
     }

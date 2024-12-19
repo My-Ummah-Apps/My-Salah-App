@@ -150,7 +150,7 @@ const PrayerTable = ({
                     if (isMultiEditMode) return;
                     setIsMultiEditMode(true);
                   }}
-                  className="flex items-center justify-center text-lg multi-edit-icon"
+                  className="flex items-center justify-center text-lg text-white multi-edit-icon"
                 >
                   <TbEdit />
 
