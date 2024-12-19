@@ -347,6 +347,15 @@ const SettingsPage = ({
             link("https://myummahapps.com/");
           }}
         />
+        <SettingIndividual
+          headingText={"Privacy Policy"}
+          subText={"View Privacy Policy"}
+          onClick={() => {
+            link(
+              "https://sites.google.com/view/my-salah-app-privacy-policy/home"
+            );
+          }}
+        />
         {/* <SettingIndividual
           indvidualStyles="rounded-b-md"
           headingText={"About"}
