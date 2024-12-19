@@ -1,4 +1,12 @@
 import { useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+
+// import "swiper/swiper-bundle.min.css";
+// import "swiper/swiper.min.css";
 
 import Calendar from "../components/Stats/Calendar";
 import {
@@ -110,18 +118,32 @@ const StatsPage = ({
         userStartDate={userPreferences.userStartDate}
         fetchedSalahData={fetchedSalahData}
       />{" "}
-      <ReasonsCard
-        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-        status={"male-alone"}
-      />
-      <ReasonsCard
-        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-        status={"late"}
-      />
-      <ReasonsCard
-        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-        status={"missed"}
-      />
+      <Swiper
+        spaceBetween={50}
+        slidesPerView={1}
+        modules={[Pagination]}
+        pagination={{ clickable: true }}
+      >
+        <SwiperSlide>
+          <ReasonsCard
+            salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+            status={"male-alone"}
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReasonsCard
+            salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+            status={"late"}
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReasonsCard
+            salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+            status={"missed"}
+          />
+        </SwiperSlide>
+        {/* ... */}
+      </Swiper>
     </section>
   );
 };

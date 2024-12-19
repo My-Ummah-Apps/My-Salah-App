@@ -520,18 +520,21 @@ const App = () => {
         // console.log("missedReasons: ", missedReasons);
 
         maleAloneReasons.forEach((item: string) => {
+          if (item === "") return;
           if (!salahReasonsOverallNumbers["male-alone"][item]) {
             salahReasonsOverallNumbers["male-alone"][item] = 0;
           }
           salahReasonsOverallNumbers["male-alone"][item] += 1;
         });
         lateReasons.forEach((item) => {
+          if (item === "") return;
           if (!salahReasonsOverallNumbers["late"][item]) {
             salahReasonsOverallNumbers["late"][item] = 0;
           }
           salahReasonsOverallNumbers["late"][item] += 1;
         });
         missedReasons.forEach((item) => {
+          if (item === "") return;
           if (!salahReasonsOverallNumbers["missed"][item]) {
             salahReasonsOverallNumbers["missed"][item] = 0;
           }

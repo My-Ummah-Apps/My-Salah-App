@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { salahReasonsOverallNumbersType } from "../../types/types";
 import BottomSheetReasons from "../BottomSheets/BottomSheetReasons";
-import ReasonsList from "./ReasonsList";
 
 interface ReasonsCardProps {
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
@@ -12,7 +11,6 @@ const ReasonsCard = ({
   salahReasonsOverallNumbers,
   status,
 }: ReasonsCardProps) => {
-  const [reasonsToShow, setReasonsToShow] = useState("");
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
 
   return (
@@ -53,7 +51,6 @@ const ReasonsCard = ({
         setShowReasonsSheet={setShowReasonsSheet}
         showReasonsSheet={showReasonsSheet}
         salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-        reasonsToShow={reasonsToShow}
         status={status}
       />
     </>

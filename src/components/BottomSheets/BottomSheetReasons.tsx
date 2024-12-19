@@ -1,7 +1,6 @@
 import Sheet from "react-modal-sheet";
 import { sheetBackdropColor, TWEEN_CONFIG } from "../../utils/constants";
 import { salahReasonsOverallNumbersType } from "../../types/types";
-import ReasonsList from "../Stats/ReasonsList";
 
 interface BottomSheetReasonsProps {
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
