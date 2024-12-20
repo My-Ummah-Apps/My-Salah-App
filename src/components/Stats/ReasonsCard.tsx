@@ -1,9 +1,8 @@
-import { useState } from "react";
 import {
   reasonsToShowType,
   salahReasonsOverallNumbersType,
 } from "../../types/types";
-import BottomSheetReasons from "../BottomSheets/BottomSheetReasons";
+import { prayerStatusColorsHexCodes } from "../../utils/constants";
 
 interface ReasonsCardProps {
   setReasonsToShow: React.Dispatch<React.SetStateAction<reasonsToShowType>>;
@@ -20,24 +19,55 @@ const ReasonsCard = ({
   salahReasonsOverallNumbers,
   status,
 }: ReasonsCardProps) => {
+  const reasonsSum = Object.values(salahReasonsOverallNumbers[status]).reduce(
+    (acc, total) => acc + total,
+    0
+  );
+
   return (
     <>
       <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-t-2xl p-2">
         <h1 className="mb-2 text-lg text-center">
-          Top Reasons For {status} Salah
+          {`Top Reasons For ${
+            status === "male-alone"
+              ? "Praying Salah Alone"
+              : status === "late"
+              ? "Praying Salah Late"
+              : status === "missed"
+              ? "Missing Salah"
+              : ""
+          }`}
         </h1>
         <ul>
           {Object.entries(salahReasonsOverallNumbers[status])
             .slice(0, 3)
             .map(([key, value], index) => (
-              <li className="flex justify-between" key={index}>
-                <p>
-                  {index + 1}. {key}
-                </p>
-                <p>{value} times</p>
+              <li
+                className="flex items-center justify-between py-2"
+                key={index}
+              >
+                <p>{key}</p>
+                <div className="w-1/2 h-2 bg-gray-800 rounded-md reasons-bar">
+                  <p
+                    style={{
+                      width: Math.round((value / reasonsSum) * 100) + "%",
+                      backgroundColor: prayerStatusColorsHexCodes[status],
+                    }}
+                    className="h-2 rounded-md reasons-bar"
+                  ></p>
+                </div>
+                <section className="">
+                  <p>
+                    {value} {value > 1 ? "times" : "time"}
+                  </p>
+                  <p className="text-xs text-end">
+                    ({Math.round((value / reasonsSum) * 100)}%)
+                  </p>{" "}
+                </section>
               </li>
             ))}
         </ul>
+
         {Object.entries(salahReasonsOverallNumbers[status]).length > 3 && (
           <button
             onClick={() => {
