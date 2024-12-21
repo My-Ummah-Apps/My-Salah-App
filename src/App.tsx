@@ -21,6 +21,12 @@ import {
   salahReasonsOverallNumbersType,
 } from "./types/types";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+
 import { StatusBar } from "@capacitor/status-bar";
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 import { SplashScreen } from "@capacitor/splash-screen";
@@ -82,12 +88,6 @@ const App = () => {
     ) {
       setShowChangelogModal(true);
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!localStorage.getItem("existingUser")) {
-      setShowIntroModal(true);
     }
   }, []);
 
@@ -177,6 +177,19 @@ const App = () => {
       const notificationValue = DBResultPreferences.values.find(
         (row) => row.preferenceName === "dailyNotification"
       );
+
+      const isExistingUser =
+        DBResultPreferences.values.find(
+          (row) => row.preferenceName === "isExistingUser"
+        ) || "";
+
+      console.log("isExistingUser: ", isExistingUser);
+
+      if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
+        setShowIntroModal(true);
+      }
+
+      console.log(isExistingUser.preferenceValue);
 
       // * The below has been implemented as a last resort since on Android (atleast when installing via Android Studio) notifications stop working on reinstallation/update of the app, need to test whether this is still a problem when installing via the playstore, this issue doesn't exist on iOS
       if (
@@ -276,6 +289,7 @@ const App = () => {
             (?, ?),
             (?, ?),
             (?, ?),
+            (?, ?),
             (?, ?);
             `;
         // prettier-ignore
@@ -287,7 +301,8 @@ const App = () => {
             "haptics", "0",
             "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
             "showReasons", "0",
-            "showMissedSalahCount", "1"
+            "showMissedSalahCount", "1",
+            "isExistingUser", "0"
           ];
 
         await dbConnection.current.run(insertQuery, params);
@@ -320,6 +335,10 @@ const App = () => {
     } finally {
       checkAndOpenOrCloseDBConnection("close");
     }
+    console.log(
+      "DBResultPreferencesValues: ",
+      DBResultPreferencesValues.values
+    );
 
     // ! Remove below once the ability for users to remove and add their own reasons is introduced
     const updatedReasons =
@@ -569,7 +588,7 @@ const App = () => {
     }
   };
 
-  const [showIntroModal, setShowIntroModal] = useState(false);
+  const [showIntroModal, setShowIntroModal] = useState(true);
   // const appRef = useRef();
   // console.log(appRef);
   // if (Capacitor.isNativePlatform()) {
@@ -741,52 +760,69 @@ const App = () => {
         >
           <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
             <Sheet.Header style={sheetHeaderHeight} />
-            <Sheet.Content>
+            <Sheet.Content style={{ justifyContent: "center" }}>
               {" "}
-              <section className="p-5 text-center">
-                <h1 className="text-4xl">I am a...</h1>
-                <p
-                  onClick={async () => {
-                    // setUserGender("male");
-                    setUserPreferences(
-                      (userPreferences: userPreferencesType) => ({
-                        ...userPreferences,
-                        userGender: "male",
-                      })
-                    );
-                    await modifyDataInUserPreferencesTable(
-                      "male",
-                      "userGender"
-                    );
-                    setShowIntroModal(false);
-                    localStorage.setItem("existingUser", "existingUser");
-                    localStorage.setItem("appVersion", LATEST_APP_VERSION);
-                  }}
-                  className="p-2 m-4 text-2xl text-white bg-blue-800 rounded-2xl"
-                >
-                  Brother
-                </p>
-                <p
-                  onClick={async () => {
-                    // setUserGender("female");
-                    setUserPreferences(
-                      (userPreferences: userPreferencesType) => ({
-                        ...userPreferences,
-                        userGender: "female",
-                      })
-                    );
-                    await modifyDataInUserPreferencesTable(
-                      "female",
-                      "userGender"
-                    );
-                    setShowIntroModal(false);
-                    localStorage.setItem("existingUser", "existingUser");
-                    localStorage.setItem("appVersion", LATEST_APP_VERSION);
-                  }}
-                  className="p-2 m-4 text-2xl text-white bg-pink-400 rounded-2xl"
-                >
-                  Sister
-                </p>
+              <Swiper
+                style={{ margin: 0 }}
+                spaceBetween={50}
+                slidesPerView={1}
+                navigation={{
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                }}
+                modules={[Pagination, Navigation]}
+                pagination={{ clickable: true }}
+              >
+                <SwiperSlide>
+                  <section className="p-5">
+                    <h1 className="text-4xl">I am a...</h1>
+                    <p
+                      className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
+                      onClick={async () => {
+                        setUserPreferences(
+                          (userPreferences: userPreferencesType) => ({
+                            ...userPreferences,
+                            userGender: "male",
+                          })
+                        );
+                        await modifyDataInUserPreferencesTable(
+                          "male",
+                          "userGender"
+                        );
+                        setShowIntroModal(false);
+                        modifyDataInUserPreferencesTable("1", "isExistingUser");
+                        localStorage.setItem("appVersion", LATEST_APP_VERSION);
+                      }}
+                    >
+                      Brother
+                    </p>
+                    <p
+                      className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
+                      onClick={async () => {
+                        setUserPreferences(
+                          (userPreferences: userPreferencesType) => ({
+                            ...userPreferences,
+                            userGender: "female",
+                          })
+                        );
+                        await modifyDataInUserPreferencesTable(
+                          "female",
+                          "userGender"
+                        );
+                        setShowIntroModal(false);
+                        modifyDataInUserPreferencesTable("1", "isExistingUser");
+                        localStorage.setItem("appVersion", LATEST_APP_VERSION);
+                      }}
+                    >
+                      Sister
+                    </p>
+                  </section>
+                </SwiperSlide>
+                <SwiperSlide>hi</SwiperSlide>
+              </Swiper>
+              <section className="flex justify-end m-2">
+                <div className="swiper-button-prev ">Prev</div>
+                <div className="swiper-button-next">Next</div>
               </section>
             </Sheet.Content>
           </Sheet.Container>

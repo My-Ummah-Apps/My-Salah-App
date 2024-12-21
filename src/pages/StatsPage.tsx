@@ -126,7 +126,7 @@ const StatsPage = ({
         spaceBetween={50}
         slidesPerView={1}
         modules={[Pagination]}
-        // pagination={{ clickable: true }}
+        pagination={{ clickable: true }}
       >
         <SwiperSlide>
           <ReasonsCard
@@ -152,7 +152,6 @@ const StatsPage = ({
             status={"missed"}
           />
         </SwiperSlide>
-        {/* ... */}
       </Swiper>
       <BottomSheetReasons
         // setReasonsToShow={setReasonsToShow}

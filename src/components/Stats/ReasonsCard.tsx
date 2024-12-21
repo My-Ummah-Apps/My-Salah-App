@@ -26,8 +26,8 @@ const ReasonsCard = ({
 
   return (
     <>
-      <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-t-2xl p-2">
-        <h1 className="mb-2 text-lg text-center">
+      <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-t-2xl p-2 h-full">
+        <h1 className="m-2 text-lg text-center">
           {`Top Reasons For ${
             status === "male-alone"
               ? "Praying Salah Alone"

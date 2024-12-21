@@ -20,7 +20,8 @@ export type PreferenceType =
   | "haptics"
   | "reasons"
   | "showReasons"
-  | "showMissedSalahCount";
+  | "showMissedSalahCount"
+  | "isExistingUser";
 
 export type PreferenceObjType = {
   preferenceName: PreferenceType;
