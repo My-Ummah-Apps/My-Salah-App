@@ -147,6 +147,11 @@ const App = () => {
       if (!dbConnection || !dbConnection.current) {
         throw new Error("dbConnection or dbConnection.current do not exist");
       }
+      // ! Remove this once some time has passed, as its just for migrating beta testers data
+      if (localStorage.getItem("existingUser")) {
+        modifyDataInUserPreferencesTable("1", "isExistingUser");
+        localStorage.removeItem("existingUser");
+      }
       // const test = await dbConnection.current.query(
       //   `SELECT * FROM salahDataTable`
       // );
@@ -178,18 +183,18 @@ const App = () => {
         (row) => row.preferenceName === "dailyNotification"
       );
 
-      const isExistingUser =
+      let isExistingUser =
         DBResultPreferences.values.find(
           (row) => row.preferenceName === "isExistingUser"
         ) || "";
+
+      console.log("DBResultPreferences.values: ", DBResultPreferences.values);
 
       console.log("isExistingUser: ", isExistingUser);
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
         setShowIntroModal(true);
       }
-
-      console.log(isExistingUser.preferenceValue);
 
       // * The below has been implemented as a last resort since on Android (atleast when installing via Android Studio) notifications stop working on reinstallation/update of the app, need to test whether this is still a problem when installing via the playstore, this issue doesn't exist on iOS
       if (
@@ -561,7 +566,6 @@ const App = () => {
         });
         setSalahReasonsOverallNumbers(salahReasonsOverallNumbers);
       }
-      console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
       singleSalahObjArr.push(singleSalahObj);
     }
@@ -571,16 +575,18 @@ const App = () => {
   };
 
   const modifyDataInUserPreferencesTable = async (
-    value: string,
-    preference: PreferenceType
+    preferenceValue: string,
+    preferenceName: PreferenceType
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
-      const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-      if (!dbConnection || !dbConnection.current) {
-        throw new Error("dbConnection or dbConnection.current do not exist");
-      }
-      await dbConnection.current.run(query, [value, preference]);
+      // const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+      const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+      // await dbConnection.current.run(query, [preferenceValue, preferenceName]);
+      await dbConnection?.current?.run(query, [
+        preferenceName,
+        preferenceValue,
+      ]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -588,7 +594,7 @@ const App = () => {
     }
   };
 
-  const [showIntroModal, setShowIntroModal] = useState(true);
+  const [showIntroModal, setShowIntroModal] = useState(false);
   // const appRef = useRef();
   // console.log(appRef);
   // if (Capacitor.isNativePlatform()) {

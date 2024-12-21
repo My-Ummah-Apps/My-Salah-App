@@ -78,9 +78,9 @@ const useSQLiteDB = () => {
     action: DBConnectionStateType
   ) {
     try {
-      if (!dbConnection.current) {
+      if (!dbConnection || !dbConnection.current) {
         throw new Error(
-          `Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection.current is ${dbConnection.current}`
+          `Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`
         );
       }
 
