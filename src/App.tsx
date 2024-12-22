@@ -23,6 +23,7 @@ import {
 } from "./types/types";
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 
 import "swiper/css";
@@ -154,7 +155,7 @@ const App = () => {
       // ! Remove this once some time has passed, as its just for migrating beta testers data
       if (localStorage.getItem("existingUser")) {
         modifyDataInUserPreferencesTable("1", "isExistingUser");
-        setUserPreferences({ ...userPreferences, isExistingUser: "1" });
+        // setUserPreferences({ ...userPreferences, isExistingUser: "1" });
         localStorage.removeItem("existingUser");
       }
       // const test = await dbConnection.current.query(
@@ -408,13 +409,13 @@ const App = () => {
     if (reasons) {
       // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
       if (reasons.preferenceValue !== updatedReasons) {
-        await modifyDataInUserPreferencesTable(updatedReasons, "reasons");
+        await modifyDataInUserPreferencesTable(updatedReasons, "reasonsArr");
       }
       // setReasonsArray(reasons.preferenceValue.split(","));
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        reasonsArr: reasons.preferenceValue.split(","),
-      }));
+      // setUserPreferences((userPreferences: userPreferencesType) => ({
+      //   ...userPreferences,
+      //   reasonsArr: reasons.preferenceValue.split(","),
+      // }));
     } else {
       console.error("reasons row not found");
     }
@@ -597,10 +598,14 @@ const App = () => {
         preferenceName,
         preferenceValue,
       ]);
-      // setUserPreferences({
-      //   ...userPreferences,
-      //   [preferenceName]: preferenceValue,
-      // });
+
+      setUserPreferences({
+        ...userPreferences,
+        [preferenceName]:
+          preferenceValue === "reasonsArr"
+            ? preferenceValue.split(",")
+            : preferenceValue,
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -666,7 +671,7 @@ const App = () => {
   // const pageStyles: string = `pt-[9vh] pb-[2vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
   const pageStyles: string = `pt-[9vh] pb-[5rem] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
 
-  const swiperRef = useRef(null);
+  const swiperRef = useRef<SwiperInstance | null>(null);
 
   const handleGenderSelect = () => {
     swiperRef.current?.slideNext();

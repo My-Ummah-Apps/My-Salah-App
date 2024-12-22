@@ -204,16 +204,16 @@ const SettingsPage = ({
   useEffect(() => {
     const updateStateAndDB = async () => {
       if (isMissedSalahCounterOptionChecked) {
-        setUserPreferences((userPreferences) => ({
-          ...userPreferences,
-          showMissedSalahCount: "1",
-        }));
+        // setUserPreferences((userPreferences) => ({
+        //   ...userPreferences,
+        //   showMissedSalahCount: "1",
+        // }));
         modifyDataInUserPreferencesTable("1", "showMissedSalahCount");
       } else {
-        setUserPreferences((userPreferences) => ({
-          ...userPreferences,
-          showMissedSalahCount: "0",
-        }));
+        // setUserPreferences((userPreferences) => ({
+        //   ...userPreferences,
+        //   showMissedSalahCount: "0",
+        // }));
         modifyDataInUserPreferencesTable("0", "showMissedSalahCount");
       }
     };

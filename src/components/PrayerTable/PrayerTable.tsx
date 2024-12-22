@@ -119,8 +119,7 @@ const PrayerTable = ({
     },
   ];
 
-  const handleJoyRideCompletion = (data) => {
-    console.log("data: ", data);
+  const handleJoyRideCompletion = (data: any) => {
     if (data.status === "ready") {
       modifyDataInUserPreferencesTable("1", "isExistingUser");
       setUserPreferences({ ...userPreferences, isExistingUser: "1" });
@@ -129,35 +128,39 @@ const PrayerTable = ({
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
-      {userPreferences.isExistingUser === "0" && (
-        <Joyride
-          locale={{
-            last: "Done",
-            next: "Next",
-            back: "Back",
-          }}
-          callback={handleJoyRideCompletion}
-          styles={{
-            options: {
-              zIndex: 10000,
-            },
-            buttonNext: {
-              backgroundColor: "#2563eb",
-              color: "#fff",
-              borderRadius: "5px",
-              padding: "8px 12px",
-            },
-            buttonBack: {
-              backgroundColor: "#f44336",
-              color: "#fff",
-              borderRadius: "5px",
-              padding: "8px 12px",
-            },
-          }}
-          steps={onBoardingSteps}
-          continuous
-        />
-      )}
+      {/* {userPreferences.isExistingUser === "1" && ( */}
+      <Joyride
+        locale={{
+          last: "Done",
+          next: "Next",
+          back: "Back",
+        }}
+        hideCloseButton={true}
+        callback={handleJoyRideCompletion}
+        styles={{
+          options: {
+            backgroundColor: "#27272a",
+            arrowColor: "#27272a",
+            textColor: "#fff",
+            zIndex: 10000,
+          },
+          buttonNext: {
+            backgroundColor: "#2563eb",
+            color: "#fff",
+            borderRadius: "5px",
+            padding: "8px 12px",
+          },
+          buttonBack: {
+            backgroundColor: "#f44336",
+            color: "#fff",
+            borderRadius: "5px",
+            padding: "8px 12px",
+          },
+        }}
+        steps={onBoardingSteps}
+        continuous
+      />
+      {/* // )} */}
 
       {isMultiEditMode && (
         <section className="absolute z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-700 rounded-full prayer-table-edit-cancel-btn-wrap top-3/4 left-1/2">
@@ -210,7 +213,11 @@ const PrayerTable = ({
                     if (isMultiEditMode) return;
                     setIsMultiEditMode(true);
                   }}
-                  className="flex items-center justify-center text-lg text-white multi-edit-icon"
+                  className={`flex items-center justify-center text-lg text-white ${
+                    userPreferences.isExistingUser === "0"
+                      ? "multi-edit-icon"
+                      : ""
+                  }`}
                 >
                   <TbEdit />
 
@@ -273,6 +280,8 @@ const PrayerTable = ({
                     ? true
                     : false;
 
+                  const key = salahName;
+
                   return (
                     <section
                       onClick={() => {
@@ -282,7 +291,12 @@ const PrayerTable = ({
                     >
                       {rowData.salahs[salahName] === "" ? (
                         <LuDot
-                          className={`${prayerTableIndividualSquareStyles} single-tabel-cell`}
+                          className={`${prayerTableIndividualSquareStyles} ${
+                            userPreferences.isExistingUser === "0" &&
+                            key === "Dhuhr"
+                              ? "single-tabel-cell"
+                              : ""
+                          }`}
                         />
                       ) : (
                         <div
