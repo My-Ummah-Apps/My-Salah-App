@@ -14,6 +14,7 @@ import {
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import {
   checkNotificationPermissions,
+  scheduleDailyNotification,
   sheetBackdropColor,
   sheetHeaderHeight,
   TWEEN_CONFIG,
@@ -59,42 +60,6 @@ const BottomSheetNotifications = ({
     }
   };
 
-  const createNotificationChannel = async () => {
-    await LocalNotifications.createChannel({
-      id: "daily-reminder",
-      name: "Reminders",
-      importance: 4,
-      description: "General reminders",
-      sound: "default",
-      visibility: 1,
-      vibration: true,
-    });
-  };
-
-  const scheduleDailyNotification = async (hour: number, minute: number) => {
-    await createNotificationChannel();
-
-    await LocalNotifications.schedule({
-      notifications: [
-        {
-          id: 1,
-          title: "Daily Reminder",
-          body: `Did you log your prayers today?`,
-          schedule: {
-            on: {
-              hour: hour,
-              minute: minute,
-            },
-            allowWhileIdle: true,
-            repeats: true,
-          },
-          channelId: "daily-reminder",
-          // foreground: true, // iOS only
-        },
-      ],
-    });
-  };
-
   const cancelNotification = async (id: number) => {
     await LocalNotifications.cancel({ notifications: [{ id: id }] });
   };
@@ -114,11 +79,6 @@ const BottomSheetNotifications = ({
         scheduleDailyNotification(hour, minute);
       }
       setDailyNotificationToggle(!dailyNotificationToggle);
-
-      // modifyDataInUserPreferencesTable(
-      //   dailyNotificationToggle === true ? "1" : "0",
-      //   "dailyNotification"
-      // );
     } else if (
       userNotificationPermission === "prompt" ||
       userNotificationPermission === "prompt-with-rationale"

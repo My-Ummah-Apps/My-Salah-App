@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
@@ -67,6 +67,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 const App = () => {
+  const [showIntroModal, setShowIntroModal] = useState(true);
   const [showChangelogModal, setShowChangelogModal] = useState(false);
   const [showMissedPrayersSheet, setShowMissedPrayersSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<MissedSalahObjType>(
@@ -594,7 +595,6 @@ const App = () => {
     }
   };
 
-  const [showIntroModal, setShowIntroModal] = useState(false);
   // const appRef = useRef();
   // console.log(appRef);
   // if (Capacitor.isNativePlatform()) {
@@ -652,6 +652,12 @@ const App = () => {
 
   // const pageStyles: string = `pt-[9vh] pb-[2vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
   const pageStyles: string = `pt-[9vh] pb-[5rem] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
+
+  const swiperRef = useRef(null);
+
+  const handleGenderSelect = () => {
+    swiperRef.current?.slideNext();
+  };
 
   return (
     <BrowserRouter>
@@ -769,13 +775,15 @@ const App = () => {
             <Sheet.Content style={{ justifyContent: "center" }}>
               {" "}
               <Swiper
+                onSwiper={(swiper) => (swiperRef.current = swiper)}
                 style={{ margin: 0 }}
                 spaceBetween={50}
                 slidesPerView={1}
-                navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
-                }}
+                allowTouchMove={false}
+                // navigation={{
+                //   nextEl: ".swiper-button-next",
+                //   prevEl: ".swiper-button-prev",
+                // }}
                 modules={[Pagination, Navigation]}
                 pagination={{ clickable: true }}
               >
@@ -785,6 +793,7 @@ const App = () => {
                     <p
                       className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
                       onClick={async () => {
+                        handleGenderSelect();
                         setUserPreferences(
                           (userPreferences: userPreferencesType) => ({
                             ...userPreferences,
@@ -795,7 +804,7 @@ const App = () => {
                           "male",
                           "userGender"
                         );
-                        setShowIntroModal(false);
+                        // setShowIntroModal(false);
                         modifyDataInUserPreferencesTable("1", "isExistingUser");
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
                       }}
@@ -805,6 +814,7 @@ const App = () => {
                     <p
                       className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
                       onClick={async () => {
+                        handleGenderSelect();
                         setUserPreferences(
                           (userPreferences: userPreferencesType) => ({
                             ...userPreferences,
@@ -815,7 +825,7 @@ const App = () => {
                           "female",
                           "userGender"
                         );
-                        setShowIntroModal(false);
+                        // setShowIntroModal(false);
                         modifyDataInUserPreferencesTable("1", "isExistingUser");
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
                       }}
@@ -824,12 +834,35 @@ const App = () => {
                     </p>
                   </section>
                 </SwiperSlide>
-                <SwiperSlide>hi</SwiperSlide>
+                <SwiperSlide>
+                  <section className="m-4 text-center">
+                    <h1 className="mb-2 text-2xl font-bold">
+                      Stay Consistent with Your Salah
+                    </h1>
+                    <p className="">
+                      A simple daily reminder to record your prayer statuses and
+                      stay on track with your goals
+                    </p>
+                  </section>
+                  <section className="flex flex-col p-5">
+                    <button className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl">
+                      Allow Daily Notification
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowIntroModal(false);
+                      }}
+                      className="py-3 m-2 text-center text-white bg-red-500 rounded-2xl"
+                    >
+                      Maybe Later
+                    </button>
+                  </section>
+                </SwiperSlide>
               </Swiper>
-              <section className="flex justify-end m-2">
+              {/* <section className="flex justify-end m-2">
                 <div className="swiper-button-prev ">Prev</div>
                 <div className="swiper-button-next">Next</div>
-              </section>
+              </section> */}
             </Sheet.Content>
           </Sheet.Container>
           <Sheet.Backdrop style={sheetBackdropColor} />
