@@ -9,7 +9,7 @@ export interface userPreferencesType {
   dailyNotification: string;
   dailyNotificationTime: string;
   haptics: "0" | "1" | "";
-  reasons: string[];
+  reasonsArr: string[];
   showMissedSalahCount: string;
   isExistingUser: "0" | "1" | "";
 }

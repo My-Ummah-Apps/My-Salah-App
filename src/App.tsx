@@ -103,10 +103,10 @@ const App = () => {
     userStartDate: "",
     dailyNotification: "",
     dailyNotificationTime: "",
-    reasons: [],
+    reasonsArr: [],
     showMissedSalahCount: "",
     haptics: "",
-    isExistingUser: "",
+    isExistingUser: "0",
   });
 
   const {
@@ -154,6 +154,7 @@ const App = () => {
       // ! Remove this once some time has passed, as its just for migrating beta testers data
       if (localStorage.getItem("existingUser")) {
         modifyDataInUserPreferencesTable("1", "isExistingUser");
+        setUserPreferences({ ...userPreferences, isExistingUser: "1" });
         localStorage.removeItem("existingUser");
       }
       // const test = await dbConnection.current.query(
@@ -193,8 +194,6 @@ const App = () => {
         ) || "";
 
       console.log("DBResultPreferences.values: ", DBResultPreferences.values);
-
-      console.log("isExistingUser: ", isExistingUser);
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
         setShowIntroModal(true);
@@ -377,6 +376,7 @@ const App = () => {
     const dailyNotificationTimeRow = assignPreference("dailyNotificationTime");
     const reasons = assignPreference("reasons");
     const showMissedSalahCount = assignPreference("showMissedSalahCount");
+    const isExistingUser = assignPreference("isExistingUser");
 
     if (userGenderRow) {
       const gender = userGenderRow.preferenceValue as userGenderType;
@@ -413,7 +413,7 @@ const App = () => {
       // setReasonsArray(reasons.preferenceValue.split(","));
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
-        reasonsArray: reasons.preferenceValue.split(","),
+        reasonsArr: reasons.preferenceValue.split(","),
       }));
     } else {
       console.error("reasons row not found");
@@ -444,6 +444,12 @@ const App = () => {
       }));
     } else {
       console.error("showMissedSalahCount row not found");
+    }
+    if (isExistingUser) {
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        isExistingUser: "1",
+      }));
     }
   };
 
@@ -591,6 +597,10 @@ const App = () => {
         preferenceName,
         preferenceValue,
       ]);
+      // setUserPreferences({
+      //   ...userPreferences,
+      //   [preferenceName]: preferenceValue,
+      // });
     } catch (error) {
       console.error(error);
     } finally {
@@ -701,6 +711,9 @@ const App = () => {
                 dbConnection={dbConnection}
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
+                }
+                modifyDataInUserPreferencesTable={
+                  modifyDataInUserPreferencesTable
                 }
                 renderTable={renderTable}
                 setUserPreferences={setUserPreferences}

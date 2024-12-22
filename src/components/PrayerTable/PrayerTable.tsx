@@ -5,6 +5,7 @@ AutoSizer;
 import {
   DBConnectionStateType,
   MissedSalahObjType,
+  PreferenceType,
   SalahNamesType,
   SelectedSalahAndDateObjType,
   userPreferencesType,
@@ -28,6 +29,10 @@ interface PrayerTableProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
+  modifyDataInUserPreferencesTable: (
+    value: string,
+    preference: PreferenceType
+  ) => Promise<void>;
   renderTable: boolean;
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
@@ -49,6 +54,7 @@ interface PrayerTableProps {
 const PrayerTable = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
+  modifyDataInUserPreferencesTable,
   setFetchedSalahData,
   fetchedSalahData,
   setUserPreferences,
@@ -100,18 +106,59 @@ const PrayerTable = ({
 
   const onBoardingSteps = [
     {
-      target: ".single-tabel-cell",
-      content: "This is my awesome feature!",
+      target: ".multi-edit-icon",
+      content:
+        "Tap this icon to edit multiple Salah entries across different dates at once (provided they share the same status, reasons, and notes).",
+      disableBeacon: true,
     },
     {
-      target: ".multi-edit-icon",
-      content: "This another awesome feature!",
+      target: ".single-tabel-cell",
+      content:
+        "Alternatively, you can update a Salah individually by tapping on a specific cell.",
+      disableBeacon: true,
     },
   ];
 
+  const handleJoyRideCompletion = (data) => {
+    console.log("data: ", data);
+    if (data.status === "ready") {
+      modifyDataInUserPreferencesTable("1", "isExistingUser");
+      setUserPreferences({ ...userPreferences, isExistingUser: "1" });
+    }
+  };
+
   return (
     <section className="prayer-table-wrap h-[80vh]">
-      <Joyride steps={onBoardingSteps} continuous showProgress />
+      {userPreferences.isExistingUser === "0" && (
+        <Joyride
+          locale={{
+            last: "Done",
+            next: "Next",
+            back: "Back",
+          }}
+          callback={handleJoyRideCompletion}
+          styles={{
+            options: {
+              zIndex: 10000,
+            },
+            buttonNext: {
+              backgroundColor: "#2563eb",
+              color: "#fff",
+              borderRadius: "5px",
+              padding: "8px 12px",
+            },
+            buttonBack: {
+              backgroundColor: "#f44336",
+              color: "#fff",
+              borderRadius: "5px",
+              padding: "8px 12px",
+            },
+          }}
+          steps={onBoardingSteps}
+          continuous
+        />
+      )}
+
       {isMultiEditMode && (
         <section className="absolute z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-700 rounded-full prayer-table-edit-cancel-btn-wrap top-3/4 left-1/2">
           <button
@@ -154,7 +201,7 @@ const PrayerTable = ({
           >
             <Column
               style={{ marginLeft: "0" }}
-              className="items-center text-left single-tabel-cell"
+              className="items-center text-left"
               label=""
               dataKey="date"
               headerRenderer={() => (
@@ -235,12 +282,7 @@ const PrayerTable = ({
                     >
                       {rowData.salahs[salahName] === "" ? (
                         <LuDot
-                          // ! Below state check won't do, query db instead
-                          className={`${prayerTableIndividualSquareStyles} ${
-                            userPreferences.isExistingUser === "0"
-                              ? "single-tabel-cell"
-                              : ""
-                          }`}
+                          className={`${prayerTableIndividualSquareStyles} single-tabel-cell`}
                         />
                       ) : (
                         <div

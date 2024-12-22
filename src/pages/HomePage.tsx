@@ -6,6 +6,7 @@ import {
   userPreferencesType,
   MissedSalahObjType,
   SelectedSalahAndDateObjType,
+  PreferenceType,
 } from "../types/types";
 import { useEffect, useState } from "react";
 
@@ -13,6 +14,10 @@ interface HomePageProps {
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
+  ) => Promise<void>;
+  modifyDataInUserPreferencesTable: (
+    value: string,
+    preference: PreferenceType
   ) => Promise<void>;
   renderTable: boolean;
   setFetchedSalahData: React.Dispatch<
@@ -34,6 +39,7 @@ interface HomePageProps {
 const HomePage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
+  modifyDataInUserPreferencesTable,
   renderTable,
   setFetchedSalahData,
   fetchedSalahData,
@@ -66,6 +72,7 @@ const HomePage = ({
         <PrayerTable
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+          modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
           renderTable={renderTable}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}

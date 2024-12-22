@@ -216,7 +216,7 @@ const BottomSheetPrayerStatus = ({
 
         if (
           !selectedReasons.every((reason) =>
-            userPreferences.reasons.includes(reason)
+            userPreferences.reasonsArr.includes(reason)
           )
         ) {
           console.error(
@@ -506,7 +506,7 @@ const BottomSheetPrayerStatus = ({
                   </div>
                   <div className="flex flex-wrap">
                     {/* {missedReasonsArray.map((item) => ( */}
-                    {userPreferences.reasons.sort().map((item) => (
+                    {userPreferences.reasonsArr.sort().map((item) => (
                       <p
                         key={item}
                         style={{
@@ -555,13 +555,13 @@ const BottomSheetPrayerStatus = ({
                       className="mt-10 bg-blue-700"
                       onClick={() => {
                         const updatedReasonsArray = [
-                          ...userPreferences.reasons,
+                          ...userPreferences.reasonsArr,
                           customReason,
                         ];
                         // setReasonsArray(updatedReasonsArray);
                         setUserPreferences((userPreferences) => ({
                           ...userPreferences,
-                          reasons: updatedReasonsArray,
+                          reasonsArr: updatedReasonsArray,
                         }));
                         setShowAddCustomReasonInputBox(false);
                         localStorage.setItem(
@@ -665,7 +665,7 @@ const BottomSheetPrayerStatus = ({
         </div>
         <div className="flex flex-wrap">
           {/* {missedReasonsArray.map((item) => ( */}
-          {userPreferences.reasons.sort().map((item) => (
+          {userPreferences.reasonsArr.sort().map((item) => (
             <p
               key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
               style={{
