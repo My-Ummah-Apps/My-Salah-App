@@ -6,6 +6,7 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   getMissedSalahCount,
+  scheduleDailyNotification,
   sheetBackdropColor,
   sheetHeaderHeight,
 } from "./utils/constants";
@@ -67,7 +68,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 const App = () => {
-  const [showIntroModal, setShowIntroModal] = useState(true);
+  const [showIntroModal, setShowIntroModal] = useState(false);
   const [showChangelogModal, setShowChangelogModal] = useState(false);
   const [showMissedPrayersSheet, setShowMissedPrayersSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<MissedSalahObjType>(
@@ -102,8 +103,10 @@ const App = () => {
     userStartDate: "",
     dailyNotification: "",
     dailyNotificationTime: "",
-    reasonsArray: [],
+    reasons: [],
     showMissedSalahCount: "",
+    haptics: "",
+    isExistingUser: "",
   });
 
   const {
@@ -785,7 +788,7 @@ const App = () => {
                 //   prevEl: ".swiper-button-prev",
                 // }}
                 modules={[Pagination, Navigation]}
-                pagination={{ clickable: true }}
+                // pagination={{ clickable: true }}
               >
                 <SwiperSlide>
                   <section className="p-5">
@@ -805,7 +808,7 @@ const App = () => {
                           "userGender"
                         );
                         // setShowIntroModal(false);
-                        modifyDataInUserPreferencesTable("1", "isExistingUser");
+                        // modifyDataInUserPreferencesTable("1", "isExistingUser");
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
                       }}
                     >
@@ -825,8 +828,7 @@ const App = () => {
                           "female",
                           "userGender"
                         );
-                        // setShowIntroModal(false);
-                        modifyDataInUserPreferencesTable("1", "isExistingUser");
+                        // modifyDataInUserPreferencesTable("1", "isExistingUser");
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
                       }}
                     >
@@ -845,14 +847,32 @@ const App = () => {
                     </p>
                   </section>
                   <section className="flex flex-col p-5">
-                    <button className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl">
+                    <button
+                      onClick={async () => {
+                        const permission =
+                          await LocalNotifications.requestPermissions();
+                        if (permission.display === "granted") {
+                          console.log("Permission granted");
+                          setShowIntroModal(false);
+                          scheduleDailyNotification(21, 0);
+                          modifyDataInUserPreferencesTable(
+                            "21:00",
+                            "dailyNotificationTime"
+                          );
+                        } else {
+                          setShowIntroModal(false);
+                          console.log("Permissions not granted");
+                        }
+                      }}
+                      className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl"
+                    >
                       Allow Daily Notification
                     </button>
                     <button
                       onClick={() => {
                         setShowIntroModal(false);
                       }}
-                      className="py-3 m-2 text-center text-white bg-red-500 rounded-2xl"
+                      className="py-3 m-2 text-center text-white rounded-2xl"
                     >
                       Maybe Later
                     </button>

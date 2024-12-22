@@ -4,24 +4,17 @@
 // }
 
 export interface userPreferencesType {
-  userGender: userGenderType;
   userStartDate: string;
+  userGender: userGenderType;
   dailyNotification: string;
   dailyNotificationTime: string;
-  reasonsArray: string[];
+  haptics: "0" | "1" | "";
+  reasons: string[];
   showMissedSalahCount: string;
+  isExistingUser: "0" | "1" | "";
 }
 
-export type PreferenceType =
-  | "userStartDate"
-  | "userGender"
-  | "dailyNotification"
-  | "dailyNotificationTime"
-  | "haptics"
-  | "reasons"
-  | "showReasons"
-  | "showMissedSalahCount"
-  | "isExistingUser";
+export type PreferenceType = keyof userPreferencesType;
 
 export type PreferenceObjType = {
   preferenceName: PreferenceType;

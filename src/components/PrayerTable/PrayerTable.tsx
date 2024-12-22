@@ -1,5 +1,6 @@
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
+import Joyride from "react-joyride";
 AutoSizer;
 import {
   DBConnectionStateType,
@@ -97,8 +98,20 @@ const PrayerTable = ({
     }
   };
 
+  const onBoardingSteps = [
+    {
+      target: ".single-tabel-cell",
+      content: "This is my awesome feature!",
+    },
+    {
+      target: ".multi-edit-icon",
+      content: "This another awesome feature!",
+    },
+  ];
+
   return (
     <section className="prayer-table-wrap h-[80vh]">
+      <Joyride steps={onBoardingSteps} continuous showProgress />
       {isMultiEditMode && (
         <section className="absolute z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-700 rounded-full prayer-table-edit-cancel-btn-wrap top-3/4 left-1/2">
           <button
@@ -141,7 +154,7 @@ const PrayerTable = ({
           >
             <Column
               style={{ marginLeft: "0" }}
-              className="items-center text-left "
+              className="items-center text-left single-tabel-cell"
               label=""
               dataKey="date"
               headerRenderer={() => (
@@ -222,7 +235,12 @@ const PrayerTable = ({
                     >
                       {rowData.salahs[salahName] === "" ? (
                         <LuDot
-                          className={`${prayerTableIndividualSquareStyles}`}
+                          // ! Below state check won't do, query db instead
+                          className={`${prayerTableIndividualSquareStyles} ${
+                            userPreferences.isExistingUser === "0"
+                              ? "single-tabel-cell"
+                              : ""
+                          }`}
                         />
                       ) : (
                         <div
