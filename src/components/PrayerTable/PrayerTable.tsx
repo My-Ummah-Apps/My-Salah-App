@@ -30,8 +30,8 @@ interface PrayerTableProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   modifyDataInUserPreferencesTable: (
-    value: string,
-    preference: PreferenceType
+    preference: PreferenceType,
+    value: string
   ) => Promise<void>;
   renderTable: boolean;
   setFetchedSalahData: React.Dispatch<
@@ -121,7 +121,7 @@ const PrayerTable = ({
 
   const handleJoyRideCompletion = (data: any) => {
     if (data.status === "ready") {
-      modifyDataInUserPreferencesTable("1", "isExistingUser");
+      modifyDataInUserPreferencesTable("isExistingUser", "1");
       setUserPreferences({ ...userPreferences, isExistingUser: "1" });
     }
   };

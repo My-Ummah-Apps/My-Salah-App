@@ -16,8 +16,8 @@ interface HomePageProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   modifyDataInUserPreferencesTable: (
-    value: string,
-    preference: PreferenceType
+    preference: PreferenceType,
+    value: string
   ) => Promise<void>;
   renderTable: boolean;
   setFetchedSalahData: React.Dispatch<

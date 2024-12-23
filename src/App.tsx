@@ -104,7 +104,7 @@ const App = () => {
     userStartDate: "",
     dailyNotification: "",
     dailyNotificationTime: "",
-    reasonsArr: [],
+    reasons: [],
     showMissedSalahCount: "",
     haptics: "",
     isExistingUser: "0",
@@ -154,7 +154,7 @@ const App = () => {
       }
       // ! Remove this once some time has passed, as its just for migrating beta testers data
       if (localStorage.getItem("existingUser")) {
-        modifyDataInUserPreferencesTable("1", "isExistingUser");
+        modifyDataInUserPreferencesTable("isExistingUser", "1");
         // setUserPreferences({ ...userPreferences, isExistingUser: "1" });
         localStorage.removeItem("existingUser");
       }
@@ -241,7 +241,7 @@ const App = () => {
         notificationValue === "1"
       ) {
         try {
-          await modifyDataInUserPreferencesTable("0", "dailyNotification");
+          await modifyDataInUserPreferencesTable("dailyNotification", "0");
           await checkAndOpenOrCloseDBConnection("open");
           DBResultPreferences = await dbConnection.current.query(
             `SELECT * FROM userPreferencesTable`
@@ -298,7 +298,6 @@ const App = () => {
             (?, ?),
             (?, ?),
             (?, ?),
-            (?, ?),
             (?, ?);
             `;
         // prettier-ignore
@@ -309,7 +308,6 @@ const App = () => {
             "dailyNotificationTime", "21:00",
             "haptics", "0",
             "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
-            "showReasons", "0",
             "showMissedSalahCount", "1",
             "isExistingUser", "0"
           ];
@@ -408,14 +406,15 @@ const App = () => {
 
     if (reasons) {
       // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
+
       if (reasons.preferenceValue !== updatedReasons) {
-        await modifyDataInUserPreferencesTable(updatedReasons, "reasonsArr");
+        await modifyDataInUserPreferencesTable("reasons", updatedReasons);
+      } else {
+        setUserPreferences((userPreferences: userPreferencesType) => ({
+          ...userPreferences,
+          reasons: reasons.preferenceValue.split(","),
+        }));
       }
-      // setReasonsArray(reasons.preferenceValue.split(","));
-      // setUserPreferences((userPreferences: userPreferencesType) => ({
-      //   ...userPreferences,
-      //   reasonsArr: reasons.preferenceValue.split(","),
-      // }));
     } else {
       console.error("reasons row not found");
     }
@@ -586,8 +585,8 @@ const App = () => {
   };
 
   const modifyDataInUserPreferencesTable = async (
-    preferenceValue: string,
-    preferenceName: PreferenceType
+    preferenceName: PreferenceType,
+    preferenceValue: string
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -602,7 +601,7 @@ const App = () => {
       setUserPreferences({
         ...userPreferences,
         [preferenceName]:
-          preferenceValue === "reasonsArr"
+          preferenceName === "reasons"
             ? preferenceValue.split(",")
             : preferenceValue,
       });
@@ -822,11 +821,10 @@ const App = () => {
                           })
                         );
                         await modifyDataInUserPreferencesTable(
-                          "male",
-                          "userGender"
+                          "userGender",
+                          "male"
                         );
-                        // setShowIntroModal(false);
-                        // modifyDataInUserPreferencesTable("1", "isExistingUser");
+
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
                       }}
                     >
@@ -843,10 +841,10 @@ const App = () => {
                           })
                         );
                         await modifyDataInUserPreferencesTable(
-                          "female",
-                          "userGender"
+                          "userGender",
+                          "female"
                         );
-                        // modifyDataInUserPreferencesTable("1", "isExistingUser");
+
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
                       }}
                     >
@@ -874,8 +872,8 @@ const App = () => {
                           setShowIntroModal(false);
                           scheduleDailyNotification(21, 0);
                           modifyDataInUserPreferencesTable(
-                            "21:00",
-                            "dailyNotificationTime"
+                            "dailyNotificationTime",
+                            "21:00"
                           );
                         } else {
                           setShowIntroModal(false);

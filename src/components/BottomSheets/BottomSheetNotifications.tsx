@@ -30,8 +30,8 @@ const BottomSheetNotifications = ({
   setShowNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
   showNotificationsModal: boolean;
   modifyDataInUserPreferencesTable: (
-    value: string,
-    preference: PreferenceType
+    preference: PreferenceType,
+    value: string
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
@@ -103,7 +103,7 @@ const BottomSheetNotifications = ({
       requestPermission === "prompt-with-rationale" ||
       requestPermission === "denied"
     ) {
-      modifyDataInUserPreferencesTable("0", "dailyNotification");
+      modifyDataInUserPreferencesTable("dailyNotification", "0");
     }
   };
 
@@ -116,7 +116,7 @@ const BottomSheetNotifications = ({
     console.log(hour, minute);
 
     scheduleDailyNotification(hour, minute);
-    modifyDataInUserPreferencesTable(e.target.value, "dailyNotificationTime");
+    modifyDataInUserPreferencesTable("dailyNotificationTime", e.target.value);
   };
 
   useEffect(() => {
@@ -125,7 +125,7 @@ const BottomSheetNotifications = ({
       ...userPreferences,
       dailyNotification: notificationValue,
     });
-    modifyDataInUserPreferencesTable(notificationValue, "dailyNotification");
+    modifyDataInUserPreferencesTable("dailyNotification", notificationValue);
   }, [dailyNotificationToggle]);
 
   return (

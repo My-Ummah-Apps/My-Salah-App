@@ -31,8 +31,8 @@ interface SettingsPageProps {
   fetchDataFromDB: () => Promise<void>;
   pageStyles: string;
   modifyDataInUserPreferencesTable: (
-    value: string,
-    preference: PreferenceType
+    preference: PreferenceType,
+    value: string
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
@@ -208,13 +208,13 @@ const SettingsPage = ({
         //   ...userPreferences,
         //   showMissedSalahCount: "1",
         // }));
-        modifyDataInUserPreferencesTable("1", "showMissedSalahCount");
+        modifyDataInUserPreferencesTable("showMissedSalahCount", "1");
       } else {
         // setUserPreferences((userPreferences) => ({
         //   ...userPreferences,
         //   showMissedSalahCount: "0",
         // }));
-        modifyDataInUserPreferencesTable("0", "showMissedSalahCount");
+        modifyDataInUserPreferencesTable("showMissedSalahCount", "0");
       }
     };
 
