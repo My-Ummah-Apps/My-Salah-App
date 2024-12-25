@@ -106,8 +106,8 @@ const App = () => {
     dailyNotificationTime: "",
     reasons: [],
     showMissedSalahCount: "",
-    haptics: "",
-    isExistingUser: "0",
+    haptics: "0",
+    isExistingUser: "",
   });
 
   const {
@@ -154,16 +154,12 @@ const App = () => {
       }
       // ! Remove this once some time has passed, as its just for migrating beta testers data
       if (localStorage.getItem("existingUser")) {
+        console.log("existingUser key exists in localstorage, amending DB");
+
         modifyDataInUserPreferencesTable("isExistingUser", "1");
-        // setUserPreferences({ ...userPreferences, isExistingUser: "1" });
         localStorage.removeItem("existingUser");
       }
-      // const test = await dbConnection.current.query(
-      //   `SELECT * FROM salahDataTable`
-      // );
-      // setDBResultAllSalahData(
-      //   await dbConnection.current.query(`SELECT * FROM salahDataTable`)
-      // );
+
       const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`
       );
@@ -347,10 +343,6 @@ const App = () => {
       DBResultPreferencesValues.values
     );
 
-    // ! Remove below once the ability for users to remove and add their own reasons is introduced
-    const updatedReasons =
-      "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
-
     const assignPreference = (
       preference: string
     ): {
@@ -407,6 +399,9 @@ const App = () => {
     if (reasons) {
       // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
 
+      const updatedReasons =
+        "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
+
       if (reasons.preferenceValue !== updatedReasons) {
         await modifyDataInUserPreferencesTable("reasons", updatedReasons);
       } else {
@@ -445,10 +440,12 @@ const App = () => {
     } else {
       console.error("showMissedSalahCount row not found");
     }
+    console.log("isExistingUser: ", isExistingUser);
+
     if (isExistingUser) {
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
-        isExistingUser: "1",
+        isExistingUser: isExistingUser.preferenceValue as "" | "0" | "1",
       }));
     }
   };
@@ -608,7 +605,14 @@ const App = () => {
     } catch (error) {
       console.error(error);
     } finally {
+      // console.log("HERE YA GO");
+      // const test = await dbConnection.current.query(
+      //   `SELECT * FROM userPreferencesTable`
+      // );
+      // console.log(test);
+
       await checkAndOpenOrCloseDBConnection("close");
+      console.log("PREF IN APP: ", userPreferences);
     }
   };
 
@@ -807,6 +811,8 @@ const App = () => {
                 modules={[Pagination, Navigation]}
                 // pagination={{ clickable: true }}
               >
+                // ! For some reason, when tapping brother or sister inthe
+                sheet, the isExistingUser flag in the DB chnges from 0 to 1
                 <SwiperSlide>
                   <section className="p-5">
                     <h1 className="text-4xl">I am a...</h1>

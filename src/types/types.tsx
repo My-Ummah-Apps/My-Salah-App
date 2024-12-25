@@ -8,11 +8,15 @@ export interface userPreferencesType {
   userGender: userGenderType;
   dailyNotification: string;
   dailyNotificationTime: string;
-  haptics: "0" | "1" | "";
+  haptics: "0" | "1";
   reasons: string[];
   showMissedSalahCount: string;
-  isExistingUser: "0" | "1" | "";
+  isExistingUser: "" | "0" | "1";
 }
+
+// type ValueOf<T> = T[keyof T];
+
+// export type UserPreferenceValues = ValueOf<userPreferencesType>;
 
 export type PreferenceType = keyof userPreferencesType;
 

@@ -112,17 +112,21 @@ const PrayerTable = ({
       disableBeacon: true,
     },
     {
-      target: ".single-tabel-cell",
+      target: ".single-table-cell",
+      // target: "",
       content:
         "Alternatively, you can update a Salah individually by tapping on a specific cell.",
       disableBeacon: true,
+      placement: "center",
     },
   ];
 
   const handleJoyRideCompletion = (data: any) => {
+    console.log("handleJoyRideCompletion has run");
+
     if (data.status === "ready") {
+      console.log("Joyride status complete");
       modifyDataInUserPreferencesTable("isExistingUser", "1");
-      setUserPreferences({ ...userPreferences, isExistingUser: "1" });
     }
   };
 
@@ -130,6 +134,8 @@ const PrayerTable = ({
     <section className="prayer-table-wrap h-[80vh]">
       {/* {userPreferences.isExistingUser === "1" && ( */}
       <Joyride
+        disableOverlay={true}
+        run={userPreferences.isExistingUser === "0"}
         locale={{
           last: "Done",
           next: "Next",
@@ -213,11 +219,7 @@ const PrayerTable = ({
                     if (isMultiEditMode) return;
                     setIsMultiEditMode(true);
                   }}
-                  className={`flex items-center justify-center text-lg text-white ${
-                    userPreferences.isExistingUser === "0"
-                      ? "multi-edit-icon"
-                      : ""
-                  }`}
+                  className={`flex items-center justify-center text-lg text-white multi-edit-icon`}
                 >
                   <TbEdit />
 
@@ -255,7 +257,7 @@ const PrayerTable = ({
                 );
 
                 return (
-                  <section className="">
+                  <section>
                     <p className="text-sm">{formattedParsedDate}</p>
                     <p className="text-sm">{day}</p>
                   </section>
@@ -273,14 +275,12 @@ const PrayerTable = ({
                 dataKey={""}
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData }) => {
+                cellRenderer={({ rowData, rowIndex }) => {
                   let isChecked = selectedSalahAndDate[rowData.date]?.includes(
                     salahName
                   )
                     ? true
                     : false;
-
-                  const key = salahName;
 
                   return (
                     <section
@@ -291,11 +291,15 @@ const PrayerTable = ({
                     >
                       {rowData.salahs[salahName] === "" ? (
                         <LuDot
+                          style={{
+                            backgroundColor:
+                              salahName === "Asar" &&
+                              userPreferences.isExistingUser === "0"
+                                ? "white"
+                                : "",
+                          }}
                           className={`${prayerTableIndividualSquareStyles} ${
-                            userPreferences.isExistingUser === "0" &&
-                            key === "Dhuhr"
-                              ? "single-tabel-cell"
-                              : ""
+                            salahName === "Asar" ? "single-table-cell" : ""
                           }`}
                         />
                       ) : (
