@@ -409,14 +409,19 @@ const App = () => {
     }
 
     if (reasons) {
-      // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
+      console.log("REASONS EXIST");
 
+      // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
       const updatedReasons =
-        "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
+        "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
       if (reasons.preferenceValue !== updatedReasons) {
+        console.log("REASONS ARE NOT EQUAL TO WHATS STORED, UPDATING DB...");
+
         await modifyDataInUserPreferencesTable("reasons", updatedReasons);
       } else {
+        console.log("UPDATING REASONS STATE...");
+
         setUserPreferences((userPreferences: userPreferencesType) => ({
           ...userPreferences,
           reasons: reasons.preferenceValue.split(","),
@@ -620,7 +625,13 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
       // const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-      const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+      let query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+
+      // if (preferenceName === "reasons") {
+      //   console.log("Reasons here, and its: ", preferenceValue);
+      //   query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+      // }
+
       // await dbConnection.current.run(query, [preferenceValue, preferenceName]);
       await dbConnection?.current?.run(query, [
         preferenceName,
@@ -637,16 +648,14 @@ const App = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      // console.log("HERE YA GO");
-      // const test = await dbConnection.current.query(
-      //   `SELECT * FROM userPreferencesTable`
-      // );
-      // console.log(test);
-
       await checkAndOpenOrCloseDBConnection("close");
       console.log("PREF IN APP: ", userPreferences);
     }
   };
+
+  useEffect(() => {
+    console.log("userPreferences: ", userPreferences);
+  }, [userPreferences]);
 
   // const appRef = useRef();
   // console.log(appRef);
@@ -804,6 +813,7 @@ const App = () => {
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }
+                // @ts-ignore
                 salahReasonsOverallNumbers={salahReasonsOverallNumbers}
                 // DBResultAllSalahData={DBResultAllSalahData}
                 userPreferences={userPreferences}
