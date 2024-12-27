@@ -104,13 +104,14 @@ const PrayerTable = ({
     }
   };
 
-  const onBoardingSteps = [
+  const joyRideonBoardingSteps = [
     {
       target: ".multi-edit-icon",
       content:
         "Tap this icon to edit multiple Salah entries across different dates at once (provided they share the same status, reasons, and notes).",
       disableBeacon: true,
     },
+
     {
       target: ".single-table-cell",
       // target: "",
@@ -122,10 +123,7 @@ const PrayerTable = ({
   ];
 
   const handleJoyRideCompletion = (data: any) => {
-    console.log("handleJoyRideCompletion has run");
-
     if (data.status === "ready") {
-      console.log("Joyride status complete");
       modifyDataInUserPreferencesTable("isExistingUser", "1");
     }
   };
@@ -141,6 +139,9 @@ const PrayerTable = ({
           next: "Next",
           back: "Back",
         }}
+        // @ts-ignore
+        steps={joyRideonBoardingSteps}
+        continuous
         hideCloseButton={true}
         callback={handleJoyRideCompletion}
         styles={{
@@ -163,8 +164,6 @@ const PrayerTable = ({
             padding: "8px 12px",
           },
         }}
-        steps={onBoardingSteps}
-        continuous
       />
       {/* // )} */}
 
@@ -275,7 +274,7 @@ const PrayerTable = ({
                 dataKey={""}
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData, rowIndex }) => {
+                cellRenderer={({ rowData }) => {
                   let isChecked = selectedSalahAndDate[rowData.date]?.includes(
                     salahName
                   )
@@ -299,7 +298,15 @@ const PrayerTable = ({
                                 : "",
                           }}
                           className={`${prayerTableIndividualSquareStyles} ${
-                            salahName === "Asar" ? "single-table-cell" : ""
+                            userPreferences.isExistingUser &&
+                            salahName === "Asar"
+                              ? "single-table-cell"
+                              : ""
+                          } ${
+                            userPreferences.isExistingUser === "0" &&
+                            salahName === "Asar"
+                              ? "animate-bounce"
+                              : ""
                           }`}
                         />
                       ) : (

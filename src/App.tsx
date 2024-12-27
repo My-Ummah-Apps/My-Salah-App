@@ -104,10 +104,12 @@ const App = () => {
     userStartDate: "",
     dailyNotification: "",
     dailyNotificationTime: "",
+    haptics: "0",
     reasons: [],
     showMissedSalahCount: "",
-    haptics: "0",
     isExistingUser: "",
+    isMissedSalahToolTipShown: "",
+    appLaunchCount: "",
   });
 
   const {
@@ -116,9 +118,6 @@ const App = () => {
     dbConnection,
     checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
-
-  // const [DBResultAllSalahData, setDBResultAllSalahData] =
-  //   useState<DBSQLiteValues>();
 
   useEffect(() => {
     if (isDatabaseInitialised === true) {
@@ -156,7 +155,8 @@ const App = () => {
       if (localStorage.getItem("existingUser")) {
         console.log("existingUser key exists in localstorage, amending DB");
 
-        modifyDataInUserPreferencesTable("isExistingUser", "1");
+        await modifyDataInUserPreferencesTable("isExistingUser", "1");
+        modifyDataInUserPreferencesTable("isMissedSalahToolTipShown", "1");
         localStorage.removeItem("existingUser");
       }
 
@@ -294,6 +294,8 @@ const App = () => {
             (?, ?),
             (?, ?),
             (?, ?),
+            (?, ?),
+            (?, ?),
             (?, ?);
             `;
         // prettier-ignore
@@ -305,7 +307,9 @@ const App = () => {
             "haptics", "0",
             "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
             "showMissedSalahCount", "1",
-            "isExistingUser", "0"
+            "isExistingUser", "0",
+            "isMissedSalahToolTipShown", "0",
+            "appLaunchCount", "0"
           ];
 
         await dbConnection.current.run(insertQuery, params);
@@ -320,8 +324,12 @@ const App = () => {
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
       } else if (DBResultPreferencesValues.length > 0) {
-        const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
+        const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES 
+        ("showMissedSalahCount", "1"),
+        ("appLaunchCount", "0")`;
+
         await dbConnection.current.run(query);
+
         const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
         );
@@ -368,6 +376,10 @@ const App = () => {
     const reasons = assignPreference("reasons");
     const showMissedSalahCount = assignPreference("showMissedSalahCount");
     const isExistingUser = assignPreference("isExistingUser");
+    const isMissedSalahToolTipShown = assignPreference(
+      "isMissedSalahToolTipShown"
+    );
+    const appLaunchCount = assignPreference("appLaunchCount");
 
     if (userGenderRow) {
       const gender = userGenderRow.preferenceValue as userGenderType;
@@ -440,13 +452,33 @@ const App = () => {
     } else {
       console.error("showMissedSalahCount row not found");
     }
-    console.log("isExistingUser: ", isExistingUser);
 
     if (isExistingUser) {
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         isExistingUser: isExistingUser.preferenceValue as "" | "0" | "1",
       }));
+    } else {
+      console.error("isExistingUser row not found");
+    }
+    if (isMissedSalahToolTipShown) {
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        isMissedSalahToolTipShown: isMissedSalahToolTipShown.preferenceValue as
+          | ""
+          | "0"
+          | "1",
+      }));
+    } else {
+      console.error("isMissedSalahToolTipShown row not found");
+    }
+    if (appLaunchCount) {
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        appLaunchCount: appLaunchCount.preferenceValue,
+      }));
+    } else {
+      console.error("appLaunchCount row not found");
     }
   };
 
@@ -691,6 +723,10 @@ const App = () => {
               setShowMissedPrayersSheet={setShowMissedPrayersSheet}
               isMultiEditMode={isMultiEditMode}
               missedSalahList={missedSalahList}
+              modifyDataInUserPreferencesTable={
+                modifyDataInUserPreferencesTable
+              }
+              userPreferences={userPreferences}
             />
           ) : null}
 
@@ -863,7 +899,7 @@ const App = () => {
                     <h1 className="mb-2 text-2xl font-bold">
                       Stay Consistent with Your Salah
                     </h1>
-                    <p className="">
+                    <p>
                       A simple daily reminder to record your prayer statuses and
                       stay on track with your goals
                     </p>

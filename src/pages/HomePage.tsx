@@ -68,27 +68,27 @@ const HomePage = ({
       {/* <section className={`home-page-wrap`}> */}
       {/* {title} */}
 
-      {renderTable ? (
-        <PrayerTable
-          dbConnection={dbConnection}
-          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-          renderTable={renderTable}
-          setUserPreferences={setUserPreferences}
-          userPreferences={userPreferences}
-          setMissedSalahList={setMissedSalahList}
-          setFetchedSalahData={setFetchedSalahData}
-          fetchedSalahData={fetchedSalahData}
-          setSelectedSalahAndDate={setSelectedSalahAndDate}
-          selectedSalahAndDate={selectedSalahAndDate}
-          setIsMultiEditMode={setIsMultiEditMode}
-          isMultiEditMode={isMultiEditMode}
-          setShowUpdateStatusModal={setShowUpdateStatusModal}
-          showUpdateStatusModal={showUpdateStatusModal}
-        />
-      ) : (
+      {/* {renderTable ? ( */}
+      <PrayerTable
+        dbConnection={dbConnection}
+        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+        renderTable={renderTable}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
+        setMissedSalahList={setMissedSalahList}
+        setFetchedSalahData={setFetchedSalahData}
+        fetchedSalahData={fetchedSalahData}
+        setSelectedSalahAndDate={setSelectedSalahAndDate}
+        selectedSalahAndDate={selectedSalahAndDate}
+        setIsMultiEditMode={setIsMultiEditMode}
+        isMultiEditMode={isMultiEditMode}
+        setShowUpdateStatusModal={setShowUpdateStatusModal}
+        showUpdateStatusModal={showUpdateStatusModal}
+      />
+      {/* ) : (
         <div>Loading Data...</div>
-      )}
+      )} */}
       {/* )} */}
       <BottomSheetMissedPrayersList
         dbConnection={dbConnection}
