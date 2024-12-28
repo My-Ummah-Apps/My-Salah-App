@@ -156,7 +156,10 @@ const App = () => {
         console.log("existingUser key exists in localstorage, amending DB");
 
         await modifyDataInUserPreferencesTable("isExistingUser", "1");
-        modifyDataInUserPreferencesTable("isMissedSalahToolTipShown", "1");
+        await modifyDataInUserPreferencesTable(
+          "isMissedSalahToolTipShown",
+          "1"
+        );
         localStorage.removeItem("existingUser");
       }
 
@@ -271,6 +274,9 @@ const App = () => {
     DBResultPreferences: PreferenceObjType[]
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
+    // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
+    const latestReasons =
+      "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
     try {
       if (!dbConnection || !dbConnection.current) {
@@ -295,7 +301,6 @@ const App = () => {
             (?, ?),
             (?, ?),
             (?, ?),
-            (?, ?),
             (?, ?);
             `;
         // prettier-ignore
@@ -305,7 +310,7 @@ const App = () => {
             "dailyNotification", "0",
             "dailyNotificationTime", "21:00",
             "haptics", "0",
-            "reasons", "Alarm,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work",
+            "reasons", latestReasons,
             "showMissedSalahCount", "1",
             "isExistingUser", "0",
             "isMissedSalahToolTipShown", "0",
@@ -324,11 +329,17 @@ const App = () => {
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
       } else if (DBResultPreferencesValues.length > 0) {
-        const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES 
+        const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES
         ("showMissedSalahCount", "1"),
-        ("appLaunchCount", "0")`;
+        ("appLaunchCount", "0"),
+        ("isMissedSalahToolTipShown", "0")`;
 
         await dbConnection.current.run(query);
+        // const query1 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
+        // await dbConnection.current.run(query1);
+
+        // const query2 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("appLaunchCount", "0")`;
+        // await dbConnection.current.run(query2);
 
         const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
@@ -364,7 +375,7 @@ const App = () => {
       if (preferenceQuery) {
         return preferenceQuery;
       } else {
-        console.error("preferenceQuery row does not exist");
+        console.error(`preferenceQuery row ${preference} does not exist`);
         return null;
       }
     };
@@ -411,14 +422,14 @@ const App = () => {
     if (reasons) {
       console.log("REASONS EXIST");
 
-      // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
-      const updatedReasons =
-        "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
+      // // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
+      // const updatedReasons =
+      //   "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
-      if (reasons.preferenceValue !== updatedReasons) {
+      if (reasons.preferenceValue !== latestReasons) {
         console.log("REASONS ARE NOT EQUAL TO WHATS STORED, UPDATING DB...");
 
-        await modifyDataInUserPreferencesTable("reasons", updatedReasons);
+        await modifyDataInUserPreferencesTable("reasons", latestReasons);
       } else {
         console.log("UPDATING REASONS STATE...");
 
@@ -624,19 +635,36 @@ const App = () => {
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection or dbConnection.current does not exist");
+      }
       // const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-      let query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+      // let query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+      // const query =
+      //   preferenceName === "reasons"
+      //     ? `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`
+      //     : `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
 
-      // if (preferenceName === "reasons") {
-      //   console.log("Reasons here, and its: ", preferenceValue);
-      //   query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-      // }
+      if (preferenceName === "reasons") {
+        console.log("Reasons here, and its: ", preferenceValue);
+        const test = await dbConnection.current?.query(
+          `SELECT * FROM userPreferencesTable`
+        );
+        console.log("PREFERENCES IN DB: ", test);
+        const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+        await dbConnection.current.run(query, [
+          preferenceValue,
+          preferenceName,
+        ]);
+      } else {
+        const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+        await dbConnection.current.run(query, [
+          preferenceName,
+          preferenceValue,
+        ]);
+      }
 
       // await dbConnection.current.run(query, [preferenceValue, preferenceName]);
-      await dbConnection?.current?.run(query, [
-        preferenceName,
-        preferenceValue,
-      ]);
 
       setUserPreferences({
         ...userPreferences,
