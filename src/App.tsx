@@ -193,8 +193,6 @@ const App = () => {
           (row) => row.preferenceName === "isExistingUser"
         ) || "";
 
-      console.log("DBResultPreferences.values: ", DBResultPreferences.values);
-
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
         setShowIntroModal(true);
       }
@@ -329,17 +327,15 @@ const App = () => {
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
       } else if (DBResultPreferencesValues.length > 0) {
-        const query = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES
+        const query1 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES
         ("showMissedSalahCount", "1"),
         ("appLaunchCount", "0"),
         ("isMissedSalahToolTipShown", "0")`;
 
-        await dbConnection.current.run(query);
-        // const query1 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("showMissedSalahCount", "1")`;
-        // await dbConnection.current.run(query1);
+        await dbConnection.current.run(query1);
 
-        // const query2 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES ("appLaunchCount", "0")`;
-        // await dbConnection.current.run(query2);
+        const query2 = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+        await dbConnection.current.run(query2, [latestReasons, "reasons"]);
 
         const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
@@ -349,6 +345,8 @@ const App = () => {
             "No values returned from the DBResultPreferencesQuery."
           );
         }
+        console.log("DBResultPreferencesQuery: ", DBResultPreferencesQuery);
+
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
       }
@@ -357,10 +355,6 @@ const App = () => {
     } finally {
       checkAndOpenOrCloseDBConnection("close");
     }
-    console.log(
-      "DBResultPreferencesValues: ",
-      DBResultPreferencesValues.values
-    );
 
     const assignPreference = (
       preference: string
@@ -426,18 +420,22 @@ const App = () => {
       // const updatedReasons =
       //   "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
-      if (reasons.preferenceValue !== latestReasons) {
-        console.log("REASONS ARE NOT EQUAL TO WHATS STORED, UPDATING DB...");
+      // if (reasons.preferenceValue !== latestReasons) {
+      //   // console.log("REASONS ARE NOT EQUAL TO WHATS STORED, UPDATING DB...");
 
-        await modifyDataInUserPreferencesTable("reasons", latestReasons);
-      } else {
-        console.log("UPDATING REASONS STATE...");
+      //   // await modifyDataInUserPreferencesTable("reasons", latestReasons);
+      // } else {
+      //   console.log("UPDATING REASONS STATE...");
 
-        setUserPreferences((userPreferences: userPreferencesType) => ({
-          ...userPreferences,
-          reasons: reasons.preferenceValue.split(","),
-        }));
-      }
+      //   setUserPreferences((userPreferences: userPreferencesType) => ({
+      //     ...userPreferences,
+      //     reasons: reasons.preferenceValue.split(","),
+      //   }));
+      // }
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        reasons: reasons.preferenceValue.split(","),
+      }));
     } else {
       console.error("reasons row not found");
     }
@@ -682,7 +680,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log("userPreferences: ", userPreferences);
+    console.log("userPreferences IN USEEFFECT: ", userPreferences);
   }, [userPreferences]);
 
   // const appRef = useRef();
