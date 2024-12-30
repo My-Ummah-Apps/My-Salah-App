@@ -334,6 +334,11 @@ const App = () => {
 
         await dbConnection.current.run(query1);
 
+        console.log(
+          "DBResultPreferencesValues: ",
+          DBResultPreferencesValues.values
+        );
+
         const query2 = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
         await dbConnection.current.run(query2, [latestReasons, "reasons"]);
 
@@ -345,7 +350,6 @@ const App = () => {
             "No values returned from the DBResultPreferencesQuery."
           );
         }
-        console.log("DBResultPreferencesQuery: ", DBResultPreferencesQuery);
 
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
@@ -408,7 +412,6 @@ const App = () => {
       }));
 
       userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
-      // await handleSalahTrackingDataFromDB(DBResultAllSalahData);
     } else {
       console.error("userStartDate row not found");
     }
@@ -416,22 +419,6 @@ const App = () => {
     if (reasons) {
       console.log("REASONS EXIST");
 
-      // // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
-      // const updatedReasons =
-      //   "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
-
-      // if (reasons.preferenceValue !== latestReasons) {
-      //   // console.log("REASONS ARE NOT EQUAL TO WHATS STORED, UPDATING DB...");
-
-      //   // await modifyDataInUserPreferencesTable("reasons", latestReasons);
-      // } else {
-      //   console.log("UPDATING REASONS STATE...");
-
-      //   setUserPreferences((userPreferences: userPreferencesType) => ({
-      //     ...userPreferences,
-      //     reasons: reasons.preferenceValue.split(","),
-      //   }));
-      // }
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         reasons: reasons.preferenceValue.split(","),
