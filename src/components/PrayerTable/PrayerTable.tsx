@@ -124,6 +124,7 @@ const PrayerTable = ({
 
   const handleJoyRideCompletion = (data: any) => {
     if (data.status === "ready") {
+      console.log("TOUR COMPLETE!");
       modifyDataInUserPreferencesTable("isExistingUser", "1");
     }
   };

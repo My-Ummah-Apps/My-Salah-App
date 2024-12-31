@@ -198,22 +198,10 @@ const SettingsPage = ({
   };
 
   useEffect(() => {
-    console.log("userPreferences: ", userPreferences.showMissedSalahCount);
-  }, [userPreferences]);
-
-  useEffect(() => {
     const updateStateAndDB = async () => {
       if (isMissedSalahCounterOptionChecked) {
-        // setUserPreferences((userPreferences) => ({
-        //   ...userPreferences,
-        //   showMissedSalahCount: "1",
-        // }));
         modifyDataInUserPreferencesTable("showMissedSalahCount", "1");
       } else {
-        // setUserPreferences((userPreferences) => ({
-        //   ...userPreferences,
-        //   showMissedSalahCount: "0",
-        // }));
         modifyDataInUserPreferencesTable("showMissedSalahCount", "0");
       }
     };

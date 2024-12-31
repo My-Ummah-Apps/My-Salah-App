@@ -171,6 +171,11 @@ const App = () => {
         `SELECT * FROM userPreferencesTable`
       );
 
+      console.log(
+        "DBResultPreferences in fetchDataFromDB: ",
+        DBResultPreferences
+      );
+
       if (!DBResultPreferences || !DBResultPreferences.values) {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
@@ -282,13 +287,21 @@ const App = () => {
       }
       await checkAndOpenOrCloseDBConnection("open");
 
+      // if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
+      //   throw new Error(
+      //     "No values returned from the DBResultPreferencesQuery."
+      //   );
+      // }
+
       if (DBResultPreferencesValues.length === 0) {
+        console.log(
+          "DBResultPreferencesValues.length is 0, inserting values into DB"
+        );
+
         const userStartDate = format(new Date(), "yyyy-MM-dd");
-        // const remove_below = [];
-        // const userStartDate = "2023-01-01";
 
         const insertQuery = `
-            INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) 
+            INSERT INTO userPreferencesTable (preferenceName, preferenceValue) 
             VALUES 
             (?, ?),
             (?, ?),
@@ -319,14 +332,16 @@ const App = () => {
         const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
         );
-        if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
-          throw new Error(
-            "No values returned from the DBResultPreferencesQuery."
-          );
-        }
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
+
+        console.log(
+          "DBResultPreferencesValues AFTER NEW USER INSERTION: ",
+          DBResultPreferencesValues
+        );
       } else if (DBResultPreferencesValues.length > 0) {
+        console.log("THIS IS AN EXISTING USER");
+
         const query1 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES
         ("showMissedSalahCount", "1"),
         ("appLaunchCount", "0"),
@@ -334,17 +349,13 @@ const App = () => {
 
         await dbConnection.current.run(query1);
 
-        console.log(
-          "DBResultPreferencesValues: ",
-          DBResultPreferencesValues.values
-        );
-
         const query2 = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
         await dbConnection.current.run(query2, [latestReasons, "reasons"]);
 
         const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
         );
+
         if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
           throw new Error(
             "No values returned from the DBResultPreferencesQuery."
@@ -366,9 +377,16 @@ const App = () => {
       preferenceName: string;
       preferenceValue: string;
     } | null => {
+      console.log("assignPreference has run, preference: ", preference);
+      console.log(
+        "DBResultPreferencesValues in assignPreference: ",
+        DBResultPreferencesValues
+      );
+
       let preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
+      console.log("preferenceQuery: ", preferenceQuery);
 
       if (preferenceQuery) {
         return preferenceQuery;
@@ -377,6 +395,54 @@ const App = () => {
         return null;
       }
     };
+
+    // const placeholders = Arr(params.length / 2).fill("?, ?").join(", ")
+
+    // const assignPreference = (
+    //       preference: string
+    //     ): void => {
+    //       const preferenceQuery = DBResultPreferencesValues.find(
+    //         (row) => row.preferenceName === preference
+    //       );
+
+    //       if (preferenceQuery) {
+    //         const prefName = preferenceQuery.preferenceName
+    //         let prefValue = preferenceQuery.preferenceValue
+
+    //        if (prefName === "reasons") {
+    //          prefValue = prefValue.split(",")
+    //        }
+    //       // ! should this be userStartDate or "userStartDate"?
+    //       if (prefName === userStartDate) {
+    //         userStartDateForSalahTrackingFunc = prefValue
+    //          }
+
+    //         setUserPreferences((userPreferences: userPreferencesType) => ({
+    //           ...userPreferences,
+    //           [prefName]: prefValue,
+    //         }));
+
+    //       } else {
+    //         console.error(`preferenceQuery row ${preference} does not exist`);
+    //       }
+    //     };
+
+    // const preferencesArr = ["userGender",
+    //                         "userStartDate",
+    //                         "dailyNotification",
+    //                         "dailyNotificationTime",
+    //                         "reasons",
+    //                         "showMissedSalahCount",
+    //                         "isExistingUser"
+    //                         "isMissedSalahToolTipShown",
+    //                         "appLaunchCount"
+    //                        ]
+
+    // const arr = params.filter((_, i) => i % 2 === 0)
+
+    // preferencesArr.forEach(item => {
+    //   assignPreference(item);
+    // }
 
     const userGenderRow = assignPreference("userGender");
     const userStartDate = assignPreference("userStartDate");
@@ -406,6 +472,11 @@ const App = () => {
     }
 
     if (userStartDate) {
+      console.log(
+        "userStartDate row detected and is as follows: ",
+        userStartDate
+      );
+
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         userStartDate: userStartDate.preferenceValue,
@@ -455,6 +526,11 @@ const App = () => {
     }
 
     if (isExistingUser) {
+      console.log(
+        "isExistingUser row detected and is as follows: ",
+        isExistingUser
+      );
+
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         isExistingUser: isExistingUser.preferenceValue as "" | "0" | "1",
@@ -642,6 +718,14 @@ const App = () => {
           preferenceName,
         ]);
       } else {
+        // ! Continue from here, why is it that when user imports existing data, they keep being shown the intro screens even on app re-launches?
+        console.log(
+          "PreferenceName: ",
+          preferenceName,
+          "changing to: ",
+          preferenceValue
+        );
+
         const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
         await dbConnection.current.run(query, [
           preferenceName,
@@ -662,7 +746,6 @@ const App = () => {
       console.error(error);
     } finally {
       await checkAndOpenOrCloseDBConnection("close");
-      console.log("PREF IN APP: ", userPreferences);
     }
   };
 
