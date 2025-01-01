@@ -467,8 +467,6 @@ const App = () => {
       } else {
         console.error(`Invalid gender value: ${gender}`);
       }
-    } else {
-      console.error("userGenderRow row not found");
     }
 
     if (userStartDate) {
@@ -483,10 +481,7 @@ const App = () => {
       }));
 
       userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
-    } else {
-      console.error("userStartDate row not found");
     }
-
     if (reasons) {
       console.log("REASONS EXIST");
 
@@ -494,8 +489,6 @@ const App = () => {
         ...userPreferences,
         reasons: reasons.preferenceValue.split(","),
       }));
-    } else {
-      console.error("reasons row not found");
     }
 
     if (dailyNotificationRow) {
@@ -503,8 +496,6 @@ const App = () => {
         ...userPreferences,
         dailyNotification: dailyNotificationRow.preferenceValue,
       }));
-    } else {
-      console.error("dailyNotification row not found");
     }
 
     if (dailyNotificationTimeRow) {
@@ -512,8 +503,6 @@ const App = () => {
         ...userPreferences,
         dailyNotificationTime: dailyNotificationTimeRow.preferenceValue,
       }));
-    } else {
-      console.error("dailyNotificationTime row not found");
     }
 
     if (showMissedSalahCount) {
@@ -521,8 +510,6 @@ const App = () => {
         ...userPreferences,
         showMissedSalahCount: showMissedSalahCount.preferenceValue,
       }));
-    } else {
-      console.error("showMissedSalahCount row not found");
     }
 
     if (isExistingUser) {
@@ -535,8 +522,6 @@ const App = () => {
         ...userPreferences,
         isExistingUser: isExistingUser.preferenceValue as "" | "0" | "1",
       }));
-    } else {
-      console.error("isExistingUser row not found");
     }
     if (isMissedSalahToolTipShown) {
       setUserPreferences((userPreferences: userPreferencesType) => ({
@@ -546,16 +531,12 @@ const App = () => {
           | "0"
           | "1",
       }));
-    } else {
-      console.error("isMissedSalahToolTipShown row not found");
     }
     if (appLaunchCount) {
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         appLaunchCount: appLaunchCount.preferenceValue,
       }));
-    } else {
-      console.error("appLaunchCount row not found");
     }
   };
 
