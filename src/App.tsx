@@ -276,7 +276,7 @@ const App = () => {
     DBResultPreferences: PreferenceObjType[]
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
-    // ! Remove below if statement once the ability for users to remove and add their own reasons is introduced
+    // ! Remove below once the ability for users to remove and add their own reasons is introduced
     const latestReasons =
       "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
@@ -291,7 +291,7 @@ const App = () => {
       //     "No values returned from the DBResultPreferencesQuery."
       //   );
       // }
-
+      // ! Should this not be (!isExistingUser) ?
       if (DBResultPreferencesValues.length === 0) {
         console.log(
           "DBResultPreferencesValues.length is 0, inserting values into DB"
@@ -299,20 +299,6 @@ const App = () => {
 
         const userStartDate = format(new Date(), "yyyy-MM-dd");
 
-        const insertQuery = `
-            INSERT INTO userPreferencesTable (preferenceName, preferenceValue) 
-            VALUES 
-            (?, ?),
-            (?, ?),
-            (?, ?),
-            (?, ?),
-            (?, ?),
-            (?, ?),
-            (?, ?),
-            (?, ?),
-            (?, ?),
-            (?, ?);
-            `;
         // prettier-ignore
         const params = [
             "userGender", "male",
@@ -327,6 +313,15 @@ const App = () => {
             "appLaunchCount", "0"
           ];
 
+        const placeholders = Array(params.length / 2)
+          .fill("?, ?")
+          .join(", ");
+
+        const insertQuery = `
+        INSERT INTO userPreferencesTable (preferenceName, preferenceValue) 
+        VALUES ${placeholders};
+        `;
+
         await dbConnection.current.run(insertQuery, params);
         const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
@@ -338,6 +333,7 @@ const App = () => {
           "DBResultPreferencesValues AFTER NEW USER INSERTION: ",
           DBResultPreferencesValues
         );
+        // ! Should this not be (isExistingUser) ?
       } else if (DBResultPreferencesValues.length > 0) {
         console.log("THIS IS AN EXISTING USER");
 
@@ -370,174 +366,53 @@ const App = () => {
       checkAndOpenOrCloseDBConnection("close");
     }
 
-    const assignPreference = (
-      preference: PreferenceType
-    ): {
-      preferenceName: string;
-      preferenceValue: string;
-    } | null => {
-      const dictPreferencesDefaultValues = {
-        userGender: "male",
-        userStartDate: format(new Date(), "yyyy-MM-dd"),
-        dailyNotification: "0",
-        dailyNotificationTime: "21:00",
-        haptics: "0",
-        reasons: latestReasons,
-        showMissedSalahCount: "1",
-        isExistingUser: "0",
-        isMissedSalahToolTipShown: "0",
-        appLaunchCount: "0",
-      };
+    const dictPreferencesDefaultValues = {
+      userGender: "male",
+      userStartDate: format(new Date(), "yyyy-MM-dd"),
+      dailyNotification: "0",
+      dailyNotificationTime: "21:00",
+      haptics: "0",
+      reasons: latestReasons,
+      showMissedSalahCount: "1",
+      isExistingUser: "0",
+      isMissedSalahToolTipShown: "0",
+      appLaunchCount: "0",
+    };
 
+    const assignPreference = (preference: PreferenceType): void => {
       const preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
-      console.log("preferenceQuery: ", preferenceQuery);
 
       if (preferenceQuery) {
-        return preferenceQuery;
+        const prefName = preferenceQuery.preferenceName;
+        let prefValue = preferenceQuery.preferenceValue;
+
+        if (prefName === "reasons") {
+          prefValue = prefValue.split(",");
+        }
+        // ! should this be userStartDate or "userStartDate"?
+        if (prefName === "userStartDate") {
+          userStartDateForSalahTrackingFunc = prefValue;
+        }
+
+        setUserPreferences((userPreferences: userPreferencesType) => ({
+          ...userPreferences,
+          [prefName]: prefValue,
+        }));
       } else {
         modifyDataInUserPreferencesTable(
           preference,
           dictPreferencesDefaultValues[preference]
         );
-
-        return null;
       }
     };
 
-    // const placeholders = Arr(params.length / 2).fill("?, ?").join(", ")
-
-    // const assignPreference = (
-    //       preference: string
-    //     ): void => {
-    //       const preferenceQuery = DBResultPreferencesValues.find(
-    //         (row) => row.preferenceName === preference
-    //       );
-
-    //       if (preferenceQuery) {
-    //         const prefName = preferenceQuery.preferenceName
-    //         let prefValue = preferenceQuery.preferenceValue
-
-    //        if (prefName === "reasons") {
-    //          prefValue = prefValue.split(",")
-    //        }
-    //       // ! should this be userStartDate or "userStartDate"?
-    //       if (prefName === userStartDate) {
-    //         userStartDateForSalahTrackingFunc = prefValue
-    //          }
-
-    //         setUserPreferences((userPreferences: userPreferencesType) => ({
-    //           ...userPreferences,
-    //           [prefName]: prefValue,
-    //         }));
-
-    //       } else {
-    //         console.error(`preferenceQuery row ${preference} does not exist`);
-    //       }
-    //     };
-
-    // const preferencesArr = ["userGender",
-    //                         "userStartDate",
-    //                         "dailyNotification",
-    //                         "dailyNotificationTime",
-    //                         "reasons",
-    //                         "showMissedSalahCount",
-    //                         "isExistingUser"
-    //                         "isMissedSalahToolTipShown",
-    //                         "appLaunchCount"
-    //                        ]
-
     // const arr = params.filter((_, i) => i % 2 === 0)
 
-    // preferencesArr.forEach(item => {
-    //   assignPreference(item);
-    // }
-
-    const userGenderRow = assignPreference("userGender");
-    const userStartDate = assignPreference("userStartDate");
-    const dailyNotificationRow = assignPreference("dailyNotification");
-    const dailyNotificationTimeRow = assignPreference("dailyNotificationTime");
-    const reasons = assignPreference("reasons");
-    const showMissedSalahCount = assignPreference("showMissedSalahCount");
-    const isExistingUser = assignPreference("isExistingUser");
-    const isMissedSalahToolTipShown = assignPreference(
-      "isMissedSalahToolTipShown"
-    );
-    const appLaunchCount = assignPreference("appLaunchCount");
-
-    if (userGenderRow) {
-      // @ts-ignore
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        userGender: userGenderRow.preferenceValue,
-      }));
-    }
-
-    if (userStartDate) {
-      console.log(
-        "userStartDate row detected and is as follows: ",
-        userStartDate
-      );
-
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        userStartDate: userStartDate.preferenceValue,
-      }));
-
-      userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
-    }
-    if (reasons) {
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        reasons: reasons.preferenceValue.split(","),
-      }));
-    }
-
-    if (dailyNotificationRow) {
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        dailyNotification: dailyNotificationRow.preferenceValue,
-      }));
-    }
-
-    if (dailyNotificationTimeRow) {
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        dailyNotificationTime: dailyNotificationTimeRow.preferenceValue,
-      }));
-    }
-
-    if (showMissedSalahCount) {
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        showMissedSalahCount: showMissedSalahCount.preferenceValue,
-      }));
-    }
-
-    if (isExistingUser) {
-      console.log(
-        "isExistingUser row detected and is as follows: ",
-        isExistingUser
-      );
-
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        isExistingUser: isExistingUser.preferenceValue,
-      }));
-    }
-    if (isMissedSalahToolTipShown) {
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        isMissedSalahToolTipShown: isMissedSalahToolTipShown.preferenceValue,
-      }));
-    }
-    if (appLaunchCount) {
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        appLaunchCount: appLaunchCount.preferenceValue,
-      }));
-    }
+    Object.keys(dictPreferencesDefaultValues).forEach((key) => {
+      assignPreference(key);
+    });
   };
 
   // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
