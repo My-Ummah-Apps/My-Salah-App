@@ -35,7 +35,6 @@ import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 import { format, parse, eachDayOfInterval } from "date-fns";
 import { PreferenceType } from "./types/types";
-import { userGenderType } from "./types/types";
 
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
@@ -372,18 +371,25 @@ const App = () => {
     }
 
     const assignPreference = (
-      preference: string
+      preference: PreferenceType
     ): {
       preferenceName: string;
       preferenceValue: string;
     } | null => {
-      console.log("assignPreference has run, preference: ", preference);
-      console.log(
-        "DBResultPreferencesValues in assignPreference: ",
-        DBResultPreferencesValues
-      );
+      const dictPreferencesDefaultValues = {
+        userGender: "male",
+        userStartDate: format(new Date(), "yyyy-MM-dd"),
+        dailyNotification: "0",
+        dailyNotificationTime: "21:00",
+        haptics: "0",
+        reasons: latestReasons,
+        showMissedSalahCount: "1",
+        isExistingUser: "0",
+        isMissedSalahToolTipShown: "0",
+        appLaunchCount: "0",
+      };
 
-      let preferenceQuery = DBResultPreferencesValues.find(
+      const preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
       console.log("preferenceQuery: ", preferenceQuery);
@@ -391,7 +397,11 @@ const App = () => {
       if (preferenceQuery) {
         return preferenceQuery;
       } else {
-        console.error(`preferenceQuery row ${preference} does not exist`);
+        modifyDataInUserPreferencesTable(
+          preference,
+          dictPreferencesDefaultValues[preference]
+        );
+
         return null;
       }
     };
@@ -457,16 +467,11 @@ const App = () => {
     const appLaunchCount = assignPreference("appLaunchCount");
 
     if (userGenderRow) {
-      const gender = userGenderRow.preferenceValue as userGenderType;
-
-      if (gender === "male" || gender === "female") {
-        setUserPreferences((userPreferences: userPreferencesType) => ({
-          ...userPreferences,
-          userGender: gender,
-        }));
-      } else {
-        console.error(`Invalid gender value: ${gender}`);
-      }
+      // @ts-ignore
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        userGender: userGenderRow.preferenceValue,
+      }));
     }
 
     if (userStartDate) {
@@ -483,8 +488,6 @@ const App = () => {
       userStartDateForSalahTrackingFunc = userStartDate.preferenceValue;
     }
     if (reasons) {
-      console.log("REASONS EXIST");
-
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         reasons: reasons.preferenceValue.split(","),
@@ -520,16 +523,13 @@ const App = () => {
 
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
-        isExistingUser: isExistingUser.preferenceValue as "" | "0" | "1",
+        isExistingUser: isExistingUser.preferenceValue,
       }));
     }
     if (isMissedSalahToolTipShown) {
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
-        isMissedSalahToolTipShown: isMissedSalahToolTipShown.preferenceValue as
-          | ""
-          | "0"
-          | "1",
+        isMissedSalahToolTipShown: isMissedSalahToolTipShown.preferenceValue,
       }));
     }
     if (appLaunchCount) {

@@ -8,11 +8,11 @@ export interface userPreferencesType {
   userGender: userGenderType;
   dailyNotification: string;
   dailyNotificationTime: string;
-  haptics: "" | "0" | "1";
+  haptics: string;
   reasons: string[];
   showMissedSalahCount: string;
-  isExistingUser: "" | "0" | "1";
-  isMissedSalahToolTipShown: "" | "0" | "1";
+  isExistingUser: string;
+  isMissedSalahToolTipShown: string;
   appLaunchCount: string;
 }
 
