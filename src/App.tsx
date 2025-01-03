@@ -288,8 +288,13 @@ const App = () => {
         );
 
         const params = Object.keys(dictPreferencesDefaultValues)
-          .map((item) => [item, dictPreferencesDefaultValues[item]])
+          .map((key) => {
+            const value = dictPreferencesDefaultValues[key];
+            return [key, Array.isArray(value) ? value.join(",") : value];
+          })
           .flat();
+
+        console.log("params: ", params);
 
         const placeholders = Array(params.length / 2)
           .fill("(?, ?)")
