@@ -5,10 +5,9 @@
 
 export interface userPreferencesType {
   userStartDate: string;
-  userGender: userGenderType;
+  userGender: string;
   dailyNotification: string;
   dailyNotificationTime: string;
-  haptics: string;
   reasons: string[];
   showMissedSalahCount: string;
   isExistingUser: string;

@@ -5,7 +5,9 @@ import Sheet from "react-modal-sheet";
 import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
+  dictPreferencesDefaultValues,
   getMissedSalahCount,
+  defaultReasons,
   scheduleDailyNotification,
   sheetBackdropColor,
   sheetHeaderHeight,
@@ -98,18 +100,9 @@ const App = () => {
 
   const [renderTable, setRenderTable] = useState(false);
 
-  const [userPreferences, setUserPreferences] = useState<userPreferencesType>({
-    userGender: "male",
-    userStartDate: "",
-    dailyNotification: "",
-    dailyNotificationTime: "",
-    haptics: "0",
-    reasons: [],
-    showMissedSalahCount: "",
-    isExistingUser: "",
-    isMissedSalahToolTipShown: "",
-    appLaunchCount: "",
-  });
+  const [userPreferences, setUserPreferences] = useState<userPreferencesType>(
+    dictPreferencesDefaultValues
+  );
 
   const {
     isDatabaseInitialised,
@@ -276,9 +269,6 @@ const App = () => {
     DBResultPreferences: PreferenceObjType[]
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
-    // ! Remove below once the ability for users to remove and add their own reasons is introduced
-    const latestReasons =
-      "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
     try {
       if (!dbConnection || !dbConnection.current) {
@@ -297,24 +287,12 @@ const App = () => {
           "DBResultPreferencesValues.length is 0, inserting values into DB"
         );
 
-        const userStartDate = format(new Date(), "yyyy-MM-dd");
-
-        // prettier-ignore
-        const params = [
-            "userGender", "male",
-            "userStartDate", userStartDate,
-            "dailyNotification", "0",
-            "dailyNotificationTime", "21:00",
-            "haptics", "0",
-            "reasons", latestReasons,
-            "showMissedSalahCount", "1",
-            "isExistingUser", "0",
-            "isMissedSalahToolTipShown", "0",
-            "appLaunchCount", "0"
-          ];
+        const params = Object.keys(dictPreferencesDefaultValues)
+          .map((item) => [item, dictPreferencesDefaultValues[item]])
+          .flat();
 
         const placeholders = Array(params.length / 2)
-          .fill("?, ?")
+          .fill("(?, ?)")
           .join(", ");
 
         const insertQuery = `
@@ -337,15 +315,15 @@ const App = () => {
       } else if (DBResultPreferencesValues.length > 0) {
         console.log("THIS IS AN EXISTING USER");
 
-        const query1 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES
-        ("showMissedSalahCount", "1"),
-        ("appLaunchCount", "0"),
-        ("isMissedSalahToolTipShown", "0")`;
+        // const query1 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES
+        // ("showMissedSalahCount", "1"),
+        // ("appLaunchCount", "0"),
+        // ("isMissedSalahToolTipShown", "0")`;
 
-        await dbConnection.current.run(query1);
+        // await dbConnection.current.run(query1);
 
         const query2 = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-        await dbConnection.current.run(query2, [latestReasons, "reasons"]);
+        await dbConnection.current.run(query2, [defaultReasons, "reasons"]);
 
         const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
@@ -366,19 +344,6 @@ const App = () => {
       checkAndOpenOrCloseDBConnection("close");
     }
 
-    const dictPreferencesDefaultValues = {
-      userGender: "male",
-      userStartDate: format(new Date(), "yyyy-MM-dd"),
-      dailyNotification: "0",
-      dailyNotificationTime: "21:00",
-      haptics: "0",
-      reasons: latestReasons,
-      showMissedSalahCount: "1",
-      isExistingUser: "0",
-      isMissedSalahToolTipShown: "0",
-      appLaunchCount: "0",
-    };
-
     const assignPreference = (preference: PreferenceType): void => {
       const preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
@@ -388,17 +353,13 @@ const App = () => {
         const prefName = preferenceQuery.preferenceName;
         let prefValue = preferenceQuery.preferenceValue;
 
-        if (prefName === "reasons") {
-          prefValue = prefValue.split(",");
-        }
-        // ! should this be userStartDate or "userStartDate"?
         if (prefName === "userStartDate") {
           userStartDateForSalahTrackingFunc = prefValue;
         }
 
         setUserPreferences((userPreferences: userPreferencesType) => ({
           ...userPreferences,
-          [prefName]: prefValue,
+          [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
       } else {
         modifyDataInUserPreferencesTable(
@@ -456,11 +417,6 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
-      // type salahReasonsType = {
-      //   "male-alone": string[];
-      //   late: string[];
-      //   missed: string[];
-      // };
       const salahReasonsOverallNumbers: salahReasonsOverallNumbersType = {
         "male-alone": {},
         late: {},
@@ -511,10 +467,6 @@ const App = () => {
         lateReasons = lateReasons.flat();
         missedReasons = missedReasons.flat();
 
-        // console.log("maleAloneReasons: ", maleAloneReasons);
-        // console.log("lateReasons: ", lateReasons);
-        // console.log("missedReasons: ", missedReasons);
-
         maleAloneReasons.forEach((item: string) => {
           if (item === "") return;
           if (!salahReasonsOverallNumbers["male-alone"][item]) {
@@ -548,40 +500,25 @@ const App = () => {
 
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,
-    preferenceValue: string
+    preferenceValue: string | string[]
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
       if (!dbConnection || !dbConnection.current) {
         throw new Error("dbConnection or dbConnection.current does not exist");
       }
-      // const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-      // let query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
-      // const query =
-      //   preferenceName === "reasons"
-      //     ? `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`
-      //     : `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+      const test = await dbConnection.current?.query(
+        `SELECT * FROM userPreferencesTable`
+      );
+      console.log("PREFERENCES IN DB: ", test);
 
       if (preferenceName === "reasons") {
-        console.log("Reasons here, and its: ", preferenceValue);
-        const test = await dbConnection.current?.query(
-          `SELECT * FROM userPreferencesTable`
-        );
-        console.log("PREFERENCES IN DB: ", test);
         const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
         await dbConnection.current.run(query, [
-          preferenceValue,
+          preferenceValue.toString(),
           preferenceName,
         ]);
       } else {
-        // ! Continue from here, why is it that when user imports existing data, they keep being shown the intro screens even on app re-launches?
-        console.log(
-          "PreferenceName: ",
-          preferenceName,
-          "changing to: ",
-          preferenceValue
-        );
-
         const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
         await dbConnection.current.run(query, [
           preferenceName,
@@ -589,15 +526,18 @@ const App = () => {
         ]);
       }
 
-      // await dbConnection.current.run(query, [preferenceValue, preferenceName]);
-
       setUserPreferences({
         ...userPreferences,
-        [preferenceName]:
-          preferenceName === "reasons"
-            ? preferenceValue.split(",")
-            : preferenceValue,
+        [preferenceName]: preferenceValue,
       });
+
+      // setUserPreferences({
+      //   ...userPreferences,
+      //   [preferenceName]:
+      //     preferenceName === "reasons"
+      //       ? preferenceValue.split(",")
+      //       : preferenceValue,
+      // });
     } catch (error) {
       console.error(error);
     } finally {

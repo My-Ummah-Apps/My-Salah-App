@@ -504,41 +504,44 @@ const BottomSheetPrayerStatus = ({
                       {/* + */}
                     </p>
                   </div>
-                  <div className="flex flex-wrap">
-                    {/* {missedReasonsArray.map((item) => ( */}
-                    {userPreferences.reasons.sort().map((item) => (
-                      <p
-                        key={item}
-                        style={{
-                          backgroundColor: selectedReasons.includes(item)
-                            ? "#2563eb"
-                            : "",
-                        }}
-                        className={reasonsStyles}
-                        onClick={() => {
-                          console.log(selectedReasons);
+                  {Array.isArray(userPreferences.reasons) && (
+                    <div className="flex flex-wrap">
+                      {/* {missedReasonsArray.map((item) => ( */}
 
-                          if (!selectedReasonsArray.includes(item)) {
-                            selectedReasonsArray = [...selectedReasons, item];
-                          } else if (selectedReasonsArray.includes(item)) {
-                            let indexToRemove = selectedReasons.indexOf(item);
-                            selectedReasonsArray = selectedReasons.filter(
-                              (item) => {
-                                return (
-                                  selectedReasons.indexOf(item) !==
-                                  indexToRemove
-                                );
-                              }
-                            );
-                          }
-                          setSelectedReasons(selectedReasonsArray);
-                        }}
-                        // border border-gray-700 b-1 rounded-xl
-                      >
-                        {item}
-                      </p>
-                    ))}
-                  </div>
+                      {userPreferences.reasons.sort().map((item) => (
+                        <p
+                          key={item}
+                          style={{
+                            backgroundColor: selectedReasons.includes(item)
+                              ? "#2563eb"
+                              : "",
+                          }}
+                          className={reasonsStyles}
+                          onClick={() => {
+                            console.log(selectedReasons);
+
+                            if (!selectedReasonsArray.includes(item)) {
+                              selectedReasonsArray = [...selectedReasons, item];
+                            } else if (selectedReasonsArray.includes(item)) {
+                              let indexToRemove = selectedReasons.indexOf(item);
+                              selectedReasonsArray = selectedReasons.filter(
+                                (item) => {
+                                  return (
+                                    selectedReasons.indexOf(item) !==
+                                    indexToRemove
+                                  );
+                                }
+                              );
+                            }
+                            setSelectedReasons(selectedReasonsArray);
+                          }}
+                          // border border-gray-700 b-1 rounded-xl
+                        >
+                          {item}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 {/* ) : null} */}
                 {showAddCustomReasonInputBox ? (
@@ -663,31 +666,34 @@ const BottomSheetPrayerStatus = ({
             {/* + */}
           </p>
         </div>
-        <div className="flex flex-wrap">
-          {/* {missedReasonsArray.map((item) => ( */}
-          {userPreferences.reasons.sort().map((item) => (
-            <p
-              key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
-              style={{
-                backgroundColor: selectedReasons.includes(item) ? "#fff" : "",
-              }}
-              onClick={() => {
-                if (!selectedReasonsArray.includes(item)) {
-                  selectedReasonsArray = [...selectedReasons, item];
-                } else if (selectedReasonsArray.includes(item)) {
-                  let indexToRemove = selectedReasons.indexOf(item);
-                  selectedReasonsArray = selectedReasons.filter((item) => {
-                    return selectedReasons.indexOf(item) !== indexToRemove;
-                  });
-                }
-                setSelectedReasons(selectedReasonsArray);
-              }}
-              className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
-            >
-              {item}
-            </p>
-          ))}
-        </div>
+        {Array.isArray(userPreferences.reasons) && (
+          <div className="flex flex-wrap">
+            {/* {missedReasonsArray.map((item) => ( */}
+
+            {userPreferences.reasons.sort().map((item) => (
+              <p
+                key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
+                style={{
+                  backgroundColor: selectedReasons.includes(item) ? "#fff" : "",
+                }}
+                onClick={() => {
+                  if (!selectedReasonsArray.includes(item)) {
+                    selectedReasonsArray = [...selectedReasons, item];
+                  } else if (selectedReasonsArray.includes(item)) {
+                    let indexToRemove = selectedReasons.indexOf(item);
+                    selectedReasonsArray = selectedReasons.filter((item) => {
+                      return selectedReasons.indexOf(item) !== indexToRemove;
+                    });
+                  }
+                  setSelectedReasons(selectedReasonsArray);
+                }}
+                className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+              >
+                {item}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

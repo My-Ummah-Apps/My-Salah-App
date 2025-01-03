@@ -2,11 +2,30 @@ import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { format, isValid, parse } from "date-fns";
-import { MissedSalahObjType, SalahNamesType } from "../types/types";
+import {
+  MissedSalahObjType,
+  SalahNamesType,
+  userPreferencesType,
+} from "../types/types";
 
 export const TWEEN_CONFIG = {
   ease: "easeInOut" as EasingDefinition,
   duration: 0.5,
+};
+
+export const defaultReasons =
+  "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
+
+export const dictPreferencesDefaultValues: userPreferencesType = {
+  userGender: "male",
+  userStartDate: format(new Date(), "yyyy-MM-dd"),
+  dailyNotification: "0",
+  dailyNotificationTime: "21:00",
+  reasons: defaultReasons.split(","),
+  showMissedSalahCount: "1",
+  isExistingUser: "0",
+  isMissedSalahToolTipShown: "0",
+  appLaunchCount: "0",
 };
 
 export const reasonsStyles = "p-2 m-1 text-xs bg-[rgb(39,39,39)] rounded-xl";
