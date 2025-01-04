@@ -140,9 +140,6 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      if (!dbConnection || !dbConnection.current) {
-        throw new Error("dbConnection or dbConnection.current do not exist");
-      }
       // ! Remove this once some time has passed, as its just for migrating beta testers data
       if (localStorage.getItem("existingUser")) {
         console.log("existingUser key exists in localstorage, amending DB");
@@ -155,11 +152,11 @@ const App = () => {
         localStorage.removeItem("existingUser");
       }
 
-      const DBResultAllSalahData = await dbConnection.current.query(
+      const DBResultAllSalahData = await dbConnection.current?.query(
         `SELECT * FROM salahDataTable`
       );
 
-      let DBResultPreferences = await dbConnection.current.query(
+      let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
 
@@ -237,7 +234,7 @@ const App = () => {
         try {
           await modifyDataInUserPreferencesTable("dailyNotification", "0");
           await checkAndOpenOrCloseDBConnection("open");
-          DBResultPreferences = await dbConnection.current.query(
+          DBResultPreferences = await dbConnection.current?.query(
             `SELECT * FROM userPreferencesTable`
           );
         } catch (error) {
@@ -250,6 +247,11 @@ const App = () => {
         }
       }
       try {
+        if (!DBResultPreferences || !DBResultPreferences.values) {
+          throw new Error(
+            "DBResultPreferences or DBResultPreferences.values do not exist"
+          );
+        }
         await handleUserPreferencesDataFromDB(
           DBResultPreferences.values as PreferenceObjType[]
         );
@@ -271,16 +273,8 @@ const App = () => {
     let DBResultPreferencesValues = DBResultPreferences;
 
     try {
-      if (!dbConnection || !dbConnection.current) {
-        throw new Error("!dbConnection or !dbConnection.current do not exist");
-      }
       await checkAndOpenOrCloseDBConnection("open");
 
-      // if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
-      //   throw new Error(
-      //     "No values returned from the DBResultPreferencesQuery."
-      //   );
-      // }
       // ! Should this not be (!isExistingUser) ?
       if (DBResultPreferencesValues.length === 0) {
         console.log(
@@ -306,31 +300,26 @@ const App = () => {
         `;
 
         await dbConnection.current.run(insertQuery, params);
-        const DBResultPreferencesQuery = await dbConnection.current.query(
+        const DBResultPreferencesQuery = await dbConnection.current?.query(
           `SELECT * FROM userPreferencesTable`
         );
+
+        if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
+          throw new Error(
+            "No values returned from the DBResultPreferencesQuery."
+          );
+        }
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
 
-        console.log(
-          "DBResultPreferencesValues AFTER NEW USER INSERTION: ",
-          DBResultPreferencesValues
-        );
         // ! Should this not be (isExistingUser) ?
       } else if (DBResultPreferencesValues.length > 0) {
         console.log("THIS IS AN EXISTING USER");
 
-        // const query1 = `INSERT OR IGNORE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES
-        // ("showMissedSalahCount", "1"),
-        // ("appLaunchCount", "0"),
-        // ("isMissedSalahToolTipShown", "0")`;
-
-        // await dbConnection.current.run(query1);
-
         const query2 = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-        await dbConnection.current.run(query2, [defaultReasons, "reasons"]);
+        await dbConnection.current?.run(query2, [defaultReasons, "reasons"]);
 
-        const DBResultPreferencesQuery = await dbConnection.current.query(
+        const DBResultPreferencesQuery = await dbConnection.current?.query(
           `SELECT * FROM userPreferencesTable`
         );
 
@@ -373,8 +362,6 @@ const App = () => {
         );
       }
     };
-
-    // const arr = params.filter((_, i) => i % 2 === 0)
 
     Object.keys(dictPreferencesDefaultValues).forEach((key) => {
       assignPreference(key);
@@ -509,9 +496,7 @@ const App = () => {
   ) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
-      if (!dbConnection || !dbConnection.current) {
-        throw new Error("dbConnection or dbConnection.current does not exist");
-      }
+
       const test = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
@@ -519,13 +504,13 @@ const App = () => {
 
       if (preferenceName === "reasons") {
         const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-        await dbConnection.current.run(query, [
+        await dbConnection.current?.run(query, [
           preferenceValue.toString(),
           preferenceName,
         ]);
       } else {
         const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
-        await dbConnection.current.run(query, [
+        await dbConnection.current?.run(query, [
           preferenceName,
           preferenceValue,
         ]);
