@@ -160,7 +160,9 @@ const SettingsPage = ({
           await sqliteConnection.current.importFromJson(fileContent);
           diaglogElement.current?.close();
           showToast("Import Successful", "short");
-          await fetchDataFromDB();
+
+          const isDBImported = true;
+          await fetchDataFromDB(isDBImported);
         } catch (error) {
           console.error("Error importing backup file", error);
           // Below is in the finally block but had to be duplicated here otherwise wouldn't close on Android

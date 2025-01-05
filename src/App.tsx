@@ -136,14 +136,16 @@ const App = () => {
   }, [fetchedSalahData]);
   // let DBResultAllSalahData: DBSQLiteValues;
 
-  const fetchDataFromDB = async () => {
+  const fetchDataFromDB = async (isDBImported?: boolean) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
+      if (isDBImported) {
+        await modifyDataInUserPreferencesTable("isExistingUser", "1");
+      }
+
       // ! Remove this once some time has passed, as its just for migrating beta testers data
       if (localStorage.getItem("existingUser")) {
-        console.log("existingUser key exists in localstorage, amending DB");
-
         await modifyDataInUserPreferencesTable("isExistingUser", "1");
         await modifyDataInUserPreferencesTable(
           "isMissedSalahToolTipShown",
@@ -182,10 +184,12 @@ const App = () => {
         (row) => row.preferenceName === "dailyNotification"
       );
 
-      let isExistingUser =
+      const isExistingUser =
         DBResultPreferences.values.find(
           (row) => row.preferenceName === "isExistingUser"
         ) || "";
+
+      console.log("isExistingUser: ", isExistingUser);
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
         setShowIntroModal(true);
@@ -277,18 +281,13 @@ const App = () => {
 
       // ! Should this not be (!isExistingUser) ?
       if (DBResultPreferencesValues.length === 0) {
-        console.log(
-          "DBResultPreferencesValues.length is 0, inserting values into DB"
-        );
-
         const params = Object.keys(dictPreferencesDefaultValues)
           .map((key) => {
-            const value = dictPreferencesDefaultValues[key];
+            const value =
+              dictPreferencesDefaultValues[key as keyof userPreferencesType];
             return [key, Array.isArray(value) ? value.join(",") : value];
           })
           .flat();
-
-        console.log("params: ", params);
 
         const placeholders = Array(params.length / 2)
           .fill("(?, ?)")
@@ -299,7 +298,7 @@ const App = () => {
         VALUES ${placeholders};
         `;
 
-        await dbConnection.current.run(insertQuery, params);
+        await dbConnection.current?.run(insertQuery, params);
         const DBResultPreferencesQuery = await dbConnection.current?.query(
           `SELECT * FROM userPreferencesTable`
         );
@@ -314,10 +313,8 @@ const App = () => {
 
         // ! Should this not be (isExistingUser) ?
       } else if (DBResultPreferencesValues.length > 0) {
-        console.log("THIS IS AN EXISTING USER");
-
-        const query2 = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-        await dbConnection.current?.run(query2, [defaultReasons, "reasons"]);
+        const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+        await dbConnection.current?.run(query, [defaultReasons, "reasons"]);
 
         const DBResultPreferencesQuery = await dbConnection.current?.query(
           `SELECT * FROM userPreferencesTable`
@@ -338,14 +335,16 @@ const App = () => {
       checkAndOpenOrCloseDBConnection("close");
     }
 
-    const assignPreference = (preference: PreferenceType): void => {
+    const assignPreference = async (
+      preference: PreferenceType
+    ): Promise<void> => {
       const preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
 
       if (preferenceQuery) {
         const prefName = preferenceQuery.preferenceName;
-        let prefValue = preferenceQuery.preferenceValue;
+        const prefValue = preferenceQuery.preferenceValue;
 
         if (prefName === "userStartDate") {
           userStartDateForSalahTrackingFunc = prefValue;
@@ -363,9 +362,23 @@ const App = () => {
       }
     };
 
-    Object.keys(dictPreferencesDefaultValues).forEach((key) => {
-      assignPreference(key);
-    });
+    // Object.keys(dictPreferencesDefaultValues).forEach((key) => {
+    //   assignPreference(key as keyof userPreferencesType);
+    // });
+    // const batchAssignPreferences = async () => {
+    //   for (const key of dictPreferencesDefaultValues) {
+
+    //   }
+    // }
+    await assignPreference("userGender");
+    await assignPreference("userStartDate");
+    await assignPreference("dailyNotification");
+    await assignPreference("dailyNotificationTime");
+    await assignPreference("reasons");
+    await assignPreference("showMissedSalahCount");
+    await assignPreference("isExistingUser");
+    await assignPreference("isMissedSalahToolTipShown");
+    await assignPreference("appLaunchCount");
   };
 
   // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
@@ -444,7 +457,6 @@ const App = () => {
             DBResultAllSalahData[i].reasons !== ""
           ) {
             const reasons = DBResultAllSalahData[i].reasons.split(", ");
-            // console.log("reasons: ", reasons);
             if (DBResultAllSalahData[i].salahStatus === "male-alone") {
               maleAloneReasons.push(reasons);
             } else if (DBResultAllSalahData[i].salahStatus === "late") {
@@ -494,6 +506,8 @@ const App = () => {
     preferenceName: PreferenceType,
     preferenceValue: string | string[]
   ) => {
+    console.log("modifyDataInUserPreferencesTable has run");
+
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
@@ -509,6 +523,8 @@ const App = () => {
           preferenceName,
         ]);
       } else {
+        console.log(`ENTERING ${preferenceName} into DB`);
+
         const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
         await dbConnection.current?.run(query, [
           preferenceName,
@@ -520,15 +536,8 @@ const App = () => {
         ...userPreferences,
         [preferenceName]: preferenceValue,
       });
-
-      // setUserPreferences({
-      //   ...userPreferences,
-      //   [preferenceName]:
-      //     preferenceName === "reasons"
-      //       ? preferenceValue.split(",")
-      //       : preferenceValue,
-      // });
     } catch (error) {
+      console.log(`ERROR ENTERING ${preferenceName} into DB`);
       console.error(error);
     } finally {
       await checkAndOpenOrCloseDBConnection("close");
