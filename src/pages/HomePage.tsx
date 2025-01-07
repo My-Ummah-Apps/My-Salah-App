@@ -19,6 +19,8 @@ interface HomePageProps {
     preference: PreferenceType,
     value: string
   ) => Promise<void>;
+  setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  showJoyRideEditIcon: boolean;
   renderTable: boolean;
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
@@ -40,6 +42,8 @@ const HomePage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   modifyDataInUserPreferencesTable,
+  setShowJoyRideEditIcon,
+  showJoyRideEditIcon,
   renderTable,
   setFetchedSalahData,
   fetchedSalahData,
@@ -73,6 +77,8 @@ const HomePage = ({
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+        setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+        showJoyRideEditIcon={showJoyRideEditIcon}
         renderTable={renderTable}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}

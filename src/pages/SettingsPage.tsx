@@ -28,7 +28,7 @@ interface SettingsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  fetchDataFromDB: () => Promise<void>;
+  fetchDataFromDB: (isDBImported: boolean) => Promise<void>;
   pageStyles: string;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
@@ -202,9 +202,9 @@ const SettingsPage = ({
   useEffect(() => {
     const updateStateAndDB = async () => {
       if (isMissedSalahCounterOptionChecked) {
-        modifyDataInUserPreferencesTable("showMissedSalahCount", "1");
+        await modifyDataInUserPreferencesTable("showMissedSalahCount", "1");
       } else {
-        modifyDataInUserPreferencesTable("showMissedSalahCount", "0");
+        await modifyDataInUserPreferencesTable("showMissedSalahCount", "0");
       }
     };
 

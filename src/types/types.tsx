@@ -13,6 +13,7 @@ export interface userPreferencesType {
   isExistingUser: string;
   isMissedSalahToolTipShown: string;
   appLaunchCount: string;
+  haptics: string;
 }
 
 // type ValueOf<T> = T[keyof T];

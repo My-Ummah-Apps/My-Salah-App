@@ -26,6 +26,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   isExistingUser: "0",
   isMissedSalahToolTipShown: "0",
   appLaunchCount: "0",
+  haptics: "0",
 };
 
 export const reasonsStyles = "p-2 m-1 text-xs bg-[rgb(39,39,39)] rounded-xl";

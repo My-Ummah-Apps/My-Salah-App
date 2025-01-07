@@ -103,11 +103,11 @@ const BottomSheetNotifications = ({
       requestPermission === "prompt-with-rationale" ||
       requestPermission === "denied"
     ) {
-      modifyDataInUserPreferencesTable("dailyNotification", "0");
+      await modifyDataInUserPreferencesTable("dailyNotification", "0");
     }
   };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTimeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserPreferences((userPreferences) => ({
       ...userPreferences,
       dailyNotificationTime: e.target.value,
@@ -116,7 +116,10 @@ const BottomSheetNotifications = ({
     console.log(hour, minute);
 
     scheduleDailyNotification(hour, minute);
-    modifyDataInUserPreferencesTable("dailyNotificationTime", e.target.value);
+    await modifyDataInUserPreferencesTable(
+      "dailyNotificationTime",
+      e.target.value
+    );
   };
 
   useEffect(() => {
@@ -125,7 +128,15 @@ const BottomSheetNotifications = ({
       ...userPreferences,
       dailyNotification: notificationValue,
     });
-    modifyDataInUserPreferencesTable("dailyNotification", notificationValue);
+
+    const modifyDBAndState = async () => {
+      await modifyDataInUserPreferencesTable(
+        "dailyNotification",
+        notificationValue
+      );
+    };
+
+    modifyDBAndState();
   }, [dailyNotificationToggle]);
 
   return (

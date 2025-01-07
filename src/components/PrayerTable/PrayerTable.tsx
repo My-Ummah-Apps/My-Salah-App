@@ -33,6 +33,8 @@ interface PrayerTableProps {
     preference: PreferenceType,
     value: string
   ) => Promise<void>;
+  setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  showJoyRideEditIcon: boolean;
   renderTable: boolean;
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
@@ -55,6 +57,8 @@ const PrayerTable = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   modifyDataInUserPreferencesTable,
+  setShowJoyRideEditIcon,
+  showJoyRideEditIcon,
   setFetchedSalahData,
   fetchedSalahData,
   setUserPreferences,
@@ -122,10 +126,11 @@ const PrayerTable = ({
     },
   ];
 
-  const handleJoyRideCompletion = (data: any) => {
+  const handleJoyRideCompletion = async (data: any) => {
     if (data.status === "ready") {
       console.log("TOUR COMPLETE!");
-      modifyDataInUserPreferencesTable("isExistingUser", "1");
+      await modifyDataInUserPreferencesTable("isExistingUser", "1");
+      setShowJoyRideEditIcon(false);
     }
   };
 
@@ -134,7 +139,7 @@ const PrayerTable = ({
       {/* {userPreferences.isExistingUser === "1" && ( */}
       <Joyride
         disableOverlay={true}
-        run={userPreferences.isExistingUser === "0"}
+        run={showJoyRideEditIcon}
         locale={{
           last: "Done",
           next: "Next",

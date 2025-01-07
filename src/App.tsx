@@ -77,6 +77,7 @@ const App = () => {
     {}
   );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
+  const [showJoyRideEditIcon, setShowJoyRideEditIcon] = useState(false);
 
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
@@ -138,8 +139,6 @@ const App = () => {
 
   const fetchDataFromDB = async (isDBImported?: boolean) => {
     try {
-      await checkAndOpenOrCloseDBConnection("open");
-
       if (isDBImported) {
         await modifyDataInUserPreferencesTable("isExistingUser", "1");
       }
@@ -153,14 +152,18 @@ const App = () => {
         );
         localStorage.removeItem("existingUser");
       }
-
-      const DBResultAllSalahData = await dbConnection.current?.query(
-        `SELECT * FROM salahDataTable`
-      );
+      await checkAndOpenOrCloseDBConnection("open");
 
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
+
+      console.log("DBResultAllSalahData about to be fetched...");
+      const DBResultAllSalahData = await dbConnection.current?.query(
+        `SELECT * FROM salahDataTable`
+      );
+
+      console.log("DBResultAllSalahData: ", DBResultAllSalahData);
 
       console.log(
         "DBResultPreferences in fetchDataFromDB: ",
@@ -277,8 +280,6 @@ const App = () => {
     let DBResultPreferencesValues = DBResultPreferences;
 
     try {
-      await checkAndOpenOrCloseDBConnection("open");
-
       // ! Should this not be (!isExistingUser) ?
       if (DBResultPreferencesValues.length === 0) {
         const params = Object.keys(dictPreferencesDefaultValues)
@@ -331,8 +332,6 @@ const App = () => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      checkAndOpenOrCloseDBConnection("close");
     }
 
     const assignPreference = async (
@@ -341,6 +340,11 @@ const App = () => {
       const preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
+
+      console.log(
+        `preference is: ${preference}, preferenceQuery: ${preferenceQuery?.preferenceName} and its value is: ${preferenceQuery?.preferenceValue}`
+      );
+      console.log("IS PREF TRUE OR FALSE: ", preferenceQuery);
 
       if (preferenceQuery) {
         const prefName = preferenceQuery.preferenceName;
@@ -355,30 +359,24 @@ const App = () => {
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
       } else {
-        modifyDataInUserPreferencesTable(
+        console.log(
+          `PREF ${preference} not found in DB, therefore entering into DB via modifyDataInUserPreferencesTable`
+        );
+
+        await modifyDataInUserPreferencesTable(
           preference,
           dictPreferencesDefaultValues[preference]
         );
       }
     };
 
-    // Object.keys(dictPreferencesDefaultValues).forEach((key) => {
-    //   assignPreference(key as keyof userPreferencesType);
-    // });
-    // const batchAssignPreferences = async () => {
-    //   for (const key of dictPreferencesDefaultValues) {
+    const batchAssignPreferences = async () => {
+      for (const key of Object.keys(dictPreferencesDefaultValues)) {
+        await assignPreference(key as keyof userPreferencesType);
+      }
+    };
 
-    //   }
-    // }
-    await assignPreference("userGender");
-    await assignPreference("userStartDate");
-    await assignPreference("dailyNotification");
-    await assignPreference("dailyNotificationTime");
-    await assignPreference("reasons");
-    await assignPreference("showMissedSalahCount");
-    await assignPreference("isExistingUser");
-    await assignPreference("isMissedSalahToolTipShown");
-    await assignPreference("appLaunchCount");
+    await batchAssignPreferences();
   };
 
   // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
@@ -506,7 +504,9 @@ const App = () => {
     preferenceName: PreferenceType,
     preferenceValue: string | string[]
   ) => {
-    console.log("modifyDataInUserPreferencesTable has run");
+    console.log(
+      `modifyDataInUserPreferencesTable has run, preferenceName is: ${preferenceName} & preferenceValue is: ${preferenceValue}`
+    );
 
     try {
       await checkAndOpenOrCloseDBConnection("open");
@@ -659,6 +659,8 @@ const App = () => {
                 modifyDataInUserPreferencesTable={
                   modifyDataInUserPreferencesTable
                 }
+                setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+                showJoyRideEditIcon={showJoyRideEditIcon}
                 renderTable={renderTable}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
@@ -727,7 +729,10 @@ const App = () => {
         </Routes>
         <Sheet
           isOpen={showIntroModal}
-          onClose={() => setShowIntroModal(false)}
+          onClose={() => {
+            setShowJoyRideEditIcon(true);
+            setShowIntroModal(false);
+          }}
           detent="full-height"
           disableDrag={true}
         >
@@ -814,7 +819,7 @@ const App = () => {
                           console.log("Permission granted");
                           setShowIntroModal(false);
                           scheduleDailyNotification(21, 0);
-                          modifyDataInUserPreferencesTable(
+                          await modifyDataInUserPreferencesTable(
                             "dailyNotificationTime",
                             "21:00"
                           );
