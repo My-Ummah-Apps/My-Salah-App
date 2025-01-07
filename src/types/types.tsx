@@ -9,6 +9,7 @@ export interface userPreferencesType {
   dailyNotification: string;
   dailyNotificationTime: string;
   reasons: string[];
+  showReasons: string;
   showMissedSalahCount: string;
   isExistingUser: string;
   isMissedSalahToolTipShown: string;

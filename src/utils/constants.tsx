@@ -22,6 +22,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   dailyNotification: "0",
   dailyNotificationTime: "21:00",
   reasons: defaultReasons.split(","),
+  showReasons: "0",
   showMissedSalahCount: "1",
   isExistingUser: "0",
   isMissedSalahToolTipShown: "0",

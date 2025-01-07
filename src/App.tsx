@@ -77,7 +77,8 @@ const App = () => {
     {}
   );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
-  const [showJoyRideEditIcon, setShowJoyRideEditIcon] = useState(false);
+  const [showJoyRideEditIcon, setShowJoyRideEditIcon] =
+    useState<boolean>(false);
 
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
@@ -612,6 +613,10 @@ const App = () => {
     swiperRef.current?.slideNext();
   };
 
+  useEffect(() => {
+    console.log("showJoyRideEditIcon STATE: ", showJoyRideEditIcon);
+  }, [showJoyRideEditIcon]);
+
   return (
     <BrowserRouter>
       <section className="app">
@@ -730,7 +735,6 @@ const App = () => {
         <Sheet
           isOpen={showIntroModal}
           onClose={() => {
-            setShowJoyRideEditIcon(true);
             setShowIntroModal(false);
           }}
           detent="full-height"
@@ -818,6 +822,7 @@ const App = () => {
                         if (permission.display === "granted") {
                           console.log("Permission granted");
                           setShowIntroModal(false);
+                          setShowJoyRideEditIcon(true);
                           scheduleDailyNotification(21, 0);
                           await modifyDataInUserPreferencesTable(
                             "dailyNotificationTime",
@@ -825,6 +830,7 @@ const App = () => {
                           );
                         } else {
                           setShowIntroModal(false);
+                          setShowJoyRideEditIcon(true);
                           console.log("Permissions not granted");
                         }
                       }}
@@ -835,6 +841,7 @@ const App = () => {
                     <button
                       onClick={() => {
                         setShowIntroModal(false);
+                        setShowJoyRideEditIcon(true);
                       }}
                       className="py-3 m-2 text-center text-white rounded-2xl"
                     >

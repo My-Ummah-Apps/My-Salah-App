@@ -1,6 +1,6 @@
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
-import Joyride from "react-joyride";
+import Joyride, { Step } from "react-joyride";
 AutoSizer;
 import {
   DBConnectionStateType,
@@ -108,7 +108,7 @@ const PrayerTable = ({
     }
   };
 
-  const joyRideonBoardingSteps = [
+  const joyRideonBoardingSteps: Step[] = [
     {
       target: ".multi-edit-icon",
       content:
@@ -129,25 +129,25 @@ const PrayerTable = ({
   const handleJoyRideCompletion = async (data: any) => {
     if (data.status === "ready") {
       console.log("TOUR COMPLETE!");
-      await modifyDataInUserPreferencesTable("isExistingUser", "1");
       setShowJoyRideEditIcon(false);
+      await modifyDataInUserPreferencesTable("isExistingUser", "1");
     }
   };
 
   return (
     <section className="prayer-table-wrap h-[80vh]">
-      {/* {userPreferences.isExistingUser === "1" && ( */}
       <Joyride
         disableOverlay={true}
         run={showJoyRideEditIcon}
+        // run={userPreferences.isExistingUser === "0"}
         locale={{
           last: "Done",
           next: "Next",
           back: "Back",
         }}
-        // @ts-ignore
         steps={joyRideonBoardingSteps}
         continuous
+        disableScrolling={true}
         hideCloseButton={true}
         callback={handleJoyRideCompletion}
         styles={{
@@ -171,7 +171,6 @@ const PrayerTable = ({
           },
         }}
       />
-      {/* // )} */}
 
       {isMultiEditMode && (
         <section className="absolute z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-700 rounded-full prayer-table-edit-cancel-btn-wrap top-3/4 left-1/2">
