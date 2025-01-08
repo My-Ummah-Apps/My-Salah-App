@@ -137,7 +137,8 @@ const PrayerTable = ({
   return (
     <section className="prayer-table-wrap h-[80vh]">
       <Joyride
-        disableOverlay={true}
+        disableOverlay={false}
+        disableOverlayClose={true}
         run={showJoyRideEditIcon}
         // run={userPreferences.isExistingUser === "0"}
         locale={{

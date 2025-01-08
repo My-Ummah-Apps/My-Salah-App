@@ -736,6 +736,7 @@ const App = () => {
           isOpen={showIntroModal}
           onClose={() => {
             setShowIntroModal(false);
+            setShowJoyRideEditIcon(true);
           }}
           detent="full-height"
           disableDrag={true}
@@ -820,7 +821,6 @@ const App = () => {
                         const permission =
                           await LocalNotifications.requestPermissions();
                         if (permission.display === "granted") {
-                          console.log("Permission granted");
                           setShowIntroModal(false);
                           setShowJoyRideEditIcon(true);
                           scheduleDailyNotification(21, 0);
@@ -831,7 +831,6 @@ const App = () => {
                         } else {
                           setShowIntroModal(false);
                           setShowJoyRideEditIcon(true);
-                          console.log("Permissions not granted");
                         }
                       }}
                       className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl"
