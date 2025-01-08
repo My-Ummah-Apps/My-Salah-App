@@ -128,7 +128,6 @@ const PrayerTable = ({
 
   const handleJoyRideCompletion = async (data: any) => {
     if (data.status === "ready") {
-      console.log("TOUR COMPLETE!");
       setShowJoyRideEditIcon(false);
       await modifyDataInUserPreferencesTable("isExistingUser", "1");
     }

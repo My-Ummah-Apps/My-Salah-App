@@ -149,7 +149,6 @@ const SettingsPage = ({
 
         try {
           await sqliteConnection.current.isJsonValid(fileContent);
-          console.log("JSON is valid");
         } catch (error) {
           showToast(`File not recognised, file is invalid - ${error}`, "long");
           throw new Error("JSON is not valid");

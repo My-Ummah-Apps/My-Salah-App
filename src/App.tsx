@@ -159,16 +159,8 @@ const App = () => {
         `SELECT * FROM userPreferencesTable`
       );
 
-      console.log("DBResultAllSalahData about to be fetched...");
       const DBResultAllSalahData = await dbConnection.current?.query(
         `SELECT * FROM salahDataTable`
-      );
-
-      console.log("DBResultAllSalahData: ", DBResultAllSalahData);
-
-      console.log(
-        "DBResultPreferences in fetchDataFromDB: ",
-        DBResultPreferences
       );
 
       if (!DBResultPreferences || !DBResultPreferences.values) {
@@ -192,8 +184,6 @@ const App = () => {
         DBResultPreferences.values.find(
           (row) => row.preferenceName === "isExistingUser"
         ) || "";
-
-      console.log("isExistingUser: ", isExistingUser);
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
         setShowIntroModal(true);
@@ -342,11 +332,6 @@ const App = () => {
         (row) => row.preferenceName === preference
       );
 
-      console.log(
-        `preference is: ${preference}, preferenceQuery: ${preferenceQuery?.preferenceName} and its value is: ${preferenceQuery?.preferenceValue}`
-      );
-      console.log("IS PREF TRUE OR FALSE: ", preferenceQuery);
-
       if (preferenceQuery) {
         const prefName = preferenceQuery.preferenceName;
         const prefValue = preferenceQuery.preferenceValue;
@@ -360,10 +345,6 @@ const App = () => {
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
       } else {
-        console.log(
-          `PREF ${preference} not found in DB, therefore entering into DB via modifyDataInUserPreferencesTable`
-        );
-
         await modifyDataInUserPreferencesTable(
           preference,
           dictPreferencesDefaultValues[preference]
@@ -505,17 +486,12 @@ const App = () => {
     preferenceName: PreferenceType,
     preferenceValue: string | string[]
   ) => {
-    console.log(
-      `modifyDataInUserPreferencesTable has run, preferenceName is: ${preferenceName} & preferenceValue is: ${preferenceValue}`
-    );
-
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
       const test = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
-      console.log("PREFERENCES IN DB: ", test);
 
       if (preferenceName === "reasons") {
         const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
@@ -524,8 +500,6 @@ const App = () => {
           preferenceName,
         ]);
       } else {
-        console.log(`ENTERING ${preferenceName} into DB`);
-
         const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
         await dbConnection.current?.run(query, [
           preferenceName,
@@ -545,12 +519,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("userPreferences IN USEEFFECT: ", userPreferences);
-  }, [userPreferences]);
-
-  // const appRef = useRef();
-  // console.log(appRef);
   // if (Capacitor.isNativePlatform()) {
   // let launchCount: number | null = localStorage.getItem("launch-count");
   // useEffect(() => {
@@ -612,10 +580,6 @@ const App = () => {
   const handleGenderSelect = () => {
     swiperRef.current?.slideNext();
   };
-
-  useEffect(() => {
-    console.log("showJoyRideEditIcon STATE: ", showJoyRideEditIcon);
-  }, [showJoyRideEditIcon]);
 
   return (
     <BrowserRouter>

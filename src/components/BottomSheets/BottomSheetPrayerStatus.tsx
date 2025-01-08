@@ -93,7 +93,6 @@ const BottomSheetPrayerStatus = ({
       setIsMultiEditMode(false);
     }
     await checkAndOpenOrCloseDBConnection("close");
-    console.log("Cleanup Operation Complete");
   };
 
   useEffect(() => {
@@ -117,7 +116,7 @@ const BottomSheetPrayerStatus = ({
         notesTextArea.current.scrollHeight + 0.5
       }px`;
     } else {
-      console.log("notesTextArea.current does not exist");
+      // console.log("notesTextArea.current does not exist");
     }
   });
 
@@ -183,7 +182,6 @@ const BottomSheetPrayerStatus = ({
 
       const reasonsToInsert =
         selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
-      console.log(selectedReasons);
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         if (!isValidDate(date)) {

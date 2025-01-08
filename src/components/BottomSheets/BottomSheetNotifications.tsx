@@ -113,7 +113,6 @@ const BottomSheetNotifications = ({
       dailyNotificationTime: e.target.value,
     }));
     const [hour, minute] = e.target.value.split(":").map(Number);
-    console.log(hour, minute);
 
     scheduleDailyNotification(hour, minute);
     await modifyDataInUserPreferencesTable(
