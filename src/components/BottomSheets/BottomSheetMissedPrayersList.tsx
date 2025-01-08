@@ -162,7 +162,6 @@ const BottomSheetMissedPrayersList = ({
                             className="rounded-full bg-[rgb(50,50,50)]"
                             onClick={() => {
                               modifySalahStatusInDB(date, salah);
-                              // const test = `${date}-${salah}`
                               setIsClickedItem(`${date}-${salah}`);
                             }}
                           >

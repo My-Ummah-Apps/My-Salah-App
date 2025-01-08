@@ -297,19 +297,16 @@ const PrayerTable = ({
                         <LuDot
                           style={{
                             backgroundColor:
-                              salahName === "Asar" &&
-                              userPreferences.isExistingUser === "0"
+                              salahName === "Asar" && showJoyRideEditIcon
                                 ? "white"
                                 : "",
                           }}
                           className={`${prayerTableIndividualSquareStyles} ${
-                            userPreferences.isExistingUser &&
-                            salahName === "Asar"
+                            showJoyRideEditIcon && salahName === "Asar"
                               ? "single-table-cell"
                               : ""
                           } ${
-                            userPreferences.isExistingUser === "0" &&
-                            salahName === "Asar"
+                            showJoyRideEditIcon && salahName === "Asar"
                               ? "animate-bounce"
                               : ""
                           }`}

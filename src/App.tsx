@@ -489,10 +489,6 @@ const App = () => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const test = await dbConnection.current?.query(
-        `SELECT * FROM userPreferencesTable`
-      );
-
       if (preferenceName === "reasons") {
         const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
         await dbConnection.current?.run(query, [

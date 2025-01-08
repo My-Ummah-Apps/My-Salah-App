@@ -329,13 +329,13 @@ const SettingsPage = ({
             );
           }}
         />
-        <SettingIndividual
+        {/* <SettingIndividual
           headingText={"Website"}
           subText={"Visit our website"}
           onClick={() => {
             link("https://myummahapps.com/");
           }}
-        />
+        /> */}
         <SettingIndividual
           headingText={"Privacy Policy"}
           subText={"View Privacy Policy"}
