@@ -1,8 +1,44 @@
-export const LATEST_APP_VERSION = "2.8";
+// 1. Increment LATEST_APP_VERSION 2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0") 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
+
+export const LATEST_APP_VERSION = "2.9";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Privacy Policy Link",
+        text: (
+          <>
+            <strong>Feature:</strong> Added a link to the privacy policy within
+            the settings page.
+          </>
+        ),
+      },
+      {
+        heading: "Enhanced Onboarding Process",
+        text: (
+          <>
+            <strong>Feature:</strong> Improved onboarding process for new users,
+            introduced new intro sheets that include an option to enable
+            notifications.
+          </>
+        ),
+      },
+      {
+        heading: "Tooltip for Missed Salah Counter",
+        text: (
+          <>
+            <strong>UX:</strong> Added a tooltip to the missed Salah counter
+            button to help users understand its functionality when it triggers
+            for the first time.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "2.8",
     changes: [
       {
         heading: "Missed Salah Feature",
