@@ -45,6 +45,7 @@ const MissedSalahCounter = ({
     <>
       <Joyride
         disableOverlay={true}
+        disableOverlayClose={true}
         run={userPreferences.isMissedSalahToolTipShown === "0"}
         locale={{
           last: "Done",
@@ -52,6 +53,7 @@ const MissedSalahCounter = ({
           back: "Back",
         }}
         hideCloseButton={true}
+        disableScrolling={true}
         callback={handleJoyRideCompletion}
         styles={{
           options: {
