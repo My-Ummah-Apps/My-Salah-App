@@ -155,9 +155,6 @@ const BottomSheetPrayerStatus = ({
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      // TODO: Below is stopping the database from being updated so have commented it out for now, this needs to be debugged
-      // await checkAndOpenOrCloseDBConnection("close");
     }
 
     return false;
@@ -258,9 +255,6 @@ const BottomSheetPrayerStatus = ({
     } catch (error) {
       console.error(error);
     }
-    // finally {
-    //   await checkAndOpenOrCloseDBConnection("close");
-    // }
   };
 
   useEffect(() => {

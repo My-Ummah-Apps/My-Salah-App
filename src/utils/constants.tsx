@@ -27,6 +27,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   isExistingUser: "0",
   isMissedSalahToolTipShown: "0",
   appLaunchCount: "0",
+  saveButtonTapCount: "0",
   haptics: "0",
 };
 

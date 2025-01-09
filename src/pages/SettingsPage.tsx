@@ -322,7 +322,7 @@ const SettingsPage = ({
         />
         <SettingIndividual
           headingText={"Feedback"}
-          subText={"Report Bugs"}
+          subText={"Report Bugs / Request Features"}
           onClick={() => {
             link(
               "mailto: contact@myummahapps.com?subject=My Salah App Feedback"

@@ -14,6 +14,7 @@ export interface userPreferencesType {
   isExistingUser: string;
   isMissedSalahToolTipShown: string;
   appLaunchCount: string;
+  saveButtonTapCount: string;
   haptics: string;
 }
 
