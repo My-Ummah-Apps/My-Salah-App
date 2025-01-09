@@ -1,6 +1,8 @@
 PODS:
   - Capacitor (6.1.2):
     - CapacitorCordova
+  - CapacitorCommunityInAppReview (6.0.0):
+    - Capacitor
   - CapacitorCommunitySqlite (6.0.1):
     - Capacitor
     - SQLCipher
@@ -37,6 +39,7 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorCommunityInAppReview (from `../../node_modules/@capacitor-community/in-app-review`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
@@ -59,6 +62,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorCommunityInAppReview:
+    :path: "../../node_modules/@capacitor-community/in-app-review"
   CapacitorCommunitySqlite:
     :path: "../../node_modules/@capacitor-community/sqlite"
   CapacitorCordova:
@@ -88,6 +93,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
+  CapacitorCommunityInAppReview: c69a9392f39a10f28092d823cfa979637f4fa079
   CapacitorCommunitySqlite: d0b543e12a06ee6fd0dc287c389e6b435ec4acdf
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
   CapacitorDialog: ad752191fdb22a8d0ac199b0754b8a021d86dbf9
@@ -104,6 +110,6 @@ SPEC CHECKSUMS:
   SQLCipher: 30a8e81afa6128e600b17ffa77d0f92fa05ed208
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: d7e27d27b3fcd5936f55f3fc5c1155efc8751cd6
+PODFILE CHECKSUM: 61f1e1f01ac87a5a25df43d0c6981b98ae224d5c
 
 COCOAPODS: 1.15.2

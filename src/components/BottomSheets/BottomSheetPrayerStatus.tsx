@@ -6,6 +6,7 @@ import { GoClock } from "react-icons/go";
 import { PiFlower } from "react-icons/pi";
 import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
+import { InAppReview } from "@capacitor-community/in-app-review";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
   MissedSalahObjType,
@@ -252,6 +253,37 @@ const BottomSheetPrayerStatus = ({
       }
 
       setFetchedSalahData((prev) => [...prev]);
+
+      // const saveBtnCounterQuery = `SELECT * FROM userPreferencesTable WHERE preferenceName = ?`;
+      const saveButtonTapCountQuery = await dbConnection.current.query(
+        `SELECT * FROM userPreferencesTable WHERE preferenceName = ?;`,
+        ["saveButtonTapCount"]
+      );
+      console.log(
+        "saveBtnCounterQuery: ",
+        saveButtonTapCountQuery.values[0].preferenceValue
+      );
+      const incrementedSaveButtonTapCount =
+        Number(saveButtonTapCountQuery.values[0].preferenceValue) + 1;
+
+      if (
+        incrementedSaveButtonTapCount === 3 ||
+        incrementedSaveButtonTapCount === 10 ||
+        incrementedSaveButtonTapCount === 20 ||
+        incrementedSaveButtonTapCount % 50 === 0
+      ) {
+        InAppReview.requestReview();
+      }
+
+      await dbConnection.current.run(
+        `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`,
+        [incrementedSaveButtonTapCount.toString(), "saveButtonTapCount"]
+      );
+
+      console.log(
+        "incrementedSaveButtonTapCount: ",
+        incrementedSaveButtonTapCount
+      );
     } catch (error) {
       console.error(error);
     }
