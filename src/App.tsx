@@ -51,14 +51,6 @@ import MissedSalahCounter from "./components/Stats/MissedSalahCounter";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
-    setTimeout(() => {
-      SplashScreen.hide({
-        fadeOutDuration: 250,
-      });
-    }, 500);
-  }
-
-  if (Capacitor.isNativePlatform()) {
     const STATUS_AND_NAV_BAR_COLOR = "#161515";
     if (Capacitor.getPlatform() === "android") {
       setTimeout(() => {
@@ -66,6 +58,12 @@ window.addEventListener("DOMContentLoaded", async () => {
         NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
       }, 1000);
     }
+
+    setTimeout(() => {
+      SplashScreen.hide({
+        fadeOutDuration: 250,
+      });
+    }, 500);
   }
 });
 
@@ -142,6 +140,7 @@ const App = () => {
     try {
       if (isDBImported) {
         await modifyDataInUserPreferencesTable("isExistingUser", "1");
+        console.log("modifyDataInUserPreferencesTable called from line 143");
       }
 
       // ! Remove this once some time has passed, as its just for migrating beta testers data
@@ -151,6 +150,8 @@ const App = () => {
           "isMissedSalahToolTipShown",
           "1"
         );
+        console.log("modifyDataInUserPreferencesTable called from line 153");
+
         localStorage.removeItem("existingUser");
       }
       await checkAndOpenOrCloseDBConnection("open");
@@ -233,6 +234,8 @@ const App = () => {
         try {
           await modifyDataInUserPreferencesTable("dailyNotification", "0");
           await checkAndOpenOrCloseDBConnection("open");
+          console.log("modifyDataInUserPreferencesTable called from line 237");
+
           DBResultPreferences = await dbConnection.current?.query(
             `SELECT * FROM userPreferencesTable`
           );
@@ -332,8 +335,13 @@ const App = () => {
       const preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
+      console.log("preferenceQuery: ", preferenceQuery);
 
       if (preferenceQuery) {
+        console.log(
+          `preferenceQuery found: ${preferenceQuery.preferenceName}, ${preferenceQuery.preferenceValue}, updating state...`
+        );
+
         const prefName = preferenceQuery.preferenceName;
         const prefValue = preferenceQuery.preferenceValue;
 
@@ -345,11 +353,17 @@ const App = () => {
           ...userPreferences,
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
+        console.log("userPreferences changed in assignPreference - line 346");
       } else {
+        console.log(
+          `Preference: ${preference} not found, adding into database and updating state...`
+        );
+        // ! This is where the issue is, with the below function commented out, bug with state/database not updating properly upon app date does not occur
         await modifyDataInUserPreferencesTable(
           preference,
           dictPreferencesDefaultValues[preference]
         );
+        console.log("modifyDataInUserPreferencesTable called from line 361");
       }
     };
 
@@ -508,6 +522,9 @@ const App = () => {
         ...userPreferences,
         [preferenceName]: preferenceValue,
       });
+      console.log(
+        `userPreference ${preferenceName} changed in modifyDataInUserPreferencesTable to ${preferenceValue} - Line 514`
+      );
     } catch (error) {
       console.log(`ERROR ENTERING ${preferenceName} into DB`);
       console.error(error);
@@ -515,24 +532,6 @@ const App = () => {
       await checkAndOpenOrCloseDBConnection("close");
     }
   };
-
-  // if (Capacitor.isNativePlatform()) {
-  // let launchCount: number | null = localStorage.getItem("launch-count");
-  // useEffect(() => {
-  //   if (launchCount > 14) {
-  //     launchCount = 0;
-  //   } else if (launchCount == null) {
-  //     launchCount = 1;
-  //   } else if (launchCount != null) {
-  //     let launchCountNumber = Number(launchCount);
-  //     launchCount = launchCountNumber + 1;
-  //   }
-  //   localStorage.setItem("launch-count", JSON.stringify(launchCount));
-
-  //   if (launchCount == 3 || launchCount == 8 || launchCount == 14) {
-  //     showReviewPrompt(true);
-  //   }
-  // });
 
   // const todaysDate = new Date("2024-01-01");
 
@@ -577,6 +576,10 @@ const App = () => {
   const handleGenderSelect = () => {
     swiperRef.current?.slideNext();
   };
+
+  useEffect(() => {
+    console.log("userPreferences updated, new preferneces:: ", userPreferences);
+  }, [userPreferences]);
 
   return (
     <BrowserRouter>
@@ -728,15 +731,13 @@ const App = () => {
                       className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
                       onClick={async () => {
                         handleGenderSelect();
-                        setUserPreferences(
-                          (userPreferences: userPreferencesType) => ({
-                            ...userPreferences,
-                            userGender: "male",
-                          })
-                        );
+                        console.log("Changing Gender to male...");
                         await modifyDataInUserPreferencesTable(
                           "userGender",
                           "male"
+                        );
+                        console.log(
+                          "modifyDataInUserPreferencesTable called from line 734"
                         );
 
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
@@ -748,15 +749,13 @@ const App = () => {
                       className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
                       onClick={async () => {
                         handleGenderSelect();
-                        setUserPreferences(
-                          (userPreferences: userPreferencesType) => ({
-                            ...userPreferences,
-                            userGender: "female",
-                          })
-                        );
+                        console.log("Changing Gender to Female...");
                         await modifyDataInUserPreferencesTable(
                           "userGender",
                           "female"
+                        );
+                        console.log(
+                          "modifyDataInUserPreferencesTable called from line 753"
                         );
 
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
@@ -788,6 +787,9 @@ const App = () => {
                           await modifyDataInUserPreferencesTable(
                             "dailyNotificationTime",
                             "21:00"
+                          );
+                          console.log(
+                            "modifyDataInUserPreferencesTable called from line 786"
                           );
                         } else {
                           setShowIntroModal(false);
