@@ -55,6 +55,25 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
+  // const link = (url) => {
+  //   window.location.href = url;
+  // };
+  // const shareThisAppLink = async () => {
+  //   let link;
+  //   if (Capacitor.getPlatform() == "ios") {
+  //     link = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
+  //   } else if (Capacitor.getPlatform() == "android") {
+  //     link = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
+  //   }
+
+  //   await Share.share({
+  //     title: "",
+  //     text: "",
+  //     url: link,
+  //     dialogTitle: "",
+  //   });
+  // };
+
   const importDBRef = useRef<HTMLInputElement | null>(null);
   const diaglogElement = useRef<HTMLDialogElement | null>(null);
   const [dialogElementText, setDialogElementText] = useState<string>("");
@@ -282,31 +301,28 @@ const SettingsPage = ({
         >
           {dialogElementText}
         </dialog>
-        {/* 
-        {Capacitor.getPlatform() === "android" ? (
+        {Capacitor.getPlatform() === "android" && (
           <SettingIndividual
             indvidualStyles={"rounded-t-md"}
             headingText={"Review"}
             subText={"Rate us on the Google Play Store"}
             onClick={() => {
               link(
-                "https://play.google.com/store/apps/details?id=com.tasbeeh.my"
+                "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
               );
             }}
           />
-        ) : null}
-        {Capacitor.getPlatform() === "ios" ? (
+        )}
+        {Capacitor.getPlatform() === "ios" && (
           <SettingIndividual
             indvidualStyles={"rounded-t-md"}
             headingText={"Review"}
             subText={"Rate us on the App Store"}
             onClick={() => {
-              link(
-                "https://play.google.com/store/apps/details?id=com.tasbeeh.my"
-              );
+              link("https://apps.apple.com/us/app/my-salah-app/id6449438967");
             }}
           />
-        ) : null} */}
+        )}
         {/* {Capacitor.getPlatform() === "android" ? ( */}
         {/* <SettingIndividual
           headingText={"Share"}
@@ -329,13 +345,13 @@ const SettingsPage = ({
             );
           }}
         />
-        {/* <SettingIndividual
+        <SettingIndividual
           headingText={"Website"}
           subText={"Visit our website"}
           onClick={() => {
             link("https://myummahapps.com/");
           }}
-        /> */}
+        />
         <SettingIndividual
           headingText={"Privacy Policy"}
           subText={"View Privacy Policy"}
