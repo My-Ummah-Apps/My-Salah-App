@@ -98,8 +98,6 @@ const App = () => {
   const [fetchedSalahData, setFetchedSalahData] =
     useState<SalahRecordsArrayType>([]);
 
-  const [renderTable, setRenderTable] = useState(false);
-
   const [userPreferences, setUserPreferences] = useState<userPreferencesType>(
     dictPreferencesDefaultValues
   );
@@ -114,7 +112,6 @@ const App = () => {
   useEffect(() => {
     if (isDatabaseInitialised === true) {
       const initialiseAndLoadData = async () => {
-        setRenderTable(true);
         await fetchDataFromDB();
       };
       initialiseAndLoadData();
@@ -140,7 +137,6 @@ const App = () => {
     try {
       if (isDBImported) {
         await modifyDataInUserPreferencesTable("isExistingUser", "1");
-        console.log("modifyDataInUserPreferencesTable called from line 143");
       }
 
       // ! Remove this once some time has passed, as its just for migrating beta testers data
@@ -150,7 +146,6 @@ const App = () => {
           "isMissedSalahToolTipShown",
           "1"
         );
-        console.log("modifyDataInUserPreferencesTable called from line 153");
 
         localStorage.removeItem("existingUser");
       }
@@ -159,7 +154,6 @@ const App = () => {
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
-      console.log("DBResultPreferences: ", DBResultPreferences);
 
       const DBResultAllSalahData = await dbConnection.current?.query(
         `SELECT * FROM salahDataTable`
@@ -234,7 +228,6 @@ const App = () => {
         try {
           await modifyDataInUserPreferencesTable("dailyNotification", "0");
           await checkAndOpenOrCloseDBConnection("open");
-          console.log("modifyDataInUserPreferencesTable called from line 237");
 
           DBResultPreferences = await dbConnection.current?.query(
             `SELECT * FROM userPreferencesTable`
@@ -335,13 +328,8 @@ const App = () => {
       const preferenceQuery = DBResultPreferencesValues.find(
         (row) => row.preferenceName === preference
       );
-      console.log("preferenceQuery: ", preferenceQuery);
 
       if (preferenceQuery) {
-        console.log(
-          `preferenceQuery found: ${preferenceQuery.preferenceName}, ${preferenceQuery.preferenceValue}, updating state...`
-        );
-
         const prefName = preferenceQuery.preferenceName;
         const prefValue = preferenceQuery.preferenceValue;
 
@@ -353,17 +341,11 @@ const App = () => {
           ...userPreferences,
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
-        console.log("userPreferences changed in assignPreference - line 346");
       } else {
-        console.log(
-          `Preference: ${preference} not found, adding into database and updating state...`
-        );
-
         await modifyDataInUserPreferencesTable(
           preference,
           dictPreferencesDefaultValues[preference]
         );
-        console.log("modifyDataInUserPreferencesTable called from line 361");
       }
     };
 
@@ -522,10 +504,6 @@ const App = () => {
         ...userPreferences,
         [preferenceName]: preferenceValue,
       }));
-
-      console.log(
-        `userPreference ${preferenceName} changed in modifyDataInUserPreferencesTable to ${preferenceValue} - Line 514`
-      );
     } catch (error) {
       console.log(`ERROR ENTERING ${preferenceName} into DB`);
       console.error(error);
@@ -578,20 +556,6 @@ const App = () => {
     swiperRef.current?.slideNext();
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      await checkAndOpenOrCloseDBConnection("open");
-
-      const test = await dbConnection.current?.query(
-        `SELECT * FROM userPreferencesTable`
-      );
-      console.log("UPDATED PREFERENCES IN DB: ", test?.values);
-      await checkAndOpenOrCloseDBConnection("close");
-    };
-    console.log("UPDATED PREFERENCES STATE: ", userPreferences);
-    fetch();
-  }, [userPreferences]);
-
   return (
     <BrowserRouter>
       <section className="app">
@@ -641,7 +605,6 @@ const App = () => {
                 }
                 setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                 showJoyRideEditIcon={showJoyRideEditIcon}
-                renderTable={renderTable}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 setFetchedSalahData={setFetchedSalahData}
@@ -742,13 +705,10 @@ const App = () => {
                       className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
                       onClick={async () => {
                         handleGenderSelect();
-                        console.log("Changing Gender to male...");
+
                         await modifyDataInUserPreferencesTable(
                           "userGender",
                           "male"
-                        );
-                        console.log(
-                          "modifyDataInUserPreferencesTable called from line 734"
                         );
 
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
@@ -760,13 +720,10 @@ const App = () => {
                       className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
                       onClick={async () => {
                         handleGenderSelect();
-                        console.log("Changing Gender to Female...");
+
                         await modifyDataInUserPreferencesTable(
                           "userGender",
                           "female"
-                        );
-                        console.log(
-                          "modifyDataInUserPreferencesTable called from line 753"
                         );
 
                         localStorage.setItem("appVersion", LATEST_APP_VERSION);
@@ -798,9 +755,6 @@ const App = () => {
                           await modifyDataInUserPreferencesTable(
                             "dailyNotificationTime",
                             "21:00"
-                          );
-                          console.log(
-                            "modifyDataInUserPreferencesTable called from line 786"
                           );
                         } else {
                           setShowIntroModal(false);

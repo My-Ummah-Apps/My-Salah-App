@@ -35,7 +35,6 @@ interface PrayerTableProps {
   ) => Promise<void>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   showJoyRideEditIcon: boolean;
-  renderTable: boolean;
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
