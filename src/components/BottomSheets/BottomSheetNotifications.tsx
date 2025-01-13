@@ -123,10 +123,11 @@ const BottomSheetNotifications = ({
 
   useEffect(() => {
     const notificationValue = dailyNotificationToggle === true ? "1" : "0";
-    setUserPreferences({
+
+    setUserPreferences((userPreferences) => ({
       ...userPreferences,
       dailyNotification: notificationValue,
-    });
+    }));
 
     const modifyDBAndState = async () => {
       await modifyDataInUserPreferencesTable(

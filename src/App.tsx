@@ -358,7 +358,7 @@ const App = () => {
         console.log(
           `Preference: ${preference} not found, adding into database and updating state...`
         );
-        // ! This is where the issue is, with the below function commented out, bug with state/database not updating properly upon app date does not occur
+
         await modifyDataInUserPreferencesTable(
           preference,
           dictPreferencesDefaultValues[preference]
@@ -518,10 +518,11 @@ const App = () => {
         ]);
       }
 
-      setUserPreferences({
+      setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
         [preferenceName]: preferenceValue,
-      });
+      }));
+
       console.log(
         `userPreference ${preferenceName} changed in modifyDataInUserPreferencesTable to ${preferenceValue} - Line 514`
       );
@@ -578,7 +579,17 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log("userPreferences updated, new preferneces:: ", userPreferences);
+    const fetch = async () => {
+      await checkAndOpenOrCloseDBConnection("open");
+
+      const test = await dbConnection.current?.query(
+        `SELECT * FROM userPreferencesTable`
+      );
+      console.log("UPDATED PREFERENCES IN DB: ", test?.values);
+      await checkAndOpenOrCloseDBConnection("close");
+    };
+    console.log("UPDATED PREFERENCES STATE: ", userPreferences);
+    fetch();
   }, [userPreferences]);
 
   return (
