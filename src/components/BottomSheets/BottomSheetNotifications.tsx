@@ -159,7 +159,7 @@ const BottomSheetNotifications = ({
                 onChange={() => {
                   handleNotificationPermissions();
                 }}
-                onColor="lightblue"
+                onColor="#3b82f6"
               />
             </div>
 

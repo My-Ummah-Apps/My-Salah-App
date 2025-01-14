@@ -1,10 +1,34 @@
 // 1. Increment LATEST_APP_VERSION 2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0") 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "2.9";
+export const LATEST_APP_VERSION = "3.0";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Settings Page Enhancements",
+        text: (
+          <>
+            <strong>Enhancement:</strong> Added review & share options in the
+            Settings page, along with a website link.
+          </>
+        ),
+      },
+      {
+        heading: "UI Improvements",
+        text: (
+          <>
+            <strong>UI:</strong> Adjusted toggle colors on the settings page for
+            notifications and missed Salah counter to ensure consistency.
+          </>
+        ),
+      },
+    ],
+  },
+
+  {
+    versionNum: "2.9",
     changes: [
       {
         heading: "Privacy Policy Link",
