@@ -55,24 +55,14 @@ const SettingsPage = ({
     setHeading("Settings");
   }, []);
 
-  // const link = (url) => {
-  //   window.location.href = url;
-  // };
-  // const shareThisAppLink = async () => {
-  //   let link;
-  //   if (Capacitor.getPlatform() == "ios") {
-  //     link = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
-  //   } else if (Capacitor.getPlatform() == "android") {
-  //     link = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
-  //   }
-
-  //   await Share.share({
-  //     title: "",
-  //     text: "",
-  //     url: link,
-  //     dialogTitle: "",
-  //   });
-  // };
+  const shareThisAppLink = async (link: string) => {
+    await Share.share({
+      title: "",
+      text: "",
+      url: link,
+      dialogTitle: "",
+    });
+  };
 
   const importDBRef = useRef<HTMLInputElement | null>(null);
   const diaglogElement = useRef<HTMLDialogElement | null>(null);
@@ -323,12 +313,24 @@ const SettingsPage = ({
             }}
           />
         )}
-        {/* {Capacitor.getPlatform() === "android" ? ( */}
-        {/* <SettingIndividual
-          headingText={"Share"}
-          subText={"Share application"}
-          onClick={shareThisAppLink}
-        /> */}
+        {Capacitor.isNativePlatform() && (
+          <SettingIndividual
+            indvidualStyles={"rounded-t-md"}
+            headingText={"Share"}
+            subText={"Share application"}
+            onClick={() => {
+              if (Capacitor.getPlatform() === "android") {
+                shareThisAppLink(
+                  "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
+                );
+              } else if (Capacitor.getPlatform() === "ios") {
+                shareThisAppLink(
+                  "https://apps.apple.com/gb/app/my-salah-app/id6478277078"
+                );
+              }
+            }}
+          />
+        )}
         <SettingIndividual
           headingText={"Changelog"}
           subText={"View Changelog"}
