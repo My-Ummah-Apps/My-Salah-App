@@ -399,15 +399,9 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
-      const salahReasonsOverallNumbers: salahReasonsOverallNumbersType = {
-        "male-alone": {},
-        late: {},
-        missed: {},
-      };
-
-      let maleAloneReasons: any[] = [];
-      let lateReasons: any[] = [];
-      let missedReasons: any[] = [];
+      let maleAloneReasonsArr: any[] = [];
+      let lateReasonsArr: any[] = [];
+      let missedReasonsArr: any[] = [];
 
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
@@ -435,18 +429,14 @@ const App = () => {
           ) {
             const reasons = DBResultAllSalahData[i].reasons.split(", ");
             if (DBResultAllSalahData[i].salahStatus === "male-alone") {
-              maleAloneReasons.push(reasons);
+              maleAloneReasonsArr.push(reasons);
             } else if (DBResultAllSalahData[i].salahStatus === "late") {
-              lateReasons.push(reasons);
+              lateReasonsArr.push(reasons);
             } else if (DBResultAllSalahData[i].salahStatus === "missed") {
-              missedReasons.push(reasons);
+              missedReasonsArr.push(reasons);
             }
           }
         }
-
-        maleAloneReasons = maleAloneReasons.flat();
-        lateReasons = lateReasons.flat();
-        missedReasons = missedReasons.flat();
 
         const populateReasonsArrays = (
           arr: string[],
@@ -461,9 +451,9 @@ const App = () => {
           });
         };
 
-        populateReasonsArrays(maleAloneReasons, "male-alone");
-        populateReasonsArrays(lateReasons, "late");
-        populateReasonsArrays(missedReasons, "missed");
+        populateReasonsArrays(maleAloneReasonsArr.flat(), "male-alone");
+        populateReasonsArrays(lateReasonsArr.flat(), "late");
+        populateReasonsArrays(missedReasonsArr.flat(), "missed");
 
         setSalahReasonsOverallNumbers(salahReasonsOverallNumbers);
       }
@@ -474,6 +464,13 @@ const App = () => {
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
   };
+
+  useEffect(() => {
+    console.log(
+      "salahReasonsOverallNumbers in useEffect: ",
+      salahReasonsOverallNumbers
+    );
+  }, []);
 
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,

@@ -94,6 +94,8 @@ const StatsPage = ({
     }
   }
 
+  console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
+
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
@@ -117,6 +119,7 @@ const StatsPage = ({
         modules={[Pagination]}
         pagination={{ clickable: true }}
       >
+        {/* {"male-alone" in salahReasonsOverallNumbers && ( */}
         <SwiperSlide>
           <ReasonsCard
             setReasonsToShow={setReasonsToShow}
@@ -125,6 +128,7 @@ const StatsPage = ({
             status={"male-alone"}
           />
         </SwiperSlide>
+        {/* // )} */}
         <SwiperSlide>
           <ReasonsCard
             setReasonsToShow={setReasonsToShow}
