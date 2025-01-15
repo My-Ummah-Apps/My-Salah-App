@@ -64,7 +64,6 @@ const HomePage = ({
     useState<SelectedSalahAndDateObjType>({});
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
 
-  // TODO: The below conditional shouldn't be needed
   return (
     <section className={`home-page-wrap ${pageStyles}`}>
       {/* <section className={`home-page-wrap`}> */}

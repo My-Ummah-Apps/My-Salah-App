@@ -417,7 +417,6 @@ const App = () => {
             let salahStatus: SalahStatusType =
               DBResultAllSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
-            // TODO: Add a conditional here, where 'if (salahStatus === "missed")'  only runs if the user has not turned the qadha salah setting off
             if (salahStatus === "missed") {
               if (DBResultAllSalahData[i].date in missedSalahObj) {
                 missedSalahObj[DBResultAllSalahData[i].date].push(salahName);
