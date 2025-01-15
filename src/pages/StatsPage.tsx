@@ -1,17 +1,17 @@
-import { useEffect } from "react";
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import { Pagination } from "swiper/modules";
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 
-import "swiper/css";
-import "swiper/css/pagination";
+// import "swiper/css";
+// import "swiper/css/pagination";
 
 // import "swiper/swiper-bundle.min.css";
-// import "swiper/swiper.min.css";
+// // import "swiper/swiper.min.css";
 
 import Calendar from "../components/Stats/Calendar";
 import {
-  // reasonsToShowType,
-  // salahReasonsOverallNumbersType,
+  reasonsToShowType,
+  salahReasonsOverallNumbersType,
   SalahRecordsArrayType,
   SalahStatusType,
   // userGenderType,
@@ -19,8 +19,9 @@ import {
 } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
-// import ReasonsCard from "../components/Stats/ReasonsCard";
-// import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
+import ReasonsCard from "../components/Stats/ReasonsCard";
+import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
+import { DBSQLiteValues } from "@capacitor-community/sqlite";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -29,8 +30,8 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  // DBResultAllSalahData: DBSQLiteValues;
-  // salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
+  DBResultAllSalahData: DBSQLiteValues;
+  salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -40,8 +41,8 @@ interface StatsPageProps {
 const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  // DBResultAllSalahData,
-  // salahReasonsOverallNumbers,
+  DBResultAllSalahData,
+  salahReasonsOverallNumbers,
   userPreferences,
   fetchedSalahData,
   setHeading,
@@ -52,9 +53,9 @@ const StatsPage = ({
   }, []);
   // console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
-  // const [showReasonsSheet, setShowReasonsSheet] = useState(false);
-  // const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
-  // const [showDonutChart, setShowDonutChart] = useState(false);
+  const [showReasonsSheet, setShowReasonsSheet] = useState(false);
+  const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
+
   let salahStatusStatistics;
   let showDonutChart;
   let salahStatusesOverallArr: SalahStatusType[] = [];
@@ -110,7 +111,7 @@ const StatsPage = ({
         userStartDate={userPreferences.userStartDate}
         fetchedSalahData={fetchedSalahData}
       />{" "}
-      {/* <Swiper
+      <Swiper
         spaceBetween={50}
         slidesPerView={1}
         modules={[Pagination]}
@@ -140,14 +141,14 @@ const StatsPage = ({
             status={"missed"}
           />
         </SwiperSlide>
-      </Swiper> */}
-      {/* <BottomSheetReasons
+      </Swiper>
+      <BottomSheetReasons
         // setReasonsToShow={setReasonsToShow}
         setShowReasonsSheet={setShowReasonsSheet}
         showReasonsSheet={showReasonsSheet}
         salahReasonsOverallNumbers={salahReasonsOverallNumbers}
         status={reasonsToShow}
-      /> */}
+      />
     </section>
   );
 };

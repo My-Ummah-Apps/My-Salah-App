@@ -417,6 +417,7 @@ const App = () => {
             let salahStatus: SalahStatusType =
               DBResultAllSalahData[i].salahStatus;
             singleSalahObj.salahs[salahName] = salahStatus;
+
             if (salahStatus === "missed") {
               if (DBResultAllSalahData[i].date in missedSalahObj) {
                 missedSalahObj[DBResultAllSalahData[i].date].push(salahName);
@@ -447,27 +448,23 @@ const App = () => {
         lateReasons = lateReasons.flat();
         missedReasons = missedReasons.flat();
 
-        maleAloneReasons.forEach((item: string) => {
-          if (item === "") return;
-          if (!salahReasonsOverallNumbers["male-alone"][item]) {
-            salahReasonsOverallNumbers["male-alone"][item] = 0;
-          }
-          salahReasonsOverallNumbers["male-alone"][item] += 1;
-        });
-        lateReasons.forEach((item) => {
-          if (item === "") return;
-          if (!salahReasonsOverallNumbers["late"][item]) {
-            salahReasonsOverallNumbers["late"][item] = 0;
-          }
-          salahReasonsOverallNumbers["late"][item] += 1;
-        });
-        missedReasons.forEach((item) => {
-          if (item === "") return;
-          if (!salahReasonsOverallNumbers["missed"][item]) {
-            salahReasonsOverallNumbers["missed"][item] = 0;
-          }
-          salahReasonsOverallNumbers["missed"][item] += 1;
-        });
+        const populateReasonsArrays = (
+          arr: string[],
+          status: keyof salahReasonsOverallNumbersType
+        ) => {
+          arr.forEach((item: string) => {
+            if (item === "") return;
+            if (!salahReasonsOverallNumbers[status][item]) {
+              salahReasonsOverallNumbers[status][item] = 0;
+            }
+            salahReasonsOverallNumbers[status][item] += 1;
+          });
+        };
+
+        populateReasonsArrays(maleAloneReasons, "male-alone");
+        populateReasonsArrays(lateReasons, "late");
+        populateReasonsArrays(missedReasons, "missed");
+
         setSalahReasonsOverallNumbers(salahReasonsOverallNumbers);
       }
 

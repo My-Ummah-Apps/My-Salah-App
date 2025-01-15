@@ -24,6 +24,8 @@ const ReasonsCard = ({
     0
   );
 
+  console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
+
   return (
     <>
       <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-t-2xl p-2 h-full">

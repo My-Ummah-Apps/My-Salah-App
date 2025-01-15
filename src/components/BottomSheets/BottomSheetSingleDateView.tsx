@@ -203,6 +203,7 @@ const BottomSheetSingleDateView = ({
                             (reason) => (
                               // reason.length > 0 && (
                               <p
+                                key={reason}
                                 // style={{
                                 //   backgroundColor:
                                 //     prayerStatusColorsHexCodes[
