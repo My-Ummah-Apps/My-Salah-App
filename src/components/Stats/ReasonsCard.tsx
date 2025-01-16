@@ -28,7 +28,7 @@ const ReasonsCard = ({
 
   return (
     <>
-      <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-t-2xl p-2 h-full">
+      <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl p-2 h-full">
         <h1 className="m-2 text-lg text-center">
           {`Top Reasons For ${
             status === "male-alone"
@@ -40,35 +40,68 @@ const ReasonsCard = ({
               : ""
           }`}
         </h1>
-        <ul>
-          {Object.entries(salahReasonsOverallNumbers[status])
-            .slice(0, 3)
-            .map(([key, value], index) => (
-              <li
-                className="flex items-center justify-between py-2"
-                key={index}
-              >
-                <p>{key}</p>
-                <div className="w-1/2 h-2 bg-gray-800 rounded-md reasons-bar">
-                  <p
-                    style={{
-                      width: Math.round((value / reasonsSum) * 100) + "%",
-                      backgroundColor: prayerStatusColorsHexCodes[status],
-                    }}
-                    className="h-2 rounded-md reasons-bar"
-                  ></p>
-                </div>
-                <section className="">
-                  <p>
-                    {value} {value > 1 ? "times" : "time"}
-                  </p>
-                  <p className="text-xs text-end">
-                    ({Math.round((value / reasonsSum) * 100)}%)
-                  </p>{" "}
-                </section>
-              </li>
-            ))}
-        </ul>
+        {Object.entries(salahReasonsOverallNumbers[status]).length > 0 ? (
+          <table>
+            {Object.entries(salahReasonsOverallNumbers[status])
+              .slice(0, 3)
+              .map(([key, value], index) => (
+                <tr className="" key={index}>
+                  <td className="p-2">{key}</td>
+                  <td className="w-1/2 p-2">
+                    <section className="relative">
+                      <p className="h-2 bg-gray-800 rounded-md reasons-bar"></p>
+                      <p
+                        style={{
+                          width: Math.round((value / reasonsSum) * 100) + "%",
+                          backgroundColor: prayerStatusColorsHexCodes[status],
+                        }}
+                        className="absolute top-0 h-2 rounded-md reasons-bar"
+                      ></p>
+                    </section>
+                  </td>
+                  <td className="p-2 whitespace-nowrap">
+                    <p>
+                      {value} {value > 1 ? "times" : "time"}
+                    </p>
+                    <p className="text-xs text-end">
+                      ({Math.round((value / reasonsSum) * 100)}%)
+                    </p>{" "}
+                  </td>
+                </tr>
+              ))}
+          </table>
+        ) : (
+          <section className="relative">
+            <h1 className="absolute inset-0 flex items-center justify-center">
+              No Reasons Entered
+            </h1>
+            <table className="opacity-0">
+              {Array.from({ length: 3 })
+                .fill(0)
+                .map((_, i) => (
+                  <tr className="" key={i}>
+                    <td className="p-2">{"key"}</td>
+                    <td className="w-1/2 p-2">
+                      <section className="relative">
+                        <p className="h-2 bg-gray-800 rounded-md reasons-bar"></p>
+                        <p
+                          style={{
+                            //  width: Math.round(("value" / reasonsSum) * 100) + "%",
+                            backgroundColor: prayerStatusColorsHexCodes[status],
+                          }}
+                          className="absolute top-0 h-2 rounded-md reasons-bar"
+                        ></p>
+                      </section>
+                    </td>
+                    <td className="p-2">
+                      <p>{/* {"value"} {"value" > 1 ? "times" : "time"} */}</p>
+                      <p className="text-xs text-end">(0%)</p>{" "}
+                    </td>
+                  </tr>
+                ))}
+            </table>
+          </section>
+        )}
 
         {Object.entries(salahReasonsOverallNumbers[status]).length > 3 && (
           <button

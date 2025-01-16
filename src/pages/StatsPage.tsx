@@ -14,7 +14,6 @@ import {
   salahReasonsOverallNumbersType,
   SalahRecordsArrayType,
   SalahStatusType,
-  // userGenderType,
   userPreferencesType,
 } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
@@ -119,16 +118,16 @@ const StatsPage = ({
         modules={[Pagination]}
         pagination={{ clickable: true }}
       >
-        {/* {"male-alone" in salahReasonsOverallNumbers && ( */}
-        <SwiperSlide>
-          <ReasonsCard
-            setReasonsToShow={setReasonsToShow}
-            setShowReasonsSheet={setShowReasonsSheet}
-            salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-            status={"male-alone"}
-          />
-        </SwiperSlide>
-        {/* // )} */}
+        {userPreferences.userGender === "male" && (
+          <SwiperSlide>
+            <ReasonsCard
+              setReasonsToShow={setReasonsToShow}
+              setShowReasonsSheet={setShowReasonsSheet}
+              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+              status={"male-alone"}
+            />
+          </SwiperSlide>
+        )}
         <SwiperSlide>
           <ReasonsCard
             setReasonsToShow={setReasonsToShow}
