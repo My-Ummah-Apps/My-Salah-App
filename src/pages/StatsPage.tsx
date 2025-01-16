@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 
@@ -20,7 +20,6 @@ import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
 import ReasonsCard from "../components/Stats/ReasonsCard";
 import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
-import { DBSQLiteValues } from "@capacitor-community/sqlite";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -29,7 +28,6 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  DBResultAllSalahData: DBSQLiteValues;
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
@@ -40,7 +38,6 @@ interface StatsPageProps {
 const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  DBResultAllSalahData,
   salahReasonsOverallNumbers,
   userPreferences,
   fetchedSalahData,
@@ -51,7 +48,7 @@ const StatsPage = ({
     setHeading("Stats");
   }, []);
   // console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
-  const swiperElemRef = useRef(0);
+
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
 
@@ -95,8 +92,6 @@ const StatsPage = ({
 
   console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
-  console.log("swiperElemRef: ", swiperElemRef.current.offsetHeight);
-
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
@@ -115,7 +110,6 @@ const StatsPage = ({
         fetchedSalahData={fetchedSalahData}
       />{" "}
       <Swiper
-        ref={swiperElemRef}
         spaceBetween={50}
         slidesPerView={1}
         modules={[Pagination]}
