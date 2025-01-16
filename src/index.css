@@ -193,6 +193,15 @@ td {
   /* animation: slideUp 0.3s ease-out; */
 }
 
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper .swiper-slide {
+  height: auto;
+}
+
 .react-modal-sheet-scroller,
 .react-modal-sheet-header,
 .react-modal-sheet-container {

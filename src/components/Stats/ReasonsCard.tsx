@@ -41,12 +41,12 @@ const ReasonsCard = ({
           }`}
         </h1>
         {Object.entries(salahReasonsOverallNumbers[status]).length > 0 ? (
-          <table>
+          <table className="w-full">
             {Object.entries(salahReasonsOverallNumbers[status])
               .slice(0, 3)
               .map(([key, value], index) => (
                 <tr className="" key={index}>
-                  <td className="p-2">{key}</td>
+                  <td className="p-2 whitespace-nowrap">{key}</td>
                   <td className="w-1/2 p-2">
                     <section className="relative">
                       <p className="h-2 bg-gray-800 rounded-md reasons-bar"></p>
@@ -59,11 +59,11 @@ const ReasonsCard = ({
                       ></p>
                     </section>
                   </td>
-                  <td className="p-2 whitespace-nowrap">
+                  <td className="p-2 whitespace-nowrap text-end">
                     <p>
                       {value} {value > 1 ? "times" : "time"}
                     </p>
-                    <p className="text-xs text-end">
+                    <p className="text-xs ">
                       ({Math.round((value / reasonsSum) * 100)}%)
                     </p>{" "}
                   </td>
@@ -83,7 +83,7 @@ const ReasonsCard = ({
                     <td className="p-2">{"key"}</td>
                     <td className="w-1/2 p-2">
                       <section className="relative">
-                        <p className="h-2 bg-gray-800 rounded-md reasons-bar"></p>
+                        <p className="h-2"></p>
                         <p
                           style={{
                             //  width: Math.round(("value" / reasonsSum) * 100) + "%",
@@ -94,7 +94,7 @@ const ReasonsCard = ({
                       </section>
                     </td>
                     <td className="p-2">
-                      <p>{/* {"value"} {"value" > 1 ? "times" : "time"} */}</p>
+                      <p>""</p>
                       <p className="text-xs text-end">(0%)</p>{" "}
                     </td>
                   </tr>
@@ -103,17 +103,19 @@ const ReasonsCard = ({
           </section>
         )}
 
-        {Object.entries(salahReasonsOverallNumbers[status]).length > 3 && (
-          <button
-            onClick={() => {
-              setReasonsToShow(status);
-              setShowReasonsSheet(true);
-            }}
-            className="w-full mt-2 text-right"
-          >
-            Show More
-          </button>
-        )}
+        <button
+          onClick={() => {
+            setReasonsToShow(status);
+            setShowReasonsSheet(true);
+          }}
+          className={`w-full mt-2 text-right ${
+            Object.entries(salahReasonsOverallNumbers[status]).length > 3
+              ? "visible"
+              : "invisible"
+          }`}
+        >
+          Show More
+        </button>
       </section>
     </>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 
@@ -51,7 +51,7 @@ const StatsPage = ({
     setHeading("Stats");
   }, []);
   // console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
-
+  const swiperElemRef = useRef(0);
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
 
@@ -95,6 +95,8 @@ const StatsPage = ({
 
   console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
+  console.log("swiperElemRef: ", swiperElemRef.current.offsetHeight);
+
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
@@ -113,6 +115,7 @@ const StatsPage = ({
         fetchedSalahData={fetchedSalahData}
       />{" "}
       <Swiper
+        ref={swiperElemRef}
         spaceBetween={50}
         slidesPerView={1}
         modules={[Pagination]}
