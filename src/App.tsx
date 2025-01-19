@@ -399,10 +399,6 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
-      let maleAloneReasonsArr: any[] = [];
-      let lateReasonsArr: any[] = [];
-      let missedReasonsArr: any[] = [];
-
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
@@ -420,46 +416,60 @@ const App = () => {
               }
             }
           }
-
-          if (
-            DBResultAllSalahData[i].salahStatus !== "group" &&
-            DBResultAllSalahData[i].salahStatus !== "excused" &&
-            DBResultAllSalahData[i].salahStatus !== "female-alone" &&
-            DBResultAllSalahData[i].reasons !== ""
-          ) {
-            const reasons = DBResultAllSalahData[i].reasons.split(", ");
-            if (DBResultAllSalahData[i].salahStatus === "male-alone") {
-              maleAloneReasonsArr.push(reasons);
-            } else if (DBResultAllSalahData[i].salahStatus === "late") {
-              lateReasonsArr.push(reasons);
-            } else if (DBResultAllSalahData[i].salahStatus === "missed") {
-              missedReasonsArr.push(reasons);
-            }
-          }
         }
-
-        const populateReasonsArrays = (
-          arr: string[],
-          status: keyof salahReasonsOverallNumbersType
-        ) => {
-          arr.forEach((item: string) => {
-            if (item === "") return;
-            if (!salahReasonsOverallNumbers[status][item]) {
-              salahReasonsOverallNumbers[status][item] = 0;
-            }
-            salahReasonsOverallNumbers[status][item] += 1;
-          });
-        };
-
-        populateReasonsArrays(maleAloneReasonsArr.flat(), "male-alone");
-        populateReasonsArrays(lateReasonsArr.flat(), "late");
-        populateReasonsArrays(missedReasonsArr.flat(), "missed");
-
-        setSalahReasonsOverallNumbers(salahReasonsOverallNumbers);
       }
 
       singleSalahObjArr.push(singleSalahObj);
     }
+
+    let maleAloneReasonsArr: any[] = [];
+    let lateReasonsArr: any[] = [];
+    let missedReasonsArr: any[] = [];
+
+    const salahStatusesWithoutReasons = ["group", "excused", "female-alone"];
+
+    for (let i = 0; i < DBResultAllSalahData.length; i++) {
+      if (
+        !salahStatusesWithoutReasons.includes(
+          DBResultAllSalahData[i].salahStatus
+        ) &&
+        DBResultAllSalahData[i].reasons !== ""
+      ) {
+        const reasons = DBResultAllSalahData[i].reasons.split(", ");
+        console.log("Reasons: ", reasons);
+
+        if (DBResultAllSalahData[i].salahStatus === "male-alone") {
+          maleAloneReasonsArr.push(reasons);
+        } else if (DBResultAllSalahData[i].salahStatus === "late") {
+          lateReasonsArr.push(reasons);
+        } else if (DBResultAllSalahData[i].salahStatus === "missed") {
+          missedReasonsArr.push(reasons);
+        }
+      }
+    }
+
+    const populateReasonsArrays = (
+      arr: string[],
+      status: keyof salahReasonsOverallNumbersType
+    ) => {
+      arr.forEach((item: string) => {
+        if (item === "") return;
+
+        salahReasonsOverallNumbers[status][item] = salahReasonsOverallNumbers[
+          status
+        ][item]
+          ? (salahReasonsOverallNumbers[status][item] += 1)
+          : 1;
+      });
+    };
+
+    populateReasonsArrays(maleAloneReasonsArr.flat(), "male-alone");
+    populateReasonsArrays(lateReasonsArr.flat(), "late");
+    populateReasonsArrays(missedReasonsArr.flat(), "missed");
+
+    setSalahReasonsOverallNumbers({
+      ...salahReasonsOverallNumbers,
+    });
 
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });

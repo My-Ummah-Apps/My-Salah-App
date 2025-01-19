@@ -15,7 +15,6 @@ const useSQLiteDB = () => {
   useEffect(() => {
     const initialiseDB = async () => {
       try {
-        // if (sqliteConnection && dbConnection) return;
         if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so return out of the function
 
         sqliteConnection.current = new SQLiteConnection(CapacitorSQLite); // Create a new SQLiteConnection instance and assign it to sqliteConnection.current.
@@ -113,7 +112,7 @@ const useSQLiteDB = () => {
     }
   }
 
-  // This is where you can check and update table structure
+  // Check and update table structure here
   const initialiseTables = async () => {
     try {
       if (!dbConnection.current) {
@@ -124,7 +123,6 @@ const useSQLiteDB = () => {
 
       await checkAndOpenOrCloseDBConnection("open");
 
-      // SQL query to create the 'salahDataTable' table if it doesn't already exist
       const salahDataTable = `
         CREATE TABLE IF NOT EXISTS salahDataTable(
         id INTEGER PRIMARY KEY NOT NULL,
@@ -160,8 +158,6 @@ const useSQLiteDB = () => {
         if (isDatabaseOpen.result) {
           await checkAndOpenOrCloseDBConnection("close");
         }
-
-        // cleanup && (await cleanup()); // Perform cleanup actions if cleanup function is provided
       } catch (error) {
         console.error(error);
       }
@@ -173,7 +169,7 @@ const useSQLiteDB = () => {
     sqliteConnection,
     dbConnection,
     checkAndOpenOrCloseDBConnection,
-  }; // This exposes, checkAndOpenOrCloseDBConnection, databaseInitialised etc so when importing this hook in another component all of these can be accessed by said component
+  };
 };
 
 export default useSQLiteDB;
