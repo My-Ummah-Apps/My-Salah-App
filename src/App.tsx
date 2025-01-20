@@ -21,7 +21,6 @@ import {
   SalahRecordsArrayType,
   SalahStatusType,
   MissedSalahObjType,
-  salahReasonsOverallNumbersType,
 } from "./types/types";
 
 import { Swiper, SwiperSlide } from "swiper/react";

@@ -21,8 +21,8 @@ const ReasonsCard = ({
   status,
 }: ReasonsCardProps) => {
   return (
-    <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl px-2 pt-2 pb-14 h-full">
-      <h1 className="m-2 text-lg text-center">
+    <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl pb-14 h-full">
+      <h1 className="pt-4 m-2 text-lg text-center">
         {`Top Reasons For ${
           status === "male-alone"
             ? "Praying Salah Alone"
@@ -37,6 +37,7 @@ const ReasonsCard = ({
         <ReasonsTable
           salahReasonsOverallNumbers={salahReasonsOverallNumbers}
           status={status}
+          partialOrFull="partial"
         />
       ) : (
         <section className="relative">

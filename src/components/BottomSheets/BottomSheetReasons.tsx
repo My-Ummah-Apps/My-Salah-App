@@ -4,6 +4,7 @@ import {
   reasonsToShowType,
   salahReasonsOverallNumbersType,
 } from "../../types/types";
+import ReasonsTable from "../Stats/ReasonsTable";
 
 interface BottomSheetReasonsProps {
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,21 +32,22 @@ const BottomSheetReasons = ({
           {/* <Sheet.Header /> */}
           <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
             <>
-              <h1 className="mb-2 text-lg text-center">
-                Top Reasons For {status} Salah
+              <h1 className="my-4 text-lg text-center">
+                {`Reasons For ${
+                  status === "male-alone"
+                    ? "Praying Salah Alone"
+                    : status === "late"
+                    ? "Praying Salah Late"
+                    : status === "missed"
+                    ? "Missing Salah"
+                    : ""
+                }`}
               </h1>
-              <ul>
-                {Object.entries(salahReasonsOverallNumbers[status]).map(
-                  ([key, value], index) => (
-                    <li className="flex justify-between" key={index}>
-                      <p>
-                        {index + 1}. {key}
-                      </p>
-                      <p>{value} times</p>
-                    </li>
-                  )
-                )}
-              </ul>
+              <ReasonsTable
+                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                status={status}
+                partialOrFull="full"
+              />
             </>
           </Sheet.Content>
         </Sheet.Scroller>
