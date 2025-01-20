@@ -24,7 +24,6 @@ const BottomSheetReasons = ({
       isOpen={showReasonsSheet}
       onClose={() => setShowReasonsSheet(false)}
       detent="full-height"
-      // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
       tweenConfig={TWEEN_CONFIG}
     >
       <Sheet.Container>
