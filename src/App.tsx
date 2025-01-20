@@ -78,13 +78,6 @@ const App = () => {
   const [showJoyRideEditIcon, setShowJoyRideEditIcon] =
     useState<boolean>(false);
 
-  const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
-    useState<salahReasonsOverallNumbersType>({
-      "male-alone": {},
-      late: {},
-      missed: {},
-    });
-
   useEffect(() => {
     if (
       localStorage.getItem("appVersion") &&
@@ -422,65 +415,11 @@ const App = () => {
       singleSalahObjArr.push(singleSalahObj);
     }
 
-    let maleAloneReasonsArr: any[] = [];
-    let lateReasonsArr: any[] = [];
-    let missedReasonsArr: any[] = [];
-
-    const salahStatusesWithoutReasons = ["group", "excused", "female-alone"];
-
-    for (let i = 0; i < DBResultAllSalahData.length; i++) {
-      if (
-        !salahStatusesWithoutReasons.includes(
-          DBResultAllSalahData[i].salahStatus
-        ) &&
-        DBResultAllSalahData[i].reasons !== ""
-      ) {
-        const reasons = DBResultAllSalahData[i].reasons.split(", ");
-        console.log("Reasons: ", reasons);
-
-        if (DBResultAllSalahData[i].salahStatus === "male-alone") {
-          maleAloneReasonsArr.push(reasons);
-        } else if (DBResultAllSalahData[i].salahStatus === "late") {
-          lateReasonsArr.push(reasons);
-        } else if (DBResultAllSalahData[i].salahStatus === "missed") {
-          missedReasonsArr.push(reasons);
-        }
-      }
-    }
-
-    const populateReasonsArrays = (
-      arr: string[],
-      status: keyof salahReasonsOverallNumbersType
-    ) => {
-      arr.forEach((item: string) => {
-        if (item === "") return;
-
-        salahReasonsOverallNumbers[status][item] = salahReasonsOverallNumbers[
-          status
-        ][item]
-          ? (salahReasonsOverallNumbers[status][item] += 1)
-          : 1;
-      });
-    };
-
-    populateReasonsArrays(maleAloneReasonsArr.flat(), "male-alone");
-    populateReasonsArrays(lateReasonsArr.flat(), "late");
-    populateReasonsArrays(missedReasonsArr.flat(), "missed");
-
-    setSalahReasonsOverallNumbers({
-      ...salahReasonsOverallNumbers,
-    });
+    // updateReasonsStats(DBResultAllSalahData);
 
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
   };
-
-  useEffect(() => {
-    console.log(
-      "salahReasonsOverallNumbers in useEffect: ",
-      salahReasonsOverallNumbers
-    );
-  }, []);
 
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,
@@ -653,7 +592,6 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection
                 }
                 // @ts-ignore
-                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
                 // DBResultAllSalahData={DBResultAllSalahData}
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}

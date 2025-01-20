@@ -259,10 +259,7 @@ const BottomSheetPrayerStatus = ({
         `SELECT * FROM userPreferencesTable WHERE preferenceName = ?;`,
         ["saveButtonTapCount"]
       );
-      console.log(
-        "saveBtnCounterQuery: ",
-        saveButtonTapCountQuery.values[0].preferenceValue
-      );
+
       const incrementedSaveButtonTapCount =
         Number(saveButtonTapCountQuery.values[0].preferenceValue) + 1;
 

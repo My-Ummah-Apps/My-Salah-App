@@ -64,7 +64,7 @@ const ReasonsCard = ({
                       {value} {value > 1 ? "times" : "time"}
                     </p>
                     <p className="text-xs ">
-                      ({Math.round((value / reasonsSum) * 100)}%)
+                      ({((value / reasonsSum) * 100).toFixed(1)}%)
                     </p>{" "}
                   </td>
                 </tr>

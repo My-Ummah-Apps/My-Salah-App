@@ -28,7 +28,6 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
@@ -38,7 +37,6 @@ interface StatsPageProps {
 const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  salahReasonsOverallNumbers,
   userPreferences,
   fetchedSalahData,
   setHeading,
@@ -47,10 +45,89 @@ const StatsPage = ({
   useEffect(() => {
     setHeading("Stats");
   }, []);
-  // console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
+  const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
+    useState<salahReasonsOverallNumbersType>({
+      "male-alone": {},
+      late: {},
+      missed: {},
+    });
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
+
+  useEffect(() => {
+    const grabSalahDataFromDB = async () => {
+      try {
+        await checkAndOpenOrCloseDBConnection("open");
+        let DBResultAllSalahData = await dbConnection.current.query(
+          `SELECT * FROM salahDataTable`
+        );
+
+        DBResultAllSalahData = DBResultAllSalahData.values;
+
+        let maleAloneReasonsArr: any[] = [];
+        let lateReasonsArr: any[] = [];
+        let missedReasonsArr: any[] = [];
+
+        const salahStatusesWithoutReasons = [
+          "group",
+          "excused",
+          "female-alone",
+        ];
+
+        for (let i = 0; i < DBResultAllSalahData.length; i++) {
+          if (
+            !salahStatusesWithoutReasons.includes(
+              DBResultAllSalahData[i].salahStatus
+            ) &&
+            DBResultAllSalahData[i].reasons !== ""
+          ) {
+            console.log(
+              "DBResultAllSalahData[i].reasons: ",
+              DBResultAllSalahData[i].reasons
+            );
+
+            const reasons = DBResultAllSalahData[i].reasons.split(", ");
+
+            if (DBResultAllSalahData[i].salahStatus === "male-alone") {
+              maleAloneReasonsArr.push(reasons);
+            } else if (DBResultAllSalahData[i].salahStatus === "late") {
+              lateReasonsArr.push(reasons);
+            } else if (DBResultAllSalahData[i].salahStatus === "missed") {
+              missedReasonsArr.push(reasons);
+            }
+          }
+        }
+
+        const populateReasonsArrays = (
+          arr: string[],
+          status: keyof salahReasonsOverallNumbersType
+        ) => {
+          arr.forEach((item: string) => {
+            if (item === "") return;
+
+            salahReasonsOverallNumbers[status][item] =
+              salahReasonsOverallNumbers[status][item]
+                ? (salahReasonsOverallNumbers[status][item] += 1)
+                : 1;
+          });
+        };
+
+        populateReasonsArrays(maleAloneReasonsArr.flat(), "male-alone");
+        populateReasonsArrays(lateReasonsArr.flat(), "late");
+        populateReasonsArrays(missedReasonsArr.flat(), "missed");
+
+        setSalahReasonsOverallNumbers({
+          ...salahReasonsOverallNumbers,
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        await checkAndOpenOrCloseDBConnection("close");
+      }
+    };
+    grabSalahDataFromDB();
+  }, []);
 
   let salahStatusStatistics;
   let showDonutChart;
@@ -89,8 +166,6 @@ const StatsPage = ({
       break;
     }
   }
-
-  console.log("salahReasonsOverallNumbers: ", salahReasonsOverallNumbers);
 
   return (
     <section className={`${pageStyles} settings-page-wrap`}>
