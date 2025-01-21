@@ -19,9 +19,6 @@ const BottomSheetReasons = ({
   salahReasonsOverallNumbers,
   status,
 }: BottomSheetReasonsProps) => {
-  // if (!status) return;
-  console.log("STATUS: ", status);
-
   return (
     <Sheet
       isOpen={showReasonsSheet}
@@ -35,7 +32,7 @@ const BottomSheetReasons = ({
           <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
             {status && (
               <>
-                <h1 className="my-4 text-2xl text-center">
+                <h1 className="px-10 my-4 text-2xl text-center">
                   {`Reasons For ${
                     status === "male-alone"
                       ? "Praying Salah Alone"

@@ -40,9 +40,20 @@ const ReasonsCard = ({
           partialOrFull="partial"
         />
       ) : (
-        <section className="relative">
+        <section className="relative h-full">
           <h1 className="absolute inset-0 flex items-center justify-center">
-            No Reasons Entered
+            <section className="">
+              <p className="p-2 text-center ">
+                No reasons entered for Salah which were{" "}
+                {status === "male-alone"
+                  ? "prayed alone"
+                  : status === "late"
+                  ? "performed late"
+                  : status === "missed"
+                  ? "missed"
+                  : null}
+              </p>
+            </section>
           </h1>
           <table className="opacity-0">
             <tbody>

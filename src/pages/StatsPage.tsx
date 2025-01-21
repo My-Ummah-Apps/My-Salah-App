@@ -129,9 +129,8 @@ const StatsPage = ({
     grabSalahDataFromDB();
   }, []);
 
-  let salahStatusStatistics;
   let showDonutChart;
-  let salahStatusesOverallArr: SalahStatusType[] = [];
+  const salahStatusesOverallArr: SalahStatusType[] = [];
   // TODO: Test the below code to ensure stats are being calculated correctly
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
@@ -151,7 +150,7 @@ const StatsPage = ({
 
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
-  salahStatusStatistics = {
+  const salahStatusStatistics = {
     salahInJamaahDatesOverall: filterSalahStatuses("group").length,
     salahMaleAloneDatesOverall: filterSalahStatuses("male-alone").length,
     salahFemaleAloneDatesOverall: filterSalahStatuses("female-alone").length,
@@ -190,32 +189,37 @@ const StatsPage = ({
         modules={[Pagination]}
         pagination={{ clickable: true }}
       >
-        {userPreferences.userGender === "male" && (
+        {userPreferences.userGender === "male" &&
+          salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+            <SwiperSlide>
+              <ReasonsCard
+                setReasonsToShow={setReasonsToShow}
+                setShowReasonsSheet={setShowReasonsSheet}
+                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                status={"male-alone"}
+              />
+            </SwiperSlide>
+          )}
+        {salahStatusStatistics.salahLateDatesOverall > 0 && (
           <SwiperSlide>
             <ReasonsCard
               setReasonsToShow={setReasonsToShow}
               setShowReasonsSheet={setShowReasonsSheet}
               salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-              status={"male-alone"}
+              status={"late"}
             />
           </SwiperSlide>
         )}
-        <SwiperSlide>
-          <ReasonsCard
-            setReasonsToShow={setReasonsToShow}
-            setShowReasonsSheet={setShowReasonsSheet}
-            salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-            status={"late"}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReasonsCard
-            setReasonsToShow={setReasonsToShow}
-            setShowReasonsSheet={setShowReasonsSheet}
-            salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-            status={"missed"}
-          />
-        </SwiperSlide>
+        {salahStatusStatistics.salahMissedDatesOverall > 0 && (
+          <SwiperSlide>
+            <ReasonsCard
+              setReasonsToShow={setReasonsToShow}
+              setShowReasonsSheet={setShowReasonsSheet}
+              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+              status={"missed"}
+            />
+          </SwiperSlide>
+        )}
       </Swiper>
       <BottomSheetReasons
         // setReasonsToShow={setReasonsToShow}
