@@ -12,6 +12,12 @@
     
     <!-- android:theme="@style/SplashTheme" -->
 
+    <supports-screens
+        android:smallScreens="false"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="false" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -50,10 +56,6 @@
     </application>
 
 
-        <supports-screens
-            android:smallScreens="false"
-            android:normalScreens="true"
-            android:largeScreens="true"
-            android:xlargeScreens="false" />
+
 
 </manifest>

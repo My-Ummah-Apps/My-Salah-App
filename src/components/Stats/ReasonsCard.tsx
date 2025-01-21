@@ -21,7 +21,7 @@ const ReasonsCard = ({
   status,
 }: ReasonsCardProps) => {
   return (
-    <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl pb-14 h-full">
+    <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl pb-10 h-full">
       <h1 className="pt-4 m-2 text-lg text-center">
         {`Top Reasons For ${
           status === "male-alone"
@@ -43,7 +43,7 @@ const ReasonsCard = ({
         <section className="relative h-full">
           <h1 className="absolute inset-0 flex items-center justify-center">
             <section className="">
-              <p className="p-2 text-center ">
+              <p className="p-4 text-lg text-center">
                 No reasons entered for Salah which were{" "}
                 {status === "male-alone"
                   ? "prayed alone"

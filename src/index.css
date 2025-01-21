@@ -203,6 +203,20 @@ td {
   height: auto;
 }
 
+.swiper-pagination-bullet {
+  background-color: rgba(0, 0, 0, 1);
+  opacity: 0.7;
+  width: 8px;
+  height: 8px;
+  margin: 0 5px;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #fff; /* Highlighted color */
+  opacity: 1;
+}
+
 .react-modal-sheet-scroller,
 .react-modal-sheet-header,
 .react-modal-sheet-container {
