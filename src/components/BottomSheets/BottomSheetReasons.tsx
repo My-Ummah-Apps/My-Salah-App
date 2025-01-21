@@ -19,7 +19,9 @@ const BottomSheetReasons = ({
   salahReasonsOverallNumbers,
   status,
 }: BottomSheetReasonsProps) => {
-  if (!status) return;
+  // if (!status) return;
+  console.log("STATUS: ", status);
+
   return (
     <Sheet
       isOpen={showReasonsSheet}
@@ -29,26 +31,28 @@ const BottomSheetReasons = ({
     >
       <Sheet.Container>
         <Sheet.Scroller>
-          {/* <Sheet.Header /> */}
+          <Sheet.Header />
           <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
-            <>
-              <h1 className="my-4 text-lg text-center">
-                {`Reasons For ${
-                  status === "male-alone"
-                    ? "Praying Salah Alone"
-                    : status === "late"
-                    ? "Praying Salah Late"
-                    : status === "missed"
-                    ? "Missing Salah"
-                    : ""
-                }`}
-              </h1>
-              <ReasonsTable
-                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                status={status}
-                partialOrFull="full"
-              />
-            </>
+            {status && (
+              <>
+                <h1 className="my-4 text-2xl text-center">
+                  {`Reasons For ${
+                    status === "male-alone"
+                      ? "Praying Salah Alone"
+                      : status === "late"
+                      ? "Praying Salah Late"
+                      : status === "missed"
+                      ? "Missing Salah"
+                      : ""
+                  }`}
+                </h1>
+                <ReasonsTable
+                  salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                  status={status}
+                  partialOrFull="full"
+                />
+              </>
+            )}
           </Sheet.Content>
         </Sheet.Scroller>
       </Sheet.Container>

@@ -71,6 +71,7 @@ body {
   background: var(--primary-color);
   color: rgb(184, 184, 184);
   overflow: auto;
+  font-family: sans-serif;
   /* overflow-y: hidden;
   overflow-x: hidden; */
 }

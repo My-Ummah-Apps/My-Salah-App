@@ -80,13 +80,13 @@ const ReasonsCard = ({
           setShowReasonsSheet(true);
           console.log("clicked");
         }}
-        className={`mt-2 text-center w-full border-t border-gray-700 ${
+        className={`mt-2 text-center w-full border-t border-gray-800 ${
           Object.entries(salahReasonsOverallNumbers[status]).length > 3
             ? "visible"
             : "invisible"
         }`}
       >
-        <p className="pt-2 font-bold">Show More</p>
+        <p className="pt-4 text-lg font-bold">Show More</p>
       </button>
     </section>
   );
