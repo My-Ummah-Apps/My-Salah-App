@@ -1,10 +1,28 @@
-// 1. Increment LATEST_APP_VERSION 2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0") 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
+// 1. Increment LATEST_APP_VERSION
+//  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
+// 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.0";
+export const LATEST_APP_VERSION = "3.1";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Stats Page Enhancements",
+        text: (
+          <>
+            <strong>Feature:</strong> Added a section on the stats page to
+            display the top reasons for being late, missing, or praying Salah
+            alone (males only). This feature draws information from
+            user-selected statuses and reasons to provide meaningful insights.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.0",
     changes: [
       {
         heading: "Settings Page Enhancements",
