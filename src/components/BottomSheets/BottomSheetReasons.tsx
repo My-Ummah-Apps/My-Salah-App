@@ -27,9 +27,9 @@ const BottomSheetReasons = ({
       tweenConfig={TWEEN_CONFIG}
     >
       <Sheet.Container>
-        <Sheet.Scroller>
-          <Sheet.Header />
-          <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
+        <Sheet.Header />
+        <Sheet.Content className="mb-10 overflow-scroll sheet-changelog">
+          <Sheet.Scroller>
             {status && (
               <>
                 <h1 className="px-10 my-4 text-2xl text-center">
@@ -50,8 +50,8 @@ const BottomSheetReasons = ({
                 />
               </>
             )}
-          </Sheet.Content>
-        </Sheet.Scroller>
+          </Sheet.Scroller>
+        </Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop
         style={sheetBackdropColor}
