@@ -82,11 +82,6 @@ const StatsPage = ({
             ) &&
             DBResultAllSalahData[i].reasons !== ""
           ) {
-            console.log(
-              "DBResultAllSalahData[i].reasons: ",
-              DBResultAllSalahData[i].reasons
-            );
-
             const reasons = DBResultAllSalahData[i].reasons.split(", ");
 
             if (DBResultAllSalahData[i].salahStatus === "male-alone") {
@@ -111,6 +106,12 @@ const StatsPage = ({
                 ? (salahReasonsOverallNumbers[status][item] += 1)
                 : 1;
           });
+
+          const sortedObj = Object.entries(salahReasonsOverallNumbers[status])
+            .sort((a, b) => a[1] - b[1])
+            .reverse();
+
+          salahReasonsOverallNumbers[status] = Object.fromEntries(sortedObj);
         };
 
         populateReasonsArrays(maleAloneReasonsArr.flat(), "male-alone");

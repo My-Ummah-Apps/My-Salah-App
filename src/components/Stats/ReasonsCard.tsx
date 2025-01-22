@@ -3,7 +3,7 @@ import {
   salahReasonsOverallNumbersType,
 } from "../../types/types";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
-import ReasonsTable from "./ReasonsTable";
+import ReasonsList from "./ReasonsList";
 
 interface ReasonsCardProps {
   setReasonsToShow: React.Dispatch<React.SetStateAction<reasonsToShowType>>;
@@ -34,7 +34,7 @@ const ReasonsCard = ({
         }`}
       </h1>
       {Object.entries(salahReasonsOverallNumbers[status]).length > 0 ? (
-        <ReasonsTable
+        <ReasonsList
           salahReasonsOverallNumbers={salahReasonsOverallNumbers}
           status={status}
           partialOrFull="partial"
@@ -86,12 +86,13 @@ const ReasonsCard = ({
       )}
 
       <button
+        style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
         onClick={() => {
           setReasonsToShow(status);
           setShowReasonsSheet(true);
           console.log("clicked");
         }}
-        className={`mt-2 text-center w-full border-t border-gray-800 ${
+        className={`mt-2 text-center w-full ${
           Object.entries(salahReasonsOverallNumbers[status]).length > 3
             ? "visible"
             : "invisible"

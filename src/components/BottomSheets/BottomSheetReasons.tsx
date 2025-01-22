@@ -4,7 +4,7 @@ import {
   reasonsToShowType,
   salahReasonsOverallNumbersType,
 } from "../../types/types";
-import ReasonsTable from "../Stats/ReasonsTable";
+import ReasonsList from "../Stats/ReasonsList";
 
 interface BottomSheetReasonsProps {
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,7 +43,7 @@ const BottomSheetReasons = ({
                       : ""
                   }`}
                 </h1>
-                <ReasonsTable
+                <ReasonsList
                   salahReasonsOverallNumbers={salahReasonsOverallNumbers}
                   status={status}
                   partialOrFull="full"

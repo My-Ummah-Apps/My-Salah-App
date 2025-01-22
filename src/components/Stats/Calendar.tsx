@@ -166,23 +166,20 @@ const Calendar = ({
           {formattedMonths[index]}
         </p>
         <div className="grid grid-cols-7 px-2 mb-3 place-items-center days-row-wrap">
-          {days.map((day, i) => {
-            // ? Below is being console.logged twice with day formattedMonths[index] + i duplicated , but React isn't // ?complaining about duplicate keys being created?
-            // console.log(day + formattedMonths[index] + i);
-            return (
-              <div
-                key={day + formattedMonths[index] + i}
-                className="w-5 h-5 text-sm font-semibold text-center individual-day"
-              >
-                {day}
-              </div>
-            );
-          })}
+          {days.map((day, i) => (
+            <div
+              key={`${day}-${i}`}
+              className="w-5 h-5 text-sm font-semibold text-center individual-day"
+            >
+              {day}
+            </div>
+          ))}
         </div>
         <div className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap">
-          {monthlyDates(formattedMonths[index]).map((date) =>
+          {monthlyDates(formattedMonths[index]).map((date, i) =>
             isDayInSpecificMonth(date, formattedMonths[index]) ? (
               <div
+                key={format(date, "yyyy-MM-dd") + i}
                 onClick={() => {
                   // if (date <= todaysDate) {
                   if (date >= userStartDateParsed && date <= todaysDate) {
@@ -191,7 +188,6 @@ const Calendar = ({
                     setShowDailySalahDataModal(true);
                   }
                 }}
-                key={format(date, "yyyy-MM-dd")}
                 className="relative flex items-center justify-center individual-date"
               >
                 {determineRadialColors(date)}
@@ -251,7 +247,6 @@ const Calendar = ({
                   />
                 </svg>
                 <p
-                  //
                   className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white
               `}
                 >
@@ -260,7 +255,7 @@ const Calendar = ({
                 </p>
               </div>
             ) : (
-              <div></div>
+              <div key={format(date, "yyyy-MM-dd") + i}></div>
             )
           )}
         </div>
