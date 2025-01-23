@@ -65,11 +65,7 @@ const HomePage = ({
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
 
   return (
-    <section className={`home-page-wrap ${pageStyles}`}>
-      {/* <section className={`home-page-wrap`}> */}
-      {/* {title} */}
-
-      {/* {renderTable ? ( */}
+    <section className={`${pageStyles}`}>
       <PrayerTable
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
@@ -88,10 +84,7 @@ const HomePage = ({
         setShowUpdateStatusModal={setShowUpdateStatusModal}
         showUpdateStatusModal={showUpdateStatusModal}
       />
-      {/* ) : (
-        <div>Loading Data...</div>
-      )} */}
-      {/* )} */}
+
       <BottomSheetMissedPrayersList
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
