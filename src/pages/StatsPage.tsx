@@ -168,7 +168,7 @@ const StatsPage = ({
   }
 
   return (
-    <section className={`${pageStyles} settings-page-wrap`}>
+    <section className={`${pageStyles}`}>
       {/* <StreakCount styles={{}} /> */}
       {showDonutChart === true ? (
         <DonutPieChart

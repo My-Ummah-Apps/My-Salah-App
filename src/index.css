@@ -52,17 +52,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-/* body,
-html {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-} */
-
-/* html body {
-  overflow: hidden;
-} */
-
 body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -70,10 +59,9 @@ body {
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);
   color: rgb(184, 184, 184);
-  overflow: auto;
+  /* overflow: auto; */
   font-family: sans-serif;
-  /* overflow-y: hidden;
-  overflow-x: hidden; */
+  overflow-y: hidden;
 }
 
 @keyframes fadeIn {
@@ -288,7 +276,7 @@ td {
 }
 
 .prayer-table-wrap {
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   position: static !important;
 }
 

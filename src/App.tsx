@@ -489,7 +489,7 @@ const App = () => {
   // }, [datesFrequencyReduced]);
 
   // const pageStyles: string = `pt-[9vh] pb-[2vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
-  const pageStyles: string = `pt-[9vh] pb-[5rem] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
+  const pageStyles: string = `pt-[10vh] h-[80vh] pb-[10vh] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
 
   const swiperRef = useRef<SwiperInstance | null>(null);
 
@@ -500,7 +500,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
-        <section className="fixed h-[9vh] z-20 w-full py-5 header-wrap">
+        <header className="fixed h-[10vh] z-20 w-full py-5 header-wrap">
           {getMissedSalahCount(missedSalahList) > 0 &&
           heading === "Home" &&
           userPreferences.showMissedSalahCount === "1" ? (
@@ -518,7 +518,7 @@ const App = () => {
           <h1 className="text-center">{heading}</h1>
           {/* <div className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}></div> */}
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
-        </section>
+        </header>
         {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
           {heading}
         </h1> */}
