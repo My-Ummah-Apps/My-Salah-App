@@ -489,7 +489,7 @@ const App = () => {
   // }, [datesFrequencyReduced]);
 
   // const pageStyles: string = `pt-[9vh] pb-[2vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
-  const pageStyles: string = `pt-[10vh] h-[80vh] pb-[10vh] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
+  const pageStyles: string = `pt-[10vh] h-[100vh] pb-[20vh] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
 
   const swiperRef = useRef<SwiperInstance | null>(null);
 

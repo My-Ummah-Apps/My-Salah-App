@@ -21,7 +21,7 @@ const ReasonsCard = ({
   status,
 }: ReasonsCardProps) => {
   return (
-    <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl pb-10 h-full">
+    <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl h-full">
       <h1 className="pt-4 m-2 text-lg text-center">
         {`Top Reasons For ${
           status === "male-alone"
@@ -92,13 +92,13 @@ const ReasonsCard = ({
           setShowReasonsSheet(true);
           console.log("clicked");
         }}
-        className={`mt-2 text-center w-full ${
+        className={`mb-10 pt-2 text-center w-full ${
           Object.entries(salahReasonsOverallNumbers[status]).length > 3
             ? "visible"
             : "invisible"
         }`}
       >
-        <p className="pt-4 text-lg font-bold">Show More</p>
+        <p className="text-lg font-bold">Show More</p>
       </button>
     </section>
   );

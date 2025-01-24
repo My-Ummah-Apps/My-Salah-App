@@ -59,9 +59,8 @@ body {
   /* background: rgb(26, 26, 26); */
   background: var(--primary-color);
   color: rgb(184, 184, 184);
-  /* overflow: auto; */
   font-family: sans-serif;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 @keyframes fadeIn {
@@ -184,7 +183,7 @@ td {
 
 .swiper {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   border-radius: 1rem;
 }
 
