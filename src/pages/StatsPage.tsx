@@ -124,7 +124,7 @@ const StatsPage = ({
     grabSalahDataFromDB();
   }, []);
 
-  let showDonutChart;
+  // let showDonutChart;
   const salahStatusesOverallArr: SalahStatusType[] = [];
   // TODO: Test the below code to ensure stats are being calculated correctly
   const getAllSalahStatuses = () => {
@@ -154,13 +154,6 @@ const StatsPage = ({
     salahLateDatesOverall: filterSalahStatuses("late").length,
   };
 
-  for (let key in salahStatusStatistics) {
-    if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
-      showDonutChart = true;
-      break;
-    }
-  }
-
   return (
     // <section className={`${pageStyles}`}>
     <section className={`${pageStyles} stats-page-wrap`}>
@@ -169,14 +162,10 @@ const StatsPage = ({
         <p className="stats-page-header-p">Stats</p>
       </header>
       <section className="stats-page-components-wrap">
-        {showDonutChart === true ? (
-          <DonutPieChart
-            userGender={userPreferences.userGender}
-            salahStatusStatistics={salahStatusStatistics}
-          />
-        ) : (
-          ""
-        )}
+        <DonutPieChart
+          userGender={userPreferences.userGender}
+          salahStatusStatistics={salahStatusStatistics}
+        />
         <Calendar
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}

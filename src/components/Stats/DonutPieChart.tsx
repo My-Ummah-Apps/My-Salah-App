@@ -1,6 +1,7 @@
 // import React, { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
+import { useState } from "react";
 
 interface CustomizedLabelProps {
   cx: number;
@@ -57,6 +58,15 @@ const DonutPieChart = ({
   };
   userGender: string;
 }) => {
+  const [showDonutChart, setShowDonutChart] = useState(false);
+  for (let key in salahStatusStatistics) {
+    if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
+      if (!showDonutChart) {
+        setShowDonutChart(true);
+      }
+      break;
+    }
+  }
   const data = [
     userGender === "male"
       ? {
@@ -99,68 +109,67 @@ const DonutPieChart = ({
           prayerStatusColorsHexCodes.missed,
         ];
   return (
-    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2 ">
-      <ResponsiveContainer className="" width="60%" height="100%">
-        <PieChart width={400} height={400}>
-          <Pie
-            data={data}
-            isAnimationActive={true}
-            animationDuration={1000}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={90}
-            innerRadius={45}
-            // cornerRadius={5}
-            // paddingAngle={5}
-            fill="#8884d8"
-            dataKey="value"
-            stroke="none"
-          >
-            {data.map((_, index) => (
-              // {data.map((entry, index) => (
-              <Cell
-                style={{ outline: "none" }}
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
+      {showDonutChart ? (
+        <ResponsiveContainer className="" width="60%" height="100%">
+          <PieChart width={400} height={400}>
+            <Pie
+              data={data}
+              isAnimationActive={true}
+              animationDuration={1000}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={renderCustomizedLabel}
+              outerRadius={90}
+              innerRadius={45}
+              fill="#8884d8"
+              dataKey="value"
+              stroke="none"
+            >
+              {data.map((_, index) => (
+                <Cell
+                  style={{ outline: "none" }}
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      ) : (
+        <p className="w-full text-center">No Data</p>
+      )}
+
       <div className="justify-center">
         {salahStatusStatistics.salahFemaleAloneDatesOverall > 0 ||
-          (salahStatusStatistics.salahInJamaahDatesOverall > 0 && (
-            <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#448b75]">
-              {" "}
-              {userGender === "male" ? "In Jamaah" : "Prayed"}
-            </p>
-          ))}
+        salahStatusStatistics.salahInJamaahDatesOverall > 0 ? (
+          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#448b75]">
+            {userGender === "male" ? "In Jamaah" : "Prayed"}
+          </p>
+        ) : null}
 
         {salahStatusStatistics.salahExcusedDatesOverall > 0 ||
         salahStatusStatistics.salahMaleAloneDatesOverall > 0 ? (
           userGender === "male" ? (
             <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#bcaa4b]">
-              {" "}
               Alone
             </p>
           ) : (
             <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#dd42da]">
-              {" "}
               Excused
             </p>
           )
         ) : null}
+
         {salahStatusStatistics.salahLateDatesOverall > 0 && (
           <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#ea580c]">
-            {" "}
             Late
           </p>
         )}
+
         {salahStatusStatistics.salahMissedDatesOverall > 0 && (
-          <p className="donut-pie-chart-text pb-1 text-sm  before:bg-[#b62e2e]">
-            {" "}
+          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#b62e2e]">
             Missed
           </p>
         )}
