@@ -2,11 +2,25 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.1";
+export const LATEST_APP_VERSION = "3.2";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Minor UI Fixes",
+        text: (
+          <>
+            <strong>UI:</strong> Resolved issue with pie chart not animating and
+            app content overlapping into the status bar on iOS devices.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.1",
     changes: [
       {
         heading: "Stats Page Enhancements",

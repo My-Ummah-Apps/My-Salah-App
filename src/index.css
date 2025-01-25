@@ -66,10 +66,20 @@ body {
   color: rgb(184, 184, 184);
   font-family: sans-serif;
   overflow: hidden;
+  /* scrollbar-color: red red; */
 }
 
-.body::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none;
+}
+
+html {
+  overflow: scroll;
+}
+
+body:-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
 }
 
 .app {

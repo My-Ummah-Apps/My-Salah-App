@@ -1,7 +1,6 @@
 // import React, { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
-import { useState } from "react";
 
 interface CustomizedLabelProps {
   cx: number;
@@ -47,6 +46,8 @@ const renderCustomizedLabel = ({
 const DonutPieChart = ({
   salahStatusStatistics,
   userGender,
+  showDonutChart,
+  showNoDataText,
 }: {
   salahStatusStatistics: {
     salahInJamaahDatesOverall: number;
@@ -57,16 +58,9 @@ const DonutPieChart = ({
     salahLateDatesOverall: number;
   };
   userGender: string;
+  showDonutChart: boolean;
+  showNoDataText: boolean;
 }) => {
-  const [showDonutChart, setShowDonutChart] = useState(false);
-  for (let key in salahStatusStatistics) {
-    if (salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0) {
-      if (!showDonutChart) {
-        setShowDonutChart(true);
-      }
-      break;
-    }
-  }
   const data = [
     userGender === "male"
       ? {
@@ -110,8 +104,8 @@ const DonutPieChart = ({
         ];
   return (
     <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
-      {showDonutChart ? (
-        <ResponsiveContainer className="" width="60%" height="100%">
+      <ResponsiveContainer className="" width="60%" height="100%">
+        {showDonutChart ? (
           <PieChart width={400} height={400}>
             <Pie
               data={data}
@@ -136,10 +130,12 @@ const DonutPieChart = ({
               ))}
             </Pie>
           </PieChart>
-        </ResponsiveContainer>
-      ) : (
-        <p className="w-full text-center">No Data</p>
-      )}
+        ) : (
+          <p className="flex items-center justify-center w-full h-full">
+            {showNoDataText && <p>No Data</p>}
+          </p>
+        )}
+      </ResponsiveContainer>
 
       <div className="justify-center">
         {salahStatusStatistics.salahFemaleAloneDatesOverall > 0 ||

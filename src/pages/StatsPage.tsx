@@ -48,6 +48,55 @@ const StatsPage = ({
     });
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
+  const [showDonutChart, setShowDonutChart] = useState(false);
+  const [showNoDataText, setShowNoDataText] = useState(false);
+
+  const salahStatusesOverallArr: SalahStatusType[] = [];
+  // TODO: Test the below code to ensure stats are being calculated correctly
+  const getAllSalahStatuses = () => {
+    for (let i = 0; i < fetchedSalahData.length; i++) {
+      Object.values(fetchedSalahData[i].salahs).forEach((status) => {
+        if (status !== "" && typeof status === "string") {
+          salahStatusesOverallArr.push(status as SalahStatusType);
+        }
+      });
+    }
+  };
+
+  getAllSalahStatuses();
+
+  const filterSalahStatuses = (salahStatus: SalahStatusType) => {
+    return salahStatusesOverallArr.filter((status) => status === salahStatus);
+  };
+
+  const salahStatusStatistics = {
+    salahInJamaahDatesOverall: filterSalahStatuses("group").length,
+    salahMaleAloneDatesOverall: filterSalahStatuses("male-alone").length,
+    salahFemaleAloneDatesOverall: filterSalahStatuses("female-alone").length,
+    salahExcusedDatesOverall: filterSalahStatuses("excused").length,
+    salahMissedDatesOverall: filterSalahStatuses("missed").length,
+    salahLateDatesOverall: filterSalahStatuses("late").length,
+  };
+
+  useEffect(() => {
+    for (let key in salahStatusStatistics) {
+      if (
+        salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0
+      ) {
+        if (!showDonutChart) {
+          setTimeout(() => {
+            setShowDonutChart(true);
+          }, 100);
+        }
+        break;
+      }
+    }
+    if (!showDonutChart) {
+      setTimeout(() => {
+        setShowNoDataText(true);
+      }, 100);
+    }
+  }, [showDonutChart, salahStatusStatistics]);
 
   useEffect(() => {
     const grabSalahDataFromDB = async () => {
@@ -124,35 +173,7 @@ const StatsPage = ({
     grabSalahDataFromDB();
   }, []);
 
-  // let showDonutChart;
-  const salahStatusesOverallArr: SalahStatusType[] = [];
-  // TODO: Test the below code to ensure stats are being calculated correctly
-  const getAllSalahStatuses = () => {
-    for (let i = 0; i < fetchedSalahData.length; i++) {
-      Object.values(fetchedSalahData[i].salahs).forEach((status) => {
-        if (status !== "" && typeof status === "string") {
-          salahStatusesOverallArr.push(status as SalahStatusType);
-        }
-      });
-    }
-  };
-
-  getAllSalahStatuses();
-
-  const filterSalahStatuses = (salahStatus: SalahStatusType) => {
-    return salahStatusesOverallArr.filter((status) => status === salahStatus);
-  };
-
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
-
-  const salahStatusStatistics = {
-    salahInJamaahDatesOverall: filterSalahStatuses("group").length,
-    salahMaleAloneDatesOverall: filterSalahStatuses("male-alone").length,
-    salahFemaleAloneDatesOverall: filterSalahStatuses("female-alone").length,
-    salahExcusedDatesOverall: filterSalahStatuses("excused").length,
-    salahMissedDatesOverall: filterSalahStatuses("missed").length,
-    salahLateDatesOverall: filterSalahStatuses("late").length,
-  };
 
   return (
     // <section className={`${pageStyles}`}>
@@ -165,6 +186,8 @@ const StatsPage = ({
         <DonutPieChart
           userGender={userPreferences.userGender}
           salahStatusStatistics={salahStatusStatistics}
+          showDonutChart={showDonutChart}
+          showNoDataText={showNoDataText}
         />
         <Calendar
           dbConnection={dbConnection}

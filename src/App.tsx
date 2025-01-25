@@ -74,6 +74,7 @@ const App = () => {
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [showJoyRideEditIcon, setShowJoyRideEditIcon] =
     useState<boolean>(false);
+  // const [showDonutChart, setShowDonutChart] = useState(false);
 
   useEffect(() => {
     if (
@@ -391,6 +392,9 @@ const App = () => {
 
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
+        console.log("HEY IM HERE");
+
+        // setShowDonutChart(true);
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
           if (DBResultAllSalahData[i].date === currentDate) {
             let salahName: SalahNamesType = DBResultAllSalahData[i].salahName;
@@ -568,6 +572,7 @@ const App = () => {
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
+                // showDonutChart={showDonutChart}
               />
             }
           />
