@@ -30,7 +30,6 @@ interface StatsPageProps {
   ) => Promise<void>;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
-  setHeading: React.Dispatch<React.SetStateAction<string>>;
   pageStyles: string;
 }
 
@@ -39,13 +38,8 @@ const StatsPage = ({
   checkAndOpenOrCloseDBConnection,
   userPreferences,
   fetchedSalahData,
-  setHeading,
   pageStyles,
 }: StatsPageProps) => {
-  useEffect(() => {
-    setHeading("Stats");
-  }, []);
-
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},
@@ -168,67 +162,73 @@ const StatsPage = ({
   }
 
   return (
-    <section className={`${pageStyles}`}>
+    // <section className={`${pageStyles}`}>
+    <section className={`${pageStyles} stats-page-wrap`}>
       {/* <StreakCount styles={{}} /> */}
-      {showDonutChart === true ? (
-        <DonutPieChart
-          userGender={userPreferences.userGender}
-          salahStatusStatistics={salahStatusStatistics}
-        />
-      ) : (
-        ""
-      )}
-      <Calendar
-        dbConnection={dbConnection}
-        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-        userStartDate={userPreferences.userStartDate}
-        fetchedSalahData={fetchedSalahData}
-      />{" "}
-      <Swiper
-        spaceBetween={50}
-        slidesPerView={1}
-        modules={[Pagination]}
-        pagination={{ clickable: true }}
-      >
-        {userPreferences.userGender === "male" &&
-          salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+      <header className="stats-page-header">
+        <p className="stats-page-header-p">Stats</p>
+      </header>
+      <section className="stats-page-components-wrap">
+        {showDonutChart === true ? (
+          <DonutPieChart
+            userGender={userPreferences.userGender}
+            salahStatusStatistics={salahStatusStatistics}
+          />
+        ) : (
+          ""
+        )}
+        <Calendar
+          dbConnection={dbConnection}
+          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+          userStartDate={userPreferences.userStartDate}
+          fetchedSalahData={fetchedSalahData}
+        />{" "}
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={1}
+          modules={[Pagination]}
+          pagination={{ clickable: true }}
+        >
+          {userPreferences.userGender === "male" &&
+            salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+              <SwiperSlide>
+                <ReasonsCard
+                  setReasonsToShow={setReasonsToShow}
+                  setShowReasonsSheet={setShowReasonsSheet}
+                  salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                  status={"male-alone"}
+                />
+              </SwiperSlide>
+            )}
+          {salahStatusStatistics.salahLateDatesOverall > 0 && (
             <SwiperSlide>
               <ReasonsCard
                 setReasonsToShow={setReasonsToShow}
                 setShowReasonsSheet={setShowReasonsSheet}
                 salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                status={"male-alone"}
+                status={"late"}
               />
             </SwiperSlide>
           )}
-        {salahStatusStatistics.salahLateDatesOverall > 0 && (
-          <SwiperSlide>
-            <ReasonsCard
-              setReasonsToShow={setReasonsToShow}
-              setShowReasonsSheet={setShowReasonsSheet}
-              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-              status={"late"}
-            />
-          </SwiperSlide>
-        )}
-        {salahStatusStatistics.salahMissedDatesOverall > 0 && (
-          <SwiperSlide>
-            <ReasonsCard
-              setReasonsToShow={setReasonsToShow}
-              setShowReasonsSheet={setShowReasonsSheet}
-              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-              status={"missed"}
-            />
-          </SwiperSlide>
-        )}
-      </Swiper>
-      <BottomSheetReasons
-        // setReasonsToShow={setReasonsToShow}
-        setShowReasonsSheet={setShowReasonsSheet}
-        showReasonsSheet={showReasonsSheet}
-        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-        status={reasonsToShow}
-      />
+          {salahStatusStatistics.salahMissedDatesOverall > 0 && (
+            <SwiperSlide>
+              <ReasonsCard
+                setReasonsToShow={setReasonsToShow}
+                setShowReasonsSheet={setShowReasonsSheet}
+                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                status={"missed"}
+              />
+            </SwiperSlide>
+          )}
+        </Swiper>
+        <BottomSheetReasons
+          // setReasonsToShow={setReasonsToShow}
+          setShowReasonsSheet={setShowReasonsSheet}
+          showReasonsSheet={showReasonsSheet}
+          salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+          status={reasonsToShow}
+        />
+      </section>
     </section>
   );
 };

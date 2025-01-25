@@ -22,7 +22,6 @@ import { Capacitor } from "@capacitor/core";
 import { showToast } from "../utils/constants";
 
 interface SettingsPageProps {
-  setHeading: React.Dispatch<React.SetStateAction<string>>;
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
   dbConnection: any;
   checkAndOpenOrCloseDBConnection: (
@@ -40,7 +39,6 @@ interface SettingsPageProps {
 }
 
 const SettingsPage = ({
-  setHeading,
   sqliteConnection,
   dbConnection,
   checkAndOpenOrCloseDBConnection,
@@ -51,10 +49,6 @@ const SettingsPage = ({
   userPreferences,
   setShowChangelogModal,
 }: SettingsPageProps) => {
-  useEffect(() => {
-    setHeading("Settings");
-  }, []);
-
   const shareThisAppLink = async (link: string) => {
     await Share.share({
       title: "",
@@ -220,7 +214,10 @@ const SettingsPage = ({
   }, [isMissedSalahCounterOptionChecked]);
 
   return (
-    <section className={pageStyles}>
+    <section className={`${pageStyles} settings-page-wrap`}>
+      <header className="settings-page-header">
+        <p className="settings-page-header-p">Settings</p>
+      </header>
       <div className="settings-page-options-wrap">
         <div
           className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}

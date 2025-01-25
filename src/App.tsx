@@ -6,7 +6,6 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   dictPreferencesDefaultValues,
-  getMissedSalahCount,
   defaultReasons,
   scheduleDailyNotification,
   sheetBackdropColor,
@@ -46,7 +45,6 @@ import StatsPage from "./pages/StatsPage";
 import useSQLiteDB from "./utils/useSqLiteDB";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import MissedSalahCounter from "./components/Stats/MissedSalahCounter";
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (Capacitor.isNativePlatform()) {
@@ -457,8 +455,6 @@ const App = () => {
 
   // const [streakCounter, setStreakCounter] = useState(0);
 
-  const [heading, setHeading] = useState("");
-
   // let datesFrequency: { [date: string]: number } = {};
   // salahFulfilledDates.forEach((date) => {
   //   datesFrequency[date] = (datesFrequency[date] || 0) + 1;
@@ -489,7 +485,8 @@ const App = () => {
   // }, [datesFrequencyReduced]);
 
   // const pageStyles: string = `pt-[9vh] pb-[2vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
-  const pageStyles: string = `pt-[10vh] h-[100vh] pb-[20vh] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
+  // const pageStyles: string = `h-[100vh] pb-[20vh] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto `;
+  const pageStyles: string = ``;
 
   const swiperRef = useRef<SwiperInstance | null>(null);
 
@@ -500,28 +497,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
-        <header className="fixed h-[10vh] z-20 w-full py-5 header-wrap">
-          {getMissedSalahCount(missedSalahList) > 0 &&
-          heading === "Home" &&
-          userPreferences.showMissedSalahCount === "1" ? (
-            <MissedSalahCounter
-              setShowMissedPrayersSheet={setShowMissedPrayersSheet}
-              isMultiEditMode={isMultiEditMode}
-              missedSalahList={missedSalahList}
-              modifyDataInUserPreferencesTable={
-                modifyDataInUserPreferencesTable
-              }
-              userPreferences={userPreferences}
-            />
-          ) : null}
-
-          <h1 className="text-center">{heading}</h1>
-          {/* <div className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}></div> */}
-          {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
-        </header>
-        {/* <h1 className="fixed w-full bg-black text-center mt-[6vh]">
-          {heading}
-        </h1> */}
         <Routes>
           {/* <Route
             path="/ResourcesPage"
@@ -551,7 +526,6 @@ const App = () => {
                 setFetchedSalahData={setFetchedSalahData}
                 fetchedSalahData={fetchedSalahData}
                 setMissedSalahList={setMissedSalahList}
-                setHeading={setHeading}
                 pageStyles={pageStyles}
                 setShowMissedPrayersSheet={setShowMissedPrayersSheet}
                 showMissedPrayersSheet={showMissedPrayersSheet}
@@ -565,7 +539,6 @@ const App = () => {
             path="/SettingsPage"
             element={
               <SettingsPage
-                setHeading={setHeading}
                 sqliteConnection={sqliteConnection}
                 dbConnection={dbConnection}
                 checkAndOpenOrCloseDBConnection={
@@ -595,7 +568,6 @@ const App = () => {
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
-                setHeading={setHeading}
               />
             }
           />
