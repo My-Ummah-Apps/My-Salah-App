@@ -46,24 +46,6 @@ import useSQLiteDB from "./utils/useSqLiteDB";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
-window.addEventListener("DOMContentLoaded", async () => {
-  if (Capacitor.isNativePlatform()) {
-    const STATUS_AND_NAV_BAR_COLOR = "#161515";
-    if (Capacitor.getPlatform() === "android") {
-      setTimeout(() => {
-        StatusBar.setBackgroundColor({ color: STATUS_AND_NAV_BAR_COLOR });
-        NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
-      }, 1000);
-    }
-
-    setTimeout(() => {
-      SplashScreen.hide({
-        fadeOutDuration: 250,
-      });
-    }, 500);
-  }
-});
-
 const App = () => {
   const [showIntroModal, setShowIntroModal] = useState(false);
   const [showChangelogModal, setShowChangelogModal] = useState(false);
@@ -101,12 +83,25 @@ const App = () => {
   } = useSQLiteDB();
 
   useEffect(() => {
-    if (isDatabaseInitialised === true) {
-      const initialiseAndLoadData = async () => {
-        await fetchDataFromDB();
-      };
-      initialiseAndLoadData();
-    }
+    const initializeApp = async () => {
+      const STATUS_AND_NAV_BAR_COLOR = "#161515";
+      if (Capacitor.getPlatform() === "android") {
+        setTimeout(() => {
+          StatusBar.setBackgroundColor({ color: STATUS_AND_NAV_BAR_COLOR });
+          NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
+        }, 500);
+      }
+
+      if (isDatabaseInitialised === true) {
+        const initialiseAndLoadData = async () => {
+          await fetchDataFromDB();
+        };
+        initialiseAndLoadData();
+        await SplashScreen.hide({ fadeOutDuration: 250 });
+      }
+    };
+
+    initializeApp();
   }, [isDatabaseInitialised]);
 
   useEffect(() => {
