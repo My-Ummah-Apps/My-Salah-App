@@ -20,6 +20,7 @@ import DonutPieChart from "../components/Stats/DonutPieChart";
 import { DBConnectionStateType } from "../types/types";
 import ReasonsCard from "../components/Stats/ReasonsCard";
 import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
+import StreakCounter from "../components/Stats/StreakCounter";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -40,6 +41,8 @@ const StatsPage = ({
   fetchedSalahData,
   pageStyles,
 }: StatsPageProps) => {
+  console.log("fetchedSalahData: ", fetchedSalahData);
+
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},
@@ -183,6 +186,8 @@ const StatsPage = ({
         <p className="stats-page-header-p">Stats</p>
       </header>
       <section className="stats-page-components-wrap">
+        {/* <StreakCount /> */}
+        <StreakCounter />
         <DonutPieChart
           userGender={userPreferences.userGender}
           salahStatusStatistics={salahStatusStatistics}

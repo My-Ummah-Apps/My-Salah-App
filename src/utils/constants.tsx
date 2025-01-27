@@ -46,7 +46,7 @@ export const reasonsStyles = "p-2 m-1 text-xs bg-[rgb(39,39,39)] rounded-xl";
 export const prayerStatusColorsHexCodes = {
   group: "#5FAE82",
   "male-alone": "#D4B245",
-  "female-alone": "#E6C457",
+  "female-alone": "#5FAE82",
   excused: "#8C4FB5",
   late: "#D9653B",
   missed: "#E63946",

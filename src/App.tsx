@@ -33,7 +33,7 @@ import { StatusBar } from "@capacitor/status-bar";
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
-import { format, parse, eachDayOfInterval } from "date-fns";
+import { format, parse, eachDayOfInterval, isSameDay, addDays } from "date-fns";
 import { PreferenceType } from "./types/types";
 
 import NavBar from "./components/Nav/NavBar";
@@ -387,8 +387,6 @@ const App = () => {
 
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
-        console.log("HEY IM HERE");
-
         // setShowDonutChart(true);
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
           if (DBResultAllSalahData[i].date === currentDate) {
@@ -450,9 +448,69 @@ const App = () => {
     }
   };
 
-  // const todaysDate = new Date("2024-01-01");
+  const [streakCounter, setStreakCounter] = useState(0);
+  const reversedFetchedSalahDataArr = [...fetchedSalahData].reverse();
+  // console.log("reversedFetchedSalahDataArr: ", reversedFetchedSalahDataArr);
 
-  // const [streakCounter, setStreakCounter] = useState(0);
+  type streakCounterObjType = {
+    [date: string]: number;
+  };
+
+  useEffect(() => {
+    let streakCounterObj: streakCounterObjType = {};
+
+    for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
+      const salahStatuses = Object.values(
+        reversedFetchedSalahDataArr[i].salahs
+      );
+      const date = reversedFetchedSalahDataArr[i].date;
+
+      if (
+        salahStatuses.some((status) => status === "late") ||
+        salahStatuses.some((status) => status === "missed")
+      ) {
+        console.log(`salah status is late or missed, skipping...`);
+        continue;
+      }
+
+      if (salahStatuses.some((status) => status === "excused")) {
+        console.log(`salah status is excused, skipping...`);
+        continue;
+      }
+      console.log("Status neither excused nor late or missed, contiuing...");
+
+      // if (streakCounterObj[date]) {
+      //   streakCounterObj[date] += 1;
+      // } else {
+      //   streakCounterObj[date] = 1;
+      // }
+
+      streakCounterObj[date] = (streakCounterObj[date] || 0) + 1;
+    }
+
+    console.log("streakCounterObj: ", streakCounterObj);
+
+    for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
+      const date = Object.keys(streakCounterObj)[i];
+      console.log("DATE: ", date);
+      // ! previousDate and currentDate are coming up as invalid dates
+      const previousDate = parse(date[i - 1], "yyyy-MM-dd", new Date());
+      const currentDate = parse(date[i], "yyyy-MM-dd", new Date());
+      console.log("previousDate: ", previousDate);
+      console.log("currentDate: ", currentDate);
+      if (isSameDay(addDays(previousDate, 1), currentDate)) {
+        console.log(
+          `previousDate ${previousDate} is right after ${currentDate}`
+        );
+      } else {
+        console.log(
+          `previousDate ${previousDate} is not right after ${currentDate}`
+        );
+      }
+    }
+  });
+
+  // const todaysDate = new Date("2024-01-01");
 
   // let datesFrequency: { [date: string]: number } = {};
   // salahFulfilledDates.forEach((date) => {
