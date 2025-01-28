@@ -453,10 +453,11 @@ const App = () => {
   // console.log("reversedFetchedSalahDataArr: ", reversedFetchedSalahDataArr);
 
   type streakCounterObjType = {
-    [date: string]: number;
+    [date: string]: string;
   };
 
   useEffect(() => {
+    let streakCount = 0;
     let streakCounterObj: streakCounterObjType = {};
 
     for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
@@ -466,48 +467,34 @@ const App = () => {
       const date = reversedFetchedSalahDataArr[i].date;
 
       if (
-        salahStatuses.some((status) => status === "late") ||
-        salahStatuses.some((status) => status === "missed")
+        salahStatuses.includes("late") ||
+        salahStatuses.includes("missed") ||
+        salahStatuses.includes("")
       ) {
-        console.log(`salah status is late or missed, skipping...`);
         continue;
       }
 
-      if (salahStatuses.some((status) => status === "excused")) {
-        console.log(`salah status is excused, skipping...`);
-        continue;
+      if (salahStatuses.includes("excused")) {
+        streakCounterObj[date] = "excused";
+      } else {
+        streakCounterObj[date] = "fulfilled";
       }
-      console.log("Status neither excused nor late or missed, contiuing...");
-
-      // if (streakCounterObj[date]) {
-      //   streakCounterObj[date] += 1;
-      // } else {
-      //   streakCounterObj[date] = 1;
-      // }
-
-      streakCounterObj[date] = (streakCounterObj[date] || 0) + 1;
     }
-
-    console.log("streakCounterObj: ", streakCounterObj);
 
     for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
-      const date = Object.keys(streakCounterObj)[i];
-      console.log("DATE: ", date);
-      // ! previousDate and currentDate are coming up as invalid dates
+      const date = Object.keys(streakCounterObj);
       const previousDate = parse(date[i - 1], "yyyy-MM-dd", new Date());
       const currentDate = parse(date[i], "yyyy-MM-dd", new Date());
-      console.log("previousDate: ", previousDate);
-      console.log("currentDate: ", currentDate);
-      if (isSameDay(addDays(previousDate, 1), currentDate)) {
-        console.log(
-          `previousDate ${previousDate} is right after ${currentDate}`
-        );
-      } else {
-        console.log(
-          `previousDate ${previousDate} is not right after ${currentDate}`
-        );
+
+      if (
+        isSameDay(addDays(previousDate, 1), currentDate) &&
+        !streakCounterObj[date[i]].includes("excused")
+      ) {
+        streakCount += 1;
       }
     }
+    console.log("STREAKCOUNT: ", streakCount + 1);
+    setStreakCounter(streakCount + 1);
   });
 
   // const todaysDate = new Date("2024-01-01");
@@ -554,6 +541,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
+        <h1 className="text-4xl text-right">{streakCounter}</h1>
         <Routes>
           {/* <Route
             path="/ResourcesPage"
