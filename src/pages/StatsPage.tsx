@@ -32,6 +32,7 @@ interface StatsPageProps {
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   pageStyles: string;
+  streakCounter: number;
 }
 
 const StatsPage = ({
@@ -40,9 +41,8 @@ const StatsPage = ({
   userPreferences,
   fetchedSalahData,
   pageStyles,
+  streakCounter,
 }: StatsPageProps) => {
-  console.log("fetchedSalahData: ", fetchedSalahData);
-
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},
@@ -186,8 +186,7 @@ const StatsPage = ({
         <p className="stats-page-header-p">Stats</p>
       </header>
       <section className="stats-page-components-wrap">
-        {/* <StreakCount /> */}
-        <StreakCounter />
+        <StreakCounter streakCounter={streakCounter} />
         <DonutPieChart
           userGender={userPreferences.userGender}
           salahStatusStatistics={salahStatusStatistics}

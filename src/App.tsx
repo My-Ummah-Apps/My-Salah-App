@@ -457,57 +457,61 @@ const App = () => {
   };
 
   useEffect(() => {
-    let streakCount = 0;
+    let streakCount = -1;
     const streakCounterObj: streakCounterObjType = {};
-    const streakDates = {};
 
     for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
       const salahStatuses = Object.values(
         reversedFetchedSalahDataArr[i].salahs
       );
       const date = reversedFetchedSalahDataArr[i].date;
+      const todaysDate = format(new Date(), "yyyy-MM-dd");
 
-      if (
+      if (salahStatuses.includes("") && date !== todaysDate) {
+        streakCounterObj[date] = "skip";
+        // continue;
+      } else if (
         salahStatuses.includes("late") ||
-        salahStatuses.includes("missed") ||
-        salahStatuses.includes("")
+        salahStatuses.includes("missed")
       ) {
-        continue;
-      }
-
-      if (salahStatuses.includes("excused")) {
+        streakCounterObj[date] = "skip";
+        // continue;
+      } else if (salahStatuses.includes("excused")) {
         streakCounterObj[date] = "excused";
+        // continue;
       } else {
         streakCounterObj[date] = "fulfilled";
       }
     }
 
-    console.log(
-      "Object.keys(streakCounterObj): ",
-      Object.keys(streakCounterObj)
-    );
+    // console.log(
+    //   "Object.keys(streakCounterObj): ",
+    //   Object.keys(streakCounterObj)
+    // );
 
     for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
       const date = Object.keys(streakCounterObj);
       const previousDate = parse(date[i - 1], "yyyy-MM-dd", new Date());
       const currentDate = parse(date[i], "yyyy-MM-dd", new Date());
 
+      // console.log(date[i], streakCounterObj[date[i]]);
+
       if (
         isSameDay(addDays(previousDate, 1), currentDate) &&
-        !streakCounterObj[date[i]].includes("excused")
+        !streakCounterObj[date[i]].includes("excused") &&
+        !streakCounterObj[date[i]].includes("skip")
       ) {
+        // console.log("STREAK CONTIUING, DATES ARE: ", previousDate, currentDate);
         streakCount += 1;
+        // console.log("STREAK COUNT IS: ", streakCount);
+      } else if (!streakCounterObj[date[i]].includes("excused")) {
+        // console.log("STREAK BROKEN, DATES ARE: ", previousDate, currentDate);
+        streakCount = 0;
+        // console.log("STREAK COUNT IS: ", streakCount);
       }
-      // else {
-      //   console.log("HELLO");
-      //   console.log(date[i - 1], date[i]);
-      //   streakDates[(date[i - 1], date[i])] = streakCount;
-      // }
     }
-    console.log("STREAKCOUNT: ", streakCount + 1);
-    console.log("streakDates: ", streakDates);
 
-    setStreakCounter(streakCount + 1);
+    setStreakCounter(streakCount);
   });
 
   const pageStyles: string = ``;
@@ -521,7 +525,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <section className="app">
-        <h1 className="text-4xl text-right">{streakCounter}</h1>
+        {/* <h1 className="text-4xl text-right">{streakCounter}</h1> */}
         <Routes>
           {/* <Route
             path="/ResourcesPage"
@@ -593,6 +597,7 @@ const App = () => {
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
+                streakCounter={streakCounter}
                 // showDonutChart={showDonutChart}
               />
             }
