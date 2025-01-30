@@ -458,7 +458,8 @@ const App = () => {
 
   useEffect(() => {
     let streakCount = 0;
-    let streakCounterObj: streakCounterObjType = {};
+    const streakCounterObj: streakCounterObjType = {};
+    const streakDates = {};
 
     for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
       const salahStatuses = Object.values(
@@ -481,6 +482,11 @@ const App = () => {
       }
     }
 
+    console.log(
+      "Object.keys(streakCounterObj): ",
+      Object.keys(streakCounterObj)
+    );
+
     for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
       const date = Object.keys(streakCounterObj);
       const previousDate = parse(date[i - 1], "yyyy-MM-dd", new Date());
@@ -492,44 +498,18 @@ const App = () => {
       ) {
         streakCount += 1;
       }
+      // else {
+      //   console.log("HELLO");
+      //   console.log(date[i - 1], date[i]);
+      //   streakDates[(date[i - 1], date[i])] = streakCount;
+      // }
     }
     console.log("STREAKCOUNT: ", streakCount + 1);
+    console.log("streakDates: ", streakDates);
+
     setStreakCounter(streakCount + 1);
   });
 
-  // const todaysDate = new Date("2024-01-01");
-
-  // let datesFrequency: { [date: string]: number } = {};
-  // salahFulfilledDates.forEach((date) => {
-  //   datesFrequency[date] = (datesFrequency[date] || 0) + 1;
-  // });
-
-  // const datesFrequencyReduced = Object.keys(datesFrequency).filter((date) =>
-  //   datesFrequency[date] === 5 ? true : false
-  // );
-
-  // let streakCount = 0;
-  // function checkStreak() {
-  //   // const todaysDate = new Date();
-
-  //   for (let i = 0; i < datesFrequencyReduced.length; i++) {
-  //     let formattedDate = subDays(todaysDate, i);
-
-  //     if (datesFrequencyReduced.includes(format(formattedDate, "dd.MM.yy"))) {
-  //       streakCount += 1;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   setStreakCounter(streakCount);
-  // }
-
-  // useEffect(() => {
-  //   checkStreak();
-  // }, [datesFrequencyReduced]);
-
-  // const pageStyles: string = `pt-[9vh] pb-[2vh] bg-[color:var(--primary-color)] h-[90vh] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto`;
-  // const pageStyles: string = `h-[100vh] pb-[20vh] bg-[color:var(--primary-color)] overflow-x-hidden overflow-y-auto w-[93vw] mx-auto `;
   const pageStyles: string = ``;
 
   const swiperRef = useRef<SwiperInstance | null>(null);
