@@ -370,7 +370,7 @@ const BottomSheetPrayerStatus = ({
           <Sheet.Content>
             <Sheet.Scroller>
               {" "}
-              <section className="w-[90%] mx-auto mb-20 rounded-lg text-white">
+              <section className="w-[90%] mx-auto mb-5 rounded-lg text-white">
                 <h1 className="mb-10 text-3xl font-light text-center">
                   How did you pray{" "}
                   {Object.keys(selectedSalahAndDate).length === 1 &&
