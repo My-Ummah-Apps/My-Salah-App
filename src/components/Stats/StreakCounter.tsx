@@ -4,9 +4,7 @@ interface StreakCounterProps {
 
 const StreakCounter = ({ streakCounter }: StreakCounterProps) => {
   return (
-    <div
-      className={`streak-wrap mt-5 mb-5 bg-[color:var(--card-bg-color)] rounded-2xl py-8`}
-    >
+    <div className={`mt-5 mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}>
       <div className="relative flex items-center justify-center wreath-and-text-wrap">
         <img
           style={{ width: "150px", marginRight: "-4rem" }}

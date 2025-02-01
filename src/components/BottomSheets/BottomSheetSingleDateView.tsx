@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 
 import { SalahNamesType } from "../../types/types";
 import {
+  bottomSheetContainerStyles,
   prayerStatusColorsHexCodes,
   reasonsStyles,
   sheetBackdropColor,
@@ -131,7 +132,7 @@ const BottomSheetSingleDateView = ({
         setShowDailySalahDataModal(false);
       }}
     >
-      <Sheet.Container>
+      <Sheet.Container style={bottomSheetContainerStyles}>
         <Sheet.Header style={sheetHeaderHeight} />
         <Sheet.Content style={{ backgroundColor: "rgb(33, 36, 38)" }}>
           <Sheet.Scroller>

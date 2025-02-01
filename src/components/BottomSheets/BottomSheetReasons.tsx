@@ -1,5 +1,9 @@
 import Sheet from "react-modal-sheet";
-import { sheetBackdropColor, TWEEN_CONFIG } from "../../utils/constants";
+import {
+  bottomSheetContainerStyles,
+  sheetBackdropColor,
+  TWEEN_CONFIG,
+} from "../../utils/constants";
 import {
   reasonsToShowType,
   salahReasonsOverallNumbersType,
@@ -23,10 +27,10 @@ const BottomSheetReasons = ({
     <Sheet
       isOpen={showReasonsSheet}
       onClose={() => setShowReasonsSheet(false)}
-      detent="full-height"
+      detent="content-height"
       tweenConfig={TWEEN_CONFIG}
     >
-      <Sheet.Container>
+      <Sheet.Container style={bottomSheetContainerStyles}>
         <Sheet.Header />
         <Sheet.Content className="mb-10 overflow-scroll sheet-changelog">
           <Sheet.Scroller>

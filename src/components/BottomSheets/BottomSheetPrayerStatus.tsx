@@ -18,6 +18,7 @@ import {
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import {
+  bottomSheetContainerStyles,
   createLocalisedDate,
   isValidDate,
   prayerStatusColorsHexCodes,
@@ -363,7 +364,7 @@ const BottomSheetPrayerStatus = ({
         <Sheet.Container
           // className="react-modal-sheet-container"
           ref={sheetRef}
-          style={{ backgroundColor: "rgb(33, 36, 38)" }}
+          style={bottomSheetContainerStyles}
         >
           <Sheet.Header style={sheetHeaderHeight} />
           <Sheet.Content>

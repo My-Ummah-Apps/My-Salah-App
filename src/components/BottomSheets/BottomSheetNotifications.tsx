@@ -13,6 +13,7 @@ import {
 
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import {
+  bottomSheetContainerStyles,
   checkNotificationPermissions,
   scheduleDailyNotification,
   sheetBackdropColor,
@@ -146,7 +147,7 @@ const BottomSheetNotifications = ({
       isOpen={showNotificationsModal}
       onClose={() => setShowNotificationsModal(false)}
     >
-      <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+      <Sheet.Container style={bottomSheetContainerStyles}>
         <Sheet.Header style={sheetHeaderHeight} />
         <Sheet.Content>
           <div className="h-[50vh]">

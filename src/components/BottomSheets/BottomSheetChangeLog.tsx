@@ -1,4 +1,8 @@
-import { sheetBackdropColor, TWEEN_CONFIG } from "../../utils/constants";
+import {
+  bottomSheetContainerStyles,
+  sheetBackdropColor,
+  TWEEN_CONFIG,
+} from "../../utils/constants";
 import { changeLogs } from "../../utils/changelog";
 import { LATEST_APP_VERSION } from "../../utils/changelog";
 import Sheet from "react-modal-sheet";
@@ -20,7 +24,7 @@ const BottomSheetChangelog = ({
       // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
       tweenConfig={TWEEN_CONFIG}
     >
-      <Sheet.Container>
+      <Sheet.Container style={bottomSheetContainerStyles}>
         {/* <Sheet.Header /> */}
         <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
           <Sheet.Scroller>

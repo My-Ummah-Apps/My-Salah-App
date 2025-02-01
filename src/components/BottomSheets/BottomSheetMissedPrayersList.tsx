@@ -10,6 +10,7 @@ import {
   SalahRecordsArrayType,
 } from "../../types/types";
 import {
+  bottomSheetContainerStyles,
   createLocalisedDate,
   //   createLocalisedDate,
   getMissedSalahCount,
@@ -104,7 +105,7 @@ const BottomSheetMissedPrayersList = ({
         detent="full-height"
         tweenConfig={TWEEN_CONFIG}
       >
-        <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+        <Sheet.Container style={bottomSheetContainerStyles}>
           <Sheet.Header />
           <Sheet.Content>
             {" "}

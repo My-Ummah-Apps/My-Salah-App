@@ -10,6 +10,7 @@ import {
   scheduleDailyNotification,
   sheetBackdropColor,
   sheetHeaderHeight,
+  bottomSheetContainerStyles,
 } from "./utils/constants";
 import {
   DBResultDataObjType,
@@ -622,7 +623,7 @@ const App = () => {
           detent="full-height"
           disableDrag={true}
         >
-          <Sheet.Container style={{ backgroundColor: "rgb(33, 36, 38)" }}>
+          <Sheet.Container style={bottomSheetContainerStyles}>
             <Sheet.Header style={sheetHeaderHeight} />
             <Sheet.Content style={{ justifyContent: "center" }}>
               {" "}

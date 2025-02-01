@@ -73,6 +73,11 @@ body {
   display: none;
 }
 
+/* .recharts-sector {
+  stroke-linejoin: round;
+  stroke-width: 7px;
+} */
+
 html {
   overflow: scroll;
 }

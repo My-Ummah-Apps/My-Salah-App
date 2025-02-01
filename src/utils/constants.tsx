@@ -13,6 +13,12 @@ export const TWEEN_CONFIG = {
   duration: 0.5,
 };
 
+export const bottomSheetContainerStyles = {
+  borderRadius: "1.5rem 1.5rem 0 0",
+  overflow: "hidden",
+  backgroundColor: "rgb(33, 36, 38)",
+};
+
 export const defaultReasons =
   "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
