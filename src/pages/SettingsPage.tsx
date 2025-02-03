@@ -248,17 +248,18 @@ const SettingsPage = ({
               {"Missed Salah Counter"}
             </p>
             <p className=" pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {"Show Missed Salah Counter on the Homepage"}
+              {"Display Missed Salah Counter When Applicable on Homepage"}
             </p>
           </div>
-          <Switch
-            style={{ marginRight: "0.5rem" }}
-            onColor="#3b82f6"
-            checked={isMissedSalahCounterOptionChecked}
-            onChange={async () => {
-              setIsMissedSalahCounterOptionChecked((prev) => !prev);
-            }}
-          />
+          <section className="pl-4 pr-2">
+            <Switch
+              onColor="#3b82f6"
+              checked={isMissedSalahCounterOptionChecked}
+              onChange={async () => {
+                setIsMissedSalahCounterOptionChecked((prev) => !prev);
+              }}
+            />
+          </section>
         </div>{" "}
         <div className="my-5">
           <SettingIndividual

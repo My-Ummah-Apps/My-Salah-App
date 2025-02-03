@@ -1,14 +1,23 @@
+import wreathLeft from "/src/assets/icons/wreath-left.png";
+import wreathRight from "/src/assets/icons/wreath-right.png";
+// import { GoInfo } from "react-icons/go";
+
 interface StreakCounterProps {
   streakCounter: number;
 }
 
 const StreakCounter = ({ streakCounter }: StreakCounterProps) => {
   return (
-    <div className={`mt-5 mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}>
-      <div className="relative flex items-center justify-center wreath-and-text-wrap">
+    <div
+      className={`relative mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}
+    >
+      {/* <p className="absolute top-2 right-2">
+        <GoInfo />
+      </p> */}
+      <div className="relative flex items-center justify-center py-10 wreath-and-text-wrap">
         <img
-          style={{ width: "150px", marginRight: "-4rem" }}
-          src="/src/assets/icons/wreath-left.png"
+          style={{ width: "150px", height: "100%", marginRight: "-4rem" }}
+          src={wreathLeft}
           alt=""
           srcSet=""
         />
@@ -20,8 +29,8 @@ const StreakCounter = ({ streakCounter }: StreakCounterProps) => {
           <h2 className="text-xs text-center">Current Streak</h2>
         </div>
         <img
-          style={{ width: "150px", marginLeft: "7rem" }}
-          src="/src/assets/icons/wreath-right.png"
+          style={{ width: "150px", height: "100%", marginLeft: "7rem" }}
+          src={wreathRight}
           alt=""
           srcSet=""
         />

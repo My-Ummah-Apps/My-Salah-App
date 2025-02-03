@@ -104,7 +104,7 @@ const DonutPieChart = ({
         ];
   return (
     <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
-      <ResponsiveContainer className="" width="60%" height="100%">
+      <ResponsiveContainer width="60%" height="100%">
         {showDonutChart ? (
           <PieChart width={400} height={400}>
             <Pie
@@ -117,8 +117,8 @@ const DonutPieChart = ({
               label={renderCustomizedLabel}
               outerRadius={90}
               innerRadius={45}
-              paddingAngle={3}
-              cornerRadius={5}
+              paddingAngle={0}
+              cornerRadius={0}
               fill="#8884d8"
               dataKey="value"
               stroke="none"

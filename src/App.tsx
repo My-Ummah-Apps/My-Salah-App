@@ -34,7 +34,15 @@ import { StatusBar } from "@capacitor/status-bar";
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
-import { format, parse, eachDayOfInterval, isSameDay, addDays } from "date-fns";
+import {
+  format,
+  parse,
+  eachDayOfInterval,
+  isSameDay,
+  addDays,
+  differenceInDays,
+  subDays,
+} from "date-fns";
 import { PreferenceType } from "./types/types";
 
 import NavBar from "./components/Nav/NavBar";
@@ -458,8 +466,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    let streakCount = -1;
+    let streakCount = 0;
     const streakCounterObj: streakCounterObjType = {};
+
+    let streakDates = [];
+    let streakDatesObjects = [];
 
     for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
       const salahStatuses = Object.values(
@@ -470,25 +481,26 @@ const App = () => {
 
       if (salahStatuses.includes("") && date !== todaysDate) {
         streakCounterObj[date] = "skip";
-        // continue;
       } else if (
         salahStatuses.includes("late") ||
         salahStatuses.includes("missed")
       ) {
         streakCounterObj[date] = "skip";
-        // continue;
       } else if (salahStatuses.includes("excused")) {
         streakCounterObj[date] = "excused";
-        // continue;
       } else {
         streakCounterObj[date] = "fulfilled";
       }
     }
 
-    // console.log(
-    //   "Object.keys(streakCounterObj): ",
-    //   Object.keys(streakCounterObj)
-    // );
+    console.log("streakCounterObj: ", streakCounterObj);
+
+    type streakDatesType = {
+      startDate: Date;
+      endDate: Date;
+      days: number;
+      isActive: boolean;
+    };
 
     for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
       const date = Object.keys(streakCounterObj);
@@ -503,14 +515,44 @@ const App = () => {
         !streakCounterObj[date[i]].includes("skip")
       ) {
         // console.log("STREAK CONTIUING, DATES ARE: ", previousDate, currentDate);
+
+        // streakDates.push(addDays(previousDate, 1));
+        streakDates.push(currentDate);
+        // console.log("streakDates: ", streakDates);
         streakCount += 1;
         // console.log("STREAK COUNT IS: ", streakCount);
       } else if (!streakCounterObj[date[i]].includes("excused")) {
         // console.log("STREAK BROKEN, DATES ARE: ", previousDate, currentDate);
+        console.log("streakDates in else if statement: ", streakDates);
+
+        console.log(
+          " streakDates[0]: ",
+          streakDates[0],
+          "streakDates[streakDates.length - 1]: ",
+          streakDates[streakDates.length - 1]
+        );
+
+        if (streakDates[0] && streakDates[streakDates.length - 1]) {
+          let streakDatesObj: streakDatesType = {
+            startDate: streakDates[0],
+            endDate: streakDates[streakDates.length - 1],
+            days: differenceInDays(
+              subDays(streakDates[0], 1),
+              streakDates[streakDates.length - 1]
+            ),
+            isActive: true,
+          };
+          streakDatesObjects.push(streakDatesObj);
+          streakDatesObj = {} as any;
+        }
+
         streakCount = 0;
+        streakDates = [];
         // console.log("STREAK COUNT IS: ", streakCount);
       }
     }
+
+    console.log("streakDatesObjects: ", streakDatesObjects);
 
     setStreakCounter(streakCount);
   });
