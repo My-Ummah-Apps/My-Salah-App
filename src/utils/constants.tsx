@@ -144,6 +144,13 @@ export const validSalahStatuses = [
   "excused",
 ];
 
+export type streakDatesObjType = {
+  startDate: Date;
+  endDate: Date;
+  days: number;
+  isActive: boolean;
+};
+
 export const sheetHeaderHeight = {
   height: "60px",
   // backgroundColor: "black",

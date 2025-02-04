@@ -1,12 +1,25 @@
+import { useEffect, useState } from "react";
+import { streakDatesObjType } from "../../utils/constants";
 import wreathLeft from "/src/assets/icons/wreath-left.png";
 import wreathRight from "/src/assets/icons/wreath-right.png";
 // import { GoInfo } from "react-icons/go";
 
 interface StreakCounterProps {
-  streakCounter: number;
+  streakDatesObjectsArr: streakDatesObjType[];
 }
 
-const StreakCounter = ({ streakCounter }: StreakCounterProps) => {
+const StreakCounter = ({ streakDatesObjectsArr }: StreakCounterProps) => {
+  console.log("streakDatesObjType: ", streakDatesObjectsArr);
+  const [activeStreak, setActiveStreak] = useState(0);
+  useEffect(() => {
+    for (let i = 0; i < streakDatesObjectsArr.length; i++) {
+      if (streakDatesObjectsArr[i].isActive === true) {
+        setActiveStreak(streakDatesObjectsArr[i].days);
+        break;
+      }
+    }
+  }, [streakDatesObjectsArr]);
+
   return (
     <div
       className={`relative mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}
@@ -23,8 +36,9 @@ const StreakCounter = ({ streakCounter }: StreakCounterProps) => {
         />
         <div className="absolute -translate-x-1/2 -translate-y-[60%] top-[60%] left-1/2">
           <h1 className="mb-1 text-4xl font-extrabold text-center">
-            {streakCounter !== -1 ? streakCounter : 0}{" "}
-            {streakCounter !== 1 ? "Days" : "Day"}
+            {/* {streakCounter !== -1 ? streakCounter : 0}{" "}
+            {streakCounter !== 1 ? "Days" : "Day"} */}
+            {activeStreak}
           </h1>
           <h2 className="text-xs text-center">Current Streak</h2>
         </div>

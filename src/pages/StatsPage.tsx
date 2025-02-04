@@ -21,6 +21,7 @@ import { DBConnectionStateType } from "../types/types";
 import ReasonsCard from "../components/Stats/ReasonsCard";
 import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
 import StreakCounter from "../components/Stats/StreakCounter";
+import { streakDatesObjType } from "../utils/constants";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -32,7 +33,7 @@ interface StatsPageProps {
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   pageStyles: string;
-  streakCounter: number;
+  streakDatesObjectsArr: streakDatesObjType[];
 }
 
 const StatsPage = ({
@@ -41,7 +42,7 @@ const StatsPage = ({
   userPreferences,
   fetchedSalahData,
   pageStyles,
-  streakCounter,
+  streakDatesObjectsArr,
 }: StatsPageProps) => {
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
@@ -186,7 +187,7 @@ const StatsPage = ({
         <p className="stats-page-header-p">Stats</p>
       </header>
       <section className="stats-page-components-wrap">
-        <StreakCounter streakCounter={streakCounter} />
+        <StreakCounter streakDatesObjectsArr={streakDatesObjectsArr} />
         <DonutPieChart
           userGender={userPreferences.userGender}
           salahStatusStatistics={salahStatusStatistics}

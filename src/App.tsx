@@ -11,6 +11,7 @@ import {
   sheetBackdropColor,
   sheetHeaderHeight,
   bottomSheetContainerStyles,
+  streakDatesObjType,
 } from "./utils/constants";
 import {
   DBResultDataObjType,
@@ -422,6 +423,77 @@ const App = () => {
 
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
+
+    generateStreaks([...singleSalahObjArr]);
+  };
+
+  const [streakDatesObjectsArr, setStreakDatesObjectsArr] = useState<
+    streakDatesObjType[]
+  >([]);
+
+  const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {
+    const streakDatesObjectsArray: streakDatesObjType[] = [];
+    const reversedFetchedSalahDataArr = [...fetchedSalahData].reverse();
+
+    const streakCounterObj: streakCounterObjType = {};
+
+    let streakDatesArr = [];
+
+    for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
+      const salahStatuses = Object.values(
+        reversedFetchedSalahDataArr[i].salahs
+      );
+      const date = reversedFetchedSalahDataArr[i].date;
+      // const todaysDate = format(new Date(), "yyyy-MM-dd");
+
+      if (salahStatuses.includes("")) {
+        streakCounterObj[date] = "skip";
+      } else if (
+        salahStatuses.includes("late") ||
+        salahStatuses.includes("missed")
+      ) {
+        streakCounterObj[date] = "skip";
+      } else if (salahStatuses.includes("excused")) {
+        streakCounterObj[date] = "excused";
+      } else {
+        streakCounterObj[date] = "fulfilled";
+      }
+    }
+
+    for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
+      const date = Object.keys(streakCounterObj);
+      const previousDate = parse(date[i - 1], "yyyy-MM-dd", new Date());
+      const currentDate = parse(date[i], "yyyy-MM-dd", new Date());
+      const todaysDate = new Date();
+
+      if (
+        isSameDay(addDays(previousDate, 1), currentDate) &&
+        !streakCounterObj[date[i]].includes("excused") &&
+        !streakCounterObj[date[i]].includes("skip")
+      ) {
+        // console.log("STREAK CONTIUING, DATES ARE: ", previousDate, currentDate);
+
+        streakDatesArr.push(currentDate);
+
+        // console.log("STREAK COUNT IS: ", streakCount);
+      } else if (!streakCounterObj[date[i]].includes("excused")) {
+        if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
+          let streakDatesObj: streakDatesObjType = {
+            startDate: streakDatesArr[0],
+            endDate: streakDatesArr[streakDatesArr.length - 1],
+            days: differenceInDays(
+              streakDatesArr[streakDatesArr.length - 1],
+              subDays(streakDatesArr[0], 1)
+            ),
+            isActive: isSameDay(addDays(previousDate, 1), todaysDate),
+          };
+          streakDatesObjectsArray.push(streakDatesObj);
+          // streakDatesObj = {} as any;
+          setStreakDatesObjectsArr(streakDatesObjectsArray);
+          streakDatesArr = [];
+        }
+      }
+    }
   };
 
   const modifyDataInUserPreferencesTable = async (
@@ -457,105 +529,9 @@ const App = () => {
     }
   };
 
-  const [streakCounter, setStreakCounter] = useState(0);
-  const reversedFetchedSalahDataArr = [...fetchedSalahData].reverse();
-  // console.log("reversedFetchedSalahDataArr: ", reversedFetchedSalahDataArr);
-
   type streakCounterObjType = {
     [date: string]: string;
   };
-
-  useEffect(() => {
-    let streakCount = 0;
-    const streakCounterObj: streakCounterObjType = {};
-
-    let streakDates = [];
-    let streakDatesObjects = [];
-
-    for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
-      const salahStatuses = Object.values(
-        reversedFetchedSalahDataArr[i].salahs
-      );
-      const date = reversedFetchedSalahDataArr[i].date;
-      const todaysDate = format(new Date(), "yyyy-MM-dd");
-
-      if (salahStatuses.includes("") && date !== todaysDate) {
-        streakCounterObj[date] = "skip";
-      } else if (
-        salahStatuses.includes("late") ||
-        salahStatuses.includes("missed")
-      ) {
-        streakCounterObj[date] = "skip";
-      } else if (salahStatuses.includes("excused")) {
-        streakCounterObj[date] = "excused";
-      } else {
-        streakCounterObj[date] = "fulfilled";
-      }
-    }
-
-    console.log("streakCounterObj: ", streakCounterObj);
-
-    type streakDatesType = {
-      startDate: Date;
-      endDate: Date;
-      days: number;
-      isActive: boolean;
-    };
-
-    for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
-      const date = Object.keys(streakCounterObj);
-      const previousDate = parse(date[i - 1], "yyyy-MM-dd", new Date());
-      const currentDate = parse(date[i], "yyyy-MM-dd", new Date());
-
-      // console.log(date[i], streakCounterObj[date[i]]);
-
-      if (
-        isSameDay(addDays(previousDate, 1), currentDate) &&
-        !streakCounterObj[date[i]].includes("excused") &&
-        !streakCounterObj[date[i]].includes("skip")
-      ) {
-        // console.log("STREAK CONTIUING, DATES ARE: ", previousDate, currentDate);
-
-        // streakDates.push(addDays(previousDate, 1));
-        streakDates.push(currentDate);
-        // console.log("streakDates: ", streakDates);
-        streakCount += 1;
-        // console.log("STREAK COUNT IS: ", streakCount);
-      } else if (!streakCounterObj[date[i]].includes("excused")) {
-        // console.log("STREAK BROKEN, DATES ARE: ", previousDate, currentDate);
-        console.log("streakDates in else if statement: ", streakDates);
-
-        console.log(
-          " streakDates[0]: ",
-          streakDates[0],
-          "streakDates[streakDates.length - 1]: ",
-          streakDates[streakDates.length - 1]
-        );
-
-        if (streakDates[0] && streakDates[streakDates.length - 1]) {
-          let streakDatesObj: streakDatesType = {
-            startDate: streakDates[0],
-            endDate: streakDates[streakDates.length - 1],
-            days: differenceInDays(
-              subDays(streakDates[0], 1),
-              streakDates[streakDates.length - 1]
-            ),
-            isActive: true,
-          };
-          streakDatesObjects.push(streakDatesObj);
-          streakDatesObj = {} as any;
-        }
-
-        streakCount = 0;
-        streakDates = [];
-        // console.log("STREAK COUNT IS: ", streakCount);
-      }
-    }
-
-    console.log("streakDatesObjects: ", streakDatesObjects);
-
-    setStreakCounter(streakCount);
-  });
 
   const pageStyles: string = ``;
 
@@ -640,7 +616,7 @@ const App = () => {
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
-                streakCounter={streakCounter}
+                streakDatesObjectsArr={streakDatesObjectsArr}
                 // showDonutChart={showDonutChart}
               />
             }
