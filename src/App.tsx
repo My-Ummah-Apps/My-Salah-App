@@ -438,20 +438,18 @@ const App = () => {
     const streakCounterObj: streakCounterObjType = {};
 
     let streakDatesArr = [];
+    console.log("reversedFetchedSalahDataArr: ", reversedFetchedSalahDataArr);
 
     for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
       const salahStatuses = Object.values(
         reversedFetchedSalahDataArr[i].salahs
       );
       const date = reversedFetchedSalahDataArr[i].date;
-      // const todaysDate = format(new Date(), "yyyy-MM-dd");
+      const todaysDate = format(new Date(), "yyyy-MM-dd");
 
-      if (salahStatuses.includes("")) {
-        streakCounterObj[date] = "skip";
-      } else if (
-        salahStatuses.includes("late") ||
-        salahStatuses.includes("missed")
-      ) {
+      // || salahStatuses.includes("late") || salahStatuses.includes("missed")
+      // ! issue is with && date !== todaysDate below, todays date needs to be handled differently when its empty or all prayed
+      if (salahStatuses.includes("") && date !== todaysDate) {
         streakCounterObj[date] = "skip";
       } else if (salahStatuses.includes("excused")) {
         streakCounterObj[date] = "excused";
@@ -459,24 +457,29 @@ const App = () => {
         streakCounterObj[date] = "fulfilled";
       }
     }
+    console.log("streakCounterObj: ", streakCounterObj);
 
     for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
-      const date = Object.keys(streakCounterObj);
-      const previousDate = parse(date[i - 1], "yyyy-MM-dd", new Date());
-      const currentDate = parse(date[i], "yyyy-MM-dd", new Date());
+      const datesArr = Object.keys(streakCounterObj);
+      const previousDate = parse(datesArr[i - 1], "yyyy-MM-dd", new Date());
+      const currentDate = parse(datesArr[i], "yyyy-MM-dd", new Date());
       const todaysDate = new Date();
 
       if (
         isSameDay(addDays(previousDate, 1), currentDate) &&
-        !streakCounterObj[date[i]].includes("excused") &&
-        !streakCounterObj[date[i]].includes("skip")
+        !streakCounterObj[datesArr[i]].includes("excused") &&
+        !streakCounterObj[datesArr[i]].includes("skip")
       ) {
-        // console.log("STREAK CONTIUING, DATES ARE: ", previousDate, currentDate);
-
         streakDatesArr.push(currentDate);
-
-        // console.log("STREAK COUNT IS: ", streakCount);
-      } else if (!streakCounterObj[date[i]].includes("excused")) {
+        console.log("streakDatesArr in if statement: ", streakDatesArr);
+        // else if (!streakCounterObj[datesArr[i]].includes("excused"))
+      } else if (
+        !isSameDay(addDays(previousDate, 1), currentDate) ||
+        streakCounterObj[datesArr[i]].includes("skip")
+      ) {
+        // ! For some reason, currentDate is stopping at 2nd Feb here, so the streak from 3rd Feb onwards does not get added
+        // console.log("currentDate: ", currentDate);
+        console.log("streakDatesArr in else if statement: ", streakDatesArr);
         if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
           const isActiveStreak = isSameDay(
             addDays(previousDate, 1),
@@ -500,13 +503,22 @@ const App = () => {
             isActive: isActiveStreak,
           };
           streakDatesObjectsArray.push(streakDatesObj);
+
           // streakDatesObj = {} as any;
           setStreakDatesObjectsArr(streakDatesObjectsArray);
+          console.log("streakDatesArr: ", streakDatesArr);
+
           streakDatesArr = [];
         }
+      } else {
+        console.log("WEVE LANDED IN THE ELSE STATEMENT FOLKS");
       }
     }
   };
+
+  useEffect(() => {
+    console.log("streakDatesObjType: ", streakDatesObjectsArr);
+  }, [streakDatesObjectsArr]);
 
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,
