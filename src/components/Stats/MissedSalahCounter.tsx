@@ -80,7 +80,7 @@ const MissedSalahCounter = ({
       />
       {/* bg-[#252525] */}
       <div
-        className="missed-salah-counter absolute top-1/2 left-0 px-2 py-1 -translate-x-0 -translate-y-1/2 flex items-center bg-[#252525] rounded-lg"
+        className="missed-salah-counter absolute top-1/2 left-0 px-2 py-1 -translate-y-1/2 flex items-center bg-[#252525] rounded-lg"
         onClick={() => {
           if (isMultiEditMode) {
             return;

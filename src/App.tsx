@@ -11,7 +11,6 @@ import {
   sheetBackdropColor,
   sheetHeaderHeight,
   bottomSheetContainerStyles,
-  streakDatesObjType,
 } from "./utils/constants";
 import {
   DBResultDataObjType,
@@ -22,6 +21,7 @@ import {
   SalahRecordsArrayType,
   SalahStatusType,
   MissedSalahObjType,
+  streakDatesObjType,
 } from "./types/types";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -66,6 +66,10 @@ const App = () => {
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [showJoyRideEditIcon, setShowJoyRideEditIcon] =
     useState<boolean>(false);
+  const [streakDatesObjectsArr, setStreakDatesObjectsArr] = useState<
+    streakDatesObjType[]
+  >([]);
+  const [activeStreak, setActiveStreak] = useState(0);
   // const [showDonutChart, setShowDonutChart] = useState(false);
 
   useEffect(() => {
@@ -427,10 +431,6 @@ const App = () => {
     generateStreaks([...singleSalahObjArr]);
   };
 
-  const [streakDatesObjectsArr, setStreakDatesObjectsArr] = useState<
-    streakDatesObjType[]
-  >([]);
-
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {
     const streakDatesObjectsArray: streakDatesObjType[] = [];
     const reversedFetchedSalahDataArr = [...fetchedSalahData].reverse();
@@ -478,14 +478,26 @@ const App = () => {
         // console.log("STREAK COUNT IS: ", streakCount);
       } else if (!streakCounterObj[date[i]].includes("excused")) {
         if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
+          const isActiveStreak = isSameDay(
+            addDays(previousDate, 1),
+            todaysDate
+          );
+          const streakDaysAmount = differenceInDays(
+            streakDatesArr[streakDatesArr.length - 1],
+            subDays(streakDatesArr[0], 1)
+          );
+          if (isActiveStreak) {
+            setActiveStreak(streakDaysAmount);
+          }
+
           let streakDatesObj: streakDatesObjType = {
-            startDate: streakDatesArr[0],
-            endDate: streakDatesArr[streakDatesArr.length - 1],
-            days: differenceInDays(
+            startDate: format(streakDatesArr[0], "yyyy-MM-dd"),
+            endDate: format(
               streakDatesArr[streakDatesArr.length - 1],
-              subDays(streakDatesArr[0], 1)
+              "yyyy-MM-dd"
             ),
-            isActive: isSameDay(addDays(previousDate, 1), todaysDate),
+            days: streakDaysAmount,
+            isActive: isActiveStreak,
           };
           streakDatesObjectsArray.push(streakDatesObj);
           // streakDatesObj = {} as any;
@@ -580,6 +592,7 @@ const App = () => {
                 missedSalahList={missedSalahList}
                 setIsMultiEditMode={setIsMultiEditMode}
                 isMultiEditMode={isMultiEditMode}
+                activeStreak={activeStreak}
               />
             }
           />
@@ -611,11 +624,11 @@ const App = () => {
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }
-                // @ts-ignore
                 // DBResultAllSalahData={DBResultAllSalahData}
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
+                activeStreak={activeStreak}
                 streakDatesObjectsArr={streakDatesObjectsArr}
                 // showDonutChart={showDonutChart}
               />

@@ -1,6 +1,8 @@
 import BottomSheetMissedPrayersList from "../components/BottomSheets/BottomSheetMissedPrayersList";
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 import MissedSalahCounter from "../components/Stats/MissedSalahCounter";
+import wreathLeft from "/src/assets/icons/wreath-left.png";
+import wreathRight from "/src/assets/icons/wreath-right.png";
 
 import {
   SalahRecordsArrayType,
@@ -37,6 +39,7 @@ interface HomePageProps {
   missedSalahList: MissedSalahObjType;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
+  activeStreak: number;
 }
 
 const HomePage = ({
@@ -56,6 +59,7 @@ const HomePage = ({
   missedSalahList,
   setIsMultiEditMode,
   isMultiEditMode,
+  activeStreak,
 }: HomePageProps) => {
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
     useState<SelectedSalahAndDateObjType>({});
@@ -79,7 +83,31 @@ const HomePage = ({
           ) : null}
 
           <p className="home-page-header-p">{"Home"}</p>
-          {/* <div className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}></div> */}
+          <div
+            className={`absolute top-1/2 right-[-7px] py-1 -translate-y-1/2 flex items-center`}
+          >
+            <div className="relative flex items-center justify-center py-10 wreath-and-text-wrap">
+              <img
+                style={{ width: "30px", height: "100%", marginRight: "-2rem" }}
+                src={wreathLeft}
+                alt=""
+                srcSet=""
+              />
+              <div className="absolute -translate-x-1/2 -translate-y-[60%] top-[58%] left-1/2">
+                <h1 className="mb-1 font-extrabold text-center">
+                  {/* {activeStreak !== -1 ? activeStreak : 0}{" "}
+                  {activeStreak !== 1 ? "Days" : "Day"} */}
+                  {activeStreak}
+                </h1>
+              </div>
+              <img
+                style={{ width: "30px", height: "100%", marginLeft: "2rem" }}
+                src={wreathRight}
+                alt=""
+                srcSet=""
+              />
+            </div>
+          </div>
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
         </section>
       </header>

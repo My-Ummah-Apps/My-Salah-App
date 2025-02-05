@@ -124,3 +124,10 @@ export type reasonsToShowType =
   | "late"
   | "missed"
   | undefined;
+
+export type streakDatesObjType = {
+  startDate: string;
+  endDate: string;
+  days: number;
+  isActive: boolean;
+};

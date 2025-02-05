@@ -98,7 +98,7 @@ const ReasonsCard = ({
             : "invisible"
         }`}
       >
-        <p className="text-lg font-bold">Show More</p>
+        <p className="text-[1rem]">Show More</p>
       </button>
     </section>
   );
