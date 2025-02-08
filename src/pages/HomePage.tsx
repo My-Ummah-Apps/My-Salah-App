@@ -40,6 +40,7 @@ interface HomePageProps {
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
   activeStreak: number;
+  generateStreaks: (fetchedSalahData: SalahRecordsArrayType) => void;
 }
 
 const HomePage = ({
@@ -60,6 +61,7 @@ const HomePage = ({
   setIsMultiEditMode,
   isMultiEditMode,
   activeStreak,
+  generateStreaks,
 }: HomePageProps) => {
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
     useState<SelectedSalahAndDateObjType>({});
@@ -133,6 +135,7 @@ const HomePage = ({
           isMultiEditMode={isMultiEditMode}
           setShowUpdateStatusModal={setShowUpdateStatusModal}
           showUpdateStatusModal={showUpdateStatusModal}
+          generateStreaks={generateStreaks}
         />
 
         <BottomSheetMissedPrayersList

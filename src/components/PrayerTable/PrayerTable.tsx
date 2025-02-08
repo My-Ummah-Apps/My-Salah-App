@@ -50,6 +50,7 @@ interface PrayerTableProps {
   isMultiEditMode: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   showUpdateStatusModal: boolean;
+  generateStreaks: (fetchedSalahData: SalahRecordsArrayType) => void;
 }
 
 const PrayerTable = ({
@@ -69,6 +70,7 @@ const PrayerTable = ({
   isMultiEditMode,
   setShowUpdateStatusModal,
   showUpdateStatusModal,
+  generateStreaks,
 }: PrayerTableProps) => {
   // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
 
@@ -360,6 +362,7 @@ const PrayerTable = ({
         dbConnection={dbConnection}
         setShowUpdateStatusModal={setShowUpdateStatusModal}
         showUpdateStatusModal={showUpdateStatusModal}
+        generateStreaks={generateStreaks}
       />
     </section>
   );

@@ -432,34 +432,45 @@ const App = () => {
   };
 
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {
+    let pauseDays = 0;
     const streakDatesObjectsArray: streakDatesObjType[] = [];
     const reversedFetchedSalahDataArr = [...fetchedSalahData].reverse();
 
     const streakCounterObj: streakCounterObjType = {};
 
     let streakDatesArr = [];
-    console.log("reversedFetchedSalahDataArr: ", reversedFetchedSalahDataArr);
 
     for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
       const salahStatuses = Object.values(
         reversedFetchedSalahDataArr[i].salahs
       );
-      const date = reversedFetchedSalahDataArr[i].date;
+      const currentDate = reversedFetchedSalahDataArr[i].date;
       const todaysDate = format(new Date(), "yyyy-MM-dd");
 
-      // || salahStatuses.includes("late") || salahStatuses.includes("missed")
-      // ! issue is with && date !== todaysDate below, todays date needs to be handled differently when its empty or all prayed
-      if (salahStatuses.includes("") && date !== todaysDate) {
-        streakCounterObj[date] = "skip";
-      } else if (salahStatuses.includes("excused")) {
-        streakCounterObj[date] = "excused";
+      if (currentDate === todaysDate) {
+        if (
+          salahStatuses.includes("late") ||
+          salahStatuses.includes("missed")
+        ) {
+          streakCounterObj[currentDate] = "skip";
+        }
       } else {
-        streakCounterObj[date] = "fulfilled";
+        if (
+          salahStatuses.includes("") ||
+          salahStatuses.includes("late") ||
+          salahStatuses.includes("missed")
+        ) {
+          streakCounterObj[currentDate] = "skip";
+        } else if (salahStatuses.includes("excused")) {
+          streakCounterObj[currentDate] = "excused";
+        } else {
+          streakCounterObj[currentDate] = "fulfilled";
+        }
       }
     }
     console.log("streakCounterObj: ", streakCounterObj);
 
-    for (let i = 1; i < Object.keys(streakCounterObj).length; i++) {
+    for (let i = 1; i < Object.keys(streakCounterObj).length + 1; i++) {
       const datesArr = Object.keys(streakCounterObj);
       const previousDate = parse(datesArr[i - 1], "yyyy-MM-dd", new Date());
       const currentDate = parse(datesArr[i], "yyyy-MM-dd", new Date());
@@ -467,18 +478,15 @@ const App = () => {
 
       if (
         isSameDay(addDays(previousDate, 1), currentDate) &&
-        !streakCounterObj[datesArr[i]].includes("excused") &&
         !streakCounterObj[datesArr[i]].includes("skip")
       ) {
+        if (streakCounterObj[datesArr[i]].includes("excused")) {
+          pauseDays -= 1;
+        }
         streakDatesArr.push(currentDate);
-        console.log("streakDatesArr in if statement: ", streakDatesArr);
-        // else if (!streakCounterObj[datesArr[i]].includes("excused"))
-      } else if (
-        !isSameDay(addDays(previousDate, 1), currentDate) ||
-        streakCounterObj[datesArr[i]].includes("skip")
-      ) {
-        // ! For some reason, currentDate is stopping at 2nd Feb here, so the streak from 3rd Feb onwards does not get added
-        // console.log("currentDate: ", currentDate);
+        console.log("Date is: ", currentDate, "pauseDays: ", pauseDays);
+        // console.log("streakDatesArr in if statement: ", streakDatesArr);
+      } else {
         console.log("streakDatesArr in else if statement: ", streakDatesArr);
         if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
           const isActiveStreak = isSameDay(
@@ -489,9 +497,17 @@ const App = () => {
             streakDatesArr[streakDatesArr.length - 1],
             subDays(streakDatesArr[0], 1)
           );
-          if (isActiveStreak) {
-            setActiveStreak(streakDaysAmount);
+          const isTodayCounting =
+            streakCounterObj[format(new Date(), "yyyy-MM-dd")];
+
+          if (isActiveStreak && isTodayCounting !== "skip") {
+            console.log(previousDate, todaysDate);
+            setActiveStreak(streakDaysAmount + pauseDays);
+          } else if (isTodayCounting === "skip") {
+            setActiveStreak(0);
           }
+          console.log("pauseDays just before obj creation: ", pauseDays);
+          console.log("streakDaysAmount: ", streakDaysAmount);
 
           let streakDatesObj: streakDatesObjType = {
             startDate: format(streakDatesArr[0], "yyyy-MM-dd"),
@@ -499,25 +515,23 @@ const App = () => {
               streakDatesArr[streakDatesArr.length - 1],
               "yyyy-MM-dd"
             ),
-            days: streakDaysAmount,
+            days: streakDaysAmount + pauseDays,
             isActive: isActiveStreak,
           };
           streakDatesObjectsArray.push(streakDatesObj);
 
           // streakDatesObj = {} as any;
           setStreakDatesObjectsArr(streakDatesObjectsArray);
-          console.log("streakDatesArr: ", streakDatesArr);
-
+          // console.log("streakDatesArr: ", streakDatesArr);
+          pauseDays = 0;
           streakDatesArr = [];
         }
-      } else {
-        console.log("WEVE LANDED IN THE ELSE STATEMENT FOLKS");
       }
     }
   };
 
   useEffect(() => {
-    console.log("streakDatesObjType: ", streakDatesObjectsArr);
+    console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
   }, [streakDatesObjectsArr]);
 
   const modifyDataInUserPreferencesTable = async (
@@ -605,6 +619,7 @@ const App = () => {
                 setIsMultiEditMode={setIsMultiEditMode}
                 isMultiEditMode={isMultiEditMode}
                 activeStreak={activeStreak}
+                generateStreaks={generateStreaks}
               />
             }
           />

@@ -49,6 +49,7 @@ interface PrayerStatusBottomSheetProps {
   resetSelectedSalahAndDate: () => void;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
+  generateStreaks: (fetchedSalahData: SalahRecordsArrayType) => void;
 }
 
 const BottomSheetPrayerStatus = ({
@@ -64,6 +65,7 @@ const BottomSheetPrayerStatus = ({
   userPreferences,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
+  generateStreaks,
 }: PrayerStatusBottomSheetProps) => {
   const sheetRef = useRef<HTMLDivElement>(null);
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
@@ -282,6 +284,7 @@ const BottomSheetPrayerStatus = ({
         "incrementedSaveButtonTapCount: ",
         incrementedSaveButtonTapCount
       );
+      generateStreaks(fetchedSalahData);
     } catch (error) {
       console.error(error);
     }
