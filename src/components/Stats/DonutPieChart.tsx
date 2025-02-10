@@ -142,7 +142,14 @@ const DonutPieChart = ({
       <div className="justify-center">
         {salahStatusStatistics.salahFemaleAloneDatesOverall > 0 ||
         salahStatusStatistics.salahInJamaahDatesOverall > 0 ? (
-          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#448b75]">
+          <p
+            style={
+              {
+                "--group-color": prayerStatusColorsHexCodes.group,
+              } as React.CSSProperties
+            }
+            className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--group-color)]"
+          >
             {userGender === "male" ? "In Jamaah" : "Prayed"}
           </p>
         ) : null}
@@ -150,24 +157,52 @@ const DonutPieChart = ({
         {salahStatusStatistics.salahExcusedDatesOverall > 0 ||
         salahStatusStatistics.salahMaleAloneDatesOverall > 0 ? (
           userGender === "male" ? (
-            <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#bcaa4b]">
+            <p
+              style={
+                {
+                  "--male-alone-color":
+                    prayerStatusColorsHexCodes["male-alone"],
+                } as React.CSSProperties
+              }
+              className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--male-alone-color)]"
+            >
               Alone
             </p>
           ) : (
-            <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#dd42da]">
+            <p
+              style={
+                {
+                  "--excused-color": prayerStatusColorsHexCodes.excused,
+                } as React.CSSProperties
+              }
+              className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--excused-color)]"
+            >
               Excused
             </p>
           )
         ) : null}
 
         {salahStatusStatistics.salahLateDatesOverall > 0 && (
-          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#ea580c]">
+          <p
+            style={
+              {
+                "--late-color": prayerStatusColorsHexCodes.late,
+              } as React.CSSProperties
+            }
+            className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--late-color)]"
+          >
             Late
           </p>
         )}
-
         {salahStatusStatistics.salahMissedDatesOverall > 0 && (
-          <p className="donut-pie-chart-text pb-1 text-sm before:bg-[#b62e2e]">
+          <p
+            style={
+              {
+                "--missed-color": prayerStatusColorsHexCodes.missed,
+              } as React.CSSProperties
+            }
+            className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--missed-color)]"
+          >
             Missed
           </p>
         )}

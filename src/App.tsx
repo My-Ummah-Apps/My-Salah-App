@@ -432,7 +432,7 @@ const App = () => {
   };
 
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {
-    let pauseDays = 0;
+    let excusedDays = 0;
     const streakDatesObjectsArray: streakDatesObjType[] = [];
     const reversedFetchedSalahDataArr = [...fetchedSalahData].reverse();
 
@@ -481,10 +481,10 @@ const App = () => {
         !streakCounterObj[datesArr[i]].includes("skip")
       ) {
         if (streakCounterObj[datesArr[i]].includes("excused")) {
-          pauseDays -= 1;
+          excusedDays += 1;
         }
         streakDatesArr.push(currentDate);
-        console.log("Date is: ", currentDate, "pauseDays: ", pauseDays);
+        console.log("Date is: ", currentDate, "excusedDays: ", excusedDays);
         // console.log("streakDatesArr in if statement: ", streakDatesArr);
       } else {
         console.log("streakDatesArr in else if statement: ", streakDatesArr);
@@ -502,11 +502,11 @@ const App = () => {
 
           if (isActiveStreak && isTodayCounting !== "skip") {
             console.log(previousDate, todaysDate);
-            setActiveStreak(streakDaysAmount + pauseDays);
+            setActiveStreak(streakDaysAmount + excusedDays);
           } else if (isTodayCounting === "skip") {
             setActiveStreak(0);
           }
-          console.log("pauseDays just before obj creation: ", pauseDays);
+          console.log("excusedDays just before obj creation: ", excusedDays);
           console.log("streakDaysAmount: ", streakDaysAmount);
 
           let streakDatesObj: streakDatesObjType = {
@@ -515,7 +515,7 @@ const App = () => {
               streakDatesArr[streakDatesArr.length - 1],
               "yyyy-MM-dd"
             ),
-            days: streakDaysAmount + pauseDays,
+            days: streakDaysAmount - excusedDays,
             isActive: isActiveStreak,
           };
           streakDatesObjectsArray.push(streakDatesObj);
@@ -523,7 +523,7 @@ const App = () => {
           // streakDatesObj = {} as any;
           setStreakDatesObjectsArr(streakDatesObjectsArray);
           // console.log("streakDatesArr: ", streakDatesArr);
-          pauseDays = 0;
+          excusedDays = 0;
           streakDatesArr = [];
         }
       }
