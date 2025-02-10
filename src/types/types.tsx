@@ -126,8 +126,8 @@ export type reasonsToShowType =
   | undefined;
 
 export type streakDatesObjType = {
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   days: number;
   isActive: boolean;
 };

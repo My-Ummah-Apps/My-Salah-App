@@ -22,7 +22,7 @@ const StreakCounter = ({
   streakDatesObjectsArr,
   activeStreak,
 }: StreakCounterProps) => {
-  console.log("activeStreak", activeStreak);
+  console.log("streakDatesObjectsArr", streakDatesObjectsArr);
   const [showStreaksModal, setShowStreaksModal] = useState(false);
 
   return (
