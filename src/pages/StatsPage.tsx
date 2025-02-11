@@ -192,6 +192,7 @@ const StatsPage = ({
         <StreakCounter
           streakDatesObjectsArr={streakDatesObjectsArr}
           activeStreak={activeStreak}
+          userGender={userPreferences.userGender}
         />
         <DonutPieChart
           userGender={userPreferences.userGender}

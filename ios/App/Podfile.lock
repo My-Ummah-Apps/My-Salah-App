@@ -8,7 +8,7 @@ PODS:
     - SQLCipher
     - ZIPFoundation
   - CapacitorCordova (6.1.2)
-  - CapacitorDialog (6.0.1):
+  - CapacitorDialog (6.0.2):
     - Capacitor
   - CapacitorFilesystem (6.0.1):
     - Capacitor
@@ -96,7 +96,7 @@ SPEC CHECKSUMS:
   CapacitorCommunityInAppReview: c69a9392f39a10f28092d823cfa979637f4fa079
   CapacitorCommunitySqlite: d0b543e12a06ee6fd0dc287c389e6b435ec4acdf
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  CapacitorDialog: ad752191fdb22a8d0ac199b0754b8a021d86dbf9
+  CapacitorDialog: e966e2261e1c74a8a502e610dd66b4f97ec6fcca
   CapacitorFilesystem: 37fb3aa5c945b4539ab11c74a5c57925a302bf24
   CapacitorHaptics: b53409aaca1203f79c6d0eb3ed5de40556339518
   CapacitorKeyboard: deacbd09d8d1029c3681197fb05d206b721d5f73

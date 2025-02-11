@@ -12,20 +12,37 @@ import wreathRight from "/src/assets/icons/wreath-right.png";
 import { useState } from "react";
 import { format } from "date-fns";
 import { GoInfo } from "react-icons/go";
+import { Dialog } from "@capacitor/dialog";
 
 // import { GoInfo } from "react-icons/go";
 
 interface StreakCounterProps {
   streakDatesObjectsArr: streakDatesObjType[];
   activeStreak: number;
+  userGender: string;
 }
 
 const StreakCounter = ({
   streakDatesObjectsArr,
   activeStreak,
+  userGender,
 }: StreakCounterProps) => {
   console.log("streakDatesObjectsArr", streakDatesObjectsArr);
   const [showStreaksModal, setShowStreaksModal] = useState(false);
+
+  const showStreakInfo = async () => {
+    await Dialog.alert({
+      title: "Streaks Explained",
+      message:
+        userGender === "female"
+          ? `Streaks represent the number of consecutive days you have performed your Salah. 
+          - Streaks continue if you pray in a group or alone.
+          - If you miss a prayer or are late, your streak resets.`
+          : `Streaks represent the number of consecutive days you have performed your Salah. 
+          - Streaks continue as long as you pray on time.
+          - If you select "Excused", your streak will **pause** (it won't break, but it also won't increase).`,
+    });
+  };
 
   return (
     <>
@@ -46,7 +63,7 @@ const StreakCounter = ({
                             )[1]
                           }`}
           </p>
-          <p className="">
+          <p onClick={showStreakInfo} className="">
             <GoInfo />
           </p>
         </section>
