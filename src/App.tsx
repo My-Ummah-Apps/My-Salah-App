@@ -434,7 +434,7 @@ const App = () => {
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {
     let excusedDays = 0;
     const streakDatesObjectsArray: streakDatesObjType[] = [];
-    const reversedFetchedSalahDataArr = [...fetchedSalahData].reverse();
+    const reversedFetchedSalahDataArr = fetchedSalahData.reverse();
 
     let streakDatesArr = [];
     const todaysDate = new Date();
@@ -481,17 +481,24 @@ const App = () => {
             addDays(previousDate, 1),
             todaysDate
           );
-          console.log("isActiveStreak: ", isActiveStreak);
-          console.log(previousDate, todaysDate);
-          console.log("isTodayCounting: ", isTodayCounting);
+          // console.log("isActiveStreak: ", isActiveStreak);
+          // console.log(previousDate, todaysDate);
+          // console.log("isTodayCounting: ", isTodayCounting);
 
           const streakDaysAmount = differenceInDays(
             streakDatesArr[streakDatesArr.length - 1],
             subDays(streakDatesArr[0], 1)
           );
+          console.log("streakDatesArr: ", streakDatesArr);
+
+          console.log("streakDaysAmount: ", streakDaysAmount);
+          console.log(
+            "streakDaysAmount - excusedDays: ",
+            streakDaysAmount - excusedDays
+          );
 
           if (isActiveStreak && isTodayCounting) {
-            setActiveStreak(streakDaysAmount + excusedDays);
+            setActiveStreak(streakDaysAmount - excusedDays);
           } else if (!isTodayCounting) {
             setActiveStreak(0);
           }
