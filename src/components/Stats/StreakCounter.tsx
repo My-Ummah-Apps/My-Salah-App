@@ -10,6 +10,7 @@ import Sheet from "react-modal-sheet";
 import wreathLeft from "/src/assets/icons/wreath-left.png";
 import wreathRight from "/src/assets/icons/wreath-right.png";
 import { useState } from "react";
+import { format } from "date-fns";
 
 // import { GoInfo } from "react-icons/go";
 
@@ -87,8 +88,16 @@ const StreakCounter = ({
                     <ul className="px-4 my-2">
                       <li className="flex justify-between">
                         <p>
-                          {`${createLocalisedDate(item.startDate)[1]} -
-                          ${createLocalisedDate(item.endDate)[1]}`}
+                          {`${
+                            createLocalisedDate(
+                              format(item.startDate, "yyyy-MM-dd")
+                            )[1]
+                          } -
+                          ${
+                            createLocalisedDate(
+                              format(item.endDate, "yyyy-MM-dd")
+                            )[1]
+                          }`}
                         </p>
                         <p>{`${item.days} Days`}</p>
                       </li>
