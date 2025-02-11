@@ -11,6 +11,7 @@ import wreathLeft from "/src/assets/icons/wreath-left.png";
 import wreathRight from "/src/assets/icons/wreath-right.png";
 import { useState } from "react";
 import { format } from "date-fns";
+import { GoInfo } from "react-icons/go";
 
 // import { GoInfo } from "react-icons/go";
 
@@ -28,12 +29,27 @@ const StreakCounter = ({
 
   return (
     <>
-      <div
-        className={`relative mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}
-      >
-        {/* <p className="absolute top-2 right-2">
-        <GoInfo />
-      </p> */}
+      <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}>
+        <section className="flex items-center justify-between p-2 text-xs">
+          <p className="">
+            {`${
+              createLocalisedDate(
+                format(streakDatesObjectsArr[0].startDate, "yyyy-MM-dd")
+              )[1]
+            } -
+                          ${
+                            createLocalisedDate(
+                              format(
+                                streakDatesObjectsArr[0].endDate,
+                                "yyyy-MM-dd"
+                              )
+                            )[1]
+                          }`}
+          </p>
+          <p className="">
+            <GoInfo />
+          </p>
+        </section>
         <div className="relative flex items-center justify-center py-5 wreath-and-text-wrap">
           <img
             style={{ width: "150px", height: "100%", marginRight: "-4rem" }}
@@ -55,7 +71,7 @@ const StreakCounter = ({
             srcSet=""
           />
         </div>
-        {streakDatesObjectsArr.length > 0 && (
+        {streakDatesObjectsArr.length > 1 && (
           <button
             style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
             onClick={() => {

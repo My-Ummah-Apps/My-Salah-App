@@ -484,7 +484,7 @@ const App = () => {
         }
 
         streakDatesArr.push(currentDate);
-        console.log("streakDatesArr: ", streakDatesArr);
+        // console.log("streakDatesArr: ", streakDatesArr);
       } else {
         handleEndOfStreak(
           streakDatesArr,
@@ -530,7 +530,7 @@ const App = () => {
       };
       streakDatesObjectsArray.push(streakDatesObj);
 
-      setStreakDatesObjectsArr(streakDatesObjectsArray);
+      setStreakDatesObjectsArr(streakDatesObjectsArray.reverse());
       excusedDays = 0;
       streakDatesArr = [];
     }
