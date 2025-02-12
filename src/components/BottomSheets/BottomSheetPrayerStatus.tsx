@@ -280,10 +280,6 @@ const BottomSheetPrayerStatus = ({
         [incrementedSaveButtonTapCount.toString(), "saveButtonTapCount"]
       );
 
-      console.log(
-        "incrementedSaveButtonTapCount: ",
-        incrementedSaveButtonTapCount
-      );
       generateStreaks(fetchedSalahData);
     } catch (error) {
       console.error(error);

@@ -432,10 +432,10 @@ const App = () => {
   };
 
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {
-    let excusedDays = 0;
-    const streakDatesObjectsArray: streakDatesObjType[] = [];
     const reversedFetchedSalahDataArr = fetchedSalahData.reverse();
-    let streakDatesArr: Date[] = [];
+    const streakDatesObjectsArray: streakDatesObjType[] = [];
+    const streakDatesArr: Date[] = [];
+    let excusedDays = 0;
     const todaysDate = new Date();
     let isTodayCounting: boolean = false;
 
@@ -453,6 +453,8 @@ const App = () => {
         "yyyy-MM-dd",
         new Date()
       );
+
+      const isActiveStreak = isSameDay(addDays(previousDate, 1), todaysDate);
 
       if (
         isSameDay(addDays(previousDate, 1), currentDate) &&
@@ -472,14 +474,12 @@ const App = () => {
           isTodayCounting = true;
           handleEndOfStreak(
             streakDatesArr,
-            previousDate,
-            todaysDate,
-            excusedDays,
+            isActiveStreak,
             isTodayCounting,
+            excusedDays,
             streakDatesObjectsArray
           );
           excusedDays = 0;
-          streakDatesArr = [];
           break;
         }
 
@@ -488,29 +488,24 @@ const App = () => {
       } else {
         handleEndOfStreak(
           streakDatesArr,
-          previousDate,
-          todaysDate,
-          excusedDays,
+          isActiveStreak,
           isTodayCounting,
+          excusedDays,
           streakDatesObjectsArray
         );
         excusedDays = 0;
-        streakDatesArr = [];
       }
     }
   };
 
   const handleEndOfStreak = (
     streakDatesArr: Date[],
-    previousDate: Date,
-    todaysDate: Date,
-    excusedDays: number,
+    isActiveStreak: boolean,
     isTodayCounting: boolean,
+    excusedDays: number,
     streakDatesObjectsArray: streakDatesObjType[]
   ) => {
     if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
-      const isActiveStreak = isSameDay(addDays(previousDate, 1), todaysDate);
-
       const streakDaysAmount = differenceInDays(
         streakDatesArr[streakDatesArr.length - 1],
         subDays(streakDatesArr[0], 1)
@@ -530,9 +525,13 @@ const App = () => {
       };
       streakDatesObjectsArray.push(streakDatesObj);
 
-      setStreakDatesObjectsArr(streakDatesObjectsArray.reverse());
+      setStreakDatesObjectsArr(
+        streakDatesObjectsArray
+          .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+          .reverse()
+      );
       excusedDays = 0;
-      streakDatesArr = [];
+      streakDatesArr.length = 0;
     }
   };
 

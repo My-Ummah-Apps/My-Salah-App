@@ -95,10 +95,8 @@ const HomePage = ({
                 alt=""
                 srcSet=""
               />
-              <div className="absolute -translate-x-1/2 -translate-y-[60%] top-[58%] left-1/2">
-                <h1 className="mb-1 font-extrabold text-center">
-                  {/* {activeStreak !== -1 ? activeStreak : 0}{" "}
-                  {activeStreak !== 1 ? "Days" : "Day"} */}
+              <div className="absolute -translate-x-1/2 -translate-y-[55%] top-[55%] left-1/2">
+                <h1 className="mb-1 text-xs font-extrabold text-center">
                   {activeStreak}
                 </h1>
               </div>

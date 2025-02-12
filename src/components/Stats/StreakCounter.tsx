@@ -48,12 +48,14 @@ const StreakCounter = ({
     <>
       <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}>
         <section className="flex items-center justify-between p-2 text-xs">
-          <p className="">
-            {`${
-              createLocalisedDate(
-                format(streakDatesObjectsArr[0].startDate, "yyyy-MM-dd")
-              )[1]
-            } -
+          <div>
+            {activeStreak > 0 && (
+              <p className="">
+                {`${
+                  createLocalisedDate(
+                    format(streakDatesObjectsArr[0].startDate, "yyyy-MM-dd")
+                  )[1]
+                } -
                           ${
                             createLocalisedDate(
                               format(
@@ -62,7 +64,9 @@ const StreakCounter = ({
                               )
                             )[1]
                           }`}
-          </p>
+              </p>
+            )}
+          </div>
           <p onClick={showStreakInfo} className="">
             <GoInfo />
           </p>
@@ -76,8 +80,7 @@ const StreakCounter = ({
           />
           <div className="absolute -translate-x-1/2 -translate-y-[60%] top-[60%] left-1/2">
             <h1 className="mb-1 text-4xl font-extrabold text-center">
-              {activeStreak !== -1 ? activeStreak : 0}{" "}
-              {activeStreak !== 1 ? "Days" : "Day"}
+              {activeStreak} {activeStreak !== 1 ? "Days" : "Day"}
             </h1>
             <h2 className="text-xs text-center">Current Streak</h2>
           </div>
@@ -96,7 +99,7 @@ const StreakCounter = ({
             }}
             className={`mb-2 pt-2 text-center w-full `}
           >
-            <p className="">Show Past Streaks</p>
+            <p className="">Show All Streaks</p>
           </button>
         )}
       </div>
