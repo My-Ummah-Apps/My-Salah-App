@@ -437,9 +437,13 @@ const App = () => {
     const streakDatesArr: Date[] = [];
     let excusedDays = 0;
     const todaysDate = new Date();
-    let isTodayCounting: boolean = false;
+    let isActiveStreak = false;
 
-    for (let i = 1; i < reversedFetchedSalahDataArr.length; i++) {
+    // let isTodayCounting: boolean = false;
+
+    for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
+      console.log("TRIGGERED");
+
       const salahStatuses = Object.values(
         reversedFetchedSalahDataArr[i].salahs
       );
@@ -448,30 +452,26 @@ const App = () => {
         "yyyy-MM-dd",
         new Date()
       );
-      const previousDate = parse(
-        reversedFetchedSalahDataArr[i - 1].date,
-        "yyyy-MM-dd",
-        new Date()
-      );
-
-      const isActiveStreak = isSameDay(addDays(previousDate, 1), todaysDate);
+      let previousDate;
+      if (reversedFetchedSalahDataArr[i - 1]) {
+        previousDate = parse(
+          reversedFetchedSalahDataArr[i - 1].date,
+          "yyyy-MM-dd",
+          new Date()
+        );
+      } else {
+        const todaysDate = new Date();
+        previousDate = subDays(todaysDate, 1);
+      }
 
       if (
         isSameDay(addDays(previousDate, 1), todaysDate) &&
         !salahStatuses.includes("late") &&
         !salahStatuses.includes("missed")
       ) {
-        streakDatesArr.push(currentDate);
-        isTodayCounting = true;
-        handleEndOfStreak(
-          streakDatesArr,
-          isActiveStreak,
-          isTodayCounting,
-          excusedDays,
-          streakDatesObjectsArray
-        );
-        excusedDays = 0;
-      } else if (
+        isActiveStreak = true;
+      }
+      if (
         isSameDay(addDays(previousDate, 1), currentDate) &&
         !salahStatuses.includes("late") &&
         !salahStatuses.includes("missed") &&
@@ -482,11 +482,20 @@ const App = () => {
         }
 
         streakDatesArr.push(currentDate);
+
+        if (isSameDay(addDays(previousDate, 1), todaysDate)) {
+          handleEndOfStreak(
+            streakDatesArr,
+            isActiveStreak,
+            excusedDays,
+            streakDatesObjectsArray
+          );
+          excusedDays = 0;
+        }
       } else {
         handleEndOfStreak(
           streakDatesArr,
           isActiveStreak,
-          isTodayCounting,
           excusedDays,
           streakDatesObjectsArray
         );
@@ -498,7 +507,6 @@ const App = () => {
   const handleEndOfStreak = (
     streakDatesArr: Date[],
     isActiveStreak: boolean,
-    isTodayCounting: boolean,
     excusedDays: number,
     streakDatesObjectsArray: streakDatesObjType[]
   ) => {
@@ -508,9 +516,9 @@ const App = () => {
         subDays(streakDatesArr[0], 1)
       );
 
-      if (isActiveStreak && isTodayCounting) {
+      if (isActiveStreak) {
         setActiveStreak(streakDaysAmount - excusedDays);
-      } else if (!isTodayCounting) {
+      } else if (!isActiveStreak) {
         setActiveStreak(0);
       }
 
