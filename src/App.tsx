@@ -457,6 +457,21 @@ const App = () => {
       const isActiveStreak = isSameDay(addDays(previousDate, 1), todaysDate);
 
       if (
+        isSameDay(addDays(previousDate, 1), todaysDate) &&
+        !salahStatuses.includes("late") &&
+        !salahStatuses.includes("missed")
+      ) {
+        streakDatesArr.push(currentDate);
+        isTodayCounting = true;
+        handleEndOfStreak(
+          streakDatesArr,
+          isActiveStreak,
+          isTodayCounting,
+          excusedDays,
+          streakDatesObjectsArray
+        );
+        excusedDays = 0;
+      } else if (
         isSameDay(addDays(previousDate, 1), currentDate) &&
         !salahStatuses.includes("late") &&
         !salahStatuses.includes("missed") &&
@@ -465,26 +480,8 @@ const App = () => {
         if (salahStatuses.includes("excused")) {
           excusedDays += 1;
         }
-        if (
-          isSameDay(addDays(previousDate, 1), todaysDate) &&
-          !salahStatuses.includes("late") &&
-          !salahStatuses.includes("missed")
-        ) {
-          streakDatesArr.push(currentDate);
-          isTodayCounting = true;
-          handleEndOfStreak(
-            streakDatesArr,
-            isActiveStreak,
-            isTodayCounting,
-            excusedDays,
-            streakDatesObjectsArray
-          );
-          excusedDays = 0;
-          break;
-        }
 
         streakDatesArr.push(currentDate);
-        // console.log("streakDatesArr: ", streakDatesArr);
       } else {
         handleEndOfStreak(
           streakDatesArr,
