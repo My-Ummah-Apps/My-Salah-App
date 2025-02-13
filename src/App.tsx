@@ -440,10 +440,9 @@ const App = () => {
     let isActiveStreak = false;
 
     // let isTodayCounting: boolean = false;
+    console.log(reversedFetchedSalahDataArr);
 
-    for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
-      console.log("TRIGGERED");
-
+    for (let i = 1; i < reversedFetchedSalahDataArr.length; i++) {
       const salahStatuses = Object.values(
         reversedFetchedSalahDataArr[i].salahs
       );
@@ -452,17 +451,12 @@ const App = () => {
         "yyyy-MM-dd",
         new Date()
       );
-      let previousDate;
-      if (reversedFetchedSalahDataArr[i - 1]) {
-        previousDate = parse(
-          reversedFetchedSalahDataArr[i - 1].date,
-          "yyyy-MM-dd",
-          new Date()
-        );
-      } else {
-        const todaysDate = new Date();
-        previousDate = subDays(todaysDate, 1);
-      }
+
+      const previousDate = parse(
+        reversedFetchedSalahDataArr[i - 1].date,
+        "yyyy-MM-dd",
+        new Date()
+      );
 
       if (
         isSameDay(addDays(previousDate, 1), todaysDate) &&

@@ -261,6 +261,29 @@ const SettingsPage = ({
             />
           </section>
         </div>{" "}
+        <div
+          className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+        >
+          <div className="z-50 mx-2">
+            {/* <label for="start-date">start-date:</label> */}
+            {/* <input
+              type="date"
+              id="start"
+              name="start-date-picker"
+              value="2018-07-22"
+              min="2018-01-01"
+              max="2023-12-31"
+            /> */}
+
+            <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
+              {"Change Start Date"}
+            </p>
+            <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+              {"Change App Start Date"}
+            </p>
+          </div>
+          <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
+        </div>{" "}
         <div className="my-5">
           <SettingIndividual
             headingText={"Import Data"}
