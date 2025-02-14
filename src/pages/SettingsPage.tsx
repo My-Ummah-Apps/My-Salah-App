@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
+// import "react-datepicker/dist/react-datepicker.css";
 // import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Switch from "react-ios-switch";
@@ -59,6 +61,7 @@ const SettingsPage = ({
   };
 
   const importDBRef = useRef<HTMLInputElement | null>(null);
+  const datePickerRef = useRef<HTMLInputElement | null>(null);
   const diaglogElement = useRef<HTMLDialogElement | null>(null);
   const [dialogElementText, setDialogElementText] = useState<string>("");
   const [
@@ -67,11 +70,26 @@ const SettingsPage = ({
   ] = useState<boolean>(
     userPreferences.showMissedSalahCount === "0" ? false : true
   );
+  const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
+  const today = new Date();
+  const minDate = new Date(1950, 0, 1); // January 1950
+  const [selectedDate, setSelectedDate] = useState(today);
+
   const triggerInput = () => {
+    console.log("TRIGGERED");
     if (importDBRef.current) {
       importDBRef.current.click();
     } else {
       console.error("importDBRef.current does not exist");
+    }
+  };
+  const triggerDatePicker = () => {
+    if (datePickerRef.current) {
+      console.log("TRIGGERED");
+      // datePickerRef.current.style.display = "block";
+      datePickerRef.current.click();
+    } else {
+      console.error("datePickerRef.current does not exist");
     }
   };
 
@@ -261,29 +279,38 @@ const SettingsPage = ({
             />
           </section>
         </div>{" "}
-        <div
-          className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
-        >
-          <div className="z-50 mx-2">
-            {/* <label for="start-date">start-date:</label> */}
-            {/* <input
-              type="date"
-              id="start"
-              name="start-date-picker"
-              value="2018-07-22"
-              min="2018-01-01"
-              max="2023-12-31"
-            /> */}
-
-            <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
-              {"Change Start Date"}
-            </p>
-            <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {"Change App Start Date"}
-            </p>
-          </div>
-          <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
-        </div>{" "}
+        <div className="my-5">
+          <input
+            ref={datePickerRef}
+            className="hidden"
+            type="date"
+            id="start"
+            name="start-date-picker"
+            value={new Date().toISOString().split("T")[0]}
+            min="1950-01-01"
+            max={new Date().toISOString().split("T")[0]}
+          ></input>
+          {/* <div
+            className="absolute hidden p-4 -translate-x-1/2 -translate-y-1/2 bg-gray-900 rounded-2xl top-1/2 left-1/2"
+            ref={datePickerRef}
+          >
+            <DayPicker
+              mode="single"
+              selected={selectedStartDate}
+              onSelect={setSelectedStartDate}
+              // footer={
+              //   selectedStartDate
+              //     ? `Selected: ${selectedStartDate.toLocaleDateString()}`
+              //     : "Pick a day."
+              // }
+            />
+          </div> */}
+          <SettingIndividual
+            headingText={"Change Start Date"}
+            subText={"Change App Start Date"}
+            onClick={triggerDatePicker}
+          />
+        </div>
         <div className="my-5">
           <SettingIndividual
             headingText={"Import Data"}
