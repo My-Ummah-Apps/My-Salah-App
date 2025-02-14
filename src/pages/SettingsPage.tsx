@@ -29,7 +29,7 @@ interface SettingsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  fetchDataFromDB: (isDBImported: boolean) => Promise<void>;
+  fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
   pageStyles: string;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
@@ -70,10 +70,26 @@ const SettingsPage = ({
   ] = useState<boolean>(
     userPreferences.showMissedSalahCount === "0" ? false : true
   );
-  const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
+  const [selectedStartDate, setSelectedStartDate] = useState(
+    userPreferences.userStartDate
+  );
   const today = new Date();
   const minDate = new Date(1950, 0, 1); // January 1950
-  const [selectedDate, setSelectedDate] = useState(today);
+  // const [selectedDate, setSelectedDate] = useState(today);
+
+  const handleStartDateChange = async () => {
+    if (datePickerRef.current) {
+      // setSelectedStartDate(datePickerRef.current.value);
+      setSelectedStartDate(datePickerRef.current.value);
+      await modifyDataInUserPreferencesTable(
+        "userStartDate",
+        datePickerRef.current.value
+      );
+      await fetchDataFromDB();
+
+      console.log(datePickerRef.current.value);
+    }
+  };
 
   const triggerInput = () => {
     console.log("TRIGGERED");
@@ -281,12 +297,13 @@ const SettingsPage = ({
         </div>{" "}
         <div className="my-5">
           <input
+            onChange={handleStartDateChange}
             ref={datePickerRef}
-            className="hidden"
+            // className="hidden"
             type="date"
             id="start"
             name="start-date-picker"
-            value={new Date().toISOString().split("T")[0]}
+            // value={new Date().toISOString().split("T")[0]}
             min="1950-01-01"
             max={new Date().toISOString().split("T")[0]}
           ></input>
@@ -307,7 +324,7 @@ const SettingsPage = ({
           </div> */}
           <SettingIndividual
             headingText={"Change Start Date"}
-            subText={"Change App Start Date"}
+            subText={`Change App Start Date, current start date: ${selectedStartDate}`}
             onClick={triggerDatePicker}
           />
         </div>
