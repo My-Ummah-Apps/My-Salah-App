@@ -1,4 +1,5 @@
 import {
+  bottomSheetCloseBtnStyles,
   bottomSheetContainerStyles,
   sheetBackdropColor,
   TWEEN_CONFIG,
@@ -55,8 +56,7 @@ const BottomSheetChangelog = ({
             ))}
             <button
               onClick={() => setShowChangelogModal(false)}
-              className="text-base fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2 border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-6
-"
+              className={bottomSheetCloseBtnStyles}
             >
               Close
             </button>

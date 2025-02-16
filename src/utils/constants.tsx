@@ -171,3 +171,6 @@ export const isValidDate = (date: string): boolean => {
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
   return isValid(parsedDate);
 };
+
+export const bottomSheetCloseBtnStyles =
+  "text-base fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2 border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3";

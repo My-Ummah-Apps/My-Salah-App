@@ -270,6 +270,7 @@ const Calendar = ({
           <List
             // style={{ borderRadius: "0.5rem" }}
             className="list rounded-2xl"
+            // overscanCount={5}
             // height={330}
             height={370}
             itemCount={monthsBetween.length}

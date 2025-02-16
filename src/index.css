@@ -149,6 +149,16 @@ body:-webkit-scrollbar {
   padding-bottom: 20vh;
 }
 
+input[type="date"] {
+  /* background: transparent; */
+  background-color: gray;
+  border-radius: 0.3rem;
+  color: white;
+  border: none;
+  color-scheme: dark;
+  padding: 0.3rem;
+}
+
 .prayer-status-color-box {
   animation: fadeIn 0.5s ease forwards;
 }

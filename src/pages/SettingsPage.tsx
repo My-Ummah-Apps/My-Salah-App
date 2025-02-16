@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
 // import "react-datepicker/dist/react-datepicker.css";
 // import { Capacitor } from "@capacitor/core";
 // @ts-ignore
@@ -22,6 +20,7 @@ import BottomSheetNotifications from "../components/BottomSheets/BottomSheetNoti
 import { SQLiteConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { showToast } from "../utils/constants";
+import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -61,7 +60,7 @@ const SettingsPage = ({
   };
 
   const importDBRef = useRef<HTMLInputElement | null>(null);
-  const datePickerRef = useRef<HTMLInputElement | null>(null);
+  // const datePickerRef = useRef<HTMLInputElement | null>(null);
   const diaglogElement = useRef<HTMLDialogElement | null>(null);
   const [dialogElementText, setDialogElementText] = useState<string>("");
   const [
@@ -70,26 +69,20 @@ const SettingsPage = ({
   ] = useState<boolean>(
     userPreferences.showMissedSalahCount === "0" ? false : true
   );
-  const [selectedStartDate, setSelectedStartDate] = useState(
-    userPreferences.userStartDate
-  );
-  const today = new Date();
-  const minDate = new Date(1950, 0, 1); // January 1950
-  // const [selectedDate, setSelectedDate] = useState(today);
 
-  const handleStartDateChange = async () => {
-    if (datePickerRef.current) {
-      // setSelectedStartDate(datePickerRef.current.value);
-      setSelectedStartDate(datePickerRef.current.value);
-      await modifyDataInUserPreferencesTable(
-        "userStartDate",
-        datePickerRef.current.value
-      );
-      await fetchDataFromDB();
+  // const handleStartDateChange = async () => {
+  //   if (datePickerRef.current) {
+  //     // setSelectedStartDate(datePickerRef.current.value);
+  //     setSelectedStartDate(datePickerRef.current.value);
+  //     await modifyDataInUserPreferencesTable(
+  //       "userStartDate",
+  //       datePickerRef.current.value
+  //     );
+  //     await fetchDataFromDB();
 
-      console.log(datePickerRef.current.value);
-    }
-  };
+  //     console.log(datePickerRef.current.value);
+  //   }
+  // };
 
   const triggerInput = () => {
     console.log("TRIGGERED");
@@ -97,15 +90,6 @@ const SettingsPage = ({
       importDBRef.current.click();
     } else {
       console.error("importDBRef.current does not exist");
-    }
-  };
-  const triggerDatePicker = () => {
-    if (datePickerRef.current) {
-      console.log("TRIGGERED");
-      // datePickerRef.current.style.display = "block";
-      datePickerRef.current.click();
-    } else {
-      console.error("datePickerRef.current does not exist");
     }
   };
 
@@ -231,6 +215,7 @@ const SettingsPage = ({
 
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
 
+  const [showStartDateSheet, setShowStartDateSheet] = useState(false);
   const link = (url: string) => {
     window.location.href = url;
   };
@@ -296,7 +281,7 @@ const SettingsPage = ({
           </section>
         </div>{" "}
         <div className="my-5">
-          <input
+          {/* <input
             onChange={handleStartDateChange}
             ref={datePickerRef}
             // className="hidden"
@@ -306,26 +291,20 @@ const SettingsPage = ({
             // value={new Date().toISOString().split("T")[0]}
             min="1950-01-01"
             max={new Date().toISOString().split("T")[0]}
-          ></input>
-          {/* <div
-            className="absolute hidden p-4 -translate-x-1/2 -translate-y-1/2 bg-gray-900 rounded-2xl top-1/2 left-1/2"
-            ref={datePickerRef}
-          >
-            <DayPicker
-              mode="single"
-              selected={selectedStartDate}
-              onSelect={setSelectedStartDate}
-              // footer={
-              //   selectedStartDate
-              //     ? `Selected: ${selectedStartDate.toLocaleDateString()}`
-              //     : "Pick a day."
-              // }
-            />
-          </div> */}
+          ></input> */}
           <SettingIndividual
             headingText={"Change Start Date"}
-            subText={`Change App Start Date, current start date: ${selectedStartDate}`}
-            onClick={triggerDatePicker}
+            subText={`Change App Start Date`}
+            onClick={() => {
+              setShowStartDateSheet(true);
+            }}
+          />
+          <BottomSheetStartDate
+            setShowStartDateSheet={setShowStartDateSheet}
+            showStartDateSheet={showStartDateSheet}
+            userPreferences={userPreferences}
+            fetchDataFromDB={fetchDataFromDB}
+            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
           />
         </div>
         <div className="my-5">
