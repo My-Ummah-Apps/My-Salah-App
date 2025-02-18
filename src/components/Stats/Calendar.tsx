@@ -1,8 +1,6 @@
-import { useState, useRef } from "react";
-import { CSSProperties } from "react";
-
-import { FixedSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
+import { useState, useRef, useEffect } from "react";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
 
@@ -22,7 +20,6 @@ import {
   DBConnectionStateType,
 } from "../../types/types";
 
-// import DailyOverviewBottomSheet from "../BottomSheets/DailyOverviewBottomSheet";
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
 
 interface CalenderProps {
@@ -41,11 +38,9 @@ const Calendar = ({
   userStartDate,
 }: CalenderProps) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
-
   const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
   const [clickedDate, setClickedDate] = useState<string>("");
-
-  const days = ["M", "T", "W", "T", "F", "S", "S"];
+  const [currentMonth, setCurrentMonth] = useState(0);
 
   // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
@@ -61,17 +56,17 @@ const Calendar = ({
   const userStartDateParsed = parse(userStartDate, "yyyy-MM-dd", new Date());
   const todaysDate = new Date();
 
-  // Generate an array of all the months between the start and end dates
   const monthsBetween = eachMonthOfInterval({
     start: userStartDateParsed,
     end: todaysDate,
   });
 
-  // Format the months
   const formattedMonths = monthsBetween.map((month) =>
     format(month, "MMMM yyyy")
   );
   formattedMonths.reverse();
+
+  // console.log("formattedMonths: ", formattedMonths);
 
   let firstDayOfMonth;
   const monthlyDates = (month: string) => {
@@ -86,20 +81,24 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  let fajrColor = "";
-  let zoharColor = "";
-  let asarColor = "";
-  let maghribColor = "";
-  let ishaColor = "";
+  // console.log(monthlyDates("January 2025"));
+
+  // monthlyDates()
+
+  useEffect(() => {
+    console.log("currentMonth: ", currentMonth);
+  }, [currentMonth]);
 
   function determineRadialColors(date: Date) {
+    const colors = {
+      fajrColor: "transparent",
+      zoharColor: "transparent",
+      asarColor: "transparent",
+      maghribColor: "transparent",
+      ishaColor: "transparent",
+    };
     if (date < userStartDateParsed || date > todaysDate) {
-      fajrColor = "transparent";
-      zoharColor = "transparent";
-      asarColor = "transparent";
-      maghribColor = "transparent";
-      ishaColor = "transparent";
-      return;
+      return colors;
     }
 
     let formattedDate = format(date, "yyyy-MM-dd");
@@ -110,27 +109,27 @@ const Calendar = ({
 
         for (const [prayer, prayerStatus] of Object.entries(matchedData)) {
           if (prayer === "Fajr") {
-            fajrColor =
+            colors.fajrColor =
               prayerStatusColorsHexCodes[
                 prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
           } else if (prayer === "Dhuhr") {
-            zoharColor =
+            colors.zoharColor =
               prayerStatusColorsHexCodes[
                 prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
           } else if (prayer === "Asar") {
-            asarColor =
+            colors.asarColor =
               prayerStatusColorsHexCodes[
                 prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
           } else if (prayer === "Maghrib") {
-            maghribColor =
+            colors.maghribColor =
               prayerStatusColorsHexCodes[
                 prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
           } else if (prayer === "Isha") {
-            ishaColor =
+            colors.ishaColor =
               prayerStatusColorsHexCodes[
                 prayerStatus as keyof typeof prayerStatusColorsHexCodes
               ];
@@ -139,151 +138,258 @@ const Calendar = ({
       }
     }
 
-    return null;
+    return colors;
   }
-
-  // const Column = ({ index, style }) => <div style={style}>Column {index}</div>;
-  const Column = ({
-    index,
-    style,
-  }: {
-    index: number;
-    style: CSSProperties;
-  }) => (
-    <div
-      style={{
-        ...style,
-        width: monthsBetween.length === 1 ? "100%" : style.width,
-        borderRight: "1px solid rgb(0, 0, 0, 0.2)",
-      }}
-      className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
-    >
-      <div
-        ref={calenderSingleMonthHeightRef}
-        className={`month-name-days-dates-wrap`}
-      >
-        <p className="py-4 font-semibold text-center">
-          {formattedMonths[index]}
-        </p>
-        <div className="grid grid-cols-7 px-2 mb-3 place-items-center days-row-wrap">
-          {days.map((day, i) => (
-            <div
-              key={`${day}-${i}`}
-              className="w-5 h-5 text-sm font-semibold text-center individual-day"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap">
-          {monthlyDates(formattedMonths[index]).map((date, i) =>
-            isDayInSpecificMonth(date, formattedMonths[index]) ? (
-              <div
-                key={format(date, "yyyy-MM-dd") + i}
-                onClick={() => {
-                  // if (date <= todaysDate) {
-                  if (date >= userStartDateParsed && date <= todaysDate) {
-                    const formattedDate = format(date, "yyyy-MM-dd");
-                    setClickedDate(formattedDate);
-                    setShowDailySalahDataModal(true);
-                  }
-                }}
-                className="relative flex items-center justify-center individual-date"
-              >
-                {determineRadialColors(date)}
-                <svg
-                  className="absolute"
-                  xmlns="http://www.w3.org/2000/svg"
-                  id="svg"
-                  viewBox="0 0 150 150"
-                  style={{ height: "35px", width: "35px" }}
-                >
-                  <desc>Created with Snap</desc>
-                  <defs />
-                  <path
-                    d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
-                    style={{
-                      strokeWidth: "11px",
-                      strokeLinecap: "round",
-                    }}
-                    fill="none"
-                    stroke={zoharColor}
-                  />
-                  <path
-                    d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
-                    style={{
-                      strokeWidth: "11px",
-                      strokeLinecap: "round",
-                    }}
-                    fill="none"
-                    stroke={asarColor}
-                  />
-                  <path
-                    d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
-                    style={{
-                      strokeWidth: "11px",
-                      strokeLinecap: "round",
-                    }}
-                    fill="none"
-                    stroke={maghribColor}
-                  />
-                  <path
-                    d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
-                    style={{
-                      strokeWidth: "11px",
-                      strokeLinecap: "round",
-                    }}
-                    fill="none"
-                    stroke={ishaColor}
-                  />
-                  <path
-                    d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
-                    style={{
-                      strokeWidth: "11px",
-                      strokeLinecap: "round",
-                    }}
-                    fill="none"
-                    stroke={fajrColor}
-                  />
-                </svg>
-                <p
-                  className={` text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white
-              `}
-                >
-                  {format(date, "d")}
-                  {/* {format(day, "dd")} */}
-                </p>
-              </div>
-            ) : (
-              <div key={format(date, "yyyy-MM-dd") + i}></div>
-            )
-          )}
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <>
-      <AutoSizer disableHeight>
-        {({ width }) => (
-          <List
-            // style={{ borderRadius: "0.5rem" }}
-            className="list rounded-2xl"
-            // overscanCount={5}
-            // height={330}
-            height={370}
-            itemCount={monthsBetween.length}
-            // itemCount
-            itemSize={300}
-            layout="horizontal"
-            width={width}
-            direction="rtl"
-          >
-            {Column}
-          </List>
-        )}
-      </AutoSizer>
+      <div
+        style={{
+          // width: monthsBetween.length === 1 ? "100%" : style.width,
+          borderRight: "1px solid rgb(0, 0, 0, 0.2)",
+        }}
+        className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
+      >
+        <div
+          ref={calenderSingleMonthHeightRef}
+          className={`month-name-days-dates-wrap`}
+        >
+          <section className="flex items-center justify-between m-2">
+            <p className="py-4 font-semibold text-center">
+              {formattedMonths[currentMonth]}
+            </p>
+            <div>
+              <button
+                style={{
+                  opacity:
+                    currentMonth === formattedMonths.length - 1 ? "0.5" : "1",
+                }}
+                onClick={() => {
+                  if (currentMonth === formattedMonths.length - 1) return;
+                  setCurrentMonth((prev) => prev + 1);
+                }}
+                className="p-2 m-1 bg-gray-800 rounded-lg"
+              >
+                <IoIosArrowBack />
+              </button>
+
+              <button
+                style={{
+                  opacity: currentMonth === 0 ? "0.5" : "1",
+                }}
+                onClick={() => {
+                  if (currentMonth === 0) return;
+                  setCurrentMonth((prev) => prev - 1);
+                }}
+                className="p-2 m-1 bg-gray-800 rounded-lg"
+              >
+                <IoIosArrowForward />
+              </button>
+            </div>
+          </section>
+          <div className="grid grid-cols-7 px-2 mb-3 place-items-center days-row-wrap">
+            {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
+              <div
+                key={`${day}-${i}`}
+                className="w-5 h-5 text-sm font-semibold text-center individual-day"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap">
+          {monthlyDates(formattedMonths[currentMonth]).map((date, i) => {
+            if (isDayInSpecificMonth(date, formattedMonths[currentMonth])) {
+              const {
+                fajrColor,
+                zoharColor,
+                asarColor,
+                maghribColor,
+                ishaColor,
+              } = determineRadialColors(date);
+              console.log("RENDERED");
+
+              return (
+                <div
+                  key={format(date, "yyyy-MM-dd") + i}
+                  onClick={() => {
+                    // if (date <= todaysDate) {
+                    if (date >= userStartDateParsed && date <= todaysDate) {
+                      const formattedDate = format(date, "yyyy-MM-dd");
+                      setClickedDate(formattedDate);
+                      setShowDailySalahDataModal(true);
+                    }
+                  }}
+                  className="relative flex items-center justify-center individual-date"
+                >
+                  <svg
+                    className="absolute"
+                    xmlns="http://www.w3.org/2000/svg"
+                    id="svg"
+                    viewBox="0 0 150 150"
+                    style={{ height: "35px", width: "35px" }}
+                  >
+                    <desc>Created with Snap</desc>
+                    <defs />
+                    <path
+                      d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={zoharColor}
+                    />
+                    <path
+                      d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={asarColor}
+                    />
+                    <path
+                      d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={maghribColor}
+                    />
+                    <path
+                      d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={ishaColor}
+                    />
+                    <path
+                      d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                      style={{
+                        strokeWidth: "11px",
+                        strokeLinecap: "round",
+                      }}
+                      fill="none"
+                      stroke={fajrColor}
+                    />
+                  </svg>
+                  <p
+                    className={`text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white
+  `}
+                  >
+                    {format(date, "d")}
+                  </p>
+                </div>
+              );
+            } else {
+              return <div key={format(date, "yyyy-MM-dd") + i}></div>;
+            }
+          })}
+        </div>
+      </div>
+      {/* </div>  */}
+      {/* <div className="grid grid-cols-7 px-2 gap-y-5 place-items-center month-dates-wrap">
+            {monthlyDates(formattedMonths[index]).map((date, i) => {
+              if (isDayInSpecificMonth(date, formattedMonths[index])) {
+                const {
+                  fajrColor,
+                  zoharColor,
+                  asarColor,
+                  maghribColor,
+                  ishaColor,
+                } = determineRadialColors(date);
+                console.log("RENDERED");
+
+                return (
+                  <div
+                    key={format(date, "yyyy-MM-dd") + i}
+                    onClick={() => {
+                      // if (date <= todaysDate) {
+                      if (date >= userStartDateParsed && date <= todaysDate) {
+                        const formattedDate = format(date, "yyyy-MM-dd");
+                        setClickedDate(formattedDate);
+                        setShowDailySalahDataModal(true);
+                      }
+                    }}
+                    className="relative flex items-center justify-center individual-date"
+                  >
+                    <svg
+                      className="absolute"
+                      xmlns="http://www.w3.org/2000/svg"
+                      id="svg"
+                      viewBox="0 0 150 150"
+                      style={{ height: "35px", width: "35px" }}
+                    >
+                      <desc>Created with Snap</desc>
+                      <defs />
+                      <path
+                        d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={zoharColor}
+                      />
+                      <path
+                        d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={asarColor}
+                      />
+                      <path
+                        d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={maghribColor}
+                      />
+                      <path
+                        d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={ishaColor}
+                      />
+                      <path
+                        d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={fajrColor}
+                      />
+                    </svg>
+                    <p
+                      className={`text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white
+  `}
+                    >
+                      {format(date, "d")}
+
+                    </p>
+                  </div>
+                );
+              } else {
+                return <div key={format(date, "yyyy-MM-dd") + i}></div>;
+              }
+            })}
+          </div>
+        </div>
+      </div> */}
+
       <BottomSheetSingleDateView
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
@@ -291,6 +397,7 @@ const Calendar = ({
         showDailySalahDataModal={showDailySalahDataModal}
         clickedDate={clickedDate}
       />
+      {/* </div> */}
     </>
   );
 };
