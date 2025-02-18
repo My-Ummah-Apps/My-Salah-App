@@ -70,7 +70,7 @@ const BottomSheetStartDate = ({
                 </p>
               </section>
               <section className="text-center">
-                <p className="mb-2">Select New Date</p>
+                <p className="mb-2">Select New Start Date</p>
                 <input
                   //   onChange={handleStartDateChange}
                   ref={datePickerRef}

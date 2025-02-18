@@ -440,9 +440,9 @@ const App = () => {
     let isActiveStreak = false;
 
     // let isTodayCounting: boolean = false;
-    console.log(reversedFetchedSalahDataArr);
+    // console.log(reversedFetchedSalahDataArr);
 
-    for (let i = 1; i < reversedFetchedSalahDataArr.length; i++) {
+    for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
       const salahStatuses = Object.values(
         reversedFetchedSalahDataArr[i].salahs
       );
@@ -451,6 +451,33 @@ const App = () => {
         "yyyy-MM-dd",
         new Date()
       );
+
+      if (reversedFetchedSalahDataArr.length < 2) {
+        // i = 0;
+        console.log("length < 2");
+
+        if (
+          !salahStatuses.includes("late") &&
+          !salahStatuses.includes("missed") &&
+          !salahStatuses.includes("")
+        ) {
+          if (salahStatuses.includes("excused")) {
+            excusedDays += 1;
+          }
+          streakDatesArr.push(currentDate);
+
+          handleEndOfStreak(
+            streakDatesArr,
+            isActiveStreak,
+            excusedDays,
+            streakDatesObjectsArray
+          );
+          excusedDays = 0;
+        }
+        return;
+      }
+
+      console.log("HAS RUN");
 
       const previousDate = parse(
         reversedFetchedSalahDataArr[i - 1].date,
@@ -504,6 +531,12 @@ const App = () => {
     excusedDays: number,
     streakDatesObjectsArray: streakDatesObjType[]
   ) => {
+    console.log(
+      "handleEndOfStreak triggered",
+      streakDatesArr,
+      streakDatesObjectsArray
+    );
+
     if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
       const streakDaysAmount = differenceInDays(
         streakDatesArr[streakDatesArr.length - 1],
@@ -699,7 +732,7 @@ const App = () => {
                 // pagination={{ clickable: true }}
               >
                 // ! For some reason, when tapping brother or sister inthe
-                sheet, the isExistingUser flag in the DB chnges from 0 to 1
+                sheet, the isExistingUser flag in the DB changes from 0 to 1
                 <SwiperSlide>
                   <section className="p-5">
                     <h1 className="text-4xl">I am a...</h1>

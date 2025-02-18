@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
@@ -76,10 +76,6 @@ const Calendar = ({
     return daysInMonth;
   };
 
-  useEffect(() => {
-    console.log("currentMonth: ", currentMonth);
-  }, [currentMonth]);
-
   function determineRadialColors(date: Date) {
     const colors = {
       fajrColor: "transparent",
@@ -134,17 +130,14 @@ const Calendar = ({
   return (
     <>
       <div
-        style={{
-          borderRight: "1px solid rgb(0, 0, 0, 0.2)",
-        }}
-        className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36)`}
+        className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) rounded-2xl`}
       >
         <div
           ref={calenderSingleMonthHeightRef}
           className={`month-name-days-dates-wrap`}
         >
-          <section className="flex items-center justify-between m-2">
-            <p className="py-4 font-semibold text-center">
+          <section className="flex items-center justify-between p-4">
+            <p className="font-semibold text-center">
               {formattedMonths[currentMonth]}
             </p>
             <div>
@@ -157,7 +150,7 @@ const Calendar = ({
                   if (currentMonth === formattedMonths.length - 1) return;
                   setCurrentMonth((prev) => prev + 1);
                 }}
-                className="p-2 m-1 bg-gray-800 rounded-lg"
+                className="p-2 m-1 rounded-lg bg-neutral-800"
               >
                 <IoIosArrowBack />
               </button>
@@ -170,7 +163,7 @@ const Calendar = ({
                   if (currentMonth === 0) return;
                   setCurrentMonth((prev) => prev - 1);
                 }}
-                className="p-2 m-1 bg-gray-800 rounded-lg"
+                className="p-2 m-1 rounded-lg bg-neutral-800"
               >
                 <IoIosArrowForward />
               </button>

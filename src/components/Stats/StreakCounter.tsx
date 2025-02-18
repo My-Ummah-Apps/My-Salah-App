@@ -14,8 +14,6 @@ import { format } from "date-fns";
 import { GoInfo } from "react-icons/go";
 import { Dialog } from "@capacitor/dialog";
 
-// import { GoInfo } from "react-icons/go";
-
 interface StreakCounterProps {
   streakDatesObjectsArr: streakDatesObjType[];
   activeStreak: number;
@@ -36,9 +34,11 @@ const StreakCounter = ({
       message:
         userGender === "female"
           ? `Streaks represent the number of consecutive days you have performed your Salah. 
+
           - Streaks continue if you pray in a group or alone.
           - If you miss a prayer or are late, your streak resets.`
           : `Streaks represent the number of consecutive days you have performed your Salah. 
+          
           - Streaks continue as long as you pray on time.
           - If you select "Excused", your streak will **pause** (it won't break, but it also won't increase).`,
     });
@@ -46,7 +46,7 @@ const StreakCounter = ({
 
   return (
     <>
-      <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl `}>
+      <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl`}>
         <section className="flex items-center justify-between p-2 text-xs">
           <div>
             {activeStreak > 0 && (
@@ -121,8 +121,8 @@ const StreakCounter = ({
                 <h1 className="mb-10 text-2xl text-center">Past Streaks</h1>
                 {streakDatesObjectsArr.map((item) => {
                   return (
-                    <ul className="px-4 my-2">
-                      <li className="flex justify-between">
+                    <ul className="px-4 my-3">
+                      <li className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800">
                         <p>
                           {`${
                             createLocalisedDate(
@@ -146,7 +146,6 @@ const StreakCounter = ({
         </Sheet.Container>
         <Sheet.Backdrop
           style={sheetBackdropColor}
-          // onTap={onSheetCloseCleanup}
           onTap={() => setShowStreaksModal(false)}
         />
       </Sheet>
