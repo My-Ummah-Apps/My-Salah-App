@@ -266,13 +266,15 @@ const BottomSheetPrayerStatus = ({
       const incrementedSaveButtonTapCount =
         Number(saveButtonTapCountQuery.values[0].preferenceValue) + 1;
 
-      if (
-        incrementedSaveButtonTapCount === 3 ||
-        incrementedSaveButtonTapCount === 10 ||
-        incrementedSaveButtonTapCount === 20 ||
-        incrementedSaveButtonTapCount % 50 === 0
-      ) {
-        InAppReview.requestReview();
+      if (Capacitor.isNativePlatform()) {
+        if (
+          incrementedSaveButtonTapCount === 3 ||
+          incrementedSaveButtonTapCount === 10 ||
+          incrementedSaveButtonTapCount === 20 ||
+          incrementedSaveButtonTapCount % 50 === 0
+        ) {
+          InAppReview.requestReview();
+        }
       }
 
       await dbConnection.current.run(

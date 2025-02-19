@@ -10,7 +10,7 @@ import Sheet from "react-modal-sheet";
 import wreathLeft from "/src/assets/icons/wreath-left.png";
 import wreathRight from "/src/assets/icons/wreath-right.png";
 import { useState } from "react";
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
 import { Dialog } from "@capacitor/dialog";
 
@@ -25,14 +25,14 @@ const StreakCounter = ({
   activeStreak,
   userGender,
 }: StreakCounterProps) => {
-  console.log("streakDatesObjectsArr", streakDatesObjectsArr);
+  console.log("userGender", userGender);
   const [showStreaksModal, setShowStreaksModal] = useState(false);
 
   const showStreakInfo = async () => {
     await Dialog.alert({
       title: "Streaks Explained",
       message:
-        userGender === "female"
+        userGender === "male"
           ? `Streaks represent the number of consecutive days you have performed your Salah. 
 
           - Streaks continue if you pray in a group or alone.
@@ -55,15 +55,18 @@ const StreakCounter = ({
                   createLocalisedDate(
                     format(streakDatesObjectsArr[0].startDate, "yyyy-MM-dd")
                   )[1]
-                } -
-                          ${
-                            createLocalisedDate(
-                              format(
-                                streakDatesObjectsArr[0].endDate,
-                                "yyyy-MM-dd"
-                              )
-                            )[1]
-                          }`}
+                } ${
+                  !isSameDay(
+                    streakDatesObjectsArr[0].startDate,
+                    streakDatesObjectsArr[0].endDate
+                  )
+                    ? `${
+                        createLocalisedDate(
+                          format(streakDatesObjectsArr[0].endDate, "yyyy-MM-dd")
+                        )[1]
+                      }`
+                    : ""
+                }`}
               </p>
             )}
           </div>

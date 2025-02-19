@@ -439,61 +439,11 @@ const App = () => {
     const todaysDate = new Date();
     let isActiveStreak = false;
 
-    // let isTodayCounting: boolean = false;
-    // console.log(reversedFetchedSalahDataArr);
-
-    for (let i = 0; i < reversedFetchedSalahDataArr.length; i++) {
+    if (reversedFetchedSalahDataArr.length === 1) {
       const salahStatuses = Object.values(
-        reversedFetchedSalahDataArr[i].salahs
+        reversedFetchedSalahDataArr[0].salahs
       );
-      const currentDate = parse(
-        reversedFetchedSalahDataArr[i].date,
-        "yyyy-MM-dd",
-        new Date()
-      );
-
-      if (reversedFetchedSalahDataArr.length < 2) {
-        // i = 0;
-        console.log("length < 2");
-
-        if (
-          !salahStatuses.includes("late") &&
-          !salahStatuses.includes("missed") &&
-          !salahStatuses.includes("")
-        ) {
-          if (salahStatuses.includes("excused")) {
-            excusedDays += 1;
-          }
-          streakDatesArr.push(currentDate);
-
-          handleEndOfStreak(
-            streakDatesArr,
-            isActiveStreak,
-            excusedDays,
-            streakDatesObjectsArray
-          );
-          excusedDays = 0;
-        }
-        return;
-      }
-
-      console.log("HAS RUN");
-
-      const previousDate = parse(
-        reversedFetchedSalahDataArr[i - 1].date,
-        "yyyy-MM-dd",
-        new Date()
-      );
-
       if (
-        isSameDay(addDays(previousDate, 1), todaysDate) &&
-        !salahStatuses.includes("late") &&
-        !salahStatuses.includes("missed")
-      ) {
-        isActiveStreak = true;
-      }
-      if (
-        isSameDay(addDays(previousDate, 1), currentDate) &&
         !salahStatuses.includes("late") &&
         !salahStatuses.includes("missed") &&
         !salahStatuses.includes("")
@@ -501,10 +451,64 @@ const App = () => {
         if (salahStatuses.includes("excused")) {
           excusedDays += 1;
         }
+        streakDatesArr.push(todaysDate);
+        isActiveStreak = true;
 
-        streakDatesArr.push(currentDate);
+        handleEndOfStreak(
+          streakDatesArr,
+          isActiveStreak,
+          excusedDays,
+          streakDatesObjectsArray
+        );
+        excusedDays = 0;
+      }
+      return;
+    } else {
+      for (let i = 1; i < reversedFetchedSalahDataArr.length; i++) {
+        const salahStatuses = Object.values(
+          reversedFetchedSalahDataArr[i].salahs
+        );
+        const currentDate = parse(
+          reversedFetchedSalahDataArr[i].date,
+          "yyyy-MM-dd",
+          new Date()
+        );
 
-        if (isSameDay(addDays(previousDate, 1), todaysDate)) {
+        const previousDate = parse(
+          reversedFetchedSalahDataArr[i - 1].date,
+          "yyyy-MM-dd",
+          new Date()
+        );
+
+        if (
+          isSameDay(addDays(previousDate, 1), todaysDate) &&
+          !salahStatuses.includes("late") &&
+          !salahStatuses.includes("missed")
+        ) {
+          isActiveStreak = true;
+        }
+        if (
+          isSameDay(addDays(previousDate, 1), currentDate) &&
+          !salahStatuses.includes("late") &&
+          !salahStatuses.includes("missed") &&
+          !salahStatuses.includes("")
+        ) {
+          if (salahStatuses.includes("excused")) {
+            excusedDays += 1;
+          }
+
+          streakDatesArr.push(currentDate);
+
+          if (isSameDay(addDays(previousDate, 1), todaysDate)) {
+            handleEndOfStreak(
+              streakDatesArr,
+              isActiveStreak,
+              excusedDays,
+              streakDatesObjectsArray
+            );
+            excusedDays = 0;
+          }
+        } else {
           handleEndOfStreak(
             streakDatesArr,
             isActiveStreak,
@@ -513,14 +517,6 @@ const App = () => {
           );
           excusedDays = 0;
         }
-      } else {
-        handleEndOfStreak(
-          streakDatesArr,
-          isActiveStreak,
-          excusedDays,
-          streakDatesObjectsArray
-        );
-        excusedDays = 0;
       }
     }
   };
@@ -537,11 +533,15 @@ const App = () => {
       streakDatesObjectsArray
     );
 
-    if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
-      const streakDaysAmount = differenceInDays(
-        streakDatesArr[streakDatesArr.length - 1],
-        subDays(streakDatesArr[0], 1)
-      );
+    // if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
+    if (streakDatesArr[0]) {
+      const streakDaysAmount =
+        streakDatesArr.length === 1
+          ? 1
+          : differenceInDays(
+              streakDatesArr[streakDatesArr.length - 1],
+              subDays(streakDatesArr[0], 1)
+            );
 
       if (isActiveStreak) {
         setActiveStreak(streakDaysAmount - excusedDays);
