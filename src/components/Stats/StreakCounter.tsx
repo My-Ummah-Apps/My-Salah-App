@@ -125,21 +125,23 @@ const StreakCounter = ({
                 {streakDatesObjectsArr.map((item) => {
                   return (
                     <ul className="px-4 my-3">
-                      <li className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800">
-                        <p>
-                          {`${
-                            createLocalisedDate(
-                              format(item.startDate, "yyyy-MM-dd")
-                            )[1]
-                          } -
-                          ${
-                            createLocalisedDate(
-                              format(item.endDate, "yyyy-MM-dd")
-                            )[1]
-                          }`}
-                        </p>
-                        <p>{`${item.days} Days`}</p>
-                      </li>
+                      {!isSameDay(item.startDate, item.endDate) && (
+                        <li className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800">
+                          <p>
+                            {`${
+                              createLocalisedDate(
+                                format(item.startDate, "yyyy-MM-dd")
+                              )[1]
+                            } -
+                         ${
+                           createLocalisedDate(
+                             format(item.endDate, "yyyy-MM-dd")
+                           )[1]
+                         }`}
+                          </p>
+                          <p>{`${item.days} Days`}</p>
+                        </li>
+                      )}
                     </ul>
                   );
                 })}
