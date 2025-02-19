@@ -169,6 +169,7 @@ export const getMissedSalahCount = (missedSalahList: MissedSalahObjType) => {
 
 export const isValidDate = (date: string): boolean => {
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+  console.log("Date is: ", parsedDate, "and its: ", isValid(parsedDate));
   return isValid(parsedDate);
 };
 

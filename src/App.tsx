@@ -527,14 +527,7 @@ const App = () => {
     excusedDays: number,
     streakDatesObjectsArray: streakDatesObjType[]
   ) => {
-    console.log(
-      "handleEndOfStreak triggered",
-      streakDatesArr,
-      streakDatesObjectsArray
-    );
-
-    // if (streakDatesArr[0] && streakDatesArr[streakDatesArr.length - 1]) {
-    if (streakDatesArr[0]) {
+    if (streakDatesArr.length > 0) {
       const streakDaysAmount =
         streakDatesArr.length === 1
           ? 1
@@ -542,7 +535,6 @@ const App = () => {
               streakDatesArr[streakDatesArr.length - 1],
               subDays(streakDatesArr[0], 1)
             );
-
       if (isActiveStreak) {
         setActiveStreak(streakDaysAmount - excusedDays);
       } else if (!isActiveStreak) {
@@ -567,9 +559,9 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
-  }, [streakDatesObjectsArr]);
+  // useEffect(() => {
+  //   console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
+  // }, [streakDatesObjectsArr]);
 
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,
@@ -605,7 +597,6 @@ const App = () => {
   };
 
   const pageStyles: string = ``;
-
   const swiperRef = useRef<SwiperInstance | null>(null);
 
   const handleGenderSelect = () => {

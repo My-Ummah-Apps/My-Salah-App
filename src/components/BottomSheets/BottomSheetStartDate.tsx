@@ -29,7 +29,6 @@ const BottomSheetStartDate = ({
   modifyDataInUserPreferencesTable,
   fetchDataFromDB,
 }: BottomSheetStartDateProps) => {
-  console.log(userPreferences.userStartDate);
   const datePickerRef = useRef<HTMLInputElement | null>(null);
   const [selectedStartDate, setSelectedStartDate] = useState(
     userPreferences.userStartDate
@@ -72,6 +71,9 @@ const BottomSheetStartDate = ({
               <section className="text-center">
                 <p className="mb-2">Select New Start Date</p>
                 <input
+                  onKeyDown={(e) => {
+                    e.preventDefault();
+                  }}
                   //   onChange={handleStartDateChange}
                   ref={datePickerRef}
                   // className="hidden"
