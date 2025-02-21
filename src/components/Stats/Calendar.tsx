@@ -190,7 +190,6 @@ const Calendar = ({
                 maghribColor,
                 ishaColor,
               } = determineRadialColors(date);
-              console.log("RENDERED");
 
               return (
                 <div

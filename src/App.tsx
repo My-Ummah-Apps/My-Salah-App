@@ -43,6 +43,8 @@ import {
   addDays,
   differenceInDays,
   subDays,
+  isYesterday,
+  parseISO,
 } from "date-fns";
 import { PreferenceType } from "./types/types";
 
@@ -439,76 +441,33 @@ const App = () => {
     const todaysDate = new Date();
     let isActiveStreak = false;
 
-    if (reversedFetchedSalahDataArr.length === 1) {
+    const isConsecutiveDay = (date2: Date, date1: Date) =>
+      differenceInDays(date1, date2) === 1;
+
+    const streakBreakingStatuses = ["missed", "late", ""];
+
+    const isStreakBreakingStatus = (statusesArr: SalahStatusType[]) =>
+      statusesArr.some((status) => streakBreakingStatuses.includes(status));
+
+    for (
+      let i = reversedFetchedSalahDataArr.length > 1 ? 1 : 0;
+      i < reversedFetchedSalahDataArr.length;
+      i++
+    ) {
       const salahStatuses = Object.values(
-        reversedFetchedSalahDataArr[0].salahs
+        reversedFetchedSalahDataArr[i].salahs
       );
-      if (
-        !salahStatuses.includes("late") &&
-        !salahStatuses.includes("missed") &&
-        !salahStatuses.includes("")
-      ) {
-        if (salahStatuses.includes("excused")) {
-          excusedDays += 1;
-        }
-        streakDatesArr.push(todaysDate);
-        isActiveStreak = true;
 
-        handleEndOfStreak(
-          streakDatesArr,
-          isActiveStreak,
-          excusedDays,
-          streakDatesObjectsArray
-        );
-        excusedDays = 0;
-      }
-      return;
-    } else {
-      for (let i = 1; i < reversedFetchedSalahDataArr.length; i++) {
+      if (reversedFetchedSalahDataArr.length === 1) {
         const salahStatuses = Object.values(
-          reversedFetchedSalahDataArr[i].salahs
+          reversedFetchedSalahDataArr[0].salahs
         );
-        const currentDate = parse(
-          reversedFetchedSalahDataArr[i].date,
-          "yyyy-MM-dd",
-          new Date()
-        );
-
-        const previousDate = parse(
-          reversedFetchedSalahDataArr[i - 1].date,
-          "yyyy-MM-dd",
-          new Date()
-        );
-
-        if (
-          isSameDay(addDays(previousDate, 1), todaysDate) &&
-          !salahStatuses.includes("late") &&
-          !salahStatuses.includes("missed")
-        ) {
-          isActiveStreak = true;
-        }
-        if (
-          isSameDay(addDays(previousDate, 1), currentDate) &&
-          !salahStatuses.includes("late") &&
-          !salahStatuses.includes("missed") &&
-          !salahStatuses.includes("")
-        ) {
+        if (!isStreakBreakingStatus(salahStatuses)) {
           if (salahStatuses.includes("excused")) {
             excusedDays += 1;
           }
-
-          streakDatesArr.push(currentDate);
-
-          if (isSameDay(addDays(previousDate, 1), todaysDate)) {
-            handleEndOfStreak(
-              streakDatesArr,
-              isActiveStreak,
-              excusedDays,
-              streakDatesObjectsArray
-            );
-            excusedDays = 0;
-          }
-        } else {
+          streakDatesArr.push(todaysDate);
+          isActiveStreak = true;
           handleEndOfStreak(
             streakDatesArr,
             isActiveStreak,
@@ -517,6 +476,56 @@ const App = () => {
           );
           excusedDays = 0;
         }
+        return;
+      }
+
+      const previousDate = parseISO(reversedFetchedSalahDataArr[i - 1].date);
+      const currentDate = parseISO(reversedFetchedSalahDataArr[i].date);
+
+      console.log(
+        `i is: ${i}, currentDate is: ${currentDate} streakDatesArr is: ${streakDatesArr}`
+      );
+
+      const firstDateSalahStatuses = Object.values(
+        reversedFetchedSalahDataArr[0].salahs
+      );
+
+      if (
+        isConsecutiveDay(previousDate, todaysDate) &&
+        !salahStatuses.includes("late") &&
+        !salahStatuses.includes("missed")
+      ) {
+        isActiveStreak = true;
+      }
+      if (
+        isConsecutiveDay(previousDate, currentDate) &&
+        !isStreakBreakingStatus(salahStatuses)
+      ) {
+        if (salahStatuses.includes("excused")) {
+          excusedDays += 1;
+        }
+
+        i === 1 && !isStreakBreakingStatus(firstDateSalahStatuses)
+          ? streakDatesArr.push(previousDate, currentDate)
+          : streakDatesArr.push(currentDate);
+
+        if (isConsecutiveDay(previousDate, todaysDate)) {
+          handleEndOfStreak(
+            streakDatesArr,
+            isActiveStreak,
+            excusedDays,
+            streakDatesObjectsArray
+          );
+          excusedDays = 0;
+        }
+      } else {
+        handleEndOfStreak(
+          streakDatesArr,
+          isActiveStreak,
+          excusedDays,
+          streakDatesObjectsArray
+        );
+        excusedDays = 0;
       }
     }
   };
@@ -548,6 +557,7 @@ const App = () => {
         isActive: isActiveStreak,
       };
       streakDatesObjectsArray.push(streakDatesObj);
+      console.log("streakDatesObjectsArray: ", streakDatesObjectsArray);
 
       setStreakDatesObjectsArr(
         streakDatesObjectsArray
@@ -559,9 +569,9 @@ const App = () => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
-  // }, [streakDatesObjectsArr]);
+  useEffect(() => {
+    console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
+  }, [streakDatesObjectsArr]);
 
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,

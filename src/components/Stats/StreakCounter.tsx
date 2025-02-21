@@ -25,7 +25,6 @@ const StreakCounter = ({
   activeStreak,
   userGender,
 }: StreakCounterProps) => {
-  console.log("userGender", userGender);
   const [showStreaksModal, setShowStreaksModal] = useState(false);
 
   const showStreakInfo = async () => {
@@ -60,7 +59,7 @@ const StreakCounter = ({
                     streakDatesObjectsArr[0].startDate,
                     streakDatesObjectsArr[0].endDate
                   )
-                    ? `${
+                    ? `- ${
                         createLocalisedDate(
                           format(streakDatesObjectsArr[0].endDate, "yyyy-MM-dd")
                         )[1]
@@ -121,7 +120,7 @@ const StreakCounter = ({
           <Sheet.Content>
             <Sheet.Scroller>
               <section>
-                <h1 className="mb-10 text-2xl text-center">Past Streaks</h1>
+                <h1 className="mb-10 text-2xl text-center">Streaks</h1>
                 {streakDatesObjectsArr.map((item) => {
                   return (
                     <ul className="px-4 my-3">
