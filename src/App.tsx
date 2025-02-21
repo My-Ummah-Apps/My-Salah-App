@@ -39,11 +39,11 @@ import {
   format,
   parse,
   eachDayOfInterval,
-  isSameDay,
-  addDays,
+  // isSameDay,
+  // addDays,
   differenceInDays,
   subDays,
-  isYesterday,
+  // isYesterday,
   parseISO,
 } from "date-fns";
 import { PreferenceType } from "./types/types";

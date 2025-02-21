@@ -1,18 +1,12 @@
-import {
-  bottomSheetContainerStyles,
-  createLocalisedDate,
-  sheetBackdropColor,
-  sheetHeaderHeight,
-  TWEEN_CONFIG,
-} from "../../utils/constants";
+import { createLocalisedDate } from "../../utils/constants";
 import { streakDatesObjType } from "../../types/types";
-import Sheet from "react-modal-sheet";
 import wreathLeft from "/src/assets/icons/wreath-left.png";
 import wreathRight from "/src/assets/icons/wreath-right.png";
 import { useState } from "react";
 import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
 import { Dialog } from "@capacitor/dialog";
+import BottomSheetStreaksHistory from "../BottomSheets/BottomSheetStreaksHistory";
 
 interface StreakCounterProps {
   streakDatesObjectsArr: streakDatesObjType[];
@@ -45,12 +39,6 @@ const StreakCounter = ({
 
   const filteredStreakDatesObjectsArr = streakDatesObjectsArr.filter(
     (obj) => obj.startDate.getTime() !== obj.endDate.getTime()
-  );
-  console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
-
-  console.log(
-    "filteredStreakDatesObjectsArr[0]: ",
-    filteredStreakDatesObjectsArr[0]
   );
 
   return (
@@ -121,54 +109,11 @@ const StreakCounter = ({
           </button>
         )}
       </div>
-      <Sheet
-        disableDrag={false}
-        isOpen={showStreaksModal}
-        onClose={() => setShowStreaksModal(false)}
-        detent="full-height"
-        tweenConfig={TWEEN_CONFIG}
-      >
-        <Sheet.Container
-          // className="react-modal-sheet-container"
-          style={bottomSheetContainerStyles}
-        >
-          <Sheet.Header style={sheetHeaderHeight} />
-          <Sheet.Content>
-            <Sheet.Scroller>
-              <section>
-                <h1 className="mb-10 text-2xl text-center">Streaks</h1>
-                {filteredStreakDatesObjectsArr.slice(1).map((item) => {
-                  return (
-                    <ul className="px-4 my-3">
-                      {!isSameDay(item.startDate, item.endDate) && (
-                        <li className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800">
-                          <p>
-                            {`${
-                              createLocalisedDate(
-                                format(item.startDate, "yyyy-MM-dd")
-                              )[1]
-                            } -
-                         ${
-                           createLocalisedDate(
-                             format(item.endDate, "yyyy-MM-dd")
-                           )[1]
-                         }`}
-                          </p>
-                          <p>{`${item.days} Days`}</p>
-                        </li>
-                      )}
-                    </ul>
-                  );
-                })}
-              </section>
-            </Sheet.Scroller>
-          </Sheet.Content>
-        </Sheet.Container>
-        <Sheet.Backdrop
-          style={sheetBackdropColor}
-          onTap={() => setShowStreaksModal(false)}
-        />
-      </Sheet>
+      <BottomSheetStreaksHistory
+        setShowStreaksModal={setShowStreaksModal}
+        showStreaksModal={showStreaksModal}
+        filteredStreakDatesObjectsArr={filteredStreakDatesObjectsArr}
+      />
     </>
   );
 };
