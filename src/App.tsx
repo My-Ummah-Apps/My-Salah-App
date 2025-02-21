@@ -39,11 +39,8 @@ import {
   format,
   parse,
   eachDayOfInterval,
-  // isSameDay,
-  // addDays,
   differenceInDays,
   subDays,
-  // isYesterday,
   parseISO,
 } from "date-fns";
 import { PreferenceType } from "./types/types";
@@ -53,7 +50,6 @@ import SettingsPage from "./pages/SettingsPage";
 // import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
-// import StreakCount from "./components/Stats/StreakCount";
 import useSQLiteDB from "./utils/useSqLiteDB";
 import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
@@ -564,9 +560,9 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
-  }, [streakDatesObjectsArr]);
+  // useEffect(() => {
+  //   console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
+  // }, [streakDatesObjectsArr]);
 
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,
