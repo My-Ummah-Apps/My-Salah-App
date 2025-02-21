@@ -481,11 +481,6 @@ const App = () => {
 
       const previousDate = parseISO(reversedFetchedSalahDataArr[i - 1].date);
       const currentDate = parseISO(reversedFetchedSalahDataArr[i].date);
-
-      console.log(
-        `i is: ${i}, currentDate is: ${currentDate} streakDatesArr is: ${streakDatesArr}`
-      );
-
       const firstDateSalahStatuses = Object.values(
         reversedFetchedSalahDataArr[0].salahs
       );

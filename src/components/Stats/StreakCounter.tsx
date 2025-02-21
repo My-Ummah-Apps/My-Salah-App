@@ -43,25 +43,41 @@ const StreakCounter = ({
     });
   };
 
+  const filteredStreakDatesObjectsArr = streakDatesObjectsArr.filter(
+    (obj) => obj.startDate.getTime() !== obj.endDate.getTime()
+  );
+  console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
+
+  console.log(
+    "filteredStreakDatesObjectsArr[0]: ",
+    filteredStreakDatesObjectsArr[0]
+  );
+
   return (
     <>
       <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl`}>
         <section className="flex items-center justify-between p-2 text-xs">
           <div>
-            {activeStreak > 0 && (
+            {activeStreak > 0 && filteredStreakDatesObjectsArr.length > 0 && (
               <p className="">
                 {`${
                   createLocalisedDate(
-                    format(streakDatesObjectsArr[0].startDate, "yyyy-MM-dd")
+                    format(
+                      filteredStreakDatesObjectsArr[0].startDate,
+                      "yyyy-MM-dd"
+                    )
                   )[1]
                 } ${
                   !isSameDay(
-                    streakDatesObjectsArr[0].startDate,
-                    streakDatesObjectsArr[0].endDate
+                    filteredStreakDatesObjectsArr[0].startDate,
+                    filteredStreakDatesObjectsArr[0].endDate
                   )
                     ? `- ${
                         createLocalisedDate(
-                          format(streakDatesObjectsArr[0].endDate, "yyyy-MM-dd")
+                          format(
+                            filteredStreakDatesObjectsArr[0].endDate,
+                            "yyyy-MM-dd"
+                          )
                         )[1]
                       }`
                     : ""
@@ -93,7 +109,7 @@ const StreakCounter = ({
             srcSet=""
           />
         </div>
-        {streakDatesObjectsArr.length > 1 && (
+        {filteredStreakDatesObjectsArr.length > 1 && (
           <button
             style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
             onClick={() => {
@@ -101,7 +117,7 @@ const StreakCounter = ({
             }}
             className={`mb-2 pt-2 text-center w-full `}
           >
-            <p className="">Show All Streaks</p>
+            <p className="">Show Past Streaks</p>
           </button>
         )}
       </div>
@@ -121,7 +137,7 @@ const StreakCounter = ({
             <Sheet.Scroller>
               <section>
                 <h1 className="mb-10 text-2xl text-center">Streaks</h1>
-                {streakDatesObjectsArr.map((item) => {
+                {filteredStreakDatesObjectsArr.slice(1).map((item) => {
                   return (
                     <ul className="px-4 my-3">
                       {!isSameDay(item.startDate, item.endDate) && (
