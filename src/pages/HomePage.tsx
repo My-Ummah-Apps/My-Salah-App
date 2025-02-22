@@ -3,6 +3,7 @@ import PrayerTable from "../components/PrayerTable/PrayerTable";
 import MissedSalahCounter from "../components/Stats/MissedSalahCounter";
 import wreathLeft from "/src/assets/icons/wreath-left.png";
 import wreathRight from "/src/assets/icons/wreath-right.png";
+import { Dialog } from "@capacitor/dialog";
 
 import {
   SalahRecordsArrayType,
@@ -67,6 +68,17 @@ const HomePage = ({
     useState<SelectedSalahAndDateObjType>({});
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
 
+  const showStreakInfoHomePage = async () => {
+    await Dialog.alert({
+      title: "Streaks Explained",
+      message: `Your current streak shows how many consecutive days you've completed all your Salah, starting from the first day where all Salah have been prayed. ${
+        userPreferences.userGender === "male"
+          ? "If you miss a prayer or are late, the streak resets."
+          : "If you're late, the streak will reset, selecting 'Excused' will pause the streak, but won't break it."
+      }`,
+    });
+  };
+
   return (
     <section className={`${pageStyles} home-page-wrap`}>
       <header className="home-page-header">
@@ -86,6 +98,7 @@ const HomePage = ({
 
           <p className="home-page-header-p">{"Home"}</p>
           <div
+            onClick={showStreakInfoHomePage}
             className={`absolute top-1/2 right-[-7px] py-1 -translate-y-1/2 flex items-center`}
           >
             <div className="relative flex items-center justify-center py-10 wreath-and-text-wrap">
