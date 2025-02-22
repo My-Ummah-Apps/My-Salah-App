@@ -2,11 +2,35 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.2";
+export const LATEST_APP_VERSION = "3.3";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Streak Counter",
+        text: (
+          <>
+            <strong>Feature:</strong> A streak counter to help you track your
+            consecutive days of completed Salah.
+          </>
+        ),
+      },
+      {
+        heading: "Custom Start Date",
+        text: (
+          <>
+            <strong>Feature:</strong> You can now change the start date of the
+            application, giving you the flexibility to begin tracking from any
+            date of your choice.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.2",
     changes: [
       {
         heading: "Minor UI Fixes",
