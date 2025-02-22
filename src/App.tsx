@@ -109,7 +109,7 @@ const App = () => {
           await fetchDataFromDB();
         };
         initialiseAndLoadData();
-        await SplashScreen.hide({ fadeOutDuration: 250 });
+        await SplashScreen.hide({ fadeOutDuration: 500 });
       }
     };
 
@@ -425,7 +425,6 @@ const App = () => {
 
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
-
     generateStreaks([...singleSalahObjArr]);
   };
 

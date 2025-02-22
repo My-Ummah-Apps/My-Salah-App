@@ -20,7 +20,7 @@ export const bottomSheetContainerStyles = {
 };
 
 export const defaultReasons =
-  "Alarm,Education,Caregiving,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
+  "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Repairs,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
 export const dictPreferencesDefaultValues: userPreferencesType = {
   userGender: "male",

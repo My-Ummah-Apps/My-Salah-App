@@ -50,7 +50,7 @@ const StreakCounter = ({
       <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl`}>
         <section className="flex items-center justify-between p-2 text-xs">
           <div>
-            {activeStreakObj && (
+            {activeStreakObj && activeStreakObj.days > 0 && (
               <p className="">
                 {`${
                   createLocalisedDate(
