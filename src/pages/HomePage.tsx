@@ -73,7 +73,7 @@ const HomePage = ({
       title: "Streaks Explained",
       message: `Your current streak shows how many consecutive days you've completed all your Salah, starting from the first day where all Salah have been prayed. ${
         userPreferences.userGender === "male"
-          ? "If you miss a prayer or are late, the streak resets."
+          ? "If you miss a prayer or are late, the streak will reset."
           : "If you're late, the streak will reset, selecting 'Excused' will pause the streak, but won't break it."
       }`,
     });

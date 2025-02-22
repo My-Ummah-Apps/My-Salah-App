@@ -109,7 +109,9 @@ const App = () => {
           await fetchDataFromDB();
         };
         initialiseAndLoadData();
-        await SplashScreen.hide({ fadeOutDuration: 500 });
+        setTimeout(async () => {
+          await SplashScreen.hide({ fadeOutDuration: 250 });
+        }, 250);
       }
     };
 
