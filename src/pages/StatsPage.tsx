@@ -34,7 +34,7 @@ interface StatsPageProps {
   fetchedSalahData: SalahRecordsArrayType;
   pageStyles: string;
   streakDatesObjectsArr: streakDatesObjType[];
-  activeStreak: number;
+  activeStreakCount: number;
 }
 
 const StatsPage = ({
@@ -44,7 +44,7 @@ const StatsPage = ({
   fetchedSalahData,
   pageStyles,
   streakDatesObjectsArr,
-  activeStreak,
+  activeStreakCount,
 }: StatsPageProps) => {
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
@@ -191,7 +191,7 @@ const StatsPage = ({
       <section className="stats-page-components-wrap">
         <StreakCounter
           streakDatesObjectsArr={streakDatesObjectsArr}
-          activeStreak={activeStreak}
+          activeStreakCount={activeStreakCount}
           userGender={userPreferences.userGender}
         />
         <DonutPieChart

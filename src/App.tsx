@@ -67,7 +67,7 @@ const App = () => {
   const [streakDatesObjectsArr, setStreakDatesObjectsArr] = useState<
     streakDatesObjType[]
   >([]);
-  const [activeStreak, setActiveStreak] = useState(0);
+  const [activeStreakCount, setActiveStreakCount] = useState(0);
   // const [showDonutChart, setShowDonutChart] = useState(false);
 
   useEffect(() => {
@@ -536,9 +536,9 @@ const App = () => {
               subDays(streakDatesArr[0], 1)
             );
       if (isActiveStreak) {
-        setActiveStreak(streakDaysAmount - excusedDays);
+        setActiveStreakCount(streakDaysAmount - excusedDays);
       } else if (!isActiveStreak) {
-        setActiveStreak(0);
+        setActiveStreakCount(0);
       }
 
       let streakDatesObj: streakDatesObjType = {
@@ -643,7 +643,7 @@ const App = () => {
                 missedSalahList={missedSalahList}
                 setIsMultiEditMode={setIsMultiEditMode}
                 isMultiEditMode={isMultiEditMode}
-                activeStreak={activeStreak}
+                activeStreakCount={activeStreakCount}
                 generateStreaks={generateStreaks}
               />
             }
@@ -680,7 +680,7 @@ const App = () => {
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
-                activeStreak={activeStreak}
+                activeStreakCount={activeStreakCount}
                 streakDatesObjectsArr={streakDatesObjectsArr}
                 // showDonutChart={showDonutChart}
               />

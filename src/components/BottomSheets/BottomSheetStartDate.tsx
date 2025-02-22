@@ -72,7 +72,7 @@ const BottomSheetStartDate = ({
                 <p className="mb-2">Select New Start Date</p>
                 <input
                   onKeyDown={(e) => {
-                    e.preventDefault();
+                    // e.preventDefault();
                   }}
                   //   onChange={handleStartDateChange}
                   ref={datePickerRef}

@@ -39,7 +39,7 @@ interface HomePageProps {
   missedSalahList: MissedSalahObjType;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
-  activeStreak: number;
+  activeStreakCount: number;
   generateStreaks: (fetchedSalahData: SalahRecordsArrayType) => void;
 }
 
@@ -60,7 +60,7 @@ const HomePage = ({
   missedSalahList,
   setIsMultiEditMode,
   isMultiEditMode,
-  activeStreak,
+  activeStreakCount,
   generateStreaks,
 }: HomePageProps) => {
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
@@ -97,7 +97,7 @@ const HomePage = ({
               />
               <div className="absolute -translate-x-1/2 -translate-y-[55%] top-[55%] left-1/2">
                 <h1 className="mb-1 text-xs font-extrabold text-center">
-                  {activeStreak}
+                  {activeStreakCount}
                 </h1>
               </div>
               <img

@@ -10,16 +10,20 @@ import BottomSheetStreaksHistory from "../BottomSheets/BottomSheetStreaksHistory
 
 interface StreakCounterProps {
   streakDatesObjectsArr: streakDatesObjType[];
-  activeStreak: number;
+  activeStreakCount: number;
   userGender: string;
 }
 
 const StreakCounter = ({
   streakDatesObjectsArr,
-  activeStreak,
+  activeStreakCount,
   userGender,
 }: StreakCounterProps) => {
   const [showStreaksModal, setShowStreaksModal] = useState(false);
+  const activeStreakObj = streakDatesObjectsArr.filter(
+    (obj) => obj.isActive === true
+  )[0];
+  console.log("activeStreakObj: ", activeStreakObj);
 
   const showStreakInfo = async () => {
     await Dialog.alert({
@@ -46,26 +50,17 @@ const StreakCounter = ({
       <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl`}>
         <section className="flex items-center justify-between p-2 text-xs">
           <div>
-            {activeStreak > 0 && filteredStreakDatesObjectsArr.length > 0 && (
+            {activeStreakObj && (
               <p className="">
                 {`${
                   createLocalisedDate(
-                    format(
-                      filteredStreakDatesObjectsArr[0].startDate,
-                      "yyyy-MM-dd"
-                    )
+                    format(activeStreakObj.startDate, "yyyy-MM-dd")
                   )[1]
                 } ${
-                  !isSameDay(
-                    filteredStreakDatesObjectsArr[0].startDate,
-                    filteredStreakDatesObjectsArr[0].endDate
-                  )
+                  !isSameDay(activeStreakObj.startDate, activeStreakObj.endDate)
                     ? `- ${
                         createLocalisedDate(
-                          format(
-                            filteredStreakDatesObjectsArr[0].endDate,
-                            "yyyy-MM-dd"
-                          )
+                          format(activeStreakObj.endDate, "yyyy-MM-dd")
                         )[1]
                       }`
                     : ""
@@ -86,7 +81,7 @@ const StreakCounter = ({
           />
           <div className="absolute -translate-x-1/2 -translate-y-[60%] top-[60%] left-1/2">
             <h1 className="mb-1 text-4xl font-extrabold text-center">
-              {activeStreak} {activeStreak !== 1 ? "Days" : "Day"}
+              {activeStreakCount} {activeStreakCount !== 1 ? "Days" : "Day"}
             </h1>
             <h2 className="text-xs text-center">Current Streak</h2>
           </div>
