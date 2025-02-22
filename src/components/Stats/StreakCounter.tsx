@@ -23,21 +23,21 @@ const StreakCounter = ({
   const activeStreakObj = streakDatesObjectsArr.filter(
     (obj) => obj.isActive === true
   )[0];
-  console.log("activeStreakObj: ", activeStreakObj);
+  // console.log("activeStreakObj: ", activeStreakObj);
 
   const showStreakInfo = async () => {
     await Dialog.alert({
       title: "Streaks Explained",
       message:
         userGender === "male"
-          ? `Streaks represent the number of consecutive days you have performed your Salah. 
+          ? `Streaks represent the number of consecutive days you've completed all your Salah, starting from the first day of full completion.
 
           - Streaks continue if you pray in a group or alone.
           - If you miss a prayer or are late, your streak resets.`
-          : `Streaks represent the number of consecutive days you have performed your Salah. 
+          : `Streaks represent the number of consecutive days you've completed all your Salah, starting from the first day of full completion.
           
           - Streaks continue as long as you pray on time.
-          - If you select "Excused", your streak will **pause** (it won't break, but it also won't increase).`,
+          - If you select "Excused", your streak will pause (it won't break, but it also won't increase).`,
     });
   };
 
