@@ -41,8 +41,8 @@ const BottomSheetAboutUs = ({
 
               <p className="p-4 text-sm leading-5">
                 MyUmmahApps Ltd is an organization driven by a passionate
-                commitment to empower the Muslim community through cutting-edge
-                Open Source Mobile Applications.{" "}
+                commitment to empower the Muslim community through privacy
+                friendly Open Source Mobile Applications.{" "}
               </p>
             </div>
             <div className="flex w-4/5 mx-auto">

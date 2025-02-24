@@ -1,6 +1,5 @@
 import Sheet from "react-modal-sheet";
 import {
-  bottomSheetCloseBtnStyles,
   bottomSheetContainerStyles,
   createLocalisedDate,
   isValidDate,
@@ -87,11 +86,11 @@ const BottomSheetStartDate = ({
               </section>
             </div>
             <button
+              className="text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-4"
               onClick={async () => {
                 await handleStartDateChange();
                 setShowStartDateSheet(false);
               }}
-              className={bottomSheetCloseBtnStyles}
             >
               Save
             </button>

@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-// import "react-datepicker/dist/react-datepicker.css";
-// import { Capacitor } from "@capacitor/core";
 // @ts-ignore
 import Switch from "react-ios-switch";
 
-// import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import {
@@ -13,8 +10,6 @@ import {
   userPreferencesType,
 } from "../types/types";
 import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
-// import { DBConnectionStateType } from "../types/types";
-
 import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetNotifications from "../components/BottomSheets/BottomSheetNotifications";
 import { SQLiteConnection } from "@capacitor-community/sqlite";

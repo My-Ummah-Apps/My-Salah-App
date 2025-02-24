@@ -43,7 +43,7 @@ const ReasonsCard = ({
         <section className="relative h-full">
           <h1 className="absolute inset-0 flex items-center justify-center">
             <section className="">
-              <p className="p-4 text-lg text-center">
+              <p className="p-4 text-center">
                 No reasons entered for Salah which were{" "}
                 {status === "male-alone"
                   ? "prayed alone"

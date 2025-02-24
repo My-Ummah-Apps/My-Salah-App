@@ -1,5 +1,4 @@
 import {
-  bottomSheetCloseBtnStyles,
   bottomSheetContainerStyles,
   sheetBackdropColor,
   TWEEN_CONFIG,
@@ -27,7 +26,7 @@ const BottomSheetChangelog = ({
     >
       <Sheet.Container style={bottomSheetContainerStyles}>
         {/* <Sheet.Header /> */}
-        <Sheet.Content className="overflow-scroll mb-28 sheet-changelog">
+        <Sheet.Content className="mb-24 overflow-scroll sheet-changelog">
           <Sheet.Scroller>
             <h1 className="mx-6 mt-8 mb-4 text-4xl ">Whats new?</h1>
             {changeLogs.map((item, i) => (
@@ -53,10 +52,10 @@ const BottomSheetChangelog = ({
                   </section>
                 ))}
               </section>
-            ))}
+            ))}{" "}
             <button
+              className="w-[90%] rounded-xl bg-[#5c6bc0] p-3 text-center fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2"
               onClick={() => setShowChangelogModal(false)}
-              className={bottomSheetCloseBtnStyles}
             >
               Close
             </button>
