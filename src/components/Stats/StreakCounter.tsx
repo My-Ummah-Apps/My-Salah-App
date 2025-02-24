@@ -1,7 +1,7 @@
 import { createLocalisedDate } from "../../utils/constants";
 import { streakDatesObjType } from "../../types/types";
-import wreathLeft from "/src/assets/icons/wreath-left.png";
-import wreathRight from "/src/assets/icons/wreath-right.png";
+import wreathLeft from "/src/assets/images/wreath-left.png";
+import wreathRight from "/src/assets/images/wreath-right.png";
 import { useState } from "react";
 import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";

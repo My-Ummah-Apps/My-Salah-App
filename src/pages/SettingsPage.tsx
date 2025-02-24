@@ -21,6 +21,7 @@ import { SQLiteConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { showToast } from "../utils/constants";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
+import BottomSheetAboutUs from "../components/BottomSheets/BottomSheetAboutUs";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -214,8 +215,9 @@ const SettingsPage = ({
   };
 
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
-
+  const [showAboutUsModal, setShowAboutUsModal] = useState(false);
   const [showStartDateSheet, setShowStartDateSheet] = useState(false);
+
   const link = (url: string) => {
     window.location.href = url;
   };
@@ -408,40 +410,19 @@ const SettingsPage = ({
             );
           }}
         />
-        {/* <SettingIndividual
-          indvidualStyles="rounded-b-md"
+        <SettingIndividual
           headingText={"About"}
-          subText={"About us"}
+          subText={"About Us"}
           onClick={() => {
-            // handleOpenModal4();
+            setShowAboutUsModal(true);
           }}
-        /> */}
-        {/* <NotificationOptions
-                    setMorningNotification={setMorningNotification}
-                    morningNotification={morningNotification}
-                    afternoonNotification={afternoonNotification}
-                    setAfternoonNotification={setAfternoonNotification}
-                    eveningNotification={eveningNotification}
-                    setEveningNotification={setEveningNotification}
-                    activeBackgroundColor={activeBackgroundColor}
-                  /> */}
+        />
+        <BottomSheetAboutUs
+          setShowAboutUsModal={setShowAboutUsModal}
+          showAboutUsModal={showAboutUsModal}
+        />
       </div>
     </section>
-    // let appLink: string;
-    // const shareThisAppLink = async () => {
-    //   if (Capacitor.getPlatform() == "ios") {
-    //     appLink = "https://apps.apple.com/us/app/my-tasbeeh-app/id6449438967";
-    //   } else if (Capacitor.getPlatform() == "android") {
-    //     appLink = "https://play.google.com/store/apps/details?id=com.tasbeeh.my";
-    //   }
-
-    //   await Share.share({
-    //     title: "",
-    //     text: "",
-    //     url: appLink,
-    //     dialogTitle: "",
-    //   });
-    // };
   );
 };
 

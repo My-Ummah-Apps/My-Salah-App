@@ -1,8 +1,8 @@
 import BottomSheetMissedPrayersList from "../components/BottomSheets/BottomSheetMissedPrayersList";
 import PrayerTable from "../components/PrayerTable/PrayerTable";
 import MissedSalahCounter from "../components/Stats/MissedSalahCounter";
-import wreathLeft from "/src/assets/icons/wreath-left.png";
-import wreathRight from "/src/assets/icons/wreath-right.png";
+import wreathLeft from "../assets/images/wreath-left.png";
+import wreathRight from "../assets/images/wreath-right.png";
 import { Dialog } from "@capacitor/dialog";
 
 import {
