@@ -5,6 +5,7 @@ import {
   isValidDate,
   sheetBackdropColor,
   sheetHeaderHeight,
+  showToast,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import { PreferenceType, userPreferencesType } from "../../types/types";
@@ -29,14 +30,15 @@ const BottomSheetStartDate = ({
   fetchDataFromDB,
 }: BottomSheetStartDateProps) => {
   const datePickerRef = useRef<HTMLInputElement | null>(null);
-  const [selectedStartDate, setSelectedStartDate] = useState(
-    userPreferences.userStartDate
+  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
+    null
   );
-  selectedStartDate;
+  const currentStartDate = userPreferences.userStartDate;
+
   const handleStartDateChange = async () => {
     if (datePickerRef.current) {
       if (isValidDate(datePickerRef.current.value)) {
-        setSelectedStartDate(datePickerRef.current.value);
+        // setSelectedStartDate(datePickerRef.current.value);
         await modifyDataInUserPreferencesTable(
           "userStartDate",
           datePickerRef.current.value
@@ -47,6 +49,11 @@ const BottomSheetStartDate = ({
     } else {
       console.log("datePickerRef.current null");
     }
+    setShowStartDateSheet(false);
+    showToast(
+      `Start date changed to ${createLocalisedDate(selectedStartDate!)[1]}`,
+      "long"
+    );
     await fetchDataFromDB();
   };
   return (
@@ -64,7 +71,8 @@ const BottomSheetStartDate = ({
               <section className="mb-10 text-center">
                 <p className="mb-2">Current Start Date:</p>
                 <p className="font-extrabold">
-                  {createLocalisedDate(userPreferences.userStartDate)[1]}
+                  {/* {createLocalisedDate(userPreferences.userStartDate)[1]} */}
+                  {createLocalisedDate(currentStartDate)[1]}
                 </p>
               </section>
               <section className="text-center">
@@ -73,23 +81,26 @@ const BottomSheetStartDate = ({
                   onKeyDown={(e) => {
                     e.preventDefault();
                   }}
-                  //   onChange={handleStartDateChange}
+                  onChange={(e) => {
+                    setSelectedStartDate(e.target.value);
+                  }}
                   ref={datePickerRef}
-                  // className="hidden"
                   type="date"
                   id="start"
                   name="start-date-picker"
-                  //   value={selectedStartDate}
                   min="1950-01-01"
                   max={new Date().toISOString().split("T")[0]}
                 ></input>
               </section>
             </div>
             <button
-              className="text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-4"
+              className={`text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-4 ${
+                selectedStartDate ? "opacity-100" : "opacity-20"
+              }`}
               onClick={async () => {
-                await handleStartDateChange();
-                setShowStartDateSheet(false);
+                if (selectedStartDate) {
+                  await handleStartDateChange();
+                }
               }}
             >
               Save

@@ -14,6 +14,7 @@ const SettingIndividual = ({
   return (
     <>
       <div
+        style={{ borderTopRightRadius: indvidualStyles }}
         className={`flex items-center justify-between py-1 shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto p-0.5 ${indvidualStyles}`}
         onClick={onClick}
       >

@@ -335,7 +335,7 @@ const SettingsPage = ({
         </dialog>
         {Capacitor.getPlatform() === "android" && (
           <SettingIndividual
-            indvidualStyles={"rounded-t-md"}
+            indvidualStyles={"rounded-md"}
             headingText={"Review"}
             subText={"Rate us on the Google Play Store"}
             onClick={() => {
