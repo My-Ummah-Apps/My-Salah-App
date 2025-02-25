@@ -406,6 +406,13 @@ const SettingsPage = ({
           }}
         />
         <SettingIndividual
+          headingText={"Source Code"}
+          subText={"View Source Code"}
+          onClick={() => {
+            link("https://github.com/My-Ummah-Apps/My-Salah-App");
+          }}
+        />
+        <SettingIndividual
           headingText={"About"}
           subText={"About Us"}
           onClick={() => {

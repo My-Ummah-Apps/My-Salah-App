@@ -5,10 +5,7 @@ import {
   sheetHeaderHeight,
   TWEEN_CONFIG,
 } from "../../utils/constants";
-
-const link = (url) => {
-  window.location.href = url;
-};
+import MyUmmahAppsLogo from "/src/assets/images/My-Ummah-Apps-72ppi.png";
 
 interface BottomSheetAboutUsProps {
   setShowAboutUsModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,11 +26,11 @@ const BottomSheetAboutUs = ({
       <Sheet.Container style={bottomSheetContainerStyles}>
         <Sheet.Header style={sheetHeaderHeight} />
         <Sheet.Content>
-          <div className="pt-4 pb-12 rounded-lg">
+          <div className="pt-4 pb-6 rounded-lg">
             <div className="text-center">
               <img
                 className="block mx-auto mb-2"
-                src="/src/assets/images/My-Ummah-Apps-72ppi.png"
+                src={MyUmmahAppsLogo}
                 height="50"
                 width="40%"
                 alt=""
@@ -45,18 +42,9 @@ const BottomSheetAboutUs = ({
                 friendly Open Source Mobile Applications.{" "}
               </p>
             </div>
-            <div className="flex w-4/5 mx-auto">
-              <div
-                className="w-2/5 p-2 mx-auto mt-2 text-xs leading-4 text-center text-white bg-blue-500 rounded-md"
-                onClick={() => {
-                  link("https://github.com/My-Ummah-Apps/My-Salah-App");
-                }}
-              >
-                <p> View App Source Code</p>
-              </div>
-            </div>
-            <div className="mx-4 mt-10 text-sm text-center">
-              <p>App Icon by: </p>
+
+            <div className="mx-4 mt-5 text-xs text-center">
+              <p className="mb-[0.2rem]">App Icon by: </p>
               <a
                 className="text-xs underline text-inherit"
                 href="https://www.flaticon.com/authors/zane-priedite"
