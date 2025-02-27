@@ -121,6 +121,27 @@ const HomePage = ({
               />
             </div>
           </div>
+          {/* <div
+            className="missed-salah-counter absolute top-1/2 right-0 w-10 py-1 -translate-y-1/2 flex justify-between items-center bg-[#252525] rounded-lg"
+            onClick={() => {}}
+          >
+            <div className={`w-[1.1rem] h-[1.1rem] rounded-md flex`}>
+              {" "}
+              <img
+                style={{ width: "40px", height: "100%", marginRight: "0rem" }}
+                src={wreathLeft}
+                alt=""
+                srcSet=""
+              />
+              <img
+                style={{ width: "40px", height: "100%", marginLeft: "-0.5rem" }}
+                src={wreathRight}
+                alt=""
+                srcSet=""
+              />
+            </div>
+            <p className="text-xs">{getMissedSalahCount(missedSalahList)}</p>
+          </div> */}
           {/* <StreakCount styles={{ backgroundColor: "grey" }} /> */}
         </section>
       </header>

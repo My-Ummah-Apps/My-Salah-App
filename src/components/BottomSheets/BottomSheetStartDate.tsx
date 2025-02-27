@@ -78,6 +78,8 @@ const BottomSheetStartDate = ({
               <section className="text-center">
                 <p className="mb-2">Select New Start Date</p>
                 <input
+                  className="w-3/4"
+                  placeholder="Day Month Year"
                   onKeyDown={(e) => {
                     e.preventDefault();
                   }}
@@ -86,7 +88,6 @@ const BottomSheetStartDate = ({
                   }}
                   ref={datePickerRef}
                   type="date"
-                  id="start"
                   name="start-date-picker"
                   min="1950-01-01"
                   max={new Date().toISOString().split("T")[0]}

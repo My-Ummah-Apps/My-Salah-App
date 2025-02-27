@@ -362,25 +362,47 @@ td {
   display: inline-block;
   margin-right: 0.3rem;
   border-radius: 0.15rem;
-  width: 10px; /* Adjust the size as needed */
-  height: 10px; /* Adjust the size as needed */
+  width: 10px;
+  height: 10px;
   /* background-color: red; */
 }
 
 @supports not (-webkit-touch-callout: none) {
-  /* CSS for other than iOS devices */
+  /* CSS for non-iOS devices */
   .navbar-wrap {
     /* padding-bottom: 0; */
     padding-bottom: 0.5rem;
   }
 }
 
-/* Apply the background color to the safe areas for iOS devices
+@supports (-webkit-touch-callout: none) {
+  /* CSS for only iOS devices */
+  input[type="date"]:before {
+    content: attr(placeholder) !important;
+    margin-right: 0.5em;
+  }
+}
+
+/* Apply background color to the safe areas for iOS devices
 @supports (padding-top: constant(safe-area-inset-top)) or
   (padding-top: env(safe-area-inset-top)) {
   .header-wrap {
     margin-top: 6vh;
   }
+} */
+
+input[type="date"] {
+  color: white;
+  background-color: rgb(67, 67, 67);
+}
+
+/* input[type="date"]:focus:before,
+input[type="date"]:valid:before {
+  content: "";
+} */
+
+/* input[type="date"]:after {
+  content: attr(placeholder);
 } */
 
 /* CHECKBOX STYLING */
