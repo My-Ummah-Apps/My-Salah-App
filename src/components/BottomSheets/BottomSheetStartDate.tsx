@@ -95,7 +95,7 @@ const BottomSheetStartDate = ({
               </section>
             </div>
             <button
-              className={`text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-4 ${
+              className={`text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-[7%] ${
                 selectedStartDate ? "opacity-100" : "opacity-20"
               }`}
               onClick={async () => {
