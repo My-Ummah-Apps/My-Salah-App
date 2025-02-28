@@ -351,7 +351,7 @@ const SettingsPage = ({
             headingText={"Review"}
             subText={"Rate us on the App Store"}
             onClick={() => {
-              link("https://apps.apple.com/us/app/my-salah-app/id6449438967");
+              link("https://apps.apple.com/gb/app/my-salah-app/id6478277078");
             }}
           />
         )}

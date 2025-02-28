@@ -10,7 +10,6 @@ import {
 } from "../../utils/constants";
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
-import { Capacitor } from "@capacitor/core";
 
 interface BottomSheetStartDateProps {
   showStartDateSheet: boolean;

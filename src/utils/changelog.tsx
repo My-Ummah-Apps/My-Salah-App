@@ -2,11 +2,50 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.3";
+export const LATEST_APP_VERSION = "3.4";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Open Source Release",
+        text: (
+          <>
+            <strong>Announcement:</strong> In line with our commitment to
+            transparency and our promise of being privacy-friendly, the app is
+            now open source. A link to the applications source code can be found
+            in the settings page.
+          </>
+        ),
+      },
+      {
+        heading: "Minor UI/UX Improvements",
+        text: (
+          <>
+            <strong>Improvements: </strong>
+            Fixed an issue where the save button in the start date sheet was too
+            low on iOS devices, made the save button clickable only when a date
+            is selected, added a toast alert for start date changes, and
+            resolved a visual issue on iOS devices where the input box was
+            blank.
+          </>
+        ),
+      },
+      {
+        heading: "Bug Fix",
+        text: (
+          <>
+            <strong>Donut Pie Chart: </strong> Fixed an issue where the donut
+            pie chart would occasionally pop in on the stats page on some
+            devices, primarily affecting Android.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.3",
     changes: [
       {
         heading: "Streak Counter",

@@ -165,7 +165,7 @@ input[type="date"] {
 }
 
 .prayer-status-color-box {
-  animation: fadeIn 0.5s ease forwards;
+  /* animation: fadeIn 0.5s ease forwards; */
 }
 
 .status-box-transition {
