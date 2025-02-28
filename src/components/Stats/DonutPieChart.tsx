@@ -44,10 +44,9 @@ const renderCustomizedLabel = ({
 };
 
 const DonutPieChart = ({
+  donutPieChartData,
   salahStatusStatistics,
   userGender,
-  showDonutChart,
-  showNoDataText,
 }: {
   salahStatusStatistics: {
     salahInJamaahDatesOverall: number;
@@ -57,38 +56,10 @@ const DonutPieChart = ({
     salahMissedDatesOverall: number;
     salahLateDatesOverall: number;
   };
+  donutPieChartData: { name: string; value: number }[];
   userGender: string;
-  showDonutChart: boolean;
-  showNoDataText: boolean;
 }) => {
-  const data = [
-    userGender === "male"
-      ? {
-          name: "In Jamaah",
-          value: salahStatusStatistics.salahInJamaahDatesOverall,
-        }
-      : {
-          name: "Prayed",
-          value: salahStatusStatistics.salahFemaleAloneDatesOverall,
-        },
-    userGender === "male"
-      ? {
-          name: "Alone",
-          value: salahStatusStatistics.salahMaleAloneDatesOverall,
-        }
-      : {
-          name: "Excused",
-          value: salahStatusStatistics.salahExcusedDatesOverall,
-        },
-
-    { name: "Late", value: salahStatusStatistics.salahLateDatesOverall },
-    { name: "Missed", value: salahStatusStatistics.salahMissedDatesOverall },
-  ];
-
   const COLORS =
-    // userGender === "male"
-    //   ? ["green", "#BDA55D", "orange", "red"]
-    //   : ["green", "purple", "orange", "red"];
     userGender === "male"
       ? [
           prayerStatusColorsHexCodes.group,
@@ -105,38 +76,34 @@ const DonutPieChart = ({
   return (
     <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
       <ResponsiveContainer width="60%" height="100%">
-        {showDonutChart ? (
-          <PieChart width={400} height={400}>
-            <Pie
-              data={data}
-              isAnimationActive={true}
-              animationDuration={1000}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={renderCustomizedLabel}
-              outerRadius={90}
-              innerRadius={45}
-              paddingAngle={0}
-              cornerRadius={0}
-              fill="#8884d8"
-              dataKey="value"
-              stroke="none"
-            >
-              {data.map((_, index) => (
-                <Cell
-                  style={{ outline: "none" }}
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-          </PieChart>
-        ) : (
-          <p className="flex items-center justify-center w-full h-full">
-            {showNoDataText && <p>No Data</p>}
-          </p>
-        )}
+        <PieChart width={400} height={400}>
+          <Pie
+            // data={data}
+            data={donutPieChartData}
+            // data={data.length > 0 ? data : [{ name: "No Data", value: 0 }]}
+            isAnimationActive={false}
+            // animationDuration={1000}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={renderCustomizedLabel}
+            outerRadius={90}
+            innerRadius={45}
+            paddingAngle={0}
+            cornerRadius={0}
+            fill="#8884d8"
+            dataKey="value"
+            stroke="none"
+          >
+            {donutPieChartData.map((_, index) => (
+              <Cell
+                style={{ outline: "none" }}
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+        </PieChart>
       </ResponsiveContainer>
 
       <div className="justify-center">

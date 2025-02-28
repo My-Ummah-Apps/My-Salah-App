@@ -10,6 +10,7 @@ import {
 } from "../../utils/constants";
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
+import { Capacitor } from "@capacitor/core";
 
 interface BottomSheetStartDateProps {
   showStartDateSheet: boolean;
@@ -78,8 +79,12 @@ const BottomSheetStartDate = ({
               <section className="text-center">
                 <p className="mb-2">Select New Start Date</p>
                 <input
-                  className="w-3/4"
-                  placeholder="Day Month Year"
+                  // className="w-3/4"
+                  // {...(Capacitor.getPlatform() === "ios" && {
+                  //   placeholder: "Enter your text",
+
+                  // })}
+                  placeholder="&#x1F5D3;"
                   onKeyDown={(e) => {
                     e.preventDefault();
                   }}

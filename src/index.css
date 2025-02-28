@@ -60,13 +60,18 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
   height: 100vh;
-  max-width: 700px;
+  /* max-width: 700px; */
   margin-inline: auto;
   background: var(--primary-color);
   color: rgb(184, 184, 184);
   font-family: sans-serif;
   overflow: hidden;
   /* scrollbar-color: red red; */
+}
+
+.app {
+  /* max-width: 700px; */
+  /* overflow: hidden; */
 }
 
 ::-webkit-scrollbar {
@@ -380,7 +385,11 @@ td {
   input[type="date"]:before {
     content: attr(placeholder) !important;
     margin-right: 0.5em;
+    /* transform: translateY(90deg) !important; */
   }
+  /* input[type="date"]:focus:before {
+    content: "" !important;
+  } */
 }
 
 /* Apply background color to the safe areas for iOS devices

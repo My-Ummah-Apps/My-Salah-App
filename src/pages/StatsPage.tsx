@@ -54,8 +54,6 @@ const StatsPage = ({
     });
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
-  const [showDonutChart, setShowDonutChart] = useState(false);
-  const [showNoDataText, setShowNoDataText] = useState(false);
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
   // TODO: Test the below code to ensure stats are being calculated correctly
@@ -84,25 +82,34 @@ const StatsPage = ({
     salahLateDatesOverall: filterSalahStatuses("late").length,
   };
 
-  useEffect(() => {
-    for (let key in salahStatusStatistics) {
-      if (
-        salahStatusStatistics[key as keyof typeof salahStatusStatistics] > 0
-      ) {
-        if (!showDonutChart) {
-          setTimeout(() => {
-            setShowDonutChart(true);
-          }, 100);
+  const donutPieChartData = [
+    userPreferences.userGender === "male"
+      ? {
+          name: "In Jamaah",
+          value: salahStatusStatistics.salahInJamaahDatesOverall,
         }
-        break;
-      }
-    }
-    if (!showDonutChart) {
-      setTimeout(() => {
-        setShowNoDataText(true);
-      }, 100);
-    }
-  }, [showDonutChart, salahStatusStatistics]);
+      : {
+          name: "Prayed",
+          value: salahStatusStatistics.salahFemaleAloneDatesOverall,
+        },
+    userPreferences.userGender === "male"
+      ? {
+          name: "Alone",
+          value: salahStatusStatistics.salahMaleAloneDatesOverall,
+        }
+      : {
+          name: "Excused",
+          value: salahStatusStatistics.salahExcusedDatesOverall,
+        },
+
+    { name: "Late", value: salahStatusStatistics.salahLateDatesOverall },
+    { name: "Missed", value: salahStatusStatistics.salahMissedDatesOverall },
+  ];
+  console.log(Object.values(donutPieChartData).some((obj) => obj.value));
+  console.log(
+    "Object.entries(donutPieChartData): ",
+    Object.values(donutPieChartData)
+  );
 
   useEffect(() => {
     const grabSalahDataFromDB = async () => {
@@ -194,12 +201,13 @@ const StatsPage = ({
           activeStreakCount={activeStreakCount}
           userGender={userPreferences.userGender}
         />
-        <DonutPieChart
-          userGender={userPreferences.userGender}
-          salahStatusStatistics={salahStatusStatistics}
-          showDonutChart={showDonutChart}
-          showNoDataText={showNoDataText}
-        />
+        {Object.values(donutPieChartData).some((obj) => obj.value) && (
+          <DonutPieChart
+            donutPieChartData={donutPieChartData}
+            userGender={userPreferences.userGender}
+            salahStatusStatistics={salahStatusStatistics}
+          />
+        )}
         <Calendar
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
