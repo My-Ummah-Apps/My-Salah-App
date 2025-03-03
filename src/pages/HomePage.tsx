@@ -31,7 +31,6 @@ interface HomePageProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   pageStyles: string;
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,7 +51,6 @@ const HomePage = ({
   showJoyRideEditIcon,
   setFetchedSalahData,
   fetchedSalahData,
-  setUserPreferences,
   userPreferences,
   pageStyles,
   setShowMissedPrayersSheet,
@@ -156,7 +154,6 @@ const HomePage = ({
           modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
           setShowJoyRideEditIcon={setShowJoyRideEditIcon}
           showJoyRideEditIcon={showJoyRideEditIcon}
-          setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
           setMissedSalahList={setMissedSalahList}
           setFetchedSalahData={setFetchedSalahData}

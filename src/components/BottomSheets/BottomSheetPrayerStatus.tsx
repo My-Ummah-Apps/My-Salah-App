@@ -40,7 +40,6 @@ interface PrayerStatusBottomSheetProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
   showUpdateStatusModal: boolean;
@@ -61,7 +60,6 @@ const BottomSheetPrayerStatus = ({
   resetSelectedSalahAndDate,
   setIsMultiEditMode,
   isMultiEditMode,
-  setUserPreferences,
   userPreferences,
   showUpdateStatusModal,
   setShowUpdateStatusModal,
@@ -73,16 +71,11 @@ const BottomSheetPrayerStatus = ({
   const notesTextArea = useRef<HTMLTextAreaElement | null>(null);
   const [salahStatus, setSalahStatus] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
-  const [customReason, setCustomReason] = useState("");
-  const handleCustomReason = (e: any) => {
-    setCustomReason(e.target.value);
-  };
+
   const [notes, setNotes] = useState("");
   const handleNotes = (e: any) => {
     setNotes(e.target.value);
   };
-  const [showAddCustomReasonInputBox, setShowAddCustomReasonInputBox] =
-    useState(false);
 
   let selectedReasonsArray = selectedReasons;
 
@@ -211,7 +204,6 @@ const BottomSheetPrayerStatus = ({
           );
           continue;
         }
-        // let selectedReasons1 = ["work", "leisure"];
 
         if (
           !selectedReasons.every((reason) =>
@@ -352,21 +344,14 @@ const BottomSheetPrayerStatus = ({
   return (
     <>
       <Sheet
-        // rootId="root"
         disableDrag={false}
         onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
-        // onClose={onSheetCloseCleanup}
         onClose={() => setShowUpdateStatusModal(false)}
         detent="content-height"
-        // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
         tweenConfig={TWEEN_CONFIG}
       >
-        <Sheet.Container
-          // className="react-modal-sheet-container"
-          ref={sheetRef}
-          style={bottomSheetContainerStyles}
-        >
+        <Sheet.Container ref={sheetRef} style={bottomSheetContainerStyles}>
           <Sheet.Header style={sheetHeaderHeight} />
           <Sheet.Content>
             <Sheet.Scroller>
@@ -384,7 +369,6 @@ const BottomSheetPrayerStatus = ({
                     : `these Salah?`}
                 </h1>
                 <div
-                  // ref={modalSheetPrayerStatusesWrap}
                   className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs modal-sheet-prayer-statuses-wrap `}
                 >
                   {userPreferences.userGender === "male" ? (
@@ -392,10 +376,7 @@ const BottomSheetPrayerStatus = ({
                       <div
                         onClick={() => {
                           setSalahStatus("group");
-                          // setShowReasons(false);
                           setSelectedReasons([]);
-                          // setNotes("");
-                          // setReasonsArray([]);
                         }}
                         style={{
                           backgroundColor: prayerStatusColorsHexCodes.group,
@@ -414,8 +395,6 @@ const BottomSheetPrayerStatus = ({
                       <div
                         onClick={() => {
                           setSalahStatus("female-alone");
-                          // setShowReasons(false);
-                          // setReasonsArray([]);
                         }}
                         style={{
                           backgroundColor:
@@ -438,8 +417,6 @@ const BottomSheetPrayerStatus = ({
                       <div
                         onClick={() => {
                           setSalahStatus("male-alone");
-                          // setShowReasons(true);
-                          // setReasonsArray(reasonsArray);
                         }}
                         style={{
                           backgroundColor:
@@ -460,8 +437,6 @@ const BottomSheetPrayerStatus = ({
                       <div
                         onClick={() => {
                           setSalahStatus("excused");
-                          // setShowReasons(false);
-                          // setReasonsArray([]);
                         }}
                         style={{
                           backgroundColor: prayerStatusColorsHexCodes.excused,
@@ -478,8 +453,6 @@ const BottomSheetPrayerStatus = ({
                   <div
                     onClick={() => {
                       setSalahStatus("late");
-                      // setShowReasons(true);
-                      // setReasonsArray(reasonsArray);
                     }}
                     style={{
                       backgroundColor: prayerStatusColorsHexCodes.late,
@@ -494,8 +467,6 @@ const BottomSheetPrayerStatus = ({
                   <div
                     onClick={() => {
                       setSalahStatus("missed");
-                      // setShowReasons(true);
-                      // setReasonsArray(reasonsArray);
                     }}
                     style={{
                       backgroundColor: prayerStatusColorsHexCodes.missed,
@@ -509,28 +480,15 @@ const BottomSheetPrayerStatus = ({
                   </div>
                 </div>
 
-                {/* {salahStatus === "male-alone" ||
-              salahStatus === "late" ||
-              salahStatus === "missed" ? ( */}
                 <div
                   ref={modalSheetPrayerReasonsWrap}
                   className="mb-5 overflow-x-hidden mt-7 prayer-status-modal-reasons-wrap"
                 >
-                  <div className="flex justify-between">
-                    <h2 className="mb-3 text-sm">Reasons: </h2>
-                    <p
-                      onClick={() => {
-                        // prompt();
-                        setShowAddCustomReasonInputBox(true);
-                      }}
-                    >
-                      {/* + */}
-                    </p>
+                  <div>
+                    <h2 className="mb-3 text-sm text-start">Reasons: </h2>
                   </div>
                   {Array.isArray(userPreferences.reasons) && (
                     <div className="flex flex-wrap">
-                      {/* {missedReasonsArray.map((item) => ( */}
-
                       {userPreferences.reasons.sort().map((item) => (
                         <p
                           key={item}
@@ -566,46 +524,8 @@ const BottomSheetPrayerStatus = ({
                     </div>
                   )}
                 </div>
-                {/* ) : null} */}
-                {showAddCustomReasonInputBox ? (
-                  <div className="absolute inline-block p-5 transform -translate-x-1/2 -translate-y-1/2 custom-input-box-wrap top-1/2 left-1/2 bg-slate-950">
-                    <p className="mb-5">Enter Custom Reason:</p>
-                    <input
-                      className="bg-gray-800"
-                      type="text"
-                      maxLength={10}
-                      value={customReason}
-                      onChange={handleCustomReason}
-                    />
-                    <button
-                      className="mt-10 bg-blue-700"
-                      onClick={() => {
-                        const updatedReasonsArray = [
-                          ...userPreferences.reasons,
-                          customReason,
-                        ];
-                        // setReasonsArray(updatedReasonsArray);
-                        setUserPreferences((userPreferences) => ({
-                          ...userPreferences,
-                          reasons: updatedReasonsArray,
-                        }));
-                        setShowAddCustomReasonInputBox(false);
-                        localStorage.setItem(
-                          "storedReasonsArray",
-                          JSON.stringify(updatedReasonsArray)
-                        );
-                      }}
-                    >
-                      Save
-                    </button>
-                  </div>
-                ) : null}
 
-                <div
-                  className="text-sm notes-wrap"
-                  //  useRef={notesBoxRef}
-                >
-                  {/* <h2 className="mt-3">Notes</h2> */}
+                <div className="text-sm notes-wrap">
                   <textarea
                     dir="auto"
                     placeholder="Notes"
@@ -616,9 +536,7 @@ const BottomSheetPrayerStatus = ({
                       increaseTextAreaHeight(e);
                     }}
                     style={{ resize: "vertical" }}
-                    // wrap="hard"
                     rows={3}
-                    // cols={1}
                     className="w-full p-2 border outline-none bg-[rgb(35,35,35)] border-hidden rounded-xl max-h-14 focus:border-gray-500"
                   />
                 </div>
@@ -627,7 +545,6 @@ const BottomSheetPrayerStatus = ({
                     if (salahStatus) {
                       await addOrModifySalah();
                       setShowUpdateStatusModal(false);
-                      // onSheetCloseCleanup();
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
@@ -642,7 +559,6 @@ const BottomSheetPrayerStatus = ({
         </Sheet.Container>
         <Sheet.Backdrop
           style={sheetBackdropColor}
-          // onTap={onSheetCloseCleanup}
           onTap={() => setShowUpdateStatusModal(false)}
         />
       </Sheet>
@@ -650,49 +566,18 @@ const BottomSheetPrayerStatus = ({
         className="duplicate-reasons z-[-100] absolute bottom-0 opacity-0"
         ref={modalSheetHiddenPrayerReasonsWrap}
       >
-        <div
-          style={
-            {
-              // visibility: "hidden",
-              // transform: "translateX(1000px)",
-              // position: "absolute",
-              // backgroundColor: "transparent",
-              // color: "transparent",
-              // border: "none",
-              // left: "30%",
-              // zIndex: "-100",
-            }
-          }
-        >
+        <div>
           <div className="overflow-x-hidden prayer-status-modal-reasons-wrap">
-            <div className="flex justify-between">
-              <h2 className="mb-3 text-sm">Reasons: </h2>
-              <p
-                onClick={() => {
-                  // prompt();
-                  setShowAddCustomReasonInputBox(true);
-                }}
-              >
-                {/* + */}
-              </p>
+            <div>
+              <h2 className="mb-3 text-sm text-start">Reasons: </h2>
             </div>
           </div>
         </div>
-        <div className="flex justify-between">
-          <h2 className="mb-3 text-sm">Reasons: </h2>
-          <p
-            onClick={() => {
-              // prompt();
-              setShowAddCustomReasonInputBox(true);
-            }}
-          >
-            {/* + */}
-          </p>
+        <div>
+          <h2 className="mb-3 text-sm text-start">Reasons: </h2>
         </div>
         {Array.isArray(userPreferences.reasons) && (
           <div className="flex flex-wrap">
-            {/* {missedReasonsArray.map((item) => ( */}
-
             {userPreferences.reasons.sort().map((item) => (
               <p
                 key={item} // TODO: Ensure item is going to be unique as this is being used as the key here

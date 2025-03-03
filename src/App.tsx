@@ -633,7 +633,6 @@ const App = () => {
                 }
                 setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                 showJoyRideEditIcon={showJoyRideEditIcon}
-                setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 setFetchedSalahData={setFetchedSalahData}
                 fetchedSalahData={fetchedSalahData}

@@ -40,7 +40,6 @@ interface PrayerTableProps {
   >;
   fetchedSalahData: SalahRecordsArrayType;
   setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   setSelectedSalahAndDate: React.Dispatch<
     React.SetStateAction<SelectedSalahAndDateObjType>
@@ -61,7 +60,6 @@ const PrayerTable = ({
   showJoyRideEditIcon,
   setFetchedSalahData,
   fetchedSalahData,
-  setUserPreferences,
   userPreferences,
   setMissedSalahList,
   setSelectedSalahAndDate,
@@ -325,7 +323,6 @@ const PrayerTable = ({
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
         fetchedSalahData={fetchedSalahData}
-        setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
         setMissedSalahList={setMissedSalahList}
         selectedSalahAndDate={selectedSalahAndDate}

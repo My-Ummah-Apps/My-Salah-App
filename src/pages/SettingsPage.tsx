@@ -17,6 +17,7 @@ import { Capacitor } from "@capacitor/core";
 import { showToast } from "../utils/constants";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetAboutUs from "../components/BottomSheets/BottomSheetAboutUs";
+import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -212,6 +213,7 @@ const SettingsPage = ({
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
   const [showAboutUsModal, setShowAboutUsModal] = useState(false);
   const [showStartDateSheet, setShowStartDateSheet] = useState(false);
+  const [showEditReasonsSheet, setShowEditReasonsSheet] = useState(false);
 
   const link = (url: string) => {
     window.location.href = url;
@@ -296,12 +298,23 @@ const SettingsPage = ({
               setShowStartDateSheet(true);
             }}
           />
+          <SettingIndividual
+            headingText={"Edit Reasons"}
+            subText={`Edit pre-set reasons`}
+            onClick={() => {
+              setShowEditReasonsSheet(true);
+            }}
+          />
           <BottomSheetStartDate
             setShowStartDateSheet={setShowStartDateSheet}
             showStartDateSheet={showStartDateSheet}
             userPreferences={userPreferences}
             fetchDataFromDB={fetchDataFromDB}
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+          />
+          <BottomSheetEditReasons
+            setShowEditReasonsSheet={setShowEditReasonsSheet}
+            showEditReasonsSheet={showEditReasonsSheet}
           />
         </div>
         <div className="my-5">
