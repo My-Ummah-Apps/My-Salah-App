@@ -20,14 +20,14 @@ export const bottomSheetContainerStyles = {
 };
 
 export const defaultReasons =
-  "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Repairs,Shopping,Sleep,Sports,Travel,TV,Other,Work";
+  "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
 export const dictPreferencesDefaultValues: userPreferencesType = {
   userGender: "male",
   userStartDate: format(new Date(), "yyyy-MM-dd"),
   dailyNotification: "0",
   dailyNotificationTime: "21:00",
-  reasons: defaultReasons.split(","),
+  reasons: defaultReasons.split(",").sort((a, b) => a.localeCompare(b)),
   showReasons: "0",
   showMissedSalahCount: "1",
   isExistingUser: "0",

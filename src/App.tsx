@@ -6,7 +6,7 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   dictPreferencesDefaultValues,
-  defaultReasons,
+  // defaultReasons,
   scheduleDailyNotification,
   sheetBackdropColor,
   sheetHeaderHeight,
@@ -302,8 +302,8 @@ const App = () => {
 
         // ! Should this not be (isExistingUser) ?
       } else if (DBResultPreferencesValues.length > 0) {
-        const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-        await dbConnection.current?.run(query, [defaultReasons, "reasons"]);
+        // const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+        // await dbConnection.current?.run(query, [defaultReasons, "reasons"]);
 
         const DBResultPreferencesQuery = await dbConnection.current?.query(
           `SELECT * FROM userPreferencesTable`

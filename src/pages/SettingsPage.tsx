@@ -315,6 +315,8 @@ const SettingsPage = ({
           <BottomSheetEditReasons
             setShowEditReasonsSheet={setShowEditReasonsSheet}
             showEditReasonsSheet={showEditReasonsSheet}
+            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+            userPreferences={userPreferences}
           />
         </div>
         <div className="my-5">

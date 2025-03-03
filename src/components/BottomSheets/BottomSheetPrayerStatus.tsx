@@ -489,38 +489,45 @@ const BottomSheetPrayerStatus = ({
                   </div>
                   {Array.isArray(userPreferences.reasons) && (
                     <div className="flex flex-wrap">
-                      {userPreferences.reasons.sort().map((item) => (
-                        <p
-                          key={item}
-                          style={{
-                            backgroundColor: selectedReasons.includes(item)
-                              ? "#2563eb"
-                              : "",
-                          }}
-                          className={reasonsStyles}
-                          onClick={() => {
-                            console.log(selectedReasons);
+                      {/* {userPreferences.reasons.sort().map((item) => ( */}
+                      {userPreferences.reasons
+                        .sort((a, b) => a.localeCompare(b))
+                        .map((item) => (
+                          <p
+                            key={item}
+                            style={{
+                              backgroundColor: selectedReasons.includes(item)
+                                ? "#2563eb"
+                                : "",
+                            }}
+                            className={reasonsStyles}
+                            onClick={() => {
+                              console.log(selectedReasons);
 
-                            if (!selectedReasonsArray.includes(item)) {
-                              selectedReasonsArray = [...selectedReasons, item];
-                            } else if (selectedReasonsArray.includes(item)) {
-                              let indexToRemove = selectedReasons.indexOf(item);
-                              selectedReasonsArray = selectedReasons.filter(
-                                (item) => {
-                                  return (
-                                    selectedReasons.indexOf(item) !==
-                                    indexToRemove
-                                  );
-                                }
-                              );
-                            }
-                            setSelectedReasons(selectedReasonsArray);
-                          }}
-                          // border border-gray-700 b-1 rounded-xl
-                        >
-                          {item}
-                        </p>
-                      ))}
+                              if (!selectedReasonsArray.includes(item)) {
+                                selectedReasonsArray = [
+                                  ...selectedReasons,
+                                  item,
+                                ];
+                              } else if (selectedReasonsArray.includes(item)) {
+                                let indexToRemove =
+                                  selectedReasons.indexOf(item);
+                                selectedReasonsArray = selectedReasons.filter(
+                                  (item) => {
+                                    return (
+                                      selectedReasons.indexOf(item) !==
+                                      indexToRemove
+                                    );
+                                  }
+                                );
+                              }
+                              setSelectedReasons(selectedReasonsArray);
+                            }}
+                            // border border-gray-700 b-1 rounded-xl
+                          >
+                            {item}
+                          </p>
+                        ))}
                     </div>
                   )}
                 </div>
