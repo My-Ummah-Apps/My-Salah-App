@@ -29,7 +29,7 @@ interface SettingsPageProps {
   pageStyles: string;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
-    value: string
+    value: string | string[]
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;

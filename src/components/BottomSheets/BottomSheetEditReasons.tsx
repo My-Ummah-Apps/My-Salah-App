@@ -8,7 +8,8 @@ import {
 import Sheet from "react-modal-sheet";
 // import { MdEdit } from "react-icons/md";
 import { TiDelete } from "react-icons/ti";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface BottomSheetStartDateProps {
   showEditReasonsSheet: boolean;
@@ -26,16 +27,16 @@ const BottomSheetEditReasons = ({
   modifyDataInUserPreferencesTable,
   userPreferences,
 }: BottomSheetStartDateProps) => {
-  const handleNewReasonInput = (e) => {
-    setHandleNewReason(e.target.value);
-  };
-  const [handleNewReason, setHandleNewReason] = useState("");
+  const [newReasonInput, setNewReasonInput] = useState("");
+  useEffect(() => {
+    console.log("userPreferences.reasons: ", userPreferences.reasons);
+  }, [userPreferences]);
 
   return (
     <>
       {" "}
       <Sheet
-        detent="content-height"
+        detent="full-height"
         tweenConfig={TWEEN_CONFIG}
         isOpen={showEditReasonsSheet}
         onClose={() => setShowEditReasonsSheet(false)}
@@ -45,72 +46,87 @@ const BottomSheetEditReasons = ({
           <Sheet.Content>
             <Sheet.Scroller>
               <section className="m-4">
-                <section className="mb-4 text-center">
+                <section className="flex justify-between w-full mb-4">
                   {" "}
-                  <input
-                    onChange={(e) => {
-                      handleNewReasonInput(e);
-                    }}
-                    className="p-1 bg-black rounded-md"
-                    type="text"
-                  ></input>
-                  <button
-                    onClick={() => {
-                      const updatedReasons = [
-                        ...userPreferences.reasons,
-                        handleNewReason,
-                      ];
-                      modifyDataInUserPreferencesTable(
-                        "reasons",
-                        updatedReasons
-                      );
-                      console.log("UPDATED REASONS: ", updatedReasons.join(""));
-                    }}
-                    className="px-2 py-1 ml-2 bg-blue-600 rounded-md "
-                  >
-                    Add
-                  </button>
+                  <section className="flex">
+                    <input
+                      onChange={(e) => {
+                        setNewReasonInput(e.target.value);
+                      }}
+                      className="p-1 bg-black rounded-md"
+                      type="text"
+                      value={newReasonInput}
+                    ></input>
+                    <button
+                      onClick={async () => {
+                        if (
+                          userPreferences.reasons.some(
+                            (item) =>
+                              item.toLocaleLowerCase() ===
+                              newReasonInput.toLocaleLowerCase()
+                          )
+                        ) {
+                          alert(`${newReasonInput} already exists`);
+                          return;
+                        }
+                        const updatedReasons = [
+                          ...userPreferences.reasons,
+                          newReasonInput,
+                        ];
+                        await modifyDataInUserPreferencesTable(
+                          "reasons",
+                          updatedReasons
+                        );
+                        setNewReasonInput("");
+                        // console.log("UPDATED REASONS: ", updatedReasons);
+                      }}
+                      className="px-2 py-1 ml-2 bg-blue-600 rounded-md "
+                    >
+                      Add
+                    </button>
+                  </section>
+                  <button>Reset To Defaults</button>
                 </section>
+
                 <ul>
-                  {userPreferences.reasons
-                    .sort((a, b) => a.localeCompare(b))
-                    .map((reason) => (
-                      <li className="flex items-center justify-between p-2 my-2 rounded-md bg-stone-900">
-                        <p>{reason}</p>
-                        {/* <section className=""> */}
-                        {/* <p className="mr-2">
-                          <MdEdit />
-                        </p> */}
-                        <p>
-                          <TiDelete className="text-lg" />
-                        </p>
-                        {/* </section> */}
-                      </li>
-                    ))}
+                  <AnimatePresence>
+                    {userPreferences.reasons
+                      .sort((a, b) => a.localeCompare(b))
+                      .map((reason) => (
+                        <motion.li
+                          className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-lg`}
+                          layout
+                          initial={{ x: 0 }}
+                          animate={{ x: 0 }}
+                          exit={{ x: "-100%", opacity: 0 }}
+                          transition={{
+                            delay: 0.1,
+                            duration: 0.5,
+                            layout: { duration: 0.2 },
+                          }}
+                          key={reason}
+                        >
+                          <p>{reason}</p>
+                          <p
+                            onClick={async () => {
+                              const modifiedReasons =
+                                userPreferences.reasons.filter(
+                                  (item) => item !== reason
+                                );
+                              await modifyDataInUserPreferencesTable(
+                                "reasons",
+                                modifiedReasons
+                              );
+                            }}
+                          >
+                            <TiDelete className="text-lg" />
+                          </p>
+                        </motion.li>
+                      ))}
+                  </AnimatePresence>
                 </ul>
               </section>
-              <section className="flex justify-between w-full px-4 py-4">
-                <button
-                // className={`text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-[7%] ${
-                //   selectedStartDate ? "opacity-100" : "opacity-20"
-                // }`}
-                // onClick={async () => {
-                //   if (selectedStartDate) {
-                //     await handleStartDateChange();
-                //   }
-                // }}
-                >
-                  Reset To Defaults
-                </button>
-                <button
-                  onClick={() => {}}
-                  // className={`text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-[7%] ${
-                  //   selectedStartDate ? "opacity-100" : "opacity-20"
-                  // }`}
-                >
-                  Close
-                </button>
-              </section>
+              <section className="flex justify-between w-full px-4 py-4"></section>
             </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>

@@ -484,9 +484,11 @@ const BottomSheetPrayerStatus = ({
                   ref={modalSheetPrayerReasonsWrap}
                   className="mb-5 overflow-x-hidden mt-7 prayer-status-modal-reasons-wrap"
                 >
-                  <div>
-                    <h2 className="mb-3 text-sm text-start">Reasons: </h2>
-                  </div>
+                  {userPreferences.reasons.length > 0 && (
+                    <div>
+                      <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+                    </div>
+                  )}
                   {Array.isArray(userPreferences.reasons) && (
                     <div className="flex flex-wrap">
                       {/* {userPreferences.reasons.sort().map((item) => ( */}
@@ -503,7 +505,6 @@ const BottomSheetPrayerStatus = ({
                             className={reasonsStyles}
                             onClick={() => {
                               console.log(selectedReasons);
-
                               if (!selectedReasonsArray.includes(item)) {
                                 selectedReasonsArray = [
                                   ...selectedReasons,
@@ -575,14 +576,16 @@ const BottomSheetPrayerStatus = ({
       >
         <div>
           <div className="overflow-x-hidden prayer-status-modal-reasons-wrap">
-            <div>
-              <h2 className="mb-3 text-sm text-start">Reasons: </h2>
-            </div>
+            {userPreferences.reasons.length > 0 && (
+              <div>
+                <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+              </div>
+            )}
           </div>
         </div>
-        <div>
+        {/* <div>
           <h2 className="mb-3 text-sm text-start">Reasons: </h2>
-        </div>
+        </div> */}
         {Array.isArray(userPreferences.reasons) && (
           <div className="flex flex-wrap">
             {userPreferences.reasons.sort().map((item) => (
