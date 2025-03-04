@@ -77,6 +77,17 @@ const BottomSheetPrayerStatus = ({
     setNotes(e.target.value);
   };
 
+  console.log("userPreferences.reasons: ", userPreferences.reasons);
+  // ! The below probably needs to be put in a state and changed at the point where selectReasons is set within the doesSalahAndDateExists function
+  const combinedReasons =
+    selectedReasons.length === 0
+      ? userPreferences.reasons
+      : [...userPreferences.reasons, [...selectedReasons]];
+
+  useEffect(() => {
+    console.log("selectedReasons: ", selectedReasons);
+  }, [selectedReasons]);
+
   let selectedReasonsArray = selectedReasons;
 
   const onSheetCloseCleanup = async () => {
@@ -144,7 +155,7 @@ const BottomSheetPrayerStatus = ({
       } else if (res && res.values && res.values.length > 0) {
         setSalahStatus(res.values[0].salahStatus);
         setNotes(res.values[0].notes);
-        // setSelectedReasons(res.values[0].reasons.split(", "));
+
         if (res.values[0].reasons.length > 0) {
           setSelectedReasons(res.values[0].reasons.split(", "));
         }
@@ -492,7 +503,8 @@ const BottomSheetPrayerStatus = ({
                   {Array.isArray(userPreferences.reasons) && (
                     <div className="flex flex-wrap">
                       {/* {userPreferences.reasons.sort().map((item) => ( */}
-                      {userPreferences.reasons
+                      {/* {userPreferences.reasons */}
+                      {combinedReasons
                         .sort((a, b) => a.localeCompare(b))
                         .map((item) => (
                           <p
@@ -571,7 +583,7 @@ const BottomSheetPrayerStatus = ({
         />
       </Sheet>
       <div
-        className="duplicate-reasons z-[-100] absolute bottom-0 opacity-0"
+        className="DUPLICATE-REASONS z-[-100] absolute bottom-0 opacity-0"
         ref={modalSheetHiddenPrayerReasonsWrap}
       >
         <div>
@@ -589,6 +601,7 @@ const BottomSheetPrayerStatus = ({
         {Array.isArray(userPreferences.reasons) && (
           <div className="flex flex-wrap">
             {userPreferences.reasons.sort().map((item) => (
+              // {combinedReasons.sort().map((item) => (
               <p
                 key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
                 style={{
