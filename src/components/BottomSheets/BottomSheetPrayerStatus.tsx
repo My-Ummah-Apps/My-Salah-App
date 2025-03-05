@@ -79,16 +79,16 @@ const BottomSheetPrayerStatus = ({
 
   console.log("userPreferences.reasons: ", userPreferences.reasons);
   // ! The below probably needs to be put in a state and changed at the point where selectReasons is set within the doesSalahAndDateExists function
-  const combinedReasons =
-    selectedReasons.length === 0
-      ? userPreferences.reasons
-      : [...userPreferences.reasons, [...selectedReasons]];
+  // const combinedReasons =
+  //   selectedReasons.length === 0
+  //     ? userPreferences.reasons
+  //     : [...userPreferences.reasons, [...selectedReasons]];
 
   useEffect(() => {
     console.log("selectedReasons: ", selectedReasons);
   }, [selectedReasons]);
 
-  let selectedReasonsArray = selectedReasons;
+  // let selectedReasonsArray = selectedReasons;
 
   const onSheetCloseCleanup = async () => {
     setShowUpdateStatusModal(false);
@@ -504,7 +504,7 @@ const BottomSheetPrayerStatus = ({
                     <div className="flex flex-wrap">
                       {/* {userPreferences.reasons.sort().map((item) => ( */}
                       {/* {userPreferences.reasons */}
-                      {combinedReasons
+                      {userPreferences.reasons
                         .sort((a, b) => a.localeCompare(b))
                         .map((item) => (
                           <p
@@ -516,25 +516,15 @@ const BottomSheetPrayerStatus = ({
                             }}
                             className={reasonsStyles}
                             onClick={() => {
-                              console.log(selectedReasons);
-                              if (!selectedReasonsArray.includes(item)) {
-                                selectedReasonsArray = [
-                                  ...selectedReasons,
-                                  item,
-                                ];
-                              } else if (selectedReasonsArray.includes(item)) {
-                                let indexToRemove =
-                                  selectedReasons.indexOf(item);
-                                selectedReasonsArray = selectedReasons.filter(
-                                  (item) => {
-                                    return (
-                                      selectedReasons.indexOf(item) !==
-                                      indexToRemove
-                                    );
-                                  }
+                              if (!selectedReasons.includes(item)) {
+                                setSelectedReasons([...selectedReasons, item]);
+                              } else if (selectedReasons.includes(item)) {
+                                setSelectedReasons(
+                                  selectedReasons.filter(
+                                    (reason) => reason !== item
+                                  )
                                 );
                               }
-                              setSelectedReasons(selectedReasonsArray);
                             }}
                             // border border-gray-700 b-1 rounded-xl
                           >
