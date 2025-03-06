@@ -29,9 +29,9 @@ const ReasonsList = ({
         .map(([key, value], index) => (
           <section className="" key={index}>
             <section className="flex items-center justify-between py-2">
-              <p className="px-2 whitespace-nowrap">{`${index + 1}. ${key}`}</p>
+              <p className="px-2 ">{`${index + 1}. ${key}`}</p>
 
-              <section className="px-2 whitespace-nowrap text-end">
+              <section className="px-2 text-end">
                 <p className="text-sm">
                   {((value / reasonsSum) * 100).toFixed(1)}%
                 </p>{" "}

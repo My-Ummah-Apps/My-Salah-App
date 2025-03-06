@@ -4,6 +4,7 @@ import {
   defaultReasons,
   sheetBackdropColor,
   sheetHeaderHeight,
+  showToast,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import Sheet from "react-modal-sheet";
@@ -30,9 +31,6 @@ const BottomSheetEditReasons = ({
   userPreferences,
 }: BottomSheetStartDateProps) => {
   const [newReasonInput, setNewReasonInput] = useState("");
-  useEffect(() => {
-    console.log("userPreferences.reasons: ", userPreferences.reasons);
-  }, [userPreferences]);
 
   return (
     <>
@@ -57,6 +55,7 @@ const BottomSheetEditReasons = ({
                         setNewReasonInput(e.target.value);
                       }}
                       type="text"
+                      maxLength={20}
                       value={newReasonInput}
                     ></input>
                     <button
@@ -81,7 +80,7 @@ const BottomSheetEditReasons = ({
                           updatedReasons
                         );
                         setNewReasonInput("");
-                        // console.log("UPDATED REASONS: ", updatedReasons);
+                        showToast(`${newReasonInput} added`, "short");
                       }}
                     >
                       Add
@@ -111,8 +110,8 @@ const BottomSheetEditReasons = ({
                           animate={{ x: 0 }}
                           exit={{ x: "-100%", opacity: 0 }}
                           transition={{
-                            delay: 0.1,
-                            duration: 0.5,
+                            // delay: 0.1,
+                            duration: 0.3,
                             layout: { duration: 0.2 },
                           }}
                           key={reason}

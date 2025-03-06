@@ -90,7 +90,6 @@ const ReasonsCard = ({
         onClick={() => {
           setReasonsToShow(status);
           setShowReasonsSheet(true);
-          console.log("clicked");
         }}
         className={`mb-10 pt-2 text-center w-full ${
           Object.entries(salahReasonsOverallNumbers[status]).length > 3
