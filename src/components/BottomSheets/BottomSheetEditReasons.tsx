@@ -1,6 +1,7 @@
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import {
   bottomSheetContainerStyles,
+  defaultReasons,
   sheetBackdropColor,
   sheetHeaderHeight,
   TWEEN_CONFIG,
@@ -10,6 +11,7 @@ import Sheet from "react-modal-sheet";
 import { TiDelete } from "react-icons/ti";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { VscDebugRestart } from "react-icons/vsc";
 
 interface BottomSheetStartDateProps {
   showEditReasonsSheet: boolean;
@@ -45,19 +47,20 @@ const BottomSheetEditReasons = ({
           <Sheet.Header style={sheetHeaderHeight} />
           <Sheet.Content>
             <Sheet.Scroller>
-              <section className="m-4">
+              <section className="mx-4 my-4">
                 <section className="flex justify-between w-full mb-4">
                   {" "}
                   <section className="flex">
                     <input
+                      className="p-1 rounded-md bg-zinc-800"
                       onChange={(e) => {
                         setNewReasonInput(e.target.value);
                       }}
-                      className="p-1 bg-black rounded-md"
                       type="text"
                       value={newReasonInput}
                     ></input>
                     <button
+                      className="px-2 ml-2 bg-blue-600 rounded-md"
                       onClick={async () => {
                         if (
                           userPreferences.reasons.some(
@@ -80,12 +83,20 @@ const BottomSheetEditReasons = ({
                         setNewReasonInput("");
                         // console.log("UPDATED REASONS: ", updatedReasons);
                       }}
-                      className="px-2 py-1 ml-2 bg-blue-600 rounded-md "
                     >
                       Add
                     </button>
                   </section>
-                  <button>Reset To Defaults</button>
+                  <button
+                    onClick={async () => {
+                      await modifyDataInUserPreferencesTable(
+                        "reasons",
+                        defaultReasons.split(",")
+                      );
+                    }}
+                  >
+                    <VscDebugRestart className="text-2xl" />
+                  </button>
                 </section>
 
                 <ul>
@@ -94,7 +105,7 @@ const BottomSheetEditReasons = ({
                       .sort((a, b) => a.localeCompare(b))
                       .map((reason) => (
                         <motion.li
-                          className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-lg`}
+                          className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-4 py-4 my-3 rounded-lg`}
                           layout
                           initial={{ x: 0 }}
                           animate={{ x: 0 }}

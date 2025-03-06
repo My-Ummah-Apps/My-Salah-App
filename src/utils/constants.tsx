@@ -1,3 +1,4 @@
+import { Dialog } from "@capacitor/dialog";
 import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
@@ -171,6 +172,18 @@ export const isValidDate = (date: string): boolean => {
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
   console.log("Date is: ", parsedDate, "and its: ", isValid(parsedDate));
   return isValid(parsedDate);
+};
+
+export const showConfirmMsg = async (
+  title: string,
+  msg: string
+): Promise<boolean> => {
+  const { value } = await Dialog.confirm({
+    title: title,
+    message: msg,
+  });
+  console.log("ConfirmMsg Result:", value);
+  return value;
 };
 
 // export const bottomSheetCloseBtnStyles =

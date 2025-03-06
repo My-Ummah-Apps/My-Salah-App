@@ -25,6 +25,7 @@ import {
   reasonsStyles,
   salahNamesArr,
   sheetBackdropColor,
+  showConfirmMsg,
   TWEEN_CONFIG,
   validSalahStatuses,
 } from "../../utils/constants";
@@ -76,19 +77,6 @@ const BottomSheetPrayerStatus = ({
   const handleNotes = (e: any) => {
     setNotes(e.target.value);
   };
-
-  console.log("userPreferences.reasons: ", userPreferences.reasons);
-  // ! The below probably needs to be put in a state and changed at the point where selectReasons is set within the doesSalahAndDateExists function
-  // const combinedReasons =
-  //   selectedReasons.length === 0
-  //     ? userPreferences.reasons
-  //     : [...userPreferences.reasons, [...selectedReasons]];
-
-  useEffect(() => {
-    console.log("selectedReasons: ", selectedReasons);
-  }, [selectedReasons]);
-
-  // let selectedReasonsArray = selectedReasons;
 
   const onSheetCloseCleanup = async () => {
     setShowUpdateStatusModal(false);
@@ -216,16 +204,16 @@ const BottomSheetPrayerStatus = ({
           continue;
         }
 
-        if (
-          !selectedReasons.every((reason) =>
-            userPreferences.reasons.includes(reason)
-          )
-        ) {
-          console.error(
-            `reasons not valid: ${reasonsToInsert}, skipping this iteration...`
-          );
-          continue;
-        }
+        // if (
+        //   !selectedReasons.every((reason) =>
+        //     [...userPreferences.reasons, [...selectedReasons]].includes(reason)
+        //   )
+        // ) {
+        //   console.error(
+        //     `reasons not valid: ${reasonsToInsert}, skipping this iteration...`
+        //   );
+        //   continue;
+        // }
 
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([
@@ -495,16 +483,19 @@ const BottomSheetPrayerStatus = ({
                   ref={modalSheetPrayerReasonsWrap}
                   className="mb-5 overflow-x-hidden mt-7 prayer-status-modal-reasons-wrap"
                 >
-                  {userPreferences.reasons.length > 0 && (
-                    <div>
-                      <h2 className="mb-3 text-sm text-start">Reasons: </h2>
-                    </div>
-                  )}
+                  {/* {userPreferences.reasons.length > 0 && ( */}
+                  <div>
+                    <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+                  </div>
+                  {/* // )} */}
                   {Array.isArray(userPreferences.reasons) && (
                     <div className="flex flex-wrap">
-                      {/* {userPreferences.reasons.sort().map((item) => ( */}
-                      {/* {userPreferences.reasons */}
-                      {userPreferences.reasons
+                      {[
+                        ...new Set([
+                          ...selectedReasons,
+                          ...userPreferences.reasons,
+                        ]),
+                      ]
                         .sort((a, b) => a.localeCompare(b))
                         .map((item) => (
                           <p
@@ -515,14 +506,19 @@ const BottomSheetPrayerStatus = ({
                                 : "",
                             }}
                             className={reasonsStyles}
-                            onClick={() => {
+                            onClick={async () => {
                               if (!selectedReasons.includes(item)) {
-                                setSelectedReasons([...selectedReasons, item]);
+                                setSelectedReasons((prev) => [...prev, item]);
                               } else if (selectedReasons.includes(item)) {
-                                setSelectedReasons(
-                                  selectedReasons.filter(
-                                    (reason) => reason !== item
-                                  )
+                                if (!userPreferences.reasons.includes(item)) {
+                                  const confirmMsgRes = await showConfirmMsg(
+                                    "Confirm",
+                                    "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                                  );
+                                  if (!confirmMsgRes) return;
+                                }
+                                setSelectedReasons((prev) =>
+                                  prev.filter((reason) => reason !== item)
                                 );
                               }
                             }}
@@ -572,6 +568,8 @@ const BottomSheetPrayerStatus = ({
           onTap={() => setShowUpdateStatusModal(false)}
         />
       </Sheet>
+
+      {/* BELOW IS DUPLICATE SO HEIGHT CAN BE ANIMATED */}
       <div
         className="DUPLICATE-REASONS z-[-100] absolute bottom-0 opacity-0"
         ref={modalSheetHiddenPrayerReasonsWrap}
@@ -590,29 +588,22 @@ const BottomSheetPrayerStatus = ({
         </div> */}
         {Array.isArray(userPreferences.reasons) && (
           <div className="flex flex-wrap">
-            {userPreferences.reasons.sort().map((item) => (
-              // {combinedReasons.sort().map((item) => (
-              <p
-                key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
-                style={{
-                  backgroundColor: selectedReasons.includes(item) ? "#fff" : "",
-                }}
-                onClick={() => {
-                  if (!selectedReasonsArray.includes(item)) {
-                    selectedReasonsArray = [...selectedReasons, item];
-                  } else if (selectedReasonsArray.includes(item)) {
-                    let indexToRemove = selectedReasons.indexOf(item);
-                    selectedReasonsArray = selectedReasons.filter((item) => {
-                      return selectedReasons.indexOf(item) !== indexToRemove;
-                    });
-                  }
-                  setSelectedReasons(selectedReasonsArray);
-                }}
-                className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
-              >
-                {item}
-              </p>
-            ))}
+            {[...new Set([...selectedReasons, ...userPreferences.reasons])].map(
+              (item) => (
+                // {combinedReasons.sort().map((item) => (
+                <p
+                  key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
+                  style={{
+                    backgroundColor: selectedReasons.includes(item)
+                      ? "#fff"
+                      : "",
+                  }}
+                  className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+                >
+                  {item}
+                </p>
+              )
+            )}
           </div>
         )}
       </div>
