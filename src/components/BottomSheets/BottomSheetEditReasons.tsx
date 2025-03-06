@@ -4,13 +4,14 @@ import {
   defaultReasons,
   sheetBackdropColor,
   sheetHeaderHeight,
+  showConfirmMsg,
   showToast,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import Sheet from "react-modal-sheet";
 // import { MdEdit } from "react-icons/md";
 import { TiDelete } from "react-icons/ti";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { VscDebugRestart } from "react-icons/vsc";
 
@@ -88,10 +89,16 @@ const BottomSheetEditReasons = ({
                   </section>
                   <button
                     onClick={async () => {
+                      const reasonConfirmMsgRes = await showConfirmMsg(
+                        "Reset Reasons?",
+                        "This will reset all reasons to the app’s default values. Are you sure you want to proceed?"
+                      );
+                      if (!reasonConfirmMsgRes) return;
                       await modifyDataInUserPreferencesTable(
                         "reasons",
                         defaultReasons.split(",")
                       );
+                      showToast("Default Reasons Restored", "short");
                     }}
                   >
                     <VscDebugRestart className="text-2xl" />

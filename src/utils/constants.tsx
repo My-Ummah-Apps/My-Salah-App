@@ -182,7 +182,7 @@ export const showConfirmMsg = async (
     title: title,
     message: msg,
   });
-  console.log("ConfirmMsg Result:", value);
+
   return value;
 };
 
