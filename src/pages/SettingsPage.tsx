@@ -266,7 +266,7 @@ const SettingsPage = ({
               {"Missed Salah Counter"}
             </p>
             <p className=" pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {"Display Missed Salah Counter When Applicable on Homepage"}
+              {"Display missed salah counter (when applicable) on homepage"}
             </p>
           </div>
           <section className="pl-4 pr-2">
@@ -293,14 +293,14 @@ const SettingsPage = ({
           ></input> */}
           <SettingIndividual
             headingText={"Change Start Date"}
-            subText={`Change App Start Date`}
+            subText={`Change app start date`}
             onClick={() => {
               setShowStartDateSheet(true);
             }}
           />
           <SettingIndividual
             headingText={"Edit Reasons"}
-            subText={`Edit pre-set reasons`}
+            subText={`Add or remove reasons`}
             onClick={() => {
               setShowEditReasonsSheet(true);
             }}

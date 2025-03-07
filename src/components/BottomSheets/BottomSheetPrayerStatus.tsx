@@ -181,7 +181,7 @@ const BottomSheetPrayerStatus = ({
           ? selectedReasons.join(", ")
           : "";
 
-      console.log("Reasons to insert: ", reasonsToInsert);
+      // console.log("Reasons to insert: ", reasonsToInsert);
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         if (!isValidDate(date)) {
@@ -592,9 +592,9 @@ const BottomSheetPrayerStatus = ({
 
         {Array.isArray(userPreferences.reasons) && (
           <div className="flex flex-wrap">
-            {[...new Set([...selectedReasons, ...userPreferences.reasons])].map(
-              (item) => (
-                // {combinedReasons.sort().map((item) => (
+            {[...new Set([...selectedReasons, ...userPreferences.reasons])]
+              .sort((a, b) => a.localeCompare(b))
+              .map((item) => (
                 <p
                   key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
                   style={{
@@ -602,12 +602,27 @@ const BottomSheetPrayerStatus = ({
                       ? "#fff"
                       : "",
                   }}
-                  className="p-2 m-1 text-xs border border-gray-700 b-1 rounded-xl"
+                  className={reasonsStyles}
+                  onClick={async () => {
+                    if (!selectedReasons.includes(item)) {
+                      setSelectedReasons((prev) => [...prev, item]);
+                    } else if (selectedReasons.includes(item)) {
+                      if (!userPreferences.reasons.includes(item)) {
+                        const confirmMsgRes = await showConfirmMsg(
+                          "Confirm",
+                          "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                        );
+                        if (!confirmMsgRes) return;
+                      }
+                      setSelectedReasons((prev) =>
+                        prev.filter((reason) => reason !== item)
+                      );
+                    }
+                  }}
                 >
                   {item}
                 </p>
-              )
-            )}
+              ))}
           </div>
         )}
       </div>
