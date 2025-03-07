@@ -9,7 +9,6 @@ import {
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import Sheet from "react-modal-sheet";
-// import { MdEdit } from "react-icons/md";
 import { TiDelete } from "react-icons/ti";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -31,6 +30,8 @@ const BottomSheetEditReasons = ({
   modifyDataInUserPreferencesTable,
   userPreferences,
 }: BottomSheetStartDateProps) => {
+  const CHAR_LIMIT = 20;
+  const [charCount, setCharCount] = useState(CHAR_LIMIT);
   const [newReasonInput, setNewReasonInput] = useState("");
 
   return (
@@ -47,64 +48,78 @@ const BottomSheetEditReasons = ({
           <Sheet.Content>
             <Sheet.Scroller>
               <section className="mx-4 my-4">
-                <section className="flex justify-between w-full mb-4">
-                  {" "}
-                  <section className="flex">
-                    <input
-                      className="p-1 rounded-md bg-zinc-800"
-                      onChange={(e) => {
-                        setNewReasonInput(e.target.value);
-                      }}
-                      type="text"
-                      maxLength={20}
-                      value={newReasonInput}
-                    ></input>
+                <section>
+                  <section className="flex justify-between w-full">
+                    {" "}
+                    <section className="flex">
+                      <input
+                        className="p-1 rounded-md bg-zinc-800"
+                        onChange={(e) => {
+                          setNewReasonInput(e.target.value);
+                          setCharCount(20 - e.target.value.length);
+                        }}
+                        type="text"
+                        dir="auto"
+                        maxLength={CHAR_LIMIT}
+                        value={newReasonInput}
+                      ></input>
+                      <button
+                        className="px-2 ml-2 bg-blue-600 rounded-md"
+                        onClick={async () => {
+                          if (
+                            userPreferences.reasons.some(
+                              (item) =>
+                                item.toLocaleLowerCase() ===
+                                newReasonInput.toLocaleLowerCase()
+                            )
+                          ) {
+                            alert(`${newReasonInput} already exists`);
+                            return;
+                          }
+                          const updatedReasons = [
+                            ...userPreferences.reasons,
+                            newReasonInput,
+                          ];
+                          await modifyDataInUserPreferencesTable(
+                            "reasons",
+                            updatedReasons
+                          );
+                          setNewReasonInput("");
+                          setCharCount(CHAR_LIMIT);
+                          showToast(`${newReasonInput} added`, "short");
+                        }}
+                      >
+                        Add
+                      </button>
+                    </section>
                     <button
-                      className="px-2 ml-2 bg-blue-600 rounded-md"
                       onClick={async () => {
-                        if (
-                          userPreferences.reasons.some(
-                            (item) =>
-                              item.toLocaleLowerCase() ===
-                              newReasonInput.toLocaleLowerCase()
-                          )
-                        ) {
-                          alert(`${newReasonInput} already exists`);
-                          return;
-                        }
-                        const updatedReasons = [
-                          ...userPreferences.reasons,
-                          newReasonInput,
-                        ];
+                        const reasonConfirmMsgRes = await showConfirmMsg(
+                          "Reset Reasons?",
+                          "This will reset all reasons to the app’s default values. Are you sure you want to proceed?"
+                        );
+                        if (!reasonConfirmMsgRes) return;
                         await modifyDataInUserPreferencesTable(
                           "reasons",
-                          updatedReasons
+                          defaultReasons.split(",")
                         );
-                        setNewReasonInput("");
-                        showToast(`${newReasonInput} added`, "short");
+                        showToast("Default Reasons Restored", "short");
                       }}
                     >
-                      Add
+                      <VscDebugRestart className="text-2xl" />
                     </button>
                   </section>
-                  <button
-                    onClick={async () => {
-                      const reasonConfirmMsgRes = await showConfirmMsg(
-                        "Reset Reasons?",
-                        "This will reset all reasons to the app’s default values. Are you sure you want to proceed?"
-                      );
-                      if (!reasonConfirmMsgRes) return;
-                      await modifyDataInUserPreferencesTable(
-                        "reasons",
-                        defaultReasons.split(",")
-                      );
-                      showToast("Default Reasons Restored", "short");
-                    }}
-                  >
-                    <VscDebugRestart className="text-2xl" />
-                  </button>
-                </section>
 
+                  <motion.p
+                    style={{
+                      visibility:
+                        newReasonInput.length > 0 ? "visible" : "hidden",
+                    }}
+                    className="mt-1 text-xs"
+                  >
+                    {`${charCount} characters left`}
+                  </motion.p>
+                </section>
                 <ul>
                   <AnimatePresence>
                     {userPreferences.reasons

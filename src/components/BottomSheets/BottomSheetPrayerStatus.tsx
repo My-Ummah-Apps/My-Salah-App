@@ -479,15 +479,15 @@ const BottomSheetPrayerStatus = ({
                   </div>
                 </div>
 
-                <div
+                <section
                   ref={modalSheetPrayerReasonsWrap}
                   className="mb-5 overflow-x-hidden mt-7 prayer-status-modal-reasons-wrap"
                 >
-                  {/* {userPreferences.reasons.length > 0 && ( */}
-                  <div>
-                    <h2 className="mb-3 text-sm text-start">Reasons: </h2>
-                  </div>
-                  {/* // )} */}
+                  {userPreferences.reasons.length > 0 && (
+                    <div>
+                      <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+                    </div>
+                  )}
                   {Array.isArray(userPreferences.reasons) && (
                     <div className="flex flex-wrap">
                       {[
@@ -529,7 +529,7 @@ const BottomSheetPrayerStatus = ({
                         ))}
                     </div>
                   )}
-                </div>
+                </section>
 
                 <div className="text-sm notes-wrap">
                   <textarea
@@ -583,9 +583,7 @@ const BottomSheetPrayerStatus = ({
             )}
           </div>
         </div>
-        {/* <div>
-          <h2 className="mb-3 text-sm text-start">Reasons: </h2>
-        </div> */}
+
         {Array.isArray(userPreferences.reasons) && (
           <div className="flex flex-wrap">
             {[...new Set([...selectedReasons, ...userPreferences.reasons])].map(

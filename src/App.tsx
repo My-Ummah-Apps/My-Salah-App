@@ -100,7 +100,7 @@ const App = () => {
         setTimeout(() => {
           StatusBar.setBackgroundColor({ color: STATUS_AND_NAV_BAR_COLOR });
           NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
-        }, 500);
+        }, 750);
       }
 
       if (isDatabaseInitialised === true) {
@@ -110,7 +110,7 @@ const App = () => {
         initialiseAndLoadData();
         setTimeout(async () => {
           await SplashScreen.hide({ fadeOutDuration: 250 });
-        }, 250);
+        }, 500);
       }
     };
 
@@ -545,7 +545,6 @@ const App = () => {
         isActive: isActiveStreak,
       };
       streakDatesObjectsArray.push(streakDatesObj);
-      console.log("streakDatesObjectsArray: ", streakDatesObjectsArray);
 
       setStreakDatesObjectsArr(
         streakDatesObjectsArray
