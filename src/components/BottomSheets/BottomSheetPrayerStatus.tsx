@@ -70,7 +70,7 @@ const BottomSheetPrayerStatus = ({
   const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
   const notesTextArea = useRef<HTMLTextAreaElement | null>(null);
-  const [salahStatus, setSalahStatus] = useState("");
+  const [salahStatus, setSalahStatus] = useState<SalahStatusType>("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
 
   const [notes, setNotes] = useState("");
@@ -174,7 +174,14 @@ const BottomSheetPrayerStatus = ({
       await checkAndOpenOrCloseDBConnection("open");
 
       const reasonsToInsert =
-        selectedReasons.length > 0 ? selectedReasons.join(", ") : "";
+        selectedReasons.length > 0 &&
+        salahStatus !== "group" &&
+        salahStatus !== "female-alone" &&
+        salahStatus !== "excused"
+          ? selectedReasons.join(", ")
+          : "";
+
+      console.log("Reasons to insert: ", reasonsToInsert);
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         if (!isValidDate(date)) {
@@ -375,7 +382,7 @@ const BottomSheetPrayerStatus = ({
                       <div
                         onClick={() => {
                           setSalahStatus("group");
-                          setSelectedReasons([]);
+                          // setSelectedReasons([]);
                         }}
                         style={{
                           backgroundColor: prayerStatusColorsHexCodes.group,
@@ -522,7 +529,6 @@ const BottomSheetPrayerStatus = ({
                                 );
                               }
                             }}
-                            // border border-gray-700 b-1 rounded-xl
                           >
                             {item}
                           </p>
