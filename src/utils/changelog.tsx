@@ -2,11 +2,26 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.4";
+export const LATEST_APP_VERSION = "3.5";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Custom Reasons",
+        text: (
+          <>
+            <strong>Feature:</strong> The reasons list (when updating a Salah)
+            is now customizable! You can add and remove reasons from the
+            settings page.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.4",
     changes: [
       {
         heading: "Open Source Release",
