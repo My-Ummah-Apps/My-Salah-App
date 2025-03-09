@@ -610,7 +610,7 @@ const BottomSheetPrayerStatus = ({
                       if (!userPreferences.reasons.includes(item)) {
                         const confirmMsgRes = await showConfirmMsg(
                           "Confirm",
-                          "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                          "This reason has been deleted from the reasons list in the settings page, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
                         );
                         if (!confirmMsgRes) return;
                       }

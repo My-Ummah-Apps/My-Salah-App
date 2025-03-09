@@ -55,8 +55,9 @@ const BottomSheetEditReasons = ({
                       <input
                         className="p-1 rounded-md bg-zinc-800"
                         onChange={(e) => {
+                          if (e.target.value.length > CHAR_LIMIT) return;
                           setNewReasonInput(e.target.value);
-                          setCharCount(20 - e.target.value.length);
+                          setCharCount(CHAR_LIMIT - e.target.value.length);
                         }}
                         type="text"
                         dir="auto"
@@ -96,7 +97,7 @@ const BottomSheetEditReasons = ({
                       onClick={async () => {
                         const reasonConfirmMsgRes = await showConfirmMsg(
                           "Reset Reasons?",
-                          "This will reset all reasons to the app’s default values. Are you sure you want to proceed?"
+                          "This will reset all reasons to the app’s default reasons. Are you sure you want to proceed?"
                         );
                         if (!reasonConfirmMsgRes) return;
                         await modifyDataInUserPreferencesTable(
@@ -114,6 +115,7 @@ const BottomSheetEditReasons = ({
                     style={{
                       visibility:
                         newReasonInput.length > 0 ? "visible" : "hidden",
+                      color: charCount === 0 ? "red" : "white",
                     }}
                     className="mt-1 text-xs"
                   >
