@@ -160,8 +160,15 @@ export const getMissedSalahCount = (missedSalahList: MissedSalahObjType) => {
 
 export const isValidDate = (date: string): boolean => {
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
-  console.log("Date is: ", parsedDate, "and its: ", isValid(parsedDate));
+  // console.log("Date is: ", parsedDate, "and its: ", isValid(parsedDate));
   return isValid(parsedDate);
+};
+
+export const showAlert = async (title: string, msg: string) => {
+  await Dialog.alert({
+    title: title,
+    message: msg,
+  });
 };
 
 export const showConfirmMsg = async (

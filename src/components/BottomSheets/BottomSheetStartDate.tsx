@@ -5,11 +5,13 @@ import {
   isValidDate,
   sheetBackdropColor,
   sheetHeaderHeight,
+  showAlert,
   showToast,
   TWEEN_CONFIG,
 } from "../../utils/constants";
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
+import { isAfter, startOfDay } from "date-fns";
 
 interface BottomSheetStartDateProps {
   showStartDateSheet: boolean;
@@ -38,7 +40,6 @@ const BottomSheetStartDate = ({
   const handleStartDateChange = async () => {
     if (datePickerRef.current) {
       if (isValidDate(datePickerRef.current.value)) {
-        // setSelectedStartDate(datePickerRef.current.value);
         await modifyDataInUserPreferencesTable(
           "userStartDate",
           datePickerRef.current.value
@@ -78,11 +79,6 @@ const BottomSheetStartDate = ({
               <section className="text-center">
                 <p className="mb-2">Select New Start Date</p>
                 <input
-                  // className="w-3/4"
-                  // {...(Capacitor.getPlatform() === "ios" && {
-                  //   placeholder: "Enter your text",
-
-                  // })}
                   placeholder="&#x1F5D3;"
                   onKeyDown={(e) => {
                     e.preventDefault();
@@ -104,6 +100,19 @@ const BottomSheetStartDate = ({
               }`}
               onClick={async () => {
                 if (selectedStartDate) {
+                  const todaysDate = startOfDay(new Date());
+                  const selectedDate = startOfDay(new Date(selectedStartDate));
+                  // console.log("todaysDate: ", todaysDate);
+                  // console.log("selectedDate: ", selectedDate);
+
+                  if (isAfter(selectedDate, todaysDate)) {
+                    // alert("Please select a date that is not in the future");
+                    showAlert(
+                      "Invalid Date",
+                      "Please select a date that is not in the future"
+                    );
+                    return;
+                  }
                   await handleStartDateChange();
                 }
               }}
