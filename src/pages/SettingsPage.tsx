@@ -85,7 +85,6 @@ const SettingsPage = ({
   // };
 
   const triggerInput = () => {
-    console.log("TRIGGERED");
     if (importDBRef.current) {
       importDBRef.current.click();
     } else {

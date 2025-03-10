@@ -57,7 +57,6 @@ const StatsPage = ({
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
-  // TODO: Test the below code to ensure stats are being calculated correctly
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
       Object.values(fetchedSalahData[i].salahs).forEach((status) => {
@@ -106,11 +105,6 @@ const StatsPage = ({
     { name: "Late", value: salahStatusStatistics.salahLateDatesOverall },
     { name: "Missed", value: salahStatusStatistics.salahMissedDatesOverall },
   ];
-  console.log(Object.values(donutPieChartData).some((obj) => obj.value));
-  console.log(
-    "Object.entries(donutPieChartData): ",
-    Object.values(donutPieChartData)
-  );
 
   useEffect(() => {
     const grabSalahDataFromDB = async () => {

@@ -1,6 +1,6 @@
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
-import Joyride, { Step } from "react-joyride";
+import Joyride, { CallBackProps, Step } from "react-joyride";
 AutoSizer;
 import {
   DBConnectionStateType,
@@ -72,8 +72,6 @@ const PrayerTable = ({
   showUpdateStatusModal,
   generateStreaks,
 }: PrayerTableProps) => {
-  // const modalSheetPrayerStatusesWrap = useRef<HTMLDivElement>(null);
-
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
   };
@@ -82,11 +80,9 @@ const PrayerTable = ({
     salahName: SalahNamesType,
     rowDataDate: string
   ) => {
-    // setToggleCheckbox((prev) => !prev);
     setSelectedSalahAndDate((prev) => {
       let newArr = { ...prev };
 
-      // if (prev[rowDataDate] && prev[rowDataDate].includes(salahName)) {
       if (prev[rowDataDate]?.includes(salahName)) {
         newArr[rowDataDate] = prev[rowDataDate].filter(
           (item) => item !== salahName
@@ -127,7 +123,7 @@ const PrayerTable = ({
     },
   ];
 
-  const handleJoyRideCompletion = async (data: any) => {
+  const handleJoyRideCompletion = async (data: CallBackProps) => {
     if (data.status === "ready") {
       setShowJoyRideEditIcon(false);
       await modifyDataInUserPreferencesTable("isExistingUser", "1");
@@ -187,7 +183,6 @@ const PrayerTable = ({
           <button
             className="px-2  text-white border-l border-[#adadad]"
             onClick={() => {
-              // TODO: Improve the alert below to something more native
               const dateArrLength = Object.keys(selectedSalahAndDate).length;
               dateArrLength > 0
                 ? setShowUpdateStatusModal(true)
