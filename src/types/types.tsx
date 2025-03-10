@@ -93,6 +93,15 @@ export interface restructuredMissedSalahListProp {
   [date: string]: SalahNamesType;
 }
 
+export interface clickedDateDataObj {
+  date: string;
+  id: number | null;
+  salahName: SalahNamesType;
+  salahStatus: SalahStatusType;
+  notes: string;
+  reasons: string;
+}
+
 // export interface CalenderSalahArrayObject {
 //   [date: string]: SalahEntry[];
 // }

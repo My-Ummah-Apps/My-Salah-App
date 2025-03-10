@@ -22,11 +22,12 @@ import {
   showAlert,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 // import StreakCount from "../Stats/StreakCount";
 
 interface PrayerTableProps {
-  dbConnection: any;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;

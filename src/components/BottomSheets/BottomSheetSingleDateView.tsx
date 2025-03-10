@@ -5,7 +5,11 @@ import Sheet from "react-modal-sheet";
 // import { GoPeople } from "react-icons/go";
 // import { GoSkip } from "react-icons/go";
 // import { PiFlower } from "react-icons/pi";
-import { SalahStatusType } from "../../types/types";
+import {
+  clickedDateDataObj,
+  clickedDateObj,
+  SalahStatusType,
+} from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
 
@@ -18,9 +22,10 @@ import {
 } from "../../utils/constants";
 import { sheetHeaderHeight, TWEEN_CONFIG } from "../../utils/constants";
 import format from "date-fns/format";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface BottomSheetSingleDateViewProps {
-  dbConnection: any;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -36,19 +41,9 @@ const BottomSheetSingleDateView = ({
   setShowDailySalahDataModal,
   clickedDate,
 }: BottomSheetSingleDateViewProps) => {
-  //
-  interface clickedDateObj {
-    date: string;
-    id: number | null;
-    salahName: SalahNamesType;
-    salahStatus: SalahStatusType;
-    notes: string;
-    reasons: string;
-  }
-
-  // console.log("BOTTOM SINGLE DATE SHEET HAS RENDERED");
-
-  const [clickedDateData, setClickedDateData] = useState<clickedDateObj[]>([]);
+  const [clickedDateData, setClickedDateData] = useState<clickedDateDataObj[]>(
+    []
+  );
 
   const prayerNamesOrder: SalahNamesType[] = [
     "Fajr",
@@ -69,16 +64,15 @@ const BottomSheetSingleDateView = ({
       await checkAndOpenOrCloseDBConnection("open");
       // formatDateWithOrdinal(clickedDate);
       const query = `SELECT * FROM salahDataTable WHERE date = ?`;
-      const data = await dbConnection.current.query(query, [clickedDate]);
+      const data = await dbConnection.current!.query(query, [clickedDate]);
 
-      const sortedData: clickedDateObj[] = data.values.sort(
-        (a: clickedDateObj, b: clickedDateObj) => {
+      const sortedData: clickedDateDataObj[] = data.values!.sort(
+        (a: clickedDateDataObj, b: clickedDateDataObj) =>
           prayerNamesOrder.indexOf(a.salahName) -
-            prayerNamesOrder.indexOf(b.salahName);
-        }
+          prayerNamesOrder.indexOf(b.salahName)
       );
 
-      const placeholderData: clickedDateObj[] = prayerNamesOrder.map(
+      const placeholderData: clickedDateDataObj[] = prayerNamesOrder.map(
         (salah) => {
           const dataCheck = sortedData.find((obj) => {
             return obj.salahName === salah;

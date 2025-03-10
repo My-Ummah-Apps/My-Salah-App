@@ -31,9 +31,10 @@ import {
 } from "../../utils/constants";
 import { sheetHeaderHeight } from "../../utils/constants";
 import { isToday, isYesterday, parse } from "date-fns";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface PrayerStatusBottomSheetProps {
-  dbConnection: any;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
@@ -74,7 +75,7 @@ const BottomSheetPrayerStatus = ({
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
 
   const [notes, setNotes] = useState("");
-  const handleNotes = (e: any) => {
+  const handleNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNotes(e.target.value);
   };
 
@@ -116,7 +117,9 @@ const BottomSheetPrayerStatus = ({
     }
   });
 
-  const increaseTextAreaHeight = (e: any) => {
+  const increaseTextAreaHeight = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     if (notesTextArea.current) {
       // notesTextArea.current.style.height = "auto";
       notesTextArea.current.style.height = `${e.target.scrollHeight}px`;
@@ -132,7 +135,7 @@ const BottomSheetPrayerStatus = ({
     try {
       await checkAndOpenOrCloseDBConnection("open");
 
-      const res = await dbConnection.current.query(
+      const res = await dbConnection.current!.query(
         `SELECT * FROM salahDataTable 
       WHERE date = ? AND salahName = ?;`,
         [selectedDate, selectedSalah]
@@ -211,17 +214,6 @@ const BottomSheetPrayerStatus = ({
           continue;
         }
 
-        // if (
-        //   !selectedReasons.every((reason) =>
-        //     [...userPreferences.reasons, [...selectedReasons]].includes(reason)
-        //   )
-        // ) {
-        //   console.error(
-        //     `reasons not valid: ${reasonsToInsert}, skipping this iteration...`
-        //   );
-        //   continue;
-        // }
-
         for (let i = 0; i < salahArr.length; i++) {
           salahDataToInsertIntoDB.push([
             date,
@@ -243,7 +235,7 @@ const BottomSheetPrayerStatus = ({
       query += `) VALUES ${placeholders}`;
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
 
-      await dbConnection.current.run(query, flattenedSalahDBValues);
+      await dbConnection.current!.run(query, flattenedSalahDBValues);
 
       for (const obj of fetchedSalahData) {
         if (selectedSalahAndDate[obj.date]) {
@@ -256,13 +248,13 @@ const BottomSheetPrayerStatus = ({
       setFetchedSalahData((prev) => [...prev]);
 
       // const saveBtnCounterQuery = `SELECT * FROM userPreferencesTable WHERE preferenceName = ?`;
-      const saveButtonTapCountQuery = await dbConnection.current.query(
+      const saveButtonTapCountQuery = await dbConnection.current!.query(
         `SELECT * FROM userPreferencesTable WHERE preferenceName = ?;`,
         ["saveButtonTapCount"]
       );
 
       const incrementedSaveButtonTapCount =
-        Number(saveButtonTapCountQuery.values[0].preferenceValue) + 1;
+        Number(saveButtonTapCountQuery.values![0].preferenceValue) + 1;
 
       if (Capacitor.isNativePlatform()) {
         if (
@@ -275,7 +267,7 @@ const BottomSheetPrayerStatus = ({
         }
       }
 
-      await dbConnection.current.run(
+      await dbConnection.current!.run(
         `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`,
         [incrementedSaveButtonTapCount.toString(), "saveButtonTapCount"]
       );

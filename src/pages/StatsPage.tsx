@@ -22,11 +22,12 @@ import ReasonsCard from "../components/Stats/ReasonsCard";
 import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
 import StreakCounter from "../components/Stats/StreakCounter";
 import { streakDatesObjType } from "../types/types";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
 interface StatsPageProps {
-  dbConnection: any;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
@@ -115,15 +116,19 @@ const StatsPage = ({
     const grabSalahDataFromDB = async () => {
       try {
         await checkAndOpenOrCloseDBConnection("open");
-        let DBResultAllSalahData = await dbConnection.current.query(
+        let DBResultAllSalahData = await dbConnection.current!.query(
           `SELECT * FROM salahDataTable`
         );
 
-        DBResultAllSalahData = DBResultAllSalahData.values;
+        if (!DBResultAllSalahData.values) {
+          throw new Error("DBResultAllSalahData.values are undefined");
+        }
 
-        let maleAloneReasonsArr: any[] = [];
-        let lateReasonsArr: any[] = [];
-        let missedReasonsArr: any[] = [];
+        const DBResultAllSalahDataValues = DBResultAllSalahData.values;
+
+        let maleAloneReasonsArr: string[] = [];
+        let lateReasonsArr: string[] = [];
+        let missedReasonsArr: string[] = [];
 
         const salahStatusesWithoutReasons = [
           "group",
@@ -131,20 +136,20 @@ const StatsPage = ({
           "female-alone",
         ];
 
-        for (let i = 0; i < DBResultAllSalahData.length; i++) {
+        for (let i = 0; i < DBResultAllSalahDataValues.length; i++) {
           if (
             !salahStatusesWithoutReasons.includes(
-              DBResultAllSalahData[i].salahStatus
+              DBResultAllSalahDataValues[i].salahStatus
             ) &&
-            DBResultAllSalahData[i].reasons !== ""
+            DBResultAllSalahDataValues[i].reasons !== ""
           ) {
-            const reasons = DBResultAllSalahData[i].reasons.split(", ");
+            const reasons = DBResultAllSalahDataValues[i].reasons.split(", ");
 
-            if (DBResultAllSalahData[i].salahStatus === "male-alone") {
+            if (DBResultAllSalahDataValues[i].salahStatus === "male-alone") {
               maleAloneReasonsArr.push(reasons);
-            } else if (DBResultAllSalahData[i].salahStatus === "late") {
+            } else if (DBResultAllSalahDataValues[i].salahStatus === "late") {
               lateReasonsArr.push(reasons);
-            } else if (DBResultAllSalahData[i].salahStatus === "missed") {
+            } else if (DBResultAllSalahDataValues[i].salahStatus === "missed") {
               missedReasonsArr.push(reasons);
             }
           }

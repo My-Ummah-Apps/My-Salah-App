@@ -20,9 +20,10 @@ import {
 } from "../../types/types";
 
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface CalenderProps {
-  dbConnection: any;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;

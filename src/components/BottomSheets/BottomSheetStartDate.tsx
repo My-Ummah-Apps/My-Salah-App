@@ -53,7 +53,7 @@ const BottomSheetStartDate = ({
     setShowStartDateSheet(false);
     showToast(
       `Start date changed to ${createLocalisedDate(selectedStartDate!)[1]}`,
-      "long"
+      "short"
     );
     await fetchDataFromDB();
   };
@@ -102,8 +102,6 @@ const BottomSheetStartDate = ({
                 if (selectedStartDate) {
                   const todaysDate = startOfDay(new Date());
                   const selectedDate = startOfDay(new Date(selectedStartDate));
-                  // console.log("todaysDate: ", todaysDate);
-                  // console.log("selectedDate: ", selectedDate);
 
                   if (isAfter(selectedDate, todaysDate)) {
                     showAlert(

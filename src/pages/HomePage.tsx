@@ -15,9 +15,10 @@ import {
 } from "../types/types";
 import { useState } from "react";
 import { getMissedSalahCount } from "../utils/constants";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface HomePageProps {
-  dbConnection: any;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;

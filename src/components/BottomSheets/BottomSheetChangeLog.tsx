@@ -59,7 +59,6 @@ const BottomSheetChangelog = ({
             >
               Close
             </button>
-            {/* <SheetCloseBtn closeModalState={setShowChangelogModal} /> */}
           </Sheet.Scroller>
         </Sheet.Content>
       </Sheet.Container>

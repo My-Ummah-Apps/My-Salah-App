@@ -56,21 +56,6 @@ const useSQLiteDB = () => {
     };
 
     initialiseDB();
-
-    // initialiseDB().then(() => {
-    //   initialiseTables();
-    //   setisDatabaseInitialised(true);
-    // });
-
-    // Cleanup function to close the database connection when the component unmounts
-    // ? Unsure if the below cleanup function is needed
-    // const cleanUp = async () => {
-
-    //   await checkAndOpenOrCloseDBConnection("close");
-    // };
-    // return () => {
-    //   cleanUp();
-    // };
   }, []);
 
   async function checkAndOpenOrCloseDBConnection(

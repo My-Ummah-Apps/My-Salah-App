@@ -7,7 +7,7 @@ import {
   getMissedSalahCount,
   prayerStatusColorsHexCodes,
 } from "../../utils/constants";
-import Joyride from "react-joyride";
+import Joyride, { CallBackProps } from "react-joyride";
 
 interface MissedSalahCounterProps {
   isMultiEditMode: boolean;
@@ -35,7 +35,7 @@ const MissedSalahCounter = ({
     },
   ];
 
-  const handleJoyRideCompletion = async (data: any) => {
+  const handleJoyRideCompletion = async (data: CallBackProps) => {
     if (data.status === "ready") {
       await modifyDataInUserPreferencesTable("isMissedSalahToolTipShown", "1");
     }

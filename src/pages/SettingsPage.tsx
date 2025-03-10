@@ -12,7 +12,10 @@ import {
 import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetNotifications from "../components/BottomSheets/BottomSheetNotifications";
-import { SQLiteConnection } from "@capacitor-community/sqlite";
+import {
+  SQLiteConnection,
+  SQLiteDBConnection,
+} from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { showToast } from "../utils/constants";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
@@ -21,7 +24,7 @@ import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditRe
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
-  dbConnection: any;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
