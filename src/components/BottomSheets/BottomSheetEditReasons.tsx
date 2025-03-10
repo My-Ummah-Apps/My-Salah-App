@@ -4,6 +4,7 @@ import {
   defaultReasons,
   sheetBackdropColor,
   sheetHeaderHeight,
+  showAlert,
   showConfirmMsg,
   showToast,
   TWEEN_CONFIG,
@@ -74,7 +75,10 @@ const BottomSheetEditReasons = ({
                                 newReasonInput.toLocaleLowerCase()
                             )
                           ) {
-                            alert(`${newReasonInput} already exists`);
+                            showAlert(
+                              "Duplicate Reason",
+                              "This reason already exists"
+                            );
                             return;
                           }
                           const updatedReasons = [

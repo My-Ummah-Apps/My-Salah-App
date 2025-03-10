@@ -45,7 +45,7 @@ const BottomSheetStartDate = ({
           datePickerRef.current.value
         );
       } else {
-        alert("Date not valid");
+        showAlert("Invalid Date", "Please enter a valid date");
       }
     } else {
       console.log("datePickerRef.current null");
@@ -106,7 +106,6 @@ const BottomSheetStartDate = ({
                   // console.log("selectedDate: ", selectedDate);
 
                   if (isAfter(selectedDate, todaysDate)) {
-                    // alert("Please select a date that is not in the future");
                     showAlert(
                       "Invalid Date",
                       "Please select a date that is not in the future"

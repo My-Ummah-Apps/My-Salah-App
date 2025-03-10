@@ -19,6 +19,7 @@ import {
   prayerStatusColorsHexCodes,
   prayerTableIndividualSquareStyles,
   salahNamesArr,
+  showAlert,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
 
@@ -189,7 +190,10 @@ const PrayerTable = ({
               const dateArrLength = Object.keys(selectedSalahAndDate).length;
               dateArrLength > 0
                 ? setShowUpdateStatusModal(true)
-                : alert("Please select atleast one Salah");
+                : showAlert(
+                    "No Salah Selected",
+                    "Please select atleast one Salah"
+                  );
             }}
           >
             Edit
