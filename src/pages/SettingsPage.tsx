@@ -98,8 +98,8 @@ const SettingsPage = ({
         throw new Error("sqliteConnection does not exist");
       }
       await checkAndOpenOrCloseDBConnection("open");
-      const rawBackupData = await dbConnection.current.exportToJson("full");
-      rawBackupData.export.overwrite = true;
+      const rawBackupData = await dbConnection.current!.exportToJson("full");
+      rawBackupData.export!.overwrite = true;
       const exportedDBAsJson = JSON.stringify(rawBackupData.export);
 
       try {

@@ -5,11 +5,7 @@ import Sheet from "react-modal-sheet";
 // import { GoPeople } from "react-icons/go";
 // import { GoSkip } from "react-icons/go";
 // import { PiFlower } from "react-icons/pi";
-import {
-  clickedDateDataObj,
-  clickedDateObj,
-  SalahStatusType,
-} from "../../types/types";
+import { clickedDateDataObj } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
 

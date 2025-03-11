@@ -556,10 +556,6 @@ const App = () => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("streakDatesObjectsArr: ", streakDatesObjectsArr);
-  // }, [streakDatesObjectsArr]);
-
   const modifyDataInUserPreferencesTable = async (
     preferenceName: PreferenceType,
     preferenceValue: string | string[]
