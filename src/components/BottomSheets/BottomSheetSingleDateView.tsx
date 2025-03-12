@@ -174,6 +174,7 @@ const BottomSheetSingleDateView = ({
                           ))}
                       </div>
                     )}
+
                     {item.notes.length > 0 && (
                       <div className="flex pb-3 my-5 text-sm">
                         <p className="pr-2">Notes: </p>
