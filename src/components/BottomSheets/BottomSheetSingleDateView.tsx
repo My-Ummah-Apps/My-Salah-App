@@ -1,10 +1,4 @@
-// import { useState, useEffect } from "react";
-
 import Sheet from "react-modal-sheet";
-// import { GoPerson } from "react-icons/go";
-// import { GoPeople } from "react-icons/go";
-// import { GoSkip } from "react-icons/go";
-// import { PiFlower } from "react-icons/pi";
 import { clickedDateDataObj } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
 import { useEffect, useState } from "react";
@@ -58,7 +52,6 @@ const BottomSheetSingleDateView = ({
   const grabSingleDateData = async (clickedDate: string) => {
     try {
       await checkAndOpenOrCloseDBConnection("open");
-      // formatDateWithOrdinal(clickedDate);
       const query = `SELECT * FROM salahDataTable WHERE date = ?`;
       const data = await dbConnection.current!.query(query, [clickedDate]);
 
@@ -108,15 +101,11 @@ const BottomSheetSingleDateView = ({
     if (clickedDate) {
       grabSingleDateData(clickedDate);
     }
-    // formatDateWithOrdinal(clickedDate);
-    // setClickedDateData(placeholderData);
   }, [clickedDate]);
 
   return (
     <Sheet
-      // style={{ backgroundColor: "rgb(33, 36, 38)" }}
       isOpen={showDailySalahDataModal}
-      // tweenConfig={{ ease: "easeOut", duration: 0.3 }}
       tweenConfig={TWEEN_CONFIG}
       onClose={() => {
         setShowDailySalahDataModal(false);
@@ -131,13 +120,11 @@ const BottomSheetSingleDateView = ({
                 {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
               </h1>
               {clickedDateData.map((item) => {
+                console.log(item.reasons.split(","));
+
                 return (
                   <div
                     key={item.date + item.salahName}
-                    // style={{
-                    //   backgroundColor:
-                    //     prayerStatusColorsHexCodes[item.salahStatus],
-                    // }}
                     className="p-2 mb-5  border-[var(--border-bottom-color)] border-b"
                   >
                     <div className="flex items-center justify-between my-5">
@@ -167,53 +154,29 @@ const BottomSheetSingleDateView = ({
                           : item.salahStatus === "female-alone"
                           ? "prayed"
                           : item.salahStatus || "No Data"}
-                        {/* {item.salahStatus === "group" ? (
-                          <GoPeople
-                            style={{
-                              color:
-                                prayerStatusColorsHexCodes[item.salahStatus],
-                              fontSize: "2rem",
-                            }}
-                          />
-                        ) : item.salahStatus === "female-alone" ? (
-                          "prayed"
-                        ) : (
-                          item.salahStatus || "No Data"
-                        )} */}
                       </div>
                     </div>
                     {item.reasons.length > 0 && (
-                      // <section className="mb-2 text-sm">
                       <div className="flex flex-wrap items-center">
-                        <p className="pr-2 my-3 text-sm">Reason(s): </p>
+                        <p className="pr-2 my-3 text-sm">
+                          {item.reasons.split(",").length > 1
+                            ? "Reasons: "
+                            : "Reason: "}{" "}
+                        </p>
                         {item.reasons
                           .split(",")
                           .filter((reason) => reason.length > 0)
                           .sort()
-                          .map(
-                            (reason) => (
-                              // reason.length > 0 && (
-                              <p
-                                key={reason}
-                                // style={{
-                                //   backgroundColor:
-                                //     prayerStatusColorsHexCodes[
-                                //       item.salahStatus
-                                //     ],
-                                // }}
-                                className={`${reasonsStyles}`}
-                              >
-                                {reason}
-                              </p>
-                            )
-                            // )
-                          )}
+                          .map((reason) => (
+                            <p key={reason} className={`${reasonsStyles}`}>
+                              {reason}
+                            </p>
+                          ))}
                       </div>
-                      // {/* </section> */}
                     )}
                     {item.notes.length > 0 && (
                       <div className="flex pb-3 my-5 text-sm">
-                        {/* <p className="pr-2">Notes: </p> */}
+                        <p className="pr-2">Notes: </p>
                         <p className="max-w-full break-words">{item.notes}</p>
                       </div>
                     )}
