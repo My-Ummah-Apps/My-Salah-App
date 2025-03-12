@@ -167,7 +167,6 @@ const BottomSheetNotifications = ({
             {dailyNotificationToggle === true ? (
               <div className="flex items-center justify-between p-3">
                 <p>Set Time</p>
-
                 <input
                   onChange={(e) => {
                     handleTimeChange(e);
@@ -177,6 +176,7 @@ const BottomSheetNotifications = ({
                     dailyNotificationToggle === true ? "slideUp" : ""
                   } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
                   type="time"
+                  dir="auto"
                   id="appt"
                   name="appt"
                   min="09:00"

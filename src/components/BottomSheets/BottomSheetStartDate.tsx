@@ -88,6 +88,7 @@ const BottomSheetStartDate = ({
                   }}
                   ref={datePickerRef}
                   type="date"
+                  dir="auto"
                   name="start-date-picker"
                   min="1950-01-01"
                   max={new Date().toISOString().split("T")[0]}

@@ -1,8 +1,3 @@
-// export interface salahTrackingArrayType {
-//   salahName: string;
-//   completedDates: { [date: string]: string }[] | [];
-// }
-
 export interface userPreferencesType {
   userStartDate: string;
   userGender: string;
@@ -17,10 +12,6 @@ export interface userPreferencesType {
   saveButtonTapCount: string;
   haptics: string;
 }
-
-// type ValueOf<T> = T[keyof T];
-
-// export type UserPreferenceValues = ValueOf<userPreferencesType>;
 
 export type PreferenceType = keyof userPreferencesType;
 
@@ -70,16 +61,6 @@ export type salahReasonsOverallNumbersType = {
   missed: { [reason: string]: number };
 };
 
-// export interface selectedSalahAndDateType {
-//   [key: string]: SalahNamesType[];
-// }
-
-// interface SelectedSalahAndDateType {
-//   [key: string]: string[];
-// }
-
-// export type SelectedSalahAndDateArrayType = SelectedSalahAndDateType[];
-
 // TODO: Below two types are duplicates, consolidate them into one
 export type SelectedSalahAndDateObjType = {
   [date: string]: SalahNamesType[];
@@ -102,17 +83,9 @@ export interface clickedDateDataObj {
   reasons: string;
 }
 
-// export interface CalenderSalahArrayObject {
-//   [date: string]: SalahEntry[];
-// }
-
-// export type CalenderSalahArray = CalenderSalahArrayObject[];
-
 export type DBConnectionStateType = "open" | "close";
 
 export type userGenderType = "male" | "female";
-
-// [tableRowDate]: { status: salahStatus, reasons: [], notes: "" }
 
 export type currentStartDateType = number;
 

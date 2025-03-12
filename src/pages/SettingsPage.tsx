@@ -282,17 +282,6 @@ const SettingsPage = ({
           </section>
         </div>{" "}
         <div className="my-5">
-          {/* <input
-            onChange={handleStartDateChange}
-            ref={datePickerRef}
-            // className="hidden"
-            type="date"
-            id="start"
-            name="start-date-picker"
-            // value={new Date().toISOString().split("T")[0]}
-            min="1950-01-01"
-            max={new Date().toISOString().split("T")[0]}
-          ></input> */}
           <SettingIndividual
             headingText={"Change Start Date"}
             subText={`Change app start date`}
