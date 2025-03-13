@@ -4,10 +4,9 @@ import Joyride, { CallBackProps, Step } from "react-joyride";
 AutoSizer;
 import {
   DBConnectionStateType,
-  MissedSalahObjType,
   PreferenceType,
   SalahNamesType,
-  SelectedSalahAndDateObjType,
+  SalahByDateObjType,
   userPreferencesType,
 } from "../../types/types";
 import BottomSheetPrayerStatus from "../BottomSheets/BottomSheetPrayerStatus";
@@ -41,12 +40,12 @@ interface PrayerTableProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
+  setMissedSalahList: React.Dispatch<React.SetStateAction<SalahByDateObjType>>;
   userPreferences: userPreferencesType;
   setSelectedSalahAndDate: React.Dispatch<
-    React.SetStateAction<SelectedSalahAndDateObjType>
+    React.SetStateAction<SalahByDateObjType>
   >;
-  selectedSalahAndDate: SelectedSalahAndDateObjType;
+  selectedSalahAndDate: SalahByDateObjType;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;

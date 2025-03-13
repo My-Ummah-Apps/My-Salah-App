@@ -4,7 +4,7 @@ import Sheet from "react-modal-sheet";
 
 import {
   DBConnectionStateType,
-  MissedSalahObjType,
+  SalahByDateObjType,
   restructuredMissedSalahListProp,
   SalahNamesType,
   SalahRecordsArrayType,
@@ -33,7 +33,7 @@ interface MissedPrayersListBottomSheetProps {
   fetchedSalahData: SalahRecordsArrayType;
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedPrayersSheet: boolean;
-  missedSalahList: MissedSalahObjType;
+  missedSalahList: SalahByDateObjType;
 }
 
 const BottomSheetMissedPrayersList = ({

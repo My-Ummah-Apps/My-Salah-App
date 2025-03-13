@@ -62,11 +62,7 @@ export type salahReasonsOverallNumbersType = {
 };
 
 // TODO: Below two types are duplicates, consolidate them into one
-export type SelectedSalahAndDateObjType = {
-  [date: string]: SalahNamesType[];
-};
-
-export type MissedSalahObjType = {
+export type SalahByDateObjType = {
   [date: string]: SalahNamesType[];
 };
 

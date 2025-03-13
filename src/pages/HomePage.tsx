@@ -9,8 +9,7 @@ import {
   SalahRecordsArrayType,
   DBConnectionStateType,
   userPreferencesType,
-  MissedSalahObjType,
-  SelectedSalahAndDateObjType,
+  SalahByDateObjType,
   PreferenceType,
 } from "../types/types";
 import { useState } from "react";
@@ -36,8 +35,8 @@ interface HomePageProps {
   pageStyles: string;
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedPrayersSheet: boolean;
-  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
-  missedSalahList: MissedSalahObjType;
+  setMissedSalahList: React.Dispatch<React.SetStateAction<SalahByDateObjType>>;
+  missedSalahList: SalahByDateObjType;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;
   activeStreakCount: number;
@@ -64,7 +63,7 @@ const HomePage = ({
   generateStreaks,
 }: HomePageProps) => {
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
-    useState<SelectedSalahAndDateObjType>({});
+    useState<SalahByDateObjType>({});
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
 
   const showStreakInfoHomePage = async () => {

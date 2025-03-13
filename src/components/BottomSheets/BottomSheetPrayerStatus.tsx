@@ -9,11 +9,10 @@ import { Capacitor } from "@capacitor/core";
 import { InAppReview } from "@capacitor-community/in-app-review";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import {
-  MissedSalahObjType,
   SalahNamesType,
   SalahRecordsArrayType,
   SalahStatusType,
-  SelectedSalahAndDateObjType,
+  SalahByDateObjType,
   userPreferencesType,
 } from "../../types/types";
 import { DBConnectionStateType } from "../../types/types";
@@ -43,10 +42,10 @@ interface PrayerStatusBottomSheetProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   userPreferences: userPreferencesType;
-  setMissedSalahList: React.Dispatch<React.SetStateAction<MissedSalahObjType>>;
+  setMissedSalahList: React.Dispatch<React.SetStateAction<SalahByDateObjType>>;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedSalahAndDate: SelectedSalahAndDateObjType;
+  selectedSalahAndDate: SalahByDateObjType;
   resetSelectedSalahAndDate: () => void;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   isMultiEditMode: boolean;

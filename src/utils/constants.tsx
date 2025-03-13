@@ -4,7 +4,7 @@ import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { format, isValid, parse } from "date-fns";
 import {
-  MissedSalahObjType,
+  SalahByDateObjType,
   SalahNamesType,
   userPreferencesType,
 } from "../types/types";
@@ -154,7 +154,7 @@ export const showToast = async (text: string, duration: "short" | "long") => {
 
 export const prayerTableIndividualSquareStyles = `w-[1.5rem] h-[1.5rem] rounded-md`;
 
-export const getMissedSalahCount = (missedSalahList: MissedSalahObjType) => {
+export const getMissedSalahCount = (missedSalahList: SalahByDateObjType) => {
   return Object.values(missedSalahList).flat().length;
 };
 

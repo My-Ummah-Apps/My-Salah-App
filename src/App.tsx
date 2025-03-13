@@ -19,7 +19,7 @@ import {
   SalahRecordType,
   SalahRecordsArrayType,
   SalahStatusType,
-  MissedSalahObjType,
+  SalahByDateObjType,
   streakDatesObjType,
 } from "./types/types";
 
@@ -57,7 +57,7 @@ const App = () => {
   const [showIntroModal, setShowIntroModal] = useState(false);
   const [showChangelogModal, setShowChangelogModal] = useState(false);
   const [showMissedPrayersSheet, setShowMissedPrayersSheet] = useState(false);
-  const [missedSalahList, setMissedSalahList] = useState<MissedSalahObjType>(
+  const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
   );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
@@ -118,7 +118,7 @@ const App = () => {
   }, [isDatabaseInitialised]);
 
   useEffect(() => {
-    let copyOfMissedSalahList: MissedSalahObjType = {};
+    let copyOfMissedSalahList: SalahByDateObjType = {};
     fetchedSalahData.forEach((obj) => {
       for (let salahName in obj.salahs) {
         if (obj.salahs[salahName as SalahNamesType] === "missed") {
@@ -365,7 +365,7 @@ const App = () => {
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
     // const missedSalahObjArr: MissedSalahObjType[] = [];
-    const missedSalahObj: MissedSalahObjType = {};
+    const missedSalahObj: SalahByDateObjType = {};
     const todaysDate = new Date();
     const userStartDateFormattedToDateObject: Date = parse(
       userStartDateForSalahTrackingFunc,

@@ -1,5 +1,5 @@
 import {
-  MissedSalahObjType,
+  SalahByDateObjType,
   PreferenceType,
   userPreferencesType,
 } from "../../types/types";
@@ -12,7 +12,7 @@ import Joyride, { CallBackProps } from "react-joyride";
 interface MissedSalahCounterProps {
   isMultiEditMode: boolean;
   setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  missedSalahList: MissedSalahObjType;
+  missedSalahList: SalahByDateObjType;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
     value: string
