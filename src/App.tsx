@@ -67,7 +67,6 @@ const App = () => {
     streakDatesObjType[]
   >([]);
   const [activeStreakCount, setActiveStreakCount] = useState(0);
-  // const [showDonutChart, setShowDonutChart] = useState(false);
 
   useEffect(() => {
     if (
@@ -130,7 +129,6 @@ const App = () => {
     });
     setMissedSalahList({ ...copyOfMissedSalahList });
   }, [fetchedSalahData]);
-  // let DBResultAllSalahData: DBSQLiteValues;
 
   const fetchDataFromDB = async (isDBImported?: boolean) => {
     try {
@@ -351,12 +349,10 @@ const App = () => {
     DBResultAllSalahData: DBResultDataObjType[]
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
-    // const missedSalahObjArr: MissedSalahObjType[] = [];
     const missedSalahObj: SalahByDateObjType = {};
     const todaysDate = new Date();
     const userStartDateFormattedToDateObject: Date = parse(
       userStartDateForSalahTrackingFunc,
-      // "2024-08-01",
       "yyyy-MM-dd",
       new Date()
     );
@@ -384,7 +380,6 @@ const App = () => {
 
       // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
       if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
-        // setShowDonutChart(true);
         for (let i = 0; i < DBResultAllSalahData.length; i++) {
           if (DBResultAllSalahData[i].date === currentDate) {
             let salahName: SalahNamesType = DBResultAllSalahData[i].salahName;
@@ -405,8 +400,6 @@ const App = () => {
 
       singleSalahObjArr.push(singleSalahObj);
     }
-
-    // updateReasonsStats(DBResultAllSalahData);
 
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
@@ -654,13 +647,11 @@ const App = () => {
                 checkAndOpenOrCloseDBConnection={
                   checkAndOpenOrCloseDBConnection
                 }
-                // DBResultAllSalahData={DBResultAllSalahData}
                 userPreferences={userPreferences}
                 fetchedSalahData={fetchedSalahData}
                 pageStyles={pageStyles}
                 activeStreakCount={activeStreakCount}
                 streakDatesObjectsArr={streakDatesObjectsArr}
-                // showDonutChart={showDonutChart}
               />
             }
           />

@@ -23,8 +23,6 @@ import {
 import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-// import StreakCount from "../Stats/StreakCount";
-
 interface PrayerTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
