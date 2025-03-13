@@ -61,7 +61,6 @@ export type salahReasonsOverallNumbersType = {
   missed: { [reason: string]: number };
 };
 
-// TODO: Below two types are duplicates, consolidate them into one
 export type SalahByDateObjType = {
   [date: string]: SalahNamesType[];
 };

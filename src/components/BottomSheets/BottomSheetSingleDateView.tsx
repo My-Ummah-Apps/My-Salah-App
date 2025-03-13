@@ -120,8 +120,6 @@ const BottomSheetSingleDateView = ({
                 {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
               </h1>
               {clickedDateData.map((item) => {
-                console.log(item.reasons.split(","));
-
                 return (
                   <div
                     key={item.date + item.salahName}

@@ -79,6 +79,7 @@ const BottomSheetPrayerStatus = ({
   };
 
   const onSheetCloseCleanup = async () => {
+    // console.log("Cleanup has run");
     setShowUpdateStatusModal(false);
     resetSelectedSalahAndDate();
     setSalahStatus("");
@@ -88,22 +89,7 @@ const BottomSheetPrayerStatus = ({
     if (isMultiEditMode) {
       setIsMultiEditMode(false);
     }
-    await checkAndOpenOrCloseDBConnection("close");
   };
-
-  useEffect(() => {
-    if (!showUpdateStatusModal) return;
-
-    const openDBConnection = async () => {
-      await checkAndOpenOrCloseDBConnection("open");
-    };
-
-    openDBConnection();
-
-    return () => {
-      onSheetCloseCleanup();
-    };
-  }, [showUpdateStatusModal]);
 
   useEffect(() => {
     if (notesTextArea.current) {
@@ -153,13 +139,14 @@ const BottomSheetPrayerStatus = ({
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      await checkAndOpenOrCloseDBConnection("close");
     }
 
     return false;
   };
 
   const checkDBForSalah = async () => {
-    // TODO: Place the below conditional statement in the onOpenStart prop on the sheet
     if (isMultiEditMode) return;
     try {
       await doesSalahAndDateExists();
@@ -172,7 +159,6 @@ const BottomSheetPrayerStatus = ({
     const salahDataToInsertIntoDB = [];
 
     try {
-      // ! Below request to open DB connection is potentially redundant since connection is already opened by the doesSalahAndDateExists function
       await checkAndOpenOrCloseDBConnection("open");
 
       const reasonsToInsert =
@@ -182,8 +168,6 @@ const BottomSheetPrayerStatus = ({
         salahStatus !== "excused"
           ? selectedReasons.join(", ")
           : "";
-
-      // console.log("Reasons to insert: ", reasonsToInsert);
 
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         if (!isValidDate(date)) {
@@ -246,7 +230,6 @@ const BottomSheetPrayerStatus = ({
 
       setFetchedSalahData((prev) => [...prev]);
 
-      // const saveBtnCounterQuery = `SELECT * FROM userPreferencesTable WHERE preferenceName = ?`;
       const saveButtonTapCountQuery = await dbConnection.current!.query(
         `SELECT * FROM userPreferencesTable WHERE preferenceName = ?;`,
         ["saveButtonTapCount"]
@@ -274,6 +257,8 @@ const BottomSheetPrayerStatus = ({
       generateStreaks(fetchedSalahData);
     } catch (error) {
       console.error(error);
+    } finally {
+      await checkAndOpenOrCloseDBConnection("close");
     }
   };
 
@@ -344,7 +329,10 @@ const BottomSheetPrayerStatus = ({
         disableDrag={false}
         onOpenStart={checkDBForSalah}
         isOpen={showUpdateStatusModal}
-        onClose={() => setShowUpdateStatusModal(false)}
+        onClose={() => {
+          setShowUpdateStatusModal(false);
+          onSheetCloseCleanup();
+        }}
         detent="content-height"
         tweenConfig={TWEEN_CONFIG}
       >
@@ -548,6 +536,7 @@ const BottomSheetPrayerStatus = ({
                     if (salahStatus) {
                       await addOrModifySalah();
                       setShowUpdateStatusModal(false);
+                      onSheetCloseCleanup();
                     }
                   }}
                   className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
@@ -562,7 +551,10 @@ const BottomSheetPrayerStatus = ({
         </Sheet.Container>
         <Sheet.Backdrop
           style={sheetBackdropColor}
-          onTap={() => setShowUpdateStatusModal(false)}
+          onTap={() => {
+            setShowUpdateStatusModal(false);
+            onSheetCloseCleanup();
+          }}
         />
       </Sheet>
 
@@ -587,7 +579,7 @@ const BottomSheetPrayerStatus = ({
               .sort((a, b) => a.localeCompare(b))
               .map((item) => (
                 <p
-                  key={item} // TODO: Ensure item is going to be unique as this is being used as the key here
+                  key={item}
                   style={{
                     backgroundColor: selectedReasons.includes(item)
                       ? "#fff"

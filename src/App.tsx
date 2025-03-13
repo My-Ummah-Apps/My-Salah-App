@@ -138,16 +138,6 @@ const App = () => {
         await modifyDataInUserPreferencesTable("isExistingUser", "1");
       }
 
-      // ! Remove this once some time has passed, as its just for migrating beta testers data
-      if (localStorage.getItem("existingUser")) {
-        await modifyDataInUserPreferencesTable("isExistingUser", "1");
-        await modifyDataInUserPreferencesTable(
-          "isMissedSalahToolTipShown",
-          "1"
-        );
-
-        localStorage.removeItem("existingUser");
-      }
       await checkAndOpenOrCloseDBConnection("open");
 
       let DBResultPreferences = await dbConnection.current?.query(
@@ -267,7 +257,6 @@ const App = () => {
     let DBResultPreferencesValues = DBResultPreferences;
 
     try {
-      // ! Should this not be (!isExistingUser) ?
       if (DBResultPreferencesValues.length === 0) {
         const params = Object.keys(dictPreferencesDefaultValues)
           .map((key) => {
@@ -298,8 +287,6 @@ const App = () => {
         }
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
-
-        // ! Should this not be (isExistingUser) ?
       } else if (DBResultPreferencesValues.length > 0) {
         const DBResultPreferencesQuery = await dbConnection.current?.query(
           `SELECT * FROM userPreferencesTable`
@@ -714,8 +701,6 @@ const App = () => {
                 modules={[Pagination, Navigation]}
                 // pagination={{ clickable: true }}
               >
-                // ! For some reason, when tapping brother or sister inthe
-                sheet, the isExistingUser flag in the DB changes from 0 to 1
                 <SwiperSlide>
                   <section className="p-5">
                     <h1 className="text-4xl">I am a...</h1>
@@ -723,7 +708,6 @@ const App = () => {
                       className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
                       onClick={async () => {
                         handleGenderSelect();
-
                         await modifyDataInUserPreferencesTable(
                           "userGender",
                           "male"
@@ -738,7 +722,6 @@ const App = () => {
                       className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
                       onClick={async () => {
                         handleGenderSelect();
-
                         await modifyDataInUserPreferencesTable(
                           "userGender",
                           "female"
