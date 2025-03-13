@@ -9,9 +9,8 @@
 }
 
 :root {
-  max-width: 1280px;
-  /* height: 100vh; */
-  overflow: auto;
+  --max-width: 700px;
+
   /* --primary-color: rgb(41, 41, 41);
   --secondary-color: rgb(27, 27, 27);
   --card-bg-color: rgb(51, 51, 51); */
@@ -60,7 +59,7 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
   height: 100vh;
-  /* max-width: 700px; */
+  max-width: 700px;
   margin-inline: auto;
   background: var(--primary-color);
   color: rgb(184, 184, 184);
@@ -96,28 +95,11 @@ body:-webkit-scrollbar {
   overflow: hidden;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
 .settings-page-wrap,
 .stats-page-wrap,
 .home-page-wrap {
   width: 95vw;
+  max-width: var(--max-width);
   margin-inline: auto;
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -128,11 +110,10 @@ body:-webkit-scrollbar {
 .settings-page-header,
 .stats-page-header,
 .home-page-header {
-  /* background: var(--header-bg-color); */
   position: relative;
   height: 10vh;
-  /* color: var(--text-color-primary); */
-  /* border-bottom: 1px solid var(--border-header-and-nav); */
+  max-width: var(--max-width);
+  /* background-color: red; */
 }
 
 .settings-page-header-p,
@@ -319,6 +300,7 @@ td {
 .ReactVirtualized__Table__row,
 .ReactVirtualized__Table__headerRow {
   width: 95vw !important;
+  max-width: var(--max-width);
 }
 
 .ReactVirtualized__Grid__innerScrollContainer {
@@ -372,6 +354,11 @@ td {
   /* background-color: red; */
 }
 
+.header-wrap,
+.navbar-wrap {
+  max-width: var(--max-width);
+}
+
 @supports not (-webkit-touch-callout: none) {
   /* CSS for non-iOS devices */
   .navbar-wrap {
@@ -385,6 +372,7 @@ td {
   input[type="date"]:before {
     content: attr(placeholder) !important;
     margin-right: 0.5em;
+
     /* transform: translateY(90deg) !important; */
   }
   /* input[type="date"]:focus:before {
