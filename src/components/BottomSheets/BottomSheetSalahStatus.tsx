@@ -52,7 +52,7 @@ interface PrayerStatusBottomSheetProps {
   generateStreaks: (fetchedSalahData: SalahRecordsArrayType) => void;
 }
 
-const BottomSheetPrayerStatus = ({
+const BottomSheetSalahStatus = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
@@ -613,4 +613,4 @@ const BottomSheetPrayerStatus = ({
   );
 };
 
-export default BottomSheetPrayerStatus;
+export default BottomSheetSalahStatus;

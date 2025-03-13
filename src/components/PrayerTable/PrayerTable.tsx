@@ -9,7 +9,7 @@ import {
   SalahByDateObjType,
   userPreferencesType,
 } from "../../types/types";
-import BottomSheetPrayerStatus from "../BottomSheets/BottomSheetPrayerStatus";
+import BottomSheetSalahStatus from "../BottomSheets/BottomSheetSalahStatus";
 
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArrayType } from "../../types/types";
@@ -318,7 +318,7 @@ const PrayerTable = ({
         )}
       </AutoSizer>
 
-      <BottomSheetPrayerStatus
+      <BottomSheetSalahStatus
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
         fetchedSalahData={fetchedSalahData}
