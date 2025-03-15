@@ -108,7 +108,7 @@ const HomePage = ({
                 srcSet=""
               />
               <div className="absolute -translate-x-1/2 -translate-y-[55%] top-[55%] left-1/2">
-                <motion.h1
+                <motion.p
                   key={activeStreakCount}
                   initial={{ scale: 0 }}
                   animate={{ scale: [1, 2, 1] }}
@@ -116,7 +116,7 @@ const HomePage = ({
                   className="mb-1 text-xs font-extrabold text-center"
                 >
                   {activeStreakCount}
-                </motion.h1>
+                </motion.p>
               </div>
               <img
                 style={{ width: "30px", height: "100%", marginLeft: "2rem" }}

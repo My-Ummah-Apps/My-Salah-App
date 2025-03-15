@@ -3,6 +3,7 @@ import {
   PreferenceType,
   userPreferencesType,
 } from "../../types/types";
+import { motion } from "framer-motion";
 import {
   getMissedSalahCount,
   prayerStatusColorsHexCodes,
@@ -94,7 +95,15 @@ const MissedSalahCounter = ({
           }}
           className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
         ></p>
-        <p className="text-xs">{getMissedSalahCount(missedSalahList)}</p>
+        <motion.p
+          key={getMissedSalahCount(missedSalahList)}
+          initial={{ scale: 0 }}
+          animate={{ scale: [1, 2, 1] }}
+          transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
+          className="text-xs"
+        >
+          {getMissedSalahCount(missedSalahList)}
+        </motion.p>
       </div>
     </>
   );
