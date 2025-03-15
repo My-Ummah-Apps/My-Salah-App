@@ -1,5 +1,6 @@
 import BottomSheetMissedPrayersList from "../components/BottomSheets/BottomSheetMissedPrayersList";
-import PrayerTable from "../components/PrayerTable/PrayerTable";
+import { motion } from "framer-motion";
+import SalahTable from "../components/SalahTable/SalahTable";
 import MissedSalahCounter from "../components/Stats/MissedSalahCounter";
 import wreathLeft from "../assets/images/wreath-left.png";
 import wreathRight from "../assets/images/wreath-right.png";
@@ -107,9 +108,15 @@ const HomePage = ({
                 srcSet=""
               />
               <div className="absolute -translate-x-1/2 -translate-y-[55%] top-[55%] left-1/2">
-                <h1 className="mb-1 text-xs font-extrabold text-center">
+                <motion.h1
+                  key={activeStreakCount}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [1, 2, 1] }}
+                  transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
+                  className="mb-1 text-xs font-extrabold text-center"
+                >
                   {activeStreakCount}
-                </h1>
+                </motion.h1>
               </div>
               <img
                 style={{ width: "30px", height: "100%", marginLeft: "2rem" }}
@@ -148,7 +155,7 @@ const HomePage = ({
           <p>Home</p>
         </header> */}
 
-        <PrayerTable
+        <SalahTable
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}

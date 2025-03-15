@@ -52,7 +52,7 @@ interface PrayerTableProps {
   generateStreaks: (fetchedSalahData: SalahRecordsArrayType) => void;
 }
 
-const PrayerTable = ({
+const SalahTable = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   modifyDataInUserPreferencesTable,
@@ -342,4 +342,4 @@ const PrayerTable = ({
   );
 };
 
-export default PrayerTable;
+export default SalahTable;
