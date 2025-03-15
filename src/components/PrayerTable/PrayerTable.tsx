@@ -1,7 +1,8 @@
 import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
+import { motion, AnimatePresence } from "framer-motion";
 import Joyride, { CallBackProps, Step } from "react-joyride";
-AutoSizer;
+
 import {
   DBConnectionStateType,
   PreferenceType,
@@ -133,7 +134,6 @@ const PrayerTable = ({
         disableOverlay={false}
         disableOverlayClose={true}
         run={showJoyRideEditIcon}
-        // run={userPreferences.isExistingUser === "0"}
         locale={{
           last: "Done",
           next: "Next",
@@ -165,34 +165,41 @@ const PrayerTable = ({
           },
         }}
       />
-
-      {isMultiEditMode && (
-        <section className="absolute z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-700 rounded-full prayer-table-edit-cancel-btn-wrap top-3/4 left-1/2">
-          <button
-            className="px-2 text-white"
-            onClick={() => {
-              setIsMultiEditMode(false);
-              resetSelectedSalahAndDate();
-            }}
+      <AnimatePresence>
+        {isMultiEditMode && (
+          <motion.section
+            initial={{ x: "-50%", y: "100%", scale: 0.5 }}
+            animate={{ y: "-25vh", scale: 1 }}
+            exit={{ y: "100%", scale: 0.5 }}
+            transition={{ type: "ease-out" }}
+            className="absolute bottom-0 z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-800 rounded-full left-1/2 prayer-table-edit-cancel-btn-wrap"
           >
-            Cancel
-          </button>
-          <button
-            className="px-2  text-white border-l border-[#adadad]"
-            onClick={() => {
-              const dateArrLength = Object.keys(selectedSalahAndDate).length;
-              dateArrLength > 0
-                ? setShowUpdateStatusModal(true)
-                : showAlert(
-                    "No Salah Selected",
-                    "Please select atleast one Salah"
-                  );
-            }}
-          >
-            Edit
-          </button>
-        </section>
-      )}
+            <button
+              className="px-2 text-white"
+              onClick={() => {
+                setIsMultiEditMode(false);
+                resetSelectedSalahAndDate();
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-2  text-white border-l border-[#adadad]"
+              onClick={() => {
+                const dateArrLength = Object.keys(selectedSalahAndDate).length;
+                dateArrLength > 0
+                  ? setShowUpdateStatusModal(true)
+                  : showAlert(
+                      "No Salah Selected",
+                      "Please select atleast one Salah"
+                    );
+              }}
+            >
+              Edit
+            </button>
+          </motion.section>
+        )}
+      </AnimatePresence>
       <AutoSizer>
         {({ height, width }) => (
           <Table

@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
+import { motion } from "framer-motion";
 
 import {
   format,
@@ -130,7 +131,9 @@ const Calendar = ({
 
   return (
     <>
-      <div
+      <motion.div
+        layout
+        // transition={{ layout: { duration: 0.5, ease: "easeInOut" } }}
         className={`bg-[color:var(--card-bg-color)] pb-5 calendar-single-month-wrap whitespace-nowrap box-shadow: 0 25px 50px -12px rgb(31, 35, 36) rounded-2xl`}
       >
         <div
@@ -273,7 +276,7 @@ const Calendar = ({
             }
           })}
         </div>
-      </div>
+      </motion.div>
 
       <BottomSheetSingleDateView
         dbConnection={dbConnection}
