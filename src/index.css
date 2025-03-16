@@ -39,6 +39,7 @@
 *:focus {
   outline: none;
 }
+
 input:focus,
 button:focus {
   outline: none;
