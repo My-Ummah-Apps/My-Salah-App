@@ -300,20 +300,32 @@ const SalahTable = ({
                           className={`${prayerTableIndividualSquareStyles} prayer-status-color-box`}
                         ></div>
                       )}
-
-                      {isMultiEditMode && (
-                        <div className={`checkbox-wrap`}>
-                          <label className="p-5">
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => {
-                                handleTableCellClick(salahName, rowData.date);
-                              }}
-                            ></input>
-                          </label>
-                        </div>
-                      )}
+                      <AnimatePresence>
+                        {isMultiEditMode && (
+                          <motion.div
+                            className={`checkbox-wrap`}
+                            initial={{
+                              opacity: 0,
+                            }}
+                            animate={{
+                              opacity: 1,
+                            }}
+                            exit={{
+                              opacity: 0,
+                            }}
+                          >
+                            <label className="p-5">
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => {
+                                  handleTableCellClick(salahName, rowData.date);
+                                }}
+                              ></input>
+                            </label>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </section>
                   );
                 }}
