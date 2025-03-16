@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
-import { motion } from "framer-motion";
 
 import {
   format,

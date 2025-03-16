@@ -109,10 +109,10 @@ const HomePage = ({
               />
               <div className="absolute -translate-x-1/2 -translate-y-[55%] top-[55%] left-1/2">
                 <motion.p
-                  key={activeStreakCount}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [1, 2, 1] }}
-                  transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
+                  // key={activeStreakCount}
+                  // initial={{ scale: 0 }}
+                  // animate={{ scale: [1, 2, 1] }}
+                  // transition={{ duration: 0.3, delay: 0.3, ease: "easeOut" }}
                   className="mb-1 text-xs font-extrabold text-center"
                 >
                   {activeStreakCount}
