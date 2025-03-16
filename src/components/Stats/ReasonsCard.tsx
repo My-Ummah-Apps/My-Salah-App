@@ -2,6 +2,7 @@ import {
   reasonsToShowType,
   salahReasonsOverallNumbersType,
 } from "../../types/types";
+import { motion } from "framer-motion";
 import { prayerStatusColorsHexCodes } from "../../utils/constants";
 import ReasonsList from "./ReasonsList";
 
@@ -21,7 +22,10 @@ const ReasonsCard = ({
   status,
 }: ReasonsCardProps) => {
   return (
-    <section className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl h-full">
+    <motion.section
+      layout
+      className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl h-full"
+    >
       <h1 className="pt-4 m-2 text-lg text-center">
         {`Top Reasons For ${
           status === "male-alone"
@@ -99,7 +103,7 @@ const ReasonsCard = ({
       >
         <p className="text-[1rem]">Show More</p>
       </button>
-    </section>
+    </motion.section>
   );
 };
 

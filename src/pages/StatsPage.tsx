@@ -188,9 +188,7 @@ const StatsPage = ({
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
   return (
-    // <section className={`${pageStyles}`}>
     <section className={`${pageStyles} stats-page-wrap`}>
-      {/* <StreakCount styles={{}} /> */}
       <header className="stats-page-header">
         <p className="stats-page-header-p">Stats</p>
       </header>
@@ -207,12 +205,17 @@ const StatsPage = ({
             salahStatusStatistics={salahStatusStatistics}
           />
         )}
+        {/* <motion.div
+          layout
+          transition={{ layout: { duration: 0.5, ease: "easeInOut" } }}
+        > */}
         <Calendar
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           userStartDate={userPreferences.userStartDate}
           fetchedSalahData={fetchedSalahData}
         />{" "}
+        {/* </motion.div> */}
         <Swiper
           spaceBetween={50}
           slidesPerView={1}

@@ -50,44 +50,28 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-body {
-  /* padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left); */
-  /* background: #ededed; */
-  /* background: rgb(26, 26, 26); */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  height: 100vh;
-  max-width: 700px;
-  margin-inline: auto;
-  background: var(--primary-color);
-  color: rgb(184, 184, 184);
-  font-family: sans-serif;
-  overflow: hidden;
-  /* scrollbar-color: red red; */
-}
-
-.app {
-  /* max-width: 700px; */
-  /* overflow: hidden; */
-}
-
 ::-webkit-scrollbar {
   display: none;
 }
 
-/* .recharts-sector {
-  stroke-linejoin: round;
-  stroke-width: 7px;
-} */
-
 html {
+  max-width: var(--max-width);
   overflow: scroll;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  height: 100vh;
+  background: var(--primary-color);
+  color: rgb(184, 184, 184);
+  font-family: sans-serif;
+  overflow: hidden;
 }
 
 body:-webkit-scrollbar {
   width: 0px;
-  background: transparent; /* make scrollbar transparent */
+  background: transparent;
 }
 
 .app {
@@ -99,7 +83,6 @@ body:-webkit-scrollbar {
 .home-page-wrap {
   width: 95vw;
   max-width: var(--max-width);
-  margin-inline: auto;
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left);
   overflow-x: hidden;
@@ -112,7 +95,6 @@ body:-webkit-scrollbar {
   position: relative;
   height: 10vh;
   max-width: var(--max-width);
-  /* background-color: red; */
 }
 
 .settings-page-header-p,
@@ -135,7 +117,6 @@ body:-webkit-scrollbar {
 }
 
 input[type="date"] {
-  /* background: transparent; */
   background-color: gray;
   border-radius: 0.3rem;
   color: white;
@@ -144,47 +125,12 @@ input[type="date"] {
   padding: 0.3rem;
 }
 
-.prayer-status-color-box {
-  /* animation: fadeIn 0.5s ease forwards; */
-}
-
-.status-box-transition {
-  animation: background-color 0.5s ease;
-}
-
 .checkbox-wrap {
   position: absolute;
   width: 100%;
   left: 50%;
   transform: translate(-50%, 50%);
-  /* animation: checkbox-slide-in 0.5s ease; */
 }
-
-/* @keyframes checkbox-slide-in {
-  from {
-    transform: translate(-50%, 100%);
-  }
-  to {
-    transform: translate(-50%, 50%);
-  }
-}
-
-@keyframes checkbox-slide-out {
-  from {
-    transform: translate(-50%, 50%);
-  }
-  to {
-    transform: translate(-50%, 100%);
-  }
-} */
-
-/* .checkbox--wrap-slide-in {
-  animation: checkbox-slide-in 0.5s ease;
-}
-
-.checkbox--wrap-slide-out {
-  animation: checkbox-slide-out 0.5s ease;
-} */
 
 textarea {
   resize: none !important;
@@ -196,6 +142,7 @@ textarea {
 
 .react-modal-sheet-container {
   transition: margin-bottom 420ms;
+  max-width: var(--max-width);
 }
 
 .header-wrap {
@@ -204,49 +151,10 @@ textarea {
 
 td {
   border-bottom: var(--border-bottom-color) !important;
-  /* vertical-align: top; */
-}
-
-@keyframes slideInFromRight {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideUp {
-  0% {
-    transform: translate(-50%, 100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(-50%, 25%);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.ReactVirtualized__Table__headerColumn:first-child::before {
-  /* content: "\f044"; */
-}
-
-.prayer-table-edit-cancel-btn-wrap {
-  /* animation: slideUp 0.3s ease-out; */
 }
 
 .swiper {
   width: 100%;
-  /* height: 100%; */
   border-radius: 1rem;
 }
 
@@ -264,7 +172,7 @@ td {
 }
 
 .swiper-pagination-bullet-active {
-  background-color: #fff; /* Highlighted color */
+  background-color: #fff;
   opacity: 1;
 }
 
@@ -278,19 +186,13 @@ td {
   color: rgb(92 107 192);
 }
 
-.modal-sheet-prayer-statuses-wrap {
-  /* transition: bottom 420ms; */
-}
-
 .prayer-status-modal-reasons-wrap {
-  /* max-height: 0; */
   opacity: 0;
   transition: max-height 0.5s ease-in-out, fadeIn 5s ease-in;
 }
 
 .calendar-single-month-wrap {
   direction: ltr;
-  /* height: 90% !important; */
 }
 
 .ReactVirtualized__Grid,
@@ -304,7 +206,6 @@ td {
 
 .ReactVirtualized__Grid__innerScrollContainer {
   max-width: 95vw !important;
-  /* margin-bottom: 20rem !important; */
 }
 
 .ReactVirtualized__Table__headerRow {
@@ -339,7 +240,6 @@ td {
 }
 
 .prayer-table-wrap {
-  /* margin-top: 1rem; */
   position: static !important;
 }
 
@@ -350,7 +250,6 @@ td {
   border-radius: 0.15rem;
   width: 10px;
   height: 10px;
-  /* background-color: red; */
 }
 
 .header-wrap,
@@ -361,7 +260,6 @@ td {
 @supports not (-webkit-touch-callout: none) {
   /* CSS for non-iOS devices */
   .navbar-wrap {
-    /* padding-bottom: 0; */
     padding-bottom: 0.5rem;
   }
 }
@@ -371,35 +269,13 @@ td {
   input[type="date"]:before {
     content: attr(placeholder) !important;
     margin-right: 0.5em;
-
-    /* transform: translateY(90deg) !important; */
   }
-  /* input[type="date"]:focus:before {
-    content: "" !important;
-  } */
 }
-
-/* Apply background color to the safe areas for iOS devices
-@supports (padding-top: constant(safe-area-inset-top)) or
-  (padding-top: env(safe-area-inset-top)) {
-  .header-wrap {
-    margin-top: 6vh;
-  }
-} */
 
 input[type="date"] {
   color: white;
   background-color: rgb(67, 67, 67);
 }
-
-/* input[type="date"]:focus:before,
-input[type="date"]:valid:before {
-  content: "";
-} */
-
-/* input[type="date"]:after {
-  content: attr(placeholder);
-} */
 
 /* CHECKBOX STYLING */
 
@@ -408,6 +284,7 @@ input[type="date"]:valid:before {
   height: 0.9rem;
   color: dodgerblue;
   vertical-align: middle;
+  appearance: none;
   -webkit-appearance: none;
   background: none;
   border: 0;
@@ -444,11 +321,3 @@ input[type="date"]:valid:before {
   box-shadow: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E %3Cpath d='M15.88 8.29L10 14.17l-1.88-1.88a.996.996 0 1 0-1.41 1.41l2.59 2.59c.39.39 1.02.39 1.41 0L17.3 9.7a.996.996 0 0 0 0-1.41c-.39-.39-1.03-.39-1.42 0z' fill='%23fff'/%3E %3C/svg%3E");
 }
-
-/* Disabled */
-
-/* [type="checkbox"]:disabled {
-  background-color: #ccd3d8;
-  opacity: 0.84;
-  cursor: not-allowed;
-} */

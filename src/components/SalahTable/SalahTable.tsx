@@ -168,9 +168,9 @@ const SalahTable = ({
       <AnimatePresence>
         {isMultiEditMode && (
           <motion.section
-            initial={{ x: "-50%", y: "100%", scale: 0.5 }}
-            animate={{ y: "-25vh", scale: 1 }}
-            exit={{ y: "100%", scale: 0.5 }}
+            initial={{ x: "-50%", y: "100%", scale: 0.5, opacity: 0 }}
+            animate={{ y: "-25vh", scale: 1, opacity: 1 }}
+            exit={{ y: "100%", scale: 0.5, opacity: 0 }}
             transition={{ type: "ease-out" }}
             className="absolute bottom-0 z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-800 rounded-full left-1/2 prayer-table-edit-cancel-btn-wrap"
           >
