@@ -12,7 +12,7 @@ import {
 import Sheet from "react-modal-sheet";
 import { TiDelete } from "react-icons/ti";
 import { useState } from "react";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { VscDebugRestart } from "react-icons/vsc";
 
 interface BottomSheetStartDateProps {
@@ -42,7 +42,10 @@ const BottomSheetEditReasons = ({
         detent="full-height"
         tweenConfig={TWEEN_CONFIG}
         isOpen={showEditReasonsSheet}
-        onClose={() => setShowEditReasonsSheet(false)}
+        onClose={() => {
+          setShowEditReasonsSheet(false);
+          setNewReasonInput("");
+        }}
       >
         <Sheet.Container style={bottomSheetContainerStyles}>
           <Sheet.Header style={sheetHeaderHeight} />
@@ -167,14 +170,16 @@ const BottomSheetEditReasons = ({
                   </AnimatePresence>
                 </ul>
               </section>
-
               <section className="flex justify-between w-full px-4 py-4"></section>
             </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop
           style={sheetBackdropColor}
-          onTap={() => setShowEditReasonsSheet(false)}
+          onTap={() => {
+            setShowEditReasonsSheet(false);
+            setNewReasonInput("");
+          }}
         />
       </Sheet>
     </>
