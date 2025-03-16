@@ -81,7 +81,8 @@ body:-webkit-scrollbar {
 .settings-page-wrap,
 .stats-page-wrap,
 .home-page-wrap {
-  width: 95vw;
+  /* width: 95vw; */
+  margin: 0.5rem;
   max-width: var(--max-width);
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left);

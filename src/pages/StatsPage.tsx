@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { motion } from "framer-motion";
 
 // import "swiper/css";
 // import "swiper/css/pagination";
@@ -205,17 +206,12 @@ const StatsPage = ({
             salahStatusStatistics={salahStatusStatistics}
           />
         )}
-        {/* <motion.div
-          layout
-          transition={{ layout: { duration: 0.5, ease: "easeInOut" } }}
-        > */}
         <Calendar
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           userStartDate={userPreferences.userStartDate}
           fetchedSalahData={fetchedSalahData}
         />{" "}
-        {/* </motion.div> */}
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
