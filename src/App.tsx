@@ -56,7 +56,7 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 const App = () => {
   const [showIntroModal, setShowIntroModal] = useState(false);
   const [showChangelogModal, setShowChangelogModal] = useState(false);
-  const [showMissedPrayersSheet, setShowMissedPrayersSheet] = useState(false);
+  const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
   );
@@ -192,7 +192,7 @@ const App = () => {
             {
               id: 1,
               title: "Daily Reminder",
-              body: `Did you log your prayers today?`,
+              body: `Did you log your Salah today?`,
               schedule: {
                 on: {
                   hour: hour,
@@ -609,8 +609,8 @@ const App = () => {
                 fetchedSalahData={fetchedSalahData}
                 setMissedSalahList={setMissedSalahList}
                 pageStyles={pageStyles}
-                setShowMissedPrayersSheet={setShowMissedPrayersSheet}
-                showMissedPrayersSheet={showMissedPrayersSheet}
+                setShowMissedSalahsSheet={setShowMissedSalahsSheet}
+                showMissedSalahsSheet={showMissedSalahsSheet}
                 missedSalahList={missedSalahList}
                 setIsMultiEditMode={setIsMultiEditMode}
                 isMultiEditMode={isMultiEditMode}
@@ -731,7 +731,7 @@ const App = () => {
                       Stay Consistent with Your Salah
                     </h1>
                     <p>
-                      A simple daily reminder to record your prayer statuses and
+                      A simple daily reminder to record your Salahstatuses and
                       stay on track with your goals
                     </p>
                   </section>

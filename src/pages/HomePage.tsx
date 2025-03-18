@@ -1,4 +1,4 @@
-import BottomSheetMissedPrayersList from "../components/BottomSheets/BottomSheetMissedPrayersList";
+import MissedSalahsListBottomSheet from "../components/BottomSheets/BottomSheetMissedSalahsList";
 import { motion } from "framer-motion";
 import SalahTable from "../components/SalahTable/SalahTable";
 import MissedSalahCounter from "../components/Stats/MissedSalahCounter";
@@ -34,8 +34,8 @@ interface HomePageProps {
   fetchedSalahData: SalahRecordsArrayType;
   userPreferences: userPreferencesType;
   pageStyles: string;
-  setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showMissedPrayersSheet: boolean;
+  setShowMissedSalahsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showMissedSalahsSheet: boolean;
   setMissedSalahList: React.Dispatch<React.SetStateAction<SalahByDateObjType>>;
   missedSalahList: SalahByDateObjType;
   setIsMultiEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,8 +54,8 @@ const HomePage = ({
   fetchedSalahData,
   userPreferences,
   pageStyles,
-  setShowMissedPrayersSheet,
-  showMissedPrayersSheet,
+  setShowMissedSalahsSheet,
+  showMissedSalahsSheet,
   setMissedSalahList,
   missedSalahList,
   setIsMultiEditMode,
@@ -72,7 +72,7 @@ const HomePage = ({
       title: "Streaks Explained",
       message: `Your current streak shows how many consecutive days you've completed all your Salah, starting from the first day where all Salah have been prayed. ${
         userPreferences.userGender === "male"
-          ? "If you miss a prayer or are late, the streak will reset."
+          ? "If you miss a Salah or are late, the streak will reset."
           : "If you're late, the streak will reset, selecting 'Excused' will pause the streak, but won't break it."
       }`,
     });
@@ -85,7 +85,7 @@ const HomePage = ({
           {getMissedSalahCount(missedSalahList) > 0 &&
           userPreferences.showMissedSalahCount === "1" ? (
             <MissedSalahCounter
-              setShowMissedPrayersSheet={setShowMissedPrayersSheet}
+              setShowMissedSalahsSheet={setShowMissedSalahsSheet}
               isMultiEditMode={isMultiEditMode}
               missedSalahList={missedSalahList}
               modifyDataInUserPreferencesTable={
@@ -174,13 +174,13 @@ const HomePage = ({
           generateStreaks={generateStreaks}
         />
 
-        <BottomSheetMissedPrayersList
+        <MissedSalahsListBottomSheet
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}
-          setShowMissedPrayersSheet={setShowMissedPrayersSheet}
-          showMissedPrayersSheet={showMissedPrayersSheet}
+          setShowMissedSalahsSheet={setShowMissedSalahsSheet}
+          showMissedSalahsSheet={showMissedSalahsSheet}
           missedSalahList={missedSalahList}
           // setSelectedSalahAndDate={setSelectedSalahAndDate}
           // setShowUpdateStatusModal={setShowUpdateStatusModal}

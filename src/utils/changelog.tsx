@@ -286,7 +286,7 @@ export const changeLogs = [
             settings wasn't properly reflected in the app settings. <br />
             - Updated notification permission checks on app reinstall to ensure
             accurate toggle behavior in settings. <br />
-            - Fixed issues with the prayer table not rendering when app data or
+            - Fixed issues with the Salah table not rendering when app data or
             cache is cleared. <br />- Improved notes entry field in the status
             update sheet which now expands dynamically as the user types, with a
             max height for readability.
@@ -303,7 +303,7 @@ export const changeLogs = [
         text: (
           <>
             <strong>Fixed</strong>: Addressed several minor bugs, including
-            prayer status sheet not animating on the main page
+            Salah status sheet not animating on the main page
           </>
         ),
       },
@@ -346,11 +346,11 @@ export const changeLogs = [
         ),
       },
       {
-        heading: "Prayer Tracker - Day Visibility",
+        heading: "Salah Tracker - Day Visibility",
         text: (
           <>
             <strong>Improvement</strong>: Added day labels below dates in the
-            prayer tracker for better clarity.
+            Salah tracker for better clarity.
           </>
         ),
       },

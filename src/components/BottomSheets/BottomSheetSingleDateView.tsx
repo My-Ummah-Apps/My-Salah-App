@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { SalahNamesType } from "../../types/types";
 import {
   bottomSheetContainerStyles,
-  prayerStatusColorsHexCodes,
+  salahStatusColorsHexCodes,
   reasonsStyles,
   sheetBackdropColor,
 } from "../../utils/constants";
@@ -35,7 +35,7 @@ const BottomSheetSingleDateView = ({
     []
   );
 
-  const prayerNamesOrder: SalahNamesType[] = [
+  const salahNamesOrder: SalahNamesType[] = [
     "Fajr",
     "Dhuhr",
     "Asar",
@@ -57,11 +57,11 @@ const BottomSheetSingleDateView = ({
 
       const sortedData: clickedDateDataObj[] = data.values!.sort(
         (a: clickedDateDataObj, b: clickedDateDataObj) =>
-          prayerNamesOrder.indexOf(a.salahName) -
-          prayerNamesOrder.indexOf(b.salahName)
+          salahNamesOrder.indexOf(a.salahName) -
+          salahNamesOrder.indexOf(b.salahName)
       );
 
-      const placeholderData: clickedDateDataObj[] = prayerNamesOrder.map(
+      const placeholderData: clickedDateDataObj[] = salahNamesOrder.map(
         (salah) => {
           const dataCheck = sortedData.find((obj) => {
             return obj.salahName === salah;
@@ -129,7 +129,7 @@ const BottomSheetSingleDateView = ({
                       <div
                         style={{
                           borderLeft: `3px solid ${
-                            prayerStatusColorsHexCodes[item.salahStatus]
+                            salahStatusColorsHexCodes[item.salahStatus]
                           }`,
                         }}
                         className="w-1/2 px-2 py-1 text-lg text-white"
@@ -139,7 +139,7 @@ const BottomSheetSingleDateView = ({
                       <div
                         style={{
                           backgroundColor:
-                            prayerStatusColorsHexCodes[item.salahStatus],
+                            salahStatusColorsHexCodes[item.salahStatus],
                         }}
                         className={
                           "capitalize-first-letter w-4/12 rounded-3xl p-2 text-center"

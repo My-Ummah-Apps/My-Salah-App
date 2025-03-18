@@ -40,7 +40,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
 
 export const reasonsStyles = "p-2 m-1 text-xs bg-[rgb(39,39,39)] rounded-xl";
 
-export const prayerStatusColorsHexCodes = {
+export const salahStatusColorsHexCodes = {
   group: "#5FAE82",
   "male-alone": "#D4B245",
   "female-alone": "#5FAE82",
@@ -152,7 +152,7 @@ export const showToast = async (text: string, duration: "short" | "long") => {
   });
 };
 
-export const prayerTableIndividualSquareStyles = `w-[1.5rem] h-[1.5rem] rounded-md`;
+export const salahTableIndividualSquareStyles = `w-[1.5rem] h-[1.5rem] rounded-md`;
 
 export const getMissedSalahCount = (missedSalahList: SalahByDateObjType) => {
   return Object.values(missedSalahList).flat().length;

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
-import { prayerStatusColorsHexCodes } from "../../utils/constants";
+import { salahStatusColorsHexCodes } from "../../utils/constants";
 
 import {
   format,
@@ -95,31 +95,31 @@ const Calendar = ({
       if (fetchedSalahData[key].date === formattedDate) {
         const matchedData = fetchedSalahData[key].salahs;
 
-        for (const [prayer, prayerStatus] of Object.entries(matchedData)) {
-          if (prayer === "Fajr") {
+        for (const [salah, salahStatus] of Object.entries(matchedData)) {
+          if (salah === "Fajr") {
             colors.fajrColor =
-              prayerStatusColorsHexCodes[
-                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              salahStatusColorsHexCodes[
+                salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (prayer === "Dhuhr") {
+          } else if (salah === "Dhuhr") {
             colors.zoharColor =
-              prayerStatusColorsHexCodes[
-                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              salahStatusColorsHexCodes[
+                salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (prayer === "Asar") {
+          } else if (salah === "Asar") {
             colors.asarColor =
-              prayerStatusColorsHexCodes[
-                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              salahStatusColorsHexCodes[
+                salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (prayer === "Maghrib") {
+          } else if (salah === "Maghrib") {
             colors.maghribColor =
-              prayerStatusColorsHexCodes[
-                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              salahStatusColorsHexCodes[
+                salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (prayer === "Isha") {
+          } else if (salah === "Isha") {
             colors.ishaColor =
-              prayerStatusColorsHexCodes[
-                prayerStatus as keyof typeof prayerStatusColorsHexCodes
+              salahStatusColorsHexCodes[
+                salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
           }
         }

@@ -21,7 +21,7 @@ import {
   bottomSheetContainerStyles,
   createLocalisedDate,
   isValidDate,
-  prayerStatusColorsHexCodes,
+  salahStatusColorsHexCodes,
   reasonsStyles,
   salahNamesArr,
   sheetBackdropColor,
@@ -33,7 +33,7 @@ import { sheetHeaderHeight } from "../../utils/constants";
 import { isToday, isYesterday, parse } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-interface PrayerStatusBottomSheetProps {
+interface SalahStatusBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
@@ -66,10 +66,10 @@ const BottomSheetSalahStatus = ({
   showUpdateStatusModal,
   setShowUpdateStatusModal,
   generateStreaks,
-}: PrayerStatusBottomSheetProps) => {
+}: SalahStatusBottomSheetProps) => {
   const sheetRef = useRef<HTMLDivElement>(null);
-  const modalSheetPrayerReasonsWrap = useRef<HTMLDivElement>(null);
-  const modalSheetHiddenPrayerReasonsWrap = useRef<HTMLDivElement>(null);
+  const modalSheetSalahReasonsWrap = useRef<HTMLDivElement>(null);
+  const modalSheetHiddenSalahReasonsWrap = useRef<HTMLDivElement>(null);
   const notesTextArea = useRef<HTMLTextAreaElement | null>(null);
   const [salahStatus, setSalahStatus] = useState<SalahStatusType>("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
@@ -264,24 +264,24 @@ const BottomSheetSalahStatus = ({
   };
 
   useEffect(() => {
-    // console.log(modalSheetPrayerReasonsWrap.current);
-    // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+    // console.log(modalSheetSalahReasonsWrap.current);
+    // console.log(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
     if (
-      modalSheetPrayerReasonsWrap.current &&
-      modalSheetHiddenPrayerReasonsWrap.current
+      modalSheetSalahReasonsWrap.current &&
+      modalSheetHiddenSalahReasonsWrap.current
     ) {
-      // console.log(modalSheetPrayerReasonsWrap.current);
-      // console.log(modalSheetHiddenPrayerReasonsWrap.current.offsetHeight);
+      // console.log(modalSheetSalahReasonsWrap.current);
+      // console.log(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
       if (
         salahStatus === "male-alone" ||
         salahStatus === "late" ||
         salahStatus === "missed"
       ) {
-        modalSheetPrayerReasonsWrap.current.style.maxHeight =
-          modalSheetHiddenPrayerReasonsWrap.current.offsetHeight + "px";
-        modalSheetPrayerReasonsWrap.current.style.opacity = "1";
+        modalSheetSalahReasonsWrap.current.style.maxHeight =
+          modalSheetHiddenSalahReasonsWrap.current.offsetHeight + "px";
+        modalSheetSalahReasonsWrap.current.style.opacity = "1";
       } else {
-        modalSheetPrayerReasonsWrap.current.style.maxHeight = "0";
+        modalSheetSalahReasonsWrap.current.style.maxHeight = "0";
       }
     }
   }, [showUpdateStatusModal, salahStatus]);
@@ -356,7 +356,7 @@ const BottomSheetSalahStatus = ({
                 </h1>
 
                 <div
-                  className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs modal-sheet-prayer-statuses-wrap `}
+                  className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs modal-sheet-salah-statuses-wrap `}
                 >
                   {userPreferences.userGender === "male" ? (
                     <motion.div
@@ -369,7 +369,7 @@ const BottomSheetSalahStatus = ({
                           // setSelectedReasons([]);
                         }}
                         style={{
-                          backgroundColor: prayerStatusColorsHexCodes.group,
+                          backgroundColor: salahStatusColorsHexCodes.group,
                         }}
                         className={`${
                           salahStatus === "group" ? "border border-white" : ""
@@ -394,7 +394,7 @@ const BottomSheetSalahStatus = ({
                           }}
                           style={{
                             backgroundColor:
-                              prayerStatusColorsHexCodes["female-alone"],
+                              salahStatusColorsHexCodes["female-alone"],
                           }}
                           className={`${
                             salahStatus === "female-alone"
@@ -423,7 +423,7 @@ const BottomSheetSalahStatus = ({
                           }}
                           style={{
                             backgroundColor:
-                              prayerStatusColorsHexCodes["male-alone"],
+                              salahStatusColorsHexCodes["male-alone"],
                           }}
                           className={`${
                             salahStatus === "male-alone"
@@ -449,7 +449,7 @@ const BottomSheetSalahStatus = ({
                             setSalahStatus("excused");
                           }}
                           style={{
-                            backgroundColor: prayerStatusColorsHexCodes.excused,
+                            backgroundColor: salahStatusColorsHexCodes.excused,
                           }}
                           className={`${
                             salahStatus === "excused"
@@ -474,7 +474,7 @@ const BottomSheetSalahStatus = ({
                         setSalahStatus("late");
                       }}
                       style={{
-                        backgroundColor: prayerStatusColorsHexCodes.late,
+                        backgroundColor: salahStatusColorsHexCodes.late,
                       }}
                       className={`${
                         salahStatus === "late" ? "border border-white" : ""
@@ -495,7 +495,7 @@ const BottomSheetSalahStatus = ({
                         setSalahStatus("missed");
                       }}
                       style={{
-                        backgroundColor: prayerStatusColorsHexCodes.missed,
+                        backgroundColor: salahStatusColorsHexCodes.missed,
                       }}
                       className={`${
                         salahStatus === "missed" ? "border border-white" : ""
@@ -508,8 +508,8 @@ const BottomSheetSalahStatus = ({
                 </div>
 
                 <section
-                  ref={modalSheetPrayerReasonsWrap}
-                  className="mb-5 overflow-x-hidden mt-7 prayer-status-modal-reasons-wrap"
+                  ref={modalSheetSalahReasonsWrap}
+                  className="mb-5 overflow-x-hidden mt-7 salah-status-modal-reasons-wrap"
                 >
                   {userPreferences.reasons.length > 0 && (
                     <div>
@@ -603,10 +603,10 @@ const BottomSheetSalahStatus = ({
       {/* BELOW IS DUPLICATE SO HEIGHT CAN BE ANIMATED */}
       <div
         className="DUPLICATE-REASONS z-[-100] absolute bottom-0 opacity-0"
-        ref={modalSheetHiddenPrayerReasonsWrap}
+        ref={modalSheetHiddenSalahReasonsWrap}
       >
         <div>
-          <div className="overflow-x-hidden prayer-status-modal-reasons-wrap">
+          <div className="overflow-x-hidden salah-status-modal-reasons-wrap">
             {userPreferences.reasons.length > 0 && (
               <div>
                 <h2 className="mb-3 text-sm text-start">Reasons: </h2>

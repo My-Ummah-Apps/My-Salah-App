@@ -6,13 +6,13 @@ import {
 import { motion } from "framer-motion";
 import {
   getMissedSalahCount,
-  prayerStatusColorsHexCodes,
+  salahStatusColorsHexCodes,
 } from "../../utils/constants";
 import Joyride, { CallBackProps } from "react-joyride";
 
 interface MissedSalahCounterProps {
   isMultiEditMode: boolean;
-  setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowMissedSalahsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   missedSalahList: SalahByDateObjType;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
@@ -23,7 +23,7 @@ interface MissedSalahCounterProps {
 
 const MissedSalahCounter = ({
   isMultiEditMode,
-  setShowMissedPrayersSheet,
+  setShowMissedSalahsSheet,
   missedSalahList,
   modifyDataInUserPreferencesTable,
   userPreferences,
@@ -85,12 +85,12 @@ const MissedSalahCounter = ({
           if (isMultiEditMode) {
             return;
           }
-          setShowMissedPrayersSheet(true);
+          setShowMissedSalahsSheet(true);
         }}
       >
         <p
           style={{
-            backgroundColor: prayerStatusColorsHexCodes["missed"],
+            backgroundColor: salahStatusColorsHexCodes["missed"],
           }}
           className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
         ></p>

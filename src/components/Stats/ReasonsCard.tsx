@@ -3,7 +3,7 @@ import {
   salahReasonsOverallNumbersType,
 } from "../../types/types";
 import { motion } from "framer-motion";
-import { prayerStatusColorsHexCodes } from "../../utils/constants";
+import { salahStatusColorsHexCodes } from "../../utils/constants";
 import ReasonsList from "./ReasonsList";
 
 interface ReasonsCardProps {
@@ -72,7 +72,7 @@ const ReasonsCard = ({
                         <p
                           style={{
                             //  width: Math.round(("value" / reasonsSum) * 100) + "%",
-                            backgroundColor: prayerStatusColorsHexCodes[status],
+                            backgroundColor: salahStatusColorsHexCodes[status],
                           }}
                           className="absolute top-0 h-2 rounded-md reasons-bar"
                         ></p>

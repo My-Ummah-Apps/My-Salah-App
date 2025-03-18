@@ -33,7 +33,7 @@ const StreakCounter = ({
           ? `Streaks represent the number of consecutive days you've completed all your Salah, starting from the first day of full completion.
 
           - Streaks continue if you pray in a group or alone.
-          - If you miss a prayer or are late, your streak resets.`
+          - If you miss a Salah or are late, your streak resets.`
           : `Streaks represent the number of consecutive days you've completed all your Salah, starting from the first day of full completion.
           
           - Streaks continue as long as you pray on time.

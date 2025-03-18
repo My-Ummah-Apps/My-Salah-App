@@ -1,6 +1,6 @@
 // import React, { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { prayerStatusColorsHexCodes } from "../../utils/constants";
+import { salahStatusColorsHexCodes } from "../../utils/constants";
 
 interface CustomizedLabelProps {
   cx: number;
@@ -62,16 +62,16 @@ const DonutPieChart = ({
   const COLORS =
     userGender === "male"
       ? [
-          prayerStatusColorsHexCodes.group,
-          prayerStatusColorsHexCodes["male-alone"],
-          prayerStatusColorsHexCodes.late,
-          prayerStatusColorsHexCodes.missed,
+          salahStatusColorsHexCodes.group,
+          salahStatusColorsHexCodes["male-alone"],
+          salahStatusColorsHexCodes.late,
+          salahStatusColorsHexCodes.missed,
         ]
       : [
-          prayerStatusColorsHexCodes["female-alone"],
-          prayerStatusColorsHexCodes.excused,
-          prayerStatusColorsHexCodes.late,
-          prayerStatusColorsHexCodes.missed,
+          salahStatusColorsHexCodes["female-alone"],
+          salahStatusColorsHexCodes.excused,
+          salahStatusColorsHexCodes.late,
+          salahStatusColorsHexCodes.missed,
         ];
   return (
     <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
@@ -112,7 +112,7 @@ const DonutPieChart = ({
           <p
             style={
               {
-                "--group-color": prayerStatusColorsHexCodes.group,
+                "--group-color": salahStatusColorsHexCodes.group,
               } as React.CSSProperties
             }
             className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--group-color)]"
@@ -127,8 +127,7 @@ const DonutPieChart = ({
             <p
               style={
                 {
-                  "--male-alone-color":
-                    prayerStatusColorsHexCodes["male-alone"],
+                  "--male-alone-color": salahStatusColorsHexCodes["male-alone"],
                 } as React.CSSProperties
               }
               className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--male-alone-color)]"
@@ -139,7 +138,7 @@ const DonutPieChart = ({
             <p
               style={
                 {
-                  "--excused-color": prayerStatusColorsHexCodes.excused,
+                  "--excused-color": salahStatusColorsHexCodes.excused,
                 } as React.CSSProperties
               }
               className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--excused-color)]"
@@ -153,7 +152,7 @@ const DonutPieChart = ({
           <p
             style={
               {
-                "--late-color": prayerStatusColorsHexCodes.late,
+                "--late-color": salahStatusColorsHexCodes.late,
               } as React.CSSProperties
             }
             className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--late-color)]"
@@ -165,7 +164,7 @@ const DonutPieChart = ({
           <p
             style={
               {
-                "--missed-color": prayerStatusColorsHexCodes.missed,
+                "--missed-color": salahStatusColorsHexCodes.missed,
               } as React.CSSProperties
             }
             className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--missed-color)]"

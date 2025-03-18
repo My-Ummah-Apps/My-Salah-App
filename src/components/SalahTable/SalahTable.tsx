@@ -16,15 +16,15 @@ import { LuDot } from "react-icons/lu";
 import { SalahRecordsArrayType } from "../../types/types";
 import {
   createLocalisedDate,
-  prayerStatusColorsHexCodes,
-  prayerTableIndividualSquareStyles,
+  salahStatusColorsHexCodes,
+  salahTableIndividualSquareStyles,
   salahNamesArr,
   showAlert,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-interface PrayerTableProps {
+interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -69,7 +69,7 @@ const SalahTable = ({
   setShowUpdateStatusModal,
   showUpdateStatusModal,
   generateStreaks,
-}: PrayerTableProps) => {
+}: SalahTableProps) => {
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
   };
@@ -129,7 +129,7 @@ const SalahTable = ({
   };
 
   return (
-    <section className="prayer-table-wrap h-[80vh]">
+    <section className="salah-table-wrap h-[80vh]">
       <Joyride
         disableOverlay={false}
         disableOverlayClose={true}
@@ -172,7 +172,7 @@ const SalahTable = ({
             animate={{ y: "-25vh", scale: 1, opacity: 1 }}
             exit={{ y: "100%", scale: 0.5, opacity: 0 }}
             transition={{ type: "ease-out" }}
-            className="absolute bottom-0 z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-800 rounded-full left-1/2 prayer-table-edit-cancel-btn-wrap"
+            className="absolute bottom-0 z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-800 rounded-full left-1/2 salah-table-edit-cancel-btn-wrap"
           >
             <button
               className="px-2 text-white"
@@ -277,7 +277,7 @@ const SalahTable = ({
                                 ? "white"
                                 : "",
                           }}
-                          className={`${prayerTableIndividualSquareStyles} ${
+                          className={`${salahTableIndividualSquareStyles} ${
                             showJoyRideEditIcon && salahName === "Asar"
                               ? "single-table-cell"
                               : ""
@@ -291,13 +291,13 @@ const SalahTable = ({
                         <div
                           style={{
                             backgroundColor:
-                              prayerStatusColorsHexCodes[
+                              salahStatusColorsHexCodes[
                                 rowData.salahs[
                                   salahName
-                                ] as keyof typeof prayerStatusColorsHexCodes
+                                ] as keyof typeof salahStatusColorsHexCodes
                               ],
                           }}
-                          className={`${prayerTableIndividualSquareStyles} prayer-status-color-box`}
+                          className={`${salahTableIndividualSquareStyles} salah-status-color-box`}
                         ></div>
                       )}
                       <AnimatePresence>

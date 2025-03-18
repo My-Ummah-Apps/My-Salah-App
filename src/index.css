@@ -188,7 +188,7 @@ td {
   color: rgb(92 107 192);
 }
 
-.prayer-status-modal-reasons-wrap {
+.salah-status-modal-reasons-wrap {
   opacity: 0;
   transition: max-height 0.5s ease-in-out, fadeIn 5s ease-in;
 }
@@ -241,7 +241,7 @@ td {
   overflow-x: scroll !important;
 }
 
-.prayer-table-wrap {
+.salah-table-wrap {
   position: static !important;
 }
 

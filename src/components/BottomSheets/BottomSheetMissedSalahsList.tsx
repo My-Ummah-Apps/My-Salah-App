@@ -14,7 +14,7 @@ import {
   createLocalisedDate,
   //   createLocalisedDate,
   getMissedSalahCount,
-  prayerStatusColorsHexCodes,
+  salahStatusColorsHexCodes,
   sheetBackdropColor,
   TWEEN_CONFIG,
 } from "../../utils/constants";
@@ -22,7 +22,7 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-interface MissedPrayersListBottomSheetProps {
+interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
@@ -31,21 +31,21 @@ interface MissedPrayersListBottomSheetProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  setShowMissedPrayersSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showMissedPrayersSheet: boolean;
+  setShowMissedSalahsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showMissedSalahsSheet: boolean;
   missedSalahList: SalahByDateObjType;
 }
 
-const BottomSheetMissedPrayersList = ({
+const MissedSalahsListBottomSheet = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  setShowMissedPrayersSheet,
-  showMissedPrayersSheet,
+  setShowMissedSalahsSheet,
+  showMissedSalahsSheet,
   missedSalahList,
   setFetchedSalahData,
-}: MissedPrayersListBottomSheetProps) => {
+}: MissedSalahsListBottomSheetProps) => {
   useEffect(() => {
-    if (!showMissedPrayersSheet) return;
+    if (!showMissedSalahsSheet) return;
 
     const openDBConnection = async () => {
       await checkAndOpenOrCloseDBConnection("open");
@@ -60,7 +60,7 @@ const BottomSheetMissedPrayersList = ({
     return () => {
       closeDBConnection();
     };
-  }, [showMissedPrayersSheet]);
+  }, [showMissedSalahsSheet]);
 
   const [isClickedItem, setIsClickedItem] = useState<string>();
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
@@ -99,8 +99,8 @@ const BottomSheetMissedPrayersList = ({
     <section>
       {" "}
       <Sheet
-        isOpen={showMissedPrayersSheet}
-        onClose={() => setShowMissedPrayersSheet(false)}
+        isOpen={showMissedSalahsSheet}
+        onClose={() => setShowMissedSalahsSheet(false)}
         // onClose={() => false}
         detent="full-height"
         tweenConfig={TWEEN_CONFIG}
@@ -148,8 +148,8 @@ const BottomSheetMissedPrayersList = ({
                             style={{
                               backgroundColor:
                                 isClickedItem === `${date}-${salah}`
-                                  ? prayerStatusColorsHexCodes["late"]
-                                  : prayerStatusColorsHexCodes["missed"],
+                                  ? salahStatusColorsHexCodes["late"]
+                                  : salahStatusColorsHexCodes["missed"],
                             }}
                             className={`w-[1.3rem] h-[1.3rem] rounded-md`}
                           ></div>
@@ -183,7 +183,7 @@ const BottomSheetMissedPrayersList = ({
         <Sheet.Backdrop
           style={sheetBackdropColor}
           onTap={() => {
-            setShowMissedPrayersSheet(false);
+            setShowMissedSalahsSheet(false);
             // checkAndOpenOrCloseDBConnection("close");
           }}
         />
@@ -192,9 +192,9 @@ const BottomSheetMissedPrayersList = ({
   );
 };
 
-export default BottomSheetMissedPrayersList;
+export default MissedSalahsListBottomSheet;
 
-// Below is to test what performance is like with a thousand missed prayers being rendered
+// Below is to test what performance is like with a thousand missed salahs being rendered
 //  const items = Array.from({ length: 1000 }, (_, i) => `Item ${i + 1}`);
 
 // return (
