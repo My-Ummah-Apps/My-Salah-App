@@ -324,6 +324,11 @@ const BottomSheetSalahStatus = ({
     }
   };
 
+  const salahStatusVariants = {
+    default: { scale: 1, opacity: 0.5, transition: { duration: 0.3 } },
+    animate: { scale: 1.07, opacity: 1, transition: { duration: 0.3 } },
+  };
+
   return (
     <>
       <Sheet
@@ -360,8 +365,9 @@ const BottomSheetSalahStatus = ({
                 >
                   {userPreferences.userGender === "male" ? (
                     <motion.div
-                      initial={{ y: 0 }}
-                      animate={{ opacity: salahStatus === "group" ? 2 : 0.5 }}
+                      variants={salahStatusVariants}
+                      initial="default"
+                      animate={salahStatus === "group" ? "animate" : "default"}
                     >
                       <div
                         onClick={() => {
@@ -371,9 +377,10 @@ const BottomSheetSalahStatus = ({
                         style={{
                           backgroundColor: salahStatusColorsHexCodes.group,
                         }}
-                        className={`${
-                          salahStatus === "group" ? "border border-white" : ""
-                        } px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        // ${
+                        //   salahStatus === "group" ? "border border-white" : ""
+                        // }
+                        className={` px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         {" "}
                         <GoPeople className="w-full mb-1 text-3xl" />
@@ -383,10 +390,11 @@ const BottomSheetSalahStatus = ({
                   ) : (
                     <>
                       <motion.div
-                        initial={{ y: 0 }}
-                        animate={{
-                          opacity: salahStatus === "female-alone" ? 2 : 0.5,
-                        }}
+                        variants={salahStatusVariants}
+                        initial="default"
+                        animate={
+                          salahStatus === "female-alone" ? "animate" : "default"
+                        }
                       >
                         <div
                           onClick={() => {
@@ -396,11 +404,12 @@ const BottomSheetSalahStatus = ({
                             backgroundColor:
                               salahStatusColorsHexCodes["female-alone"],
                           }}
-                          className={`${
-                            salahStatus === "female-alone"
-                              ? "border border-white"
-                              : ""
-                          } px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                          // ${
+                          //   salahStatus === "female-alone"
+                          //     ? "border border-white"
+                          //     : ""
+                          // }
+                          className={` px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                         >
                           {" "}
                           <GoPerson className="w-full mb-1 text-3xl" />
@@ -412,10 +421,11 @@ const BottomSheetSalahStatus = ({
                   {userPreferences.userGender === "male" ? (
                     <>
                       <motion.div
-                        initial={{ y: 0 }}
-                        animate={{
-                          opacity: salahStatus === "male-alone" ? 2 : 0.5,
-                        }}
+                        variants={salahStatusVariants}
+                        initial="default"
+                        animate={
+                          salahStatus === "male-alone" ? "animate" : "default"
+                        }
                       >
                         <div
                           onClick={() => {
@@ -425,11 +435,12 @@ const BottomSheetSalahStatus = ({
                             backgroundColor:
                               salahStatusColorsHexCodes["male-alone"],
                           }}
-                          className={`${
-                            salahStatus === "male-alone"
-                              ? "border border-white"
-                              : ""
-                          } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                          // ${
+                          //   salahStatus === "male-alone"
+                          //     ? "border border-white"
+                          //     : ""
+                          // }
+                          className={` px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                         >
                           <GoPerson className="w-full mb-1 text-3xl" />
                           <p className="inline">On Time</p>
@@ -439,10 +450,11 @@ const BottomSheetSalahStatus = ({
                   ) : (
                     <>
                       <motion.div
-                        initial={{ y: 0 }}
-                        animate={{
-                          opacity: salahStatus === "excused" ? 2 : 0.5,
-                        }}
+                        variants={salahStatusVariants}
+                        initial="default"
+                        animate={
+                          salahStatus === "excused" ? "animate" : "default"
+                        }
                       >
                         <div
                           onClick={() => {
@@ -451,11 +463,13 @@ const BottomSheetSalahStatus = ({
                           style={{
                             backgroundColor: salahStatusColorsHexCodes.excused,
                           }}
-                          className={`${
-                            salahStatus === "excused"
-                              ? "border border-white"
-                              : ""
-                          } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                          // ${
+                          //   salahStatus === "excused"
+                          //     ? "border border-white"
+                          //     : ""
+                          // }
+                          className={`
+                          px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                         >
                           <PiFlower className="w-full mb-1 text-3xl" />
                           <p className="inline">Excused</p>
@@ -463,47 +477,40 @@ const BottomSheetSalahStatus = ({
                       </motion.div>
                     </>
                   )}
+
                   <motion.div
-                    initial={{ y: 0 }}
-                    animate={{
-                      opacity: salahStatus === "late" ? 2 : 0.5,
+                    variants={salahStatusVariants}
+                    initial="default"
+                    animate={salahStatus === "late" ? "animate" : "default"}
+                    onClick={() => {
+                      setSalahStatus("late");
                     }}
+                    style={{
+                      backgroundColor: salahStatusColorsHexCodes.late,
+                    }}
+                    // ${salahStatus === "late" ? "border border-white" : ""}
+                    className={` px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
-                    <div
-                      onClick={() => {
-                        setSalahStatus("late");
-                      }}
-                      style={{
-                        backgroundColor: salahStatusColorsHexCodes.late,
-                      }}
-                      className={`${
-                        salahStatus === "late" ? "border border-white" : ""
-                      } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                    >
-                      <GoClock className="w-full mb-1 text-3xl" />
-                      <p className="inline">Late</p>
-                    </div>
+                    <GoClock className="w-full mb-1 text-3xl" />
+                    <p className="inline">Late</p>
                   </motion.div>
+
                   <motion.div
-                    initial={{ y: 0 }}
-                    animate={{
-                      opacity: salahStatus === "missed" ? 2 : 0.5,
+                    variants={salahStatusVariants}
+                    initial="default"
+                    animate={salahStatus === "missed" ? "animate" : "default"}
+                    onClick={() => {
+                      setSalahStatus("missed");
                     }}
+                    style={{
+                      backgroundColor: salahStatusColorsHexCodes.missed,
+                    }}
+                    // ${salahStatus === "missed" ? "border border-white" : ""}
+                    className={`
+                       px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
-                    <div
-                      onClick={() => {
-                        setSalahStatus("missed");
-                      }}
-                      style={{
-                        backgroundColor: salahStatusColorsHexCodes.missed,
-                      }}
-                      className={`${
-                        salahStatus === "missed" ? "border border-white" : ""
-                      } px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
-                    >
-                      <GoSkip className="w-full mb-1 text-3xl" />
-                      <p className="inline">Missed</p>
-                    </div>
+                    <GoSkip className="w-full mb-1 text-3xl" />
+                    <p className="inline">Missed</p>
                   </motion.div>
                 </div>
 
