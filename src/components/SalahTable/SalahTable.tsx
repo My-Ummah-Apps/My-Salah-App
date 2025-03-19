@@ -73,6 +73,7 @@ const SalahTable = ({
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
   };
+  // const [salahsBeingEdited, setSalahsBeingEdited] = useState();
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
@@ -99,7 +100,6 @@ const SalahTable = ({
 
     if (!isMultiEditMode) {
       setShowUpdateStatusModal(true);
-    } else if (isMultiEditMode) {
     }
   };
 
@@ -232,6 +232,13 @@ const SalahTable = ({
                 </div>
               )}
               cellRenderer={({ rowData }) => {
+                console.log("RENDERING CELL");
+
+                console.log(
+                  "selectedSalahAndDate: ",
+                  selectedSalahAndDate[rowData.date]
+                );
+
                 const [day, formattedParsedDate] = createLocalisedDate(
                   rowData.date
                 );
@@ -256,12 +263,18 @@ const SalahTable = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
+                  console.log("Date: ", rowData.date, "Salah: ", salahName);
+
+                  console.log(
+                    "selectedSalahAndDate[rowData.date]?.includes(salahName): ",
+                    selectedSalahAndDate[rowData.date]?.includes(salahName)
+                  );
+
                   let isChecked = selectedSalahAndDate[rowData.date]?.includes(
                     salahName
                   )
                     ? true
                     : false;
-
                   return (
                     <section
                       onClick={() => {
@@ -288,7 +301,16 @@ const SalahTable = ({
                           }`}
                         />
                       ) : (
-                        <div
+                        <motion.div
+                          initial={{ scale: 1 }}
+                          animate={{
+                            scale: selectedSalahAndDate[rowData.date]?.includes(
+                              salahName
+                            )
+                              ? [0, 1.2, 1]
+                              : 1,
+                          }}
+                          transition={{ duration: 0.3, delay: 0.5 }}
                           style={{
                             backgroundColor:
                               salahStatusColorsHexCodes[
@@ -298,7 +320,7 @@ const SalahTable = ({
                               ],
                           }}
                           className={`${salahTableIndividualSquareStyles} salah-status-color-box`}
-                        ></div>
+                        ></motion.div>
                       )}
                       <AnimatePresence>
                         {isMultiEditMode && (

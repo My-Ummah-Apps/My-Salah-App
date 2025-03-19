@@ -80,7 +80,6 @@ const BottomSheetSalahStatus = ({
   };
 
   const onSheetCloseCleanup = async () => {
-    // console.log("Cleanup has run");
     setShowUpdateStatusModal(false);
     resetSelectedSalahAndDate();
     setSalahStatus("");
