@@ -372,14 +372,10 @@ const BottomSheetSalahStatus = ({
                       <div
                         onClick={() => {
                           setSalahStatus("group");
-                          // setSelectedReasons([]);
                         }}
                         style={{
                           backgroundColor: salahStatusColorsHexCodes.group,
                         }}
-                        // ${
-                        //   salahStatus === "group" ? "border border-white" : ""
-                        // }
                         className={` px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                       >
                         {" "}
@@ -404,11 +400,6 @@ const BottomSheetSalahStatus = ({
                             backgroundColor:
                               salahStatusColorsHexCodes["female-alone"],
                           }}
-                          // ${
-                          //   salahStatus === "female-alone"
-                          //     ? "border border-white"
-                          //     : ""
-                          // }
                           className={` px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                         >
                           {" "}
@@ -435,11 +426,6 @@ const BottomSheetSalahStatus = ({
                             backgroundColor:
                               salahStatusColorsHexCodes["male-alone"],
                           }}
-                          // ${
-                          //   salahStatus === "male-alone"
-                          //     ? "border border-white"
-                          //     : ""
-                          // }
                           className={` px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                         >
                           <GoPerson className="w-full mb-1 text-3xl" />
@@ -463,11 +449,6 @@ const BottomSheetSalahStatus = ({
                           style={{
                             backgroundColor: salahStatusColorsHexCodes.excused,
                           }}
-                          // ${
-                          //   salahStatus === "excused"
-                          //     ? "border border-white"
-                          //     : ""
-                          // }
                           className={`
                           px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                         >
@@ -488,7 +469,6 @@ const BottomSheetSalahStatus = ({
                     style={{
                       backgroundColor: salahStatusColorsHexCodes.late,
                     }}
-                    // ${salahStatus === "late" ? "border border-white" : ""}
                     className={` px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
                     <GoClock className="w-full mb-1 text-3xl" />
@@ -505,7 +485,6 @@ const BottomSheetSalahStatus = ({
                     style={{
                       backgroundColor: salahStatusColorsHexCodes.missed,
                     }}
-                    // ${salahStatus === "missed" ? "border border-white" : ""}
                     className={`
                        px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
                   >
@@ -534,21 +513,16 @@ const BottomSheetSalahStatus = ({
                         .sort((a, b) => a.localeCompare(b))
                         .map((item) => (
                           <motion.p
-                            // initial={{
-                            //   backgroundColor: "#272727",
-                            // }}
-                            // animate={{
-                            //   backgroundColor: selectedReasons.includes(item)
-                            //     ? "#2563eb"
-                            //     : "transparent",
-                            // }}
-                            // transition={{ duration: 1.5 }}
-                            key={item}
-                            style={{
+                            initial={{
+                              backgroundColor: "#272727",
+                            }}
+                            animate={{
                               backgroundColor: selectedReasons.includes(item)
                                 ? "#2563eb"
-                                : "",
+                                : "#272727",
                             }}
+                            transition={{ duration: 0.5 }}
+                            key={item}
                             className={reasonsStyles}
                             onClick={async () => {
                               if (!selectedReasons.includes(item)) {
