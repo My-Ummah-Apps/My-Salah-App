@@ -1,5 +1,5 @@
 import Sheet from "react-modal-sheet";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { GoPerson } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
@@ -504,50 +504,54 @@ const BottomSheetSalahStatus = ({
                   )}
                   {Array.isArray(userPreferences.reasons) && (
                     <div className="flex flex-wrap">
-                      {[
-                        ...new Set([
-                          ...selectedReasons,
-                          ...userPreferences.reasons,
-                        ]),
-                      ]
-                        .sort((a, b) => a.localeCompare(b))
-                        .map((item) => (
-                          <motion.p
-                            initial={{
-                              backgroundColor: "#272727",
-                            }}
-                            animate={{
-                              backgroundColor: selectedReasons.includes(item)
-                                ? "#2563eb"
-                                : "#272727",
-                            }}
-                            transition={{ duration: 0.5 }}
-                            key={item}
-                            className={reasonsStyles}
-                            onClick={async () => {
-                              if (!selectedReasons.includes(item)) {
-                                setSelectedReasons((prev) => [...prev, item]);
-                              } else if (selectedReasons.includes(item)) {
-                                if (!userPreferences.reasons.includes(item)) {
-                                  const confirmMsgRes = await showConfirmMsg(
-                                    "Confirm",
-                                    "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                      <AnimatePresence>
+                        {[
+                          ...new Set([
+                            ...selectedReasons,
+                            ...userPreferences.reasons,
+                          ]),
+                        ]
+                          .sort((a, b) => a.localeCompare(b))
+
+                          .map((item) => (
+                            <motion.p
+                              // layout="position"
+                              initial={{
+                                backgroundColor: "#272727",
+                              }}
+                              animate={{
+                                backgroundColor: selectedReasons.includes(item)
+                                  ? "#2563eb"
+                                  : "#272727",
+                              }}
+                              transition={{ duration: 0.5 }}
+                              exit={{ scale: [1, 1.2, 0], opacity: 0 }}
+                              key={item}
+                              className={reasonsStyles}
+                              onClick={async () => {
+                                if (!selectedReasons.includes(item)) {
+                                  setSelectedReasons((prev) => [...prev, item]);
+                                } else if (selectedReasons.includes(item)) {
+                                  if (!userPreferences.reasons.includes(item)) {
+                                    const confirmMsgRes = await showConfirmMsg(
+                                      "Confirm",
+                                      "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                                    );
+                                    if (!confirmMsgRes) return;
+                                  }
+                                  setSelectedReasons((prev) =>
+                                    prev.filter((reason) => reason !== item)
                                   );
-                                  if (!confirmMsgRes) return;
                                 }
-                                setSelectedReasons((prev) =>
-                                  prev.filter((reason) => reason !== item)
-                                );
-                              }
-                            }}
-                          >
-                            {item}
-                          </motion.p>
-                        ))}
+                              }}
+                            >
+                              {item}
+                            </motion.p>
+                          ))}
+                      </AnimatePresence>
                     </div>
                   )}
                 </section>
-
                 <div className="text-sm notes-wrap">
                   <textarea
                     dir="auto"
