@@ -56,12 +56,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 html {
-  max-width: var(--max-width);
   overflow: scroll;
 }
 
 body {
   -ms-overflow-style: none;
+  /* max-width: var(--max-width); */
   scrollbar-width: none;
   height: 100vh;
   background: var(--primary-color);
@@ -77,6 +77,7 @@ body:-webkit-scrollbar {
 
 .app {
   overflow: hidden;
+  /* max-width: var(--max-width); */
 }
 
 .settings-page-wrap,

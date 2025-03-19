@@ -533,7 +533,16 @@ const BottomSheetSalahStatus = ({
                       ]
                         .sort((a, b) => a.localeCompare(b))
                         .map((item) => (
-                          <p
+                          <motion.p
+                            // initial={{
+                            //   backgroundColor: "#272727",
+                            // }}
+                            // animate={{
+                            //   backgroundColor: selectedReasons.includes(item)
+                            //     ? "#2563eb"
+                            //     : "transparent",
+                            // }}
+                            // transition={{ duration: 1.5 }}
                             key={item}
                             style={{
                               backgroundColor: selectedReasons.includes(item)
@@ -559,7 +568,7 @@ const BottomSheetSalahStatus = ({
                             }}
                           >
                             {item}
-                          </p>
+                          </motion.p>
                         ))}
                     </div>
                   )}
