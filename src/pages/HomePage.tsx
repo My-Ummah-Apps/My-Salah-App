@@ -56,7 +56,6 @@ const HomePage = ({
   pageStyles,
   setShowMissedSalahsSheet,
   showMissedSalahsSheet,
-  setMissedSalahList,
   missedSalahList,
   setIsMultiEditMode,
   isMultiEditMode,
@@ -162,7 +161,6 @@ const HomePage = ({
           setShowJoyRideEditIcon={setShowJoyRideEditIcon}
           showJoyRideEditIcon={showJoyRideEditIcon}
           userPreferences={userPreferences}
-          setMissedSalahList={setMissedSalahList}
           setFetchedSalahData={setFetchedSalahData}
           fetchedSalahData={fetchedSalahData}
           setSelectedSalahAndDate={setSelectedSalahAndDate}

@@ -23,6 +23,7 @@ import {
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { useEffect, useRef, useState } from "react";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -39,7 +40,6 @@ interface SalahTableProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  setMissedSalahList: React.Dispatch<React.SetStateAction<SalahByDateObjType>>;
   userPreferences: userPreferencesType;
   setSelectedSalahAndDate: React.Dispatch<
     React.SetStateAction<SalahByDateObjType>
@@ -61,7 +61,6 @@ const SalahTable = ({
   setFetchedSalahData,
   fetchedSalahData,
   userPreferences,
-  setMissedSalahList,
   setSelectedSalahAndDate,
   selectedSalahAndDate,
   setIsMultiEditMode,
@@ -73,7 +72,20 @@ const SalahTable = ({
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
   };
-  // const [salahsBeingEdited, setSalahsBeingEdited] = useState();
+  const [showBoxAnimation, setShowBoxAnimation] = useState(false);
+  const clonedSelectedSalahAndDate = useRef<SalahByDateObjType>({});
+
+  useEffect(() => {
+    clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
+    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
+  }, [selectedSalahAndDate]);
+
+  useEffect(() => {
+    console.log(
+      "clonedSelectedSalahAndDate: ",
+      clonedSelectedSalahAndDate.current
+    );
+  }, [selectedSalahAndDate]);
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
@@ -127,6 +139,10 @@ const SalahTable = ({
       await modifyDataInUserPreferencesTable("isExistingUser", "1");
     }
   };
+
+  useEffect(() => {
+    console.log("showBoxAnimation: ", showBoxAnimation);
+  }, [showBoxAnimation]);
 
   return (
     <section className="salah-table-wrap h-[80vh]">
@@ -232,13 +248,6 @@ const SalahTable = ({
                 </div>
               )}
               cellRenderer={({ rowData }) => {
-                console.log("RENDERING CELL");
-
-                console.log(
-                  "selectedSalahAndDate: ",
-                  selectedSalahAndDate[rowData.date]
-                );
-
                 const [day, formattedParsedDate] = createLocalisedDate(
                   rowData.date
                 );
@@ -263,13 +272,6 @@ const SalahTable = ({
                 width={120}
                 flexGrow={1}
                 cellRenderer={({ rowData }) => {
-                  console.log("Date: ", rowData.date, "Salah: ", salahName);
-
-                  console.log(
-                    "selectedSalahAndDate[rowData.date]?.includes(salahName): ",
-                    selectedSalahAndDate[rowData.date]?.includes(salahName)
-                  );
-
                   let isChecked = selectedSalahAndDate[rowData.date]?.includes(
                     salahName
                   )
@@ -304,13 +306,26 @@ const SalahTable = ({
                         <motion.div
                           initial={{ scale: 1 }}
                           animate={{
-                            scale: selectedSalahAndDate[rowData.date]?.includes(
-                              salahName
-                            )
-                              ? [0, 1.2, 1]
-                              : 1,
+                            scale:
+                              clonedSelectedSalahAndDate.current[
+                                rowData.date
+                              ]?.includes(salahName) && showBoxAnimation
+                                ? 1
+                                : [0, 1.3, 1],
                           }}
-                          transition={{ duration: 0.3, delay: 0.5 }}
+                          transition={{ duration: 0.3, delay: 0.1 }}
+                          onAnimationComplete={() => {
+                            setShowBoxAnimation(false);
+                            console.log(
+                              "clonedSelectedSalahAndDate before wipe: ",
+                              clonedSelectedSalahAndDate.current
+                            );
+                            clonedSelectedSalahAndDate.current = {};
+                            console.log(
+                              "clonedSelectedSalahAndDate after wipe: ",
+                              clonedSelectedSalahAndDate.current
+                            );
+                          }}
                           style={{
                             backgroundColor:
                               salahStatusColorsHexCodes[
@@ -362,7 +377,7 @@ const SalahTable = ({
         setFetchedSalahData={setFetchedSalahData}
         fetchedSalahData={fetchedSalahData}
         userPreferences={userPreferences}
-        setMissedSalahList={setMissedSalahList}
+        setShowBoxAnimation={setShowBoxAnimation}
         selectedSalahAndDate={selectedSalahAndDate}
         resetSelectedSalahAndDate={resetSelectedSalahAndDate}
         setIsMultiEditMode={setIsMultiEditMode}

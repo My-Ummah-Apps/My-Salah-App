@@ -43,7 +43,7 @@ interface SalahStatusBottomSheetProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   userPreferences: userPreferencesType;
-  setMissedSalahList: React.Dispatch<React.SetStateAction<SalahByDateObjType>>;
+  setShowBoxAnimation: React.Dispatch<React.SetStateAction<boolean>>;
   showUpdateStatusModal: boolean;
   setShowUpdateStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   selectedSalahAndDate: SalahByDateObjType;
@@ -59,6 +59,7 @@ const BottomSheetSalahStatus = ({
   setFetchedSalahData,
   fetchedSalahData,
   selectedSalahAndDate,
+  setShowBoxAnimation,
   resetSelectedSalahAndDate,
   setIsMultiEditMode,
   isMultiEditMode,
@@ -571,6 +572,7 @@ const BottomSheetSalahStatus = ({
                     if (salahStatus) {
                       await addOrModifySalah();
                       setShowUpdateStatusModal(false);
+                      setShowBoxAnimation(true);
                       onSheetCloseCleanup();
                     }
                   }}
