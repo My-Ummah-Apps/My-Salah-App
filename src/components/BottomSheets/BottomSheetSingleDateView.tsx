@@ -38,7 +38,7 @@ const BottomSheetSingleDateView = ({
   const salahNamesOrder: SalahNamesType[] = [
     "Fajr",
     "Dhuhr",
-    "Asar",
+    "Asr",
     "Maghrib",
     "Isha",
   ];

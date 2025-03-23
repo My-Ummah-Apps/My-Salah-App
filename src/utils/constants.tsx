@@ -121,7 +121,7 @@ export const createLocalisedDate = (date: string) => {
 export const salahNamesArr: SalahNamesType[] = [
   "Fajr",
   "Dhuhr",
-  "Asar",
+  "Asr",
   "Maghrib",
   "Isha",
 ];

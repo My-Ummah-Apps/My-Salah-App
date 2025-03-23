@@ -288,16 +288,16 @@ const SalahTable = ({
                         <LuDot
                           style={{
                             backgroundColor:
-                              salahName === "Asar" && showJoyRideEditIcon
+                              salahName === "Asr" && showJoyRideEditIcon
                                 ? "white"
                                 : "",
                           }}
                           className={`${salahTableIndividualSquareStyles} ${
-                            showJoyRideEditIcon && salahName === "Asar"
+                            showJoyRideEditIcon && salahName === "Asr"
                               ? "single-table-cell"
                               : ""
                           } ${
-                            showJoyRideEditIcon && salahName === "Asar"
+                            showJoyRideEditIcon && salahName === "Asr"
                               ? "animate-bounce"
                               : ""
                           }`}
