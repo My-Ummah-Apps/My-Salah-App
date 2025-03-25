@@ -304,27 +304,23 @@ const SalahTable = ({
                         />
                       ) : (
                         <motion.div
+                          // key={`${i}-${rowData.date}`}
                           initial={{ scale: 1 }}
-                          animate={{
-                            scale:
-                              clonedSelectedSalahAndDate.current[
-                                rowData.date
-                              ]?.includes(salahName) && showBoxAnimation
-                                ? 1
-                                : [0, 1.3, 1],
-                          }}
-                          transition={{ duration: 0.3, delay: 0.1 }}
+                          {...(showBoxAnimation &&
+                          clonedSelectedSalahAndDate.current[
+                            rowData.date
+                          ]?.includes(salahName)
+                            ? {
+                                animate: { scale: [0, 1.3, 1] },
+                                transition: {
+                                  duration: 0.5,
+                                  ease: "easeInOut",
+                                },
+                              }
+                            : {})}
                           onAnimationComplete={() => {
                             setShowBoxAnimation(false);
-                            console.log(
-                              "clonedSelectedSalahAndDate before wipe: ",
-                              clonedSelectedSalahAndDate.current
-                            );
                             clonedSelectedSalahAndDate.current = {};
-                            console.log(
-                              "clonedSelectedSalahAndDate after wipe: ",
-                              clonedSelectedSalahAndDate.current
-                            );
                           }}
                           style={{
                             backgroundColor:
