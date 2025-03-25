@@ -74,6 +74,7 @@ const SalahTable = ({
   };
   const [showBoxAnimation, setShowBoxAnimation] = useState(false);
   const clonedSelectedSalahAndDate = useRef<SalahByDateObjType>({});
+  const trackBoxAnimations = useRef<number>(0);
 
   useEffect(() => {
     clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
@@ -188,19 +189,20 @@ const SalahTable = ({
             animate={{ y: "-25vh", scale: 1, opacity: 1 }}
             exit={{ y: "100%", scale: 0.5, opacity: 0 }}
             // transition={{ type: "ease-out" }}
-            className="absolute bottom-0 z-10 flex p-3 text-sm text-white transform -translate-x-1/2 bg-gray-800 rounded-full left-1/2 salah-table-edit-cancel-btn-wrap"
+            className="absolute bottom-0 z-10 flex p-3 shadow-2xl text-xs text-white border border-stone-800 transform -translate-x-1/2 rounded-2xl bg-[#1c1c1c] left-1/2"
           >
             <button
-              className="px-2 text-white"
+              className="text-white"
               onClick={() => {
                 setIsMultiEditMode(false);
                 resetSelectedSalahAndDate();
               }}
             >
-              Cancel
+              <p className="pl-1 pr-2">Cancel</p>
             </button>
             <button
-              className="px-2  text-white border-l border-[#adadad]"
+              // border-l border-[#adadad]
+              className="text-white"
               onClick={() => {
                 const dateArrLength = Object.keys(selectedSalahAndDate).length;
                 dateArrLength > 0
@@ -211,7 +213,7 @@ const SalahTable = ({
                     );
               }}
             >
-              Edit
+              <p className="pl-2 pr-1">Edit</p>
             </button>
           </motion.section>
         )}

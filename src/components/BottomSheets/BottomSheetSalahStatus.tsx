@@ -567,7 +567,11 @@ const BottomSheetSalahStatus = ({
                     className="w-full p-2 border outline-none bg-[rgb(35,35,35)] border-hidden rounded-xl max-h-14 focus:border-gray-500"
                   />
                 </div>
-                <button
+                <motion.button
+                  animate={{
+                    opacity: salahStatus ? 1 : 0.2,
+                  }}
+                  transition={{ duration: 0.3 }}
                   onClick={async () => {
                     if (salahStatus) {
                       await addOrModifySalah();
@@ -581,7 +585,7 @@ const BottomSheetSalahStatus = ({
                   }`}
                 >
                   Save
-                </button>
+                </motion.button>
               </section>
             </Sheet.Scroller>
           </Sheet.Content>
