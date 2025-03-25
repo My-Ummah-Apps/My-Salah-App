@@ -524,7 +524,7 @@ const BottomSheetSalahStatus = ({
                                   ? "#2563eb"
                                   : "#272727",
                               }}
-                              transition={{ duration: 0.5 }}
+                              transition={{ duration: 0.3 }}
                               exit={{ scale: [1, 1.2, 0], opacity: 0 }}
                               key={item}
                               className={reasonsStyles}

@@ -74,7 +74,6 @@ const SalahTable = ({
   };
   const [showBoxAnimation, setShowBoxAnimation] = useState(false);
   const clonedSelectedSalahAndDate = useRef<SalahByDateObjType>({});
-  const trackBoxAnimations = useRef<number>(0);
 
   useEffect(() => {
     clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
@@ -189,7 +188,7 @@ const SalahTable = ({
             animate={{ y: "-25vh", scale: 1, opacity: 1 }}
             exit={{ y: "100%", scale: 0.5, opacity: 0 }}
             // transition={{ type: "ease-out" }}
-            className="absolute bottom-0 z-10 flex p-3 shadow-2xl text-xs text-white border border-stone-800 transform -translate-x-1/2 rounded-2xl bg-[#1c1c1c] left-1/2"
+            className="absolute bottom-0 z-10 flex p-3 shadow-2xl text-sm text-white border border-stone-700 transform -translate-x-1/2 rounded-2xl bg-[#232323] left-1/2"
           >
             <button
               className="text-white"
