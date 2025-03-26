@@ -80,13 +80,6 @@ const SalahTable = ({
     console.log("selectedSalahAndDate: ", selectedSalahAndDate);
   }, [selectedSalahAndDate]);
 
-  useEffect(() => {
-    console.log(
-      "clonedSelectedSalahAndDate: ",
-      clonedSelectedSalahAndDate.current
-    );
-  }, [selectedSalahAndDate]);
-
   const handleTableCellClick = (
     salahName: SalahNamesType,
     rowDataDate: string
@@ -139,10 +132,6 @@ const SalahTable = ({
       await modifyDataInUserPreferencesTable("isExistingUser", "1");
     }
   };
-
-  useEffect(() => {
-    console.log("showBoxAnimation: ", showBoxAnimation);
-  }, [showBoxAnimation]);
 
   return (
     <section className="salah-table-wrap h-[80vh]">
