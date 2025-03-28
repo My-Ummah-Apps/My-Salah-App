@@ -370,7 +370,7 @@ const App = () => {
         salahs: {
           Fajr: "",
           Dhuhr: "",
-          Asar: "",
+          Asr: "",
           Maghrib: "",
           Isha: "",
         },

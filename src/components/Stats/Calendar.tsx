@@ -106,7 +106,7 @@ const Calendar = ({
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (salah === "Asar") {
+          } else if (salah === "Asr") {
             colors.asarColor =
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
