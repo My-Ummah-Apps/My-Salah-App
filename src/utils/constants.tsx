@@ -9,6 +9,9 @@ import {
   userPreferencesType,
 } from "../types/types";
 
+export const defaultReasons =
+  "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
+
 export const TWEEN_CONFIG = {
   ease: "easeInOut" as EasingDefinition,
   duration: 0.5,
@@ -25,9 +28,6 @@ export const pageTransitionStyles = {
   animate: { opacity: 1 },
   transition: { duration: 0.2 },
 };
-
-export const defaultReasons =
-  "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
 export const dictPreferencesDefaultValues: userPreferencesType = {
   userGender: "male",

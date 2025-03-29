@@ -77,7 +77,6 @@ const SalahTable = ({
 
   useEffect(() => {
     clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
-    console.log("selectedSalahAndDate: ", selectedSalahAndDate);
   }, [selectedSalahAndDate]);
 
   const handleTableCellClick = (
@@ -252,7 +251,7 @@ const SalahTable = ({
               width={120}
               flexGrow={1}
             />
-            {salahNamesArr.map((salahName, i) => (
+            {salahNamesArr.map((salahName) => (
               <Column
                 key={salahName}
                 style={{ marginLeft: "0" }}
@@ -294,7 +293,7 @@ const SalahTable = ({
                         />
                       ) : (
                         <motion.div
-                          key={`${i}-${rowData.date}`}
+                          // key={`${i}-${rowData.date}`}
                           initial={{ scale: 1 }}
                           {...(showBoxAnimation &&
                           clonedSelectedSalahAndDate.current[
