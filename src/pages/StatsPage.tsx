@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-
-// import "swiper/css";
-// import "swiper/css/pagination";
-
-// import "swiper/swiper-bundle.min.css";
-// // import "swiper/swiper.min.css";
+import { motion } from "framer-motion";
 
 import Calendar from "../components/Stats/Calendar";
 import {
@@ -23,6 +18,7 @@ import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
 import StreakCounter from "../components/Stats/StreakCounter";
 import { streakDatesObjType } from "../types/types";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { pageTransitionStyles } from "../utils/constants";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -188,7 +184,10 @@ const StatsPage = ({
   //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
 
   return (
-    <section className={`${pageStyles} stats-page-wrap`}>
+    <motion.section
+      {...pageTransitionStyles}
+      className={`${pageStyles} stats-page-wrap`}
+    >
       <header className="stats-page-header">
         <p className="stats-page-header-p">Stats</p>
       </header>
@@ -250,14 +249,13 @@ const StatsPage = ({
           )}
         </Swiper>
         <BottomSheetReasons
-          // setReasonsToShow={setReasonsToShow}
           setShowReasonsSheet={setShowReasonsSheet}
           showReasonsSheet={showReasonsSheet}
           salahReasonsOverallNumbers={salahReasonsOverallNumbers}
           status={reasonsToShow}
         />
       </section>
-    </section>
+    </motion.section>
   );
 };
 

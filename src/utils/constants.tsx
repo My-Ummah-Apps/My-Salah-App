@@ -20,6 +20,12 @@ export const bottomSheetContainerStyles = {
   backgroundColor: "rgb(33, 36, 38)",
 };
 
+export const pageTransitionStyles = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 0.2 },
+};
+
 export const defaultReasons =
   "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 

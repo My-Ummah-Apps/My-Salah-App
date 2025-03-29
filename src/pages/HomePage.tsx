@@ -14,7 +14,7 @@ import {
   PreferenceType,
 } from "../types/types";
 import { useState } from "react";
-import { getMissedSalahCount } from "../utils/constants";
+import { getMissedSalahCount, pageTransitionStyles } from "../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface HomePageProps {
@@ -78,7 +78,10 @@ const HomePage = ({
   };
 
   return (
-    <section className={`${pageStyles} home-page-wrap`}>
+    <motion.section
+      {...pageTransitionStyles}
+      className={`${pageStyles} home-page-wrap`}
+    >
       <header className="home-page-header">
         <section className="header-wrapper">
           {getMissedSalahCount(missedSalahList) > 0 &&
@@ -184,7 +187,7 @@ const HomePage = ({
           // setShowUpdateStatusModal={setShowUpdateStatusModal}
         />
       </section>
-    </section>
+    </motion.section>
   );
 };
 

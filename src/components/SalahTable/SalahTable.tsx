@@ -252,7 +252,7 @@ const SalahTable = ({
               width={120}
               flexGrow={1}
             />
-            {salahNamesArr.map((salahName) => (
+            {salahNamesArr.map((salahName, i) => (
               <Column
                 key={salahName}
                 style={{ marginLeft: "0" }}
@@ -294,14 +294,14 @@ const SalahTable = ({
                         />
                       ) : (
                         <motion.div
-                          // key={`${i}-${rowData.date}`}
+                          key={`${i}-${rowData.date}`}
                           initial={{ scale: 1 }}
                           {...(showBoxAnimation &&
                           clonedSelectedSalahAndDate.current[
                             rowData.date
                           ]?.includes(salahName)
                             ? {
-                                animate: { scale: [0, 1.3, 1] },
+                                animate: { scale: [1, 2, 1] },
                                 transition: {
                                   duration: 0.5,
                                   ease: "easeInOut",

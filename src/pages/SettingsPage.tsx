@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 // @ts-ignore
 import Switch from "react-ios-switch";
+import { motion } from "framer-motion";
 
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
@@ -17,7 +18,7 @@ import {
   SQLiteDBConnection,
 } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
-import { showToast } from "../utils/constants";
+import { pageTransitionStyles, showToast } from "../utils/constants";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetAboutUs from "../components/BottomSheets/BottomSheetAboutUs";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
@@ -234,7 +235,10 @@ const SettingsPage = ({
   }, [isMissedSalahCounterOptionChecked]);
 
   return (
-    <section className={`${pageStyles} settings-page-wrap`}>
+    <motion.section
+      {...pageTransitionStyles}
+      className={`${pageStyles} settings-page-wrap`}
+    >
       <header className="settings-page-header">
         <p className="settings-page-header-p">Settings</p>
       </header>
@@ -430,7 +434,7 @@ const SettingsPage = ({
           showAboutUsModal={showAboutUsModal}
         />
       </div>
-    </section>
+    </motion.section>
   );
 };
 
