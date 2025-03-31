@@ -300,9 +300,9 @@ const SalahTable = ({
                             rowData.date
                           ]?.includes(salahName)
                             ? {
-                                animate: { scale: [1, 2, 1] },
+                                animate: { scale: [1, 1.5, 1] },
                                 transition: {
-                                  duration: 0.5,
+                                  duration: 0.3,
                                   ease: "easeInOut",
                                 },
                               }

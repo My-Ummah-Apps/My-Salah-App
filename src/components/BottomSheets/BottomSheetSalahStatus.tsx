@@ -329,6 +329,9 @@ const BottomSheetSalahStatus = ({
     animate: { scale: 1.07, opacity: 1, transition: { duration: 0.3 } },
   };
 
+  const statusBoxStyles =
+    "h-full px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full";
+
   return (
     <>
       <Sheet
@@ -361,7 +364,7 @@ const BottomSheetSalahStatus = ({
                 </h1>
 
                 <div
-                  className={`grid grid-cols-4 grid-rows-1 gap-2 text-xs modal-sheet-salah-statuses-wrap `}
+                  className={`grid grid-cols-4 items-stretch grid-rows-1 gap-2 text-xs modal-sheet-salah-statuses-wrap `}
                 >
                   {userPreferences.userGender === "male" ? (
                     <motion.div
@@ -376,7 +379,7 @@ const BottomSheetSalahStatus = ({
                         style={{
                           backgroundColor: salahStatusColorsHexCodes.group,
                         }}
-                        className={` px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                        className={statusBoxStyles}
                       >
                         {" "}
                         <GoPeople className="w-full mb-1 text-3xl" />
@@ -400,7 +403,7 @@ const BottomSheetSalahStatus = ({
                             backgroundColor:
                               salahStatusColorsHexCodes["female-alone"],
                           }}
-                          className={` px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                          className={statusBoxStyles}
                         >
                           {" "}
                           <GoPerson className="w-full mb-1 text-3xl" />
@@ -426,7 +429,7 @@ const BottomSheetSalahStatus = ({
                             backgroundColor:
                               salahStatusColorsHexCodes["male-alone"],
                           }}
-                          className={` px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                          className={statusBoxStyles}
                         >
                           <GoPerson className="w-full mb-1 text-3xl" />
                           <p className="inline">On Time</p>
@@ -449,8 +452,7 @@ const BottomSheetSalahStatus = ({
                           style={{
                             backgroundColor: salahStatusColorsHexCodes.excused,
                           }}
-                          className={`
-                          px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                          className={statusBoxStyles}
                         >
                           <PiFlower className="w-full mb-1 text-3xl" />
                           <p className="inline">Excused</p>
@@ -469,7 +471,7 @@ const BottomSheetSalahStatus = ({
                     style={{
                       backgroundColor: salahStatusColorsHexCodes.late,
                     }}
-                    className={` px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                    className={statusBoxStyles}
                   >
                     <GoClock className="w-full mb-1 text-3xl" />
                     <p className="inline">Late</p>
@@ -485,8 +487,7 @@ const BottomSheetSalahStatus = ({
                     style={{
                       backgroundColor: salahStatusColorsHexCodes.missed,
                     }}
-                    className={`
-                       px-5 py-3 icon-and-text-wrap rounded-2xl mx-auto text-center flex flex-col items-center justify-around w-full`}
+                    className={statusBoxStyles}
                   >
                     <GoSkip className="w-full mb-1 text-3xl" />
                     <p className="inline">Missed</p>
