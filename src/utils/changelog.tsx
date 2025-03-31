@@ -2,11 +2,41 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.5";
+export const LATEST_APP_VERSION = "3.6";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Enhanced User Experience",
+        text: (
+          <>
+            <strong>Page Transitions & Animations:</strong> Added smooth page
+            transitions for a more seamless navigation experience. Introduced
+            various animations, such as sliding and fading effects for
+            edit/cancel buttons. Improved visual feedback with transitions when
+            selecting reasons in the status sheet, and added animation effects
+            to status boxes in the Salah table, along with other minor tweaks.
+          </>
+        ),
+      },
+      {
+        heading: "Bug Fixes",
+        text: (
+          <>
+            <strong>Layout & Overflow Issues:</strong> Resolved a sizing issue
+            on certain devices where the status boxes in the status sheet
+            appeared misaligned. Fixed an overflow issue with the progress bar
+            in the reasons component on the stats page when only one reason was
+            present.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.5",
     changes: [
       {
         heading: "Custom Reasons",

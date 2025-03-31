@@ -13,7 +13,7 @@ import {
   SalahByDateObjType,
   PreferenceType,
 } from "../types/types";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { getMissedSalahCount, pageTransitionStyles } from "../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
@@ -65,9 +65,9 @@ const HomePage = ({
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
     useState<SalahByDateObjType>({});
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
-  const [animateStreakCounter, setAnimateStreakCounter] =
-    useState<boolean>(false);
-  const prevActiveStreakCount = useRef<number | undefined>();
+  // const [animateStreakCounter, setAnimateStreakCounter] =
+  //   useState<boolean>(false);
+  // const prevActiveStreakCount = useRef<number | undefined>();
 
   const showStreakInfoHomePage = async () => {
     await Dialog.alert({
@@ -80,18 +80,18 @@ const HomePage = ({
     });
   };
 
-  useEffect(() => {
-    console.log("Active streak count: ", activeStreakCount);
-    console.log("prevActiveStreakCount: ", prevActiveStreakCount.current);
+  // useEffect(() => {
+  //   console.log("Active streak count: ", activeStreakCount);
+  //   console.log("prevActiveStreakCount: ", prevActiveStreakCount.current);
 
-    // if (!prevActiveStreakCount.current) return;
+  //   // if (!prevActiveStreakCount.current) return;
 
-    if (activeStreakCount > prevActiveStreakCount.current) {
-      setAnimateStreakCounter(true);
-      console.log("ANIMATION SET TO TRUE");
-    }
-    prevActiveStreakCount.current = activeStreakCount;
-  }, [activeStreakCount]);
+  //   if (activeStreakCount > prevActiveStreakCount.current) {
+  //     setAnimateStreakCounter(true);
+  //     console.log("ANIMATION SET TO TRUE");
+  //   }
+  //   prevActiveStreakCount.current = activeStreakCount;
+  // }, [activeStreakCount]);
 
   return (
     <motion.section
@@ -128,21 +128,22 @@ const HomePage = ({
               <div className="absolute -translate-x-1/2 -translate-y-[55%] top-[55%] left-1/2">
                 <motion.p
                   initial={{ scale: 1 }}
-                  {...(animateStreakCounter
-                    ? {
-                        animate: { scale: [1, 2, 1] },
-                        transition: {
-                          duration: 0.3,
-                          delay: 0.3,
-                          ease: "easeOut",
-                        },
-                      }
-                    : {})}
+                  // {...(animateStreakCounter
+                  //   ? {
+                  //       animate: { scale: [1, 2, 1] },
+                  //       transition: {
+                  //         duration: 0.5,
+                  //         repeat: 1,
+                  //         delay: 0.3,
+                  //         ease: "easeOut",
+                  //       },
+                  //     }
+                  //   : {})}
                   className="mb-1 text-xs font-extrabold text-center"
-                  onAnimationComplete={() => {
-                    setAnimateStreakCounter(false);
-                    // clonedSelectedSalahAndDate.current = {};
-                  }}
+                  // onAnimationComplete={() => {
+                  //   setAnimateStreakCounter(false);
+                  //   // clonedSelectedSalahAndDate.current = {};
+                  // }}
                 >
                   {activeStreakCount}
                 </motion.p>

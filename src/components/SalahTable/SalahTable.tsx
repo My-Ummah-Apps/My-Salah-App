@@ -303,6 +303,7 @@ const SalahTable = ({
                                 animate: { scale: [1, 1.5, 1] },
                                 transition: {
                                   duration: 0.3,
+                                  delay: 0.2,
                                   ease: "easeInOut",
                                 },
                               }
