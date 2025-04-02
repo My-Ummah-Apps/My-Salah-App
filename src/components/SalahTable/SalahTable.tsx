@@ -250,7 +250,7 @@ const SalahTable = ({
               width={120}
               flexGrow={1}
             />
-            {salahNamesArr.map((salahName, i) => (
+            {salahNamesArr.map((salahName) => (
               <Column
                 key={salahName}
                 style={{ marginLeft: "0" }}

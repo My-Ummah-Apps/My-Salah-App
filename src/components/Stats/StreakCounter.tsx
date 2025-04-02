@@ -23,7 +23,6 @@ const StreakCounter = ({
   const activeStreakObj = streakDatesObjectsArr.filter(
     (obj) => obj.isActive === true
   )[0];
-  // console.log("activeStreakObj: ", activeStreakObj);
 
   const showStreakInfo = async () => {
     await Dialog.alert({

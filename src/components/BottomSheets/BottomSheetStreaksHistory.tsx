@@ -39,23 +39,26 @@ const BottomSheetStreaksHistory = ({
               {filteredStreakDatesObjectsArr.slice(1).map((item) => {
                 return (
                   <ul className="px-4 my-3">
-                    {/* {!isSameDay(item.startDate, item.endDate) && ( */}
-                    <li className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800">
-                      <p>
-                        {`${
-                          createLocalisedDate(
-                            format(item.startDate, "yyyy-MM-dd")
-                          )[1]
-                        } -
+                    {item.days > 0 && (
+                      <li className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800">
+                        <p>
+                          {`${
+                            createLocalisedDate(
+                              format(item.startDate, "yyyy-MM-dd")
+                            )[1]
+                          } -
                              ${
                                createLocalisedDate(
                                  format(item.endDate, "yyyy-MM-dd")
                                )[1]
                              }`}
-                      </p>
-                      <p>{`${item.days} Days`}</p>
-                    </li>
-                    {/* // )} */}
+                        </p>
+
+                        <p>
+                          {item.days} {item.days !== 1 ? "Days" : "Day"}
+                        </p>
+                      </li>
+                    )}
                   </ul>
                 );
               })}
