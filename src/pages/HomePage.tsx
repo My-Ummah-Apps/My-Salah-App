@@ -67,7 +67,7 @@ const HomePage = ({
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [animateStreakCounter, setAnimateStreakCounter] =
     useState<boolean>(false);
-  const prevActiveStreakCount = useRef<number | undefined>();
+  const prevActiveStreakCount = useRef<number>(0);
 
   const showStreakInfoHomePage = async () => {
     await Dialog.alert({
@@ -81,10 +81,8 @@ const HomePage = ({
   };
 
   useEffect(() => {
-    console.log("Active streak count: ", activeStreakCount);
-    console.log("prevActiveStreakCount: ", prevActiveStreakCount.current);
-
-    // if (!prevActiveStreakCount.current) return;
+    // console.log("Active streak count: ", activeStreakCount);
+    // console.log("prevActiveStreakCount: ", prevActiveStreakCount.current);
 
     if (activeStreakCount > prevActiveStreakCount.current) {
       setAnimateStreakCounter(true);

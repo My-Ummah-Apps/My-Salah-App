@@ -250,7 +250,7 @@ const SalahTable = ({
               width={120}
               flexGrow={1}
             />
-            {salahNamesArr.map((salahName) => (
+            {salahNamesArr.map((salahName, i) => (
               <Column
                 key={salahName}
                 style={{ marginLeft: "0" }}
@@ -301,10 +301,10 @@ const SalahTable = ({
                             ]?.includes(salahName)
                               ? {
                                   initial: { scale: 0 },
-                                  animate: { scale: [1, 1.5, 1] },
+                                  animate: { scale: [1.3, 1] },
                                   transition: {
-                                    duration: 0.3,
-                                    delay: 0.2,
+                                    duration: 0.1,
+                                    delay: 0.3,
                                     ease: "easeInOut",
                                   },
                                 }
