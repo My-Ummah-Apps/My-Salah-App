@@ -188,7 +188,6 @@ const SalahTable = ({
               <p className="">Cancel</p>
             </button>
             <button
-              // border-l border-[#adadad]
               className="p-2 py-4 pr-4 text-white"
               onClick={() => {
                 const dateArrLength = Object.keys(selectedSalahAndDate).length;
@@ -292,36 +291,39 @@ const SalahTable = ({
                           }`}
                         />
                       ) : (
-                        <motion.div
-                          // key={`${i}-${rowData.date}`}
-                          initial={{ scale: 1 }}
-                          {...(showBoxAnimation &&
-                          clonedSelectedSalahAndDate.current[
-                            rowData.date
-                          ]?.includes(salahName)
-                            ? {
-                                animate: { scale: [1, 1.5, 1] },
-                                transition: {
-                                  duration: 0.3,
-                                  delay: 0.2,
-                                  ease: "easeInOut",
-                                },
-                              }
-                            : {})}
-                          onAnimationComplete={() => {
-                            setShowBoxAnimation(false);
-                            clonedSelectedSalahAndDate.current = {};
-                          }}
-                          style={{
-                            backgroundColor:
-                              salahStatusColorsHexCodes[
-                                rowData.salahs[
-                                  salahName
-                                ] as keyof typeof salahStatusColorsHexCodes
-                              ],
-                          }}
-                          className={`${salahTableIndividualSquareStyles} salah-status-color-box`}
-                        ></motion.div>
+                        <AnimatePresence>
+                          <motion.div
+                            // key={`${i}-${rowData.date}`}
+                            // initial={{ scale: 1 }}
+                            {...(showBoxAnimation &&
+                            clonedSelectedSalahAndDate.current[
+                              rowData.date
+                            ]?.includes(salahName)
+                              ? {
+                                  initial: { scale: 0 },
+                                  animate: { scale: [1, 1.5, 1] },
+                                  transition: {
+                                    duration: 0.3,
+                                    delay: 0.2,
+                                    ease: "easeInOut",
+                                  },
+                                }
+                              : {})}
+                            onAnimationComplete={() => {
+                              setShowBoxAnimation(false);
+                              clonedSelectedSalahAndDate.current = {};
+                            }}
+                            style={{
+                              backgroundColor:
+                                salahStatusColorsHexCodes[
+                                  rowData.salahs[
+                                    salahName
+                                  ] as keyof typeof salahStatusColorsHexCodes
+                                ],
+                            }}
+                            className={`${salahTableIndividualSquareStyles}`}
+                          ></motion.div>
+                        </AnimatePresence>
                       )}
                       <AnimatePresence>
                         {isMultiEditMode && (
