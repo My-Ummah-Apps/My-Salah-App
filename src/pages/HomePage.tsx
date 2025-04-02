@@ -166,7 +166,7 @@ const HomePage = ({
                               type: "spring",
                               stiffness: 100,
                               damping: 5,
-                              delay: 0.2,
+                              // delay: 0.2,
                             },
                           },
                           exit: { opacity: 0, y: 10 },

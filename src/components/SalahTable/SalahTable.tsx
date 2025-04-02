@@ -301,9 +301,9 @@ const SalahTable = ({
                             ]?.includes(salahName)
                               ? {
                                   initial: { scale: 0 },
-                                  animate: { scale: [1.3, 1] },
+                                  animate: { scale: [1.4, 1] },
                                   transition: {
-                                    duration: 0.1,
+                                    duration: 0.2,
                                     delay: 0.3,
                                     ease: "easeInOut",
                                   },
