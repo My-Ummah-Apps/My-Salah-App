@@ -238,6 +238,18 @@ td {
   align-items: center;
 }
 
+.ReactVirtualized__Table__rowColumn:first-child {
+  justify-content: start !important;
+}
+
+.ReactVirtualized__Table__rowColumn:nth-child(2),
+.ReactVirtualized__Table__rowColumn:nth-child(3),
+.ReactVirtualized__Table__rowColumn:nth-child(4),
+.ReactVirtualized__Table__rowColumn:nth-child(5),
+.ReactVirtualized__Table__rowColumn:nth-child(6) {
+  /* justify-content: start !important; */
+}
+
 .ReactVirtualized__Grid__innerScrollContainer {
   overflow-x: scroll !important;
 }

@@ -121,7 +121,7 @@ export const createLocalisedDate = (date: string) => {
   })
     .format(parsedDate)
     .replace(/\//g, ".");
-  return [format(parsedDate, "EE"), formattedParsedDate];
+  return [format(parsedDate, "EEEE"), formattedParsedDate];
 };
 
 export const salahNamesArr: SalahNamesType[] = [

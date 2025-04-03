@@ -221,7 +221,8 @@ const SalahTable = ({
           >
             <Column
               style={{ marginLeft: "0" }}
-              className="items-center text-left"
+              // className="items-center text-left"
+              className="text-left"
               label=""
               dataKey="date"
               headerRenderer={() => (
@@ -241,13 +242,13 @@ const SalahTable = ({
                 );
 
                 return (
-                  <section>
+                  <section className="">
                     <p className="text-sm">{formattedParsedDate}</p>
                     <p className="text-sm">{day}</p>
                   </section>
                 );
               }}
-              width={120}
+              width={180}
               flexGrow={1}
             />
             {salahNamesArr.map((salahName) => (
