@@ -225,6 +225,9 @@ td {
   margin-right: 0;
   line-height: 1;
 }
+.ReactVirtualized__Table__headerTruncatedText {
+  /* text-overflow: clip; */
+}
 
 .ReactVirtualized__Table__row {
   border-bottom: 1px solid rgb(38, 38, 38);

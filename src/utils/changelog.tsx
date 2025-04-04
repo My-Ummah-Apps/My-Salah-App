@@ -2,11 +2,32 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.6";
+export const LATEST_APP_VERSION = "3.7";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "UX Improvements",
+        text: (
+          <>
+            <strong>Streak Counter Animation:</strong> Added an animation to the
+            homepage streak counter.
+            <br />
+            <br />
+            <strong>Minor UX Improvements:</strong> Increased the click area for
+            the edit button (when in multi-edit mode) to make it easier for
+            users to interact with, updated day names in the Salah table to show
+            as full names.
+            <br />
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.6",
     changes: [
       {
         heading: "Enhanced User Experience",

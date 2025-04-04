@@ -36,11 +36,14 @@ const BottomSheetStreaksHistory = ({
           <Sheet.Scroller>
             <section>
               <h1 className="mb-10 text-2xl text-center">Streaks</h1>
-              {filteredStreakDatesObjectsArr.slice(1).map((item) => {
+              {filteredStreakDatesObjectsArr.slice(1).map((item, i) => {
                 return (
                   <ul className="px-4 my-3">
                     {item.days > 0 && (
-                      <li className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800">
+                      <li
+                        key={i}
+                        className="flex justify-between px-2 py-4 rounded-lg bg-neutral-800"
+                      >
                         <p>
                           {`${
                             createLocalisedDate(

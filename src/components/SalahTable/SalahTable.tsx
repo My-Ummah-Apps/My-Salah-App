@@ -260,7 +260,7 @@ const SalahTable = ({
                 dataKey={""}
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData, i }) => {
+                cellRenderer={({ rowData }) => {
                   let isChecked = selectedSalahAndDate[rowData.date]?.includes(
                     salahName
                   )
