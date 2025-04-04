@@ -9,17 +9,12 @@ export const changeLogs = [
     versionNum: LATEST_APP_VERSION,
     changes: [
       {
-        heading: "UX Improvements",
+        heading: "UX Refinements",
         text: (
           <>
-            <strong>Streak Counter Animation:</strong> Added an animation to the
-            homepage streak counter.
-            <br />
-            <br />
-            <strong>Minor UX Improvements:</strong> Increased the click area for
-            the edit button (when in multi-edit mode) to make it easier for
-            users to interact with, updated day names in the Salah table to show
-            as full names.
+            <strong>Minor UX Improvements:</strong> Added animation to homepage
+            streak counter, expanded click areas for the edit button and
+            multi-edit icon, updated Salah table to show full day names.
             <br />
           </>
         ),

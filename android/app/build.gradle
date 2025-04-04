@@ -7,8 +7,8 @@ android {
         applicationId "com.mysalahapp.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2024
-        versionName '3.6'
+        versionCode 2025
+        versionName '3.7'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
