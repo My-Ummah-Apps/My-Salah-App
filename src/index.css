@@ -223,7 +223,7 @@ td {
 
 .ReactVirtualized__Table__headerColumn {
   margin-right: 0;
-  line-height: 1;
+  /* line-height: 1; */
 }
 .ReactVirtualized__Table__headerTruncatedText {
   /* text-overflow: clip; */

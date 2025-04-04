@@ -231,7 +231,7 @@ const SalahTable = ({
                     if (isMultiEditMode) return;
                     setIsMultiEditMode(true);
                   }}
-                  className={`flex items-center justify-center text-lg text-white multi-edit-icon`}
+                  className={`flex items-center justify-center text-lg text-white multi-edit-icon p-3`}
                 >
                   <TbEdit />
                 </div>
