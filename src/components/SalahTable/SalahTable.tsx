@@ -260,7 +260,7 @@ const SalahTable = ({
                 dataKey={""}
                 width={120}
                 flexGrow={1}
-                cellRenderer={({ rowData }) => {
+                cellRenderer={({ rowData, i }) => {
                   let isChecked = selectedSalahAndDate[rowData.date]?.includes(
                     salahName
                   )
@@ -295,7 +295,6 @@ const SalahTable = ({
                         <AnimatePresence>
                           <motion.div
                             // key={`${i}-${rowData.date}`}
-                            // initial={{ scale: 1 }}
                             {...(showBoxAnimation &&
                             clonedSelectedSalahAndDate.current[
                               rowData.date
@@ -304,9 +303,11 @@ const SalahTable = ({
                                   initial: { scale: 0 },
                                   animate: { scale: [1.4, 1] },
                                   transition: {
-                                    duration: 0.2,
+                                    type: "spring",
+                                    stiffness: 500,
+                                    damping: 20,
+                                    mass: 1,
                                     delay: 0.3,
-                                    ease: "easeInOut",
                                   },
                                 }
                               : {})}
