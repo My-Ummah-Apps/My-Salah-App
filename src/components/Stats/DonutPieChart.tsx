@@ -25,14 +25,19 @@ const DonutPieChart = ({
       <PieChart
         style={{ width: "50%" }}
         // rounded={true}
-        lineWidth={50}
-        label={({ dataEntry }) =>
-          `${Math.round(dataEntry.percentage)}% (${dataEntry.value})`
+        // paddingAngle={10}
+        // lineWidth={30}
+        lineWidth={45}
+        label={
+          ({ dataEntry }) =>
+            `${Math.round(dataEntry.percentage)}%  (${dataEntry.value})`
+          // `${Math.round(dataEntry.percentage)}% `
         }
         labelStyle={{
           fontSize: "5px",
           fill: "#fff",
         }}
+        // labelPosition={55}
         labelPosition={75}
         data={donutPieChartData}
       />
