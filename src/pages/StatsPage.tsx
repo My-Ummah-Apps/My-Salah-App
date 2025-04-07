@@ -18,7 +18,10 @@ import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
 import StreakCounter from "../components/Stats/StreakCounter";
 import { streakDatesObjType } from "../types/types";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { pageTransitionStyles } from "../utils/constants";
+import {
+  pageTransitionStyles,
+  salahStatusColorsHexCodes,
+} from "../utils/constants";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -70,7 +73,7 @@ const StatsPage = ({
   };
 
   const salahStatusStatistics = {
-    salahInJamaahDatesOverall: filterSalahStatuses("group").length,
+    salahInGroupDatesOverall: filterSalahStatuses("group").length,
     salahMaleAloneDatesOverall: filterSalahStatuses("male-alone").length,
     salahFemaleAloneDatesOverall: filterSalahStatuses("female-alone").length,
     salahExcusedDatesOverall: filterSalahStatuses("excused").length,
@@ -81,25 +84,37 @@ const StatsPage = ({
   const donutPieChartData = [
     userPreferences.userGender === "male"
       ? {
-          name: "In Jamaah",
-          value: salahStatusStatistics.salahInJamaahDatesOverall,
+          title: "In Jamaah",
+          value: salahStatusStatistics.salahInGroupDatesOverall,
+          color: salahStatusColorsHexCodes.group,
         }
       : {
-          name: "Prayed",
+          title: "Prayed",
           value: salahStatusStatistics.salahFemaleAloneDatesOverall,
+          color: salahStatusColorsHexCodes["female-alone"],
         },
     userPreferences.userGender === "male"
       ? {
-          name: "Alone",
+          title: "Alone",
           value: salahStatusStatistics.salahMaleAloneDatesOverall,
+          color: salahStatusColorsHexCodes["male-alone"],
         }
       : {
-          name: "Excused",
+          title: "Excused",
           value: salahStatusStatistics.salahExcusedDatesOverall,
+          color: salahStatusColorsHexCodes.excused,
         },
 
-    { name: "Late", value: salahStatusStatistics.salahLateDatesOverall },
-    { name: "Missed", value: salahStatusStatistics.salahMissedDatesOverall },
+    {
+      title: "Late",
+      value: salahStatusStatistics.salahLateDatesOverall,
+      color: salahStatusColorsHexCodes.late,
+    },
+    {
+      title: "Missed",
+      value: salahStatusStatistics.salahMissedDatesOverall,
+      color: salahStatusColorsHexCodes.missed,
+    },
   ];
 
   useEffect(() => {
