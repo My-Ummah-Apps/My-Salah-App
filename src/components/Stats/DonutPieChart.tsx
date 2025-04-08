@@ -50,18 +50,15 @@ const DonutPieChart = ({
         lineWidth={30}
         label={({ dataEntry }) => {
           if (dataEntry.value === 0) return;
-
           return `${Math.round(dataEntry.percentage)}%`;
         }}
         labelStyle={(index) => ({
           fontSize: "6px",
           fill: donutPieChartData[index].color,
         })}
-        // labelPosition={55}
         labelPosition={55}
         data={donutPieChartData}
       />
-
       <div className="justify-center">
         {salahStatusStatistics.salahFemaleAloneDatesOverall > 0 ||
         salahStatusStatistics.salahInGroupDatesOverall > 0 ? (

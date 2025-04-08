@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Calendar from "../components/Stats/Calendar";
 import {
   reasonsToShowType,
+  SalahNamesType,
   salahReasonsOverallNumbersType,
   SalahRecordsArrayType,
   SalahStatusType,
@@ -54,21 +55,57 @@ const StatsPage = ({
     });
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
+  const [statsToShow, setStatsToShow] = useState<SalahNamesType | "All">("All");
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
+  console.log("fetchedSalahData: ", fetchedSalahData);
+
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
-      Object.values(fetchedSalahData[i].salahs).forEach((status) => {
-        if (status !== "" && typeof status === "string") {
-          salahStatusesOverallArr.push(status as SalahStatusType);
+      if (statsToShow === "All") {
+        Object.values(fetchedSalahData[i].salahs).forEach((status) => {
+          if (status !== "" && typeof status === "string") {
+            salahStatusesOverallArr.push(status as SalahStatusType);
+          }
+        });
+      } else if (statsToShow === "Fajr") {
+        if (fetchedSalahData[i].salahs.Fajr) {
+          salahStatusesOverallArr.push(fetchedSalahData[i].salahs.Fajr);
         }
-      });
+      } else if (statsToShow === "Dhuhr") {
+        if (fetchedSalahData[i].salahs.Dhuhr) {
+          salahStatusesOverallArr.push(fetchedSalahData[i].salahs.Dhuhr);
+        }
+      } else if (statsToShow === "Asar") {
+        if (fetchedSalahData[i].salahs.Asar) {
+          salahStatusesOverallArr.push(fetchedSalahData[i].salahs.Asar);
+        }
+      } else if (statsToShow === "Maghrib") {
+        if (fetchedSalahData[i].salahs.Maghrib) {
+          salahStatusesOverallArr.push(fetchedSalahData[i].salahs.Maghrib);
+        }
+      } else if (statsToShow === "Isha") {
+        if (fetchedSalahData[i].salahs.Isha) {
+          salahStatusesOverallArr.push(fetchedSalahData[i].salahs.Isha);
+        }
+      }
     }
   };
 
   getAllSalahStatuses();
 
   const filterSalahStatuses = (salahStatus: SalahStatusType) => {
+    if (statsToShow === "Fajr") {
+      return salahStatusesOverallArr.filter((status) => status === salahStatus);
+    } else if (statsToShow === "Dhuhr") {
+      return salahStatusesOverallArr.filter((status) => status === salahStatus);
+    } else if (statsToShow === "Asar") {
+      return salahStatusesOverallArr.filter((status) => status === salahStatus);
+    } else if (statsToShow === "Maghrib") {
+      return salahStatusesOverallArr.filter((status) => status === salahStatus);
+    } else if (statsToShow === "Isha") {
+      return salahStatusesOverallArr.filter((status) => status === salahStatus);
+    }
     return salahStatusesOverallArr.filter((status) => status === salahStatus);
   };
 
@@ -80,6 +117,8 @@ const StatsPage = ({
     salahMissedDatesOverall: filterSalahStatuses("missed").length,
     salahLateDatesOverall: filterSalahStatuses("late").length,
   };
+
+  // console.log("salahStatusesOverallArr: ", salahStatusesOverallArr);
 
   const donutPieChartData = [
     userPreferences.userGender === "male"
@@ -196,7 +235,7 @@ const StatsPage = ({
     grabSalahDataFromDB();
   }, []);
 
-  //   borderStyles: "rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl",
+  console.log("statsToShow: ", statsToShow);
 
   return (
     <motion.section
@@ -212,6 +251,50 @@ const StatsPage = ({
           activeStreakCount={activeStreakCount}
           userGender={userPreferences.userGender}
         />
+        <section className="flex justify-around">
+          <button
+            onClick={() => {
+              setStatsToShow("All");
+            }}
+          >
+            All
+          </button>
+          <button
+            onClick={() => {
+              setStatsToShow("Fajr");
+            }}
+          >
+            Fajr
+          </button>
+          <button
+            onClick={() => {
+              setStatsToShow("Dhuhr");
+            }}
+          >
+            Dhuhr
+          </button>
+          <button
+            onClick={() => {
+              setStatsToShow("Asar");
+            }}
+          >
+            Asar
+          </button>
+          <button
+            onClick={() => {
+              setStatsToShow("Maghrib");
+            }}
+          >
+            Maghrib
+          </button>
+          <button
+            onClick={() => {
+              setStatsToShow("Isha");
+            }}
+          >
+            Isha
+          </button>
+        </section>
         {Object.values(donutPieChartData).some((obj) => obj.value) && (
           <DonutPieChart
             donutPieChartData={donutPieChartData}
