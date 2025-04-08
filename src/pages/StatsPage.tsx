@@ -23,6 +23,7 @@ import {
   pageTransitionStyles,
   salahStatusColorsHexCodes,
 } from "../utils/constants";
+import SalahSelectionTabs from "../components/Stats/SalahSelectionTabs";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -58,7 +59,6 @@ const StatsPage = ({
   const [statsToShow, setStatsToShow] = useState<SalahNamesType | "All">("All");
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
-  console.log("fetchedSalahData: ", fetchedSalahData);
 
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
@@ -251,50 +251,10 @@ const StatsPage = ({
           activeStreakCount={activeStreakCount}
           userGender={userPreferences.userGender}
         />
-        <section className="flex justify-around">
-          <button
-            onClick={() => {
-              setStatsToShow("All");
-            }}
-          >
-            All
-          </button>
-          <button
-            onClick={() => {
-              setStatsToShow("Fajr");
-            }}
-          >
-            Fajr
-          </button>
-          <button
-            onClick={() => {
-              setStatsToShow("Dhuhr");
-            }}
-          >
-            Dhuhr
-          </button>
-          <button
-            onClick={() => {
-              setStatsToShow("Asar");
-            }}
-          >
-            Asar
-          </button>
-          <button
-            onClick={() => {
-              setStatsToShow("Maghrib");
-            }}
-          >
-            Maghrib
-          </button>
-          <button
-            onClick={() => {
-              setStatsToShow("Isha");
-            }}
-          >
-            Isha
-          </button>
-        </section>
+        <SalahSelectionTabs
+          setStatsToShow={setStatsToShow}
+          statsToShow={statsToShow}
+        />
         {Object.values(donutPieChartData).some((obj) => obj.value) && (
           <DonutPieChart
             donutPieChartData={donutPieChartData}
