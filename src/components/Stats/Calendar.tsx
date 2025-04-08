@@ -80,7 +80,7 @@ const Calendar = ({
   function determineRadialColors(date: Date) {
     const colors = {
       fajrColor: "transparent",
-      zoharColor: "transparent",
+      dhuhrColor: "transparent",
       asarColor: "transparent",
       maghribColor: "transparent",
       ishaColor: "transparent",
@@ -102,7 +102,7 @@ const Calendar = ({
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
           } else if (salah === "Dhuhr") {
-            colors.zoharColor =
+            colors.dhuhrColor =
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
@@ -192,7 +192,7 @@ const Calendar = ({
             if (isDayInSpecificMonth(date, formattedMonths[currentMonth])) {
               const {
                 fajrColor,
-                zoharColor,
+                dhuhrColor,
                 asarColor,
                 maghribColor,
                 ishaColor,
@@ -227,7 +227,7 @@ const Calendar = ({
                         strokeLinecap: "round",
                       }}
                       fill="none"
-                      stroke={zoharColor}
+                      stroke={dhuhrColor}
                     />
                     <path
                       d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
