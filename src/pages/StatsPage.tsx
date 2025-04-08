@@ -267,6 +267,7 @@ const StatsPage = ({
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           userStartDate={userPreferences.userStartDate}
           fetchedSalahData={fetchedSalahData}
+          statsToShow={statsToShow}
         />{" "}
         <Swiper
           spaceBetween={50}

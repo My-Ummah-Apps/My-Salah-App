@@ -17,6 +17,7 @@ import {
 import {
   SalahRecordsArrayType,
   DBConnectionStateType,
+  SalahNamesType,
 } from "../../types/types";
 
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
@@ -29,6 +30,7 @@ interface CalenderProps {
   ) => Promise<void>;
   userStartDate: string;
   fetchedSalahData: SalahRecordsArrayType;
+  statsToShow: SalahNamesType | "All";
 }
 
 const Calendar = ({
@@ -36,6 +38,7 @@ const Calendar = ({
   checkAndOpenOrCloseDBConnection,
   fetchedSalahData,
   userStartDate,
+  statsToShow,
 }: CalenderProps) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
@@ -84,7 +87,9 @@ const Calendar = ({
       asarColor: "transparent",
       maghribColor: "transparent",
       ishaColor: "transparent",
+      individualRadialColor: "transparent",
     };
+    // const individualRadialColor = "transparent";
     if (date < userStartDateParsed || date > todaysDate) {
       return colors;
     }
@@ -92,32 +97,60 @@ const Calendar = ({
     let formattedDate = format(date, "yyyy-MM-dd");
 
     for (let key in fetchedSalahData) {
+      // console.log("KEY: ", fetchedSalahData[key].salahs);
       if (fetchedSalahData[key].date === formattedDate) {
         const matchedData = fetchedSalahData[key].salahs;
 
         for (const [salah, salahStatus] of Object.entries(matchedData)) {
-          if (salah === "Fajr") {
-            colors.fajrColor =
+          if (statsToShow === "All") {
+            if (salah === "Fajr") {
+              colors.fajrColor =
+                salahStatusColorsHexCodes[
+                  salahStatus as keyof typeof salahStatusColorsHexCodes
+                ];
+            } else if (salah === "Dhuhr") {
+              colors.dhuhrColor =
+                salahStatusColorsHexCodes[
+                  salahStatus as keyof typeof salahStatusColorsHexCodes
+                ];
+            } else if (salah === "Asar") {
+              colors.asarColor =
+                salahStatusColorsHexCodes[
+                  salahStatus as keyof typeof salahStatusColorsHexCodes
+                ];
+            } else if (salah === "Maghrib") {
+              colors.maghribColor =
+                salahStatusColorsHexCodes[
+                  salahStatus as keyof typeof salahStatusColorsHexCodes
+                ];
+            } else if (salah === "Isha") {
+              colors.ishaColor =
+                salahStatusColorsHexCodes[
+                  salahStatus as keyof typeof salahStatusColorsHexCodes
+                ];
+            }
+          } else if (statsToShow === "Fajr") {
+            colors.individualRadialColor =
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (salah === "Dhuhr") {
-            colors.dhuhrColor =
+          } else if (statsToShow === "Dhuhr") {
+            colors.individualRadialColor =
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (salah === "Asar") {
-            colors.asarColor =
+          } else if (statsToShow === "Asar") {
+            colors.individualRadialColor =
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (salah === "Maghrib") {
-            colors.maghribColor =
+          } else if (statsToShow === "Maghrib") {
+            colors.individualRadialColor =
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
-          } else if (salah === "Isha") {
-            colors.ishaColor =
+          } else if (statsToShow === "Isha") {
+            colors.individualRadialColor =
               salahStatusColorsHexCodes[
                 salahStatus as keyof typeof salahStatusColorsHexCodes
               ];
@@ -196,6 +229,7 @@ const Calendar = ({
                 asarColor,
                 maghribColor,
                 ishaColor,
+                individualRadialColor,
               } = determineRadialColors(date);
 
               return (
@@ -211,61 +245,80 @@ const Calendar = ({
                   }}
                   className="relative flex items-center justify-center individual-date"
                 >
-                  <svg
-                    className="absolute"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="svg"
-                    viewBox="0 0 150 150"
-                    style={{ height: "35px", width: "35px" }}
-                  >
-                    <desc>Created with Snap</desc>
-                    <defs />
-                    <path
-                      d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
-                      style={{
-                        strokeWidth: "11px",
-                        strokeLinecap: "round",
-                      }}
-                      fill="none"
-                      stroke={dhuhrColor}
-                    />
-                    <path
-                      d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
-                      style={{
-                        strokeWidth: "11px",
-                        strokeLinecap: "round",
-                      }}
-                      fill="none"
-                      stroke={asarColor}
-                    />
-                    <path
-                      d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
-                      style={{
-                        strokeWidth: "11px",
-                        strokeLinecap: "round",
-                      }}
-                      fill="none"
-                      stroke={maghribColor}
-                    />
-                    <path
-                      d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
-                      style={{
-                        strokeWidth: "11px",
-                        strokeLinecap: "round",
-                      }}
-                      fill="none"
-                      stroke={ishaColor}
-                    />
-                    <path
-                      d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
-                      style={{
-                        strokeWidth: "11px",
-                        strokeLinecap: "round",
-                      }}
-                      fill="none"
-                      stroke={fajrColor}
-                    />
-                  </svg>
+                  {statsToShow === "All" ? (
+                    <svg
+                      className="absolute"
+                      xmlns="http://www.w3.org/2000/svg"
+                      id="svg"
+                      viewBox="0 0 150 150"
+                      style={{ height: "35px", width: "35px" }}
+                    >
+                      <defs />
+                      <path
+                        d="M 86.1150408904588 8.928403485284022 A 67 67 0 0 1 134.40308587902058 44.011721763710284"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={dhuhrColor}
+                      />
+                      <path
+                        d="M 141.272558935669 65.15378589922615 A 67 67 0 0 1 122.82816700032245 121.91978731185029"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={asarColor}
+                      />
+                      <path
+                        d="M 104.84365305321519 134.98630153992926 A 67 67 0 0 1 45.15634694678482 134.98630153992926"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={maghribColor}
+                      />
+                      <path
+                        d="M 27.171832999677548 121.91978731185029 A 67 67 0 0 1 8.72744106433099 65.15378589922618"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={ishaColor}
+                      />
+                      <path
+                        d="M 15.596914120979442 44.01172176371027 A 67 67 0 0 1 63.884959109541164 8.928403485284022"
+                        style={{
+                          strokeWidth: "11px",
+                          strokeLinecap: "round",
+                        }}
+                        fill="none"
+                        stroke={fajrColor}
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="absolute"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 150 150"
+                      style={{ height: "35px", width: "35px" }}
+                    >
+                      <circle
+                        cx="75"
+                        cy="75"
+                        r="67"
+                        fill="none"
+                        stroke={individualRadialColor}
+                        strokeWidth="11px"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  )}
+
                   <p
                     className={`text-sm cursor-pointer flex items-center justify-center font-semibold h-6 w-6 hover:text-white
   `}
