@@ -91,7 +91,7 @@ const Calendar = ({
       ishaColor: "transparent",
       individualRadialColor: "transparent",
     };
-    // const individualRadialColor = "transparent";
+
     if (date < userStartDateParsed || date > todaysDate) {
       return colors;
     }
@@ -101,8 +101,7 @@ const Calendar = ({
     for (let key in fetchedSalahData) {
       // console.log("KEY: ", fetchedSalahData[key].salahs);
       if (fetchedSalahData[key].date === formattedDate) {
-        const matchedData: SalahsType = fetchedSalahData[key].salahs;
-        console.log(fetchedSalahData[key].salahs);
+        const matchedData = fetchedSalahData[key].salahs;
 
         for (const [salah, salahStatus] of Object.entries(matchedData) as [
           keyof SalahsType,
@@ -120,21 +119,23 @@ const Calendar = ({
             } else if (salah === "Isha") {
               colors.ishaColor = salahStatusColorsHexCodes[salahStatus];
             }
-          } else if (statsToShow === "Fajr") {
-            colors.individualRadialColor =
-              salahStatusColorsHexCodes[salahStatus];
-          } else if (statsToShow === "Dhuhr") {
-            colors.individualRadialColor =
-              salahStatusColorsHexCodes[salahStatus];
-          } else if (statsToShow === "Asar") {
-            colors.individualRadialColor =
-              salahStatusColorsHexCodes[salahStatus];
-          } else if (statsToShow === "Maghrib") {
-            colors.individualRadialColor =
-              salahStatusColorsHexCodes[salahStatus];
-          } else if (statsToShow === "Isha") {
-            colors.individualRadialColor =
-              salahStatusColorsHexCodes[salahStatus];
+          } else {
+            if (statsToShow === "Fajr" && salah === "Fajr") {
+              colors.individualRadialColor =
+                salahStatusColorsHexCodes[salahStatus];
+            } else if (statsToShow === "Dhuhr" && salah === "Dhuhr") {
+              colors.individualRadialColor =
+                salahStatusColorsHexCodes[salahStatus];
+            } else if (statsToShow === "Asar" && salah === "Asar") {
+              colors.individualRadialColor =
+                salahStatusColorsHexCodes[salahStatus];
+            } else if (statsToShow === "Maghrib" && salah === "Maghrib") {
+              colors.individualRadialColor =
+                salahStatusColorsHexCodes[salahStatus];
+            } else if (statsToShow === "Isha" && salah === "Isha") {
+              colors.individualRadialColor =
+                salahStatusColorsHexCodes[salahStatus];
+            }
           }
         }
       }
