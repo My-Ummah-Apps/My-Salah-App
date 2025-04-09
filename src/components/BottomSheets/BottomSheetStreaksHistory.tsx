@@ -35,7 +35,7 @@ const BottomSheetStreaksHistory = ({
         <Sheet.Content>
           <Sheet.Scroller>
             <section>
-              <h1 className="mb-10 text-2xl text-center">Streaks</h1>
+              <h1 className="mb-10 text-2xl text-center">Past Streaks</h1>
               {filteredStreakDatesObjectsArr.slice(1).map((item, i) => {
                 return (
                   <ul className="px-4 my-3">
