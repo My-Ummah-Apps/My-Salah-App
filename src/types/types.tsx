@@ -29,7 +29,7 @@ export type SalahStatusType =
   | "excused"
   | "";
 
-interface SalahsType {
+export interface SalahsType {
   Fajr: SalahStatusType;
   Dhuhr: SalahStatusType;
   Asar: SalahStatusType;

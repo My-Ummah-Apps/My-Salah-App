@@ -18,6 +18,8 @@ import {
   SalahRecordsArrayType,
   DBConnectionStateType,
   SalahNamesType,
+  SalahsType,
+  SalahStatusType,
 } from "../../types/types";
 
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
@@ -99,61 +101,40 @@ const Calendar = ({
     for (let key in fetchedSalahData) {
       // console.log("KEY: ", fetchedSalahData[key].salahs);
       if (fetchedSalahData[key].date === formattedDate) {
-        const matchedData = fetchedSalahData[key].salahs;
+        const matchedData: SalahsType = fetchedSalahData[key].salahs;
+        console.log(fetchedSalahData[key].salahs);
 
-        for (const [salah, salahStatus] of Object.entries(matchedData)) {
+        for (const [salah, salahStatus] of Object.entries(matchedData) as [
+          keyof SalahsType,
+          SalahStatusType
+        ][]) {
           if (statsToShow === "All") {
             if (salah === "Fajr") {
-              colors.fajrColor =
-                salahStatusColorsHexCodes[
-                  salahStatus as keyof typeof salahStatusColorsHexCodes
-                ];
+              colors.fajrColor = salahStatusColorsHexCodes[salahStatus];
             } else if (salah === "Dhuhr") {
-              colors.dhuhrColor =
-                salahStatusColorsHexCodes[
-                  salahStatus as keyof typeof salahStatusColorsHexCodes
-                ];
+              colors.dhuhrColor = salahStatusColorsHexCodes[salahStatus];
             } else if (salah === "Asar") {
-              colors.asarColor =
-                salahStatusColorsHexCodes[
-                  salahStatus as keyof typeof salahStatusColorsHexCodes
-                ];
+              colors.asarColor = salahStatusColorsHexCodes[salahStatus];
             } else if (salah === "Maghrib") {
-              colors.maghribColor =
-                salahStatusColorsHexCodes[
-                  salahStatus as keyof typeof salahStatusColorsHexCodes
-                ];
+              colors.maghribColor = salahStatusColorsHexCodes[salahStatus];
             } else if (salah === "Isha") {
-              colors.ishaColor =
-                salahStatusColorsHexCodes[
-                  salahStatus as keyof typeof salahStatusColorsHexCodes
-                ];
+              colors.ishaColor = salahStatusColorsHexCodes[salahStatus];
             }
           } else if (statsToShow === "Fajr") {
             colors.individualRadialColor =
-              salahStatusColorsHexCodes[
-                salahStatus as keyof typeof salahStatusColorsHexCodes
-              ];
+              salahStatusColorsHexCodes[salahStatus];
           } else if (statsToShow === "Dhuhr") {
             colors.individualRadialColor =
-              salahStatusColorsHexCodes[
-                salahStatus as keyof typeof salahStatusColorsHexCodes
-              ];
+              salahStatusColorsHexCodes[salahStatus];
           } else if (statsToShow === "Asar") {
             colors.individualRadialColor =
-              salahStatusColorsHexCodes[
-                salahStatus as keyof typeof salahStatusColorsHexCodes
-              ];
+              salahStatusColorsHexCodes[salahStatus];
           } else if (statsToShow === "Maghrib") {
             colors.individualRadialColor =
-              salahStatusColorsHexCodes[
-                salahStatus as keyof typeof salahStatusColorsHexCodes
-              ];
+              salahStatusColorsHexCodes[salahStatus];
           } else if (statsToShow === "Isha") {
             colors.individualRadialColor =
-              salahStatusColorsHexCodes[
-                salahStatus as keyof typeof salahStatusColorsHexCodes
-              ];
+              salahStatusColorsHexCodes[salahStatus];
           }
         }
       }
