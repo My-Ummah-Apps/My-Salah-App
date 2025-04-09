@@ -9,7 +9,6 @@ import ReasonsList from "./ReasonsList";
 interface ReasonsCardProps {
   setReasonsToShow: React.Dispatch<React.SetStateAction<reasonsToShowType>>;
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  // showReasonsSheet: boolean;
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
   status: "male-alone" | "late" | "missed";
 }
@@ -17,7 +16,6 @@ interface ReasonsCardProps {
 const ReasonsCard = ({
   setReasonsToShow,
   setShowReasonsSheet,
-  // showReasonsSheet,
   salahReasonsOverallNumbers,
   status,
 }: ReasonsCardProps) => {

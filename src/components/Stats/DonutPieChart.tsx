@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { salahStatusColorsHexCodes } from "../../utils/constants";
 import { PieChart } from "react-minimal-pie-chart";
 
@@ -19,6 +20,9 @@ const DonutPieChart = ({
 }) => {
   // console.log(salahStatusStatistics);
   // console.log(donutPieChartData);
+  const [toggleValues, setToggleValues] = useState<"percentage" | "amount">(
+    "amount"
+  );
 
   return (
     <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
@@ -41,24 +45,32 @@ const DonutPieChart = ({
         labelPosition={70}
         data={donutPieChartData}
       /> */}
-
-      <PieChart
-        style={{ width: "50%" }}
-        rounded={true}
-        // paddingAngle={30}
-        lineWidth={30}
-        label={({ dataEntry }) => {
-          if (dataEntry.value === 0) return;
-          // return `${Math.round(dataEntry.percentage)}%`;
-          return `${Math.round(dataEntry.value)}`;
+      <section
+        className="w-1/2"
+        onClick={() => {
+          setToggleValues(toggleValues === "amount" ? "percentage" : "amount");
         }}
-        labelStyle={(index) => ({
-          fontSize: "6px",
-          fill: donutPieChartData[index].color,
-        })}
-        labelPosition={55}
-        data={donutPieChartData}
-      />
+      >
+        <PieChart
+          rounded={true}
+          // paddingAngle={30}
+          lineWidth={30}
+          label={({ dataEntry }) => {
+            if (dataEntry.value === 0) return;
+            console.log("dataEntry.percentage): ", dataEntry.percentage);
+            console.log("dataEntry.value): ", dataEntry.value);
+            return toggleValues === "percentage"
+              ? `${Math.round(dataEntry.percentage)}%`
+              : `${Math.round(dataEntry.value)}`;
+          }}
+          labelStyle={(index) => ({
+            fontSize: "6px",
+            fill: donutPieChartData[index].color,
+          })}
+          labelPosition={55}
+          data={donutPieChartData}
+        />
+      </section>
       <div className="justify-center">
         {salahStatusStatistics.salahFemaleAloneDatesOverall > 0 ||
         salahStatusStatistics.salahInGroupDatesOverall > 0 ? (
