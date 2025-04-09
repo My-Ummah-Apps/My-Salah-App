@@ -5,14 +5,16 @@ interface SalahSelectionTabsProps {
   statsToShow: SalahNamesType | "All";
 }
 
+const buttonStyles = `px-3 rounded-md`;
+
 const SalahSelectionTabs = ({
   setStatsToShow,
   statsToShow,
 }: SalahSelectionTabsProps) => {
   return (
-    <section className="flex justify-around">
+    <section className="flex justify-around py-2 bg-[color:var(--card-bg-color)] rounded-2xl">
       <button
-        className="px-2 rounded-md"
+        className={buttonStyles}
         style={{
           backgroundColor: statsToShow === "All" ? "gray" : "transparent",
         }}
@@ -23,7 +25,7 @@ const SalahSelectionTabs = ({
         All
       </button>
       <button
-        className="px-2 rounded-md"
+        className={buttonStyles}
         style={{
           backgroundColor: statsToShow === "Fajr" ? "gray" : "transparent",
         }}
@@ -34,7 +36,7 @@ const SalahSelectionTabs = ({
         Fajr
       </button>
       <button
-        className="px-2 rounded-md"
+        className={buttonStyles}
         style={{
           backgroundColor: statsToShow === "Dhuhr" ? "gray" : "transparent",
         }}
@@ -45,7 +47,7 @@ const SalahSelectionTabs = ({
         Dhuhr
       </button>
       <button
-        className="px-2 rounded-md"
+        className={buttonStyles}
         style={{
           backgroundColor: statsToShow === "Asar" ? "gray" : "transparent",
         }}
@@ -56,7 +58,7 @@ const SalahSelectionTabs = ({
         Asar
       </button>
       <button
-        className="px-2 rounded-md"
+        className={buttonStyles}
         style={{
           backgroundColor: statsToShow === "Maghrib" ? "gray" : "transparent",
         }}
@@ -67,7 +69,7 @@ const SalahSelectionTabs = ({
         Maghrib
       </button>
       <button
-        className="px-2 rounded-md"
+        className={buttonStyles}
         style={{
           backgroundColor: statsToShow === "Isha" ? "gray" : "transparent",
         }}
