@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
-
+// @ts-ignore
 import Calendar from "../components/Stats/Calendar";
 import {
   reasonsToShowType,
@@ -57,6 +57,7 @@ const StatsPage = ({
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
   const [statsToShow, setStatsToShow] = useState<SalahNamesType | "All">("All");
+  // console.log("STATSTOSHOW: ", statsToShow);
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
 
@@ -158,6 +159,8 @@ const StatsPage = ({
 
   useEffect(() => {
     const grabSalahDataFromDB = async () => {
+      console.log("Useeffect has run");
+
       try {
         await checkAndOpenOrCloseDBConnection("open");
         let DBResultAllSalahData = await dbConnection.current!.query(
@@ -170,9 +173,9 @@ const StatsPage = ({
 
         const DBResultAllSalahDataValues = DBResultAllSalahData.values;
 
-        let maleAloneReasonsArr: string[] = [];
-        let lateReasonsArr: string[] = [];
-        let missedReasonsArr: string[] = [];
+        const maleAloneReasonsArr: string[] = [];
+        const lateReasonsArr: string[] = [];
+        const missedReasonsArr: string[] = [];
 
         const salahStatusesWithoutReasons = [
           "group",
@@ -180,26 +183,74 @@ const StatsPage = ({
           "female-alone",
         ];
 
+        const populateReasonsArrays = (i: number) => {
+          const reasons = DBResultAllSalahDataValues[i].reasons.split(", ");
+          if (DBResultAllSalahDataValues[i].salahStatus === "male-alone") {
+            maleAloneReasonsArr.push(reasons);
+          } else if (DBResultAllSalahDataValues[i].salahStatus === "late") {
+            lateReasonsArr.push(reasons);
+          } else if (DBResultAllSalahDataValues[i].salahStatus === "missed") {
+            missedReasonsArr.push(reasons);
+          }
+        };
+
         for (let i = 0; i < DBResultAllSalahDataValues.length; i++) {
+          // console.log(
+          //   "DBResultAllSalahDataValues[i]: ",
+          //   DBResultAllSalahDataValues[i]
+          // );
+
           if (
             !salahStatusesWithoutReasons.includes(
               DBResultAllSalahDataValues[i].salahStatus
             ) &&
             DBResultAllSalahDataValues[i].reasons !== ""
           ) {
-            const reasons = DBResultAllSalahDataValues[i].reasons.split(", ");
+            console.log(
+              "STATSTOSHOW: ",
+              statsToShow,
+              "DBResultAllSalahDataValues[i].salahName is: ",
+              DBResultAllSalahDataValues[i].salahName
+            );
 
-            if (DBResultAllSalahDataValues[i].salahStatus === "male-alone") {
-              maleAloneReasonsArr.push(reasons);
-            } else if (DBResultAllSalahDataValues[i].salahStatus === "late") {
-              lateReasonsArr.push(reasons);
-            } else if (DBResultAllSalahDataValues[i].salahStatus === "missed") {
-              missedReasonsArr.push(reasons);
+            if (statsToShow === "All") {
+              console.log("statsToShow is: All, populating arrays");
+              populateReasonsArrays(i);
+            } else if (
+              statsToShow === "Fajr" &&
+              DBResultAllSalahDataValues[i].salahName === "Fajr"
+            ) {
+              console.log("statsToShow is: Fajr, populating arrays");
+              populateReasonsArrays(i);
+            } else if (
+              statsToShow === "Dhuhr" &&
+              DBResultAllSalahDataValues[i].salahName === "Dhuhr"
+            ) {
+              console.log("statsToShow is: Dhuhr, populating arrays");
+              populateReasonsArrays(i);
+            } else if (
+              statsToShow === "Asar" &&
+              DBResultAllSalahDataValues[i].salahName === "Asar"
+            ) {
+              console.log("statsToShow is: Asar, populating arrays");
+              populateReasonsArrays(i);
+            } else if (
+              statsToShow === "Maghrib" &&
+              DBResultAllSalahDataValues[i].salahName === "Maghrib"
+            ) {
+              console.log("statsToShow is: Maghrib, populating arrays");
+              populateReasonsArrays(i);
+            } else if (
+              statsToShow === "Isha" &&
+              DBResultAllSalahDataValues[i].salahName === "Isha"
+            ) {
+              console.log("statsToShow is: Isha, populating arrays");
+              populateReasonsArrays(i);
             }
           }
         }
 
-        const populateReasonsArrays = (
+        const calculateReasonAmounts = (
           arr: string[],
           status: keyof salahReasonsOverallNumbersType
         ) => {
@@ -219,9 +270,9 @@ const StatsPage = ({
           salahReasonsOverallNumbers[status] = Object.fromEntries(sortedObj);
         };
 
-        populateReasonsArrays(maleAloneReasonsArr.flat(), "male-alone");
-        populateReasonsArrays(lateReasonsArr.flat(), "late");
-        populateReasonsArrays(missedReasonsArr.flat(), "missed");
+        calculateReasonAmounts(maleAloneReasonsArr.flat(), "male-alone");
+        calculateReasonAmounts(lateReasonsArr.flat(), "late");
+        calculateReasonAmounts(missedReasonsArr.flat(), "missed");
 
         setSalahReasonsOverallNumbers({
           ...salahReasonsOverallNumbers,
@@ -233,7 +284,7 @@ const StatsPage = ({
       }
     };
     grabSalahDataFromDB();
-  }, []);
+  }, [statsToShow]);
 
   console.log("statsToShow: ", statsToShow);
 
@@ -262,13 +313,13 @@ const StatsPage = ({
             salahStatusStatistics={salahStatusStatistics}
           />
         )}
-        <Calendar
+        {/* <Calendar
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           userStartDate={userPreferences.userStartDate}
           fetchedSalahData={fetchedSalahData}
           statsToShow={statsToShow}
-        />{" "}
+        />{" "} */}
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
@@ -283,6 +334,7 @@ const StatsPage = ({
                   setShowReasonsSheet={setShowReasonsSheet}
                   salahReasonsOverallNumbers={salahReasonsOverallNumbers}
                   status={"male-alone"}
+                  statsToShow={statsToShow}
                 />
               </SwiperSlide>
             )}
@@ -293,6 +345,7 @@ const StatsPage = ({
                 setShowReasonsSheet={setShowReasonsSheet}
                 salahReasonsOverallNumbers={salahReasonsOverallNumbers}
                 status={"late"}
+                statsToShow={statsToShow}
               />
             </SwiperSlide>
           )}
@@ -303,6 +356,7 @@ const StatsPage = ({
                 setShowReasonsSheet={setShowReasonsSheet}
                 salahReasonsOverallNumbers={salahReasonsOverallNumbers}
                 status={"missed"}
+                statsToShow={statsToShow}
               />
             </SwiperSlide>
           )}

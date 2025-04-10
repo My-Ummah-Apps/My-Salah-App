@@ -57,10 +57,8 @@ const DonutPieChart = ({
           lineWidth={30}
           label={({ dataEntry }) => {
             if (dataEntry.value === 0) return;
-            console.log("dataEntry.percentage): ", dataEntry.percentage);
-            console.log("dataEntry.value): ", dataEntry.value);
             return toggleValues === "percentage"
-              ? `${Math.round(dataEntry.percentage)}%`
+              ? `${dataEntry.percentage.toFixed(1)}%`
               : `${Math.round(dataEntry.value)}`;
           }}
           labelStyle={(index) => ({

@@ -1,5 +1,6 @@
 import {
   reasonsToShowType,
+  SalahNamesType,
   salahReasonsOverallNumbersType,
 } from "../../types/types";
 import { motion } from "framer-motion";
@@ -11,6 +12,7 @@ interface ReasonsCardProps {
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
   status: "male-alone" | "late" | "missed";
+  statsToShow: SalahNamesType | "All";
 }
 
 const ReasonsCard = ({
@@ -18,7 +20,10 @@ const ReasonsCard = ({
   setShowReasonsSheet,
   salahReasonsOverallNumbers,
   status,
+  statsToShow,
 }: ReasonsCardProps) => {
+  // console.log("Stats to show: ", statsToShow);
+
   return (
     <motion.section
       layout
@@ -27,11 +32,11 @@ const ReasonsCard = ({
       <h1 className="pt-4 m-2 text-lg text-center">
         {`Top Reasons For ${
           status === "male-alone"
-            ? "Praying Salah Alone"
+            ? `Praying ${statsToShow !== "All" ? statsToShow : ""} Salah Alone`
             : status === "late"
-            ? "Praying Salah Late"
+            ? `Praying ${statsToShow !== "All" ? statsToShow : ""} Salah Late`
             : status === "missed"
-            ? "Missing Salah"
+            ? `Missing ${statsToShow !== "All" ? statsToShow : ""} Salah`
             : ""
         }`}
       </h1>
