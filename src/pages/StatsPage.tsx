@@ -158,9 +158,16 @@ const StatsPage = ({
   ];
 
   useEffect(() => {
-    const grabSalahDataFromDB = async () => {
-      console.log("Useeffect has run");
+    salahReasonsOverallNumbers["male-alone"] = {};
+    salahReasonsOverallNumbers["late"] = {};
+    salahReasonsOverallNumbers["missed"] = {};
+    setSalahReasonsOverallNumbers({
+      "male-alone": {},
+      late: {},
+      missed: {},
+    });
 
+    const fetchSalahDataFromDB = async () => {
       try {
         await checkAndOpenOrCloseDBConnection("open");
         let DBResultAllSalahData = await dbConnection.current!.query(
@@ -185,89 +192,65 @@ const StatsPage = ({
 
         const populateReasonsArrays = (i: number) => {
           const reasons = DBResultAllSalahDataValues[i].reasons.split(", ");
-          if (DBResultAllSalahDataValues[i].salahStatus === "male-alone") {
+          const salahStatus = DBResultAllSalahDataValues[i].salahStatus;
+
+          if (salahStatus === "male-alone") {
             maleAloneReasonsArr.push(reasons);
-          } else if (DBResultAllSalahDataValues[i].salahStatus === "late") {
+          } else if (salahStatus === "late") {
             lateReasonsArr.push(reasons);
-          } else if (DBResultAllSalahDataValues[i].salahStatus === "missed") {
+          } else if (salahStatus === "missed") {
             missedReasonsArr.push(reasons);
           }
         };
 
         for (let i = 0; i < DBResultAllSalahDataValues.length; i++) {
-          // console.log(
-          //   "DBResultAllSalahDataValues[i]: ",
-          //   DBResultAllSalahDataValues[i]
-          // );
-
           if (
             !salahStatusesWithoutReasons.includes(
               DBResultAllSalahDataValues[i].salahStatus
             ) &&
             DBResultAllSalahDataValues[i].reasons !== ""
           ) {
-            console.log(
-              "STATSTOSHOW: ",
-              statsToShow,
-              "DBResultAllSalahDataValues[i].salahName is: ",
-              DBResultAllSalahDataValues[i].salahName
-            );
+            const salahName = DBResultAllSalahDataValues[i].salahName;
 
             if (statsToShow === "All") {
               console.log("statsToShow is: All, populating arrays");
               populateReasonsArrays(i);
-            } else if (
-              statsToShow === "Fajr" &&
-              DBResultAllSalahDataValues[i].salahName === "Fajr"
-            ) {
-              console.log("statsToShow is: Fajr, populating arrays");
+            } else if (statsToShow === "Fajr" && salahName === "Fajr") {
               populateReasonsArrays(i);
-            } else if (
-              statsToShow === "Dhuhr" &&
-              DBResultAllSalahDataValues[i].salahName === "Dhuhr"
-            ) {
-              console.log("statsToShow is: Dhuhr, populating arrays");
+            } else if (statsToShow === "Dhuhr" && salahName === "Dhuhr") {
               populateReasonsArrays(i);
-            } else if (
-              statsToShow === "Asar" &&
-              DBResultAllSalahDataValues[i].salahName === "Asar"
-            ) {
-              console.log("statsToShow is: Asar, populating arrays");
+            } else if (statsToShow === "Asar" && salahName === "Asar") {
               populateReasonsArrays(i);
-            } else if (
-              statsToShow === "Maghrib" &&
-              DBResultAllSalahDataValues[i].salahName === "Maghrib"
-            ) {
-              console.log("statsToShow is: Maghrib, populating arrays");
+            } else if (statsToShow === "Maghrib" && salahName === "Maghrib") {
               populateReasonsArrays(i);
-            } else if (
-              statsToShow === "Isha" &&
-              DBResultAllSalahDataValues[i].salahName === "Isha"
-            ) {
-              console.log("statsToShow is: Isha, populating arrays");
+            } else if (statsToShow === "Isha" && salahName === "Isha") {
               populateReasonsArrays(i);
             }
           }
         }
+        const obj = { ...salahReasonsOverallNumbers };
+        console.log("obj: ", obj);
 
         const calculateReasonAmounts = (
           arr: string[],
           status: keyof salahReasonsOverallNumbersType
         ) => {
-          arr.forEach((item: string) => {
-            if (item === "") return;
+          console.log("calculateReasonAmounts has run");
 
-            salahReasonsOverallNumbers[status][item] =
-              salahReasonsOverallNumbers[status][item]
-                ? (salahReasonsOverallNumbers[status][item] += 1)
+          arr.forEach((reason: string) => {
+            if (reason === "") return;
+
+            salahReasonsOverallNumbers[status][reason] =
+              salahReasonsOverallNumbers[status][reason]
+                ? (salahReasonsOverallNumbers[status][reason] += 1)
                 : 1;
           });
 
-          const sortedObj = Object.entries(salahReasonsOverallNumbers[status])
+          const sortedObj = Object.entries(obj[status])
             .sort((a, b) => a[1] - b[1])
             .reverse();
 
-          salahReasonsOverallNumbers[status] = Object.fromEntries(sortedObj);
+          obj[status] = Object.fromEntries(sortedObj);
         };
 
         calculateReasonAmounts(maleAloneReasonsArr.flat(), "male-alone");
@@ -275,7 +258,7 @@ const StatsPage = ({
         calculateReasonAmounts(missedReasonsArr.flat(), "missed");
 
         setSalahReasonsOverallNumbers({
-          ...salahReasonsOverallNumbers,
+          ...obj,
         });
       } catch (error) {
         console.error(error);
@@ -283,7 +266,11 @@ const StatsPage = ({
         await checkAndOpenOrCloseDBConnection("close");
       }
     };
-    grabSalahDataFromDB();
+    fetchSalahDataFromDB();
+
+    // return () => {
+    //   setSalahReasonsOverallNumbers({ "male-alone": {}, late: {}, missed: {} });
+    // };
   }, [statsToShow]);
 
   console.log("statsToShow: ", statsToShow);

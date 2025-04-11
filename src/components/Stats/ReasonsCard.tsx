@@ -27,9 +27,9 @@ const ReasonsCard = ({
   return (
     <motion.section
       layout
-      className="text-sm bg-[color:var(--card-bg-color)] mt-6 rounded-2xl h-full"
+      className="text-sm bg-[color:var(--card-bg-color)] mt-5 rounded-2xl h-full"
     >
-      <h1 className="pt-4 m-2 text-lg text-center">
+      <h1 className="py-4 mx-4 text-lg text-center">
         {`Top Reasons For ${
           status === "male-alone"
             ? `Praying ${statsToShow !== "All" ? statsToShow : ""} Salah Alone`

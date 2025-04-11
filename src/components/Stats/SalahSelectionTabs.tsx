@@ -5,7 +5,7 @@ interface SalahSelectionTabsProps {
   statsToShow: SalahNamesType | "All";
 }
 
-const buttonStyles = `px-3 py-[0.1rem] rounded-md h-full`;
+const buttonStyles = `px-3 py-[0.3rem] rounded-md h-full`;
 
 const SalahSelectionTabs = ({
   setStatsToShow,

@@ -25,7 +25,7 @@ const DonutPieChart = ({
   );
 
   return (
-    <div className="mt-5 mb-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
+    <div className="mt-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
       {/* <PieChart
         style={{ width: "50%" }}
         // rounded={true}
