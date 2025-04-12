@@ -22,12 +22,10 @@ const ReasonsCard = ({
   status,
   statsToShow,
 }: ReasonsCardProps) => {
-  // console.log("Stats to show: ", statsToShow);
-
   return (
     <AnimatePresence>
       <motion.section
-        layout
+        // layout
         className="text-sm bg-[color:var(--card-bg-color)] mt-5 rounded-2xl h-full"
       >
         <h1 className="py-4 mx-4 text-lg text-center">

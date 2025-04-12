@@ -57,7 +57,6 @@ const StatsPage = ({
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
   const [statsToShow, setStatsToShow] = useState<SalahNamesType | "All">("All");
-  // console.log("STATSTOSHOW: ", statsToShow);
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
 
@@ -118,8 +117,6 @@ const StatsPage = ({
     salahMissedDatesOverall: filterSalahStatuses("missed").length,
     salahLateDatesOverall: filterSalahStatuses("late").length,
   };
-
-  // console.log("salahStatusesOverallArr: ", salahStatusesOverallArr);
 
   const donutPieChartData = [
     userPreferences.userGender === "male"
@@ -217,7 +214,6 @@ const StatsPage = ({
             const salahName = DBResultAllSalahDataValues[i].salahName;
 
             if (statsToShow === "All") {
-              console.log("statsToShow is: All, populating arrays");
               populateReasonsArrays(i);
             } else if (statsToShow === "Fajr" && salahName === "Fajr") {
               populateReasonsArrays(i);
@@ -238,8 +234,6 @@ const StatsPage = ({
           arr: string[],
           status: keyof salahReasonsOverallNumbersType
         ) => {
-          console.log("calculateReasonAmounts has run");
-
           arr.forEach((reason: string) => {
             if (reason === "") return;
 
@@ -290,63 +284,70 @@ const StatsPage = ({
           setStatsToShow={setStatsToShow}
           statsToShow={statsToShow}
         />
-        {Object.values(donutPieChartData).some((obj) => obj.value) && (
-          <DonutPieChart
-            donutPieChartData={donutPieChartData}
-            userGender={userPreferences.userGender}
-            salahStatusStatistics={salahStatusStatistics}
-          />
-        )}
-        {/* <motion.section> */}
-        <Calendar
-          dbConnection={dbConnection}
-          checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-          userStartDate={userPreferences.userStartDate}
-          fetchedSalahData={fetchedSalahData}
-          statsToShow={statsToShow}
-        />{" "}
-        <Swiper
-          spaceBetween={50}
-          slidesPerView={1}
-          modules={[Pagination]}
-          pagination={{ clickable: true }}
+        <motion.section
+          key={statsToShow}
+          initial={{ y: 5, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
         >
-          {userPreferences.userGender === "male" &&
-            salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+          {Object.values(donutPieChartData).some((obj) => obj.value) && (
+            <DonutPieChart
+              donutPieChartData={donutPieChartData}
+              userGender={userPreferences.userGender}
+              salahStatusStatistics={salahStatusStatistics}
+            />
+          )}
+          <Calendar
+            dbConnection={dbConnection}
+            checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+            userStartDate={userPreferences.userStartDate}
+            fetchedSalahData={fetchedSalahData}
+            statsToShow={statsToShow}
+          />{" "}
+          <Swiper
+            spaceBetween={50}
+            slidesPerView={1}
+            modules={[Pagination]}
+            pagination={{ clickable: true }}
+          >
+            {userPreferences.userGender === "male" &&
+              salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+                <SwiperSlide>
+                  <ReasonsCard
+                    setReasonsToShow={setReasonsToShow}
+                    setShowReasonsSheet={setShowReasonsSheet}
+                    salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                    status={"male-alone"}
+                    statsToShow={statsToShow}
+                  />
+                </SwiperSlide>
+              )}
+            {salahStatusStatistics.salahLateDatesOverall > 0 && (
               <SwiperSlide>
                 <ReasonsCard
                   setReasonsToShow={setReasonsToShow}
                   setShowReasonsSheet={setShowReasonsSheet}
                   salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                  status={"male-alone"}
+                  status={"late"}
                   statsToShow={statsToShow}
                 />
               </SwiperSlide>
             )}
-          {salahStatusStatistics.salahLateDatesOverall > 0 && (
-            <SwiperSlide>
-              <ReasonsCard
-                setReasonsToShow={setReasonsToShow}
-                setShowReasonsSheet={setShowReasonsSheet}
-                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                status={"late"}
-                statsToShow={statsToShow}
-              />
-            </SwiperSlide>
-          )}
-          {salahStatusStatistics.salahMissedDatesOverall > 0 && (
-            <SwiperSlide>
-              <ReasonsCard
-                setReasonsToShow={setReasonsToShow}
-                setShowReasonsSheet={setShowReasonsSheet}
-                salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                status={"missed"}
-                statsToShow={statsToShow}
-              />
-            </SwiperSlide>
-          )}
-        </Swiper>
-        {/* </motion.section> */}
+            {salahStatusStatistics.salahMissedDatesOverall > 0 && (
+              <SwiperSlide>
+                <ReasonsCard
+                  setReasonsToShow={setReasonsToShow}
+                  setShowReasonsSheet={setShowReasonsSheet}
+                  salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                  status={"missed"}
+                  statsToShow={statsToShow}
+                />
+              </SwiperSlide>
+            )}
+          </Swiper>
+        </motion.section>
+
         <BottomSheetReasons
           setShowReasonsSheet={setShowReasonsSheet}
           showReasonsSheet={showReasonsSheet}
