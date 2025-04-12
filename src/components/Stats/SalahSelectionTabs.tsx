@@ -12,7 +12,7 @@ const SalahSelectionTabs = ({
   statsToShow,
 }: SalahSelectionTabsProps) => {
   return (
-    <section className="flex justify-around bg-[color:var(--card-bg-color)] rounded-md">
+    <section className="sticky top-0 z-30 flex justify-around rounded-md bg-[#292929]">
       <button
         className={buttonStyles}
         style={{

@@ -158,14 +158,18 @@ const StatsPage = ({
   ];
 
   useEffect(() => {
+    // const test = JSON.parse(JSON.stringify(salahReasonsOverallNumbers));
+    // console.log("TEST: ", test);
+    // setSalahReasonsOverallNumbers(test);
+    // TODO: State is being mutated below, otherwise reasons stats are incorrect, need to refactor this so that the state isn't mutated directly
     salahReasonsOverallNumbers["male-alone"] = {};
     salahReasonsOverallNumbers["late"] = {};
     salahReasonsOverallNumbers["missed"] = {};
-    setSalahReasonsOverallNumbers({
-      "male-alone": {},
-      late: {},
-      missed: {},
-    });
+    // setSalahReasonsOverallNumbers({
+    //   "male-alone": {},
+    //   late: {},
+    //   missed: {},
+    // });
 
     const fetchSalahDataFromDB = async () => {
       try {
@@ -229,7 +233,6 @@ const StatsPage = ({
           }
         }
         const obj = { ...salahReasonsOverallNumbers };
-        console.log("obj: ", obj);
 
         const calculateReasonAmounts = (
           arr: string[],
@@ -267,13 +270,7 @@ const StatsPage = ({
       }
     };
     fetchSalahDataFromDB();
-
-    // return () => {
-    //   setSalahReasonsOverallNumbers({ "male-alone": {}, late: {}, missed: {} });
-    // };
   }, [statsToShow]);
-
-  console.log("statsToShow: ", statsToShow);
 
   return (
     <motion.section
@@ -300,13 +297,14 @@ const StatsPage = ({
             salahStatusStatistics={salahStatusStatistics}
           />
         )}
-        {/* <Calendar
+        {/* <motion.section> */}
+        <Calendar
           dbConnection={dbConnection}
           checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
           userStartDate={userPreferences.userStartDate}
           fetchedSalahData={fetchedSalahData}
           statsToShow={statsToShow}
-        />{" "} */}
+        />{" "}
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
@@ -348,6 +346,7 @@ const StatsPage = ({
             </SwiperSlide>
           )}
         </Swiper>
+        {/* </motion.section> */}
         <BottomSheetReasons
           setShowReasonsSheet={setShowReasonsSheet}
           showReasonsSheet={showReasonsSheet}
