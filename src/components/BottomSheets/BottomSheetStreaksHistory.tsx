@@ -20,8 +20,6 @@ const BottomSheetStreaksHistory = ({
   showStreaksModal,
   filteredStreakDatesObjectsArr,
 }: BottomSheetStreaksHistoryProps) => {
-  console.log("filteredStreakDatesObjectsArr: ", filteredStreakDatesObjectsArr);
-
   return (
     <Sheet
       disableDrag={false}

@@ -81,12 +81,8 @@ const HomePage = ({
   };
 
   useEffect(() => {
-    // console.log("Active streak count: ", activeStreakCount);
-    // console.log("prevActiveStreakCount: ", prevActiveStreakCount.current);
-
     if (activeStreakCount > prevActiveStreakCount.current) {
       setAnimateStreakCounter(true);
-      console.log("ANIMATION SET TO TRUE");
     }
     prevActiveStreakCount.current = activeStreakCount;
   }, [activeStreakCount]);

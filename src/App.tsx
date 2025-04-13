@@ -531,7 +531,6 @@ const App = () => {
         isActive: isActiveStreak,
         excusedDays: excusedDays,
       };
-      console.log("streakDatesObj: ", streakDatesObj);
 
       streakDatesObjectsArray.push(streakDatesObj);
 
