@@ -107,4 +107,5 @@ export type streakDatesObjType = {
   endDate: Date;
   days: number;
   isActive: boolean;
+  excusedDays: number;
 };

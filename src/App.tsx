@@ -435,11 +435,13 @@ const App = () => {
         const salahStatuses = Object.values(
           reversedFetchedSalahDataArr[0].salahs
         );
+
         if (!isStreakBreakingStatus(salahStatuses)) {
           if (salahStatuses.includes("excused")) {
             excusedDays += 1;
           }
           streakDatesArr.push(todaysDate);
+
           isActiveStreak = true;
           handleEndOfStreak(
             streakDatesArr,
@@ -504,6 +506,10 @@ const App = () => {
     excusedDays: number,
     streakDatesObjectsArray: streakDatesObjType[]
   ) => {
+    // console.log("excusedDays: ", excusedDays);
+    // console.log("streakDatesArr: ", streakDatesArr.length);
+
+    // if (excusedDays === streakDatesArr.length) return;
     if (streakDatesArr.length > 0) {
       const streakDaysAmount =
         streakDatesArr.length === 1
@@ -523,7 +529,10 @@ const App = () => {
         endDate: streakDatesArr[streakDatesArr.length - 1],
         days: streakDaysAmount - excusedDays,
         isActive: isActiveStreak,
+        excusedDays: excusedDays,
       };
+      console.log("streakDatesObj: ", streakDatesObj);
+
       streakDatesObjectsArray.push(streakDatesObj);
 
       setStreakDatesObjectsArr(

@@ -40,6 +40,8 @@ const StreakCounter = ({
     });
   };
 
+  const hasStreakDays = streakDatesObjectsArr.some((obj) => obj.days > 0);
+
   const filteredStreakDatesObjectsArr = streakDatesObjectsArr.filter(
     (obj) => obj.startDate.getTime() !== obj.endDate.getTime()
   );
@@ -91,7 +93,7 @@ const StreakCounter = ({
             srcSet=""
           />
         </div>
-        {filteredStreakDatesObjectsArr.length > 1 && (
+        {hasStreakDays && filteredStreakDatesObjectsArr.length > 1 && (
           <button
             style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
             onClick={() => {
@@ -99,7 +101,7 @@ const StreakCounter = ({
             }}
             className={`mb-2 pt-2 text-center w-full `}
           >
-            <p className="">Show Past Streaks</p>
+            <p className="">Show All Streaks</p>
           </button>
         )}
       </div>

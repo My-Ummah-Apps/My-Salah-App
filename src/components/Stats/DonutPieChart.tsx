@@ -18,42 +18,21 @@ const DonutPieChart = ({
   donutPieChartData: { title: string; value: number; color: string }[];
   userGender: string;
 }) => {
-  // console.log(salahStatusStatistics);
-  // console.log(donutPieChartData);
   const [toggleValues, setToggleValues] = useState<"percentage" | "amount">(
     "amount"
   );
 
   return (
-    <div className="mt-5 flex h-[235px] w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
-      {/* <PieChart
-        style={{ width: "50%" }}
-        // rounded={true}
-        // paddingAngle={10}
-        // lineWidth={30}
-        lineWidth={55}
-        label={({ dataEntry }) => {
-          if (dataEntry.value === 0) return;
-          // return `${Math.round(dataEntry.percentage)}%  (${dataEntry.value})`;
-          return `${dataEntry.percentage.toFixed(1)}%  (${dataEntry.value})`;
-        }}
-        labelStyle={{
-          fontSize: "5px",
-          fill: "#fff",
-        }}
-        // labelPosition={55}
-        labelPosition={70}
-        data={donutPieChartData}
-      /> */}
+    <div className="my-5 flex w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[color:var(--card-bg-color)] rounded-2xl py-2">
       <section
-        className="w-1/2"
+        className="w-1/2 my-2"
         onClick={() => {
           setToggleValues(toggleValues === "amount" ? "percentage" : "amount");
         }}
       >
         <PieChart
+          // animate={true}
           rounded={true}
-          // paddingAngle={30}
           lineWidth={30}
           label={({ dataEntry }) => {
             if (dataEntry.value === 0) return;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 // @ts-ignore
 import Calendar from "../components/Stats/Calendar";
 import {
@@ -284,70 +284,71 @@ const StatsPage = ({
           setStatsToShow={setStatsToShow}
           statsToShow={statsToShow}
         />
-        <motion.section
-          key={statsToShow}
-          initial={{ y: 5, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
-        >
-          {Object.values(donutPieChartData).some((obj) => obj.value) && (
-            <DonutPieChart
-              donutPieChartData={donutPieChartData}
-              userGender={userPreferences.userGender}
-              salahStatusStatistics={salahStatusStatistics}
-            />
-          )}
-          <Calendar
-            dbConnection={dbConnection}
-            checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-            userStartDate={userPreferences.userStartDate}
-            fetchedSalahData={fetchedSalahData}
-            statsToShow={statsToShow}
-          />{" "}
-          <Swiper
-            spaceBetween={50}
-            slidesPerView={1}
-            modules={[Pagination]}
-            pagination={{ clickable: true }}
+        <AnimatePresence mode="wait">
+          <motion.section
+            key={statsToShow}
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -10, opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            {userPreferences.userGender === "male" &&
-              salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+            {Object.values(donutPieChartData).some((obj) => obj.value) && (
+              <DonutPieChart
+                donutPieChartData={donutPieChartData}
+                userGender={userPreferences.userGender}
+                salahStatusStatistics={salahStatusStatistics}
+              />
+            )}
+            <Calendar
+              dbConnection={dbConnection}
+              checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+              userStartDate={userPreferences.userStartDate}
+              fetchedSalahData={fetchedSalahData}
+              statsToShow={statsToShow}
+            />{" "}
+            <Swiper
+              spaceBetween={50}
+              slidesPerView={1}
+              modules={[Pagination]}
+              pagination={{ clickable: true }}
+            >
+              {userPreferences.userGender === "male" &&
+                salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+                  <SwiperSlide>
+                    <ReasonsCard
+                      setReasonsToShow={setReasonsToShow}
+                      setShowReasonsSheet={setShowReasonsSheet}
+                      salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                      status={"male-alone"}
+                      statsToShow={statsToShow}
+                    />
+                  </SwiperSlide>
+                )}
+              {salahStatusStatistics.salahLateDatesOverall > 0 && (
                 <SwiperSlide>
                   <ReasonsCard
                     setReasonsToShow={setReasonsToShow}
                     setShowReasonsSheet={setShowReasonsSheet}
                     salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                    status={"male-alone"}
+                    status={"late"}
                     statsToShow={statsToShow}
                   />
                 </SwiperSlide>
               )}
-            {salahStatusStatistics.salahLateDatesOverall > 0 && (
-              <SwiperSlide>
-                <ReasonsCard
-                  setReasonsToShow={setReasonsToShow}
-                  setShowReasonsSheet={setShowReasonsSheet}
-                  salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                  status={"late"}
-                  statsToShow={statsToShow}
-                />
-              </SwiperSlide>
-            )}
-            {salahStatusStatistics.salahMissedDatesOverall > 0 && (
-              <SwiperSlide>
-                <ReasonsCard
-                  setReasonsToShow={setReasonsToShow}
-                  setShowReasonsSheet={setShowReasonsSheet}
-                  salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                  status={"missed"}
-                  statsToShow={statsToShow}
-                />
-              </SwiperSlide>
-            )}
-          </Swiper>
-        </motion.section>
-
+              {salahStatusStatistics.salahMissedDatesOverall > 0 && (
+                <SwiperSlide>
+                  <ReasonsCard
+                    setReasonsToShow={setReasonsToShow}
+                    setShowReasonsSheet={setShowReasonsSheet}
+                    salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                    status={"missed"}
+                    statsToShow={statsToShow}
+                  />
+                </SwiperSlide>
+              )}
+            </Swiper>
+          </motion.section>
+        </AnimatePresence>
         <BottomSheetReasons
           setShowReasonsSheet={setShowReasonsSheet}
           showReasonsSheet={showReasonsSheet}

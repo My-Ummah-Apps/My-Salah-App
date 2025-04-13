@@ -262,6 +262,8 @@ td {
   position: static !important;
 }
 
+/* .streaks-list-excused-text:before */
+
 .donut-pie-chart-text:before {
   content: "";
   display: inline-block;
