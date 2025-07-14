@@ -739,8 +739,8 @@ const App = () => {
                       Stay Consistent with Your Salah
                     </h1>
                     <p>
-                      A simple daily reminder to record your Salahstatuses and
-                      stay on track with your goals
+                      Stay consistent with your Salah. Turn on daily reminders
+                      to help you log your prayers and reach your goals.
                     </p>
                   </section>
                   <section className="flex flex-col p-5">
