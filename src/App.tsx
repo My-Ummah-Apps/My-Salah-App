@@ -10,6 +10,7 @@ import {
   sheetBackdropColor,
   sheetHeaderHeight,
   bottomSheetContainerStyles,
+  setStatusAndNavBarBGColor,
 } from "./utils/constants";
 import {
   DBResultDataObjType,
@@ -30,8 +31,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { StatusBar } from "@capacitor/status-bar";
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
+import { Style } from "@capacitor/status-bar";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { Capacitor } from "@capacitor/core";
 import {
@@ -43,7 +43,6 @@ import {
   parseISO,
 } from "date-fns";
 import { PreferenceType } from "./types/types";
-
 import NavBar from "./components/Nav/NavBar";
 import SettingsPage from "./pages/SettingsPage";
 // import ResourcesPage from "./pages/ResourcesPage";
@@ -97,8 +96,9 @@ const App = () => {
       const STATUS_AND_NAV_BAR_COLOR = "#161515";
       if (Capacitor.getPlatform() === "android") {
         setTimeout(() => {
-          StatusBar.setBackgroundColor({ color: STATUS_AND_NAV_BAR_COLOR });
-          NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
+          setStatusAndNavBarBGColor(STATUS_AND_NAV_BAR_COLOR, Style.Dark);
+          // StatusBar.setBackgroundColor({ color: STATUS_AND_NAV_BAR_COLOR });
+          // NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
         }, 750);
       }
 

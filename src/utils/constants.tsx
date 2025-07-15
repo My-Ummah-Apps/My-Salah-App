@@ -3,6 +3,9 @@ import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { format, isValid, parse } from "date-fns";
+import { StatusBar, Style } from "@capacitor/status-bar";
+import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
+import { Capacitor } from "@capacitor/core";
 import {
   SalahByDateObjType,
   SalahNamesType,
@@ -187,6 +190,16 @@ export const showConfirmMsg = async (
   });
 
   return value;
+};
+
+export const setStatusAndNavBarBGColor = async (
+  backgroundColor: string,
+  textColor: Style
+) => {
+  if (Capacitor.getPlatform() === "android") {
+    await EdgeToEdge.setBackgroundColor({ color: backgroundColor });
+  }
+  await StatusBar.setStyle({ style: textColor });
 };
 
 // export const bottomSheetCloseBtnStyles =

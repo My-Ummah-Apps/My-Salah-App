@@ -1,37 +1,35 @@
 PODS:
-  - Capacitor (6.1.2):
+  - Capacitor (7.4.2):
     - CapacitorCordova
-  - CapacitorActionSheet (6.0.2):
+  - CapacitorActionSheet (7.0.1):
     - Capacitor
-  - CapacitorCommunityInAppReview (6.0.0):
+  - CapacitorCommunityInAppReview (7.0.1):
     - Capacitor
-  - CapacitorCommunitySqlite (6.0.1):
+  - CapacitorCommunitySqlite (7.0.1):
     - Capacitor
     - SQLCipher
     - ZIPFoundation
-  - CapacitorCordova (6.1.2)
-  - CapacitorDialog (6.0.2):
+  - CapacitorCordova (7.4.2)
+  - CapacitorDialog (7.0.1):
     - Capacitor
-  - CapacitorFilesystem (6.0.1):
+  - CapacitorFilesystem (7.1.2):
     - Capacitor
-  - CapacitorHaptics (6.0.2):
+    - IONFilesystemLib (~> 1.0)
+  - CapacitorKeyboard (7.0.1):
     - Capacitor
-  - CapacitorKeyboard (6.0.0):
+  - CapacitorLocalNotifications (7.0.1):
     - Capacitor
-  - CapacitorLocalNotifications (6.0.0):
+  - CapacitorNativeSettings (7.0.2):
     - Capacitor
-  - CapacitorNativeSettings (6.0.1):
+  - CapacitorShare (7.0.1):
     - Capacitor
-  - CapacitorShare (6.0.3):
+  - CapacitorSplashScreen (7.0.1):
     - Capacitor
-  - CapacitorSplashScreen (6.0.0):
+  - CapacitorStatusBar (7.0.1):
     - Capacitor
-  - CapacitorStatusBar (6.0.1):
+  - CapacitorToast (7.0.1):
     - Capacitor
-  - CapacitorToast (6.0.2):
-    - Capacitor
-  - HugotomaziCapacitorNavigationBar (4.0.1):
-    - Capacitor
+  - IONFilesystemLib (1.0.0)
   - SQLCipher (4.6.0):
     - SQLCipher/standard (= 4.6.0)
   - SQLCipher/common (4.6.0)
@@ -47,7 +45,6 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
-  - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - CapacitorNativeSettings (from `../../node_modules/capacitor-native-settings`)
@@ -55,10 +52,10 @@ DEPENDENCIES:
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
-  - "HugotomaziCapacitorNavigationBar (from `../../node_modules/@hugotomazi/capacitor-navigation-bar`)"
 
 SPEC REPOS:
   trunk:
+    - IONFilesystemLib
     - SQLCipher
     - ZIPFoundation
 
@@ -77,8 +74,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/dialog"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
-  CapacitorHaptics:
-    :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorLocalNotifications:
@@ -93,29 +88,26 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorToast:
     :path: "../../node_modules/@capacitor/toast"
-  HugotomaziCapacitorNavigationBar:
-    :path: "../../node_modules/@hugotomazi/capacitor-navigation-bar"
 
 SPEC CHECKSUMS:
-  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
-  CapacitorActionSheet: 66633b06ada3a8f98f8f3f4a61c8f7171695ab8d
-  CapacitorCommunityInAppReview: c69a9392f39a10f28092d823cfa979637f4fa079
-  CapacitorCommunitySqlite: d0b543e12a06ee6fd0dc287c389e6b435ec4acdf
-  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  CapacitorDialog: e966e2261e1c74a8a502e610dd66b4f97ec6fcca
-  CapacitorFilesystem: 37fb3aa5c945b4539ab11c74a5c57925a302bf24
-  CapacitorHaptics: b53409aaca1203f79c6d0eb3ed5de40556339518
-  CapacitorKeyboard: deacbd09d8d1029c3681197fb05d206b721d5f73
-  CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
-  CapacitorNativeSettings: 1ce5585ff07b161616cd0a795702637316677af2
-  CapacitorShare: 7af6ca761ce62030e8e9fbd2eb82416f5ceced38
-  CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
-  CapacitorStatusBar: b81d4fb5d4e0064c712018071b3ab4b810b39a63
-  CapacitorToast: cfd82cd5afdc3f027ad4a8859f909ae4a327f3c3
-  HugotomaziCapacitorNavigationBar: 57d7cd51c65ef5e40159bafb0095ee99fab432ba
+  Capacitor: 156d98aba46ec01dde72c4bbb92fa626837cad29
+  CapacitorActionSheet: 24609588961cc27c87e8b033be92b5eee65b5d4c
+  CapacitorCommunityInAppReview: f2faacccf485005d6f2f113522467337db88a06b
+  CapacitorCommunitySqlite: 3f60098baa077322ce32a678614a5fa0029ab519
+  CapacitorCordova: 5e58d04631bc5094894ac106e2bf1da18a9e6151
+  CapacitorDialog: 9b934329026b2b0ffa56939bb06df3c67541a2ab
+  CapacitorFilesystem: 7b7e9bf177ce09657a667d935ca6f0eadbcfda54
+  CapacitorKeyboard: 969647d0ca2e5c737d7300088e2517aa832434e2
+  CapacitorLocalNotifications: 4ea60b9347eac60b37cb4daaf62d12060bb00972
+  CapacitorNativeSettings: f5511eb94cb5700ac4edf54f992d2c0dda1857d6
+  CapacitorShare: 58d6c2da63b093e8693287b2d36db92435538435
+  CapacitorSplashScreen: 19cd3573e57507e02d6f34597a8c421e00931487
+  CapacitorStatusBar: 275cbf2f4dfc00388f519ef80c7ec22edda342c9
+  CapacitorToast: c0f64abc0fae75c54e504db9be180a7f5f7d7476
+  IONFilesystemLib: ceacae793975039530458eabab0c495c70515a0d
   SQLCipher: 30a8e81afa6128e600b17ffa77d0f92fa05ed208
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 8bc3cf2db97f28bcd1cc5059002f9b5a1208283f
+PODFILE CHECKSUM: 39bd238931bccd7dd17b2afcc5cd957090d4d336
 
 COCOAPODS: 1.15.2

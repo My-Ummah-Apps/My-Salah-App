@@ -6,13 +6,15 @@ import { KeyboardResize } from "@capacitor/keyboard";
 
 const isProd = process.env.NODE_ENV === "production";
 
-const serverConfig =
-  !isProd && process.env.DEV_SERVER_IP
-    ? {
-        url: process.env.DEV_SERVER_IP,
-        cleartext: true,
-      }
-    : undefined;
+// const serverConfig =
+//   !isProd && process.env.DEV_SERVER_IP
+//     ? {
+//         url: process.env.DEV_SERVER_IP,
+//         cleartext: true,
+//       }
+//     : undefined;
+
+const serverConfig = { url: process.env.DEV_SERVER_IP, cleartext: true };
 
 const config: CapacitorConfig = {
   appId: "com.mysalahapp.app",
@@ -27,8 +29,11 @@ const config: CapacitorConfig = {
     keyboard: {
       // resize: "none"
       // resize: KeyboardResize.Native,
-      // resizeOnFullScreen: true
+      resizeOnFullScreen: false,
     },
+    // EdgeToEdge: {
+    //   backgroundColor: "#ffffff",
+    // },
     SplashScreen: {
       launchAutoHide: false,
       // backgroundColor: "#1010101010",
