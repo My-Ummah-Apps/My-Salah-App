@@ -39,6 +39,7 @@ const BottomSheetNotifications = ({
 }) => {
   const [dailyNotificationToggle, setDailyNotificationToggle] =
     useState<boolean>(userPreferences.dailyNotification === "1" ? true : false);
+  console.log("dailyNotificationToggle", dailyNotificationToggle);
 
   const showNotificationsAlert = async () => {
     const { value } = await Dialog.confirm({
@@ -90,9 +91,10 @@ const BottomSheetNotifications = ({
 
   const requestPermissionFunction = async () => {
     // const requestPermission = await LocalNotifications.requestPermissions();
-    const { display: requestPermission } =
-      await LocalNotifications.requestPermissions();
-    if (requestPermission === "granted") {
+    const requestPermission = await LocalNotifications.requestPermissions();
+    console.log("DISPLAY: ", requestPermission);
+
+    if (requestPermission.display === "granted") {
       setDailyNotificationToggle(true);
       const [hour, minute] = userPreferences.dailyNotificationTime
         .split(":")
@@ -100,9 +102,9 @@ const BottomSheetNotifications = ({
       scheduleDailyNotification(hour, minute);
       // modifyDataInUserPreferencesTable("1", "dailyNotification");
     } else if (
-      requestPermission === "prompt" ||
-      requestPermission === "prompt-with-rationale" ||
-      requestPermission === "denied"
+      requestPermission.display === "prompt" ||
+      requestPermission.display === "prompt-with-rationale" ||
+      requestPermission.display === "denied"
     ) {
       await modifyDataInUserPreferencesTable("dailyNotification", "0");
     }

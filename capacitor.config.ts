@@ -6,15 +6,15 @@ import { KeyboardResize } from "@capacitor/keyboard";
 
 const isProd = process.env.NODE_ENV === "production";
 
-// const serverConfig =
-//   !isProd && process.env.DEV_SERVER_IP
-//     ? {
-//         url: process.env.DEV_SERVER_IP,
-//         cleartext: true,
-//       }
-//     : undefined;
+const serverConfig =
+  !isProd && process.env.DEV_SERVER_IP
+    ? {
+        url: process.env.DEV_SERVER_IP,
+        cleartext: true,
+      }
+    : undefined;
 
-const serverConfig = { url: process.env.DEV_SERVER_IP, cleartext: true };
+// const serverConfig = { url: process.env.DEV_SERVER_IP, cleartext: true };
 
 const config: CapacitorConfig = {
   appId: "com.mysalahapp.app",

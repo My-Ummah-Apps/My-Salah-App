@@ -146,6 +146,8 @@ const App = () => {
         `SELECT * FROM salahDataTable`
       );
 
+      // console.log("DBResultPreferences: ", DBResultPreferences?.values);
+
       if (!DBResultPreferences || !DBResultPreferences.values) {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"
@@ -752,6 +754,10 @@ const App = () => {
                           setShowIntroModal(false);
                           setShowJoyRideEditIcon(true);
                           scheduleDailyNotification(21, 0);
+                          await modifyDataInUserPreferencesTable(
+                            "dailyNotification",
+                            "1"
+                          );
                           await modifyDataInUserPreferencesTable(
                             "dailyNotificationTime",
                             "21:00"

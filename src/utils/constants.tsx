@@ -70,9 +70,9 @@ export const salahStatusColorsHexCodes = {
 // };
 
 export const checkNotificationPermissions = async () => {
-  const { display: userNotificationPermission } =
+  const userNotificationPermission =
     await LocalNotifications.checkPermissions();
-  return userNotificationPermission;
+  return userNotificationPermission.display;
 };
 
 const createNotificationChannel = async () => {
@@ -91,7 +91,9 @@ export const scheduleDailyNotification = async (
   hour: number,
   minute: number
 ) => {
-  await createNotificationChannel();
+  if (Capacitor.getPlatform() === "android") {
+    await createNotificationChannel();
+  }
 
   await LocalNotifications.schedule({
     notifications: [
