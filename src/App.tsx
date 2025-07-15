@@ -72,7 +72,9 @@ const App = () => {
       localStorage.getItem("appVersion") &&
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
     ) {
-      setShowChangelogModal(true);
+      if (Capacitor.getPlatform() === "ios") {
+        setShowChangelogModal(true);
+      }
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
   }, []);

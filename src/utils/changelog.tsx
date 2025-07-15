@@ -2,11 +2,27 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.8";
+export const LATEST_APP_VERSION = "3.9";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Notifications bug fix",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved an issue where notifications were
+            not working on iOS devices, if you have had notifications turned on,
+            please turn them off and back on again from the settings page and
+            they will start working.{" "}
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.8",
     changes: [
       {
         heading: "Improved Stats Experience",
