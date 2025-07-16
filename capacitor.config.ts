@@ -20,7 +20,7 @@ const config: CapacitorConfig = {
   appId: "com.mysalahapp.app",
   appName: "My Salah App",
   webDir: "dist",
-  server: serverConfig,
+  // server: serverConfig,
   plugins: {
     LocalNotifications: {
       smallIcon: "res:///ic_stat_name",
