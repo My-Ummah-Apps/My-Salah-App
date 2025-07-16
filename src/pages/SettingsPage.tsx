@@ -22,7 +22,13 @@ import { pageTransitionStyles, showToast } from "../utils/constants";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetAboutUs from "../components/BottomSheets/BottomSheetAboutUs";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
-import { IonContent, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -237,14 +243,16 @@ const SettingsPage = ({
 
   return (
     <IonPage>
+      <IonHeader style={{ background: "red" }} mode="ios">
+        <IonToolbar mode="ios">
+          <IonTitle>Settings</IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonContent>
         <motion.section
           {...pageTransitionStyles}
           className={`${pageStyles} settings-page-wrap`}
         >
-          <header className="settings-page-header">
-            <p className="settings-page-header-p">Settings</p>
-          </header>
           <div className="settings-page-options-wrap">
             <div
               className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}

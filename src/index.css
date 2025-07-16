@@ -107,11 +107,11 @@ body:-webkit-scrollbar {
 .settings-page-header-p,
 .stats-page-header-p,
 .home-page-header-p {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
   font-size: 1.2rem;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
 }
 
 .settings-page-options-wrap,

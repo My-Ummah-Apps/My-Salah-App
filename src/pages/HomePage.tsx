@@ -16,7 +16,13 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { getMissedSalahCount, pageTransitionStyles } from "../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { IonContent, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
 interface HomePageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -90,13 +96,11 @@ const HomePage = ({
 
   return (
     <IonPage>
-      <IonContent>
-        <motion.section
-          {...pageTransitionStyles}
-          className={`${pageStyles} home-page-wrap`}
-        >
-          <header className="home-page-header">
-            <section className="header-wrapper">
+      <IonHeader>
+        <IonToolbar style={{ background: "red" }}>
+          {" "}
+          <section className="relative flex items-center justify-between">
+            <div>
               {getMissedSalahCount(missedSalahList) > 0 &&
               userPreferences.showMissedSalahCount === "1" ? (
                 <MissedSalahCounter
@@ -108,65 +112,73 @@ const HomePage = ({
                   }
                   userPreferences={userPreferences}
                 />
-              ) : null}
+              ) : (
+                <div></div>
+              )}
+            </div>
 
-              <p className="home-page-header-p">{"Home"}</p>
-              <div
-                onClick={showStreakInfoHomePage}
-                className={`absolute top-1/2 right-[-7px] py-1 -translate-y-1/2`}
-              >
-                <div className="relative flex items-center justify-center w-full py-10">
-                  <img
-                    style={{
-                      width: "30px",
-                      height: "100%",
-                      marginRight: "-2rem",
-                    }}
-                    src={wreathLeft}
-                    alt=""
-                    srcSet=""
-                  />
+            <IonTitle className="absolute text-lg font-medium -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+              {"Home"}
+            </IonTitle>
+            <div className="mr-2" onClick={showStreakInfoHomePage}>
+              <div className="relative flex items-center justify-center w-full py-10">
+                <img
+                  style={{
+                    width: "30px",
+                    height: "100%",
+                    marginRight: "-2rem",
+                  }}
+                  src={wreathLeft}
+                  alt=""
+                  srcSet=""
+                />
 
-                  <div className="absolute -translate-x-1/2 -translate-y-[53%] top-[53%] left-1/2">
-                    <AnimatePresence mode="wait">
-                      <motion.p
-                        className="text-xs"
-                        key={activeStreakCount}
-                        {...(animateStreakCounter
-                          ? {
-                              initial: { opacity: 0, y: -10 },
-                              animate: {
-                                opacity: 1,
-                                y: 0,
-                                transition: {
-                                  type: "spring",
-                                  stiffness: 100,
-                                  damping: 5,
-                                  // delay: 0.2,
-                                },
+                <div className="absolute -translate-x-1/2 -translate-y-[53%] top-[53%] left-1/2">
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      className="text-xs"
+                      key={activeStreakCount}
+                      {...(animateStreakCounter
+                        ? {
+                            initial: { opacity: 0, y: -10 },
+                            animate: {
+                              opacity: 1,
+                              y: 0,
+                              transition: {
+                                type: "spring",
+                                stiffness: 100,
+                                damping: 5,
+                                // delay: 0.2,
                               },
-                              exit: { opacity: 0, y: 10 },
-                            }
-                          : {})}
-                      >
-                        {activeStreakCount}
-                      </motion.p>
-                    </AnimatePresence>
-                  </div>
-                  <img
-                    style={{
-                      width: "30px",
-                      height: "100%",
-                      marginLeft: "2rem",
-                    }}
-                    src={wreathRight}
-                    alt=""
-                    srcSet=""
-                  />
+                            },
+                            exit: { opacity: 0, y: 10 },
+                          }
+                        : {})}
+                    >
+                      {activeStreakCount}
+                    </motion.p>
+                  </AnimatePresence>
                 </div>
+                <img
+                  style={{
+                    width: "30px",
+                    height: "100%",
+                    marginLeft: "2rem",
+                  }}
+                  src={wreathRight}
+                  alt=""
+                  srcSet=""
+                />
               </div>
-            </section>
-          </header>
+            </div>
+          </section>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <motion.section
+          {...pageTransitionStyles}
+          className={`${pageStyles} home-page-wrap`}
+        >
           <section className="home-page-components-wrap">
             <SalahTable
               dbConnection={dbConnection}

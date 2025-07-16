@@ -39,7 +39,6 @@ const BottomSheetNotifications = ({
 }) => {
   const [dailyNotificationToggle, setDailyNotificationToggle] =
     useState<boolean>(userPreferences.dailyNotification === "1" ? true : false);
-  console.log("dailyNotificationToggle", dailyNotificationToggle);
 
   const showNotificationsAlert = async () => {
     const { value } = await Dialog.confirm({
