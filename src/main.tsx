@@ -7,6 +7,11 @@ import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
 import { CapacitorSQLite, SQLiteConnection } from "@capacitor-community/sqlite";
 import { createRoot } from "react-dom/client";
 
+import "@ionic/react/css/core.css";
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
+
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const platform = Capacitor.getPlatform();

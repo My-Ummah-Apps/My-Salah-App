@@ -22,6 +22,7 @@ import { pageTransitionStyles, showToast } from "../utils/constants";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetAboutUs from "../components/BottomSheets/BottomSheetAboutUs";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
+import { IonContent, IonPage } from "@ionic/react";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -235,206 +236,220 @@ const SettingsPage = ({
   }, [isMissedSalahCounterOptionChecked]);
 
   return (
-    <motion.section
-      {...pageTransitionStyles}
-      className={`${pageStyles} settings-page-wrap`}
-    >
-      <header className="settings-page-header">
-        <p className="settings-page-header-p">Settings</p>
-      </header>
-      <div className="settings-page-options-wrap">
-        <div
-          className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
-          onClick={() => {
-            setShowNotificationsModal(true);
-          }}
+    <IonPage>
+      <IonContent>
+        <motion.section
+          {...pageTransitionStyles}
+          className={`${pageStyles} settings-page-wrap`}
         >
-          <div className="mx-2">
-            <p className="pt-[0.3rem] pb-[0.1rem] text-lg">{"Notifications"}</p>
-            <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {"Toggle Notifications"}
-            </p>
-          </div>
-          <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
-          <BottomSheetNotifications
-            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-            setShowNotificationsModal={setShowNotificationsModal}
-            showNotificationsModal={showNotificationsModal}
-            setUserPreferences={setUserPreferences}
-            userPreferences={userPreferences}
-          />
-        </div>{" "}
-        <div
-          className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
-        >
-          <div className="mx-2">
-            <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
-              {"Missed Salah Counter"}
-            </p>
-            <p className=" pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-              {"Display missed salah counter (when applicable) on homepage"}
-            </p>
-          </div>
-          <section className="pl-4 pr-2">
-            <Switch
-              onColor="#3b82f6"
-              checked={isMissedSalahCounterOptionChecked}
-              onChange={async () => {
-                setIsMissedSalahCounterOptionChecked((prev) => !prev);
+          <header className="settings-page-header">
+            <p className="settings-page-header-p">Settings</p>
+          </header>
+          <div className="settings-page-options-wrap">
+            <div
+              className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+              onClick={() => {
+                setShowNotificationsModal(true);
+              }}
+            >
+              <div className="mx-2">
+                <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
+                  {"Notifications"}
+                </p>
+                <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+                  {"Toggle Notifications"}
+                </p>
+              </div>
+              <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
+              <BottomSheetNotifications
+                modifyDataInUserPreferencesTable={
+                  modifyDataInUserPreferencesTable
+                }
+                setShowNotificationsModal={setShowNotificationsModal}
+                showNotificationsModal={showNotificationsModal}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+              />
+            </div>{" "}
+            <div
+              className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+            >
+              <div className="mx-2">
+                <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
+                  {"Missed Salah Counter"}
+                </p>
+                <p className=" pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
+                  {"Display missed salah counter (when applicable) on homepage"}
+                </p>
+              </div>
+              <section className="pl-4 pr-2">
+                <Switch
+                  onColor="#3b82f6"
+                  checked={isMissedSalahCounterOptionChecked}
+                  onChange={async () => {
+                    setIsMissedSalahCounterOptionChecked((prev) => !prev);
+                  }}
+                />
+              </section>
+            </div>{" "}
+            <div className="my-5">
+              <SettingIndividual
+                headingText={"Change Start Date"}
+                subText={`Change app start date`}
+                onClick={() => {
+                  setShowStartDateSheet(true);
+                }}
+              />
+              <SettingIndividual
+                headingText={"Edit Reasons"}
+                subText={`Add or remove reasons`}
+                onClick={() => {
+                  setShowEditReasonsSheet(true);
+                }}
+              />
+              <BottomSheetStartDate
+                setShowStartDateSheet={setShowStartDateSheet}
+                showStartDateSheet={showStartDateSheet}
+                userPreferences={userPreferences}
+                fetchDataFromDB={fetchDataFromDB}
+                modifyDataInUserPreferencesTable={
+                  modifyDataInUserPreferencesTable
+                }
+              />
+              <BottomSheetEditReasons
+                setShowEditReasonsSheet={setShowEditReasonsSheet}
+                showEditReasonsSheet={showEditReasonsSheet}
+                modifyDataInUserPreferencesTable={
+                  modifyDataInUserPreferencesTable
+                }
+                userPreferences={userPreferences}
+              />
+            </div>
+            <div className="my-5">
+              <SettingIndividual
+                headingText={"Import Data"}
+                subText={"Supports backups exported by this app"}
+                onClick={triggerInput}
+              />
+              <SettingIndividual
+                headingText={"Export Data"}
+                subText={"Generates a file that contains all your data"}
+                onClick={async () => {
+                  await handleDBExport();
+                }}
+              />
+            </div>
+            <input
+              ref={importDBRef}
+              className="hidden"
+              onChange={handleDBImport}
+              type="file"
+              accept=".json"
+              id="backupfile"
+              name="backupfile"
+            ></input>
+            <dialog
+              className="fixed z-50 w-1/2 p-3 text-white transform -translate-x-1/2 rounded-lg shadow-lg -translate-y-3/4 bg-zinc-950 top-3/4 left-1/2"
+              ref={diaglogElement}
+            >
+              {dialogElementText}
+            </dialog>
+            {Capacitor.getPlatform() === "android" && (
+              <SettingIndividual
+                indvidualStyles={"rounded-t-md"}
+                headingText={"Review"}
+                subText={"Rate us on the Google Play Store"}
+                onClick={() => {
+                  link(
+                    "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
+                  );
+                }}
+              />
+            )}
+            {Capacitor.getPlatform() === "ios" && (
+              <SettingIndividual
+                indvidualStyles={"rounded-t-md"}
+                headingText={"Review"}
+                subText={"Rate us on the App Store"}
+                onClick={() => {
+                  link(
+                    "https://apps.apple.com/gb/app/my-salah-app/id6478277078"
+                  );
+                }}
+              />
+            )}
+            {Capacitor.isNativePlatform() && (
+              <SettingIndividual
+                indvidualStyles={"rounded-t-md"}
+                headingText={"Share"}
+                subText={"Share application"}
+                onClick={() => {
+                  if (Capacitor.getPlatform() === "android") {
+                    shareThisAppLink(
+                      "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
+                    );
+                  } else if (Capacitor.getPlatform() === "ios") {
+                    shareThisAppLink(
+                      "https://apps.apple.com/gb/app/my-salah-app/id6478277078"
+                    );
+                  }
+                }}
+              />
+            )}
+            <SettingIndividual
+              headingText={"Changelog"}
+              subText={"View Changelog"}
+              onClick={() => {
+                setShowChangelogModal(true);
               }}
             />
-          </section>
-        </div>{" "}
-        <div className="my-5">
-          <SettingIndividual
-            headingText={"Change Start Date"}
-            subText={`Change app start date`}
-            onClick={() => {
-              setShowStartDateSheet(true);
-            }}
-          />
-          <SettingIndividual
-            headingText={"Edit Reasons"}
-            subText={`Add or remove reasons`}
-            onClick={() => {
-              setShowEditReasonsSheet(true);
-            }}
-          />
-          <BottomSheetStartDate
-            setShowStartDateSheet={setShowStartDateSheet}
-            showStartDateSheet={showStartDateSheet}
-            userPreferences={userPreferences}
-            fetchDataFromDB={fetchDataFromDB}
-            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-          />
-          <BottomSheetEditReasons
-            setShowEditReasonsSheet={setShowEditReasonsSheet}
-            showEditReasonsSheet={showEditReasonsSheet}
-            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-            userPreferences={userPreferences}
-          />
-        </div>
-        <div className="my-5">
-          <SettingIndividual
-            headingText={"Import Data"}
-            subText={"Supports backups exported by this app"}
-            onClick={triggerInput}
-          />
-          <SettingIndividual
-            headingText={"Export Data"}
-            subText={"Generates a file that contains all your data"}
-            onClick={async () => {
-              await handleDBExport();
-            }}
-          />
-        </div>
-        <input
-          ref={importDBRef}
-          className="hidden"
-          onChange={handleDBImport}
-          type="file"
-          accept=".json"
-          id="backupfile"
-          name="backupfile"
-        ></input>
-        <dialog
-          className="fixed z-50 w-1/2 p-3 text-white transform -translate-x-1/2 rounded-lg shadow-lg -translate-y-3/4 bg-zinc-950 top-3/4 left-1/2"
-          ref={diaglogElement}
-        >
-          {dialogElementText}
-        </dialog>
-        {Capacitor.getPlatform() === "android" && (
-          <SettingIndividual
-            indvidualStyles={"rounded-t-md"}
-            headingText={"Review"}
-            subText={"Rate us on the Google Play Store"}
-            onClick={() => {
-              link(
-                "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
-              );
-            }}
-          />
-        )}
-        {Capacitor.getPlatform() === "ios" && (
-          <SettingIndividual
-            indvidualStyles={"rounded-t-md"}
-            headingText={"Review"}
-            subText={"Rate us on the App Store"}
-            onClick={() => {
-              link("https://apps.apple.com/gb/app/my-salah-app/id6478277078");
-            }}
-          />
-        )}
-        {Capacitor.isNativePlatform() && (
-          <SettingIndividual
-            indvidualStyles={"rounded-t-md"}
-            headingText={"Share"}
-            subText={"Share application"}
-            onClick={() => {
-              if (Capacitor.getPlatform() === "android") {
-                shareThisAppLink(
-                  "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
+            <SettingIndividual
+              headingText={"Feedback"}
+              subText={"Report Bugs / Request Features"}
+              onClick={() => {
+                link(
+                  "mailto: contact@myummahapps.com?subject=My Salah App Feedback"
                 );
-              } else if (Capacitor.getPlatform() === "ios") {
-                shareThisAppLink(
-                  "https://apps.apple.com/gb/app/my-salah-app/id6478277078"
+              }}
+            />
+            <SettingIndividual
+              headingText={"Website"}
+              subText={"Visit our website"}
+              onClick={() => {
+                link("https://myummahapps.com/");
+              }}
+            />
+            <SettingIndividual
+              headingText={"Privacy Policy"}
+              subText={"View Privacy Policy"}
+              onClick={() => {
+                link(
+                  "https://sites.google.com/view/my-salah-app-privacy-policy/home"
                 );
-              }
-            }}
-          />
-        )}
-        <SettingIndividual
-          headingText={"Changelog"}
-          subText={"View Changelog"}
-          onClick={() => {
-            setShowChangelogModal(true);
-          }}
-        />
-        <SettingIndividual
-          headingText={"Feedback"}
-          subText={"Report Bugs / Request Features"}
-          onClick={() => {
-            link(
-              "mailto: contact@myummahapps.com?subject=My Salah App Feedback"
-            );
-          }}
-        />
-        <SettingIndividual
-          headingText={"Website"}
-          subText={"Visit our website"}
-          onClick={() => {
-            link("https://myummahapps.com/");
-          }}
-        />
-        <SettingIndividual
-          headingText={"Privacy Policy"}
-          subText={"View Privacy Policy"}
-          onClick={() => {
-            link(
-              "https://sites.google.com/view/my-salah-app-privacy-policy/home"
-            );
-          }}
-        />
-        <SettingIndividual
-          headingText={"Source Code"}
-          subText={"View Source Code"}
-          onClick={() => {
-            link("https://github.com/My-Ummah-Apps/My-Salah-App");
-          }}
-        />
-        <SettingIndividual
-          headingText={"About"}
-          subText={"About Us"}
-          onClick={() => {
-            setShowAboutUsModal(true);
-          }}
-        />
-        <BottomSheetAboutUs
-          setShowAboutUsModal={setShowAboutUsModal}
-          showAboutUsModal={showAboutUsModal}
-        />
-      </div>
-    </motion.section>
+              }}
+            />
+            <SettingIndividual
+              headingText={"Source Code"}
+              subText={"View Source Code"}
+              onClick={() => {
+                link("https://github.com/My-Ummah-Apps/My-Salah-App");
+              }}
+            />
+            <SettingIndividual
+              headingText={"About"}
+              subText={"About Us"}
+              onClick={() => {
+                setShowAboutUsModal(true);
+              }}
+            />
+            <BottomSheetAboutUs
+              setShowAboutUsModal={setShowAboutUsModal}
+              showAboutUsModal={showAboutUsModal}
+            />
+          </div>
+        </motion.section>
+      </IonContent>
+    </IonPage>
   );
 };
 
