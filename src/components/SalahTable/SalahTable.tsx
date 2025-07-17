@@ -361,7 +361,6 @@ const SalahTable = ({
           </Table>
         )}
       </AutoSizer>
-
       <BottomSheetSalahStatus
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}

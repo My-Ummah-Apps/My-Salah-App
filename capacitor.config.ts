@@ -4,23 +4,26 @@ dotenv.config({ path: resolve(__dirname, ".env") });
 import { CapacitorConfig } from "@capacitor/cli";
 import { KeyboardResize } from "@capacitor/keyboard";
 
-const isProd = process.env.NODE_ENV === "production";
+// const isDevelopment = process.env.NODE_ENV === "development";
 
-const serverConfig =
-  !isProd && process.env.DEV_SERVER_IP
-    ? {
-        url: process.env.DEV_SERVER_IP,
-        cleartext: true,
-      }
-    : undefined;
-
-// const serverConfig = { url: process.env.DEV_SERVER_IP, cleartext: true };
+// const serverConfig =
+//   isDevelopment && process.env.VITE_DEV_SERVER_IP
+//     ? {
+//         url: process.env.VITE_DEV_SERVER_IP,
+//         cleartext: true,
+//       }
+//     : undefined;
 
 const config: CapacitorConfig = {
   appId: "com.mysalahapp.app",
   appName: "My Salah App",
   webDir: "dist",
   // server: serverConfig,
+  server: {
+    // url: isDevelopment ? process.env.VITE_DEV_SERVER_IP : undefined,
+    url: process.env.VITE_DEV_SERVER_IP,
+    cleartext: true,
+  },
   plugins: {
     LocalNotifications: {
       smallIcon: "res:///ic_stat_name",

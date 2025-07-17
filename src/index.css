@@ -56,18 +56,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 html {
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 body {
   -ms-overflow-style: none;
   /* max-width: var(--max-width); */
   scrollbar-width: none;
-  height: 100vh;
+  /* height: 100vh; */
+  --ion-background-color: var(--primary-color);
+  --ion-text-color: rgb(184, 184, 184);
   background: var(--primary-color);
   color: rgb(184, 184, 184);
   font-family: sans-serif;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 body:-webkit-scrollbar {
@@ -76,8 +78,18 @@ body:-webkit-scrollbar {
 }
 
 .app {
-  overflow: hidden;
+  overflow-x: hidden;
   /* max-width: var(--max-width); */
+}
+
+ion-modal {
+  --background: var(--body-bg-color) !important;
+  background: var(--body-bg-color) !important;
+  color: var(--text-color);
+}
+
+ion-modal::part(backdrop) {
+  background-color: rgba(0, 0, 0, 1) !important;
 }
 
 .settings-page-wrap,

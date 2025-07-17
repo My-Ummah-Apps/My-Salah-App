@@ -1,11 +1,26 @@
 import React from "react";
-// import ReactDOM from "react-dom/client";
 import { Capacitor } from "@capacitor/core";
 import App from "./App.tsx";
 import "./index.css";
 import { JeepSqlite } from "jeep-sqlite/dist/components/jeep-sqlite";
 import { CapacitorSQLite, SQLiteConnection } from "@capacitor-community/sqlite";
 import { createRoot } from "react-dom/client";
+
+import "@ionic/react/css/core.css";
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
+
+// Optional utility styles
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/display.css";
+
+// Custom global styles (optional)
+// import "./theme/variables.css";
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -35,9 +50,3 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.error(e);
   }
 });
-
-// ReactDOM.createRoot(document.getElementById("root")!).render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );

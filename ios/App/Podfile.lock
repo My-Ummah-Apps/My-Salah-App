@@ -3,6 +3,8 @@ PODS:
     - CapacitorCordova
   - CapacitorActionSheet (7.0.1):
     - Capacitor
+  - CapacitorApp (7.0.1):
+    - Capacitor
   - CapacitorCommunityInAppReview (7.0.1):
     - Capacitor
   - CapacitorCommunitySqlite (7.0.1):
@@ -15,6 +17,8 @@ PODS:
   - CapacitorFilesystem (7.1.2):
     - Capacitor
     - IONFilesystemLib (~> 1.0)
+  - CapacitorHaptics (7.0.1):
+    - Capacitor
   - CapacitorKeyboard (7.0.1):
     - Capacitor
   - CapacitorLocalNotifications (7.0.1):
@@ -40,11 +44,13 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorActionSheet (from `../../node_modules/@capacitor/action-sheet`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCommunityInAppReview (from `../../node_modules/@capacitor-community/in-app-review`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
+  - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - CapacitorNativeSettings (from `../../node_modules/capacitor-native-settings`)
@@ -64,6 +70,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorActionSheet:
     :path: "../../node_modules/@capacitor/action-sheet"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
   CapacitorCommunityInAppReview:
     :path: "../../node_modules/@capacitor-community/in-app-review"
   CapacitorCommunitySqlite:
@@ -74,6 +82,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/dialog"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
+  CapacitorHaptics:
+    :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorLocalNotifications:
@@ -92,11 +102,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Capacitor: 156d98aba46ec01dde72c4bbb92fa626837cad29
   CapacitorActionSheet: 24609588961cc27c87e8b033be92b5eee65b5d4c
+  CapacitorApp: d63334c052278caf5d81585d80b21905c6f93f39
   CapacitorCommunityInAppReview: f2faacccf485005d6f2f113522467337db88a06b
   CapacitorCommunitySqlite: 3f60098baa077322ce32a678614a5fa0029ab519
   CapacitorCordova: 5e58d04631bc5094894ac106e2bf1da18a9e6151
   CapacitorDialog: 9b934329026b2b0ffa56939bb06df3c67541a2ab
   CapacitorFilesystem: 7b7e9bf177ce09657a667d935ca6f0eadbcfda54
+  CapacitorHaptics: 70e47470fa1a6bd6338cd102552e3846b7f9a1b3
   CapacitorKeyboard: 969647d0ca2e5c737d7300088e2517aa832434e2
   CapacitorLocalNotifications: 4ea60b9347eac60b37cb4daaf62d12060bb00972
   CapacitorNativeSettings: f5511eb94cb5700ac4edf54f992d2c0dda1857d6
@@ -108,6 +120,6 @@ SPEC CHECKSUMS:
   SQLCipher: 30a8e81afa6128e600b17ffa77d0f92fa05ed208
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 39bd238931bccd7dd17b2afcc5cd957090d4d336
+PODFILE CHECKSUM: 789f93c84fad495001f0939139e6882ce4abf3dd
 
 COCOAPODS: 1.15.2

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { IonApp } from "@ionic/react";
 import HomePage from "./pages/HomePage";
 import Sheet from "react-modal-sheet";
 import { LATEST_APP_VERSION } from "./utils/changelog";
@@ -589,11 +590,12 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
-      <section className="app">
-        {/* <h1 className="text-4xl text-right">{streakCounter}</h1> */}
-        <Routes>
-          {/* <Route
+    <IonApp>
+      <BrowserRouter>
+        <section className="app">
+          {/* <h1 className="text-4xl text-right">{streakCounter}</h1> */}
+          <Routes>
+            {/* <Route
             path="/ResourcesPage"
             element={
               <ResourcesPage
@@ -603,71 +605,71 @@ const App = () => {
               />
             }
           /> */}
-          <Route
-            index
-            element={
-              <HomePage
-                dbConnection={dbConnection}
-                checkAndOpenOrCloseDBConnection={
-                  checkAndOpenOrCloseDBConnection
-                }
-                modifyDataInUserPreferencesTable={
-                  modifyDataInUserPreferencesTable
-                }
-                setShowJoyRideEditIcon={setShowJoyRideEditIcon}
-                showJoyRideEditIcon={showJoyRideEditIcon}
-                userPreferences={userPreferences}
-                setFetchedSalahData={setFetchedSalahData}
-                fetchedSalahData={fetchedSalahData}
-                setMissedSalahList={setMissedSalahList}
-                pageStyles={pageStyles}
-                setShowMissedSalahsSheet={setShowMissedSalahsSheet}
-                showMissedSalahsSheet={showMissedSalahsSheet}
-                missedSalahList={missedSalahList}
-                setIsMultiEditMode={setIsMultiEditMode}
-                isMultiEditMode={isMultiEditMode}
-                activeStreakCount={activeStreakCount}
-                generateStreaks={generateStreaks}
-              />
-            }
-          />
-          <Route
-            path="/SettingsPage"
-            element={
-              <SettingsPage
-                sqliteConnection={sqliteConnection}
-                dbConnection={dbConnection}
-                checkAndOpenOrCloseDBConnection={
-                  checkAndOpenOrCloseDBConnection
-                }
-                fetchDataFromDB={fetchDataFromDB}
-                pageStyles={pageStyles}
-                modifyDataInUserPreferencesTable={
-                  modifyDataInUserPreferencesTable
-                }
-                setUserPreferences={setUserPreferences}
-                userPreferences={userPreferences}
-                setShowChangelogModal={setShowChangelogModal}
-              />
-            }
-          />
-          <Route
-            path="/StatsPage"
-            element={
-              <StatsPage
-                dbConnection={dbConnection}
-                checkAndOpenOrCloseDBConnection={
-                  checkAndOpenOrCloseDBConnection
-                }
-                userPreferences={userPreferences}
-                fetchedSalahData={fetchedSalahData}
-                pageStyles={pageStyles}
-                activeStreakCount={activeStreakCount}
-                streakDatesObjectsArr={streakDatesObjectsArr}
-              />
-            }
-          />
-          {/* <Route
+            <Route
+              index
+              element={
+                <HomePage
+                  dbConnection={dbConnection}
+                  checkAndOpenOrCloseDBConnection={
+                    checkAndOpenOrCloseDBConnection
+                  }
+                  modifyDataInUserPreferencesTable={
+                    modifyDataInUserPreferencesTable
+                  }
+                  setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+                  showJoyRideEditIcon={showJoyRideEditIcon}
+                  userPreferences={userPreferences}
+                  setFetchedSalahData={setFetchedSalahData}
+                  fetchedSalahData={fetchedSalahData}
+                  setMissedSalahList={setMissedSalahList}
+                  pageStyles={pageStyles}
+                  setShowMissedSalahsSheet={setShowMissedSalahsSheet}
+                  showMissedSalahsSheet={showMissedSalahsSheet}
+                  missedSalahList={missedSalahList}
+                  setIsMultiEditMode={setIsMultiEditMode}
+                  isMultiEditMode={isMultiEditMode}
+                  activeStreakCount={activeStreakCount}
+                  generateStreaks={generateStreaks}
+                />
+              }
+            />
+            <Route
+              path="/SettingsPage"
+              element={
+                <SettingsPage
+                  sqliteConnection={sqliteConnection}
+                  dbConnection={dbConnection}
+                  checkAndOpenOrCloseDBConnection={
+                    checkAndOpenOrCloseDBConnection
+                  }
+                  fetchDataFromDB={fetchDataFromDB}
+                  pageStyles={pageStyles}
+                  modifyDataInUserPreferencesTable={
+                    modifyDataInUserPreferencesTable
+                  }
+                  setUserPreferences={setUserPreferences}
+                  userPreferences={userPreferences}
+                  setShowChangelogModal={setShowChangelogModal}
+                />
+              }
+            />
+            <Route
+              path="/StatsPage"
+              element={
+                <StatsPage
+                  dbConnection={dbConnection}
+                  checkAndOpenOrCloseDBConnection={
+                    checkAndOpenOrCloseDBConnection
+                  }
+                  userPreferences={userPreferences}
+                  fetchedSalahData={fetchedSalahData}
+                  pageStyles={pageStyles}
+                  activeStreakCount={activeStreakCount}
+                  streakDatesObjectsArr={streakDatesObjectsArr}
+                />
+              }
+            />
+            {/* <Route
             path="/QiblahDirection"
             element={
               <QiblahDirection
@@ -677,129 +679,136 @@ const App = () => {
               />
             }
           /> */}
-        </Routes>
-        <Sheet
-          isOpen={showIntroModal}
-          onClose={() => {
-            setShowIntroModal(false);
-            setShowJoyRideEditIcon(true);
-          }}
-          detent="full-height"
-          disableDrag={true}
-        >
-          <Sheet.Container style={bottomSheetContainerStyles}>
-            <Sheet.Header style={sheetHeaderHeight} />
-            <Sheet.Content style={{ justifyContent: "center" }}>
-              {" "}
-              <Swiper
-                onSwiper={(swiper) => (swiperRef.current = swiper)}
-                style={{ margin: 0 }}
-                spaceBetween={50}
-                slidesPerView={1}
-                allowTouchMove={false}
-                // navigation={{
-                //   nextEl: ".swiper-button-next",
-                //   prevEl: ".swiper-button-prev",
-                // }}
-                modules={[Pagination, Navigation]}
-                // pagination={{ clickable: true }}
-              >
-                <SwiperSlide>
-                  <section className="p-5">
-                    <h1 className="text-4xl">I am a...</h1>
-                    <p
-                      className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
-                      onClick={async () => {
-                        handleGenderSelect();
-                        await modifyDataInUserPreferencesTable(
-                          "userGender",
-                          "male"
-                        );
+          </Routes>
+          <Sheet
+            isOpen={showIntroModal}
+            onClose={() => {
+              setShowIntroModal(false);
+              setShowJoyRideEditIcon(true);
+            }}
+            detent="full-height"
+            disableDrag={true}
+          >
+            <Sheet.Container style={bottomSheetContainerStyles}>
+              <Sheet.Header style={sheetHeaderHeight} />
+              <Sheet.Content style={{ justifyContent: "center" }}>
+                {" "}
+                <Swiper
+                  onSwiper={(swiper) => (swiperRef.current = swiper)}
+                  style={{ margin: 0 }}
+                  spaceBetween={50}
+                  slidesPerView={1}
+                  allowTouchMove={false}
+                  // navigation={{
+                  //   nextEl: ".swiper-button-next",
+                  //   prevEl: ".swiper-button-prev",
+                  // }}
+                  modules={[Pagination, Navigation]}
+                  // pagination={{ clickable: true }}
+                >
+                  <SwiperSlide>
+                    <section className="p-5">
+                      <h1 className="text-4xl">I am a...</h1>
+                      <p
+                        className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
+                        onClick={async () => {
+                          handleGenderSelect();
+                          await modifyDataInUserPreferencesTable(
+                            "userGender",
+                            "male"
+                          );
 
-                        localStorage.setItem("appVersion", LATEST_APP_VERSION);
-                      }}
-                    >
-                      Brother
-                    </p>
-                    <p
-                      className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
-                      onClick={async () => {
-                        handleGenderSelect();
-                        await modifyDataInUserPreferencesTable(
-                          "userGender",
-                          "female"
-                        );
+                          localStorage.setItem(
+                            "appVersion",
+                            LATEST_APP_VERSION
+                          );
+                        }}
+                      >
+                        Brother
+                      </p>
+                      <p
+                        className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
+                        onClick={async () => {
+                          handleGenderSelect();
+                          await modifyDataInUserPreferencesTable(
+                            "userGender",
+                            "female"
+                          );
 
-                        localStorage.setItem("appVersion", LATEST_APP_VERSION);
-                      }}
-                    >
-                      Sister
-                    </p>
-                  </section>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <section className="m-4 text-center">
-                    <h1 className="mb-2 text-2xl font-bold">
-                      Stay Consistent with Your Salah
-                    </h1>
-                    <p>
-                      Stay consistent with your Salah. Turn on daily reminders
-                      to help you log your prayers and reach your goals.
-                    </p>
-                  </section>
-                  <section className="flex flex-col p-5">
-                    <button
-                      onClick={async () => {
-                        const permission =
-                          await LocalNotifications.requestPermissions();
-                        if (permission.display === "granted") {
+                          localStorage.setItem(
+                            "appVersion",
+                            LATEST_APP_VERSION
+                          );
+                        }}
+                      >
+                        Sister
+                      </p>
+                    </section>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <section className="m-4 text-center">
+                      <h1 className="mb-2 text-2xl font-bold">
+                        Stay Consistent with Your Salah
+                      </h1>
+                      <p>
+                        Stay consistent with your Salah. Turn on daily reminders
+                        to help you log your prayers and reach your goals.
+                      </p>
+                    </section>
+                    <section className="flex flex-col p-5">
+                      <button
+                        onClick={async () => {
+                          const permission =
+                            await LocalNotifications.requestPermissions();
+                          if (permission.display === "granted") {
+                            setShowIntroModal(false);
+                            setShowJoyRideEditIcon(true);
+                            scheduleDailyNotification(21, 0);
+                            await modifyDataInUserPreferencesTable(
+                              "dailyNotification",
+                              "1"
+                            );
+                            await modifyDataInUserPreferencesTable(
+                              "dailyNotificationTime",
+                              "21:00"
+                            );
+                          } else {
+                            setShowIntroModal(false);
+                            setShowJoyRideEditIcon(true);
+                          }
+                        }}
+                        className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl"
+                      >
+                        Allow Daily Notification
+                      </button>
+                      <button
+                        onClick={() => {
                           setShowIntroModal(false);
                           setShowJoyRideEditIcon(true);
-                          scheduleDailyNotification(21, 0);
-                          await modifyDataInUserPreferencesTable(
-                            "dailyNotification",
-                            "1"
-                          );
-                          await modifyDataInUserPreferencesTable(
-                            "dailyNotificationTime",
-                            "21:00"
-                          );
-                        } else {
-                          setShowIntroModal(false);
-                          setShowJoyRideEditIcon(true);
-                        }
-                      }}
-                      className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl"
-                    >
-                      Allow Daily Notification
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowIntroModal(false);
-                        setShowJoyRideEditIcon(true);
-                      }}
-                      className="py-3 m-2 text-center text-white rounded-2xl"
-                    >
-                      Maybe Later
-                    </button>
-                  </section>
-                </SwiperSlide>
-              </Swiper>
-              {/* <section className="flex justify-end m-2">
+                        }}
+                        className="py-3 m-2 text-center text-white rounded-2xl"
+                      >
+                        Maybe Later
+                      </button>
+                    </section>
+                  </SwiperSlide>
+                </Swiper>
+                {/* <section className="flex justify-end m-2">
                 <div className="swiper-button-prev ">Prev</div>
                 <div className="swiper-button-next">Next</div>
               </section> */}
-            </Sheet.Content>
-          </Sheet.Container>
-          <Sheet.Backdrop style={sheetBackdropColor} />
-        </Sheet>
-        <NavBar />
-        <BottomSheetChangelog
-          setShowChangelogModal={setShowChangelogModal}
-          showChangelogModal={showChangelogModal}
-        />
-      </section>
-    </BrowserRouter>
+              </Sheet.Content>
+            </Sheet.Container>
+            <Sheet.Backdrop style={sheetBackdropColor} />
+          </Sheet>
+          <NavBar />
+          <BottomSheetChangelog
+            setShowChangelogModal={setShowChangelogModal}
+            showChangelogModal={showChangelogModal}
+          />
+        </section>
+      </BrowserRouter>
+    </IonApp>
   );
 };
 
