@@ -12,6 +12,9 @@ import {
   userPreferencesType,
 } from "../types/types";
 
+export const MODAL_BREAKPOINTS = [0, 0.97];
+export const INITIAL_MODAL_BREAKPOINT = 0.97;
+
 export const defaultReasons =
   "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 

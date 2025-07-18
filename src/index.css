@@ -96,8 +96,8 @@ ion-textarea {
 }
 
 ion-textarea textarea {
-  max-height: 50px !important;
-  overflow-y: auto;
+  /* max-height: 50px !important;
+  overflow-y: auto; */
 }
 
 .modal-fit-content {
@@ -215,7 +215,7 @@ td {
 }
 
 .salah-status-modal-reasons-wrap {
-  max-height: 20px;
+  /* max-height: 200px; */
 }
 
 .calendar-single-month-wrap {

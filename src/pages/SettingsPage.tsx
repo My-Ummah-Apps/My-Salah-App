@@ -214,9 +214,6 @@ const SettingsPage = ({
   };
 
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
-  const [showAboutUsModal, setShowAboutUsModal] = useState(false);
-  const [showStartDateSheet, setShowStartDateSheet] = useState(false);
-  const [showEditReasonsSheet, setShowEditReasonsSheet] = useState(false);
 
   const link = (url: string) => {
     window.location.href = url;
@@ -287,29 +284,23 @@ const SettingsPage = ({
         </div>{" "}
         <div className="my-5">
           <SettingIndividual
+            id="open-change-start-date-sheet"
             headingText={"Change Start Date"}
             subText={`Change app start date`}
-            onClick={() => {
-              setShowStartDateSheet(true);
-            }}
-          />
-          <SettingIndividual
-            headingText={"Edit Reasons"}
-            subText={`Add or remove reasons`}
-            onClick={() => {
-              setShowEditReasonsSheet(true);
-            }}
           />
           <BottomSheetStartDate
-            setShowStartDateSheet={setShowStartDateSheet}
-            showStartDateSheet={showStartDateSheet}
+            triggerId={"open-change-start-date-sheet"}
             userPreferences={userPreferences}
             fetchDataFromDB={fetchDataFromDB}
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
           />
+          <SettingIndividual
+            id="open-edit-reasons-sheet"
+            headingText={"Edit Reasons"}
+            subText={`Add or remove reasons`}
+          />
           <BottomSheetEditReasons
-            setShowEditReasonsSheet={setShowEditReasonsSheet}
-            showEditReasonsSheet={showEditReasonsSheet}
+            triggerId={"open-edit-reasons-sheet"}
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
             userPreferences={userPreferences}
           />
@@ -423,16 +414,11 @@ const SettingsPage = ({
           }}
         />
         <SettingIndividual
+          id="open-about-us-sheet"
           headingText={"About"}
           subText={"About Us"}
-          onClick={() => {
-            setShowAboutUsModal(true);
-          }}
         />
-        <BottomSheetAboutUs
-          setShowAboutUsModal={setShowAboutUsModal}
-          showAboutUsModal={showAboutUsModal}
-        />
+        <BottomSheetAboutUs triggerId="open-about-us-sheet" />
       </div>
     </motion.section>
   );

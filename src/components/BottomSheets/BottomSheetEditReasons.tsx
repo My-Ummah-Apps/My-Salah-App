@@ -1,23 +1,21 @@
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import {
-  bottomSheetContainerStyles,
   defaultReasons,
-  sheetBackdropColor,
-  sheetHeaderHeight,
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
   showAlert,
   showConfirmMsg,
   showToast,
-  TWEEN_CONFIG,
 } from "../../utils/constants";
-import Sheet from "react-modal-sheet";
+
 import { TiDelete } from "react-icons/ti";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { VscDebugRestart } from "react-icons/vsc";
+import { IonContent, IonModal } from "@ionic/react";
 
 interface BottomSheetStartDateProps {
-  showEditReasonsSheet: boolean;
-  setShowEditReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  triggerId: string;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
     value: string | string[]
@@ -26,8 +24,7 @@ interface BottomSheetStartDateProps {
 }
 
 const BottomSheetEditReasons = ({
-  setShowEditReasonsSheet,
-  showEditReasonsSheet,
+  triggerId,
   modifyDataInUserPreferencesTable,
   userPreferences,
 }: BottomSheetStartDateProps) => {
@@ -36,153 +33,135 @@ const BottomSheetEditReasons = ({
   const [newReasonInput, setNewReasonInput] = useState("");
 
   return (
-    <>
-      {" "}
-      <Sheet
-        detent="full-height"
-        tweenConfig={TWEEN_CONFIG}
-        isOpen={showEditReasonsSheet}
-        onClose={() => {
-          setShowEditReasonsSheet(false);
-          setNewReasonInput("");
-        }}
-      >
-        <Sheet.Container style={bottomSheetContainerStyles}>
-          <Sheet.Header style={sheetHeaderHeight} />
-          <Sheet.Content>
-            <Sheet.Scroller>
-              <section className="mx-4 my-4">
-                <section className="flex justify-between w-full">
-                  {" "}
-                  <section className="flex">
-                    <input
-                      className="p-1 rounded-md bg-zinc-800"
-                      onChange={(e) => {
-                        if (e.target.value.length > CHAR_LIMIT) return;
-                        setNewReasonInput(e.target.value);
-                        setCharCount(CHAR_LIMIT - e.target.value.length);
-                      }}
-                      type="text"
-                      dir="auto"
-                      maxLength={CHAR_LIMIT}
-                      value={newReasonInput}
-                    ></input>
-                    <button
-                      className="px-2 ml-2 bg-blue-600 rounded-md"
+    <IonModal
+      mode="ios"
+      // expandToScroll={false}
+      // className="modal-fit-content"
+      onWillDismiss={() => {
+        setNewReasonInput("");
+      }}
+      trigger={triggerId}
+      initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+      breakpoints={MODAL_BREAKPOINTS}
+    >
+      <IonContent>
+        <section className="mx-4 mt-10 mb-20">
+          <section className="flex justify-between w-full">
+            {" "}
+            <section className="flex">
+              <input
+                className="p-1 rounded-md bg-zinc-800"
+                onChange={(e) => {
+                  if (e.target.value.length > CHAR_LIMIT) return;
+                  setNewReasonInput(e.target.value);
+                  setCharCount(CHAR_LIMIT - e.target.value.length);
+                }}
+                type="text"
+                dir="auto"
+                maxLength={CHAR_LIMIT}
+                value={newReasonInput}
+              ></input>
+              <button
+                className="px-2 ml-2 bg-blue-600 rounded-md"
+                onClick={async () => {
+                  if (
+                    userPreferences.reasons.some(
+                      (item) =>
+                        item.toLocaleLowerCase() ===
+                        newReasonInput.toLocaleLowerCase()
+                    )
+                  ) {
+                    showAlert("Duplicate Reason", "This reason already exists");
+                    return;
+                  }
+                  const updatedReasons = [
+                    ...userPreferences.reasons,
+                    newReasonInput,
+                  ];
+                  await modifyDataInUserPreferencesTable(
+                    "reasons",
+                    updatedReasons
+                  );
+                  setNewReasonInput("");
+                  setCharCount(CHAR_LIMIT);
+                  showToast(`${newReasonInput} added`, "short");
+                }}
+              >
+                Add
+              </button>
+            </section>
+            <button
+              onClick={async () => {
+                const reasonConfirmMsgRes = await showConfirmMsg(
+                  "Reset Reasons?",
+                  "This will reset all reasons to the app’s default reasons. Are you sure you want to proceed?"
+                );
+                if (!reasonConfirmMsgRes) return;
+                await modifyDataInUserPreferencesTable(
+                  "reasons",
+                  defaultReasons.split(",")
+                );
+                showToast("Default Reasons Restored", "short");
+              }}
+            >
+              <VscDebugRestart className="text-2xl" />
+            </button>
+          </section>
+
+          {newReasonInput.length > 0 && (
+            <motion.p
+              layout
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                color: charCount === 0 ? "red" : "white",
+              }}
+              className="mt-1 text-xs"
+            >
+              {`${charCount} characters left`}
+            </motion.p>
+          )}
+
+          <ul className="mt-3">
+            <AnimatePresence>
+              {userPreferences.reasons
+                .sort((a, b) => a.localeCompare(b))
+                .map((reason) => (
+                  <motion.li
+                    className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-4 py-4 my-3 rounded-lg`}
+                    layout
+                    initial={{ x: 0 }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "-100%", opacity: 0 }}
+                    transition={{
+                      // delay: 0.1,
+                      duration: 0.3,
+                      layout: { duration: 0.2 },
+                    }}
+                    key={reason}
+                  >
+                    <p>{reason}</p>
+                    <p
                       onClick={async () => {
-                        if (
-                          userPreferences.reasons.some(
-                            (item) =>
-                              item.toLocaleLowerCase() ===
-                              newReasonInput.toLocaleLowerCase()
-                          )
-                        ) {
-                          showAlert(
-                            "Duplicate Reason",
-                            "This reason already exists"
-                          );
-                          return;
-                        }
-                        const updatedReasons = [
-                          ...userPreferences.reasons,
-                          newReasonInput,
-                        ];
+                        const modifiedReasons = userPreferences.reasons.filter(
+                          (item) => item !== reason
+                        );
                         await modifyDataInUserPreferencesTable(
                           "reasons",
-                          updatedReasons
+                          modifiedReasons
                         );
-                        setNewReasonInput("");
-                        setCharCount(CHAR_LIMIT);
-                        showToast(`${newReasonInput} added`, "short");
                       }}
                     >
-                      Add
-                    </button>
-                  </section>
-                  <button
-                    onClick={async () => {
-                      const reasonConfirmMsgRes = await showConfirmMsg(
-                        "Reset Reasons?",
-                        "This will reset all reasons to the app’s default reasons. Are you sure you want to proceed?"
-                      );
-                      if (!reasonConfirmMsgRes) return;
-                      await modifyDataInUserPreferencesTable(
-                        "reasons",
-                        defaultReasons.split(",")
-                      );
-                      showToast("Default Reasons Restored", "short");
-                    }}
-                  >
-                    <VscDebugRestart className="text-2xl" />
-                  </button>
-                </section>
-
-                {newReasonInput.length > 0 && (
-                  <motion.p
-                    layout
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                      color: charCount === 0 ? "red" : "white",
-                    }}
-                    className="mt-1 text-xs"
-                  >
-                    {`${charCount} characters left`}
-                  </motion.p>
-                )}
-
-                <ul className="mt-3">
-                  <AnimatePresence>
-                    {userPreferences.reasons
-                      .sort((a, b) => a.localeCompare(b))
-                      .map((reason) => (
-                        <motion.li
-                          className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-4 py-4 my-3 rounded-lg`}
-                          layout
-                          initial={{ x: 0 }}
-                          animate={{ x: 0 }}
-                          exit={{ x: "-100%", opacity: 0 }}
-                          transition={{
-                            // delay: 0.1,
-                            duration: 0.3,
-                            layout: { duration: 0.2 },
-                          }}
-                          key={reason}
-                        >
-                          <p>{reason}</p>
-                          <p
-                            onClick={async () => {
-                              const modifiedReasons =
-                                userPreferences.reasons.filter(
-                                  (item) => item !== reason
-                                );
-                              await modifyDataInUserPreferencesTable(
-                                "reasons",
-                                modifiedReasons
-                              );
-                            }}
-                          >
-                            <TiDelete className="text-lg" />
-                          </p>
-                        </motion.li>
-                      ))}
-                  </AnimatePresence>
-                </ul>
-              </section>
-              <section className="flex justify-between w-full px-4 py-4"></section>
-            </Sheet.Scroller>
-          </Sheet.Content>
-        </Sheet.Container>
-        <Sheet.Backdrop
-          style={sheetBackdropColor}
-          onTap={() => {
-            setShowEditReasonsSheet(false);
-            setNewReasonInput("");
-          }}
-        />
-      </Sheet>
-    </>
+                      <TiDelete className="text-lg" />
+                    </p>
+                  </motion.li>
+                ))}
+            </AnimatePresence>
+          </ul>
+        </section>
+      </IonContent>
+    </IonModal>
   );
 };
 
