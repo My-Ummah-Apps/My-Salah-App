@@ -28,7 +28,7 @@ import {
 
 import { isToday, isYesterday, parse } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { IonModal } from "@ionic/react";
+import { IonModal, IonTextarea } from "@ionic/react";
 
 interface SalahStatusBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -71,8 +71,8 @@ const BottomSheetSalahStatus = ({
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
 
   const [notes, setNotes] = useState("");
-  const handleNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNotes(e.target.value);
+  const handleNotes = (e: CustomEvent<{ value: string }>) => {
+    setNotes(e.detail.value);
   };
 
   const onSheetCloseCleanup = async () => {
@@ -81,31 +81,10 @@ const BottomSheetSalahStatus = ({
     setSalahStatus("");
     setSelectedReasons([]);
     setNotes("");
+    setShowReasons(false);
 
     if (isMultiEditMode) {
       setIsMultiEditMode(false);
-    }
-  };
-
-  useEffect(() => {
-    if (notesTextArea.current) {
-      notesTextArea.current.style.height = "1px";
-      notesTextArea.current.style.height = `${
-        notesTextArea.current.scrollHeight + 0.5
-      }px`;
-    } else {
-      // console.log("notesTextArea.current does not exist");
-    }
-  });
-
-  const increaseTextAreaHeight = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    if (notesTextArea.current) {
-      // notesTextArea.current.style.height = "auto";
-      notesTextArea.current.style.height = `${e.target.scrollHeight}px`;
-    } else {
-      console.error("notesTextArea.current does not exist");
     }
   };
 
@@ -309,6 +288,7 @@ const BottomSheetSalahStatus = ({
   return (
     <>
       <IonModal
+        className="modal-fit-content"
         mode="ios"
         onWillPresent={() => {
           checkDBForSalah();
@@ -378,27 +358,25 @@ const BottomSheetSalahStatus = ({
               </motion.div>
             )}
             {userPreferences.userGender === "male" ? (
-              <>
-                <motion.div
-                  variants={salahStatusVariants}
-                  initial="default"
-                  animate={salahStatus === "male-alone" ? "animate" : "default"}
+              <motion.div
+                variants={salahStatusVariants}
+                initial="default"
+                animate={salahStatus === "male-alone" ? "animate" : "default"}
+              >
+                <div
+                  onClick={() => {
+                    setSalahStatus("male-alone");
+                    setShowReasons(true);
+                  }}
+                  style={{
+                    backgroundColor: salahStatusColorsHexCodes["male-alone"],
+                  }}
+                  className={statusBoxStyles}
                 >
-                  <div
-                    onClick={() => {
-                      setSalahStatus("male-alone");
-                      setShowReasons(true);
-                    }}
-                    style={{
-                      backgroundColor: salahStatusColorsHexCodes["male-alone"],
-                    }}
-                    className={statusBoxStyles}
-                  >
-                    <GoPerson className="w-full mb-1 text-3xl" />
-                    <p className="inline">On Time</p>
-                  </div>
-                </motion.div>
-              </>
+                  <GoPerson className="w-full mb-1 text-3xl" />
+                  <p className="inline">On Time</p>
+                </div>
+              </motion.div>
             ) : (
               <motion.div
                 variants={salahStatusVariants}
@@ -462,15 +440,15 @@ const BottomSheetSalahStatus = ({
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
-                className="mb-5 overflow-x-hidden mt-7 salah-status-modal-reasons-wrap"
+                className="overflow-x-hidden"
               >
                 {userPreferences.reasons.length > 0 && (
                   <div>
-                    <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+                    <h2 className="text-sm text-start">Reasons: </h2>
                   </div>
                 )}
                 {Array.isArray(userPreferences.reasons) && (
-                  <div className="flex flex-wrap">
+                  <div className="flex flex-wrap mb-5 salah-status-modal-reasons-wrap">
                     <AnimatePresence>
                       {[
                         ...new Set([
@@ -522,7 +500,17 @@ const BottomSheetSalahStatus = ({
             )}
           </AnimatePresence>
           <div className="text-sm notes-wrap">
-            <textarea
+            <IonTextarea
+              autoGrow={true}
+              rows={1}
+              className="pl-2 rounded-lg bg-stone-900"
+              placeholder="Notes"
+              onIonInput={(e) => {
+                handleNotes(e);
+                // increaseTextAreaHeight(e);
+              }}
+            ></IonTextarea>
+            {/* <textarea
               dir="auto"
               placeholder="Notes"
               ref={notesTextArea}
@@ -534,7 +522,7 @@ const BottomSheetSalahStatus = ({
               style={{ resize: "vertical" }}
               rows={3}
               className="w-full p-2 border outline-none bg-[rgb(35,35,35)] border-hidden rounded-xl max-h-14 focus:border-gray-500"
-            />
+            /> */}
           </div>
           <motion.button
             animate={{

@@ -301,11 +301,12 @@ const SalahTable = ({
                             ]?.includes(salahName)
                               ? {
                                   initial: { scale: 0 },
-                                  animate: { scale: [1.3, 1] },
+                                  // animate: { scale: [1.3, 1] },
+                                  animate: { scale: 1.3 },
                                   transition: {
                                     type: "spring",
-                                    stiffness: 500,
-                                    damping: 20,
+                                    stiffness: 300,
+                                    damping: 10,
                                     mass: 1,
                                     delay: 0.3,
                                   },

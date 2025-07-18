@@ -21,7 +21,6 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { IonModal } from "@ionic/react";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -97,9 +96,9 @@ const MissedSalahsListBottomSheet = ({
   };
 
   return (
-    <>
+    <section>
       {" "}
-      {/* <Sheet
+      <Sheet
         isOpen={showMissedSalahsSheet}
         onClose={() => setShowMissedSalahsSheet(false)}
         // onClose={() => false}
@@ -110,86 +109,75 @@ const MissedSalahsListBottomSheet = ({
           <Sheet.Header />
           <Sheet.Content>
             {" "}
-            <Sheet.Scroller> */}
-      <IonModal
-        mode="ios"
-        isOpen={showMissedSalahsSheet}
-        initialBreakpoint={0.97}
-        breakpoints={[0, 0.97]}
-        onWillPresent={() => {}}
-        onWillDismiss={() => {
-          console.log("onWillDismiss has run");
-          // closeFormCleanup();
-        }}
-      >
-        <section className="text-white">
-          <h1 className="mx-2 my-4 text-lg text-center">
-            You have {getMissedSalahCount(missedSalahList)} missed Salah to make
-            up
-          </h1>
-          <AnimatePresence>
-            {restructuredMissedSalahList.map((item) => {
-              const date = Object.keys(item)[0];
-              const salah = Object.values(item)[0];
-              return (
-                <motion.div
-                  layout
-                  initial={{ x: 0 }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "-100%", opacity: 0 }}
-                  transition={{
-                    delay: 0.3,
-                    duration: 0.2,
-                    layout: { duration: 0.2 },
-                  }}
-                  key={`${date}-${salah}`}
-                  className={`bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
-                >
-                  <section className="flex items-center justify-between">
-                    <p
-                    // style={{
-                    //   textDecoration:
-                    //     isClickedItem === `${date}-${salah}`
-                    //       ? "line-through"
-                    //       : "",
-                    // }}
-                    >
-                      {salah}
-                    </p>
-                    <div
-                      style={{
-                        backgroundColor:
-                          isClickedItem === `${date}-${salah}`
-                            ? salahStatusColorsHexCodes["late"]
-                            : salahStatusColorsHexCodes["missed"],
-                      }}
-                      className={`w-[1.3rem] h-[1.3rem] rounded-md`}
-                    ></div>
-                  </section>
-                  <section className="flex items-center justify-between pt-4 mt-4 border-t-[1px] border-y-stone-700">
-                    {" "}
-                    <p className="text-sm opacity-80">
-                      {createLocalisedDate(date)[1]}
-                    </p>
-                    <button
-                      className="rounded-full bg-[rgb(50,50,50)]"
-                      onClick={() => {
-                        modifySalahStatusInDB(date, salah);
-                        setIsClickedItem(`${date}-${salah}`);
-                      }}
-                    >
-                      <section className="flex items-center justify-between w-full px-3 py-2 text-sm">
-                        {/* <FaCheck className="font-thin" />{" "} */}
-                        <p className="">Mark As Done</p>
-                      </section>
-                    </button>
-                  </section>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </section>{" "}
-        {/* </Sheet.Scroller>
+            <Sheet.Scroller>
+              <section className="text-white">
+                <h1 className="mx-2 my-4 text-lg text-center">
+                  You have {getMissedSalahCount(missedSalahList)} missed Salah
+                  to make up
+                </h1>
+                <AnimatePresence>
+                  {restructuredMissedSalahList.map((item) => {
+                    const date = Object.keys(item)[0];
+                    const salah = Object.values(item)[0];
+                    return (
+                      <motion.div
+                        layout
+                        initial={{ x: 0 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: "-100%", opacity: 0 }}
+                        transition={{
+                          delay: 0.3,
+                          duration: 0.2,
+                          layout: { duration: 0.2 },
+                        }}
+                        key={`${date}-${salah}`}
+                        className={`bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
+                      >
+                        <section className="flex items-center justify-between">
+                          <p
+                          // style={{
+                          //   textDecoration:
+                          //     isClickedItem === `${date}-${salah}`
+                          //       ? "line-through"
+                          //       : "",
+                          // }}
+                          >
+                            {salah}
+                          </p>
+                          <div
+                            style={{
+                              backgroundColor:
+                                isClickedItem === `${date}-${salah}`
+                                  ? salahStatusColorsHexCodes["late"]
+                                  : salahStatusColorsHexCodes["missed"],
+                            }}
+                            className={`w-[1.3rem] h-[1.3rem] rounded-md`}
+                          ></div>
+                        </section>
+                        <section className="flex items-center justify-between pt-4 mt-4 border-t-[1px] border-y-stone-700">
+                          {" "}
+                          <p className="text-sm opacity-80">
+                            {createLocalisedDate(date)[1]}
+                          </p>
+                          <button
+                            className="rounded-full bg-[rgb(50,50,50)]"
+                            onClick={() => {
+                              modifySalahStatusInDB(date, salah);
+                              setIsClickedItem(`${date}-${salah}`);
+                            }}
+                          >
+                            <section className="flex items-center justify-between w-full px-3 py-2 text-sm">
+                              {/* <FaCheck className="font-thin" />{" "} */}
+                              <p className="">Mark As Done</p>
+                            </section>
+                          </button>
+                        </section>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </section>{" "}
+            </Sheet.Scroller>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop
@@ -198,10 +186,9 @@ const MissedSalahsListBottomSheet = ({
             setShowMissedSalahsSheet(false);
             // checkAndOpenOrCloseDBConnection("close");
           }}
-        /> */}
-        {/* </Sheet> */}
-      </IonModal>
-    </>
+        />
+      </Sheet>
+    </section>
   );
 };
 

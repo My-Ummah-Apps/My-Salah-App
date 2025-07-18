@@ -56,7 +56,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 html {
-  /* overflow: scroll; */
+  overflow: scroll;
 }
 
 body {
@@ -65,8 +65,8 @@ body {
   scrollbar-width: none;
   /* height: 100vh; */
   --ion-background-color: var(--primary-color);
-  --ion-text-color: rgb(184, 184, 184);
   background: var(--primary-color);
+  --ion-text-color: rgb(184, 184, 184);
   color: rgb(184, 184, 184);
   font-family: sans-serif;
   /* overflow: hidden; */
@@ -83,13 +83,25 @@ body:-webkit-scrollbar {
 }
 
 ion-modal {
-  --background: var(--body-bg-color) !important;
-  background: var(--body-bg-color) !important;
+  --background: var(--primary-color) !important;
   color: var(--text-color);
 }
 
 ion-modal::part(backdrop) {
-  background-color: rgba(0, 0, 0, 1) !important;
+  /* background-color: rgba(0, 0, 0, 1) !important; */
+}
+
+ion-textarea {
+  max-height: 50px !important;
+}
+
+ion-textarea textarea {
+  max-height: 50px !important;
+  overflow-y: auto;
+}
+
+.modal-fit-content {
+  --height: auto;
 }
 
 .settings-page-wrap,
@@ -203,8 +215,7 @@ td {
 }
 
 .salah-status-modal-reasons-wrap {
-  opacity: 0;
-  transition: max-height 0.5s ease-in-out, fadeIn 5s ease-in;
+  max-height: 20px;
 }
 
 .calendar-single-month-wrap {
