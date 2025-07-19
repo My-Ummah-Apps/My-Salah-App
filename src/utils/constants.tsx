@@ -11,17 +11,11 @@ import {
   userPreferencesType,
 } from "../types/types";
 
-export const MODAL_BREAKPOINTS = [0, 0.97];
-export const INITIAL_MODAL_BREAKPOINT = 0.97;
+export const MODAL_BREAKPOINTS = [0, 1];
+export const INITIAL_MODAL_BREAKPOINT = 1;
 
 export const defaultReasons =
   "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
-
-export const bottomSheetContainerStyles = {
-  borderRadius: "1.5rem 1.5rem 0 0",
-  overflow: "hidden",
-  backgroundColor: "rgb(33, 36, 38)",
-};
 
 export const pageTransitionStyles = {
   initial: { opacity: 0 },
@@ -143,15 +137,6 @@ export const validSalahStatuses = [
   "excused",
 ];
 
-export const sheetHeaderHeight = {
-  height: "60px",
-  // backgroundColor: "black",
-};
-
-export const sheetBackdropColor = {
-  backgroundColor: "rgba(0, 0, 0, 0.7)",
-};
-
 export const showToast = async (text: string, duration: "short" | "long") => {
   await Toast.show({
     text: text,
@@ -200,6 +185,3 @@ export const setStatusAndNavBarBGColor = async (
   }
   await StatusBar.setStyle({ style: textColor });
 };
-
-// export const bottomSheetCloseBtnStyles =
-//   "text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3";

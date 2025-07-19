@@ -4,7 +4,7 @@ import { GoPeople } from "react-icons/go";
 import { GoSkip } from "react-icons/go";
 import { GoClock } from "react-icons/go";
 import { PiFlower } from "react-icons/pi";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { InAppReview } from "@capacitor-community/in-app-review";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
@@ -68,6 +68,8 @@ const BottomSheetSalahStatus = ({
   generateStreaks,
 }: SalahStatusBottomSheetProps) => {
   const sheetRef = useRef<HTMLDivElement>(null);
+  const modalSheetSalahReasonsWrap = useRef<HTMLDivElement>(null);
+  const modalSheetHiddenSalahReasonsWrap = useRef<HTMLDivElement>(null);
   const [salahStatus, setSalahStatus] = useState<SalahStatusType>("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
 
@@ -82,7 +84,6 @@ const BottomSheetSalahStatus = ({
     setSalahStatus("");
     setSelectedReasons([]);
     setNotes("");
-    setShowReasons(false);
 
     if (isMultiEditMode) {
       setIsMultiEditMode(false);
@@ -238,8 +239,6 @@ const BottomSheetSalahStatus = ({
     }
   };
 
-  const [showReasons, setShowReasons] = useState(false);
-
   if (Capacitor.getPlatform() === "ios") {
     Keyboard.setResizeMode({
       mode: KeyboardResize.None,
@@ -286,254 +285,350 @@ const BottomSheetSalahStatus = ({
   const statusBoxStyles =
     "h-full px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full";
 
+  const [reasonsHeight, setReasonsHeight] = useState(0);
+
+  useEffect(() => {
+    console.log(
+      "modalSheetSalahReasonsWrap.current: ",
+      modalSheetSalahReasonsWrap.current
+    );
+    console.log(
+      " modalSheetHiddenSalahReasonsWrap.current: ",
+      modalSheetHiddenSalahReasonsWrap.current
+    );
+
+    if (
+      modalSheetHiddenSalahReasonsWrap &&
+      modalSheetHiddenSalahReasonsWrap.current
+    ) {
+      setReasonsHeight(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
+    }
+
+    // if (
+    //   modalSheetSalahReasonsWrap.current &&
+    //   modalSheetHiddenSalahReasonsWrap.current
+    // ) {
+    //   console.log("EXISTS");
+    //   // console.log(modalSheetSalahReasonsWrap.current);
+    //   // console.log(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
+    //   if (
+    //     salahStatus === "male-alone" ||
+    //     salahStatus === "late" ||
+    //     salahStatus === "missed"
+    //   ) {
+    //     console.log("YO");
+
+    //     modalSheetSalahReasonsWrap.current.style.maxHeight =
+    //       modalSheetHiddenSalahReasonsWrap.current.offsetHeight + "px";
+    //     modalSheetSalahReasonsWrap.current.style.opacity = "1";
+    //   } else {
+    //     console.log("HELLO");
+    //     modalSheetSalahReasonsWrap.current.style.maxHeight = "0";
+    //   }
+    // }
+  }, [showUpdateStatusModal, salahStatus]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "modalSheetSalahReasonsWrap.current on mount",
+  //     modalSheetSalahReasonsWrap.current
+  //   );
+  // }, []);
+
   return (
-    <IonModal
-      className="modal-fit-content"
-      mode="ios"
-      onWillPresent={() => {
-        checkDBForSalah();
-      }}
-      onDidDismiss={() => {
-        setShowUpdateStatusModal(false);
-        onSheetCloseCleanup();
-      }}
-      isOpen={showUpdateStatusModal}
-      initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
-      breakpoints={MODAL_BREAKPOINTS}
-    >
-      {/* <IonContent> */}
-      <section className="p-5 pb-10 mx-auto text-white rounded-lg">
-        <h1 className="mb-10 text-3xl font-light text-center">
-          How did you pray{" "}
-          {Object.keys(selectedSalahAndDate).length === 1 &&
-          Object.values(selectedSalahAndDate)[0].length === 1
-            ? `${Object.values(selectedSalahAndDate)} ${determineDateRecency(
-                Object.keys(selectedSalahAndDate)[0]
-              )}?`
-            : `these Salah?`}
-        </h1>
-        <div
-          className={`mb-5 grid grid-cols-4 items-stretch grid-rows-1 gap-2 text-xs`}
-        >
-          {userPreferences.userGender === "male" ? (
-            <motion.div
-              variants={salahStatusVariants}
-              initial="default"
-              animate={salahStatus === "group" ? "animate" : "default"}
-            >
-              <div
-                onClick={() => {
-                  setSalahStatus("group");
-                  setShowReasons(false);
-                }}
-                style={{
-                  backgroundColor: salahStatusColorsHexCodes.group,
-                }}
-                className={statusBoxStyles}
-              >
-                {" "}
-                <GoPeople className="w-full mb-1 text-3xl" />
-                <p className="inline"> In Jamaah</p>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              variants={salahStatusVariants}
-              initial="default"
-              animate={salahStatus === "female-alone" ? "animate" : "default"}
-            >
-              <div
-                onClick={() => {
-                  setSalahStatus("female-alone");
-                  setShowReasons(false);
-                }}
-                style={{
-                  backgroundColor: salahStatusColorsHexCodes["female-alone"],
-                }}
-                className={statusBoxStyles}
-              >
-                {" "}
-                <GoPerson className="w-full mb-1 text-3xl" />
-                <p className="inline">Prayed</p>
-              </div>
-            </motion.div>
-          )}
-          {userPreferences.userGender === "male" ? (
-            <motion.div
-              variants={salahStatusVariants}
-              initial="default"
-              animate={salahStatus === "male-alone" ? "animate" : "default"}
-            >
-              <div
-                onClick={() => {
-                  setSalahStatus("male-alone");
-                  setShowReasons(true);
-                }}
-                style={{
-                  backgroundColor: salahStatusColorsHexCodes["male-alone"],
-                }}
-                className={statusBoxStyles}
-              >
-                <GoPerson className="w-full mb-1 text-3xl" />
-                <p className="inline">On Time</p>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              variants={salahStatusVariants}
-              initial="default"
-              animate={salahStatus === "excused" ? "animate" : "default"}
-            >
-              <div
-                onClick={() => {
-                  setSalahStatus("excused");
-                  setShowReasons(false);
-                }}
-                style={{
-                  backgroundColor: salahStatusColorsHexCodes.excused,
-                }}
-                className={statusBoxStyles}
-              >
-                <PiFlower className="w-full mb-1 text-3xl" />
-                <p className="inline">Excused</p>
-              </div>{" "}
-            </motion.div>
-          )}
+    <>
+      <IonModal
+        className="modal-fit-content"
+        mode="ios"
+        onWillPresent={() => {
+          checkDBForSalah();
+        }}
+        onDidDismiss={() => {
+          setShowUpdateStatusModal(false);
+          onSheetCloseCleanup();
+        }}
+        isOpen={showUpdateStatusModal}
+        initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+        breakpoints={MODAL_BREAKPOINTS}
+      >
+        {" "}
+        <section className="w-[90%] mx-auto mb-10 rounded-lg text-white">
+          <h1 className="mb-10 text-3xl font-light text-center">
+            How did you pray{" "}
+            {Object.keys(selectedSalahAndDate).length === 1 &&
+            Object.values(selectedSalahAndDate)[0].length === 1
+              ? `${Object.values(selectedSalahAndDate)} ${determineDateRecency(
+                  Object.keys(selectedSalahAndDate)[0]
+                )}?`
+              : `these Salah?`}
+          </h1>
 
-          <motion.div
-            variants={salahStatusVariants}
-            initial="default"
-            animate={salahStatus === "late" ? "animate" : "default"}
-            onClick={() => {
-              setSalahStatus("late");
-              setShowReasons(true);
-            }}
-            style={{
-              backgroundColor: salahStatusColorsHexCodes.late,
-            }}
-            className={statusBoxStyles}
+          <div
+            className={`grid grid-cols-4 items-stretch grid-rows-1 gap-2 text-xs modal-sheet-salah-statuses-wrap `}
           >
-            <GoClock className="w-full mb-1 text-3xl" />
-            <p className="inline">Late</p>
-          </motion.div>
-
-          <motion.div
-            variants={salahStatusVariants}
-            initial="default"
-            animate={salahStatus === "missed" ? "animate" : "default"}
-            onClick={() => {
-              setSalahStatus("missed");
-              setShowReasons(true);
-            }}
-            style={{
-              backgroundColor: salahStatusColorsHexCodes.missed,
-            }}
-            className={statusBoxStyles}
-          >
-            <GoSkip className="w-full mb-1 text-3xl" />
-            <p className="inline">Missed</p>
-          </motion.div>
-        </div>
-        <AnimatePresence>
-          {showReasons && (
-            <motion.section
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-x-hidden"
-            >
-              {userPreferences.reasons.length > 0 && (
-                <div>
-                  <h2 className="text-sm text-start">Reasons: </h2>
+            {userPreferences.userGender === "male" ? (
+              <motion.div
+                variants={salahStatusVariants}
+                initial="default"
+                animate={salahStatus === "group" ? "animate" : "default"}
+              >
+                <div
+                  onClick={() => {
+                    setSalahStatus("group");
+                  }}
+                  style={{
+                    backgroundColor: salahStatusColorsHexCodes.group,
+                  }}
+                  className={statusBoxStyles}
+                >
+                  {" "}
+                  <GoPeople className="w-full mb-1 text-3xl" />
+                  <p className="inline"> In Jamaah</p>
                 </div>
-              )}
-              {Array.isArray(userPreferences.reasons) && (
-                <div className="flex flex-wrap mb-5 salah-status-modal-reasons-wrap">
-                  <AnimatePresence>
-                    {[
-                      ...new Set([
-                        ...selectedReasons,
-                        ...userPreferences.reasons,
-                      ]),
-                    ]
-                      .sort((a, b) => a.localeCompare(b))
+              </motion.div>
+            ) : (
+              <motion.div
+                variants={salahStatusVariants}
+                initial="default"
+                animate={salahStatus === "female-alone" ? "animate" : "default"}
+              >
+                <div
+                  onClick={() => {
+                    setSalahStatus("female-alone");
+                  }}
+                  style={{
+                    backgroundColor: salahStatusColorsHexCodes["female-alone"],
+                  }}
+                  className={statusBoxStyles}
+                >
+                  {" "}
+                  <GoPerson className="w-full mb-1 text-3xl" />
+                  <p className="inline">Prayed</p>
+                </div>
+              </motion.div>
+            )}
+            {userPreferences.userGender === "male" ? (
+              <>
+                <motion.div
+                  variants={salahStatusVariants}
+                  initial="default"
+                  animate={salahStatus === "male-alone" ? "animate" : "default"}
+                >
+                  <div
+                    onClick={() => {
+                      setSalahStatus("male-alone");
+                    }}
+                    style={{
+                      backgroundColor: salahStatusColorsHexCodes["male-alone"],
+                    }}
+                    className={statusBoxStyles}
+                  >
+                    <GoPerson className="w-full mb-1 text-3xl" />
+                    <p className="inline">On Time</p>
+                  </div>
+                </motion.div>
+              </>
+            ) : (
+              <>
+                <motion.div
+                  variants={salahStatusVariants}
+                  initial="default"
+                  animate={salahStatus === "excused" ? "animate" : "default"}
+                >
+                  <div
+                    onClick={() => {
+                      setSalahStatus("excused");
+                    }}
+                    style={{
+                      backgroundColor: salahStatusColorsHexCodes.excused,
+                    }}
+                    className={statusBoxStyles}
+                  >
+                    <PiFlower className="w-full mb-1 text-3xl" />
+                    <p className="inline">Excused</p>
+                  </div>{" "}
+                </motion.div>
+              </>
+            )}
 
-                      .map((item) => (
-                        <motion.p
-                          // layout="position"
-                          initial={{
-                            backgroundColor: "#272727",
-                          }}
-                          animate={{
-                            backgroundColor: selectedReasons.includes(item)
-                              ? "#2563eb"
-                              : "#272727",
-                          }}
-                          transition={{ duration: 0.3 }}
-                          exit={{ scale: [1, 1.2, 0], opacity: 0 }}
-                          key={item}
-                          className={reasonsStyles}
-                          onClick={async () => {
-                            if (!selectedReasons.includes(item)) {
-                              setSelectedReasons((prev) => [...prev, item]);
-                            } else if (selectedReasons.includes(item)) {
-                              if (!userPreferences.reasons.includes(item)) {
-                                const confirmMsgRes = await showConfirmMsg(
-                                  "Confirm",
-                                  "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
-                                );
-                                if (!confirmMsgRes) return;
-                              }
-                              setSelectedReasons((prev) =>
-                                prev.filter((reason) => reason !== item)
+            <motion.div
+              variants={salahStatusVariants}
+              initial="default"
+              animate={salahStatus === "late" ? "animate" : "default"}
+              onClick={() => {
+                setSalahStatus("late");
+              }}
+              style={{
+                backgroundColor: salahStatusColorsHexCodes.late,
+              }}
+              className={statusBoxStyles}
+            >
+              <GoClock className="w-full mb-1 text-3xl" />
+              <p className="inline">Late</p>
+            </motion.div>
+
+            <motion.div
+              variants={salahStatusVariants}
+              initial="default"
+              animate={salahStatus === "missed" ? "animate" : "default"}
+              onClick={() => {
+                setSalahStatus("missed");
+              }}
+              style={{
+                backgroundColor: salahStatusColorsHexCodes.missed,
+              }}
+              className={statusBoxStyles}
+            >
+              <GoSkip className="w-full mb-1 text-3xl" />
+              <p className="inline">Missed</p>
+            </motion.div>
+          </div>
+          <section
+            style={{ maxHeight: reasonsHeight + "px" }}
+            ref={modalSheetSalahReasonsWrap}
+            className="mb-5 overflow-x-hidden mt-7 salah-status-modal-reasons-wrap"
+          >
+            {userPreferences.reasons.length > 0 && (
+              <div>
+                <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+              </div>
+            )}
+            {Array.isArray(userPreferences.reasons) && (
+              <div className="flex flex-wrap">
+                <AnimatePresence>
+                  {[
+                    ...new Set([
+                      ...selectedReasons,
+                      ...userPreferences.reasons,
+                    ]),
+                  ]
+                    .sort((a, b) => a.localeCompare(b))
+
+                    .map((item) => (
+                      <motion.p
+                        // layout="position"
+                        initial={{
+                          backgroundColor: "#272727",
+                        }}
+                        animate={{
+                          backgroundColor: selectedReasons.includes(item)
+                            ? "#2563eb"
+                            : "#272727",
+                        }}
+                        transition={{ duration: 0.3 }}
+                        exit={{ scale: [1, 1.2, 0], opacity: 0 }}
+                        key={item}
+                        className={reasonsStyles}
+                        onClick={async () => {
+                          if (!selectedReasons.includes(item)) {
+                            setSelectedReasons((prev) => [...prev, item]);
+                          } else if (selectedReasons.includes(item)) {
+                            if (!userPreferences.reasons.includes(item)) {
+                              const confirmMsgRes = await showConfirmMsg(
+                                "Confirm",
+                                "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
                               );
+                              if (!confirmMsgRes) return;
                             }
-                          }}
-                        >
-                          {item}
-                        </motion.p>
-                      ))}
-                  </AnimatePresence>
-                </div>
-              )}
-            </motion.section>
-          )}
-        </AnimatePresence>
-        <div className="text-sm notes-wrap">
-          <IonTextarea
-            autoGrow={true}
-            rows={1}
-            className="pl-2 rounded-lg bg-stone-900"
-            placeholder="Notes"
-            onIonInput={(e) => {
-              // @ts-ignore
-              handleNotes(e);
+                            setSelectedReasons((prev) =>
+                              prev.filter((reason) => reason !== item)
+                            );
+                          }
+                        }}
+                      >
+                        {item}
+                      </motion.p>
+                    ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </section>
+          <div className="text-sm notes-wrap">
+            <IonTextarea
+              autoGrow={true}
+              rows={1}
+              className="pl-2 rounded-lg bg-stone-900"
+              placeholder="Notes"
+              onIonInput={(e) => {
+                // @ts-ignore
+                handleNotes(e);
+              }}
+            ></IonTextarea>
+          </div>
+          <motion.button
+            animate={{
+              opacity: salahStatus ? 1 : 0.2,
             }}
-          ></IonTextarea>
+            transition={{ duration: 0.3 }}
+            onClick={async () => {
+              if (salahStatus) {
+                await addOrModifySalah();
+                setShowUpdateStatusModal(false);
+                setShowBoxAnimation(true);
+                onSheetCloseCleanup();
+              }
+            }}
+            className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
+              salahStatus ? "opacity-100" : "opacity-20"
+            }`}
+          >
+            Save
+          </motion.button>
+        </section>
+      </IonModal>
+
+      {/* BELOW IS DUPLICATE SO HEIGHT CAN BE ANIMATED */}
+      <div
+        className="DUPLICATE-REASONS z-[-10000] absolute bottom-0 opacity-0"
+        ref={modalSheetHiddenSalahReasonsWrap}
+      >
+        <div>
+          <div className="overflow-x-hidden salah-status-modal-reasons-wrap">
+            {userPreferences.reasons.length > 0 && (
+              <div>
+                <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+              </div>
+            )}
+          </div>
         </div>
-        <motion.button
-          animate={{
-            opacity: salahStatus ? 1 : 0.2,
-          }}
-          transition={{ duration: 0.3 }}
-          onClick={async () => {
-            if (salahStatus) {
-              await addOrModifySalah();
-              setShowUpdateStatusModal(false);
-              setShowBoxAnimation(true);
-              onSheetCloseCleanup();
-            }
-          }}
-          className={`w-full p-4 mt-5 rounded-2xl bg-blue-600 ${
-            salahStatus ? "opacity-100" : "opacity-20"
-          }`}
-        >
-          Save
-        </motion.button>
-      </section>
-      {/* </IonContent> */}
-    </IonModal>
+
+        {Array.isArray(userPreferences.reasons) && (
+          <div className="flex flex-wrap">
+            {[...new Set([...selectedReasons, ...userPreferences.reasons])]
+              .sort((a, b) => a.localeCompare(b))
+              .map((item) => (
+                <p
+                  key={item}
+                  style={{
+                    backgroundColor: selectedReasons.includes(item)
+                      ? "#fff"
+                      : "",
+                  }}
+                  className={reasonsStyles}
+                  onClick={async () => {
+                    if (!selectedReasons.includes(item)) {
+                      setSelectedReasons((prev) => [...prev, item]);
+                    } else if (selectedReasons.includes(item)) {
+                      if (!userPreferences.reasons.includes(item)) {
+                        const confirmMsgRes = await showConfirmMsg(
+                          "Confirm",
+                          "This reason has been deleted from the reasons list in the settings page, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                        );
+                        if (!confirmMsgRes) return;
+                      }
+                      setSelectedReasons((prev) =>
+                        prev.filter((reason) => reason !== item)
+                      );
+                    }
+                  }}
+                >
+                  {item}
+                </p>
+              ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

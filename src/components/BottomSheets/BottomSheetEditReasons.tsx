@@ -35,6 +35,7 @@ const BottomSheetEditReasons = ({
   return (
     <IonModal
       mode="ios"
+      style={{ "--height": "95vh" }}
       // expandToScroll={false}
       // className="modal-fit-content"
       onWillDismiss={() => {
