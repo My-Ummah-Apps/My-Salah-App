@@ -1,5 +1,4 @@
 import { Dialog } from "@capacitor/dialog";
-import { EasingDefinition } from "framer-motion";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { format, isValid, parse } from "date-fns";
@@ -17,11 +16,6 @@ export const INITIAL_MODAL_BREAKPOINT = 0.97;
 
 export const defaultReasons =
   "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
-
-export const TWEEN_CONFIG = {
-  ease: "easeInOut" as EasingDefinition,
-  duration: 0.5,
-};
 
 export const bottomSheetContainerStyles = {
   borderRadius: "1.5rem 1.5rem 0 0",

@@ -22,6 +22,7 @@ import { pageTransitionStyles, showToast } from "../utils/constants";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetAboutUs from "../components/BottomSheets/BottomSheetAboutUs";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
+import BottomSheetChangelog from "../components/BottomSheets/BottomSheetChangeLog";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -37,7 +38,6 @@ interface SettingsPageProps {
   ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  setShowChangelogModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SettingsPage = ({
@@ -49,7 +49,6 @@ const SettingsPage = ({
   modifyDataInUserPreferencesTable,
   setUserPreferences,
   userPreferences,
-  setShowChangelogModal,
 }: SettingsPageProps) => {
   const shareThisAppLink = async (link: string) => {
     await Share.share({
@@ -213,8 +212,6 @@ const SettingsPage = ({
     }
   };
 
-  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
-
   const link = (url: string) => {
     window.location.href = url;
   };
@@ -242,9 +239,7 @@ const SettingsPage = ({
       <div className="settings-page-options-wrap">
         <div
           className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
-          onClick={() => {
-            setShowNotificationsModal(true);
-          }}
+          id="open-notification-options-sheet"
         >
           <div className="mx-2">
             <p className="pt-[0.3rem] pb-[0.1rem] text-lg">{"Notifications"}</p>
@@ -254,9 +249,8 @@ const SettingsPage = ({
           </div>
           <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
           <BottomSheetNotifications
+            triggerId="open-notification-options-sheet"
             modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-            setShowNotificationsModal={setShowNotificationsModal}
-            showNotificationsModal={showNotificationsModal}
             setUserPreferences={setUserPreferences}
             userPreferences={userPreferences}
           />
@@ -375,12 +369,11 @@ const SettingsPage = ({
           />
         )}
         <SettingIndividual
+          id="open-changelog-sheet"
           headingText={"Changelog"}
           subText={"View Changelog"}
-          onClick={() => {
-            setShowChangelogModal(true);
-          }}
         />
+        <BottomSheetChangelog triggerId="open-changelog-sheet" />
         <SettingIndividual
           headingText={"Feedback"}
           subText={"Report Bugs / Request Features"}

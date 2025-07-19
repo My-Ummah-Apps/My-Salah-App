@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sheet from "react-modal-sheet";
+
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
@@ -13,23 +13,20 @@ import {
 
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import {
-  bottomSheetContainerStyles,
   checkNotificationPermissions,
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
   scheduleDailyNotification,
-  sheetBackdropColor,
-  sheetHeaderHeight,
-  TWEEN_CONFIG,
 } from "../../utils/constants";
+import { IonModal } from "@ionic/react";
 
 const BottomSheetNotifications = ({
-  setShowNotificationsModal,
-  showNotificationsModal,
+  triggerId,
   modifyDataInUserPreferencesTable,
   setUserPreferences,
   userPreferences,
 }: {
-  setShowNotificationsModal: React.Dispatch<React.SetStateAction<boolean>>;
-  showNotificationsModal: boolean;
+  triggerId: string;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
     value: string
@@ -142,59 +139,51 @@ const BottomSheetNotifications = ({
   }, [dailyNotificationToggle]);
 
   return (
-    <Sheet
-      detent="content-height"
-      tweenConfig={TWEEN_CONFIG}
-      isOpen={showNotificationsModal}
-      onClose={() => setShowNotificationsModal(false)}
+    <IonModal
+      className="modal-fit-content"
+      mode="ios"
+      trigger={triggerId}
+      initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+      breakpoints={MODAL_BREAKPOINTS}
     >
-      <Sheet.Container style={bottomSheetContainerStyles}>
-        <Sheet.Header style={sheetHeaderHeight} />
-        <Sheet.Content>
-          <div className="h-[50vh]">
-            <div className="flex items-center justify-between p-3 notification-text-and-toggle-wrap">
-              <p>Turn on Daily Notification</p>{" "}
-              <Switch
-                checked={dailyNotificationToggle}
-                handleColor="white"
-                offColor="white"
-                onChange={() => {
-                  handleNotificationPermissions();
-                }}
-                onColor="#3b82f6"
-              />
-            </div>
+      <div className="h-[50vh]">
+        <div className="flex items-center justify-between px-2 mt-10 notification-text-and-toggle-wrap">
+          <p>Turn on Daily Notification</p>{" "}
+          <Switch
+            checked={dailyNotificationToggle}
+            handleColor="white"
+            offColor="white"
+            onChange={() => {
+              handleNotificationPermissions();
+            }}
+            onColor="#3b82f6"
+          />
+        </div>
 
-            {dailyNotificationToggle === true ? (
-              <div className="flex items-center justify-between p-3">
-                <p>Set Time</p>
-                <input
-                  onChange={(e) => {
-                    handleTimeChange(e);
-                  }}
-                  style={{ backgroundColor: "transparent" }}
-                  className={`${
-                    dailyNotificationToggle === true ? "slideUp" : ""
-                  } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
-                  type="time"
-                  dir="auto"
-                  id="appt"
-                  name="appt"
-                  min="09:00"
-                  max="18:00"
-                  value={userPreferences.dailyNotificationTime}
-                  required
-                />
-              </div>
-            ) : null}
+        {dailyNotificationToggle && (
+          <div className="flex items-center justify-between p-3">
+            <p>Set Time</p>
+            <input
+              onChange={(e) => {
+                handleTimeChange(e);
+              }}
+              style={{ backgroundColor: "transparent" }}
+              className={`${
+                dailyNotificationToggle === true ? "slideUp" : ""
+              } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
+              type="time"
+              dir="auto"
+              id="appt"
+              name="appt"
+              min="09:00"
+              max="18:00"
+              value={userPreferences.dailyNotificationTime}
+              required
+            />
           </div>
-        </Sheet.Content>
-      </Sheet.Container>
-      <Sheet.Backdrop
-        style={sheetBackdropColor}
-        onTap={() => setShowNotificationsModal(false)}
-      />
-    </Sheet>
+        )}
+      </div>
+    </IonModal>
   );
 };
 

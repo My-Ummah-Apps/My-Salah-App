@@ -168,11 +168,6 @@ textarea {
   text-transform: uppercase;
 }
 
-.react-modal-sheet-container {
-  transition: margin-bottom 420ms;
-  max-width: var(--max-width);
-}
-
 .header-wrap {
   background: var(--primary-color);
 }
@@ -202,12 +197,6 @@ td {
 .swiper-pagination-bullet-active {
   background-color: #fff;
   opacity: 1;
-}
-
-.react-modal-sheet-scroller,
-.react-modal-sheet-header,
-.react-modal-sheet-container {
-  background-color: var(--primary-color) !important;
 }
 
 .changelog-individual-log:first-of-type {

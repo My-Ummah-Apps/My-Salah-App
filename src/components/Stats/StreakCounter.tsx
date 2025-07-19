@@ -2,7 +2,6 @@ import { createLocalisedDate } from "../../utils/constants";
 import { streakDatesObjType } from "../../types/types";
 import wreathLeft from "/src/assets/images/wreath-left.png";
 import wreathRight from "/src/assets/images/wreath-right.png";
-import { useState } from "react";
 import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
 import { Dialog } from "@capacitor/dialog";
@@ -19,7 +18,6 @@ const StreakCounter = ({
   activeStreakCount,
   userGender,
 }: StreakCounterProps) => {
-  const [showStreaksModal, setShowStreaksModal] = useState(false);
   const activeStreakObj = streakDatesObjectsArr.filter(
     (obj) => obj.isActive === true
   )[0];
@@ -95,10 +93,8 @@ const StreakCounter = ({
         </div>
         {hasStreakDays && filteredStreakDatesObjectsArr.length > 1 && (
           <button
+            id="open-streak-counter-sheet"
             style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
-            onClick={() => {
-              setShowStreaksModal(true);
-            }}
             className={`mb-2 pt-2 text-center w-full `}
           >
             <p className="">Show All Streaks</p>
@@ -106,8 +102,7 @@ const StreakCounter = ({
         )}
       </div>
       <BottomSheetStreaksHistory
-        setShowStreaksModal={setShowStreaksModal}
-        showStreaksModal={showStreaksModal}
+        triggerId="open-streak-counter-sheet"
         filteredStreakDatesObjectsArr={filteredStreakDatesObjectsArr}
       />
     </>

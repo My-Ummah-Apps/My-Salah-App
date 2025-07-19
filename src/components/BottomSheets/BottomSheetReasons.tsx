@@ -1,16 +1,16 @@
-import Sheet from "react-modal-sheet";
 import {
-  bottomSheetContainerStyles,
-  sheetBackdropColor,
-  TWEEN_CONFIG,
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 import {
   reasonsToShowType,
   salahReasonsOverallNumbersType,
 } from "../../types/types";
 import ReasonsList from "../Stats/ReasonsList";
+import { IonContent, IonModal } from "@ionic/react";
 
 interface BottomSheetReasonsProps {
+  triggerId: string;
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showReasonsSheet: boolean;
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
@@ -18,50 +18,41 @@ interface BottomSheetReasonsProps {
 }
 
 const BottomSheetReasons = ({
-  setShowReasonsSheet,
-  showReasonsSheet,
+  triggerId,
   salahReasonsOverallNumbers,
   status,
 }: BottomSheetReasonsProps) => {
   return (
-    <Sheet
-      isOpen={showReasonsSheet}
-      onClose={() => setShowReasonsSheet(false)}
-      detent="content-height"
-      tweenConfig={TWEEN_CONFIG}
+    <IonModal
+      mode="ios"
+      // className="modal-fit-content"
+      trigger={triggerId}
+      initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+      breakpoints={MODAL_BREAKPOINTS}
     >
-      <Sheet.Container style={bottomSheetContainerStyles}>
-        <Sheet.Header />
-        <Sheet.Content className="mb-10 overflow-scroll sheet-changelog">
-          <Sheet.Scroller>
-            {status && (
-              <>
-                <h1 className="px-10 my-4 text-2xl text-center">
-                  {`Reasons For ${
-                    status === "male-alone"
-                      ? "Praying Salah Alone"
-                      : status === "late"
-                      ? "Praying Salah Late"
-                      : status === "missed"
-                      ? "Missing Salah"
-                      : ""
-                  }`}
-                </h1>
-                <ReasonsList
-                  salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                  status={status}
-                  partialOrFull="full"
-                />
-              </>
-            )}
-          </Sheet.Scroller>
-        </Sheet.Content>
-      </Sheet.Container>
-      <Sheet.Backdrop
-        style={sheetBackdropColor}
-        onTap={() => setShowReasonsSheet(false)}
-      />
-    </Sheet>
+      <IonContent>
+        {status && (
+          <section className="mt-10">
+            <h1 className="px-10 my-4 text-2xl text-center">
+              {`Reasons For ${
+                status === "male-alone"
+                  ? "Praying Salah Alone"
+                  : status === "late"
+                  ? "Praying Salah Late"
+                  : status === "missed"
+                  ? "Missing Salah"
+                  : ""
+              }`}
+            </h1>
+            <ReasonsList
+              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+              status={status}
+              partialOrFull="full"
+            />
+          </section>
+        )}
+      </IonContent>
+    </IonModal>
   );
 };
 

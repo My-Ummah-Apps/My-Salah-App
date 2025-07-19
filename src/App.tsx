@@ -1,16 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { IonApp } from "@ionic/react";
 import HomePage from "./pages/HomePage";
-import Sheet from "react-modal-sheet";
 import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   dictPreferencesDefaultValues,
-  scheduleDailyNotification,
-  sheetBackdropColor,
-  sheetHeaderHeight,
-  bottomSheetContainerStyles,
   setStatusAndNavBarBGColor,
 } from "./utils/constants";
 import {
@@ -24,13 +19,6 @@ import {
   SalahByDateObjType,
   streakDatesObjType,
 } from "./types/types";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperInstance } from "swiper";
-import { Navigation, Pagination } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/pagination";
 
 import { Style } from "@capacitor/status-bar";
 import { SplashScreen } from "@capacitor/splash-screen";
@@ -50,12 +38,11 @@ import SettingsPage from "./pages/SettingsPage";
 import StatsPage from "./pages/StatsPage";
 // import QiblahDirection from "./pages/QiblahDirection";
 import useSQLiteDB from "./utils/useSqLiteDB";
-import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import Onboarding from "./components/Onboarding";
 
 const App = () => {
-  const [showIntroModal, setShowIntroModal] = useState(false);
-  const [showChangelogModal, setShowChangelogModal] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
@@ -74,7 +61,7 @@ const App = () => {
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
     ) {
       if (Capacitor.getPlatform() === "ios") {
-        setShowChangelogModal(true);
+        // setShowChangelogModal(true);
       }
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
@@ -174,7 +161,8 @@ const App = () => {
         ) || "";
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
-        setShowIntroModal(true);
+        // setShowIntroModal(true);
+        setShowOnboarding(true);
       }
 
       // * The below has been implemented as a last resort since on Android (atleast when installing via Android Studio) notifications stop working on reinstallation/update of the app, need to test whether this is still a problem when installing via the playstore, this issue doesn't exist on iOS
@@ -583,11 +571,6 @@ const App = () => {
   };
 
   const pageStyles: string = ``;
-  const swiperRef = useRef<SwiperInstance | null>(null);
-
-  const handleGenderSelect = () => {
-    swiperRef.current?.slideNext();
-  };
 
   return (
     <IonApp>
@@ -649,7 +632,6 @@ const App = () => {
                   }
                   setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
-                  setShowChangelogModal={setShowChangelogModal}
                 />
               }
             />
@@ -680,132 +662,16 @@ const App = () => {
             }
           /> */}
           </Routes>
-          <Sheet
-            isOpen={showIntroModal}
-            onClose={() => {
-              setShowIntroModal(false);
-              setShowJoyRideEditIcon(true);
-            }}
-            detent="full-height"
-            disableDrag={true}
-          >
-            <Sheet.Container style={bottomSheetContainerStyles}>
-              <Sheet.Header style={sheetHeaderHeight} />
-              <Sheet.Content style={{ justifyContent: "center" }}>
-                {" "}
-                <Swiper
-                  onSwiper={(swiper) => (swiperRef.current = swiper)}
-                  style={{ margin: 0 }}
-                  spaceBetween={50}
-                  slidesPerView={1}
-                  allowTouchMove={false}
-                  // navigation={{
-                  //   nextEl: ".swiper-button-next",
-                  //   prevEl: ".swiper-button-prev",
-                  // }}
-                  modules={[Pagination, Navigation]}
-                  // pagination={{ clickable: true }}
-                >
-                  <SwiperSlide>
-                    <section className="p-5">
-                      <h1 className="text-4xl">I am a...</h1>
-                      <p
-                        className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
-                        onClick={async () => {
-                          handleGenderSelect();
-                          await modifyDataInUserPreferencesTable(
-                            "userGender",
-                            "male"
-                          );
-
-                          localStorage.setItem(
-                            "appVersion",
-                            LATEST_APP_VERSION
-                          );
-                        }}
-                      >
-                        Brother
-                      </p>
-                      <p
-                        className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
-                        onClick={async () => {
-                          handleGenderSelect();
-                          await modifyDataInUserPreferencesTable(
-                            "userGender",
-                            "female"
-                          );
-
-                          localStorage.setItem(
-                            "appVersion",
-                            LATEST_APP_VERSION
-                          );
-                        }}
-                      >
-                        Sister
-                      </p>
-                    </section>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <section className="m-4 text-center">
-                      <h1 className="mb-2 text-2xl font-bold">
-                        Stay Consistent with Your Salah
-                      </h1>
-                      <p>
-                        Stay consistent with your Salah. Turn on daily reminders
-                        to help you log your prayers and reach your goals.
-                      </p>
-                    </section>
-                    <section className="flex flex-col p-5">
-                      <button
-                        onClick={async () => {
-                          const permission =
-                            await LocalNotifications.requestPermissions();
-                          if (permission.display === "granted") {
-                            setShowIntroModal(false);
-                            setShowJoyRideEditIcon(true);
-                            scheduleDailyNotification(21, 0);
-                            await modifyDataInUserPreferencesTable(
-                              "dailyNotification",
-                              "1"
-                            );
-                            await modifyDataInUserPreferencesTable(
-                              "dailyNotificationTime",
-                              "21:00"
-                            );
-                          } else {
-                            setShowIntroModal(false);
-                            setShowJoyRideEditIcon(true);
-                          }
-                        }}
-                        className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl"
-                      >
-                        Allow Daily Notification
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowIntroModal(false);
-                          setShowJoyRideEditIcon(true);
-                        }}
-                        className="py-3 m-2 text-center text-white rounded-2xl"
-                      >
-                        Maybe Later
-                      </button>
-                    </section>
-                  </SwiperSlide>
-                </Swiper>
-                {/* <section className="flex justify-end m-2">
-                <div className="swiper-button-prev ">Prev</div>
-                <div className="swiper-button-next">Next</div>
-              </section> */}
-              </Sheet.Content>
-            </Sheet.Container>
-            <Sheet.Backdrop style={sheetBackdropColor} />
-          </Sheet>
+          {showOnboarding && (
+            <Onboarding
+              setShowOnboarding={setShowOnboarding}
+              setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+              modifyDataInUserPreferencesTable={
+                modifyDataInUserPreferencesTable
+              }
+            />
+          )}
           <NavBar />
-          <BottomSheetChangelog
-            setShowChangelogModal={setShowChangelogModal}
-            showChangelogModal={showChangelogModal}
-          />
         </section>
       </BrowserRouter>
     </IonApp>
