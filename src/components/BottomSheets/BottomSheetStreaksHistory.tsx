@@ -19,8 +19,6 @@ const BottomSheetStreaksHistory = ({
   return (
     <IonModal
       mode="ios"
-      // expandToScroll={false}
-      // className="modal-fit-content"
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}

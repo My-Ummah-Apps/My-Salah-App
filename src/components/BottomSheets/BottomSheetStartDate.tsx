@@ -31,6 +31,7 @@ const BottomSheetStartDate = ({
   const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
     null
   );
+  const modal = useRef<HTMLIonModalElement>(null);
   const currentStartDate = userPreferences.userStartDate;
 
   const handleStartDateChange = async () => {
@@ -54,6 +55,7 @@ const BottomSheetStartDate = ({
   };
   return (
     <IonModal
+      ref={modal}
       mode="ios"
       expandToScroll={false}
       className="modal-fit-content"
@@ -104,6 +106,8 @@ const BottomSheetStartDate = ({
               );
               return;
             }
+            modal.current?.dismiss();
+            setSelectedStartDate(null);
             await handleStartDateChange();
           }
         }}
