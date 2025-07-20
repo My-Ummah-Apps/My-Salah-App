@@ -72,6 +72,7 @@ const BottomSheetSalahStatus = ({
   const modalSheetHiddenSalahReasonsWrap = useRef<HTMLDivElement>(null);
   const [salahStatus, setSalahStatus] = useState<SalahStatusType>("");
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
+  const [reasonsHeight, setReasonsHeight] = useState(0);
 
   const [notes, setNotes] = useState("");
   const handleNotes = (e: CustomEvent<{ value: string }>) => {
@@ -285,55 +286,22 @@ const BottomSheetSalahStatus = ({
   const statusBoxStyles =
     "h-full px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full";
 
-  const [reasonsHeight, setReasonsHeight] = useState(0);
-
   useEffect(() => {
-    console.log(
-      "modalSheetSalahReasonsWrap.current: ",
-      modalSheetSalahReasonsWrap.current
-    );
-    console.log(
-      " modalSheetHiddenSalahReasonsWrap.current: ",
-      modalSheetHiddenSalahReasonsWrap.current
-    );
-
     if (
       modalSheetHiddenSalahReasonsWrap &&
       modalSheetHiddenSalahReasonsWrap.current
     ) {
-      setReasonsHeight(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
+      if (
+        salahStatus === "male-alone" ||
+        salahStatus === "late" ||
+        salahStatus === "missed"
+      ) {
+        setReasonsHeight(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
+      } else {
+        setReasonsHeight(0);
+      }
     }
-
-    // if (
-    //   modalSheetSalahReasonsWrap.current &&
-    //   modalSheetHiddenSalahReasonsWrap.current
-    // ) {
-    //   console.log("EXISTS");
-    //   // console.log(modalSheetSalahReasonsWrap.current);
-    //   // console.log(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
-    //   if (
-    //     salahStatus === "male-alone" ||
-    //     salahStatus === "late" ||
-    //     salahStatus === "missed"
-    //   ) {
-    //     console.log("YO");
-
-    //     modalSheetSalahReasonsWrap.current.style.maxHeight =
-    //       modalSheetHiddenSalahReasonsWrap.current.offsetHeight + "px";
-    //     modalSheetSalahReasonsWrap.current.style.opacity = "1";
-    //   } else {
-    //     console.log("HELLO");
-    //     modalSheetSalahReasonsWrap.current.style.maxHeight = "0";
-    //   }
-    // }
   }, [showUpdateStatusModal, salahStatus]);
-
-  // useEffect(() => {
-  //   console.log(
-  //     "modalSheetSalahReasonsWrap.current on mount",
-  //     modalSheetSalahReasonsWrap.current
-  //   );
-  // }, []);
 
   return (
     <>
