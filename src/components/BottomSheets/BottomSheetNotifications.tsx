@@ -147,7 +147,7 @@ const BottomSheetNotifications = ({
       breakpoints={MODAL_BREAKPOINTS}
     >
       <div className="h-[50vh]">
-        <div className="flex items-center justify-between px-2 mt-10 notification-text-and-toggle-wrap">
+        <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
           <p>Turn on Daily Notification</p>{" "}
           <Switch
             checked={dailyNotificationToggle}

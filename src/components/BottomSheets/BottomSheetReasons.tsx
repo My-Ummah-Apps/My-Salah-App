@@ -25,14 +25,14 @@ const BottomSheetReasons = ({
   return (
     <IonModal
       mode="ios"
-      // className="modal-fit-content"
+      className="modal-height"
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
       <IonContent>
         {status && (
-          <section className="mt-10">
+          <section className="mt-10 mb-10">
             <h1 className="px-10 my-4 text-2xl text-center">
               {`Reasons For ${
                 status === "male-alone"

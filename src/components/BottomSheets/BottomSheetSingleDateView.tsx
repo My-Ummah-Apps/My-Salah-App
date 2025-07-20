@@ -11,7 +11,7 @@ import {
 } from "../../utils/constants";
 import format from "date-fns/format";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { IonModal } from "@ionic/react";
+import { IonContent, IonModal } from "@ionic/react";
 
 interface BottomSheetSingleDateViewProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -105,79 +105,82 @@ const BottomSheetSingleDateView = ({
   return (
     <IonModal
       mode="ios"
+      className="modal-height"
       isOpen={showDailySalahDataModal}
       onDidDismiss={() => setShowDailySalahDataModal(false)}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <section className="mx-5 text-white mb-14 sheet-content-wrap">
-        <h1 className="py-5 text-2xl text-center">
-          {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
-        </h1>
-        {clickedDateData.map((item) => {
-          return (
-            <div
-              key={item.date + item.salahName}
-              className="p-2 mb-5  border-[var(--border-bottom-color)] border-b"
-            >
-              <div className="flex items-center justify-between my-5">
-                <div
-                  style={{
-                    borderLeft: `3px solid ${
-                      salahStatusColorsHexCodes[item.salahStatus]
-                    }`,
-                  }}
-                  className="w-1/2 px-2 py-1 text-lg text-white"
-                >
-                  {item.salahName}
+      <IonContent>
+        <section className="mx-5 text-white mb-14 sheet-content-wrap">
+          <h1 className="py-5 text-2xl text-center">
+            {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
+          </h1>
+          {clickedDateData.map((item) => {
+            return (
+              <div
+                key={item.date + item.salahName}
+                className="p-2 mb-5  border-[var(--border-bottom-color)] border-b"
+              >
+                <div className="flex items-center justify-between my-5">
+                  <div
+                    style={{
+                      borderLeft: `3px solid ${
+                        salahStatusColorsHexCodes[item.salahStatus]
+                      }`,
+                    }}
+                    className="w-1/2 px-2 py-1 text-lg text-white"
+                  >
+                    {item.salahName}
+                  </div>
+                  <div
+                    style={{
+                      backgroundColor:
+                        salahStatusColorsHexCodes[item.salahStatus],
+                    }}
+                    className={
+                      "capitalize-first-letter w-4/12 rounded-3xl p-2 text-center"
+                    }
+                  >
+                    {item.salahStatus === "group"
+                      ? "In Jamaah"
+                      : item.salahStatus === "male-alone"
+                      ? "On Time"
+                      : item.salahStatus === "female-alone"
+                      ? "prayed"
+                      : item.salahStatus || "No Data"}
+                  </div>
                 </div>
-                <div
-                  style={{
-                    backgroundColor:
-                      salahStatusColorsHexCodes[item.salahStatus],
-                  }}
-                  className={
-                    "capitalize-first-letter w-4/12 rounded-3xl p-2 text-center"
-                  }
-                >
-                  {item.salahStatus === "group"
-                    ? "In Jamaah"
-                    : item.salahStatus === "male-alone"
-                    ? "On Time"
-                    : item.salahStatus === "female-alone"
-                    ? "prayed"
-                    : item.salahStatus || "No Data"}
-                </div>
-              </div>
-              {item.reasons.length > 0 && (
-                <div className="flex flex-wrap items-center">
-                  <p className="pr-2 my-3 text-sm">
-                    {item.reasons.split(",").length > 1
-                      ? "Reasons: "
-                      : "Reason: "}{" "}
-                  </p>
-                  {item.reasons
-                    .split(",")
-                    .filter((reason) => reason.length > 0)
-                    .sort()
-                    .map((reason) => (
-                      <p key={reason} className={`${reasonsStyles}`}>
-                        {reason}
-                      </p>
-                    ))}
-                </div>
-              )}
+                {item.reasons.length > 0 && (
+                  <div className="flex flex-wrap items-center">
+                    <p className="pr-2 my-3 text-sm">
+                      {item.reasons.split(",").length > 1
+                        ? "Reasons: "
+                        : "Reason: "}{" "}
+                    </p>
+                    {item.reasons
+                      .split(",")
+                      .filter((reason) => reason.length > 0)
+                      .sort()
+                      .map((reason) => (
+                        <p key={reason} className={`${reasonsStyles}`}>
+                          {reason}
+                        </p>
+                      ))}
+                  </div>
+                )}
 
-              {item.notes.length > 0 && (
-                <div className="flex pb-3 my-5 text-sm">
-                  <p className="pr-2">Notes: </p>
-                  <p className="max-w-full break-words">{item.notes}</p>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </section>
+                {item.notes.length > 0 && (
+                  <div className="flex pb-3 my-5 text-sm">
+                    <p className="pr-2">Notes: </p>
+                    <p className="max-w-full break-words">{item.notes}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </section>
+      </IonContent>
     </IonModal>
   );
 };

@@ -14,6 +14,7 @@ const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
   return (
     <IonModal
       mode="ios"
+      className="modal-height"
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
@@ -23,7 +24,7 @@ const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
         {changeLogs.map((item, i) => (
           <section
             key={i}
-            className="mx-6 mt-4 changelog-individual-log"
+            className="pb-20 mx-6 mt-4 changelog-individual-log"
             // style={{ borderColor: i === 0 ? "red" : "" }}
           >
             <p>

@@ -44,13 +44,6 @@ const StreakCounter = ({
     (obj) => obj.startDate.getTime() !== obj.endDate.getTime()
   );
 
-  console.log(
-    "hasStreakDays: ",
-    hasStreakDays,
-    "filteredStreakDatesObjectsArr: ",
-    filteredStreakDatesObjectsArr
-  );
-
   return (
     <>
       <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl`}>
@@ -98,7 +91,7 @@ const StreakCounter = ({
             srcSet=""
           />
         </div>
-        {hasStreakDays && filteredStreakDatesObjectsArr.length > 1 && (
+        {hasStreakDays && filteredStreakDatesObjectsArr.length > 0 && (
           <button
             id="open-streak-counter-sheet"
             style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}

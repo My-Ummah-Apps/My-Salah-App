@@ -105,6 +105,10 @@ ion-textarea textarea {
   --height: auto;
 }
 
+.modal-height {
+  --height: 95vh;
+}
+
 .settings-page-wrap,
 .stats-page-wrap,
 .home-page-wrap {

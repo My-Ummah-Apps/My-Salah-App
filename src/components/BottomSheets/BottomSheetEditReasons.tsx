@@ -35,7 +35,8 @@ const BottomSheetEditReasons = ({
   return (
     <IonModal
       mode="ios"
-      style={{ "--height": "95vh" }}
+      className="modal-height"
+      // style={{ "--height": "95vh" }}
       // expandToScroll={false}
       // className="modal-fit-content"
       onWillDismiss={() => {
@@ -46,7 +47,7 @@ const BottomSheetEditReasons = ({
       breakpoints={MODAL_BREAKPOINTS}
     >
       <IonContent>
-        <section className="mx-4 mt-10 mb-20">
+        <section className="mx-4 mt-10 mb-10">
           <section className="flex justify-between w-full">
             {" "}
             <section className="flex">

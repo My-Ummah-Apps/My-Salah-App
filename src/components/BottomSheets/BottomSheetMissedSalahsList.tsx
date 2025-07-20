@@ -97,6 +97,7 @@ const MissedSalahsListBottomSheet = ({
   return (
     <IonModal
       mode="ios"
+      className="modal-height"
       isOpen={showMissedSalahsSheet}
       onDidDismiss={() => {
         setShowMissedSalahsSheet(false);
@@ -105,7 +106,7 @@ const MissedSalahsListBottomSheet = ({
       breakpoints={MODAL_BREAKPOINTS}
     >
       <IonContent>
-        <section className="mt-10 text-white">
+        <section className="mt-10 mb-10 text-white">
           <h1 className="mx-2 my-4 text-lg text-center">
             You have {getMissedSalahCount(missedSalahList)} missed Salah to make
             up
