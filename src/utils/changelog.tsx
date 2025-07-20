@@ -2,11 +2,25 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "3.9";
+export const LATEST_APP_VERSION = "4.0";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "UX Improvement - Bottom Sheets",
+        text: (
+          <>
+            <strong>UX:</strong> Bottom sheets are now more responsive and they
+            slide up quicker and smoother than previously.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "3.9",
     changes: [
       {
         heading: "Notifications bug fix",

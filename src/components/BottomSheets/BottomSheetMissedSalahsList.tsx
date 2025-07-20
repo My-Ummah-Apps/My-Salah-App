@@ -29,7 +29,7 @@ interface MissedSalahsListBottomSheetProps {
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
-  fetchedSalahData: SalahRecordsArrayType;
+  // presentingElement: HTMLElement | null;
   setShowMissedSalahsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedSalahsSheet: boolean;
   missedSalahList: SalahByDateObjType;
@@ -38,10 +38,11 @@ interface MissedSalahsListBottomSheetProps {
 const MissedSalahsListBottomSheet = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
+  setFetchedSalahData,
+  // presentingElement,
   setShowMissedSalahsSheet,
   showMissedSalahsSheet,
   missedSalahList,
-  setFetchedSalahData,
 }: MissedSalahsListBottomSheetProps) => {
   useEffect(() => {
     if (!showMissedSalahsSheet) return;
@@ -96,6 +97,7 @@ const MissedSalahsListBottomSheet = ({
 
   return (
     <IonModal
+      // presentingElement={presentingElement}
       mode="ios"
       className="modal-height"
       isOpen={showMissedSalahsSheet}

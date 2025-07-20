@@ -70,6 +70,15 @@ const HomePage = ({
     useState<boolean>(false);
   const prevActiveStreakCount = useRef<number>(0);
 
+  // const page = useRef(null);
+
+  // const [presentingElement, setPresentingElement] =
+  //   useState<HTMLElement | null>(null);
+
+  // useEffect(() => {
+  //   setPresentingElement(page.current);
+  // }, []);
+
   const showStreakInfoHomePage = async () => {
     await Dialog.alert({
       title: "Streaks Explained",
@@ -89,7 +98,9 @@ const HomePage = ({
   }, [activeStreakCount]);
 
   return (
-    <IonPage>
+    <IonPage
+    // ref={page}
+    >
       <motion.section
         {...pageTransitionStyles}
         className={`${pageStyles} home-page-wrap`}
@@ -184,7 +195,7 @@ const HomePage = ({
             dbConnection={dbConnection}
             checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
             setFetchedSalahData={setFetchedSalahData}
-            fetchedSalahData={fetchedSalahData}
+            // presentingElement={presentingElement}
             setShowMissedSalahsSheet={setShowMissedSalahsSheet}
             showMissedSalahsSheet={showMissedSalahsSheet}
             missedSalahList={missedSalahList}
