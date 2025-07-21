@@ -3,12 +3,12 @@ import {
   PreferenceType,
   userPreferencesType,
 } from "../../types/types";
-import { motion } from "framer-motion";
-import {
-  getMissedSalahCount,
-  salahStatusColorsHexCodes,
-} from "../../utils/constants";
+
+import { getMissedSalahCount } from "../../utils/constants";
 import Joyride, { CallBackProps } from "react-joyride";
+import { IonBadge } from "@ionic/react";
+
+import { GoSkip } from "react-icons/go";
 
 interface MissedSalahCounterProps {
   isMultiEditMode: boolean;
@@ -80,23 +80,28 @@ const MissedSalahCounter = ({
         continuous
       />
       <div
-        className="missed-salah-counter absolute top-1/2 left-0 px-2 py-1 -translate-y-1/2 flex items-center bg-[#252525] rounded-lg"
         onClick={() => {
           if (isMultiEditMode) {
             return;
           }
           setShowMissedSalahsSheet(true);
         }}
+        style={{ position: "relative", display: "inline-block" }}
       >
-        <p
+        <GoSkip className="text-2xl text-white" />
+        <IonBadge
+          color="danger"
           style={{
-            backgroundColor: salahStatusColorsHexCodes["missed"],
+            position: "absolute",
+            top: "-4px",
+            right: "-8px",
+            fontSize: "10px",
+            borderRadius: "50%",
+            padding: "4px",
           }}
-          className={`w-[1.1rem] h-[1.1rem] rounded-md mr-2`}
-        ></p>
-        <motion.p className="text-xs">
+        >
           {getMissedSalahCount(missedSalahList)}
-        </motion.p>
+        </IonBadge>
       </div>
     </>
   );

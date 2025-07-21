@@ -30,9 +30,9 @@
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  /* box-sizing: border-box; */
+  /* margin: 0; */
+  /* padding: 0; */
   user-select: none;
 }
 
@@ -79,7 +79,11 @@ body:-webkit-scrollbar {
 
 .app {
   overflow-x: hidden;
-  /* max-width: var(--max-width); */
+  max-width: var(--max-width);
+}
+
+ion-title {
+  color: #fff;
 }
 
 ion-modal {
@@ -113,40 +117,26 @@ ion-textarea textarea {
 .stats-page-wrap,
 .home-page-wrap {
   /* width: 95vw; */
-  margin: 0.5rem;
+  /* margin: 0.5rem; */
   max-width: var(--max-width);
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left); */
   overflow-x: hidden;
   padding-bottom: 20vh;
 }
 
-.settings-page-header,
-.stats-page-header,
-.home-page-header {
-  position: relative;
-  height: 10vh;
-  max-width: var(--max-width);
-}
-
-.settings-page-header-p,
-.stats-page-header-p,
-.home-page-header-p {
-  position: absolute;
-  top: 50%;
-  font-size: 1.2rem;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.header-toolbar {
+  --background: var(--primary-color);
 }
 
 .settings-page-options-wrap,
 .stats-page-components-wrap,
 .home-page-components-wrap {
-  height: 90vh;
+  /* height: 90vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding-bottom: 20vh;
-  margin: 0.5rem;
+  padding-bottom: 20vh; */
+  margin: 1em;
 }
 
 input[type="date"] {

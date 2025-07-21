@@ -16,7 +16,16 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { getMissedSalahCount, pageTransitionStyles } from "../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { IonPage } from "@ionic/react";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  isPlatform,
+} from "@ionic/react";
 
 interface HomePageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -101,107 +110,128 @@ const HomePage = ({
     <IonPage
     // ref={page}
     >
-      <motion.section
-        {...pageTransitionStyles}
-        className={`${pageStyles} home-page-wrap`}
-      >
-        <header className="home-page-header">
-          <section className="header-wrapper">
-            {getMissedSalahCount(missedSalahList) > 0 &&
-            userPreferences.showMissedSalahCount === "1" ? (
-              <MissedSalahCounter
-                setShowMissedSalahsSheet={setShowMissedSalahsSheet}
-                isMultiEditMode={isMultiEditMode}
-                missedSalahList={missedSalahList}
-                modifyDataInUserPreferencesTable={
-                  modifyDataInUserPreferencesTable
-                }
-                userPreferences={userPreferences}
-              />
-            ) : null}
-
-            <p className="home-page-header-p">{"Home"}</p>
-            <div
-              onClick={showStreakInfoHomePage}
-              className={`absolute top-1/2 right-[-7px] py-1 -translate-y-1/2`}
+      <IonHeader className="ion-no-border">
+        <IonToolbar className="header-toolbar">
+          <IonTitle>Home</IonTitle>
+          <IonButtons slot="secondary">
+            <IonButton
+              style={{
+                "--padding-end": "12px",
+                "--ripple-color": "transparent",
+              }}
             >
-              <div className="relative flex items-center justify-center w-full py-10">
-                <img
-                  style={{
-                    width: "30px",
-                    height: "100%",
-                    marginRight: "-2rem",
-                  }}
-                  src={wreathLeft}
-                  alt=""
-                  srcSet=""
+              {" "}
+              {getMissedSalahCount(missedSalahList) > 0 &&
+              userPreferences.showMissedSalahCount === "1" ? (
+                <MissedSalahCounter
+                  setShowMissedSalahsSheet={setShowMissedSalahsSheet}
+                  isMultiEditMode={isMultiEditMode}
+                  missedSalahList={missedSalahList}
+                  modifyDataInUserPreferencesTable={
+                    modifyDataInUserPreferencesTable
+                  }
+                  userPreferences={userPreferences}
                 />
-
-                <div className="absolute -translate-x-1/2 -translate-y-[53%] top-[53%] left-1/2">
-                  <AnimatePresence mode="wait">
-                    <motion.p
-                      className="text-xs"
-                      key={activeStreakCount}
-                      {...(animateStreakCounter
-                        ? {
-                            initial: { opacity: 0, y: -10 },
-                            animate: {
-                              opacity: 1,
-                              y: 0,
-                              transition: {
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 5,
-                                // delay: 0.2,
+              ) : null}
+            </IonButton>
+          </IonButtons>
+          <IonButtons slot="primary">
+            <IonButton style={{ "--ripple-color": "transparent" }}>
+              {" "}
+              <div
+                onClick={showStreakInfoHomePage}
+                // className={`absolute top-1/2 right-[-7px] py-1 -translate-y-1/2`}
+              >
+                <div className="relative flex items-center justify-center w-full">
+                  <img
+                    style={{
+                      width: "40px",
+                      height: "100%",
+                      marginRight: "-2rem",
+                    }}
+                    src={wreathLeft}
+                    alt=""
+                    srcSet=""
+                  />
+                  <div className="absolute -translate-x-1/2 -translate-y-[53%] top-[53%] left-1/2">
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        className="text-xs text-white"
+                        key={activeStreakCount}
+                        {...(animateStreakCounter
+                          ? {
+                              initial: { opacity: 0, y: -10 },
+                              animate: {
+                                opacity: 1,
+                                y: 0,
+                                transition: {
+                                  type: "spring",
+                                  stiffness: 100,
+                                  damping: 5,
+                                  // delay: 0.2,
+                                },
                               },
-                            },
-                            exit: { opacity: 0, y: 10 },
-                          }
-                        : {})}
-                    >
-                      {activeStreakCount}
-                    </motion.p>
-                  </AnimatePresence>
+                              exit: { opacity: 0, y: 10 },
+                            }
+                          : {})}
+                      >
+                        {activeStreakCount}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
+                  <img
+                    style={{
+                      width: "40px",
+                      height: "100%",
+                      marginLeft: "2rem",
+                    }}
+                    src={wreathRight}
+                    alt=""
+                    srcSet=""
+                  />
                 </div>
-                <img
-                  style={{ width: "30px", height: "100%", marginLeft: "2rem" }}
-                  src={wreathRight}
-                  alt=""
-                  srcSet=""
-                />
               </div>
-            </div>
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <motion.section
+          {...pageTransitionStyles}
+          className={`${pageStyles} home-page-wrap`}
+        >
+          <section className="home-page-components-wrap">
+            <SalahTable
+              dbConnection={dbConnection}
+              checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+              modifyDataInUserPreferencesTable={
+                modifyDataInUserPreferencesTable
+              }
+              setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+              showJoyRideEditIcon={showJoyRideEditIcon}
+              userPreferences={userPreferences}
+              setFetchedSalahData={setFetchedSalahData}
+              fetchedSalahData={fetchedSalahData}
+              setSelectedSalahAndDate={setSelectedSalahAndDate}
+              selectedSalahAndDate={selectedSalahAndDate}
+              setIsMultiEditMode={setIsMultiEditMode}
+              isMultiEditMode={isMultiEditMode}
+              setShowUpdateStatusModal={setShowUpdateStatusModal}
+              showUpdateStatusModal={showUpdateStatusModal}
+              generateStreaks={generateStreaks}
+            />
+            <MissedSalahsListBottomSheet
+              dbConnection={dbConnection}
+              checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+              setFetchedSalahData={setFetchedSalahData}
+              // presentingElement={presentingElement}
+              setShowMissedSalahsSheet={setShowMissedSalahsSheet}
+              showMissedSalahsSheet={showMissedSalahsSheet}
+              missedSalahList={missedSalahList}
+            />
           </section>
-        </header>
-        <section className="home-page-components-wrap">
-          <SalahTable
-            dbConnection={dbConnection}
-            checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-            modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
-            setShowJoyRideEditIcon={setShowJoyRideEditIcon}
-            showJoyRideEditIcon={showJoyRideEditIcon}
-            userPreferences={userPreferences}
-            setFetchedSalahData={setFetchedSalahData}
-            fetchedSalahData={fetchedSalahData}
-            setSelectedSalahAndDate={setSelectedSalahAndDate}
-            selectedSalahAndDate={selectedSalahAndDate}
-            setIsMultiEditMode={setIsMultiEditMode}
-            isMultiEditMode={isMultiEditMode}
-            setShowUpdateStatusModal={setShowUpdateStatusModal}
-            showUpdateStatusModal={showUpdateStatusModal}
-            generateStreaks={generateStreaks}
-          />
-          <MissedSalahsListBottomSheet
-            dbConnection={dbConnection}
-            checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-            setFetchedSalahData={setFetchedSalahData}
-            // presentingElement={presentingElement}
-            setShowMissedSalahsSheet={setShowMissedSalahsSheet}
-            showMissedSalahsSheet={showMissedSalahsSheet}
-            missedSalahList={missedSalahList}
-          />
-        </section>
-      </motion.section>
+        </motion.section>
+      </IonContent>
     </IonPage>
   );
 };

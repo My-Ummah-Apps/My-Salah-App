@@ -24,6 +24,13 @@ import {
   salahStatusColorsHexCodes,
 } from "../utils/constants";
 import SalahSelectionTabs from "../components/Stats/SalahSelectionTabs";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -267,97 +274,107 @@ const StatsPage = ({
   }, [statsToShow]);
 
   return (
-    <motion.section
-      {...pageTransitionStyles}
-      className={`${pageStyles} stats-page-wrap`}
-    >
-      <header className="stats-page-header">
-        <p className="stats-page-header-p">Stats</p>
-      </header>
-      <section className="stats-page-components-wrap">
-        <StreakCounter
-          streakDatesObjectsArr={streakDatesObjectsArr}
-          activeStreakCount={activeStreakCount}
-          userGender={userPreferences.userGender}
-        />
-        <SalahSelectionTabs
-          setStatsToShow={setStatsToShow}
-          statsToShow={statsToShow}
-        />
-        <AnimatePresence mode="wait">
-          <motion.section
-            key={statsToShow}
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -10, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {Object.values(donutPieChartData).some((obj) => obj.value) && (
-              <DonutPieChart
-                donutPieChartData={donutPieChartData}
-                userGender={userPreferences.userGender}
-                salahStatusStatistics={salahStatusStatistics}
-              />
-            )}
-            <Calendar
-              dbConnection={dbConnection}
-              checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-              userStartDate={userPreferences.userStartDate}
-              fetchedSalahData={fetchedSalahData}
+    <IonPage>
+      <IonHeader className="ion-no-border">
+        <IonToolbar className="header-toolbar">
+          <IonTitle>Stats</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <motion.section
+          {...pageTransitionStyles}
+          className={`${pageStyles} stats-page-wrap`}
+        >
+          <section className="stats-page-components-wrap">
+            <StreakCounter
+              streakDatesObjectsArr={streakDatesObjectsArr}
+              activeStreakCount={activeStreakCount}
+              userGender={userPreferences.userGender}
+            />
+            <SalahSelectionTabs
+              setStatsToShow={setStatsToShow}
               statsToShow={statsToShow}
-            />{" "}
-            <Swiper
-              spaceBetween={50}
-              slidesPerView={1}
-              modules={[Pagination]}
-              pagination={{ clickable: true }}
-            >
-              {userPreferences.userGender === "male" &&
-                salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
-                  <SwiperSlide>
-                    <ReasonsCard
-                      setReasonsToShow={setReasonsToShow}
-                      setShowReasonsSheet={setShowReasonsSheet}
-                      salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                      status={"male-alone"}
-                      statsToShow={statsToShow}
-                    />
-                  </SwiperSlide>
+            />
+            <AnimatePresence mode="wait">
+              <motion.section
+                key={statsToShow}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {Object.values(donutPieChartData).some((obj) => obj.value) && (
+                  <DonutPieChart
+                    donutPieChartData={donutPieChartData}
+                    userGender={userPreferences.userGender}
+                    salahStatusStatistics={salahStatusStatistics}
+                  />
                 )}
-              {salahStatusStatistics.salahLateDatesOverall > 0 && (
-                <SwiperSlide>
-                  <ReasonsCard
-                    setReasonsToShow={setReasonsToShow}
-                    setShowReasonsSheet={setShowReasonsSheet}
-                    salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                    status={"late"}
-                    statsToShow={statsToShow}
-                  />
-                </SwiperSlide>
-              )}
-              {salahStatusStatistics.salahMissedDatesOverall > 0 && (
-                <SwiperSlide>
-                  <ReasonsCard
-                    setReasonsToShow={setReasonsToShow}
-                    setShowReasonsSheet={setShowReasonsSheet}
-                    salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-                    status={"missed"}
-                    statsToShow={statsToShow}
-                  />
-                </SwiperSlide>
-              )}
-            </Swiper>
-          </motion.section>
-        </AnimatePresence>
-        <BottomSheetReasons
-          triggerId="open-reasons-sheet"
-          setShowReasonsSheet={setShowReasonsSheet}
-          showReasonsSheet={showReasonsSheet}
-          salahReasonsOverallNumbers={salahReasonsOverallNumbers}
-          status={reasonsToShow}
-        />
-      </section>
-    </motion.section>
+                <Calendar
+                  dbConnection={dbConnection}
+                  checkAndOpenOrCloseDBConnection={
+                    checkAndOpenOrCloseDBConnection
+                  }
+                  userStartDate={userPreferences.userStartDate}
+                  fetchedSalahData={fetchedSalahData}
+                  statsToShow={statsToShow}
+                />{" "}
+                <Swiper
+                  spaceBetween={50}
+                  slidesPerView={1}
+                  modules={[Pagination]}
+                  pagination={{ clickable: true }}
+                >
+                  {userPreferences.userGender === "male" &&
+                    salahStatusStatistics.salahMaleAloneDatesOverall > 0 && (
+                      <SwiperSlide>
+                        <ReasonsCard
+                          setReasonsToShow={setReasonsToShow}
+                          setShowReasonsSheet={setShowReasonsSheet}
+                          salahReasonsOverallNumbers={
+                            salahReasonsOverallNumbers
+                          }
+                          status={"male-alone"}
+                          statsToShow={statsToShow}
+                        />
+                      </SwiperSlide>
+                    )}
+                  {salahStatusStatistics.salahLateDatesOverall > 0 && (
+                    <SwiperSlide>
+                      <ReasonsCard
+                        setReasonsToShow={setReasonsToShow}
+                        setShowReasonsSheet={setShowReasonsSheet}
+                        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                        status={"late"}
+                        statsToShow={statsToShow}
+                      />
+                    </SwiperSlide>
+                  )}
+                  {salahStatusStatistics.salahMissedDatesOverall > 0 && (
+                    <SwiperSlide>
+                      <ReasonsCard
+                        setReasonsToShow={setReasonsToShow}
+                        setShowReasonsSheet={setShowReasonsSheet}
+                        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                        status={"missed"}
+                        statsToShow={statsToShow}
+                      />
+                    </SwiperSlide>
+                  )}
+                </Swiper>
+              </motion.section>
+            </AnimatePresence>
+            <BottomSheetReasons
+              triggerId="open-reasons-sheet"
+              setShowReasonsSheet={setShowReasonsSheet}
+              showReasonsSheet={showReasonsSheet}
+              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+              status={reasonsToShow}
+            />
+          </section>
+        </motion.section>
+      </IonContent>
+    </IonPage>
   );
 };
 
