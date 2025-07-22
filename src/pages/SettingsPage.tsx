@@ -57,6 +57,8 @@ const SettingsPage = ({
   setUserPreferences,
   userPreferences,
 }: SettingsPageProps) => {
+  console.log("SETTINGS PAGE HAS RENDERED");
+
   const shareThisAppLink = async (link: string) => {
     await Share.share({
       title: "",

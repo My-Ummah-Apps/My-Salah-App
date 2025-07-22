@@ -24,7 +24,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  isPlatform,
+  // isPlatform,
 } from "@ionic/react";
 
 interface HomePageProps {
@@ -72,6 +72,8 @@ const HomePage = ({
   activeStreakCount,
   generateStreaks,
 }: HomePageProps) => {
+  console.log("HOMEPAGE HAS RENDERED");
+
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
     useState<SalahByDateObjType>({});
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
