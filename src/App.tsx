@@ -43,7 +43,7 @@ import {
   parseISO,
 } from "date-fns";
 import { PreferenceType } from "./types/types";
-import NavBar from "./components/Nav/NavBar";
+
 import SettingsPage from "./pages/SettingsPage";
 // import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
@@ -591,7 +591,7 @@ const App = () => {
           <IonRouterOutlet animated={false}>
             <Route
               exact
-              path="/HomePage"
+              path="/"
               render={() => (
                 <HomePage
                   dbConnection={dbConnection}
@@ -657,13 +657,12 @@ const App = () => {
             />
           </IonRouterOutlet>
 
-          {/* <NavBar /> */}
           <IonTabBar slot="bottom">
             <IonTabButton tab="settings" href="/SettingsPage">
               <IonIcon icon={logoIonic} />
               <IonLabel>Settings</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="home" href="/HomePage">
+            <IonTabButton tab="home" href="/">
               {/* <IonIcon icon="home" /> */}
               <IonIcon icon={logoIonic} />
               <IonLabel>Home</IonLabel>
