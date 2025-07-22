@@ -24,7 +24,6 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from "@ionic/react";
 
 interface HomePageProps {
