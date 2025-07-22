@@ -41,7 +41,6 @@ interface StatsPageProps {
   ) => Promise<void>;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
-  pageStyles: string;
   streakDatesObjectsArr: streakDatesObjType[];
   activeStreakCount: number;
 }
@@ -51,7 +50,6 @@ const StatsPage = ({
   checkAndOpenOrCloseDBConnection,
   userPreferences,
   fetchedSalahData,
-  pageStyles,
   streakDatesObjectsArr,
   activeStreakCount,
 }: StatsPageProps) => {
@@ -281,10 +279,7 @@ const StatsPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <motion.section
-          {...pageTransitionStyles}
-          className={`${pageStyles} stats-page-wrap`}
-        >
+        <motion.section {...pageTransitionStyles} className={`stats-page-wrap`}>
           <section className="stats-page-components-wrap">
             <StreakCounter
               streakDatesObjectsArr={streakDatesObjectsArr}

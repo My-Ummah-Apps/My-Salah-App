@@ -46,7 +46,7 @@
     "date-fns": "^2.30.0",
     "dotenv": "^16.4.7",
     "framer-motion": "^11.0.5",
-    "ionicons": "^4.5.10-0",
+    "ionicons": "^8.0.13",
     "lodash": "^4.17.21",
     "lucide-react": "^0.359.0",
     "merge": "^2.1.1",

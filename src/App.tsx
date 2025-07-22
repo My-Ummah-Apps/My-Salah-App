@@ -10,7 +10,13 @@ import {
   IonTabs,
 } from "@ionic/react";
 
-import { logoIonic } from "ionicons/icons";
+import {
+  homeOutline,
+  settingsOutline,
+  statsChartOutline,
+} from "ionicons/icons";
+
+import { Redirect } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
 import { LATEST_APP_VERSION } from "./utils/changelog";
@@ -45,13 +51,13 @@ import {
 import { PreferenceType } from "./types/types";
 
 import SettingsPage from "./pages/SettingsPage";
-// import ResourcesPage from "./pages/ResourcesPage";
 import StatsPage from "./pages/StatsPage";
-// import QiblahDirection from "./pages/QiblahDirection";
 import useSQLiteDB from "./utils/useSqLiteDB";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
+
+// const location = useLocation();
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -582,16 +588,16 @@ const App = () => {
     }
   };
 
-  const pageStyles: string = ``;
-
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs className="app">
-          <IonRouterOutlet animated={false}>
+          <IonRouterOutlet
+          //  animated={false}
+          >
             <Route
               exact
-              path="/"
+              path="/HomePage"
               render={() => (
                 <HomePage
                   dbConnection={dbConnection}
@@ -607,7 +613,6 @@ const App = () => {
                   setFetchedSalahData={setFetchedSalahData}
                   fetchedSalahData={fetchedSalahData}
                   setMissedSalahList={setMissedSalahList}
-                  pageStyles={pageStyles}
                   setShowMissedSalahsSheet={setShowMissedSalahsSheet}
                   showMissedSalahsSheet={showMissedSalahsSheet}
                   missedSalahList={missedSalahList}
@@ -629,7 +634,6 @@ const App = () => {
                     checkAndOpenOrCloseDBConnection
                   }
                   fetchDataFromDB={fetchDataFromDB}
-                  pageStyles={pageStyles}
                   modifyDataInUserPreferencesTable={
                     modifyDataInUserPreferencesTable
                   }
@@ -649,7 +653,6 @@ const App = () => {
                   }
                   userPreferences={userPreferences}
                   fetchedSalahData={fetchedSalahData}
-                  pageStyles={pageStyles}
                   activeStreakCount={activeStreakCount}
                   streakDatesObjectsArr={streakDatesObjectsArr}
                 />
@@ -658,21 +661,21 @@ const App = () => {
           </IonRouterOutlet>
 
           <IonTabBar slot="bottom">
-            <IonTabButton tab="settings" href="/SettingsPage">
-              <IonIcon icon={logoIonic} />
+            <IonTabButton tab="SettingsPage" href="/SettingsPage">
+              <IonIcon icon={settingsOutline} />
               <IonLabel>Settings</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="home" href="/">
-              {/* <IonIcon icon="home" /> */}
-              <IonIcon icon={logoIonic} />
+            <IonTabButton tab="HomePage" href="/HomePage">
+              <IonIcon icon={homeOutline} />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="stats" href="/StatsPage">
-              <IonIcon icon={logoIonic} />
+            <IonTabButton tab="StatsPage" href="/StatsPage">
+              <IonIcon icon={statsChartOutline} />
               <IonLabel>Stats</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
+        <Route exact path="/" render={() => <Redirect to="/HomePage" />} />
       </IonReactRouter>
       {showOnboarding && (
         <Onboarding

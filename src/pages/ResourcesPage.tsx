@@ -4,16 +4,14 @@ import { GiArabicDoor } from "react-icons/gi";
 const ResourcesPage = ({
   // title,
   setHeading,
-  pageStyles,
 }: {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
 
   // title: React.ReactNode;
-  pageStyles: string;
 }) => {
   setHeading("Resources");
   return (
-    <section className={pageStyles}>
+    <section>
       {/* {title} */}
       <div className="grid grid-cols-2 gap-10 cards-wrap">
         <div className="flex flex-col items-center justify-center shadow-md w-36 h-28 bg-[var(--card-bg-color)] rounded-md gap-2">

@@ -38,7 +38,6 @@ interface SettingsPageProps {
     action: DBConnectionStateType
   ) => Promise<void>;
   fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
-  pageStyles: string;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
     value: string | string[]
@@ -52,7 +51,6 @@ const SettingsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
   fetchDataFromDB,
-  pageStyles,
   modifyDataInUserPreferencesTable,
   setUserPreferences,
   userPreferences,
@@ -245,7 +243,7 @@ const SettingsPage = ({
       <IonContent>
         <motion.section
           {...pageTransitionStyles}
-          className={`${pageStyles} settings-page-wrap`}
+          className={`settings-page-wrap`}
         >
           <div className="settings-page-options-wrap">
             <div
