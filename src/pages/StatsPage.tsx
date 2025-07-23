@@ -53,8 +53,6 @@ const StatsPage = ({
   streakDatesObjectsArr,
   activeStreakCount,
 }: StatsPageProps) => {
-  console.log("STATS PAGE HAS RENDERED");
-
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},

@@ -133,11 +133,7 @@ ion-tab-bar {
 .settings-page-options-wrap,
 .stats-page-components-wrap,
 .home-page-components-wrap {
-  /* height: 90vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding-bottom: 20vh; */
-  margin: 1em;
+  margin: 1rem;
 }
 
 input[type="date"] {

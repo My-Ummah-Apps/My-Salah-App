@@ -131,7 +131,7 @@ const BottomSheetEditReasons = ({
                 .sort((a, b) => a.localeCompare(b))
                 .map((reason) => (
                   <motion.li
-                    className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-4 py-4 my-3 rounded-lg`}
+                    className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-2 py-4 my-3 rounded-lg`}
                     layout
                     initial={{ x: 0 }}
                     animate={{ x: 0 }}
@@ -155,7 +155,7 @@ const BottomSheetEditReasons = ({
                         );
                       }}
                     >
-                      <TiDelete className="text-lg" />
+                      <TiDelete className="text-2xl" />
                     </p>
                   </motion.li>
                 ))}
