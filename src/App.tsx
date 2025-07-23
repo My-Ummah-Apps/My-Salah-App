@@ -19,6 +19,9 @@ import {
 import { Redirect } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
+import SettingsPage from "./pages/SettingsPage";
+import StatsPage from "./pages/StatsPage";
+
 import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
@@ -50,8 +53,6 @@ import {
 } from "date-fns";
 import { PreferenceType } from "./types/types";
 
-import SettingsPage from "./pages/SettingsPage";
-import StatsPage from "./pages/StatsPage";
 import useSQLiteDB from "./utils/useSqLiteDB";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import Onboarding from "./components/Onboarding";
@@ -61,6 +62,7 @@ import { Route } from "react-router-dom";
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [allSalahData, setAllSalahData] = useState<SalahStatusType[]>([]);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
@@ -115,6 +117,7 @@ const App = () => {
           await fetchDataFromDB();
         };
         initialiseAndLoadData();
+
         setTimeout(async () => {
           await SplashScreen.hide({ fadeOutDuration: 250 });
         }, 500);
@@ -166,6 +169,8 @@ const App = () => {
           "DBResultAllSalahData or !DBResultAllSalahData.values do not exist"
         );
       }
+
+      setAllSalahData(DBResultAllSalahData.values);
 
       const userNotificationPermission = await checkNotificationPermissions();
 
@@ -651,6 +656,7 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection={
                     checkAndOpenOrCloseDBConnection
                   }
+                  allSalahData={allSalahData}
                   userPreferences={userPreferences}
                   fetchedSalahData={fetchedSalahData}
                   activeStreakCount={activeStreakCount}

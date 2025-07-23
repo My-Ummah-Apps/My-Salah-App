@@ -39,6 +39,7 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
+  allSalahData: SalahStatusType[];
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   streakDatesObjectsArr: streakDatesObjType[];
@@ -48,11 +49,14 @@ interface StatsPageProps {
 const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
+  allSalahData,
   userPreferences,
   fetchedSalahData,
   streakDatesObjectsArr,
   activeStreakCount,
 }: StatsPageProps) => {
+  console.log("STATS RENDERED");
+
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},
@@ -175,16 +179,16 @@ const StatsPage = ({
 
     const fetchSalahDataFromDB = async () => {
       try {
-        await checkAndOpenOrCloseDBConnection("open");
-        let DBResultAllSalahData = await dbConnection.current!.query(
-          `SELECT * FROM salahDataTable`
-        );
+        // await checkAndOpenOrCloseDBConnection("open");
+        // let DBResultAllSalahData = await dbConnection.current!.query(
+        //   `SELECT * FROM salahDataTable`
+        // );
 
-        if (!DBResultAllSalahData.values) {
-          throw new Error("DBResultAllSalahData.values are undefined");
-        }
+        // if (!DBResultAllSalahData.values) {
+        //   throw new Error("DBResultAllSalahData.values are undefined");
+        // }
 
-        const DBResultAllSalahDataValues = DBResultAllSalahData.values;
+        // const allSalahData = DBResultAllSalahData.values;
 
         const maleAloneReasonsArr: string[] = [];
         const lateReasonsArr: string[] = [];
@@ -197,8 +201,8 @@ const StatsPage = ({
         ];
 
         const populateReasonsArrays = (i: number) => {
-          const reasons = DBResultAllSalahDataValues[i].reasons.split(", ");
-          const salahStatus = DBResultAllSalahDataValues[i].salahStatus;
+          const reasons = allSalahData[i].reasons.split(", ");
+          const salahStatus = allSalahData[i].salahStatus;
 
           if (salahStatus === "male-alone") {
             maleAloneReasonsArr.push(reasons);
@@ -209,14 +213,14 @@ const StatsPage = ({
           }
         };
 
-        for (let i = 0; i < DBResultAllSalahDataValues.length; i++) {
+        for (let i = 0; i < allSalahData.length; i++) {
           if (
             !salahStatusesWithoutReasons.includes(
-              DBResultAllSalahDataValues[i].salahStatus
+              allSalahData[i].salahStatus
             ) &&
-            DBResultAllSalahDataValues[i].reasons !== ""
+            allSalahData[i].reasons !== ""
           ) {
-            const salahName = DBResultAllSalahDataValues[i].salahName;
+            const salahName = allSalahData[i].salahName;
 
             if (statsToShow === "All") {
               populateReasonsArrays(i);
@@ -265,7 +269,7 @@ const StatsPage = ({
       } catch (error) {
         console.error(error);
       } finally {
-        await checkAndOpenOrCloseDBConnection("close");
+        // await checkAndOpenOrCloseDBConnection("close");
       }
     };
     fetchSalahDataFromDB();

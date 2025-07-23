@@ -88,7 +88,6 @@ const BottomSheetNotifications = ({
   const requestPermissionFunction = async () => {
     // const requestPermission = await LocalNotifications.requestPermissions();
     const requestPermission = await LocalNotifications.requestPermissions();
-    console.log("DISPLAY: ", requestPermission);
 
     if (requestPermission.display === "granted") {
       setDailyNotificationToggle(true);
