@@ -1,3 +1,4 @@
+// import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/react";
 import { SalahNamesType } from "../../types/types";
 
 interface SalahSelectionTabsProps {
@@ -5,7 +6,7 @@ interface SalahSelectionTabsProps {
   statsToShow: SalahNamesType | "All";
 }
 
-const buttonStyles = `px-3 py-[0.3rem] rounded-md h-full`;
+const buttonStyles = `px-2 py-[0.3rem] rounded-md h-full`;
 
 const SalahSelectionTabs = ({
   setStatsToShow,
@@ -90,3 +91,26 @@ const SalahSelectionTabs = ({
 };
 
 export default SalahSelectionTabs;
+
+// <>
+//     <IonSegment className="bg-stone-800" mode="ios" value="default">
+//       <IonSegmentButton mode="ios" value="default">
+//         <IonLabel>All</IonLabel>
+//       </IonSegmentButton>
+//       <IonSegmentButton mode="ios" value="segment">
+//         <IonLabel>Fajr</IonLabel>
+//       </IonSegmentButton>
+//       <IonSegmentButton mode="ios" value="segment">
+//         <IonLabel>Dhuhr</IonLabel>
+//       </IonSegmentButton>
+//       <IonSegmentButton mode="ios" value="segment">
+//         <IonLabel>Asar</IonLabel>
+//       </IonSegmentButton>
+//       <IonSegmentButton mode="ios" value="segment">
+//         <IonLabel>Maghrib</IonLabel>
+//       </IonSegmentButton>
+//       <IonSegmentButton mode="ios" value="segment">
+//         <IonLabel>Isha</IonLabel>
+//       </IonSegmentButton>
+//     </IonSegment>
+//   </>
