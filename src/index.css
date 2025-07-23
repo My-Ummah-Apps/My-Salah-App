@@ -78,8 +78,8 @@ body:-webkit-scrollbar {
 }
 
 .app {
-  overflow-x: hidden;
-  max-width: var(--max-width);
+  /* overflow-x: hidden;
+  max-width: var(--max-width); */
 }
 
 ion-title {
@@ -105,6 +105,12 @@ ion-textarea textarea {
   overflow-y: auto; */
 }
 
+ion-tab-bar {
+  --background: var(--primary-color);
+  --color: grey;
+  --color-selected: white;
+}
+
 .modal-fit-content {
   --height: auto;
 }
@@ -116,13 +122,8 @@ ion-textarea textarea {
 .settings-page-wrap,
 .stats-page-wrap,
 .home-page-wrap {
-  /* width: 95vw; */
-  /* margin: 0.5rem; */
   max-width: var(--max-width);
-  /* padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left); */
   overflow-x: hidden;
-  padding-bottom: 20vh;
 }
 
 .header-toolbar {
@@ -282,17 +283,17 @@ td {
   height: 10px;
 }
 
-.header-wrap,
+/* .header-wrap,
 .navbar-wrap {
   max-width: var(--max-width);
-}
-
+} */
+/* 
 @supports not (-webkit-touch-callout: none) {
   /* CSS for non-iOS devices */
-  .navbar-wrap {
+/* .navbar-wrap {
     padding-bottom: 0.5rem;
-  }
-}
+  } */
+/* } */
 
 @supports (-webkit-touch-callout: none) {
   /* CSS for only iOS devices */

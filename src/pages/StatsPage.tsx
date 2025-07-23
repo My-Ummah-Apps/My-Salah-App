@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { AnimatePresence, motion } from "framer-motion";
-// @ts-ignore
+
 import Calendar from "../components/Stats/Calendar";
 import {
   reasonsToShowType,
@@ -41,7 +41,6 @@ interface StatsPageProps {
   ) => Promise<void>;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
-  pageStyles: string;
   streakDatesObjectsArr: streakDatesObjType[];
   activeStreakCount: number;
 }
@@ -51,7 +50,6 @@ const StatsPage = ({
   checkAndOpenOrCloseDBConnection,
   userPreferences,
   fetchedSalahData,
-  pageStyles,
   streakDatesObjectsArr,
   activeStreakCount,
 }: StatsPageProps) => {
@@ -164,8 +162,6 @@ const StatsPage = ({
   ];
 
   useEffect(() => {
-    // const test = JSON.parse(JSON.stringify(salahReasonsOverallNumbers));
-    // console.log("TEST: ", test);
     // setSalahReasonsOverallNumbers(test);
     // TODO: State is being mutated below, otherwise reasons stats are incorrect, need to refactor this so that the state isn't mutated directly
     salahReasonsOverallNumbers["male-alone"] = {};
@@ -283,10 +279,7 @@ const StatsPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <motion.section
-          {...pageTransitionStyles}
-          className={`${pageStyles} stats-page-wrap`}
-        >
+        <motion.section {...pageTransitionStyles} className={`stats-page-wrap`}>
           <section className="stats-page-components-wrap">
             <StreakCounter
               streakDatesObjectsArr={streakDatesObjectsArr}

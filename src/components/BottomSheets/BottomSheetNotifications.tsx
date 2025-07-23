@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
@@ -88,7 +87,6 @@ const BottomSheetNotifications = ({
   const requestPermissionFunction = async () => {
     // const requestPermission = await LocalNotifications.requestPermissions();
     const requestPermission = await LocalNotifications.requestPermissions();
-    console.log("DISPLAY: ", requestPermission);
 
     if (requestPermission.display === "granted") {
       setDailyNotificationToggle(true);

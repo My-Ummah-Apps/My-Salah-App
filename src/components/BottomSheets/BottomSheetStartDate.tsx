@@ -45,7 +45,7 @@ const BottomSheetStartDate = ({
         showAlert("Invalid Date", "Please enter a valid date");
       }
     } else {
-      console.log("datePickerRef.current null");
+      console.warn("datePickerRef.current null");
     }
     showToast(
       `Start date changed to ${createLocalisedDate(selectedStartDate!)[1]}`,

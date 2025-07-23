@@ -1,7 +1,27 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { IonApp } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import {
+  IonApp,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+} from "@ionic/react";
+
+import {
+  homeOutline,
+  settingsOutline,
+  statsChartOutline,
+} from "ionicons/icons";
+
+import { Redirect } from "react-router-dom";
+
 import HomePage from "./pages/HomePage";
+import SettingsPage from "./pages/SettingsPage";
+import StatsPage from "./pages/StatsPage";
+
 import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
@@ -32,14 +52,13 @@ import {
   parseISO,
 } from "date-fns";
 import { PreferenceType } from "./types/types";
-import NavBar from "./components/Nav/NavBar";
-import SettingsPage from "./pages/SettingsPage";
-// import ResourcesPage from "./pages/ResourcesPage";
-import StatsPage from "./pages/StatsPage";
-// import QiblahDirection from "./pages/QiblahDirection";
+
 import useSQLiteDB from "./utils/useSqLiteDB";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import Onboarding from "./components/Onboarding";
+import { Route } from "react-router-dom";
+
+// const location = useLocation();
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -97,6 +116,7 @@ const App = () => {
           await fetchDataFromDB();
         };
         initialiseAndLoadData();
+
         setTimeout(async () => {
           await SplashScreen.hide({ fadeOutDuration: 250 });
         }, 500);
@@ -570,27 +590,17 @@ const App = () => {
     }
   };
 
-  const pageStyles: string = ``;
-
   return (
     <IonApp>
-      <BrowserRouter>
-        <section className="app">
-          {/* <h1 className="text-4xl text-right">{streakCounter}</h1> */}
-          <Routes>
-            {/* <Route
-            path="/ResourcesPage"
-            element={
-              <ResourcesPage
-                // title={<h1 className={h1ClassStyles}>{"Resources"}</h1>}
-                setHeading={setHeading}
-                pageStyles={pageStyles}
-              />
-            }
-          /> */}
+      <IonReactRouter>
+        <IonTabs className="app">
+          <IonRouterOutlet
+          //  animated={false}
+          >
             <Route
-              index
-              element={
+              exact
+              path="/HomePage"
+              render={() => (
                 <HomePage
                   dbConnection={dbConnection}
                   checkAndOpenOrCloseDBConnection={
@@ -605,7 +615,6 @@ const App = () => {
                   setFetchedSalahData={setFetchedSalahData}
                   fetchedSalahData={fetchedSalahData}
                   setMissedSalahList={setMissedSalahList}
-                  pageStyles={pageStyles}
                   setShowMissedSalahsSheet={setShowMissedSalahsSheet}
                   showMissedSalahsSheet={showMissedSalahsSheet}
                   missedSalahList={missedSalahList}
@@ -614,11 +623,12 @@ const App = () => {
                   activeStreakCount={activeStreakCount}
                   generateStreaks={generateStreaks}
                 />
-              }
+              )}
             />
             <Route
+              exact
               path="/SettingsPage"
-              element={
+              render={() => (
                 <SettingsPage
                   sqliteConnection={sqliteConnection}
                   dbConnection={dbConnection}
@@ -626,18 +636,18 @@ const App = () => {
                     checkAndOpenOrCloseDBConnection
                   }
                   fetchDataFromDB={fetchDataFromDB}
-                  pageStyles={pageStyles}
                   modifyDataInUserPreferencesTable={
                     modifyDataInUserPreferencesTable
                   }
                   setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
                 />
-              }
+              )}
             />
             <Route
+              exact
               path="/StatsPage"
-              element={
+              render={() => (
                 <StatsPage
                   dbConnection={dbConnection}
                   checkAndOpenOrCloseDBConnection={
@@ -645,35 +655,37 @@ const App = () => {
                   }
                   userPreferences={userPreferences}
                   fetchedSalahData={fetchedSalahData}
-                  pageStyles={pageStyles}
                   activeStreakCount={activeStreakCount}
                   streakDatesObjectsArr={streakDatesObjectsArr}
                 />
-              }
+              )}
             />
-            {/* <Route
-            path="/QiblahDirection"
-            element={
-              <QiblahDirection
-                setHeading={setHeading}
-                // title={<h1 className={h1ClassStyles}>{"Qibla Direction"}</h1>}
-                pageStyles={pageStyles}
-              />
-            }
-          /> */}
-          </Routes>
-          {showOnboarding && (
-            <Onboarding
-              setShowOnboarding={setShowOnboarding}
-              setShowJoyRideEditIcon={setShowJoyRideEditIcon}
-              modifyDataInUserPreferencesTable={
-                modifyDataInUserPreferencesTable
-              }
-            />
-          )}
-          <NavBar />
-        </section>
-      </BrowserRouter>
+          </IonRouterOutlet>
+
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="SettingsPage" href="/SettingsPage">
+              <IonIcon icon={settingsOutline} />
+              <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="HomePage" href="/HomePage">
+              <IonIcon icon={homeOutline} />
+              <IonLabel>Home</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="StatsPage" href="/StatsPage">
+              <IonIcon icon={statsChartOutline} />
+              <IonLabel>Stats</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+        <Route exact path="/" render={() => <Redirect to="/HomePage" />} />
+      </IonReactRouter>
+      {showOnboarding && (
+        <Onboarding
+          setShowOnboarding={setShowOnboarding}
+          setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+          modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+        />
+      )}
     </IonApp>
   );
 };

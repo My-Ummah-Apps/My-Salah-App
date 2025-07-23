@@ -24,7 +24,6 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  // isPlatform,
 } from "@ionic/react";
 
 interface HomePageProps {
@@ -43,7 +42,6 @@ interface HomePageProps {
   >;
   fetchedSalahData: SalahRecordsArrayType;
   userPreferences: userPreferencesType;
-  pageStyles: string;
   setShowMissedSalahsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showMissedSalahsSheet: boolean;
   setMissedSalahList: React.Dispatch<React.SetStateAction<SalahByDateObjType>>;
@@ -63,7 +61,6 @@ const HomePage = ({
   setFetchedSalahData,
   fetchedSalahData,
   userPreferences,
-  pageStyles,
   setShowMissedSalahsSheet,
   showMissedSalahsSheet,
   missedSalahList,
@@ -198,10 +195,7 @@ const HomePage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <motion.section
-          {...pageTransitionStyles}
-          className={`${pageStyles} home-page-wrap`}
-        >
+        <motion.section {...pageTransitionStyles} className={`home-page-wrap`}>
           <section className="home-page-components-wrap">
             <SalahTable
               dbConnection={dbConnection}
