@@ -69,8 +69,6 @@ const HomePage = ({
   activeStreakCount,
   generateStreaks,
 }: HomePageProps) => {
-  console.log("HOMEPAGE RENDERED");
-
   const [selectedSalahAndDate, setSelectedSalahAndDate] =
     useState<SalahByDateObjType>({});
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);

@@ -62,7 +62,6 @@ import { Route } from "react-router-dom";
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [allSalahData, setAllSalahData] = useState<SalahStatusType[]>([]);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
@@ -169,8 +168,6 @@ const App = () => {
           "DBResultAllSalahData or !DBResultAllSalahData.values do not exist"
         );
       }
-
-      setAllSalahData(DBResultAllSalahData.values);
 
       const userNotificationPermission = await checkNotificationPermissions();
 
@@ -656,7 +653,6 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection={
                     checkAndOpenOrCloseDBConnection
                   }
-                  allSalahData={allSalahData}
                   userPreferences={userPreferences}
                   fetchedSalahData={fetchedSalahData}
                   activeStreakCount={activeStreakCount}

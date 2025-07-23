@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 // @ts-ignore
 import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";

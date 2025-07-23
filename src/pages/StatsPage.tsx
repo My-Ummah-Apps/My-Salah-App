@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { AnimatePresence, motion } from "framer-motion";
-// @ts-ignore
+
 import Calendar from "../components/Stats/Calendar";
 import {
   reasonsToShowType,
@@ -39,7 +39,6 @@ interface StatsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  allSalahData: SalahStatusType[];
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   streakDatesObjectsArr: streakDatesObjType[];
@@ -49,14 +48,11 @@ interface StatsPageProps {
 const StatsPage = ({
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  allSalahData,
   userPreferences,
   fetchedSalahData,
   streakDatesObjectsArr,
   activeStreakCount,
 }: StatsPageProps) => {
-  console.log("STATS RENDERED");
-
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},
@@ -164,8 +160,6 @@ const StatsPage = ({
   ];
 
   useEffect(() => {
-    // const test = JSON.parse(JSON.stringify(salahReasonsOverallNumbers));
-    // console.log("TEST: ", test);
     // setSalahReasonsOverallNumbers(test);
     // TODO: State is being mutated below, otherwise reasons stats are incorrect, need to refactor this so that the state isn't mutated directly
     salahReasonsOverallNumbers["male-alone"] = {};
@@ -179,16 +173,16 @@ const StatsPage = ({
 
     const fetchSalahDataFromDB = async () => {
       try {
-        // await checkAndOpenOrCloseDBConnection("open");
-        // let DBResultAllSalahData = await dbConnection.current!.query(
-        //   `SELECT * FROM salahDataTable`
-        // );
+        await checkAndOpenOrCloseDBConnection("open");
+        let DBResultAllSalahData = await dbConnection.current!.query(
+          `SELECT * FROM salahDataTable`
+        );
 
-        // if (!DBResultAllSalahData.values) {
-        //   throw new Error("DBResultAllSalahData.values are undefined");
-        // }
+        if (!DBResultAllSalahData.values) {
+          throw new Error("DBResultAllSalahData.values are undefined");
+        }
 
-        // const allSalahData = DBResultAllSalahData.values;
+        const DBResultAllSalahDataValues = DBResultAllSalahData.values;
 
         const maleAloneReasonsArr: string[] = [];
         const lateReasonsArr: string[] = [];
@@ -201,8 +195,8 @@ const StatsPage = ({
         ];
 
         const populateReasonsArrays = (i: number) => {
-          const reasons = allSalahData[i].reasons.split(", ");
-          const salahStatus = allSalahData[i].salahStatus;
+          const reasons = DBResultAllSalahDataValues[i].reasons.split(", ");
+          const salahStatus = DBResultAllSalahDataValues[i].salahStatus;
 
           if (salahStatus === "male-alone") {
             maleAloneReasonsArr.push(reasons);
@@ -213,14 +207,14 @@ const StatsPage = ({
           }
         };
 
-        for (let i = 0; i < allSalahData.length; i++) {
+        for (let i = 0; i < DBResultAllSalahDataValues.length; i++) {
           if (
             !salahStatusesWithoutReasons.includes(
-              allSalahData[i].salahStatus
+              DBResultAllSalahDataValues[i].salahStatus
             ) &&
-            allSalahData[i].reasons !== ""
+            DBResultAllSalahDataValues[i].reasons !== ""
           ) {
-            const salahName = allSalahData[i].salahName;
+            const salahName = DBResultAllSalahDataValues[i].salahName;
 
             if (statsToShow === "All") {
               populateReasonsArrays(i);
@@ -269,7 +263,7 @@ const StatsPage = ({
       } catch (error) {
         console.error(error);
       } finally {
-        // await checkAndOpenOrCloseDBConnection("close");
+        await checkAndOpenOrCloseDBConnection("close");
       }
     };
     fetchSalahDataFromDB();
