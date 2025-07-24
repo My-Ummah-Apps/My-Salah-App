@@ -135,7 +135,7 @@ const HomePage = ({
           <IonButtons slot="primary">
             <IonButton style={{ "--ripple-color": "transparent" }}>
               {" "}
-              <div onClick={showStreakInfoHomePage}>
+              <div className="w-[50px]" onClick={showStreakInfoHomePage}>
                 <div className="relative flex items-center justify-center w-full">
                   <img
                     style={{

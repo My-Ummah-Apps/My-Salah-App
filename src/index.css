@@ -14,6 +14,7 @@
   --secondary-color: rgb(27, 27, 27);
   --card-bg-color: rgb(51, 51, 51); */
   /* --primary-color: rgb(33, 36, 38); */
+  --ion-text-color: white;
   --primary-color: rgb(22, 21, 21);
   --secondary-color: rgb(27, 27, 27);
   /* --card-bg-color: rgb(42, 47, 50); */
@@ -67,7 +68,7 @@ body {
   --ion-background-color: var(--primary-color);
   background: var(--primary-color);
   --ion-text-color: rgb(184, 184, 184);
-  color: rgb(184, 184, 184);
+  /* color: rgb(184, 184, 184); */
   font-family: sans-serif;
   /* overflow: hidden; */
 }
@@ -296,6 +297,10 @@ td {
   input[type="date"]:before {
     content: attr(placeholder) !important;
     margin-right: 0.5em;
+  }
+
+  .modal-height {
+    --height: calc(100dvh - 10vh);
   }
 }
 
