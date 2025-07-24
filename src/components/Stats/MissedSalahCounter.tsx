@@ -6,9 +6,6 @@ import {
 
 import { getMissedSalahCount } from "../../utils/constants";
 import Joyride, { CallBackProps } from "react-joyride";
-import { IonBadge } from "@ionic/react";
-
-import { GoSkip } from "react-icons/go";
 
 interface MissedSalahCounterProps {
   isMultiEditMode: boolean;
@@ -88,20 +85,14 @@ const MissedSalahCounter = ({
         }}
         style={{ position: "relative", display: "inline-block" }}
       >
-        <GoSkip className="text-2xl text-white" />
-        <IonBadge
-          color="danger"
-          style={{
-            position: "absolute",
-            top: "-4px",
-            right: "-8px",
-            fontSize: "10px",
-            borderRadius: "50%",
-            padding: "4px",
-          }}
-        >
-          {getMissedSalahCount(missedSalahList)}
-        </IonBadge>
+        <div className="numberCircle">
+          <p className="text-xs">99</p>
+          {/* <p className="text-xs">
+            {getMissedSalahCount(missedSalahList) < 100
+              ? getMissedSalahCount(missedSalahList)
+              : "99+"}
+          </p> */}
+        </div>
       </div>
     </>
   );

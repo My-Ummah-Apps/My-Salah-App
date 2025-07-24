@@ -107,7 +107,7 @@ const HomePage = ({
     <IonPage
     // ref={page}
     >
-      <IonHeader className="ion-no-border">
+      <IonHeader mode="md" className="ion-no-border">
         <IonToolbar className="header-toolbar">
           <IonTitle>Home</IonTitle>
           <IonButtons slot="secondary">
@@ -150,7 +150,7 @@ const HomePage = ({
                     alt=""
                     srcSet=""
                   />
-                  <div className="absolute -translate-x-1/2 -translate-y-[53%] top-[53%] left-1/2">
+                  <div className="absolute -translate-x-1/2 -translate-y-[50%] top-[58%] left-1/2">
                     <AnimatePresence mode="wait">
                       <motion.p
                         className="text-xs text-white"
