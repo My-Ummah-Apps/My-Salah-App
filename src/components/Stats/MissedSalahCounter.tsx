@@ -4,7 +4,10 @@ import {
   userPreferencesType,
 } from "../../types/types";
 
-import { getMissedSalahCount } from "../../utils/constants";
+import {
+  getMissedSalahCount,
+  salahStatusColorsHexCodes,
+} from "../../utils/constants";
 import Joyride, { CallBackProps } from "react-joyride";
 
 interface MissedSalahCounterProps {
@@ -85,13 +88,16 @@ const MissedSalahCounter = ({
         }}
         style={{ position: "relative", display: "inline-block" }}
       >
-        <div className="numberCircle">
-          <p className="text-xs">99</p>
-          {/* <p className="text-xs">
+        <div
+          className="numberCircle flex items-center justify-center min-w-[16px] h-[30px] aspect-square rounded-full border-[1.5px] border-[#c11414]"
+          style={{ borderColor: salahStatusColorsHexCodes["missed"] }}
+        >
+          {/* <p className="text-xs text-white">99</p> */}
+          <p className="text-xs text-white">
             {getMissedSalahCount(missedSalahList) < 100
               ? getMissedSalahCount(missedSalahList)
               : "99+"}
-          </p> */}
+          </p>
         </div>
       </div>
     </>

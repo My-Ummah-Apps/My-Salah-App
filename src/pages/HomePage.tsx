@@ -107,7 +107,7 @@ const HomePage = ({
     <IonPage
     // ref={page}
     >
-      <IonHeader mode="md" className="ion-no-border">
+      <IonHeader className="ion-no-border">
         <IonToolbar className="header-toolbar">
           <IonTitle>Home</IonTitle>
           <IonButtons slot="secondary">
@@ -135,15 +135,12 @@ const HomePage = ({
           <IonButtons slot="primary">
             <IonButton style={{ "--ripple-color": "transparent" }}>
               {" "}
-              <div
-                onClick={showStreakInfoHomePage}
-                // className={`absolute top-1/2 right-[-7px] py-1 -translate-y-1/2`}
-              >
+              <div onClick={showStreakInfoHomePage}>
                 <div className="relative flex items-center justify-center w-full">
                   <img
                     style={{
                       width: "40px",
-                      height: "100%",
+                      height: "35px",
                       marginRight: "-2rem",
                     }}
                     src={wreathLeft}
@@ -179,7 +176,7 @@ const HomePage = ({
                   <img
                     style={{
                       width: "40px",
-                      height: "100%",
+                      height: "35px",
                       marginLeft: "2rem",
                     }}
                     src={wreathRight}

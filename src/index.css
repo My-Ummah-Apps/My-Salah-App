@@ -327,15 +327,17 @@ input[type="date"] {
   padding-bottom: 100%;
 }
 
-.numberCircle {
+/* .numberCircle {
   display: flex;
-  width: 3.5ch; /* Set this to slightly wider than the longest string */
+  /* width: 3.5ch; Set this to slightly wider than the longest string */
+/* min-width: 16px;
+  height: 30px;
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  border: 2px solid #fc0000;
-}
+  border: 2px solid #c11414;
+} */
 
 /* CHECKBOX STYLING */
 
