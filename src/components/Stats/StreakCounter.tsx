@@ -6,6 +6,7 @@ import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
 import { Dialog } from "@capacitor/dialog";
 import BottomSheetStreaksHistory from "../BottomSheets/BottomSheetStreaksHistory";
+import { useState } from "react";
 
 interface StreakCounterProps {
   streakDatesObjectsArr: streakDatesObjType[];
@@ -18,6 +19,7 @@ const StreakCounter = ({
   activeStreakCount,
   userGender,
 }: StreakCounterProps) => {
+  const [showStreakHistorySheet, setShowStreakHistorySheet] = useState(false);
   const activeStreakObj = streakDatesObjectsArr.filter(
     (obj) => obj.isActive === true
   )[0];
@@ -93,16 +95,19 @@ const StreakCounter = ({
         </div>
         {hasStreakDays && filteredStreakDatesObjectsArr.length > 0 && (
           <button
-            id="open-streak-counter-sheet"
+            onClick={() => {
+              setShowStreakHistorySheet(true);
+            }}
             style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
             className={`mb-2 pt-2 text-center w-full `}
           >
-            <p className="">Show All Streaks</p>
+            <p>Show All Streaks</p>
           </button>
         )}
       </div>
       <BottomSheetStreaksHistory
-        triggerId="open-streak-counter-sheet"
+        setShowStreakHistorySheet={setShowStreakHistorySheet}
+        showStreakHistorySheet={showStreakHistorySheet}
         filteredStreakDatesObjectsArr={filteredStreakDatesObjectsArr}
       />
     </>

@@ -9,18 +9,23 @@ import { format } from "date-fns";
 import { IonContent, IonModal } from "@ionic/react";
 
 interface BottomSheetStreaksHistoryProps {
-  triggerId: string;
+  setShowStreakHistorySheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showStreakHistorySheet: boolean;
   filteredStreakDatesObjectsArr: streakDatesObjType[];
 }
 const BottomSheetStreaksHistory = ({
-  triggerId,
+  setShowStreakHistorySheet,
+  showStreakHistorySheet,
   filteredStreakDatesObjectsArr,
 }: BottomSheetStreaksHistoryProps) => {
   return (
     <IonModal
       mode="ios"
       className="modal-height"
-      trigger={triggerId}
+      isOpen={showStreakHistorySheet}
+      onDidDismiss={() => {
+        setShowStreakHistorySheet(false);
+      }}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >

@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-// @ts-ignore
-import Switch from "react-ios-switch";
 import { motion } from "framer-motion";
 
 import { Share } from "@capacitor/share";
@@ -28,6 +26,7 @@ import {
   IonHeader,
   IonPage,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from "@ionic/react";
 
@@ -242,7 +241,7 @@ const SettingsPage = ({
       </IonHeader>
       <IonContent>
         <motion.section
-          {...pageTransitionStyles}
+          // {...pageTransitionStyles}
           className={`settings-page-wrap`}
         >
           <div className="settings-page-options-wrap">
@@ -280,13 +279,13 @@ const SettingsPage = ({
                 </p>
               </div>
               <section className="pl-4 pr-2">
-                <Switch
-                  onColor="#3b82f6"
+                <IonToggle
+                  style={{ "--track-background": "#555" }}
                   checked={isMissedSalahCounterOptionChecked}
-                  onChange={async () => {
+                  onIonChange={async () => {
                     setIsMissedSalahCounterOptionChecked((prev) => !prev);
                   }}
-                />
+                ></IonToggle>
               </section>
             </div>{" "}
             <div className="my-5">

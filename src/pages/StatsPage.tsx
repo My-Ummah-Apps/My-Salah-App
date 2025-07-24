@@ -277,7 +277,10 @@ const StatsPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <motion.section {...pageTransitionStyles} className={`stats-page-wrap`}>
+        <motion.section
+          // {...pageTransitionStyles}
+          className={`stats-page-wrap`}
+        >
           <section className="stats-page-components-wrap">
             <StreakCounter
               streakDatesObjectsArr={streakDatesObjectsArr}

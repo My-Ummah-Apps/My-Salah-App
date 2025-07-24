@@ -663,10 +663,6 @@ const App = () => {
           </IonRouterOutlet>
 
           <IonTabBar slot="bottom">
-            <IonTabButton tab="SettingsPage" href="/SettingsPage">
-              <IonIcon icon={settingsOutline} />
-              <IonLabel>Settings</IonLabel>
-            </IonTabButton>
             <IonTabButton tab="HomePage" href="/HomePage">
               <IonIcon icon={homeOutline} />
               <IonLabel>Home</IonLabel>
@@ -674,6 +670,10 @@ const App = () => {
             <IonTabButton tab="StatsPage" href="/StatsPage">
               <IonIcon icon={statsChartOutline} />
               <IonLabel>Stats</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="SettingsPage" href="/SettingsPage">
+              <IonIcon icon={settingsOutline} />
+              <IonLabel>Settings</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>

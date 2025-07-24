@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-// @ts-ignore
-import Switch from "react-ios-switch";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Capacitor } from "@capacitor/core";
 import { Dialog } from "@capacitor/dialog";
@@ -17,7 +15,7 @@ import {
   MODAL_BREAKPOINTS,
   scheduleDailyNotification,
 } from "../../utils/constants";
-import { IonModal } from "@ionic/react";
+import { IonModal, IonToggle } from "@ionic/react";
 
 const BottomSheetNotifications = ({
   triggerId,
@@ -147,15 +145,13 @@ const BottomSheetNotifications = ({
       <div className="h-[50vh]">
         <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
           <p>Turn on Daily Notification</p>{" "}
-          <Switch
+          <IonToggle
+            style={{ "--track-background": "#555" }}
             checked={dailyNotificationToggle}
-            handleColor="white"
-            offColor="white"
-            onChange={() => {
+            onIonChange={async (e) => {
               handleNotificationPermissions();
             }}
-            onColor="#3b82f6"
-          />
+          ></IonToggle>
         </div>
 
         {dailyNotificationToggle && (

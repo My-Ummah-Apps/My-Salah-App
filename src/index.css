@@ -57,7 +57,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 html {
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 body {
@@ -300,7 +300,7 @@ td {
   }
 
   .modal-height {
-    --height: calc(100dvh - 10vh);
+    /* --height: calc(100dvh - 10vh); */
   }
 }
 
