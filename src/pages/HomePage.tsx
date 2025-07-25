@@ -199,9 +199,9 @@ const HomePage = ({
       <IonContent>
         <motion.section
           // {...pageTransitionStyles}
-          className={`home-page-wrap`}
+          className={`home-page-wrap h-full`}
         >
-          <section className="home-page-components-wrap">
+          <section className="h-full home-page-components-wrap">
             <SalahTable
               dbConnection={dbConnection}
               checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}

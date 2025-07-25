@@ -264,7 +264,8 @@ td {
 
 .salah-table-wrap {
   position: static !important;
-  height: 80vh;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* .streaks-list-excused-text:before */
@@ -302,41 +303,6 @@ input[type="date"] {
   color: white;
   background-color: rgb(67, 67, 67);
 }
-
-.notification-icon--fixed {
-  position: relative;
-  color: #fff;
-  /* background-color: #ff4081; */
-  border-radius: 50%;
-  font-family: "Roboto";
-  /* Alignment */
-  line-height: 0;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-
-  /* Adjust as required: */
-  padding: 2px;
-}
-
-/* Height = width */
-.notification-icon--fixed::after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
-}
-
-/* .numberCircle {
-  display: flex;
-  /* width: 3.5ch; Set this to slightly wider than the longest string */
-/* min-width: 16px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: 2px solid #c11414;
-} */
 
 /* CHECKBOX STYLING */
 

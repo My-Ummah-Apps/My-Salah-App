@@ -204,164 +204,169 @@ const SalahTable = ({
           </motion.section>
         )}
       </AnimatePresence>
-      <AutoSizer>
-        {({ height, width }) => (
-          <Table
-            style={{
-              textTransform: "none",
-              fontSize: "3rem",
-            }}
-            className="text-center"
-            rowCount={fetchedSalahData.length}
-            rowGetter={({ index }) => fetchedSalahData[index]}
-            rowHeight={100}
-            headerHeight={40}
-            height={height}
-            width={width}
-          >
-            <Column
-              style={{ marginLeft: "0" }}
-              // className="items-center text-left"
-              className="text-left"
-              label=""
-              dataKey="date"
-              headerRenderer={() => (
-                <div
-                  onClick={() => {
-                    if (isMultiEditMode) return;
-                    setIsMultiEditMode(true);
-                  }}
-                  className={`flex items-center justify-center text-lg text-white multi-edit-icon p-3`}
-                >
-                  <TbEdit />
-                </div>
-              )}
-              cellRenderer={({ rowData }) => {
-                const [day, formattedParsedDate] = createLocalisedDate(
-                  rowData.date
-                );
-
-                return (
-                  <section className="">
-                    <p className="text-sm">{formattedParsedDate}</p>
-                    <p className="text-sm">{day}</p>
-                  </section>
-                );
+      <div className="h-[95%]">
+        <AutoSizer>
+          {({ height, width }) => (
+            <Table
+              style={{
+                textTransform: "none",
+                fontSize: "3rem",
               }}
-              width={180}
-              flexGrow={1}
-            />
-            {salahNamesArr.map((salahName) => (
+              className="text-center"
+              rowCount={fetchedSalahData.length}
+              rowGetter={({ index }) => fetchedSalahData[index]}
+              rowHeight={100}
+              headerHeight={40}
+              height={height}
+              width={width}
+            >
               <Column
-                key={salahName}
                 style={{ marginLeft: "0" }}
-                className="items-center text-sm"
-                label={salahName}
-                dataKey={""}
-                width={120}
-                flexGrow={1}
+                // className="items-center text-left"
+                className="text-left"
+                label=""
+                dataKey="date"
+                headerRenderer={() => (
+                  <div
+                    onClick={() => {
+                      if (isMultiEditMode) return;
+                      setIsMultiEditMode(true);
+                    }}
+                    className={`flex items-center justify-center text-lg text-white multi-edit-icon p-3`}
+                  >
+                    <TbEdit />
+                  </div>
+                )}
                 cellRenderer={({ rowData }) => {
-                  let isChecked = selectedSalahAndDate[rowData.date]?.includes(
-                    salahName
-                  )
-                    ? true
-                    : false;
+                  const [day, formattedParsedDate] = createLocalisedDate(
+                    rowData.date
+                  );
+
                   return (
-                    <section
-                      onClick={() => {
-                        if (isMultiEditMode) return;
-                        handleTableCellClick(salahName, rowData.date);
-                      }}
-                    >
-                      {rowData.salahs[salahName] === "" ? (
-                        <LuDot
-                          style={{
-                            backgroundColor:
-                              salahName === "Asar" && showJoyRideEditIcon
-                                ? "white"
-                                : "",
-                          }}
-                          className={`${salahTableIndividualSquareStyles} ${
-                            showJoyRideEditIcon && salahName === "Asar"
-                              ? "single-table-cell"
-                              : ""
-                          } ${
-                            showJoyRideEditIcon && salahName === "Asar"
-                              ? "animate-bounce"
-                              : ""
-                          }`}
-                        />
-                      ) : (
-                        <AnimatePresence>
-                          <motion.div
-                            // key={`${i}-${rowData.date}`}
-                            {...(showBoxAnimation &&
-                            clonedSelectedSalahAndDate.current[
-                              rowData.date
-                            ]?.includes(salahName)
-                              ? {
-                                  initial: { scale: 0 },
-                                  // animate: { scale: [1.3, 1] },
-                                  animate: { scale: 1.3 },
-                                  transition: {
-                                    type: "spring",
-                                    stiffness: 300,
-                                    damping: 10,
-                                    mass: 1,
-                                    delay: 0.3,
-                                  },
-                                }
-                              : {})}
-                            onAnimationComplete={() => {
-                              setShowBoxAnimation(false);
-                              clonedSelectedSalahAndDate.current = {};
-                            }}
-                            style={{
-                              backgroundColor:
-                                salahStatusColorsHexCodes[
-                                  rowData.salahs[
-                                    salahName
-                                  ] as keyof typeof salahStatusColorsHexCodes
-                                ],
-                            }}
-                            className={`${salahTableIndividualSquareStyles}`}
-                          ></motion.div>
-                        </AnimatePresence>
-                      )}
-                      <AnimatePresence>
-                        {isMultiEditMode && (
-                          <motion.div
-                            className={`checkbox-wrap`}
-                            initial={{
-                              opacity: 0,
-                            }}
-                            animate={{
-                              opacity: 1,
-                            }}
-                            exit={{
-                              opacity: 0,
-                            }}
-                          >
-                            <label className="p-5">
-                              <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={() => {
-                                  handleTableCellClick(salahName, rowData.date);
-                                }}
-                              ></input>
-                            </label>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                    <section className="">
+                      <p className="text-sm">{formattedParsedDate}</p>
+                      <p className="text-sm">{day}</p>
                     </section>
                   );
                 }}
+                width={180}
+                flexGrow={1}
               />
-            ))}
-          </Table>
-        )}
-      </AutoSizer>
+              {salahNamesArr.map((salahName) => (
+                <Column
+                  key={salahName}
+                  style={{ marginLeft: "0" }}
+                  className="items-center text-sm"
+                  label={salahName}
+                  dataKey={""}
+                  width={120}
+                  flexGrow={1}
+                  cellRenderer={({ rowData }) => {
+                    let isChecked = selectedSalahAndDate[
+                      rowData.date
+                    ]?.includes(salahName)
+                      ? true
+                      : false;
+                    return (
+                      <section
+                        onClick={() => {
+                          if (isMultiEditMode) return;
+                          handleTableCellClick(salahName, rowData.date);
+                        }}
+                      >
+                        {rowData.salahs[salahName] === "" ? (
+                          <LuDot
+                            style={{
+                              backgroundColor:
+                                salahName === "Asar" && showJoyRideEditIcon
+                                  ? "white"
+                                  : "",
+                            }}
+                            className={`${salahTableIndividualSquareStyles} ${
+                              showJoyRideEditIcon && salahName === "Asar"
+                                ? "single-table-cell"
+                                : ""
+                            } ${
+                              showJoyRideEditIcon && salahName === "Asar"
+                                ? "animate-bounce"
+                                : ""
+                            }`}
+                          />
+                        ) : (
+                          <AnimatePresence>
+                            <motion.div
+                              // key={`${i}-${rowData.date}`}
+                              {...(showBoxAnimation &&
+                              clonedSelectedSalahAndDate.current[
+                                rowData.date
+                              ]?.includes(salahName)
+                                ? {
+                                    initial: { scale: 0 },
+                                    // animate: { scale: [1.3, 1] },
+                                    animate: { scale: 1.3 },
+                                    transition: {
+                                      type: "spring",
+                                      stiffness: 300,
+                                      damping: 10,
+                                      mass: 1,
+                                      delay: 0.3,
+                                    },
+                                  }
+                                : {})}
+                              onAnimationComplete={() => {
+                                setShowBoxAnimation(false);
+                                clonedSelectedSalahAndDate.current = {};
+                              }}
+                              style={{
+                                backgroundColor:
+                                  salahStatusColorsHexCodes[
+                                    rowData.salahs[
+                                      salahName
+                                    ] as keyof typeof salahStatusColorsHexCodes
+                                  ],
+                              }}
+                              className={`${salahTableIndividualSquareStyles}`}
+                            ></motion.div>
+                          </AnimatePresence>
+                        )}
+                        <AnimatePresence>
+                          {isMultiEditMode && (
+                            <motion.div
+                              className={`checkbox-wrap`}
+                              initial={{
+                                opacity: 0,
+                              }}
+                              animate={{
+                                opacity: 1,
+                              }}
+                              exit={{
+                                opacity: 0,
+                              }}
+                            >
+                              <label className="p-5">
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={() => {
+                                    handleTableCellClick(
+                                      salahName,
+                                      rowData.date
+                                    );
+                                  }}
+                                ></input>
+                              </label>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </section>
+                    );
+                  }}
+                />
+              ))}
+            </Table>
+          )}
+        </AutoSizer>
+      </div>
       <BottomSheetSalahStatus
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
