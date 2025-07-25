@@ -14,7 +14,10 @@ import {
   PreferenceType,
 } from "../types/types";
 import { useEffect, useRef, useState } from "react";
-import { getMissedSalahCount, pageTransitionStyles } from "../utils/constants";
+import {
+  getMissedSalahCount,
+  // pageTransitionStyles
+} from "../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   IonButton,
@@ -194,7 +197,10 @@ const HomePage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <motion.section {...pageTransitionStyles} className={`home-page-wrap`}>
+        <motion.section
+          // {...pageTransitionStyles}
+          className={`home-page-wrap`}
+        >
           <section className="home-page-components-wrap">
             <SalahTable
               dbConnection={dbConnection}

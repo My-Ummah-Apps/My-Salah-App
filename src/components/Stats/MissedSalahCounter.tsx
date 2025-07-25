@@ -31,7 +31,7 @@ const MissedSalahCounter = ({
   const joyRideMissedSalahCounterToolTip = [
     {
       target: ".missed-salah-counter",
-      content: "Tap this icon to see all your missed salah and complete them",
+      content: "Tap this circle to see all your missed salah and complete them",
       disableBeacon: true,
     },
   ];
@@ -89,7 +89,7 @@ const MissedSalahCounter = ({
         style={{ position: "relative", display: "inline-block" }}
       >
         <div
-          className="numberCircle flex items-center justify-center min-w-[16px] h-[30px] aspect-square rounded-full border-[1.5px] border-[#c11414]"
+          className="missed-salah-counter numberCircle flex items-center justify-center min-w-[16px] h-[30px] aspect-square rounded-full border-[1.5px] border-[#c11414]"
           style={{ borderColor: salahStatusColorsHexCodes["missed"] }}
         >
           {/* <p className="text-xs text-white">99</p> */}

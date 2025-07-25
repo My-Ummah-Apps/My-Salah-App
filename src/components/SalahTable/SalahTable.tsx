@@ -133,7 +133,7 @@ const SalahTable = ({
   };
 
   return (
-    <section className="salah-table-wrap h-[80vh]">
+    <section className="salah-table-wrap">
       <Joyride
         disableOverlay={false}
         disableOverlayClose={true}
@@ -176,7 +176,7 @@ const SalahTable = ({
             animate={{ y: "-25vh", scale: 1, opacity: 1 }}
             exit={{ y: "100%", scale: 0.5, opacity: 0 }}
             // transition={{ type: "ease-out" }}
-            className="py-1 absolute bottom-0 z-10 flex shadow-2xl text-sm text-white border border-stone-700 transform -translate-x-1/2 rounded-2xl bg-[#232323] left-1/2"
+            className="py-2 absolute bottom-0 z-10 flex shadow-2xl text-sm text-white border border-stone-500 transform -translate-x-1/2 rounded-2xl bg-[#414141] left-1/2"
           >
             <button
               className="pl-4 pr-2 mr-1 text-white"

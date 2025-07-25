@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { IonReactRouter } from "@ionic/react-router";
+//@ts-ignore
+// import { disableBodyScroll } from "body-scroll-lock";
 import {
   IonApp,
   IonIcon,
@@ -61,6 +63,10 @@ import { Route } from "react-router-dom";
 // const location = useLocation();
 
 const App = () => {
+  // useEffect(() => {
+  //   disableBodyScroll(document.body);
+  // }, []);
+
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(

@@ -20,7 +20,7 @@ import StreakCounter from "../components/Stats/StreakCounter";
 import { streakDatesObjType } from "../types/types";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
-  pageTransitionStyles,
+  // pageTransitionStyles,
   salahStatusColorsHexCodes,
 } from "../utils/constants";
 import SalahSelectionTabs from "../components/Stats/SalahSelectionTabs";

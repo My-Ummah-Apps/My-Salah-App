@@ -62,15 +62,12 @@ html {
 
 body {
   -ms-overflow-style: none;
-  /* max-width: var(--max-width); */
   scrollbar-width: none;
-  /* height: 100vh; */
+  /* overflow: hidden; */
   --ion-background-color: var(--primary-color);
   background: var(--primary-color);
   --ion-text-color: rgb(184, 184, 184);
-  /* color: rgb(184, 184, 184); */
   font-family: sans-serif;
-  /* overflow: hidden; */
 }
 
 body:-webkit-scrollbar {
@@ -267,6 +264,7 @@ td {
 
 .salah-table-wrap {
   position: static !important;
+  height: 80vh;
 }
 
 /* .streaks-list-excused-text:before */
@@ -280,10 +278,6 @@ td {
   height: 10px;
 }
 
-/* .header-wrap,
-.navbar-wrap {
-  max-width: var(--max-width);
-} */
 /* 
 @supports not (-webkit-touch-callout: none) {
   /* CSS for non-iOS devices */
@@ -300,7 +294,7 @@ td {
   }
 
   .modal-height {
-    /* --height: calc(100dvh - 10vh); */
+    --height: calc(100dvh - 10vh);
   }
 }
 

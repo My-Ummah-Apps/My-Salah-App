@@ -148,7 +148,7 @@ const BottomSheetNotifications = ({
           <IonToggle
             style={{ "--track-background": "#555" }}
             checked={dailyNotificationToggle}
-            onIonChange={async (e) => {
+            onIonChange={async () => {
               handleNotificationPermissions();
             }}
           ></IonToggle>
