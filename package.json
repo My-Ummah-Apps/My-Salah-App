@@ -39,7 +39,6 @@
     "@types/lodash": "^4.17.0",
     "@types/react-window-infinite-loader": "^1.0.9",
     "@types/recharts": "^1.8.29",
-    "body-scroll-lock": "^4.0.0-beta.0",
     "braces": "^3.0.3",
     "capacitor-native-settings": "^7.0.2",
     "class-variance-authority": "^0.7.0",

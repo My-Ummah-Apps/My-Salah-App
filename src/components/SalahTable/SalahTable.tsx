@@ -173,13 +173,13 @@ const SalahTable = ({
         {isMultiEditMode && (
           <motion.section
             initial={{ x: "-50%", y: "100%", scale: 0.5, opacity: 0 }}
-            animate={{ y: "-25vh", scale: 1, opacity: 1 }}
+            animate={{ y: "-15vh", scale: 1, opacity: 1 }}
             exit={{ y: "100%", scale: 0.5, opacity: 0 }}
             // transition={{ type: "ease-out" }}
-            className="py-2 absolute bottom-0 z-10 flex shadow-2xl text-sm text-white border border-stone-500 transform -translate-x-1/2 rounded-2xl bg-[#414141] left-1/2"
+            className="absolute bottom-0 z-10 flex shadow-2xl text-sm text-white border border-stone-500 transform -translate-x-1/2 rounded-2xl bg-[#414141] left-1/2"
           >
             <button
-              className="pl-4 pr-2 mr-1 text-white"
+              className="py-4 pl-4 pr-2 mr-1 text-white"
               onClick={() => {
                 setIsMultiEditMode(false);
                 resetSelectedSalahAndDate();
@@ -188,7 +188,7 @@ const SalahTable = ({
               <p className="">Cancel</p>
             </button>
             <button
-              className="p-2 pr-4 text-white"
+              className="p-2 py-4 pr-4 text-white"
               onClick={() => {
                 const dateArrLength = Object.keys(selectedSalahAndDate).length;
                 dateArrLength > 0

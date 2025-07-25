@@ -15,7 +15,7 @@ import {
   MODAL_BREAKPOINTS,
   scheduleDailyNotification,
 } from "../../utils/constants";
-import { IonModal, IonToggle } from "@ionic/react";
+import { IonModal, IonToggle, isPlatform } from "@ionic/react";
 
 const BottomSheetNotifications = ({
   triggerId,
@@ -146,6 +146,7 @@ const BottomSheetNotifications = ({
         <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
           <p>Turn on Daily Notification</p>{" "}
           <IonToggle
+            mode={isPlatform("android") ? "md" : "ios"}
             style={{ "--track-background": "#555" }}
             checked={dailyNotificationToggle}
             onIonChange={async () => {
