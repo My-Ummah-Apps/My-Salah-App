@@ -11,6 +11,7 @@ export interface userPreferencesType {
   appLaunchCount: string;
   saveButtonTapCount: string;
   haptics: string;
+  theme: "dark" | "light" | "system";
 }
 
 export type PreferenceType = keyof userPreferencesType;

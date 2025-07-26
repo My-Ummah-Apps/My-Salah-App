@@ -32,6 +32,7 @@ import {
   IonToggle,
   IonToolbar,
 } from "@ionic/react";
+import BottomSheetThemeOptions from "../components/BottomSheets/BottomSheetThemeOptions";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -270,6 +271,20 @@ const SettingsPage = ({
                 userPreferences={userPreferences}
               />
             </div>{" "}
+            <div className="my-5">
+              <SettingIndividual
+                id="open-theme-options-sheet"
+                headingText={"Theme"}
+                subText={`Change theme`}
+              />
+            </div>
+            <BottomSheetThemeOptions
+              triggerId={"open-theme-options-sheet"}
+              modifyDataInUserPreferencesTable={
+                modifyDataInUserPreferencesTable
+              }
+              userPreferences={userPreferences}
+            />
             <div
               className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
             >

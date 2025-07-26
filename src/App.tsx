@@ -157,6 +157,7 @@ const App = () => {
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
+      console.log("DBResultPreferences: ", DBResultPreferences?.values);
 
       const DBResultAllSalahData = await dbConnection.current?.query(
         `SELECT * FROM salahDataTable`

@@ -36,6 +36,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   appLaunchCount: "0",
   saveButtonTapCount: "0",
   haptics: "0",
+  theme: "dark",
 };
 
 export const reasonsStyles = "p-2 m-1 text-xs bg-[rgb(39,39,39)] rounded-xl";
