@@ -10,14 +10,17 @@
 
 :root {
   --max-width: 700px;
-  --ion-ripple-color: transparent;
+  /* --ion-ripple-color: transparent; */
   /* --ion-text-color: white; */
-  --ion-text-color: rgb(89, 86, 91);
   --primary-color: rgb(251, 249, 245);
   --secondary-color: rgb(200, 200, 200);
+  --ion-text-color: rgba(0, 0, 0, 0.9);
   --card-bg-color: rgb(251, 249, 245);
   --card-shadow-color: rgb(131, 131, 131);
   --border-bottom-color: rgb(128, 128, 128);
+  --table-row-border-color: rgb(210, 210, 210);
+  --nav-tab-color: #666666;
+  --nav-selected-tab-color: #3880ff;
 
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
@@ -28,12 +31,15 @@
 }
 
 body.dark {
-  --ion-text-color: rgb(227, 227, 227);
   --primary-color: rgb(22, 21, 21);
   --secondary-color: rgb(27, 27, 27);
+  --ion-text-color: rgb(255, 255, 255);
   --card-bg-color: rgb(27, 27, 28);
   --card-shadow-color: rgb(31, 35, 36);
   --border-bottom-color: rgb(54, 49, 49);
+  --table-row-border-color: rgb(38, 38, 38);
+  --nav-tab-color: grey;
+  --nav-selected-tab-color: white;
 }
 
 * {
@@ -45,6 +51,20 @@ body.dark {
 
 *:focus {
   outline: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  --ion-background-color: var(--primary-color);
+  background: var(--primary-color);
+  color: var(--ion-text-color);
+  font-family: sans-serif;
+}
+
+body:-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
 
 input:focus,
@@ -62,31 +82,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-html {
-  /* overflow: scroll; */
-}
-
-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  --ion-background-color: var(--primary-color);
-  background: var(--primary-color);
-  color: var(--ion-text-color);
-  font-family: sans-serif;
-}
-
-body:-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
-
-.app {
-  /* overflow-x: hidden;
-  max-width: var(--max-width); */
-}
-
 ion-title {
-  color: #fff;
+  /* color: #fff; */
+}
+
+ion-toolbar p {
+  color: var(--ion-text-color) !important;
 }
 
 ion-modal {
@@ -108,10 +109,15 @@ ion-textarea textarea {
   overflow-y: auto; */
 }
 
+ion-toolbar {
+  --background: var(--ion-background-color);
+  --color: var(--ion-text-color);
+}
+
 ion-tab-bar {
   --background: var(--primary-color);
-  --color: grey;
-  --color-selected: white;
+  --color: var(--nav-tab-color);
+  --color-selected: var(--nav-selected-tab-color);
 }
 
 .modal-fit-content {
@@ -161,10 +167,6 @@ textarea {
 
 .capitalize-first-letter::first-letter {
   text-transform: uppercase;
-}
-
-.header-wrap {
-  background: var(--primary-color);
 }
 
 td {
@@ -239,7 +241,7 @@ td {
 }
 
 .ReactVirtualized__Table__row {
-  border-bottom: 1px solid rgb(38, 38, 38);
+  border-bottom: 1px solid var(--table-row-border-color);
 }
 
 .ReactVirtualized__Table__rowColumn {
