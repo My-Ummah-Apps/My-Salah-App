@@ -48,6 +48,8 @@ const BottomSheetThemeOptions = ({
                   setStatusAndNavBarBGColor("#EDEDED", Style.Light);
                 }
                 setTheme("light");
+                console.log("SAVING LIGHT THEME");
+
                 await modifyDataInUserPreferencesTable("theme", "light");
                 // }
               }}
@@ -60,11 +62,12 @@ const BottomSheetThemeOptions = ({
             <button
               aria-pressed={theme === "dark"}
               onClick={async () => {
-                // if (theme !== "dark") {
+                // if (theme !== "dark") {§
                 if (Capacitor.isNativePlatform()) {
                   setStatusAndNavBarBGColor("#242424", Style.Dark);
                 }
                 setTheme("dark");
+                console.log("SAVING DARK THEME");
                 await modifyDataInUserPreferencesTable("theme", "dark");
                 // }
               }}
@@ -83,6 +86,7 @@ const BottomSheetThemeOptions = ({
                   setStatusAndNavBarBGColor("#242424", Style.Dark);
                 }
                 setTheme("system");
+                console.log("SAVING SYSTEM THEME");
                 await modifyDataInUserPreferencesTable("theme", "system");
                 // }
               }}

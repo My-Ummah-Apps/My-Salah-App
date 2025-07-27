@@ -89,10 +89,15 @@ const App = () => {
   const [theme, setTheme] = useState<themeType>("dark");
 
   const handleTheme = (theme?: themeType) => {
-    const themeColor = theme ? theme : userPreferences.theme;
+    let themeColor = theme ? theme : userPreferences.theme;
 
     setTheme(themeColor);
     let statusBarThemeColor: string = "#242424";
+
+    if (themeColor === "system") {
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      themeColor = media ? "dark" : "light";
+    }
 
     if (themeColor === "dark") {
       statusBarThemeColor = "#242424";
@@ -107,6 +112,8 @@ const App = () => {
       if (Capacitor.isNativePlatform()) {
         setStatusAndNavBarBGColor(statusBarThemeColor, Style.Light);
       }
+      console.log("REMOVING DARK CLASS");
+
       document.body.classList.remove("dark");
     }
 
@@ -211,6 +218,12 @@ const App = () => {
       const notificationValue = DBResultPreferences.values.find(
         (row) => row.preferenceName === "dailyNotification"
       );
+
+      // const themeValue = DBResultPreferences.values.find(
+      //   (row) => row.preferenceName === "theme"
+      // );
+
+      // handleTheme(themeValue);
 
       const isExistingUser =
         DBResultPreferences.values.find(

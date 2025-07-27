@@ -26,6 +26,7 @@
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
   --textarea-bg-color: rgba(207, 207, 207, 0.9);
   --missed-salah-sheet-btn-color: rgb(211, 211, 211);
+  --wreath-color: #666666;
 
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
@@ -49,6 +50,7 @@ body.dark {
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
   --textarea-bg-color: rgba(28, 25, 23, 1);
   --missed-salah-sheet-btn-color: rgb(50, 50, 50);
+  --wreath-color: rgb(255, 255, 255);
 }
 
 * {
