@@ -321,7 +321,7 @@ const BottomSheetSalahStatus = ({
       >
         {" "}
         <section className="w-[90%] mx-auto mb-10 rounded-lg text-white">
-          <h1 className="mb-10 text-3xl font-light text-center">
+          <h1 className="text-[var(--ion-text-color)] mb-10 text-3xl font-light text-center">
             How did you pray{" "}
             {Object.keys(selectedSalahAndDate).length === 1 &&
             Object.values(selectedSalahAndDate)[0].length === 1
@@ -515,7 +515,7 @@ const BottomSheetSalahStatus = ({
             <IonTextarea
               autoGrow={true}
               rows={1}
-              className="pl-2 rounded-lg bg-stone-900"
+              className="pl-2 rounded-lg bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)]"
               placeholder="Notes"
               onIonInput={(e) => {
                 // @ts-ignore

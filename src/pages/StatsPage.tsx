@@ -361,7 +361,7 @@ const StatsPage = ({
               </motion.section>
             </AnimatePresence>
             <BottomSheetReasons
-              triggerId="open-reasons-sheet"
+              // triggerId="open-reasons-sheet"
               setShowReasonsSheet={setShowReasonsSheet}
               showReasonsSheet={showReasonsSheet}
               salahReasonsOverallNumbers={salahReasonsOverallNumbers}

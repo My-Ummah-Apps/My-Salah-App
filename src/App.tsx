@@ -40,6 +40,7 @@ import {
   SalahStatusType,
   SalahByDateObjType,
   streakDatesObjType,
+  themeType,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
@@ -79,6 +80,42 @@ const App = () => {
     streakDatesObjType[]
   >([]);
   const [activeStreakCount, setActiveStreakCount] = useState(0);
+  const [fetchedSalahData, setFetchedSalahData] =
+    useState<SalahRecordsArrayType>([]);
+
+  const [userPreferences, setUserPreferences] = useState<userPreferencesType>(
+    dictPreferencesDefaultValues
+  );
+  const [theme, setTheme] = useState<themeType>("dark");
+
+  const handleTheme = (theme?: themeType) => {
+    const themeColor = theme ? theme : userPreferences.theme;
+
+    setTheme(themeColor);
+    let statusBarThemeColor: string = "#242424";
+
+    if (themeColor === "dark") {
+      statusBarThemeColor = "#242424";
+
+      if (Capacitor.isNativePlatform()) {
+        setStatusAndNavBarBGColor(statusBarThemeColor, Style.Dark);
+      }
+      document.body.classList.add("dark");
+    } else if (themeColor === "light") {
+      statusBarThemeColor = "#EDEDED";
+
+      if (Capacitor.isNativePlatform()) {
+        setStatusAndNavBarBGColor(statusBarThemeColor, Style.Light);
+      }
+      document.body.classList.remove("dark");
+    }
+
+    return statusBarThemeColor;
+  };
+
+  useEffect(() => {
+    handleTheme(theme);
+  }, [theme]);
 
   useEffect(() => {
     if (
@@ -91,13 +128,6 @@ const App = () => {
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
   }, []);
-
-  const [fetchedSalahData, setFetchedSalahData] =
-    useState<SalahRecordsArrayType>([]);
-
-  const [userPreferences, setUserPreferences] = useState<userPreferencesType>(
-    dictPreferencesDefaultValues
-  );
 
   const {
     isDatabaseInitialised,
@@ -642,6 +672,8 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection={
                     checkAndOpenOrCloseDBConnection
                   }
+                  setTheme={setTheme}
+                  theme={theme}
                   fetchDataFromDB={fetchDataFromDB}
                   modifyDataInUserPreferencesTable={
                     modifyDataInUserPreferencesTable

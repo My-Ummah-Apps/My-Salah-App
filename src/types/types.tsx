@@ -21,6 +21,8 @@ export type PreferenceObjType = {
   preferenceValue: string;
 };
 
+export type themeType = "light" | "dark" | "system";
+
 export type SalahStatusType =
   | "group"
   | "male-alone"

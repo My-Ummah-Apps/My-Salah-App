@@ -17,6 +17,7 @@ interface ReasonsCardProps {
 
 const ReasonsCard = ({
   setReasonsToShow,
+  setShowReasonsSheet,
   salahReasonsOverallNumbers,
   status,
   statsToShow,
@@ -98,7 +99,7 @@ const ReasonsCard = ({
           style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
           onClick={() => {
             setReasonsToShow(status);
-            // setShowReasonsSheet(true);
+            setShowReasonsSheet(true);
           }}
           className={`mb-10 pt-2 text-center w-full ${
             Object.entries(salahReasonsOverallNumbers[status]).length > 3

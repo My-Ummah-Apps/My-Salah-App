@@ -12,15 +12,20 @@
   --max-width: 700px;
   /* --ion-ripple-color: transparent; */
   /* --ion-text-color: white; */
-  --primary-color: rgb(251, 249, 245);
+  --primary-color: rgb(244, 245, 249);
   --secondary-color: rgb(200, 200, 200);
-  --ion-text-color: rgba(0, 0, 0, 0.9);
-  --card-bg-color: rgb(251, 249, 245);
-  --card-shadow-color: rgb(131, 131, 131);
+  /* --ion-text-color: rgba(13, 13, 13, 1); */
+  --ion-text-color: rgb(17, 17, 41);
+  --card-bg-color: rgb(255, 255, 255);
+  --card-shadow-color: rgb(234, 234, 234);
   --border-bottom-color: rgb(128, 128, 128);
   --table-row-border-color: rgb(210, 210, 210);
   --nav-tab-color: #666666;
   --nav-selected-tab-color: #3880ff;
+  --active-segment-color: rgb(183, 183, 183);
+  --table-dot-icon-color: rgba(71, 71, 71, 0.9);
+  --textarea-bg-color: rgba(207, 207, 207, 0.9);
+  --missed-salah-sheet-btn-color: rgb(211, 211, 211);
 
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
@@ -40,6 +45,10 @@ body.dark {
   --table-row-border-color: rgb(38, 38, 38);
   --nav-tab-color: grey;
   --nav-selected-tab-color: white;
+  --active-segment-color: rgb(31, 35, 36);
+  --table-dot-icon-color: rgba(71, 71, 71, 0.9);
+  --textarea-bg-color: rgba(28, 25, 23, 1);
+  --missed-salah-sheet-btn-color: rgb(50, 50, 50);
 }
 
 * {
@@ -91,7 +100,7 @@ ion-toolbar p {
 }
 
 ion-modal {
-  --background: var(--primary-color) !important;
+  --background: var(--card-bg-color) !important;
   color: var(--text-color);
 }
 

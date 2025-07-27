@@ -13,12 +13,14 @@ const SalahSelectionTabs = ({
   statsToShow,
 }: SalahSelectionTabsProps) => {
   return (
-    <section className="sticky top-[-1px] z-30 flex justify-around rounded-md bg-[#292929]">
+    <section className="sticky bg-[color:var(--card-bg-color)] top-[-1px] z-30 flex justify-around rounded-md">
       <button
         className={buttonStyles}
         style={{
           backgroundColor:
-            statsToShow === "All" ? "rgb(87, 87, 87)" : "transparent",
+            statsToShow === "All"
+              ? "var(--active-segment-color)"
+              : "transparent",
         }}
         onClick={() => {
           setStatsToShow("All");
@@ -30,7 +32,9 @@ const SalahSelectionTabs = ({
         className={buttonStyles}
         style={{
           backgroundColor:
-            statsToShow === "Fajr" ? "rgb(87, 87, 87)" : "transparent",
+            statsToShow === "Fajr"
+              ? "var(--active-segment-color)"
+              : "transparent",
         }}
         onClick={() => {
           setStatsToShow("Fajr");
@@ -42,7 +46,9 @@ const SalahSelectionTabs = ({
         className={buttonStyles}
         style={{
           backgroundColor:
-            statsToShow === "Dhuhr" ? "rgb(87, 87, 87)" : "transparent",
+            statsToShow === "Dhuhr"
+              ? "var(--active-segment-color)"
+              : "transparent",
         }}
         onClick={() => {
           setStatsToShow("Dhuhr");
@@ -54,7 +60,9 @@ const SalahSelectionTabs = ({
         className={buttonStyles}
         style={{
           backgroundColor:
-            statsToShow === "Asar" ? "rgb(87, 87, 87)" : "transparent",
+            statsToShow === "Asar"
+              ? "var(--active-segment-color)"
+              : "transparent",
         }}
         onClick={() => {
           setStatsToShow("Asar");
@@ -66,7 +74,9 @@ const SalahSelectionTabs = ({
         className={buttonStyles}
         style={{
           backgroundColor:
-            statsToShow === "Maghrib" ? "rgb(87, 87, 87)" : "transparent",
+            statsToShow === "Maghrib"
+              ? "var(--active-segment-color)"
+              : "transparent",
         }}
         onClick={() => {
           setStatsToShow("Maghrib");
@@ -78,7 +88,9 @@ const SalahSelectionTabs = ({
         className={buttonStyles}
         style={{
           backgroundColor:
-            statsToShow === "Isha" ? "rgb(87, 87, 87)" : "transparent",
+            statsToShow === "Isha"
+              ? "var(--active-segment-color)"
+              : "transparent",
         }}
         onClick={() => {
           setStatsToShow("Isha");

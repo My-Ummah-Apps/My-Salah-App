@@ -232,7 +232,7 @@ const SalahTable = ({
                       if (isMultiEditMode) return;
                       setIsMultiEditMode(true);
                     }}
-                    className={`flex items-center justify-center text-lg text-white multi-edit-icon p-3`}
+                    className={`flex items-center justify-center text-lg text-[var(--ion-text-color)] multi-edit-icon p-3`}
                   >
                     <TbEdit />
                   </div>
@@ -277,6 +277,7 @@ const SalahTable = ({
                         {rowData.salahs[salahName] === "" ? (
                           <LuDot
                             style={{
+                              color: "var(--table-dot-icon-color)",
                               backgroundColor:
                                 salahName === "Asar" && showJoyRideEditIcon
                                   ? "white"

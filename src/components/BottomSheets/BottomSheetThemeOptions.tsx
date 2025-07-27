@@ -4,24 +4,26 @@ import {
   MODAL_BREAKPOINTS,
   setStatusAndNavBarBGColor,
 } from "../../utils/constants";
-import { PreferenceType, userPreferencesType } from "../../types/types";
+import { PreferenceType, themeType } from "../../types/types";
 import { MdCheck } from "react-icons/md";
 import { Style } from "@capacitor/status-bar";
 import { Capacitor } from "@capacitor/core";
 
 interface BottomSheetAboutUsProps {
   triggerId: string;
+  setTheme: React.Dispatch<React.SetStateAction<themeType>>;
+  theme: themeType;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
     value: string
   ) => Promise<void>;
-  userPreferences: userPreferencesType;
 }
 
 const BottomSheetThemeOptions = ({
   triggerId,
+  setTheme,
+  theme,
   modifyDataInUserPreferencesTable,
-  userPreferences,
 }: BottomSheetAboutUsProps) => {
   return (
     <IonModal
@@ -33,60 +35,62 @@ const BottomSheetThemeOptions = ({
       breakpoints={MODAL_BREAKPOINTS}
     >
       <section className="pb-10 theme-sheet-content-wrap">
-        <h1 className="modal-header-text">Themes</h1>
+        {/* <h1 className="modal-header-text">Themes</h1> */}
         <ul className="my-5 notification-ul-wrap">
           {/* // TODO: May need to add aria-pressed to each button */}
           <li className="flex justify-between p-2 ">
             <button
-              aria-pressed={userPreferences.theme === "light"}
+              aria-pressed={theme === "light"}
               className="w-full text-left"
               onClick={async () => {
-                if (userPreferences.theme !== "light") {
-                  if (Capacitor.isNativePlatform()) {
-                    setStatusAndNavBarBGColor("#EDEDED", Style.Light);
-                  }
-
-                  await modifyDataInUserPreferencesTable("theme", "light");
+                // if (theme !== "light") {
+                if (Capacitor.isNativePlatform()) {
+                  setStatusAndNavBarBGColor("#EDEDED", Style.Light);
                 }
+                setTheme("light");
+                await modifyDataInUserPreferencesTable("theme", "light");
+                // }
               }}
             >
               Light
             </button>
-            {userPreferences.theme === "light" && <MdCheck />}
+            {theme === "light" && <MdCheck />}
           </li>
           <li className="flex justify-between p-2 ">
             <button
-              aria-pressed={userPreferences.theme === "dark"}
+              aria-pressed={theme === "dark"}
               onClick={async () => {
-                if (userPreferences.theme !== "dark") {
-                  if (Capacitor.isNativePlatform()) {
-                    setStatusAndNavBarBGColor("#242424", Style.Dark);
-                  }
-                  await modifyDataInUserPreferencesTable("theme", "dark");
+                // if (theme !== "dark") {
+                if (Capacitor.isNativePlatform()) {
+                  setStatusAndNavBarBGColor("#242424", Style.Dark);
                 }
+                setTheme("dark");
+                await modifyDataInUserPreferencesTable("theme", "dark");
+                // }
               }}
               className="w-full text-left"
             >
               Dark
             </button>
-            {userPreferences.theme === "dark" && <MdCheck />}
+            {theme === "dark" && <MdCheck />}
           </li>
           <li className="flex justify-between p-2 ">
             <button
-              aria-pressed={userPreferences.theme === "system"}
+              aria-pressed={theme === "system"}
               onClick={async () => {
-                if (userPreferences.theme !== "system") {
-                  if (Capacitor.isNativePlatform()) {
-                    setStatusAndNavBarBGColor("#242424", Style.Dark);
-                  }
-                  await modifyDataInUserPreferencesTable("theme", "system");
+                // if (theme !== "system") {
+                if (Capacitor.isNativePlatform()) {
+                  setStatusAndNavBarBGColor("#242424", Style.Dark);
                 }
+                setTheme("system");
+                await modifyDataInUserPreferencesTable("theme", "system");
+                // }
               }}
               className="w-full text-left"
             >
               System
             </button>
-            {userPreferences.theme === "system" && <MdCheck />}
+            {theme === "system" && <MdCheck />}
           </li>
         </ul>
       </section>

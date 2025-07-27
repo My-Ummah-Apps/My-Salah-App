@@ -38,7 +38,10 @@ const BottomSheetStreaksHistory = ({
             return (
               <ul className="px-4 my-3">
                 {item.days > 0 && (
-                  <li key={i} className="px-2 py-4 rounded-lg bg-neutral-800">
+                  <li
+                    key={i}
+                    className="px-2 py-4 rounded-lg bg-[var(--card-bg-color)]"
+                  >
                     <section className="flex justify-between">
                       <p>
                         {`${

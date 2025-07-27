@@ -109,7 +109,7 @@ const MissedSalahsListBottomSheet = ({
     >
       <IonContent>
         <section className="mt-10 mb-10 text-white">
-          <h1 className="mx-2 my-4 text-lg text-center">
+          <h1 className="mx-2 my-4 text-lg text-center text-[var(--ion-text-color)]">
             You have {getMissedSalahCount(missedSalahList)} missed Salah to make
             up
           </h1>
@@ -131,7 +131,7 @@ const MissedSalahsListBottomSheet = ({
                   key={`${date}-${salah}`}
                   className={`bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
                 >
-                  <section className="flex items-center justify-between">
+                  <section className="flex items-center justify-between text-[var(--ion-text-color)]">
                     <p
                     // style={{
                     //   textDecoration:
@@ -152,13 +152,13 @@ const MissedSalahsListBottomSheet = ({
                       className={`w-[1.3rem] h-[1.3rem] rounded-md`}
                     ></div>
                   </section>
-                  <section className="flex items-center justify-between pt-4 mt-4 border-t-[1px] border-y-stone-700">
+                  <section className="flex items-center justify-between pt-4 mt-4 border-t-[1px] border-y-stone-700 text-[var(--ion-text-color)]">
                     {" "}
                     <p className="text-sm opacity-80">
                       {createLocalisedDate(date)[1]}
                     </p>
                     <button
-                      className="rounded-full bg-[rgb(50,50,50)]"
+                      className="rounded-full bg-[var(--missed-salah-sheet-btn-color)]"
                       onClick={() => {
                         modifySalahStatusInDB(date, salah);
                         setIsClickedItem(`${date}-${salah}`);

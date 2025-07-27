@@ -6,6 +6,7 @@ import SettingIndividual from "../components/Settings/SettingIndividual";
 import {
   DBConnectionStateType,
   PreferenceType,
+  themeType,
   userPreferencesType,
 } from "../types/types";
 import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
@@ -40,6 +41,8 @@ interface SettingsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
+  setTheme: React.Dispatch<React.SetStateAction<themeType>>;
+  theme: themeType;
   fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
@@ -53,6 +56,8 @@ const SettingsPage = ({
   sqliteConnection,
   dbConnection,
   checkAndOpenOrCloseDBConnection,
+  setTheme,
+  theme,
   fetchDataFromDB,
   modifyDataInUserPreferencesTable,
   setUserPreferences,
@@ -250,7 +255,7 @@ const SettingsPage = ({
         >
           <div className="settings-page-options-wrap">
             <div
-              className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+              className={`flex items-center justify-between individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
               id="open-notification-options-sheet"
             >
               <div className="mx-2">
@@ -280,13 +285,14 @@ const SettingsPage = ({
             </div>
             <BottomSheetThemeOptions
               triggerId={"open-theme-options-sheet"}
+              setTheme={setTheme}
+              theme={theme}
               modifyDataInUserPreferencesTable={
                 modifyDataInUserPreferencesTable
               }
-              userPreferences={userPreferences}
             />
             <div
-              className={`flex items-center justify-between shadow-md individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+              className={`flex items-center justify-between individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
             >
               <div className="mx-2">
                 <p className="pt-[0.3rem] pb-[0.1rem] text-lg">

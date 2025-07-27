@@ -172,7 +172,7 @@ const Calendar = ({
                   if (currentMonth === formattedMonths.length - 1) return;
                   setCurrentMonth((prev) => prev + 1);
                 }}
-                className="p-2 m-1 rounded-lg bg-neutral-800"
+                className="p-2 m-1 rounded-lg bg-[var(--active-segment-color)]"
               >
                 <IoIosArrowBack />
               </button>
@@ -185,7 +185,7 @@ const Calendar = ({
                   if (currentMonth === 0) return;
                   setCurrentMonth((prev) => prev - 1);
                 }}
-                className="p-2 m-1 rounded-lg bg-neutral-800"
+                className="p-2 m-1 rounded-lg bg-[var(--active-segment-color)]"
               >
                 <IoIosArrowForward />
               </button>

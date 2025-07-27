@@ -10,7 +10,7 @@ import ReasonsList from "../Stats/ReasonsList";
 import { IonContent, IonModal } from "@ionic/react";
 
 interface BottomSheetReasonsProps {
-  triggerId: string;
+  // triggerId: string;
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showReasonsSheet: boolean;
   salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
@@ -18,15 +18,21 @@ interface BottomSheetReasonsProps {
 }
 
 const BottomSheetReasons = ({
-  triggerId,
+  // triggerId,
   salahReasonsOverallNumbers,
   status,
+  setShowReasonsSheet,
+  showReasonsSheet,
 }: BottomSheetReasonsProps) => {
   return (
     <IonModal
       mode="ios"
       className="modal-height"
-      trigger={triggerId}
+      isOpen={showReasonsSheet}
+      onDidDismiss={() => {
+        setShowReasonsSheet(false);
+      }}
+      // trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
