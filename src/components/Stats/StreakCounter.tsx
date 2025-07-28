@@ -1,7 +1,5 @@
 import { createLocalisedDate } from "../../utils/constants";
 import { streakDatesObjType } from "../../types/types";
-import wreathLeft from "/src/assets/images/wreathLeft.svg";
-import wreathRight from "/src/assets/images/wreathRight.svg";
 import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
 import { Dialog } from "@capacitor/dialog";
@@ -75,7 +73,7 @@ const StreakCounter = ({
         </section>
         <div className="relative flex items-center justify-center py-5">
           <svg
-            className="w-24 h-24 mr-25"
+            className="w-24 h-24 mr-28"
             xmlns="http://www.w3.org/2000/svg"
             width="351"
             height="547"
@@ -120,7 +118,7 @@ const StreakCounter = ({
             onClick={() => {
               setShowStreakHistorySheet(true);
             }}
-            style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
+            style={{ borderTop: "1px solid var(--border-bottom-color)" }}
             className={`mb-2 pt-2 text-center w-full `}
           >
             <p className="text-[var(--ion-text-color)]">Show All Streaks</p>

@@ -96,7 +96,7 @@ const ReasonsCard = ({
 
         <button
           id="open-reasons-sheet"
-          style={{ borderTop: "1px solid rgb(0, 0, 0, 0.2)" }}
+          style={{ borderTop: "1px solid var(--border-bottom-color)" }}
           onClick={() => {
             setReasonsToShow(status);
             setShowReasonsSheet(true);

@@ -2,8 +2,6 @@ import MissedSalahsListBottomSheet from "../components/BottomSheets/BottomSheetM
 import { AnimatePresence, motion } from "framer-motion";
 import SalahTable from "../components/SalahTable/SalahTable";
 import MissedSalahCounter from "../components/Stats/MissedSalahCounter";
-import wreathLeft from "../assets/images/wreathLeft.svg";
-import wreathRight from "../assets/images/wreathRight.svg";
 import { Dialog } from "@capacitor/dialog";
 
 import {

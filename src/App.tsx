@@ -122,6 +122,7 @@ const App = () => {
 
   useEffect(() => {
     handleTheme(theme);
+    // setTheme(theme);
   }, [theme]);
 
   useEffect(() => {
@@ -219,11 +220,11 @@ const App = () => {
         (row) => row.preferenceName === "dailyNotification"
       );
 
-      // const themeValue = DBResultPreferences.values.find(
-      //   (row) => row.preferenceName === "theme"
-      // );
+      const themeValue = DBResultPreferences.values.find(
+        (row) => row.preferenceName === "theme"
+      );
 
-      // handleTheme(themeValue);
+      handleTheme(themeValue.preferenceValue);
 
       const isExistingUser =
         DBResultPreferences.values.find(
