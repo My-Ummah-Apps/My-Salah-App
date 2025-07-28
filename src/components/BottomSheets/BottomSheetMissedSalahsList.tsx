@@ -152,7 +152,10 @@ const MissedSalahsListBottomSheet = ({
                       className={`w-[1.3rem] h-[1.3rem] rounded-md`}
                     ></div>
                   </section>
-                  <section className="flex items-center justify-between pt-4 mt-4 border-t-[1px] border-y-stone-700 text-[var(--ion-text-color)]">
+                  <section
+                    style={{ borderTop: "1px solid var(--app-border-color)" }}
+                    className="flex items-center justify-between pt-4 mt-4 text-[var(--ion-text-color)]"
+                  >
                     {" "}
                     <p className="text-sm opacity-80">
                       {createLocalisedDate(date)[1]}

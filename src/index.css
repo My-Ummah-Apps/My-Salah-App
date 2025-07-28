@@ -11,14 +11,15 @@
 :root {
   --max-width: 700px;
   /* --ion-ripple-color: transparent; */
-  --primary-color: rgb(244, 245, 249);
+  /* --primary-color: rgb(244, 245, 249); */
+  --primary-color: rgb(237, 237, 237);
   /* --primary-color: rgb(250, 248, 244); */
   --secondary-color: rgb(200, 200, 200);
   /* --ion-text-color: rgba(13, 13, 13, 1); */
   --ion-text-color: rgb(0, 0, 0, 1);
   --card-bg-color: rgb(255, 255, 255);
   --card-shadow-color: rgb(234, 234, 234);
-  --border-bottom-color: rgb(233, 233, 233);
+  --app-border-color: rgba(233, 233, 233, 1);
   --table-row-border-color: rgb(227, 227, 227);
   --nav-tab-color: #373737;
   --nav-active-tab-color: #3880ff;
@@ -28,9 +29,10 @@
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
   --textarea-bg-color: rgb(231, 231, 231);
   --missed-salah-sheet-btn-color: rgb(211, 211, 211);
-  --wreath-color: #a0a0a0;
+  --wreath-color: #444;
   --reasons-bg-color-status-sheet: rgb(231, 231, 231);
   --reasons-bg-active-color-status-sheet: #8acefc;
+  --calendar-arrow-btn-color: #b2b2b2;
 
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
@@ -46,7 +48,7 @@ body.dark {
   --ion-text-color: rgb(255, 255, 255);
   --card-bg-color: rgb(27, 27, 28);
   --card-shadow-color: rgb(31, 35, 36);
-  --border-bottom-color: rgb(54, 49, 49);
+  --app-border-color: rgba(54, 49, 49, 1);
   --table-row-border-color: rgb(38, 38, 38);
   --nav-tab-color: grey;
   --segment-bg-color: rgb(27, 27, 28);
@@ -55,9 +57,10 @@ body.dark {
   --table-dot-icon-color: rgba(180, 180, 180, 0.9);
   --textarea-bg-color: rgba(28, 25, 23, 1);
   --missed-salah-sheet-btn-color: rgb(50, 50, 50);
-  --wreath-color: rgb(0, 0, 0);
+  --wreath-color: #bbb;
   --reasons-bg-color-status-sheet: rgb(44, 44, 44);
   --reasons-bg-active-color-status-sheet: #2563eb;
+  --calendar-arrow-btn-color: #424242;
 }
 
 * {
@@ -188,7 +191,7 @@ textarea {
 }
 
 td {
-  border-bottom: var(--border-bottom-color) !important;
+  border-bottom: var(--table-row-border-color) !important;
 }
 
 .swiper {

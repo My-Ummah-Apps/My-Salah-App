@@ -118,8 +118,8 @@ const StreakCounter = ({
             onClick={() => {
               setShowStreakHistorySheet(true);
             }}
-            style={{ borderTop: "1px solid var(--border-bottom-color)" }}
-            className={`mb-2 pt-2 text-center w-full `}
+            style={{ borderTop: "1px solid var(--app-border-color)" }}
+            className={`mb-2 pt-2 text-center w-full`}
           >
             <p className="text-[var(--ion-text-color)]">Show All Streaks</p>
           </button>

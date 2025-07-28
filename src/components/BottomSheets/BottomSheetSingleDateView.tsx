@@ -120,7 +120,7 @@ const BottomSheetSingleDateView = ({
             return (
               <div
                 key={item.date + item.salahName}
-                className="p-2 mb-5  border-[var(--border-bottom-color)] border-b"
+                className="p-2 mb-5 border-[var(--app-border-color)] border-b"
               >
                 <div className="flex items-center justify-between my-5">
                   <div
