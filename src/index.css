@@ -15,19 +15,22 @@
   /* --primary-color: rgb(250, 248, 244); */
   --secondary-color: rgb(200, 200, 200);
   /* --ion-text-color: rgba(13, 13, 13, 1); */
-  --ion-text-color: rgb(17, 17, 41);
+  --ion-text-color: rgb(0, 0, 0, 1);
   --card-bg-color: rgb(255, 255, 255);
   --card-shadow-color: rgb(234, 234, 234);
   --border-bottom-color: rgb(233, 233, 233);
   --table-row-border-color: rgb(227, 227, 227);
   --nav-tab-color: #373737;
-  --nav-selected-tab-color: #3880ff;
+  --nav-active-tab-color: #3880ff;
   /* --nav-selected-tab-color: #2e004d; */
-  --active-segment-color: rgb(183, 183, 183);
+  --segment-bg-color: rgb(255, 255, 255);
+  --segment-active-color: rgb(183, 183, 183);
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
-  --textarea-bg-color: rgba(207, 207, 207, 0.9);
+  --textarea-bg-color: rgb(231, 231, 231);
   --missed-salah-sheet-btn-color: rgb(211, 211, 211);
-  --wreath-color: #666666;
+  --wreath-color: #a0a0a0;
+  --reasons-bg-color-status-sheet: rgb(231, 231, 231);
+  --reasons-bg-active-color-status-sheet: #8acefc;
 
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
@@ -46,12 +49,15 @@ body.dark {
   --border-bottom-color: rgb(54, 49, 49);
   --table-row-border-color: rgb(38, 38, 38);
   --nav-tab-color: grey;
-  --nav-selected-tab-color: white;
-  --active-segment-color: rgb(31, 35, 36);
+  --segment-bg-color: rgb(27, 27, 28);
+  --segment-active-color: rgb(89, 89, 89);
+  --nav-active-tab-color: white;
   --table-dot-icon-color: rgba(180, 180, 180, 0.9);
   --textarea-bg-color: rgba(28, 25, 23, 1);
   --missed-salah-sheet-btn-color: rgb(50, 50, 50);
-  --wreath-color: rgb(255, 255, 255);
+  --wreath-color: rgb(0, 0, 0);
+  --reasons-bg-color-status-sheet: rgb(44, 44, 44);
+  --reasons-bg-active-color-status-sheet: #2563eb;
 }
 
 * {
@@ -129,7 +135,7 @@ ion-toolbar {
 ion-tab-bar {
   --background: var(--primary-color);
   --color: var(--nav-tab-color);
-  --color-selected: var(--nav-selected-tab-color);
+  --color-selected: var(--nav-active-tab-color);
 }
 
 .modal-fit-content {

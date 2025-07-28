@@ -276,7 +276,7 @@ const SettingsPage = ({
                 userPreferences={userPreferences}
               />
             </div>{" "}
-            <div className="my-5">
+            <div className="my-5 rounded-md">
               <SettingIndividual
                 id="open-theme-options-sheet"
                 headingText={"Theme"}

@@ -39,7 +39,8 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   theme: "dark",
 };
 
-export const reasonsStyles = "p-2 m-1 text-xs bg-[rgb(39,39,39)] rounded-xl";
+export const reasonsStyles =
+  "p-2 m-1 text-xs bg-[var(--reasons-bg-color-status-sheet)] rounded-xl";
 
 export const salahStatusColorsHexCodes = {
   group: "#5FAE82",

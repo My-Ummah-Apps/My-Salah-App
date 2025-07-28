@@ -113,7 +113,7 @@ const BottomSheetSingleDateView = ({
     >
       <IonContent>
         <section className="mx-5 text-white mb-14 sheet-content-wrap">
-          <h1 className="py-5 text-2xl text-center">
+          <h1 className="py-5 text-2xl text-center text-[var(--ion-text-color)]">
             {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
           </h1>
           {clickedDateData.map((item) => {
@@ -129,7 +129,7 @@ const BottomSheetSingleDateView = ({
                         salahStatusColorsHexCodes[item.salahStatus]
                       }`,
                     }}
-                    className="w-1/2 px-2 py-1 text-lg text-white"
+                    className="w-1/2 px-2 py-1 text-lg text-[var(--ion-text-color)]"
                   >
                     {item.salahName}
                   </div>
@@ -152,7 +152,7 @@ const BottomSheetSingleDateView = ({
                   </div>
                 </div>
                 {item.reasons.length > 0 && (
-                  <div className="flex flex-wrap items-center">
+                  <div className="flex flex-wrap items-center text-[var(--ion-text-color)]">
                     <p className="pr-2 my-3 text-sm">
                       {item.reasons.split(",").length > 1
                         ? "Reasons: "
@@ -163,7 +163,10 @@ const BottomSheetSingleDateView = ({
                       .filter((reason) => reason.length > 0)
                       .sort()
                       .map((reason) => (
-                        <p key={reason} className={`${reasonsStyles}`}>
+                        <p
+                          key={reason}
+                          className={`${reasonsStyles} "bg-red-500"`}
+                        >
                           {reason}
                         </p>
                       ))}
@@ -171,7 +174,7 @@ const BottomSheetSingleDateView = ({
                 )}
 
                 {item.notes.length > 0 && (
-                  <div className="flex pb-3 my-5 text-sm">
+                  <div className="flex pb-3 my-5 text-sm text-[var(--ion-text-color)]">
                     <p className="pr-2">Notes: </p>
                     <p className="max-w-full break-words">{item.notes}</p>
                   </div>

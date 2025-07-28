@@ -279,12 +279,12 @@ const BottomSheetSalahStatus = ({
   };
 
   const salahStatusVariants = {
-    default: { scale: 1, opacity: 0.5, transition: { duration: 0.3 } },
+    default: { scale: 1, opacity: 0.6, transition: { duration: 0.3 } },
     animate: { scale: 1.07, opacity: 1, transition: { duration: 0.3 } },
   };
 
   const statusBoxStyles =
-    "h-full px-5 py-3 icon-and-text-wrap rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full";
+    "h-full px-5 py-3 rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full";
 
   useEffect(() => {
     if (
@@ -462,7 +462,7 @@ const BottomSheetSalahStatus = ({
               </div>
             )}
             {Array.isArray(userPreferences.reasons) && (
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap text-[var(--ion-text-color)]">
                 <AnimatePresence>
                   {[
                     ...new Set([
@@ -476,12 +476,13 @@ const BottomSheetSalahStatus = ({
                       <motion.p
                         // layout="position"
                         initial={{
-                          backgroundColor: "#272727",
+                          backgroundColor:
+                            "var(--reasons-bg-color-status-sheet)",
                         }}
                         animate={{
                           backgroundColor: selectedReasons.includes(item)
-                            ? "#2563eb"
-                            : "#272727",
+                            ? "var(--reasons-bg-active-color-status-sheet)"
+                            : "var(--reasons-bg-color-status-sheet)",
                         }}
                         transition={{ duration: 0.3 }}
                         exit={{ scale: [1, 1.2, 0], opacity: 0 }}

@@ -13,13 +13,13 @@ const SalahSelectionTabs = ({
   statsToShow,
 }: SalahSelectionTabsProps) => {
   return (
-    <section className="sticky bg-[color:var(--card-bg-color)] top-[-1px] z-30 flex justify-around rounded-md">
+    <section className="sticky bg-[var(--segment-bg-color)] top-[-1px] z-30 flex justify-around rounded-md">
       <button
         className={buttonStyles}
         style={{
           backgroundColor:
             statsToShow === "All"
-              ? "var(--active-segment-color)"
+              ? "var(--segment-active-color)"
               : "transparent",
         }}
         onClick={() => {
@@ -33,7 +33,7 @@ const SalahSelectionTabs = ({
         style={{
           backgroundColor:
             statsToShow === "Fajr"
-              ? "var(--active-segment-color)"
+              ? "var(--segment-active-color)"
               : "transparent",
         }}
         onClick={() => {
@@ -47,7 +47,7 @@ const SalahSelectionTabs = ({
         style={{
           backgroundColor:
             statsToShow === "Dhuhr"
-              ? "var(--active-segment-color)"
+              ? "var(--segment-active-color)"
               : "transparent",
         }}
         onClick={() => {
@@ -61,7 +61,7 @@ const SalahSelectionTabs = ({
         style={{
           backgroundColor:
             statsToShow === "Asar"
-              ? "var(--active-segment-color)"
+              ? "var(--segment-active-color)"
               : "transparent",
         }}
         onClick={() => {
@@ -75,7 +75,7 @@ const SalahSelectionTabs = ({
         style={{
           backgroundColor:
             statsToShow === "Maghrib"
-              ? "var(--active-segment-color)"
+              ? "var(--segment-active-color)"
               : "transparent",
         }}
         onClick={() => {
@@ -89,7 +89,7 @@ const SalahSelectionTabs = ({
         style={{
           backgroundColor:
             statsToShow === "Isha"
-              ? "var(--active-segment-color)"
+              ? "var(--segment-active-color)"
               : "transparent",
         }}
         onClick={() => {
