@@ -34,13 +34,13 @@ const BottomSheetStreaksHistory = ({
           <h1 className="mt-0 mb-10 text-2xl text-center">Streaks</h1>
 
           {/* {filteredStreakDatesObjectsArr.slice(1).map((item, i) => { */}
-          {filteredStreakDatesObjectsArr.map((item, i) => {
-            return (
-              <ul className="px-4 my-3">
-                {item.days > 0 && (
+          <ul className="px-4">
+            {filteredStreakDatesObjectsArr.map((item, i) => {
+              return (
+                item.days > 0 && (
                   <li
                     key={i}
-                    className="px-2 py-4 rounded-lg bg-[var(--card-bg-color)]"
+                    className="px-2 py-4  my-3 rounded-lg bg-[var(--card-bg-color)]"
                   >
                     <section className="flex justify-between">
                       <p>
@@ -82,10 +82,10 @@ const BottomSheetStreaksHistory = ({
                       </section>
                     )}
                   </li>
-                )}
-              </ul>
-            );
-          })}
+                )
+              );
+            })}
+          </ul>
         </section>
       </IonContent>
     </IonModal>

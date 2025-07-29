@@ -172,6 +172,8 @@ const StatsPage = ({
     // });
 
     const fetchSalahDataFromDB = async () => {
+      console.log("FETCHING DATA");
+
       try {
         await checkAndOpenOrCloseDBConnection("open");
         let DBResultAllSalahData = await dbConnection.current!.query(
@@ -240,6 +242,9 @@ const StatsPage = ({
           arr.forEach((reason: string) => {
             if (reason === "") return;
 
+            console.log("arr: ", arr);
+
+            // ! Issue seems to be here
             salahReasonsOverallNumbers[status][reason] =
               salahReasonsOverallNumbers[status][reason]
                 ? (salahReasonsOverallNumbers[status][reason] += 1)
@@ -267,7 +272,11 @@ const StatsPage = ({
       }
     };
     fetchSalahDataFromDB();
-  }, [statsToShow]);
+  }, [statsToShow, fetchedSalahData]);
+
+  useEffect(() => {
+    console.log(salahReasonsOverallNumbers);
+  }, [salahReasonsOverallNumbers]);
 
   return (
     <IonPage>

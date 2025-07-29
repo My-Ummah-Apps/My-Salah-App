@@ -196,6 +196,8 @@ const BottomSheetSalahStatus = ({
       query += `) VALUES ${placeholders}`;
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
 
+      console.log("inserted flattenedSalahDBValues: ", flattenedSalahDBValues);
+
       await dbConnection.current!.run(query, flattenedSalahDBValues);
 
       for (const obj of fetchedSalahData) {

@@ -37,7 +37,7 @@ const ReasonsList = ({
               </section>
             </section>
             <section className="relative">
-              <p className="h-2 bg-[#282828] rounded-md"></p>
+              <p className="h-2 bg-[var(--reasons-bar-bg)] rounded-md"></p>
               <p
                 style={{
                   width: Math.round((value / reasonsSum) * 100) + "%",

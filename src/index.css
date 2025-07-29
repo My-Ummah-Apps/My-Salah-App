@@ -33,6 +33,7 @@
   --reasons-bg-color-status-sheet: rgb(241, 241, 241);
   --reasons-bg-active-color-status-sheet: #8acefc;
   --calendar-arrow-btn-color: #b2b2b2;
+  --reasons-bar-bg: #888888;
 
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
@@ -61,6 +62,7 @@ body.dark {
   --reasons-bg-color-status-sheet: rgb(44, 44, 44);
   --reasons-bg-active-color-status-sheet: #2563eb;
   --calendar-arrow-btn-color: #424242;
+  --reasons-bar-bg: #282828;
 }
 
 * {
