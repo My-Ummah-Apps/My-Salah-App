@@ -220,11 +220,15 @@ const App = () => {
         (row) => row.preferenceName === "dailyNotification"
       );
 
-      // const themeValue = DBResultPreferences.values.find(
-      //   (row) => row.preferenceName === "theme"
-      // );
+      const themeValue = DBResultPreferences.values.find(
+        (row) => row.preferenceName === "theme"
+      );
 
-      // handleTheme(themeValue.preferenceValue);
+      if (themeValue) {
+        handleTheme(themeValue.preferenceValue);
+      } else {
+        handleTheme("dark");
+      }
 
       const isExistingUser =
         DBResultPreferences.values.find(
@@ -363,12 +367,6 @@ const App = () => {
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
       }
-
-      //       const themeValue = DBResultPreferencesValues.find(
-      //   (row) => row.preferenceName === "theme"
-      // );
-
-      // handleTheme(themeValue.preferenceValue);
     } catch (error) {
       console.error(error);
     }
