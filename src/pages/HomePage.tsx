@@ -181,13 +181,12 @@ const HomePage = ({
                             }
                           : {})}
                       >
-                        {/* {activeStreakCount} */}
-                        100
+                        {activeStreakCount}
                       </motion.p>
                     </AnimatePresence>
                   </div>
                   <svg
-                    className="w-4 h-7  mr-[-0.5rem]"
+                    className="w-4 h-7 mr-[-0.5rem]"
                     xmlns="http://www.w3.org/2000/svg"
                     width="352"
                     height="547"

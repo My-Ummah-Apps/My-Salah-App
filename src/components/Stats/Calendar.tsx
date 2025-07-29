@@ -47,8 +47,6 @@ const Calendar = ({
   const [clickedDate, setClickedDate] = useState<string>("");
   const [currentMonth, setCurrentMonth] = useState(0);
 
-  // let firstDayOfMonth = parse(currentMonth, "MMM-yyyy", new Date());
-
   const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
     const parsedCurrentMonth = parse(currentMonth, "MMMM yyyy", new Date());
     const dayMonth = startOfMonth(dayToCheck);
@@ -320,6 +318,7 @@ const Calendar = ({
         dbConnection={dbConnection}
         checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setShowDailySalahDataModal={setShowDailySalahDataModal}
+        setClickedDate={setClickedDate}
         showDailySalahDataModal={showDailySalahDataModal}
         clickedDate={clickedDate}
       />

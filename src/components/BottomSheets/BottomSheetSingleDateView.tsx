@@ -20,6 +20,7 @@ interface BottomSheetSingleDateViewProps {
   ) => Promise<void>;
   showDailySalahDataModal: boolean;
   setShowDailySalahDataModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setClickedDate: React.Dispatch<React.SetStateAction<string>>;
   clickedDate: string;
 }
 
@@ -28,6 +29,7 @@ const BottomSheetSingleDateView = ({
   checkAndOpenOrCloseDBConnection,
   showDailySalahDataModal,
   setShowDailySalahDataModal,
+  setClickedDate,
   clickedDate,
 }: BottomSheetSingleDateViewProps) => {
   const [clickedDateData, setClickedDateData] = useState<clickedDateDataObj[]>(
@@ -53,6 +55,7 @@ const BottomSheetSingleDateView = ({
       await checkAndOpenOrCloseDBConnection("open");
       const query = `SELECT * FROM salahDataTable WHERE date = ?`;
       const data = await dbConnection.current!.query(query, [clickedDate]);
+      console.log("DATA: ", data);
 
       const sortedData: clickedDateDataObj[] = data.values!.sort(
         (a: clickedDateDataObj, b: clickedDateDataObj) =>
@@ -107,7 +110,10 @@ const BottomSheetSingleDateView = ({
       mode="ios"
       className="modal-height"
       isOpen={showDailySalahDataModal}
-      onDidDismiss={() => setShowDailySalahDataModal(false)}
+      onDidDismiss={() => {
+        setShowDailySalahDataModal(false);
+        setClickedDate("");
+      }}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
