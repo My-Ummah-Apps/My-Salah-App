@@ -41,8 +41,8 @@ interface SettingsPageProps {
   checkAndOpenOrCloseDBConnection: (
     action: DBConnectionStateType
   ) => Promise<void>;
-  setTheme: React.Dispatch<React.SetStateAction<themeType>>;
   theme: themeType;
+  handleTheme: (theme?: themeType) => string;
   fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
@@ -56,8 +56,8 @@ const SettingsPage = ({
   sqliteConnection,
   dbConnection,
   checkAndOpenOrCloseDBConnection,
-  setTheme,
   theme,
+  handleTheme,
   fetchDataFromDB,
   modifyDataInUserPreferencesTable,
   setUserPreferences,
@@ -285,11 +285,11 @@ const SettingsPage = ({
             </div>
             <BottomSheetThemeOptions
               triggerId={"open-theme-options-sheet"}
-              setTheme={setTheme}
               theme={theme}
               modifyDataInUserPreferencesTable={
                 modifyDataInUserPreferencesTable
               }
+              handleTheme={handleTheme}
             />
             <div
               className={`flex items-center justify-between individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}

@@ -21,7 +21,7 @@ const config: CapacitorConfig = {
   // server: serverConfig,
   server: {
     // url: isDevelopment ? process.env.VITE_DEV_SERVER_IP : undefined,
-    // url: process.env.VITE_DEV_SERVER_IP,
+    url: process.env.VITE_DEV_SERVER_IP,
     cleartext: true,
   },
   plugins: {
@@ -30,8 +30,7 @@ const config: CapacitorConfig = {
       iconColor: "#26a1d5",
     },
     keyboard: {
-      // resize: "none"
-      // resize: KeyboardResize.Native,
+      // resize: "none",
       resizeOnFullScreen: false,
     },
     // EdgeToEdge: {

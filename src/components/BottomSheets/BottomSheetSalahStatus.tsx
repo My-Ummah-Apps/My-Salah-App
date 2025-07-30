@@ -79,6 +79,23 @@ const BottomSheetSalahStatus = ({
     setNotes(e.detail.value);
   };
 
+  const sheetWrapper = useRef<HTMLDivElement | null>(null);
+
+  if (Capacitor.getPlatform() === "ios") {
+    // Keyboard.setAccessoryBarVisible({ isVisible: true });
+    window.addEventListener("keyboardWillShow", (e) => {
+      if (sheetWrapper.current) {
+        sheetWrapper.current.style.marginBottom =
+          (e as any).keyboardHeight + "px";
+      }
+    });
+    window.addEventListener("keyboardWillHide", () => {
+      if (sheetWrapper.current) {
+        sheetWrapper.current.style.marginBottom = "0px";
+      }
+    });
+  }
+
   const onSheetCloseCleanup = async () => {
     setShowUpdateStatusModal(false);
     resetSelectedSalahAndDate();
@@ -306,7 +323,7 @@ const BottomSheetSalahStatus = ({
   }, [showUpdateStatusModal, salahStatus]);
 
   return (
-    <>
+    <section>
       <IonModal
         className="modal-fit-content"
         mode="ios"
@@ -322,7 +339,10 @@ const BottomSheetSalahStatus = ({
         breakpoints={MODAL_BREAKPOINTS}
       >
         {" "}
-        <section className="w-[90%] mx-auto mb-10 rounded-lg text-white">
+        <section
+          ref={sheetWrapper}
+          className="w-[90%] mx-auto mb-10 rounded-lg text-white"
+        >
           <h1 className="text-[var(--ion-text-color)] mb-10 text-3xl font-light text-center">
             How did you pray{" "}
             {Object.keys(selectedSalahAndDate).length === 1 &&
@@ -599,7 +619,7 @@ const BottomSheetSalahStatus = ({
           </div>
         )}
       </div>
-    </>
+    </section>
   );
 };
 

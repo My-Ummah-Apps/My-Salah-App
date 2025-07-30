@@ -224,32 +224,23 @@ const StatsPage = ({
         missed: {},
       };
 
-      // ! BELOW FUNCTION IS RUNNING SIX TIMES INSTEAD OF THREE
       const calculateReasonAmounts = (
         arr: string[],
         status: keyof salahReasonsOverallNumbersType
       ) => {
-        console.log("calculateReasonAmounts has run");
-
-        arr.forEach((reason: string, i) => {
+        arr.forEach((reason: string) => {
           if (reason === "") return;
 
-          // if (obj[status][reason]) {
-          //   obj[status][reason] += 1;
-          // } else {
-          //   obj[status][reason] = 1;
-          // }
-
-          obj[status][reason] = obj[status][reason]
-            ? (obj[status][reason] += 1)
-            : 1;
+          if (obj[status][reason]) {
+            obj[status][reason] += 1;
+          } else {
+            obj[status][reason] = 1;
+          }
         });
 
         const sortedObj = Object.entries(obj[status])
           .sort((a, b) => a[1] - b[1])
           .reverse();
-
-        console.log("sortedObj: ", sortedObj);
 
         obj[status] = Object.fromEntries(sortedObj);
       };
@@ -267,7 +258,6 @@ const StatsPage = ({
   };
 
   useEffect(() => {
-    console.log("USEEFFECT HAS RUN");
     fetchSalahDataFromDB();
   }, [fetchedSalahData]);
 

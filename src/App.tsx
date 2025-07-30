@@ -96,34 +96,32 @@ const App = () => {
 
     if (themeColor === "system") {
       const media = window.matchMedia("(prefers-color-scheme: dark)");
-      themeColor = media ? "dark" : "light";
+      themeColor = media.matches ? "dark" : "light";
+      console.log("media: ", media);
     }
 
     if (themeColor === "dark") {
-      statusBarThemeColor = "#242424";
-
-      if (Capacitor.isNativePlatform()) {
-        setStatusAndNavBarBGColor(statusBarThemeColor, Style.Dark);
-      }
+      statusBarThemeColor = "#161515";
       document.body.classList.add("dark");
     } else if (themeColor === "light") {
       statusBarThemeColor = "#EDEDED";
-
-      if (Capacitor.isNativePlatform()) {
-        setStatusAndNavBarBGColor(statusBarThemeColor, Style.Light);
-      }
-      console.log("REMOVING DARK CLASS");
-
       document.body.classList.remove("dark");
+    }
+
+    if (Capacitor.isNativePlatform()) {
+      const statusBarIconsColor =
+        statusBarThemeColor === "#EDEDED" ? Style.Light : Style.Dark;
+      if (Capacitor.getPlatform() === "android") {
+        setTimeout(() => {
+          setStatusAndNavBarBGColor(statusBarThemeColor, statusBarIconsColor);
+        }, 1000);
+      } else {
+        setStatusAndNavBarBGColor(statusBarThemeColor, statusBarIconsColor);
+      }
     }
 
     return statusBarThemeColor;
   };
-
-  useEffect(() => {
-    handleTheme(theme);
-    // setTheme(theme);
-  }, [theme]);
 
   useEffect(() => {
     if (
@@ -146,29 +144,28 @@ const App = () => {
 
   useEffect(() => {
     const initializeApp = async () => {
-      const STATUS_AND_NAV_BAR_COLOR = "#161515";
-      if (Capacitor.getPlatform() === "android") {
-        setTimeout(() => {
-          setStatusAndNavBarBGColor(STATUS_AND_NAV_BAR_COLOR, Style.Dark);
-          // StatusBar.setBackgroundColor({ color: STATUS_AND_NAV_BAR_COLOR });
-          // NavigationBar.setColor({ color: STATUS_AND_NAV_BAR_COLOR });
-        }, 750);
-      }
-
       if (isDatabaseInitialised === true) {
         const initialiseAndLoadData = async () => {
           await fetchDataFromDB();
         };
         initialiseAndLoadData();
 
-        setTimeout(async () => {
-          await SplashScreen.hide({ fadeOutDuration: 250 });
-        }, 500);
+        handleTheme(userPreferences.theme);
+
+        if (Capacitor.isNativePlatform()) {
+          setTimeout(async () => {
+            await SplashScreen.hide({ fadeOutDuration: 250 });
+          }, 500);
+        }
       }
     };
 
     initializeApp();
   }, [isDatabaseInitialised]);
+
+  useEffect(() => {
+    handleTheme();
+  }, [userPreferences.theme]);
 
   useEffect(() => {
     let copyOfMissedSalahList: SalahByDateObjType = {};
@@ -219,16 +216,6 @@ const App = () => {
       const notificationValue = DBResultPreferences.values.find(
         (row) => row.preferenceName === "dailyNotification"
       );
-
-      const themeValue = DBResultPreferences.values.find(
-        (row) => row.preferenceName === "theme"
-      );
-
-      if (themeValue) {
-        handleTheme(themeValue.preferenceValue);
-      } else {
-        handleTheme("dark");
-      }
 
       const isExistingUser =
         DBResultPreferences.values.find(
@@ -690,8 +677,8 @@ const App = () => {
                   checkAndOpenOrCloseDBConnection={
                     checkAndOpenOrCloseDBConnection
                   }
-                  setTheme={setTheme}
                   theme={theme}
+                  handleTheme={handleTheme}
                   fetchDataFromDB={fetchDataFromDB}
                   modifyDataInUserPreferencesTable={
                     modifyDataInUserPreferencesTable
