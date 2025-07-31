@@ -10,13 +10,13 @@
 
 :root {
   --max-width: 700px;
-  /* --ion-ripple-color: transparent; */
+
   /* --primary-color: rgb(244, 245, 249); */
   --primary-color: rgb(237, 237, 237);
   /* --primary-color: rgb(250, 248, 244); */
   --secondary-color: rgb(200, 200, 200);
   /* --ion-text-color: rgba(13, 13, 13, 1); */
-  --ion-text-color: rgb(0, 0, 0, 1);
+  --ion-text-color: rgb(0, 0, 0);
   --card-bg-color: rgb(247, 247, 247);
   --card-shadow-color: rgb(234, 234, 234);
   --app-border-color: rgba(233, 233, 233, 1);
@@ -24,12 +24,12 @@
   --nav-tab-color: #373737;
   --nav-active-tab-color: #3880ff;
   /* --nav-selected-tab-color: #2e004d; */
-  --segment-bg-color: rgb(255, 255, 255);
-  --segment-active-color: rgb(215, 215, 215);
+  --segment-bg-color: rgb(237, 237, 237);
+  --segment-active-color: rgb(179, 179, 179);
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
   --textarea-bg-color: rgb(231, 231, 231);
   --missed-salah-sheet-btn-color: rgb(237, 237, 237);
-  --wreath-color: #707070;
+  --wreath-color: #000000;
   --reasons-bg-color-status-sheet: rgb(227, 227, 227);
   --reasons-bg-active-color-status-sheet: #8acefc;
   --calendar-arrow-btn-color: #b2b2b2;
@@ -58,7 +58,7 @@ body.dark {
   --table-dot-icon-color: rgba(180, 180, 180, 0.9);
   --textarea-bg-color: rgb(38, 38, 38);
   --missed-salah-sheet-btn-color: rgb(50, 50, 50);
-  --wreath-color: #bbb;
+  --wreath-color: #ffffff;
   --reasons-bg-color-status-sheet: rgb(44, 44, 44);
   --reasons-bg-active-color-status-sheet: #2563eb;
   --calendar-arrow-btn-color: #424242;
@@ -125,7 +125,7 @@ ion-modal::part(backdrop) {
 ion-textarea {
   max-height: 50px !important;
   overflow-y: auto;
-  color: var(--ion-text-color);
+  color: var(--ion-text-color) !important;
 }
 
 ion-textarea textarea {
@@ -142,6 +142,19 @@ ion-tab-bar {
   --background: var(--primary-color);
   --color: var(--nav-tab-color);
   --color-selected: var(--nav-active-tab-color);
+}
+
+ion-button::part(native) {
+  --background-activated: transparent;
+  --background-focused: transparent;
+  --background-hover: transparent;
+  --ripple-color: transparent;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+ion-button {
+  -webkit-tap-highlight-color: transparent;
 }
 
 .modal-fit-content {
@@ -207,7 +220,7 @@ td {
 }
 
 .swiper-pagination-bullet {
-  background-color: rgba(0, 0, 0, 1);
+  background-color: rgb(138, 138, 138);
   opacity: 0.7;
   width: 8px;
   height: 8px;
@@ -216,7 +229,7 @@ td {
 }
 
 .swiper-pagination-bullet-active {
-  background-color: #fff;
+  background-color: var(--ion-text-color);
   opacity: 1;
 }
 

@@ -59,9 +59,11 @@ import useSQLiteDB from "./utils/useSqLiteDB";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
+import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 
 const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(true);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
@@ -721,6 +723,11 @@ const App = () => {
           setShowOnboarding={setShowOnboarding}
           setShowJoyRideEditIcon={setShowJoyRideEditIcon}
           modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+        />
+      )}
+      {showMajorUpdateOverlay && (
+        <MajorUpdateOverlay
+          setShowMajorUpdateOverlay={setShowMajorUpdateOverlay}
         />
       )}
     </IonApp>

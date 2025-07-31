@@ -35,7 +35,7 @@ const BottomSheetThemeOptions = ({
         {/* <h1 className="modal-header-text">Themes</h1> */}
         <ul className="my-5 mx-2 notification-ul-wrap bg-[var(--primary-color)] rounded-lg">
           {/* // TODO: May need to add aria-pressed to each button */}
-          <li className="flex justify-between p-3 border-b border-[var(--app-border-color)]">
+          <li className="flex justify-between p-3 border-b border-[var(--table-row-border-color)]">
             <button
               aria-pressed={theme === "light"}
               className="w-full text-left"
@@ -50,7 +50,7 @@ const BottomSheetThemeOptions = ({
             </button>
             {theme === "light" && <MdCheck />}
           </li>
-          <li className="flex justify-between p-3 border-b border-[var(--app-border-color)]">
+          <li className="flex justify-between p-3 border-b border-[var(--table-row-border-color)]">
             <button
               aria-pressed={theme === "dark"}
               onClick={async () => {

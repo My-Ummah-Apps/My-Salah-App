@@ -93,7 +93,9 @@ const StreakCounter = ({
             <h1 className="mt-4 mb-1 text-4xl font-extrabold text-center text-[var(--ion-text-color)]">
               {activeStreakCount} {activeStreakCount !== 1 ? "Days" : "Day"}
             </h1>
-            <h2 className="m-0 text-xs text-center">Current Streak</h2>
+            <h2 className="m-0 text-xs text-center text-[var(--ion-text-color)]">
+              Current Streak
+            </h2>
           </div>
           <svg
             className="w-24 h-24"
