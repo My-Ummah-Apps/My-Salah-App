@@ -278,7 +278,8 @@ const BottomSheetSalahStatus = ({
       if (sheetRef.current) {
         sheetRef.current.style.setProperty(
           "margin-bottom",
-          0 + "px",
+          "env(safe-area-inset-bottom)",
+          // 0 + "px",
           "important"
         );
       }
@@ -341,7 +342,7 @@ const BottomSheetSalahStatus = ({
         {" "}
         <section
           ref={sheetWrapper}
-          className="w-[90%] mx-auto mb-10 rounded-lg text-white"
+          className="w-[90%] mx-auto mb-10 rounded-lg text-white pb-env-safe-area-inset-bottom transition-all duration-300 ease-in-out"
         >
           <h1 className="text-[var(--ion-text-color)] mb-10 text-3xl font-light text-center">
             How did you pray{" "}
@@ -540,6 +541,7 @@ const BottomSheetSalahStatus = ({
               rows={1}
               className="pl-2 rounded-lg bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)]"
               placeholder="Notes"
+              value={notes}
               onIonInput={(e) => {
                 // @ts-ignore
                 handleNotes(e);

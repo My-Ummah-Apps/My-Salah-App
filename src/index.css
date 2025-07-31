@@ -30,7 +30,7 @@
   --textarea-bg-color: rgb(231, 231, 231);
   --missed-salah-sheet-btn-color: rgb(237, 237, 237);
   --wreath-color: #707070;
-  --reasons-bg-color-status-sheet: rgb(241, 241, 241);
+  --reasons-bg-color-status-sheet: rgb(227, 227, 227);
   --reasons-bg-active-color-status-sheet: #8acefc;
   --calendar-arrow-btn-color: #b2b2b2;
   --reasons-bar-bg: #888888;
@@ -125,6 +125,7 @@ ion-modal::part(backdrop) {
 ion-textarea {
   max-height: 50px !important;
   overflow-y: auto;
+  color: var(--ion-text-color);
 }
 
 ion-textarea textarea {

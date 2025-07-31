@@ -96,8 +96,8 @@ const Onboarding = ({
               Stay Consistent with Your Salah
             </h1>
             <p>
-              Stay consistent with your Salah. Turn on daily reminders to help
-              you log your prayers and reach your goals.
+              Get daily reminders to stay consistent with your Salah. You can
+              change the notification time later in Settings.
             </p>
           </section>
           <section className="flex flex-col p-5">
