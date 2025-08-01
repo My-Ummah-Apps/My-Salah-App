@@ -2,11 +2,45 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.0";
+export const LATEST_APP_VERSION = "4.1";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Light Theme Mode",
+        text: (
+          <>
+            <strong>UI:</strong> You can now switch between light, dark and
+            system modes via the settings page.
+          </>
+        ),
+      },
+      {
+        heading: "UI Improvements",
+        text: (
+          <>
+            <strong>UX:</strong> Several UI changes bring the app in line with
+            platform design standards — the Home icon now appears first in the
+            navigation bar, and the missed Salah counter is now shown as a
+            numbered circle.
+          </>
+        ),
+      },
+      {
+        heading: "Bug Fixes",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved several bugs, including launch
+            screen flicker and keyboard resize issues on some devices.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.0",
     changes: [
       {
         heading: "UX Improvement - Bottom Sheets",

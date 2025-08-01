@@ -20,7 +20,6 @@ const BottomSheetThemeOptions = ({
   triggerId,
   theme,
   modifyDataInUserPreferencesTable,
-  handleTheme,
 }: BottomSheetAboutUsProps) => {
   return (
     <IonModal
@@ -40,9 +39,6 @@ const BottomSheetThemeOptions = ({
               aria-pressed={theme === "light"}
               className="w-full text-left"
               onClick={async () => {
-                handleTheme("light");
-                console.log("SAVING LIGHT THEME");
-
                 await modifyDataInUserPreferencesTable("theme", "light");
               }}
             >
@@ -54,8 +50,6 @@ const BottomSheetThemeOptions = ({
             <button
               aria-pressed={theme === "dark"}
               onClick={async () => {
-                handleTheme("dark");
-                console.log("SAVING DARK THEME");
                 await modifyDataInUserPreferencesTable("theme", "dark");
               }}
               className="w-full text-left"
@@ -68,8 +62,6 @@ const BottomSheetThemeOptions = ({
             <button
               aria-pressed={theme === "system"}
               onClick={async () => {
-                handleTheme("system");
-                console.log("SAVING SYSTEM THEME");
                 await modifyDataInUserPreferencesTable("theme", "system");
               }}
               className="w-full text-left"

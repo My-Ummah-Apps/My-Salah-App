@@ -18,8 +18,8 @@ const MajorUpdateOverlay = ({
         bottom: 0,
         backgroundColor: "rgb(36, 36, 36)",
         color: "#fff",
-        zIndex: 9999,
         padding: 20,
+        zIndex: 9999,
         overflowY: "auto",
         paddingTop: "calc(env(safe-area-inset-top) + 20px)",
         paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)",
@@ -27,8 +27,9 @@ const MajorUpdateOverlay = ({
         paddingRight: "calc(env(safe-area-inset-right) + 20px)",
       }}
     >
+      <img src="/src/assets/images/62Xs3GxAQvwZ_1024_500.png"></img>
       <p className="bg-[#9332ed] p-2 rounded-2xl mt-4 mb-4 inline-block text-sm">
-        MAJOR UPDATE
+        VERSION 4.1
       </p>
       {/* <h1 style={{ color: "#fff" }} className="text-3xl font-bold">
         Light Theme
@@ -36,7 +37,7 @@ const MajorUpdateOverlay = ({
       <p className="mt-2 mb-6 text-sm">
         You can now switch between light and dark mode via the settings page.
       </p> */}
-      <section>
+      <section className="mb-[10rem]">
         <div className="flex items-center mb-5">
           <div>
             <GoRocket className="mr-5 text-3xl text-[#c583f1]" />
@@ -45,8 +46,8 @@ const MajorUpdateOverlay = ({
             <h2 style={{ color: "#c583f1" }}>Light Theme Mode</h2>
             <p className="text-sm">
               {" "}
-              You can now switch between light and dark mode via the settings
-              page.
+              You can now switch between light, dark and system modes via the
+              settings page.
             </p>
           </div>
         </div>
@@ -55,14 +56,12 @@ const MajorUpdateOverlay = ({
             <MdOutlinePalette className="mr-5 text-3xl text-[#ee7578]" />
           </div>
           <div>
-            <h2 style={{ color: "#ee7578" }}>UX Improvements</h2>
+            <h2 style={{ color: "#ee7578" }}>UI Improvements</h2>
             <p className="text-sm">
               {" "}
-              Header and navigation bar updated to follow platform design
-              guidelines. The Home tab now appears first, instead of in the
-              center. The missed Salah counter in the header is now a circle
-              with the number inside. Other minor improvements have also ben
-              made.
+              Several UI changes bring the app in line with platform design
+              standards — the Home icon now appears first in the navigation bar,
+              and the missed Salah counter is now shown as a numbered circle.
             </p>
           </div>
         </div>

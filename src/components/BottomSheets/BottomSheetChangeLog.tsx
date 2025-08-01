@@ -52,7 +52,7 @@ const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
           ))}{" "}
           <button
             onClick={() => modal.current?.dismiss()}
-            className="w-[90%] rounded-xl bg-[#5c6bc0] p-5 text-center fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2"
+            className="w-[90%] rounded-xl text-white bg-[#5c6bc0] p-5 text-center fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2"
           >
             Close
           </button>

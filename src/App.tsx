@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IonReactRouter } from "@ionic/react-router";
 
 import {
@@ -62,8 +62,9 @@ import { Route } from "react-router-dom";
 import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 
 const App = () => {
+  const justLaunched = useRef(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(true);
+  const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(false);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
@@ -106,9 +107,10 @@ const App = () => {
     if (Capacitor.isNativePlatform()) {
       const statusBarIconsColor =
         statusBarThemeColor === "#EDEDED" ? Style.Light : Style.Dark;
-      if (Capacitor.getPlatform() === "android") {
+      if (Capacitor.getPlatform() === "android" && justLaunched.current) {
         setTimeout(() => {
           setStatusAndNavBarBGColor(statusBarThemeColor, statusBarIconsColor);
+          justLaunched.current = false;
         }, 1000);
       } else {
         setStatusAndNavBarBGColor(statusBarThemeColor, statusBarIconsColor);
@@ -123,9 +125,8 @@ const App = () => {
       localStorage.getItem("appVersion") &&
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
     ) {
-      if (Capacitor.getPlatform() === "ios") {
-        // setShowChangelogModal(true);
-      }
+      // setShowChangelogModal(true);
+      setShowMajorUpdateOverlay(true);
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
   }, []);
@@ -145,7 +146,7 @@ const App = () => {
         };
         initialiseAndLoadData();
 
-        handleTheme(userPreferences.theme);
+        // handleTheme(userPreferences.theme);
 
         if (Capacitor.isNativePlatform()) {
           setTimeout(async () => {
@@ -159,7 +160,7 @@ const App = () => {
   }, [isDatabaseInitialised]);
 
   useEffect(() => {
-    handleTheme();
+    handleTheme(userPreferences.theme);
   }, [userPreferences.theme]);
 
   useEffect(() => {
@@ -187,7 +188,6 @@ const App = () => {
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
-      console.log("DBResultPreferences: ", DBResultPreferences?.values);
 
       const DBResultAllSalahData = await dbConnection.current?.query(
         `SELECT * FROM salahDataTable`
