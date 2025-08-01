@@ -27,8 +27,8 @@
   --segment-bg-color: rgb(223, 223, 223);
   --segment-active-color: rgb(255, 255, 255);
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
-  --textarea-bg-color: rgb(231, 231, 231);
-  --missed-salah-sheet-btn-color: rgb(237, 237, 237);
+  --textarea-bg-color: rgb(206, 206, 206);
+  --missed-salah-sheet-btn-color: rgb(206, 206, 206);
   --wreath-color: #000000;
   --reasons-bg-color-status-sheet: rgb(227, 227, 227);
   --reasons-bg-active-color-status-sheet: #8acefc;
@@ -134,7 +134,12 @@ ion-modal::part(backdrop) {
 ion-textarea {
   max-height: 50px !important;
   overflow-y: auto;
+}
+
+ion-textarea,
+input {
   color: var(--ion-text-color) !important;
+  background: var(--textarea-bg-color);
 }
 
 ion-textarea textarea {

@@ -33,7 +33,7 @@ const BottomSheetThemeOptions = ({
     >
       <section className="py-10 theme-sheet-content-wrap">
         {/* <h1 className="modal-header-text">Themes</h1> */}
-        <ul className="my-5 mx-2 notification-ul-wrap bg-[var(--primary-color)] rounded-lg">
+        <ul className="mx-2 my-5 rounded-lg notification-ul-wrap">
           {/* // TODO: May need to add aria-pressed to each button */}
           <li className="flex justify-between p-3 border-b border-[var(--table-row-border-color)]">
             <button

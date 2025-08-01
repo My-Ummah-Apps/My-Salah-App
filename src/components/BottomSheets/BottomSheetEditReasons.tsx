@@ -52,7 +52,7 @@ const BottomSheetEditReasons = ({
             {" "}
             <section className="flex">
               <input
-                className="p-1 rounded-md bg-zinc-800"
+                className="p-1 rounded-md"
                 onChange={(e) => {
                   if (e.target.value.length > CHAR_LIMIT) return;
                   setNewReasonInput(e.target.value);
@@ -64,7 +64,7 @@ const BottomSheetEditReasons = ({
                 value={newReasonInput}
               ></input>
               <button
-                className="px-2 ml-2 bg-blue-600 rounded-md"
+                className="px-2 ml-2 text-white bg-blue-600 rounded-md"
                 onClick={async () => {
                   if (
                     userPreferences.reasons.some(
@@ -117,7 +117,7 @@ const BottomSheetEditReasons = ({
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.3 }}
               style={{
-                color: charCount === 0 ? "red" : "white",
+                color: charCount === 0 ? "red" : "var(--ion-text-color)",
               }}
               className="mt-1 text-xs"
             >
