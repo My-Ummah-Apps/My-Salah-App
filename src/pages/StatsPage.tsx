@@ -23,7 +23,7 @@ import {
   // pageTransitionStyles,
   salahStatusColorsHexCodes,
 } from "../utils/constants";
-import SalahSelectionTabs from "../components/Stats/SalahSelectionTabs";
+
 import {
   IonContent,
   IonHeader,
@@ -31,6 +31,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import SalahSegmentTabs from "../components/Stats/SalahSelectionTabs";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -279,7 +280,7 @@ const StatsPage = ({
               activeStreakCount={activeStreakCount}
               userGender={userPreferences.userGender}
             />
-            <SalahSelectionTabs
+            <SalahSegmentTabs
               setStatsToShow={setStatsToShow}
               statsToShow={statsToShow}
             />

@@ -24,8 +24,8 @@
   --nav-tab-color: #373737;
   --nav-active-tab-color: #3880ff;
   /* --nav-selected-tab-color: #2e004d; */
-  --segment-bg-color: rgb(237, 237, 237);
-  --segment-active-color: rgb(179, 179, 179);
+  --segment-bg-color: rgb(223, 223, 223);
+  --segment-active-color: rgb(255, 255, 255);
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
   --textarea-bg-color: rgb(231, 231, 231);
   --missed-salah-sheet-btn-color: rgb(237, 237, 237);
@@ -52,8 +52,8 @@ body.dark {
   --app-border-color: rgba(54, 49, 49, 1);
   --table-row-border-color: rgb(38, 38, 38);
   --nav-tab-color: grey;
-  --segment-bg-color: rgb(27, 27, 28);
-  --segment-active-color: rgb(89, 89, 89);
+  --segment-bg-color: rgb(52, 53, 56);
+  --segment-active-color: rgb(100, 103, 112);
   --nav-active-tab-color: white;
   --table-dot-icon-color: rgba(180, 180, 180, 0.9);
   --textarea-bg-color: rgb(38, 38, 38);
@@ -111,6 +111,15 @@ ion-title {
 
 ion-toolbar p {
   color: var(--ion-text-color) !important;
+}
+
+ion-segment {
+  --background: var(--segment-bg-color);
+}
+
+ion-segment-button {
+  min-width: auto;
+  --indicator-color: var(--segment-active-color);
 }
 
 ion-modal {
