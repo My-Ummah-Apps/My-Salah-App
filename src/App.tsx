@@ -64,7 +64,7 @@ import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 const App = () => {
   const justLaunched = useRef(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(false);
+  const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(true);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}

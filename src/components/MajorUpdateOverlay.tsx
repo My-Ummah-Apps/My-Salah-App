@@ -1,5 +1,6 @@
 import { GoBug, GoRocket } from "react-icons/go";
 import { MdOutlinePalette } from "react-icons/md";
+import image from "../assets/images/62Xs3GxAQvwZ_1024_500.png";
 
 interface MajorUpdateOverlayProps {
   setShowMajorUpdateOverlay: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,7 +28,7 @@ const MajorUpdateOverlay = ({
         paddingRight: "calc(env(safe-area-inset-right) + 20px)",
       }}
     >
-      <img src="/src/assets/images/62Xs3GxAQvwZ_1024_500.png"></img>
+      <img src={image}></img>
       <p className="bg-[#9332ed] p-2 rounded-2xl mt-4 mb-4 inline-block text-sm">
         VERSION 4.1
       </p>
@@ -38,7 +39,7 @@ const MajorUpdateOverlay = ({
         You can now switch between light and dark mode via the settings page.
       </p> */}
       <section className="mb-[10rem]">
-        <div className="flex items-center mb-5">
+        <div className="flex items-center mb-2">
           <div>
             <GoRocket className="mr-5 text-3xl text-[#c583f1]" />
           </div>
@@ -51,7 +52,7 @@ const MajorUpdateOverlay = ({
             </p>
           </div>
         </div>
-        <div className="flex items-center mb-5">
+        <div className="flex items-center mb-2">
           <div>
             <MdOutlinePalette className="mr-5 text-3xl text-[#ee7578]" />
           </div>
@@ -65,7 +66,7 @@ const MajorUpdateOverlay = ({
             </p>
           </div>
         </div>
-        <div className="flex items-center mb-5">
+        <div className="flex items-center mb-2">
           <div>
             <GoBug className="mr-5 text-3xl text-[#f7cb22]" />
           </div>
