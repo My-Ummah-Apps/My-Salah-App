@@ -52,7 +52,7 @@ const BottomSheetEditReasons = ({
             {" "}
             <section className="flex">
               <input
-                className="p-1 rounded-md"
+                className="p-1 rounded-md text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"
                 onChange={(e) => {
                   if (e.target.value.length > CHAR_LIMIT) return;
                   setNewReasonInput(e.target.value);

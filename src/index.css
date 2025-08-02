@@ -138,8 +138,8 @@ ion-textarea {
 
 ion-textarea,
 input {
-  color: var(--ion-text-color) !important;
-  background: var(--textarea-bg-color);
+  /* color: var(--ion-text-color) !important;
+  background: var(--textarea-bg-color) !important; */
 }
 
 ion-textarea textarea {
@@ -194,15 +194,6 @@ ion-button {
 .stats-page-components-wrap,
 .home-page-components-wrap {
   margin: 1rem;
-}
-
-input[type="date"] {
-  background-color: gray;
-  border-radius: 0.3rem;
-  color: white;
-  border: none;
-  color-scheme: dark;
-  padding: 0.3rem;
 }
 
 .checkbox-wrap {
@@ -355,11 +346,6 @@ td {
   .modal-height {
     --height: calc(100dvh - 10vh);
   }
-}
-
-input[type="date"] {
-  color: white;
-  background-color: rgb(67, 67, 67);
 }
 
 /* CHECKBOX STYLING */

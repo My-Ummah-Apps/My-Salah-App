@@ -539,7 +539,7 @@ const BottomSheetSalahStatus = ({
             <IonTextarea
               autoGrow={true}
               rows={1}
-              className="pl-2 rounded-lg"
+              className="pl-2 rounded-lg text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"
               placeholder="Notes"
               value={notes}
               onIonInput={(e) => {

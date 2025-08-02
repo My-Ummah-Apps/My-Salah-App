@@ -74,6 +74,7 @@ const BottomSheetStartDate = ({
         <section className="text-center">
           <p className="mb-2">Select New Start Date</p>
           <input
+            className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
             placeholder="&#x1F5D3;"
             onKeyDown={(e) => {
               e.preventDefault();
