@@ -12,7 +12,7 @@ import { TiDelete } from "react-icons/ti";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { VscDebugRestart } from "react-icons/vsc";
-import { IonContent, IonModal } from "@ionic/react";
+import { IonContent, IonHeader, IonModal, IonToolbar } from "@ionic/react";
 
 interface BottomSheetStartDateProps {
   triggerId: string;
@@ -46,8 +46,11 @@ const BottomSheetEditReasons = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonContent>
-        <section className="mx-4 mt-10 mb-10">
+      {/* <section className="mx-4 mt-10 mb-10"> */}
+      <IonHeader className="px-2 mt-5">
+        <IonToolbar
+          style={{ "--background": "var(--card-bg-color)", paddingBottom: "0" }}
+        >
           <section className="flex justify-between w-full">
             {" "}
             <section className="flex">
@@ -109,60 +112,62 @@ const BottomSheetEditReasons = ({
               <VscDebugRestart className="text-2xl" />
             </button>
           </section>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        {newReasonInput.length > 0 && (
+          <motion.p
+            layout
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              color: charCount === 0 ? "red" : "var(--ion-text-color)",
+            }}
+            className="pl-5 text-xs bg-[color:var(--card-bg-color)]"
+          >
+            {`${charCount} characters left`}
+          </motion.p>
+        )}
 
-          {newReasonInput.length > 0 && (
-            <motion.p
-              layout
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              style={{
-                color: charCount === 0 ? "red" : "var(--ion-text-color)",
-              }}
-              className="mt-1 text-xs"
-            >
-              {`${charCount} characters left`}
-            </motion.p>
-          )}
-
-          <ul className="mt-3">
-            <AnimatePresence>
-              {userPreferences.reasons
-                .sort((a, b) => a.localeCompare(b))
-                .map((reason) => (
-                  <motion.li
-                    className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-2 py-4 my-3 rounded-lg`}
-                    layout
-                    initial={{ x: 0 }}
-                    animate={{ x: 0 }}
-                    exit={{ x: "-100%", opacity: 0 }}
-                    transition={{
-                      // delay: 0.1,
-                      duration: 0.3,
-                      layout: { duration: 0.2 },
+        <ul className="pt-3 px-2 bg-[color:var(--card-bg-color)]">
+          <AnimatePresence>
+            {userPreferences.reasons
+              .sort((a, b) => a.localeCompare(b))
+              .map((reason) => (
+                <motion.li
+                  className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-2 py-4 my-3 rounded-lg`}
+                  layout
+                  initial={{ x: 0 }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "-100%", opacity: 0 }}
+                  transition={{
+                    // delay: 0.1,
+                    duration: 0.3,
+                    layout: { duration: 0.2 },
+                  }}
+                  key={reason}
+                >
+                  <p>{reason}</p>
+                  <p
+                    onClick={async () => {
+                      const modifiedReasons = userPreferences.reasons.filter(
+                        (item) => item !== reason
+                      );
+                      await modifyDataInUserPreferencesTable(
+                        "reasons",
+                        modifiedReasons
+                      );
                     }}
-                    key={reason}
                   >
-                    <p>{reason}</p>
-                    <p
-                      onClick={async () => {
-                        const modifiedReasons = userPreferences.reasons.filter(
-                          (item) => item !== reason
-                        );
-                        await modifyDataInUserPreferencesTable(
-                          "reasons",
-                          modifiedReasons
-                        );
-                      }}
-                    >
-                      <TiDelete className="text-2xl" />
-                    </p>
-                  </motion.li>
-                ))}
-            </AnimatePresence>
-          </ul>
-        </section>
+                    <TiDelete className="text-2xl" />
+                  </p>
+                </motion.li>
+              ))}
+          </AnimatePresence>
+        </ul>
       </IonContent>
+      {/* </section> */}
     </IonModal>
   );
 };

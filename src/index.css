@@ -143,8 +143,7 @@ input {
 }
 
 ion-textarea textarea {
-  /* max-height: 50px !important;
-  overflow-y: auto; */
+  /* --color: var(--ion-text-color) !important; */
 }
 
 ion-toolbar {

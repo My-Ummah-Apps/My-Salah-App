@@ -321,6 +321,7 @@ const Calendar = ({
         setClickedDate={setClickedDate}
         showDailySalahDataModal={showDailySalahDataModal}
         clickedDate={clickedDate}
+        statsToShow={statsToShow}
       />
     </>
   );

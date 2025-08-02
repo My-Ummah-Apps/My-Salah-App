@@ -22,6 +22,7 @@ interface BottomSheetSingleDateViewProps {
   setShowDailySalahDataModal: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedDate: React.Dispatch<React.SetStateAction<string>>;
   clickedDate: string;
+  statsToShow: SalahNamesType | "All";
 }
 
 const BottomSheetSingleDateView = ({
@@ -31,7 +32,8 @@ const BottomSheetSingleDateView = ({
   setShowDailySalahDataModal,
   setClickedDate,
   clickedDate,
-}: BottomSheetSingleDateViewProps) => {
+}: // statsToShow,
+BottomSheetSingleDateViewProps) => {
   const [clickedDateData, setClickedDateData] = useState<clickedDateDataObj[]>(
     []
   );
@@ -65,18 +67,18 @@ const BottomSheetSingleDateView = ({
 
       const placeholderData: clickedDateDataObj[] = salahNamesOrder.map(
         (salah) => {
-          const dataCheck = sortedData.find((obj) => {
+          const salahData = sortedData.find((obj) => {
             return obj.salahName === salah;
           });
 
-          if (dataCheck) {
+          if (salahData) {
             return {
               id: null,
               date: clickedDate,
-              salahName: dataCheck.salahName,
-              salahStatus: dataCheck.salahStatus,
-              reasons: dataCheck.reasons,
-              notes: dataCheck.notes,
+              salahName: salahData.salahName,
+              salahStatus: salahData.salahStatus,
+              reasons: salahData.reasons,
+              notes: salahData.notes,
             };
           } else {
             return {
@@ -103,6 +105,7 @@ const BottomSheetSingleDateView = ({
     if (clickedDate) {
       grabSingleDateData(clickedDate);
     }
+    console.log("clickedDateData: ", clickedDateData);
   }, [clickedDate]);
 
   return (
