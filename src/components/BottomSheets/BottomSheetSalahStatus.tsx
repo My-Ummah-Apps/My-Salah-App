@@ -82,16 +82,17 @@ const BottomSheetSalahStatus = ({
   const sheetWrapper = useRef<HTMLDivElement | null>(null);
 
   if (Capacitor.getPlatform() === "ios") {
-    // Keyboard.setAccessoryBarVisible({ isVisible: true });
     window.addEventListener("keyboardWillShow", (e) => {
-      if (sheetWrapper.current) {
-        sheetWrapper.current.style.marginBottom =
-          (e as any).keyboardHeight + "px";
+      const app: HTMLElement | null = document.querySelector("ion-app");
+      if (app) {
+        app.style.marginBottom = (e as any).keyboardHeight + "px";
       }
     });
     window.addEventListener("keyboardWillHide", () => {
-      if (sheetWrapper.current) {
-        sheetWrapper.current.style.marginBottom = "0px";
+      const app: HTMLElement | null = document.querySelector("ion-app");
+
+      if (app) {
+        app.style.marginBottom = "0px";
       }
     });
   }
@@ -342,7 +343,7 @@ const BottomSheetSalahStatus = ({
         {" "}
         <section
           ref={sheetWrapper}
-          className="w-[90%] mx-auto mb-10 rounded-lg text-white pb-env-safe-area-inset-bottom transition-all duration-300 ease-in-out"
+          className="w-[90%] mx-auto mb-5 rounded-lg text-white pb-env-safe-area-inset-bottom transition-all duration-300 ease-in-out"
         >
           <h1 className="text-[var(--ion-text-color)] mb-10 text-3xl font-light text-center">
             How did you pray{" "}

@@ -164,7 +164,7 @@ const Calendar = ({
               <button
                 style={{
                   opacity:
-                    currentMonth === formattedMonths.length - 1 ? "0.5" : "1",
+                    currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
                 }}
                 onClick={() => {
                   if (currentMonth === formattedMonths.length - 1) return;
@@ -177,7 +177,7 @@ const Calendar = ({
 
               <button
                 style={{
-                  opacity: currentMonth === 0 ? "0.5" : "1",
+                  opacity: currentMonth === 0 ? "0.3" : "1",
                 }}
                 onClick={() => {
                   if (currentMonth === 0) return;

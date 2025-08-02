@@ -32,7 +32,7 @@
   --wreath-color: #000000;
   --reasons-bg-color-status-sheet: rgb(227, 227, 227);
   --reasons-bg-active-color-status-sheet: #8acefc;
-  --calendar-arrow-btn-color: #b2b2b2;
+  --calendar-arrow-btn-color: #d2d2d2;
   --reasons-bar-bg: #888888;
 
   --missed-status-color: #b62e2e;
@@ -58,7 +58,7 @@ body.dark {
   --table-dot-icon-color: rgba(180, 180, 180, 0.9);
   --textarea-bg-color: rgb(38, 38, 38);
   --missed-salah-sheet-btn-color: rgb(50, 50, 50);
-  --wreath-color: #ffffff;
+  --wreath-color: #e9e9e9;
   --reasons-bg-color-status-sheet: rgb(44, 44, 44);
   --reasons-bg-active-color-status-sheet: #2563eb;
   --calendar-arrow-btn-color: #424242;
@@ -345,6 +345,11 @@ td {
 
   .modal-height {
     --height: calc(100dvh - 10vh);
+  }
+
+  ion-app {
+    margin-bottom: 0;
+    transition: margin-bottom 420ms;
   }
 }
 
