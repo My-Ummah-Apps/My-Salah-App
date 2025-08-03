@@ -105,7 +105,7 @@ BottomSheetSingleDateViewProps) => {
     if (clickedDate) {
       grabSingleDateData(clickedDate);
     }
-    console.log("clickedDateData: ", clickedDateData);
+    // console.log("clickedDateData: ", clickedDateData);
   }, [clickedDate]);
 
   return (

@@ -15,9 +15,9 @@ const SalahSegmentTabs = ({
       mode="ios"
       className=""
       value={statsToShow}
-      onIonChange={(e) =>
-        setStatsToShow(e.detail.value as SalahNamesType | "All")
-      }
+      onIonChange={(e) => {
+        setStatsToShow(e.detail.value as SalahNamesType | "All");
+      }}
     >
       <IonSegmentButton value="All">
         <IonLabel>All</IonLabel>

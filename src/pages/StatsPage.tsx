@@ -161,8 +161,6 @@ const StatsPage = ({
   ];
 
   const fetchSalahDataFromDB = async () => {
-    console.log("FETCHING DATA");
-
     try {
       await checkAndOpenOrCloseDBConnection("open");
       let DBResultAllSalahData = await dbConnection.current!.query(
@@ -260,7 +258,7 @@ const StatsPage = ({
 
   useEffect(() => {
     fetchSalahDataFromDB();
-  }, [fetchedSalahData]);
+  }, [fetchedSalahData, statsToShow]);
 
   return (
     <IonPage>
