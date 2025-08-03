@@ -2,11 +2,38 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.1";
+export const LATEST_APP_VERSION = "4.2";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Minor UX & UI Improvements",
+        text: (
+          <>
+            <strong>UI:</strong> Text color in status sheet textarea is now
+            black when in light theme mode for improved readability.
+            <br /> <br />
+            <strong>UX:</strong> The "Add New Reason" and "Revert to Default"
+            icons in the Edit/Add Reasons sheet now always remain in view even
+            when scrolling for easier access.
+          </>
+        ),
+      },
+      {
+        heading: "Minor Bug Fix",
+        text: (
+          <>
+            <strong>BUG:</strong> Fixed incorrect reason amounts outside of the
+            "All" segment tab on the stats page.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.1",
     changes: [
       {
         heading: "Light Theme Mode",

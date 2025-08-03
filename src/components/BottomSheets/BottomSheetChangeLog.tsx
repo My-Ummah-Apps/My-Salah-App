@@ -44,7 +44,9 @@ const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
                   className="mt-4 mb-4 p-4 border border-[var(--border-form)] rounded-xl
 "
                 >
-                  <h2 className="mb-2 text-lg font-medium">{item.heading}</h2>
+                  <h2 className="mt-0 mb-2 text-lg font-medium">
+                    {item.heading}
+                  </h2>
                   <p className="text-sm">{item.text}</p>
                 </section>
               ))}
