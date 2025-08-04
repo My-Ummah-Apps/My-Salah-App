@@ -34,6 +34,8 @@
   --reasons-bg-active-color-status-sheet: #8acefc;
   --calendar-arrow-btn-color: #d2d2d2;
   --reasons-bar-bg: #888888;
+  --scrollbar-track: rgb(103, 103, 103);
+  --scrollbar-thumb: #d0d0d0;
 
   --missed-status-color: #b62e2e;
   --jamaah-status-color: #448b75;
@@ -63,6 +65,8 @@ body.dark {
   --reasons-bg-active-color-status-sheet: #2563eb;
   --calendar-arrow-btn-color: #424242;
   --reasons-bar-bg: #282828;
+  --scrollbar-track: rgb(103, 103, 103);
+  --scrollbar-thumb: #bebebe;
 }
 
 * {
@@ -90,6 +94,33 @@ body:-webkit-scrollbar {
   background: transparent;
 }
 
+/* ::-webkit-scrollbar {
+  display: none;
+} */
+
+.hide-scrollbar::-webkit-scrollbar {
+  /* display: none; */
+}
+
+.scrollable-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  /* background: #f1f1f1; */
+  background: var(--scrollbar-track);
+  border-radius: 5px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 5px;
+}
+
+/* .scrollable-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+} */
+
 input:focus,
 button:focus {
   outline: none;
@@ -98,10 +129,6 @@ button:focus {
 
 input[type="time"]::-webkit-calendar-picker-indicator {
   background: none;
-  display: none;
-}
-
-::-webkit-scrollbar {
   display: none;
 }
 

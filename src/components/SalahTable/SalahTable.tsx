@@ -133,7 +133,7 @@ const SalahTable = ({
   };
 
   return (
-    <section className="salah-table-wrap">
+    <section className="salah-table-wrap hide-scrollbar">
       <Joyride
         disableOverlay={false}
         disableOverlayClose={true}

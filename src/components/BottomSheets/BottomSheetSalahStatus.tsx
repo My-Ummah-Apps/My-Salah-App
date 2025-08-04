@@ -304,8 +304,10 @@ const BottomSheetSalahStatus = ({
     animate: { scale: 1.07, opacity: 1, transition: { duration: 0.3 } },
   };
 
+  // const statusBoxStyles =
+  //   "h-full px-5 py-3 rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full";
   const statusBoxStyles =
-    "h-full px-5 py-3 rounded-xl mx-auto text-center flex flex-col items-center justify-around w-full";
+    "aspect-square rounded-xl flex flex-col items-center justify-center";
 
   useEffect(() => {
     if (
@@ -375,7 +377,7 @@ const BottomSheetSalahStatus = ({
                 >
                   {" "}
                   <GoPeople className="w-full mb-1 text-3xl" />
-                  <p className="inline"> In Jamaah</p>
+                  <p className="inline mt-1"> In Jamaah</p>
                 </div>
               </motion.div>
             ) : (
@@ -395,7 +397,7 @@ const BottomSheetSalahStatus = ({
                 >
                   {" "}
                   <GoPerson className="w-full mb-1 text-3xl" />
-                  <p className="inline">Prayed</p>
+                  <p className="inline mt-1">Prayed</p>
                 </div>
               </motion.div>
             )}
@@ -416,7 +418,7 @@ const BottomSheetSalahStatus = ({
                     className={statusBoxStyles}
                   >
                     <GoPerson className="w-full mb-1 text-3xl" />
-                    <p className="inline">On Time</p>
+                    <p className="inline mt-1">On Time</p>
                   </div>
                 </motion.div>
               </>
@@ -437,7 +439,7 @@ const BottomSheetSalahStatus = ({
                     className={statusBoxStyles}
                   >
                     <PiFlower className="w-full mb-1 text-3xl" />
-                    <p className="inline">Excused</p>
+                    <p className="inline mt-1">Excused</p>
                   </div>{" "}
                 </motion.div>
               </>
@@ -456,7 +458,7 @@ const BottomSheetSalahStatus = ({
               className={statusBoxStyles}
             >
               <GoClock className="w-full mb-1 text-3xl" />
-              <p className="inline">Late</p>
+              <p className="inline mt-1">Late</p>
             </motion.div>
 
             <motion.div
@@ -472,17 +474,19 @@ const BottomSheetSalahStatus = ({
               className={statusBoxStyles}
             >
               <GoSkip className="w-full mb-1 text-3xl" />
-              <p className="inline">Missed</p>
+              <p className="inline mt-1">Missed</p>
             </motion.div>
           </div>
           <section
             style={{ maxHeight: reasonsHeight + "px" }}
             ref={modalSheetSalahReasonsWrap}
-            className="mb-5 overflow-x-hidden mt-7 salah-status-modal-reasons-wrap"
+            className="mt-2 mb-5 overflow-x-hidden salah-status-modal-reasons-wrap scrollable-container"
           >
             {userPreferences.reasons.length > 0 && (
               <div>
-                <h2 className="mb-3 text-sm text-start">Reasons: </h2>
+                <h2 className="mb-3 text-sm text-start text-[var(--ion-text-color)]">
+                  Reasons:{" "}
+                </h2>
               </div>
             )}
             {Array.isArray(userPreferences.reasons) && (
