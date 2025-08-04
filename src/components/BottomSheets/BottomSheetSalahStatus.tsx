@@ -136,6 +136,7 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
+      console.log("DB CLOSED STATUS SALAH SHEET LINE 139");
       await checkAndOpenOrCloseDBConnection("close");
     }
 
@@ -256,6 +257,7 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
+      console.log("DB CLOSED STATIS SALAH SHEET LINE 260");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };

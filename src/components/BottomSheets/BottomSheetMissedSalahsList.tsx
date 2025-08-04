@@ -44,6 +44,9 @@ const MissedSalahsListBottomSheet = ({
   showMissedSalahsSheet,
   missedSalahList,
 }: MissedSalahsListBottomSheetProps) => {
+  const [isClickedItem, setIsClickedItem] = useState<string>();
+  const [showCompletedMsg, setShowCompletedMsg] = useState(false);
+
   useEffect(() => {
     if (!showMissedSalahsSheet) return;
 
@@ -62,7 +65,6 @@ const MissedSalahsListBottomSheet = ({
     };
   }, [showMissedSalahsSheet]);
 
-  const [isClickedItem, setIsClickedItem] = useState<string>();
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
   for (let obj in missedSalahList) {
     missedSalahList[obj].forEach((item) => {
@@ -169,7 +171,7 @@ const MissedSalahsListBottomSheet = ({
                     >
                       <section className="flex items-center justify-between w-full px-3 py-2 text-sm">
                         {/* <FaCheck className="font-thin" />{" "} */}
-                        <p className="">Mark As Done</p>
+                        <p>Mark As Done</p>
                       </section>
                     </button>
                   </section>
@@ -177,6 +179,7 @@ const MissedSalahsListBottomSheet = ({
               );
             })}
           </AnimatePresence>
+          {showCompletedMsg && <div>hello</div>}
         </section>{" "}
       </IonContent>
     </IonModal>

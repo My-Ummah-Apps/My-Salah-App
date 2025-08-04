@@ -276,6 +276,7 @@ const App = () => {
             error
           );
         } finally {
+          console.log("DB CLOSED APP TSX LINE 279");
           await checkAndOpenOrCloseDBConnection("close");
         }
       }
@@ -624,6 +625,7 @@ const App = () => {
       console.log(`ERROR ENTERING ${preferenceName} into DB`);
       console.error(error);
     } finally {
+      console.log("DB CLOSED APP TSX LINE 628");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };

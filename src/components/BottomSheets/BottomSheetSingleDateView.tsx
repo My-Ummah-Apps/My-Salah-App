@@ -97,6 +97,7 @@ BottomSheetSingleDateViewProps) => {
     } catch (error) {
       console.error(error);
     } finally {
+      console.log("DB CLOSED SINGLE DATA SHEET LINE 100");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };

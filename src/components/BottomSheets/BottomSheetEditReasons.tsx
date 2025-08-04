@@ -49,7 +49,11 @@ const BottomSheetEditReasons = ({
       {/* <section className="mx-4 mt-10 mb-10"> */}
       <IonHeader className="px-2 mt-5">
         <IonToolbar
-          style={{ "--background": "var(--card-bg-color)", paddingBottom: "0" }}
+          style={{
+            "--background": "var(--card-bg-color)",
+            "--border-width": "0",
+            paddingBottom: "0",
+          }}
         >
           <section className="flex justify-between w-full">
             {" "}

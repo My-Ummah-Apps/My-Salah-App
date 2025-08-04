@@ -30,8 +30,10 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import SalahSegmentTabs from "../components/Stats/SalahSelectionTabs";
+import { useLocation } from "react-router-dom";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -54,6 +56,10 @@ const StatsPage = ({
   streakDatesObjectsArr,
   activeStreakCount,
 }: StatsPageProps) => {
+  const location = useLocation();
+  const isStatsPage = location.pathname === "/StatsPage";
+  console.log("statspage: ", isStatsPage);
+
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
       "male-alone": {},
@@ -252,13 +258,18 @@ const StatsPage = ({
     } catch (error) {
       console.error(error);
     } finally {
+      console.log("DB CLOSED STATS PAGE LINE 255");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };
 
   useEffect(() => {
-    fetchSalahDataFromDB();
-  }, [fetchedSalahData, statsToShow]);
+    console.log("USEEFFECT HAS RUN");
+
+    if (isStatsPage) {
+      fetchSalahDataFromDB();
+    }
+  }, [fetchedSalahData, statsToShow, isStatsPage]);
 
   return (
     <IonPage>

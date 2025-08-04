@@ -83,10 +83,10 @@ const useSQLiteDB = () => {
         );
       } else if (action === "open" && isDatabaseOpen.result === false) {
         await dbConnection.current.open();
-        // console.log("DB CONNECTION OPENED");
+        console.log("DB CONNECTION OPENED");
       } else if (action === "close" && isDatabaseOpen.result === true) {
         await dbConnection.current.close();
-        // console.log("DB CONNECTION CLOSED");
+        console.log("DB CONNECTION CLOSED");
       } else {
         throw new Error(
           `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
@@ -141,6 +141,7 @@ const useSQLiteDB = () => {
 
         const isDatabaseOpen = await dbConnection.current.isDBOpen();
         if (isDatabaseOpen.result) {
+          console.log("DB CLOSED USESQLITE HOOK LINE 144");
           await checkAndOpenOrCloseDBConnection("close");
         }
       } catch (error) {
