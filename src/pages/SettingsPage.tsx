@@ -160,14 +160,12 @@ const SettingsPage = ({
     } finally {
       diaglogElement.current?.close();
       setDialogElementText("");
-      console.log("DB CLOSED SETTINGS PAGE LINE 163");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };
 
   const handleDBImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      console.log("DB CLOSED SETTINGS PAGE LINE 170");
       await checkAndOpenOrCloseDBConnection("close");
       const reader = new FileReader();
       reader.onload = async (e) => {

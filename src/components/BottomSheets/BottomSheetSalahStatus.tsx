@@ -136,7 +136,6 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
-      console.log("DB CLOSED STATUS SALAH SHEET LINE 139");
       await checkAndOpenOrCloseDBConnection("close");
     }
 
@@ -215,8 +214,6 @@ const BottomSheetSalahStatus = ({
       query += `) VALUES ${placeholders}`;
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
 
-      console.log("inserted flattenedSalahDBValues: ", flattenedSalahDBValues);
-
       await dbConnection.current!.run(query, flattenedSalahDBValues);
 
       for (const obj of fetchedSalahData) {
@@ -257,7 +254,6 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
-      console.log("DB CLOSED STATIS SALAH SHEET LINE 260");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };

@@ -45,7 +45,7 @@ const MissedSalahsListBottomSheet = ({
   missedSalahList,
 }: MissedSalahsListBottomSheetProps) => {
   const [isClickedItem, setIsClickedItem] = useState<string>();
-  const [showCompletedMsg, setShowCompletedMsg] = useState(false);
+  // const [showCompletedMsg, setShowCompletedMsg] = useState(false);
 
   useEffect(() => {
     if (!showMissedSalahsSheet) return;
@@ -179,7 +179,7 @@ const MissedSalahsListBottomSheet = ({
               );
             })}
           </AnimatePresence>
-          {showCompletedMsg && <div>hello</div>}
+          {/* {showCompletedMsg && <div>hello</div>} */}
         </section>{" "}
       </IonContent>
     </IonModal>

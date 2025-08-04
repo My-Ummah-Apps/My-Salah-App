@@ -30,7 +30,6 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter,
 } from "@ionic/react";
 import SalahSegmentTabs from "../components/Stats/SalahSelectionTabs";
 import { useLocation } from "react-router-dom";
@@ -58,7 +57,6 @@ const StatsPage = ({
 }: StatsPageProps) => {
   const location = useLocation();
   const isStatsPage = location.pathname === "/StatsPage";
-  console.log("statspage: ", isStatsPage);
 
   const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
     useState<salahReasonsOverallNumbersType>({
@@ -258,18 +256,16 @@ const StatsPage = ({
     } catch (error) {
       console.error(error);
     } finally {
-      console.log("DB CLOSED STATS PAGE LINE 255");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };
 
   useEffect(() => {
-    console.log("USEEFFECT HAS RUN");
-
     if (isStatsPage) {
+      console.log("USEEFFECT HAS RUN");
       fetchSalahDataFromDB();
     }
-  }, [fetchedSalahData, statsToShow, isStatsPage]);
+  }, [fetchedSalahData, statsToShow, location.pathname]);
 
   return (
     <IonPage>

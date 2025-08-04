@@ -57,7 +57,6 @@ BottomSheetSingleDateViewProps) => {
       await checkAndOpenOrCloseDBConnection("open");
       const query = `SELECT * FROM salahDataTable WHERE date = ?`;
       const data = await dbConnection.current!.query(query, [clickedDate]);
-      console.log("DATA: ", data);
 
       const sortedData: clickedDateDataObj[] = data.values!.sort(
         (a: clickedDateDataObj, b: clickedDateDataObj) =>
@@ -97,7 +96,6 @@ BottomSheetSingleDateViewProps) => {
     } catch (error) {
       console.error(error);
     } finally {
-      console.log("DB CLOSED SINGLE DATA SHEET LINE 100");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };

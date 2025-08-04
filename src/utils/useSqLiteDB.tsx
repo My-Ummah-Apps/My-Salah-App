@@ -141,7 +141,6 @@ const useSQLiteDB = () => {
 
         const isDatabaseOpen = await dbConnection.current.isDBOpen();
         if (isDatabaseOpen.result) {
-          console.log("DB CLOSED USESQLITE HOOK LINE 144");
           await checkAndOpenOrCloseDBConnection("close");
         }
       } catch (error) {

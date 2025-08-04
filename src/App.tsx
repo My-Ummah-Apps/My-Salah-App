@@ -56,7 +56,7 @@ import {
 import { PreferenceType } from "./types/types";
 
 import useSQLiteDB from "./utils/useSqLiteDB";
-import { LocalNotifications } from "@capacitor/local-notifications";
+// import { LocalNotifications } from "@capacitor/local-notifications";
 import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
 import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
@@ -93,7 +93,6 @@ const App = () => {
     if (themeColor === "system") {
       const media = window.matchMedia("(prefers-color-scheme: dark)");
       themeColor = media.matches ? "dark" : "light";
-      console.log("media: ", media);
     }
 
     if (themeColor === "dark") {
@@ -276,7 +275,6 @@ const App = () => {
             error
           );
         } finally {
-          console.log("DB CLOSED APP TSX LINE 279");
           await checkAndOpenOrCloseDBConnection("close");
         }
       }
@@ -625,7 +623,6 @@ const App = () => {
       console.log(`ERROR ENTERING ${preferenceName} into DB`);
       console.error(error);
     } finally {
-      console.log("DB CLOSED APP TSX LINE 628");
       await checkAndOpenOrCloseDBConnection("close");
     }
   };

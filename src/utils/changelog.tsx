@@ -2,11 +2,37 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.2";
+export const LATEST_APP_VERSION = "4.3";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Minor Bug Fix & Minor UI/UX Improvements",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved issue with 'Mark as done' button in
+            the missed salah sheet not working correctly
+            <br /> <br />
+            <strong>UI:</strong> Minor UI/UX improvements have been made such as
+            showing a scrollbar next to reasons in the salah update sheet
+          </>
+        ),
+      },
+      {
+        heading: "Minor Bug Fix",
+        text: (
+          <>
+            <strong>Bug:</strong> Fixed incorrect reason amounts outside of the
+            "All" segment tab on the stats page.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.2",
     changes: [
       {
         heading: "Minor UX & UI Improvements",
@@ -25,7 +51,7 @@ export const changeLogs = [
         heading: "Minor Bug Fix",
         text: (
           <>
-            <strong>BUG:</strong> Fixed incorrect reason amounts outside of the
+            <strong>Bug:</strong> Fixed incorrect reason amounts outside of the
             "All" segment tab on the stats page.
           </>
         ),
