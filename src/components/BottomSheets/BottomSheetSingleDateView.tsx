@@ -32,8 +32,8 @@ const BottomSheetSingleDateView = ({
   setShowDailySalahDataModal,
   setClickedDate,
   clickedDate,
-}: // statsToShow,
-BottomSheetSingleDateViewProps) => {
+  statsToShow,
+}: BottomSheetSingleDateViewProps) => {
   const [clickedDateData, setClickedDateData] = useState<clickedDateDataObj[]>(
     []
   );
@@ -92,7 +92,11 @@ BottomSheetSingleDateViewProps) => {
         }
       );
 
-      setClickedDateData(placeholderData);
+      setClickedDateData(
+        statsToShow === "All"
+          ? placeholderData
+          : placeholderData.filter((item) => item.salahName === statsToShow)
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -104,8 +108,11 @@ BottomSheetSingleDateViewProps) => {
     if (clickedDate) {
       grabSingleDateData(clickedDate);
     }
-    // console.log("clickedDateData: ", clickedDateData);
   }, [clickedDate]);
+
+  useEffect(() => {
+    console.log("clickedDateData: ", clickedDateData);
+  }, [clickedDateData]);
 
   return (
     <IonModal
@@ -124,6 +131,7 @@ BottomSheetSingleDateViewProps) => {
           <h1 className="py-5 text-2xl text-center text-[var(--ion-text-color)]">
             {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
           </h1>
+
           {clickedDateData.map((item) => {
             return (
               <div
@@ -190,6 +198,12 @@ BottomSheetSingleDateViewProps) => {
               </div>
             );
           })}
+          {/* {statsToShow !== "All" &&
+            clickedDateData
+              .filter((item) => item.salahName === statsToShow)
+              .map((item) => {
+                return <div>{item.salahName}</div>;
+              })} */}
         </section>
       </IonContent>
     </IonModal>

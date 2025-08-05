@@ -31,8 +31,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import SalahSegmentTabs from "../components/Stats/SalahSelectionTabs";
+
 import { useLocation } from "react-router-dom";
+import SalahSegmentTabs from "../components/Stats/SalahSegmentTabs";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -285,10 +286,12 @@ const StatsPage = ({
               activeStreakCount={activeStreakCount}
               userGender={userPreferences.userGender}
             />
+            {/* <div className="sticky z-10 top-[56px] bg-white dark:bg-[#121212]"> */}
             <SalahSegmentTabs
               setStatsToShow={setStatsToShow}
               statsToShow={statsToShow}
             />
+            {/* </div> */}
             <AnimatePresence mode="wait">
               <motion.section
                 key={statsToShow}
