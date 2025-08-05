@@ -221,43 +221,6 @@ const App = () => {
         setShowOnboarding(true);
       }
 
-      // * The below has been implemented as a last resort since on Android (atleast when installing via Android Studio) notifications stop working on reinstallation/update of the app, need to test whether this is still a problem when installing via the playstore, this issue doesn't exist on iOS
-      // if (
-      //   Capacitor.getPlatform() === "android" &&
-      //   userNotificationPermission === "granted" &&
-      //   notificationValue === "1" &&
-      //   localStorage.getItem("appVersion") !== LATEST_APP_VERSION
-      // ) {
-      //   const dailyNotificationTime = DBResultPreferences.values.find(
-      //     (row) => row.preferenceName === "dailyNotificationTime"
-      //   );
-      //   const [hour, minute] = dailyNotificationTime.preferenceValue
-      //     .split(":")
-      //     .map(Number);
-
-      //   await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
-      //   await LocalNotifications.schedule({
-      //     notifications: [
-      //       {
-      //         id: 1,
-      //         title: "Daily Reminder",
-      //         body: `Did you log your Salah today?`,
-      //         schedule: {
-      //           on: {
-      //             hour: hour,
-      //             minute: minute,
-      //           },
-      //           allowWhileIdle: true,
-      //           repeats: true,
-      //         },
-      //         channelId: "daily-reminder",
-
-      //       },
-      //     ],
-      //   });
-      // }
-      // * Up until here, remove once its confirmed that this issue (noted above) only occurs when app is being installed from Android Studio and not the Play Store
-
       if (
         userNotificationPermission !== "granted" &&
         notificationValue === "1"
