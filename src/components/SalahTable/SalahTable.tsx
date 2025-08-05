@@ -74,6 +74,7 @@ const SalahTable = ({
   };
   const [showBoxAnimation, setShowBoxAnimation] = useState(false);
   const clonedSelectedSalahAndDate = useRef<SalahByDateObjType>({});
+  const [multiEditIconAnimation, setMultiEditIconAnimation] = useState(true);
 
   useEffect(() => {
     clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
@@ -117,7 +118,6 @@ const SalahTable = ({
 
     {
       target: ".single-table-cell",
-      // target: "",
       content:
         "Alternatively, you can update a Salah individually by tapping on a specific cell.",
       disableBeacon: true,
@@ -126,6 +126,15 @@ const SalahTable = ({
   ];
 
   const handleJoyRideCompletion = async (data: CallBackProps) => {
+    // console.log(data);
+    if (data.action === "next") {
+      setMultiEditIconAnimation(false);
+    }
+
+    // if (data.action === "prev") {
+    //   setMultiEditIconAnimation(true);
+    // }
+
     if (data.status === "ready") {
       setShowJoyRideEditIcon(false);
       await modifyDataInUserPreferencesTable("isExistingUser", "1");
@@ -232,9 +241,15 @@ const SalahTable = ({
                       if (isMultiEditMode) return;
                       setIsMultiEditMode(true);
                     }}
-                    className={`flex items-center justify-center text-lg text-[var(--ion-text-color)] multi-edit-icon p-3`}
+                    className={`flex items-center justify-center text-lg text-[var(--ion-text-color)] p-3`}
                   >
-                    <TbEdit />
+                    <TbEdit
+                      className={`multi-edit-icon ${
+                        showJoyRideEditIcon && multiEditIconAnimation
+                          ? "animate-bounce"
+                          : ""
+                      }`}
+                    />
                   </div>
                 )}
                 cellRenderer={({ rowData }) => {
@@ -285,13 +300,15 @@ const SalahTable = ({
                             }}
                             className={`${salahTableIndividualSquareStyles} ${
                               showJoyRideEditIcon && salahName === "Asar"
-                                ? "single-table-cell"
+                                ? "single-table-cell animate-bounce"
                                 : ""
-                            } ${
-                              showJoyRideEditIcon && salahName === "Asar"
-                                ? "animate-bounce"
-                                : ""
-                            }`}
+                            } 
+                                `}
+                            // ${
+                            //   showJoyRideEditIcon && salahName === "Asar"
+                            //     ? "animate-bounce"
+                            //     : ""
+                            // }
                           />
                         ) : (
                           <AnimatePresence>

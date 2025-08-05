@@ -121,6 +121,13 @@ body:-webkit-scrollbar {
   background: #a8a8a8;
 } */
 
+.center {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
 input:focus,
 button:focus {
   outline: none;
@@ -165,8 +172,8 @@ ion-textarea {
 
 ion-textarea,
 input {
-  /* color: var(--ion-text-color) !important;
-  background: var(--textarea-bg-color) !important; */
+  color: var(--ion-text-color) !important;
+  /* background: var(--textarea-bg-color) !important; */
 }
 
 ion-textarea textarea {

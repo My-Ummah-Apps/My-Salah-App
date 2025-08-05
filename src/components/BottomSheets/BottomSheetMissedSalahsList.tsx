@@ -19,7 +19,7 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { IonContent, IonModal } from "@ionic/react";
+import { IonButton, IonContent, IonModal } from "@ionic/react";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -45,7 +45,7 @@ const MissedSalahsListBottomSheet = ({
   missedSalahList,
 }: MissedSalahsListBottomSheetProps) => {
   const [isClickedItem, setIsClickedItem] = useState<string>();
-  // const [showCompletedMsg, setShowCompletedMsg] = useState(false);
+  const [showCompletedMsg, setShowCompletedMsg] = useState(false);
 
   useEffect(() => {
     if (!showMissedSalahsSheet) return;
@@ -97,24 +97,43 @@ const MissedSalahsListBottomSheet = ({
     });
   };
 
+  useEffect(() => {
+    if (restructuredMissedSalahList.length === 0) {
+      setShowCompletedMsg(true);
+    }
+
+    // return () => {
+    //   setShowCompletedMsg(false);
+    // };
+  }, [restructuredMissedSalahList]);
+
   return (
     <IonModal
       // presentingElement={presentingElement}
       mode="ios"
       className="modal-height"
       isOpen={showMissedSalahsSheet}
+      onWillPresent={() => {
+        setShowCompletedMsg(false);
+      }}
       onDidDismiss={() => {
         setShowMissedSalahsSheet(false);
+        setShowCompletedMsg(false);
       }}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonContent>
+      <IonContent className="relative">
         <section className="mt-10 mb-10 text-white">
-          <h1 className="mx-2 my-4 text-lg text-center text-[var(--ion-text-color)]">
+          <h1
+            className={`mx-2 my-4 text-lg text-center text-[var(--ion-text-color)] ${
+              showCompletedMsg ? "invisible" : "visibile"
+            }`}
+          >
             You have {getMissedSalahCount(missedSalahList)} missed Salah to make
             up
           </h1>
+
           <AnimatePresence>
             {restructuredMissedSalahList.map((item) => {
               const date = Object.keys(item)[0];
@@ -179,7 +198,28 @@ const MissedSalahsListBottomSheet = ({
               );
             })}
           </AnimatePresence>
-          {/* {showCompletedMsg && <div>hello</div>} */}
+          {showCompletedMsg && (
+            <motion.div
+              className="text-center center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.3,
+                // layout: { duration: 0.2 },
+              }}
+            >
+              <h2 className="text-lg text-center">You're all caught up</h2>
+              <IonButton
+                onClick={() => {
+                  setShowMissedSalahsSheet(false);
+                }}
+                className="w-3/4"
+              >
+                Close
+              </IonButton>
+            </motion.div>
+          )}
         </section>{" "}
       </IonContent>
     </IonModal>

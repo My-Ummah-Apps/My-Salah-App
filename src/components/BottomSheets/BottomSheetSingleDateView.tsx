@@ -110,10 +110,6 @@ const BottomSheetSingleDateView = ({
     }
   }, [clickedDate]);
 
-  useEffect(() => {
-    console.log("clickedDateData: ", clickedDateData);
-  }, [clickedDateData]);
-
   return (
     <IonModal
       mode="ios"
@@ -198,12 +194,6 @@ const BottomSheetSingleDateView = ({
               </div>
             );
           })}
-          {/* {statsToShow !== "All" &&
-            clickedDateData
-              .filter((item) => item.salahName === statsToShow)
-              .map((item) => {
-                return <div>{item.salahName}</div>;
-              })} */}
         </section>
       </IonContent>
     </IonModal>
