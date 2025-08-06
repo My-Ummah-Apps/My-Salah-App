@@ -20,6 +20,7 @@ import {
   isPlatform,
 } from "@ionic/react";
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
+import { Capacitor } from "@capacitor/core";
 
 interface BottomSheetStartDateProps {
   triggerId: string;
@@ -28,13 +29,15 @@ interface BottomSheetStartDateProps {
     value: string | string[]
   ) => Promise<void>;
   userPreferences: userPreferencesType;
+  // presentingElement: HTMLElement | null;
 }
 
 const BottomSheetEditReasons = ({
   triggerId,
   modifyDataInUserPreferencesTable,
   userPreferences,
-}: BottomSheetStartDateProps) => {
+}: // presentingElement,
+BottomSheetStartDateProps) => {
   const CHAR_LIMIT = 20;
   const [charCount, setCharCount] = useState(CHAR_LIMIT);
   const [newReasonInput, setNewReasonInput] = useState("");
@@ -47,13 +50,16 @@ const BottomSheetEditReasons = ({
     async function configureResize() {
       await Keyboard.setResizeMode({ mode: KeyboardResize.None });
     }
-    configureResize();
+    if (Capacitor.isNativePlatform()) {
+      configureResize();
+    }
   }, []);
 
   return (
     <IonModal
       mode="ios"
       className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
       // className="modal-fit-content"

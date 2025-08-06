@@ -83,6 +83,14 @@ const SettingsPage = ({
     userPreferences.showMissedSalahCount === "0" ? false : true
   );
 
+  // const page = useRef(null);
+  // const [presentingElement, setPresentingElement] =
+  //   useState<HTMLElement | null>(null);
+
+  // useEffect(() => {
+  //   setPresentingElement(page.current);
+  // }, []);
+
   // const handleStartDateChange = async () => {
   //   if (datePickerRef.current) {
   //     // setSelectedStartDate(datePickerRef.current.value);
@@ -242,7 +250,9 @@ const SettingsPage = ({
   }, [isMissedSalahCounterOptionChecked]);
 
   return (
-    <IonPage>
+    <IonPage
+    // ref={page}
+    >
       <IonHeader className="ion-no-border">
         <IonToolbar className="header-toolbar">
           <IonTitle>Settings</IonTitle>
@@ -337,6 +347,7 @@ const SettingsPage = ({
                   modifyDataInUserPreferencesTable
                 }
                 userPreferences={userPreferences}
+                // presentingElement={presentingElement}
               />
             </div>
             <div className="my-5">
