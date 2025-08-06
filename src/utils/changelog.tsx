@@ -2,11 +2,48 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.3";
+export const LATEST_APP_VERSION = "4.4";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "UX/UI Improvements",
+        text: (
+          <>
+            <strong>UI:</strong> Calendar now only shows the selected Salah when
+            viewing individual Salah calendars.
+            <br /> <br />
+            <strong>UX:</strong> When all missed Salah are completed, a success
+            message with a close button now appears.
+            <br /> <br />
+            <strong>UI:</strong> Notes box text now displays correctly in light
+            mode.
+            <br /> <br />
+            <strong>UX:</strong> Onboarding flow improved
+          </>
+        ),
+      },
+      {
+        heading: "Minor Bug Fixes",
+        text: (
+          <>
+            <strong>BUG:</strong> Late status Salahs incorrectly showing orange
+            in the missed Salah sheet — now consistently red.
+            <br /> <br />
+            <strong>BUG:</strong> Fixed keyboard-triggered resize issue on iOS
+            in the Edit Reasons sheet.
+            <br /> <br />
+            <strong>UI:</strong> Reasons box in the status sheet now has a fixed
+            height to prevent layout issues.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.3",
     changes: [
       {
         heading: "Minor Bug Fix & Minor UI/UX Improvements",

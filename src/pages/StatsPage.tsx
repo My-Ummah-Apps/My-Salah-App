@@ -263,7 +263,6 @@ const StatsPage = ({
 
   useEffect(() => {
     if (isStatsPage) {
-      console.log("USEEFFECT HAS RUN");
       fetchSalahDataFromDB();
     }
   }, [fetchedSalahData, statsToShow, location.pathname]);
