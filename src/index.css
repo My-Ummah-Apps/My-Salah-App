@@ -103,7 +103,7 @@ body:-webkit-scrollbar {
 }
 
 .scrollable-container::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
 }
 
 .scrollable-container::-webkit-scrollbar-track {

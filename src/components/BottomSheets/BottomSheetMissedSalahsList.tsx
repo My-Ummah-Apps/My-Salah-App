@@ -119,6 +119,7 @@ const MissedSalahsListBottomSheet = ({
       onDidDismiss={() => {
         setShowMissedSalahsSheet(false);
         setShowCompletedMsg(false);
+        setIsClickedItem("");
       }}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
@@ -153,16 +154,7 @@ const MissedSalahsListBottomSheet = ({
                   className={`bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
                 >
                   <section className="flex items-center justify-between text-[var(--ion-text-color)]">
-                    <p
-                    // style={{
-                    //   textDecoration:
-                    //     isClickedItem === `${date}-${salah}`
-                    //       ? "line-through"
-                    //       : "",
-                    // }}
-                    >
-                      {salah}
-                    </p>
+                    <p>{salah}</p>
                     <div
                       style={{
                         backgroundColor:
@@ -189,7 +181,6 @@ const MissedSalahsListBottomSheet = ({
                       }}
                     >
                       <section className="flex items-center justify-between w-full px-3 py-2 text-sm">
-                        {/* <FaCheck className="font-thin" />{" "} */}
                         <p>Mark As Done</p>
                       </section>
                     </button>

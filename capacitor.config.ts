@@ -17,8 +17,7 @@ import { KeyboardResize } from "@capacitor/keyboard";
 const config: CapacitorConfig = {
   appId: "com.mysalahapp.app",
   appName: "My Salah App",
-  webDir: "dist",
-  // server: serverConfig,
+  webDir: "dist", // server: serverConfig,
   server: {
     // url: isDevelopment ? process.env.VITE_DEV_SERVER_IP : undefined,
     url: process.env.VITE_DEV_SERVER_IP,

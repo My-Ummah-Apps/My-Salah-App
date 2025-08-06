@@ -9,10 +9,17 @@ import {
 } from "../../utils/constants";
 
 import { TiDelete } from "react-icons/ti";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { VscDebugRestart } from "react-icons/vsc";
-import { IonContent, IonHeader, IonModal, IonToolbar } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonModal,
+  IonToolbar,
+  isPlatform,
+} from "@ionic/react";
+import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 
 interface BottomSheetStartDateProps {
   triggerId: string;
@@ -32,10 +39,21 @@ const BottomSheetEditReasons = ({
   const [charCount, setCharCount] = useState(CHAR_LIMIT);
   const [newReasonInput, setNewReasonInput] = useState("");
 
+  // const configureResize = async () => {
+  //   await Keyboard.setResizeMode({ mode: KeyboardResize.None });
+  // };
+
+  useEffect(() => {
+    async function configureResize() {
+      await Keyboard.setResizeMode({ mode: KeyboardResize.None });
+    }
+    configureResize();
+  }, []);
+
   return (
     <IonModal
       mode="ios"
-      className="modal-height"
+      className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
       // className="modal-fit-content"

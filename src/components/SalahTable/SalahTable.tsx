@@ -160,7 +160,7 @@ const SalahTable = ({
         styles={{
           options: {
             backgroundColor: "#27272a",
-            arrowColor: "#27272a",
+            arrowColor: "#ffffff",
             textColor: "#fff",
             zIndex: 10000,
           },

@@ -317,7 +317,10 @@ const BottomSheetSalahStatus = ({
         salahStatus === "late" ||
         salahStatus === "missed"
       ) {
-        setReasonsHeight(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
+        // setReasonsHeight(modalSheetHiddenSalahReasonsWrap.current.offsetHeight);
+        const rawHeight = modalSheetHiddenSalahReasonsWrap.current.offsetHeight;
+        const clampedHeight = Math.min(rawHeight, window.innerHeight * 0.35);
+        setReasonsHeight(clampedHeight);
       } else {
         setReasonsHeight(0);
       }
@@ -478,7 +481,7 @@ const BottomSheetSalahStatus = ({
           <section
             style={{ maxHeight: reasonsHeight + "px" }}
             ref={modalSheetSalahReasonsWrap}
-            className="mt-2 mb-5 overflow-x-hidden salah-status-modal-reasons-wrap scrollable-container"
+            className="mt-4 mb-5 overflow-x-hidden salah-status-modal-reasons-wrap scrollable-container"
           >
             {userPreferences.reasons.length > 0 && (
               <div>
