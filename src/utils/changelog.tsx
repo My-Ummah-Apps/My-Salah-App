@@ -15,8 +15,9 @@ export const changeLogs = [
             <strong>UI:</strong> Calendar now only shows the selected Salah when
             viewing individual Salah calendars.
             <br /> <br />
-            <strong>UX:</strong> When all missed Salah are completed, a success
-            message with a close button now appears.
+            <strong>UX:</strong> When all missed Salah are completed in the
+            missed Salah sheet, a success message with a close button now
+            appears.
             <br /> <br />
             <strong>UI:</strong> Notes box text now displays correctly in light
             mode.
@@ -30,10 +31,10 @@ export const changeLogs = [
         text: (
           <>
             <strong>BUG:</strong> Late status Salahs incorrectly showing orange
-            in the missed Salah sheet — now consistently red.
+            color sometimes in the missed Salah sheet — now consistently red.
             <br /> <br />
-            <strong>BUG:</strong> Fixed keyboard-triggered resize issue on iOS
-            in the Edit Reasons sheet.
+            <strong>BUG:</strong> Fixed keyboard-triggered resize issue on some
+            devices in the Edit Reasons sheet.
             <br /> <br />
             <strong>UI:</strong> Reasons box in the status sheet now has a fixed
             height to prevent layout issues.
