@@ -324,6 +324,7 @@ const SettingsPage = ({
             </div>{" "}
             <div className="my-5">
               <SettingIndividual
+                indvidualStyles={"border-b border-[var(--app-border-color)]"}
                 id="open-change-start-date-sheet"
                 headingText={"Change Start Date"}
                 subText={`Change app start date`}
@@ -352,6 +353,7 @@ const SettingsPage = ({
             </div>
             <div className="my-5">
               <SettingIndividual
+                indvidualStyles={"border-b border-[var(--app-border-color)]"}
                 headingText={"Import Data"}
                 subText={"Supports backups exported by this app"}
                 onClick={triggerInput}
@@ -381,7 +383,7 @@ const SettingsPage = ({
             </dialog>
             {Capacitor.getPlatform() === "android" && (
               <SettingIndividual
-                indvidualStyles={"rounded-t-md"}
+                indvidualStyles={"rounded-t-md, border-b border-red-500"}
                 headingText={"Review"}
                 subText={"Rate us on the Google Play Store"}
                 onClick={() => {
@@ -422,12 +424,16 @@ const SettingsPage = ({
               />
             )}
             <SettingIndividual
+              indvidualStyles={
+                "rounded-t-md border-b border-[var(--app-border-color)]"
+              }
               id="open-changelog-sheet"
               headingText={"Changelog"}
               subText={"View Changelog"}
             />
             <BottomSheetChangelog triggerId="open-changelog-sheet" />
             <SettingIndividual
+              indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Feedback"}
               subText={"Report Bugs / Request Features"}
               onClick={() => {
@@ -437,6 +443,7 @@ const SettingsPage = ({
               }}
             />
             <SettingIndividual
+              indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Website"}
               subText={"Visit our website"}
               onClick={() => {
@@ -444,6 +451,7 @@ const SettingsPage = ({
               }}
             />
             <SettingIndividual
+              indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Privacy Policy"}
               subText={"View Privacy Policy"}
               onClick={() => {
@@ -453,6 +461,7 @@ const SettingsPage = ({
               }}
             />
             <SettingIndividual
+              indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Source Code"}
               subText={"View Source Code"}
               onClick={() => {

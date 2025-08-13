@@ -361,6 +361,10 @@ td {
   height: 10px;
 }
 
+.setting-bottom-border section:not(:last-of-type) {
+  border-bottom: 1px solid var(--settings-page-borders);
+}
+
 /* 
 @supports not (-webkit-touch-callout: none) {
   /* CSS for non-iOS devices */
