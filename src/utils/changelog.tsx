@@ -2,11 +2,25 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.4";
+export const LATEST_APP_VERSION = "4.5";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Minor UI Improvement",
+        text: (
+          <>
+            <strong>UI:</strong> Added borders to each setting option on the
+            settings page
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.4",
     changes: [
       {
         heading: "UX/UI Improvements",

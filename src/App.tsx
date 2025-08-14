@@ -110,7 +110,7 @@ const App = () => {
         setTimeout(() => {
           setStatusAndNavBarBGColor(statusBarThemeColor, statusBarIconsColor);
           justLaunched.current = false;
-        }, 1000);
+        }, 750);
       } else {
         setStatusAndNavBarBGColor(statusBarThemeColor, statusBarIconsColor);
       }
