@@ -16,19 +16,12 @@ const useSQLiteDB = () => {
     const initialiseDB = async () => {
       // await new Promise((res) => setTimeout(res, 5000));
       try {
-        console.log("Step 1: checking if connection exists");
         if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so return out of the function
 
-        console.log("Step 1: checking if connection exists");
         sqliteConnection.current = new SQLiteConnection(CapacitorSQLite); // Create a new SQLiteConnection instance and assign it to sqliteConnection.current.
-        console.log("Step 3: checking connections consistency");
 
         const connectionConsistency =
           await sqliteConnection.current.checkConnectionsConsistency();
-
-        console.log("Connections consistency result:", connectionConsistency);
-
-        console.log("Step 4: checking if 'mysalahappdatabase' exists");
 
         const isConn = (
           await sqliteConnection.current.isConnection(
@@ -36,11 +29,10 @@ const useSQLiteDB = () => {
             false
           )
         ).result; // The isConnection method checks if there is an existing connection
-        console.log("isConnection result:", isConn);
 
         if (connectionConsistency.result && isConn) {
           // Retrieve the existing connection to "mysalahappdatabase"
-          console.log("Step 5: retrieving existing connection");
+
           dbConnection.current =
             await sqliteConnection.current.retrieveConnection(
               "mysalahappdatabase",
@@ -48,7 +40,7 @@ const useSQLiteDB = () => {
             );
         } else {
           // If the dbConnection does not exist then create a new connection (additionally, if the "mysalahappdatabase" database does not exist, create it at the same time as establishing the new connection)
-          console.log("Step 6: creating new connection");
+
           dbConnection.current =
             await sqliteConnection.current.createConnection(
               "mysalahappdatabase",
