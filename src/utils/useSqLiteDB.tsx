@@ -14,7 +14,6 @@ const useSQLiteDB = () => {
 
   useEffect(() => {
     const initialiseDB = async () => {
-      // await new Promise((res) => setTimeout(res, 5000));
       try {
         if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so return out of the function
 
