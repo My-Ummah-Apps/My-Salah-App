@@ -15,6 +15,7 @@ import {
   homeOutline,
   settingsOutline,
   statsChartOutline,
+  timeOutline,
 } from "ionicons/icons";
 
 import { Redirect } from "react-router-dom";
@@ -60,6 +61,7 @@ import useSQLiteDB from "./utils/useSqLiteDB";
 import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
 import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
+import SalahTimesPage from "./pages/SalahTimesPage";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -662,6 +664,11 @@ const App = () => {
                 />
               )}
             />
+            <Route
+              exact
+              path="/SalahTimesPage"
+              render={() => <SalahTimesPage />}
+            />
           </IonRouterOutlet>
 
           <IonTabBar slot="bottom">
@@ -672,6 +679,10 @@ const App = () => {
             <IonTabButton tab="StatsPage" href="/StatsPage">
               <IonIcon icon={statsChartOutline} />
               <IonLabel>Stats</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="SalahTimesPage" href="/SalahTimesPage">
+              <IonIcon icon={timeOutline} />
+              <IonLabel>Salah Times</IonLabel>
             </IonTabButton>
             <IonTabButton tab="SettingsPage" href="/SettingsPage">
               <IonIcon icon={settingsOutline} />
