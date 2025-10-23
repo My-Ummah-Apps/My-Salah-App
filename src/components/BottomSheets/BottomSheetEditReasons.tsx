@@ -97,6 +97,7 @@ BottomSheetStartDateProps) => {
               <button
                 className="px-2 ml-2 text-white bg-blue-600 rounded-md"
                 onClick={async () => {
+                  if (newReasonInput.length === 0) return;
                   if (
                     userPreferences.reasons.some(
                       (item) =>
