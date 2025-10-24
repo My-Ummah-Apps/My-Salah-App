@@ -40,12 +40,12 @@ const config: CapacitorConfig = {
       // backgroundColor: "#1010101010",
     },
     CapacitorSQLite: {
-      iosIsEncryption: true,
+      iosIsEncryption: false,
       iosKeychainPrefix: "my-salah-app-data",
       iosBiometric: {
         biometricAuth: false,
       },
-      androidIsEncryption: true,
+      androidIsEncryption: false,
       androidBiometric: {
         biometricAuth: false,
       },
