@@ -2,11 +2,26 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.6";
+export const LATEST_APP_VERSION = "4.7";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Improved app restore and data handling",
+        text: (
+          <>
+            <strong>Fixed:</strong> Further improved and resolved issues which
+            were occurring when users were trying to reinstall the app on some
+            devices.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.6",
     changes: [
       {
         heading: "Fixed reinstall issue on Android devices",
