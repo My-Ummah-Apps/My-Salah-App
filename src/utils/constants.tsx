@@ -37,6 +37,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   saveButtonTapCount: "0",
   haptics: "0",
   theme: "dark",
+  location: "",
 };
 
 export const reasonsStyles =

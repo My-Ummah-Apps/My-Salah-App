@@ -1,16 +1,18 @@
 import {
+  IonButton,
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { userPreferencesType } from "../types/types";
 
 interface SalahTimesPageProps {
-  //   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  userPreferences: userPreferencesType;
 }
 
-const SalahTimesPage = ({}: SalahTimesPageProps) => {
+const SalahTimesPage = ({ userPreferences }: SalahTimesPageProps) => {
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -18,7 +20,14 @@ const SalahTimesPage = ({}: SalahTimesPageProps) => {
           <IonTitle>Salah Times</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent></IonContent>
+      <IonContent>
+        {userPreferences.location === "" && (
+          <section className="flex flex-col items-center justify-center h-full text-center">
+            <h1>Salah Times Not Set</h1>
+            <IonButton className="w-1/2">Set up Salah Times</IonButton>
+          </section>
+        )}
+      </IonContent>
     </IonPage>
   );
 };

@@ -1,16 +1,22 @@
 import { render, screen } from "@testing-library/react";
 import SalahTimesPage from "./SalahTimesPage";
+import { dictPreferencesDefaultValues } from "../utils/constants";
+
+const mockUserPrefs = {
+  ...dictPreferencesDefaultValues,
+  location: "",
+};
 
 describe("Prayer Times", () => {
-  render(<SalahTimesPage />);
+  beforeEach(() => {
+    render(<SalahTimesPage userPreferences={mockUserPrefs} />);
+  });
 
   it("shows fallback if no location is selected", () => {
-    const fallbackText = screen.getByText(/No location selected/);
+    const fallbackText = screen.getByText(/Salah Times Not Set/i);
     expect(fallbackText).toBeInTheDocument();
 
-    const autoDetectBtn = screen.getByRole("button", {
-      name: /Set up Salah Times/,
-    });
+    const autoDetectBtn = screen.getByText(/Set up Salah Times/i);
     expect(autoDetectBtn).toBeInTheDocument();
   });
 

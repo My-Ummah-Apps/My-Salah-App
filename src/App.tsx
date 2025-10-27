@@ -588,6 +588,10 @@ const App = () => {
       console.log(`ERROR ENTERING ${preferenceName} into DB`);
       console.error(error);
     } finally {
+      let DBResultPreferences = await dbConnection.current?.query(
+        `SELECT * FROM userPreferencesTable`
+      );
+      console.log("DBResultPreferences: ", DBResultPreferences);
       await checkAndOpenOrCloseDBConnection("close");
     }
   };
@@ -667,7 +671,9 @@ const App = () => {
             <Route
               exact
               path="/SalahTimesPage"
-              render={() => <SalahTimesPage />}
+              render={() => (
+                <SalahTimesPage userPreferences={userPreferences} />
+              )}
             />
           </IonRouterOutlet>
 
