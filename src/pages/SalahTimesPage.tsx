@@ -1,12 +1,25 @@
-const SalahTimesPage = ({}: // title,
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
-{
-  // title: React.ReactNode;
-}) => {
+interface SalahTimesPageProps {
+  //   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+}
+
+const SalahTimesPage = ({}: SalahTimesPageProps) => {
   return (
-    <section>
-      <h1>Salah Times</h1>
-    </section>
+    <IonPage>
+      <IonHeader className="ion-no-border">
+        <IonToolbar className="header-toolbar">
+          <IonTitle>Salah Times</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent></IonContent>
+    </IonPage>
   );
 };
 
