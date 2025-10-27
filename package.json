@@ -22,6 +22,7 @@
     "@capacitor/core": "7.4.2",
     "@capacitor/dialog": "^7.0.1",
     "@capacitor/filesystem": "^7.1.2",
+    "@capacitor/geolocation": "^7.1.5",
     "@capacitor/haptics": "7.0.1",
     "@capacitor/ios": "^7.4.2",
     "@capacitor/keyboard": "7.0.1",

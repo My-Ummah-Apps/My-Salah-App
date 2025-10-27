@@ -17,6 +17,9 @@ PODS:
   - CapacitorFilesystem (7.1.2):
     - Capacitor
     - IONFilesystemLib (~> 1.0)
+  - CapacitorGeolocation (7.1.5):
+    - Capacitor
+    - IONGeolocationLib (= 1.0.1)
   - CapacitorHaptics (7.0.1):
     - Capacitor
   - CapacitorKeyboard (7.0.1):
@@ -34,6 +37,7 @@ PODS:
   - CapacitorToast (7.0.1):
     - Capacitor
   - IONFilesystemLib (1.0.0)
+  - IONGeolocationLib (1.0.1)
   - SQLCipher (4.6.0):
     - SQLCipher/standard (= 4.6.0)
   - SQLCipher/common (4.6.0)
@@ -50,6 +54,7 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
+  - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
@@ -62,6 +67,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - IONFilesystemLib
+    - IONGeolocationLib
     - SQLCipher
     - ZIPFoundation
 
@@ -82,6 +88,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/dialog"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
+  CapacitorGeolocation:
+    :path: "../../node_modules/@capacitor/geolocation"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
@@ -108,6 +116,7 @@ SPEC CHECKSUMS:
   CapacitorCordova: 5e58d04631bc5094894ac106e2bf1da18a9e6151
   CapacitorDialog: 9b934329026b2b0ffa56939bb06df3c67541a2ab
   CapacitorFilesystem: 7b7e9bf177ce09657a667d935ca6f0eadbcfda54
+  CapacitorGeolocation: b96474c3259dd4a294227ea8ec19140b1837cceb
   CapacitorHaptics: 70e47470fa1a6bd6338cd102552e3846b7f9a1b3
   CapacitorKeyboard: 969647d0ca2e5c737d7300088e2517aa832434e2
   CapacitorLocalNotifications: 4ea60b9347eac60b37cb4daaf62d12060bb00972
@@ -117,9 +126,10 @@ SPEC CHECKSUMS:
   CapacitorStatusBar: 275cbf2f4dfc00388f519ef80c7ec22edda342c9
   CapacitorToast: c0f64abc0fae75c54e504db9be180a7f5f7d7476
   IONFilesystemLib: ceacae793975039530458eabab0c495c70515a0d
+  IONGeolocationLib: 20f9d0248a0b5264511fb57a37e25dd2badf797a
   SQLCipher: 30a8e81afa6128e600b17ffa77d0f92fa05ed208
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 789f93c84fad495001f0939139e6882ce4abf3dd
+PODFILE CHECKSUM: 832d9948fca6eed3eaf6f40720004314a2b143bc
 
 COCOAPODS: 1.15.2
