@@ -7,6 +7,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { userPreferencesType } from "../types/types";
+import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
 
 interface SalahTimesPageProps {
   userPreferences: userPreferencesType;
@@ -24,10 +25,15 @@ const SalahTimesPage = ({ userPreferences }: SalahTimesPageProps) => {
         {userPreferences.location === "" && (
           <section className="flex flex-col items-center justify-center h-full text-center">
             <h1>Salah Times Not Set</h1>
-            <IonButton className="w-1/2">Set up Salah Times</IonButton>
+            <IonButton id="open-salah-times-settings-sheet" className="w-1/2">
+              Set up Salah Times
+            </IonButton>
           </section>
         )}
       </IonContent>
+      <BottomSheetSalahTimesSettings
+        triggerId={"open-salah-times-settings-sheet"}
+      />
     </IonPage>
   );
 };

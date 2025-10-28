@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import SalahTimesPage from "./SalahTimesPage";
 import { dictPreferencesDefaultValues } from "../utils/constants";
 import userEvent from "@testing-library/user-event";
+import { act } from "react";
 
 const mockUserPrefs = {
   ...dictPreferencesDefaultValues,
@@ -21,18 +22,43 @@ describe("Prayer Times", () => {
     expect(setUpBtn).toBeInTheDocument();
   });
 
-  it("opens onboarding modal when setup button is clicked", () => {
+  it("opens onboarding modal when setup button is clicked", async () => {
     const setUpBtn = screen.getByText(/Set Up Salah Times/i);
-    userEvent.click(setUpBtn);
-    const selectLocationText = screen.getByText(/Select Location/i);
+    // userEvent.click(setUpBtn);
+    await act(async () => {
+      await userEvent.click(setUpBtn);
+    });
+
+    const selectLocationText = await screen.findByText(/Salah Times Settings/i);
     expect(selectLocationText).toBeInTheDocument();
-    const autoDetectLocationBtn = screen.getByText(/Auto-Detect/i);
+  });
+
+  it("shows location settings", async () => {
+    const setUpBtn = screen.getByText(/Set Up Salah Times/i);
+    // userEvent.click(setUpBtn);
+    await act(async () => {
+      await userEvent.click(setUpBtn);
+    });
+
+    const selectLocationText = await screen.findByText(/Select Manually/i);
+    expect(selectLocationText).toBeInTheDocument();
+    const autoDetectLocationBtn = await screen.findByText(/Auto-Detect/i);
     expect(autoDetectLocationBtn).toBeInTheDocument();
-    const manualLocationBtn = screen.getByText(/Add Manually/i);
+    const manualLocationBtn = await screen.findByText(/Select Manually/i);
     expect(manualLocationBtn).toBeInTheDocument();
   });
 
-  //   it("calculates times for location correctly", () => {});
+  it("shows calculation method settings", async () => {
+    const setUpBtn = screen.getByText(/Set Up Salah Times/i);
+    userEvent.click(setUpBtn);
+
+    // const methodSelectionText = await screen.findByText(
+    //   "Select a calculation method"
+    // );
+    // expect(methodSelectionText).toBeInTheDocument();
+    const select = await screen.findByLabelText(/Calculation Method/i);
+    expect(select).toBeInTheDocument();
+  });
 
   //   it("times change when date is changed", () => {});
 });
