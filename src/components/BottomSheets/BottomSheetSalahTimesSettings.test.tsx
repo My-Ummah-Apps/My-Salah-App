@@ -3,7 +3,6 @@ import BottomSheetSalahTimesSettings from "./BottomSheetSalahTimesSettings";
 import userEvent from "@testing-library/user-event";
 
 import { vi } from "vitest";
-import * as ionic from "@ionic/react";
 
 vi.mock("@ionic/react", async () => {
   const original: any = await vi.importActual("@ionic/react");
@@ -13,6 +12,16 @@ vi.mock("@ionic/react", async () => {
   };
 });
 
+vi.mock("@capacitor/geolocation", () => ({
+  Geolocation: {
+    getCurrentPosition: vi.fn().mockResolvedValue({
+      coords: { latitude: 53.48, longitude: -3.44 },
+    }),
+  },
+}));
+
+import { Geolocation } from "@capacitor/geolocation";
+
 describe("location testing", () => {
   beforeEach(() => {
     render(<BottomSheetSalahTimesSettings triggerId="test-trigger" />);
@@ -21,6 +30,8 @@ describe("location testing", () => {
   it("triggers location detection", async () => {
     const autoDetectBtn = await screen.findByText("Auto-Detect");
     expect(autoDetectBtn).toBeInTheDocument();
-    userEvent.click(autoDetectBtn);
+    await userEvent.click(autoDetectBtn);
+
+    expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
   });
 });

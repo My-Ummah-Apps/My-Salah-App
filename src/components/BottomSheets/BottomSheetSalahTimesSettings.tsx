@@ -15,6 +15,7 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
+import { Geolocation } from "@capacitor/geolocation";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -48,7 +49,15 @@ const BottomSheetSalahTimesSettings = ({
           <section className="text-center">
             <h5>Select Location</h5>
             <section className="flex justify-center gap-2">
-              <IonButton>Auto-Detect</IonButton>
+              <IonButton
+                onClick={async () => {
+                  const location = await Geolocation.getCurrentPosition();
+                  console.log(location.coords.latitude);
+                  console.log(location.coords.longitude);
+                }}
+              >
+                Auto-Detect
+              </IonButton>
               <IonButton>Select Manually</IonButton>
             </section>
           </section>
