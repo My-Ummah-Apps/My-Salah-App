@@ -72,6 +72,25 @@ const BottomSheetSalahTimesSettings = ({
               </IonItem>
             </IonList>
           </section>
+          <section className="mt-10 text-center">
+            <h5>Madhab / Asr Time</h5>
+            <IonList>
+              <IonItem>
+                <IonSelect
+                  aria-label="Madhab"
+                  interface="modal"
+                  placeholder="Madhab"
+                >
+                  <IonSelectOption value="apples">
+                    Earlier Asr Time - Shafi'i, Maliki & Hanbali
+                  </IonSelectOption>
+                  <IonSelectOption value="bananas">
+                    Later Asr Time - Hanafi
+                  </IonSelectOption>
+                </IonSelect>
+              </IonItem>
+            </IonList>
+          </section>
         </IonContent>
       </IonModal>
     </>

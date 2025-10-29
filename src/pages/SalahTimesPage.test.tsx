@@ -10,55 +10,66 @@ const mockUserPrefs = {
 };
 
 describe("Prayer Times", () => {
+  let setUpBtn: HTMLButtonElement;
   beforeEach(() => {
     render(<SalahTimesPage userPreferences={mockUserPrefs} />);
+    setUpBtn = screen.getByText("Set up Salah Times");
   });
 
   it("shows fallback if no location is selected", () => {
-    const fallbackText = screen.getByText(/Salah Times Not Set/i);
+    const fallbackText = screen.getByText("Salah Times Not Set");
     expect(fallbackText).toBeInTheDocument();
 
-    const setUpBtn = screen.getByText(/Set up Salah Times/i);
     expect(setUpBtn).toBeInTheDocument();
   });
 
   it("opens onboarding modal when setup button is clicked", async () => {
-    const setUpBtn = screen.getByText(/Set Up Salah Times/i);
     // userEvent.click(setUpBtn);
     await act(async () => {
       await userEvent.click(setUpBtn);
     });
 
-    const selectLocationText = await screen.findByText(/Salah Times Settings/i);
+    const selectLocationText = await screen.findByText("Salah Times Settings");
     expect(selectLocationText).toBeInTheDocument();
   });
 
   it("shows location settings", async () => {
-    const setUpBtn = screen.getByText(/Set Up Salah Times/i);
     // userEvent.click(setUpBtn);
     await act(async () => {
       await userEvent.click(setUpBtn);
     });
 
-    const selectLocationText = await screen.findByText(/Select Manually/i);
+    const selectLocationText = await screen.findByText("Select Manually");
     expect(selectLocationText).toBeInTheDocument();
-    const autoDetectLocationBtn = await screen.findByText(/Auto-Detect/i);
+    const autoDetectLocationBtn = await screen.findByText("Auto-Detect");
     expect(autoDetectLocationBtn).toBeInTheDocument();
-    const manualLocationBtn = await screen.findByText(/Select Manually/i);
+    const manualLocationBtn = await screen.findByText("Select Manually");
     expect(manualLocationBtn).toBeInTheDocument();
   });
 
   it("shows calculation method settings", async () => {
-    const setUpBtn = screen.getByText(/Set Up Salah Times/i);
-    userEvent.click(setUpBtn);
+    await act(async () => {
+      await userEvent.click(setUpBtn);
+    });
 
-    // const methodSelectionText = await screen.findByText(
-    //   "Select a calculation method"
-    // );
-    // expect(methodSelectionText).toBeInTheDocument();
-    const select = await screen.findByLabelText(/Calculation Method/i);
-    expect(select).toBeInTheDocument();
+    const calculationMethodText = await screen.findByText("Calculation Method");
+    expect(calculationMethodText).toBeInTheDocument();
+
+    const methodSelectionLabel = await screen.findByPlaceholderText(
+      "Select a calculation method"
+    );
+    expect(methodSelectionLabel).toBeInTheDocument();
   });
 
-  //   it("times change when date is changed", () => {});
+  it("shows school of thought settings", async () => {
+    await act(async () => {
+      await userEvent.click(setUpBtn);
+    });
+
+    const schoolOfThoughtText = await screen.findByText("Madhab / Asr Time");
+    expect(schoolOfThoughtText).toBeInTheDocument();
+
+    const schoolOfThoughtLabel = await screen.findByLabelText("Madhab");
+    expect(schoolOfThoughtLabel).toBeInTheDocument();
+  });
 });
