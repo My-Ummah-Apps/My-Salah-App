@@ -34,4 +34,8 @@ describe("location testing", () => {
 
     expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
   });
+
+  it("handles location success", () => {});
+
+  it("handles location failure", () => {});
 });
