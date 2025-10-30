@@ -68,8 +68,5 @@ describe("Prayer Times", () => {
 
     const schoolOfThoughtText = await screen.findByText("Madhab / Asr Time");
     expect(schoolOfThoughtText).toBeInTheDocument();
-
-    const schoolOfThoughtLabel = await screen.findByLabelText("Madhab");
-    expect(schoolOfThoughtLabel).toBeInTheDocument();
   });
 });

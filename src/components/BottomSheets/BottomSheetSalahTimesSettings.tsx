@@ -3,8 +3,11 @@ import {
   IonContent,
   IonHeader,
   IonItem,
+  IonLabel,
   IonList,
   IonModal,
+  IonRadio,
+  IonRadioGroup,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -16,6 +19,7 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 import { Geolocation } from "@capacitor/geolocation";
+import { useState } from "react";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -24,6 +28,8 @@ interface BottomSheetSalahTimesSettingsProps {
 const BottomSheetSalahTimesSettings = ({
   triggerId,
 }: BottomSheetSalahTimesSettingsProps) => {
+  const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
+
   return (
     <>
       <IonModal
@@ -82,23 +88,45 @@ const BottomSheetSalahTimesSettings = ({
             </IonList>
           </section>
           <section className="mt-10 text-center">
-            <h5>Madhab / Asr Time</h5>
-            <IonList>
-              <IonItem>
-                <IonSelect
-                  aria-label="Madhab"
-                  interface="modal"
-                  placeholder="Madhab"
-                >
-                  <IonSelectOption value="apples">
-                    Earlier Asr Time - Shafi'i, Maliki & Hanbali
-                  </IonSelectOption>
-                  <IonSelectOption value="bananas">
-                    Later Asr Time - Hanafi
-                  </IonSelectOption>
-                </IonSelect>
-              </IonItem>
-            </IonList>
+            <h5 className="mb-5">Madhab / Asr Time</h5>
+            <section className="flex justify-center gap-2 m-3">
+              <IonButton
+                style={{
+                  "--background": "transparent",
+                }}
+                onClick={() => {
+                  setMadhab("earlier");
+                }}
+                className={`no-ripple ${
+                  madhab === "earlier" ? "bg-blue-500 rounded-md" : ""
+                }`}
+              >
+                <section className="text-sm text-white">
+                  <p className="mb-2">
+                    <strong>Earlier Asr Time</strong>
+                  </p>
+                  <p className="text-xs">Shafi'i, Maliki & Hanbali</p>
+                </section>
+              </IonButton>
+              <IonButton
+                style={{
+                  "--background": "transparent",
+                }}
+                onClick={() => {
+                  setMadhab("later");
+                }}
+                className={`ion-no-ripple ${
+                  madhab === "later" ? "bg-blue-500 rounded-md" : ""
+                }`}
+              >
+                <section className="text-sm text-white">
+                  <p className="mb-2">
+                    <strong>Later Asr Time </strong>
+                  </p>
+                  <p className="text-xs">Hanafi</p>
+                </section>
+              </IonButton>
+            </section>
           </section>
         </IonContent>
       </IonModal>
