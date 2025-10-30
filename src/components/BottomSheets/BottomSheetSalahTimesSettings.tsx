@@ -3,11 +3,8 @@ import {
   IonContent,
   IonHeader,
   IonItem,
-  IonLabel,
   IonList,
   IonModal,
-  IonRadio,
-  IonRadioGroup,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -97,7 +94,7 @@ const BottomSheetSalahTimesSettings = ({
                 onClick={() => {
                   setMadhab("earlier");
                 }}
-                className={`no-ripple ${
+                className={`${
                   madhab === "earlier" ? "bg-blue-500 rounded-md" : ""
                 }`}
               >
@@ -115,7 +112,7 @@ const BottomSheetSalahTimesSettings = ({
                 onClick={() => {
                   setMadhab("later");
                 }}
-                className={`ion-no-ripple ${
+                className={` ${
                   madhab === "later" ? "bg-blue-500 rounded-md" : ""
                 }`}
               >
