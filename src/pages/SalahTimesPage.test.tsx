@@ -55,8 +55,8 @@ describe("Prayer Times", () => {
     const calculationMethodText = await screen.findByText("Calculation Method");
     expect(calculationMethodText).toBeInTheDocument();
 
-    const methodSelectionLabel = await screen.findByPlaceholderText(
-      "Select a calculation method"
+    const methodSelectionLabel = await screen.findByText(
+      "Select calculation method"
     );
     expect(methodSelectionLabel).toBeInTheDocument();
   });

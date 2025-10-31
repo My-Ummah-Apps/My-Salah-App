@@ -53,6 +53,7 @@ const BottomSheetSalahTimesSettings = ({
                 const location = await Geolocation.getCurrentPosition();
                 console.log(location.coords.latitude);
                 console.log(location.coords.longitude);
+                alert(location.coords.latitude + location.coords.longitude);
               }}
             >
               Auto-Detect
@@ -108,7 +109,9 @@ const BottomSheetSalahTimesSettings = ({
                 setMadhab("earlier");
               }}
               className={`${
-                madhab === "earlier" ? "bg-blue-500 rounded-md" : ""
+                madhab === "earlier"
+                  ? "bg-blue-500 rounded-md"
+                  : "border rounded-md"
               }`}
             >
               <section className="text-sm text-white">
@@ -126,7 +129,9 @@ const BottomSheetSalahTimesSettings = ({
                 setMadhab("later");
               }}
               className={` ${
-                madhab === "later" ? "bg-blue-500 rounded-md" : ""
+                madhab === "later"
+                  ? "bg-blue-500 rounded-md"
+                  : "border rounded-md"
               }`}
             >
               <section className="text-sm text-white">
