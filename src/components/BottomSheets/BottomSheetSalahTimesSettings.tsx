@@ -1,8 +1,8 @@
 import {
-  IonButton,
   IonContent,
   IonHeader,
   IonModal,
+  IonNav,
   IonTitle,
   IonToolbar,
   isPlatform,
@@ -11,9 +11,9 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
-import { Geolocation } from "@capacitor/geolocation";
-import { MdOutlineChevronRight } from "react-icons/md";
-import { useState } from "react";
+
+import { useRef } from "react";
+import SalahTimesSettings from "../Settings/SalahTimesSettings";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -22,13 +22,20 @@ interface BottomSheetSalahTimesSettingsProps {
 const BottomSheetSalahTimesSettings = ({
   triggerId,
 }: BottomSheetSalahTimesSettingsProps) => {
-  const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
+  const nav = useRef<HTMLIonNavElement>(null);
+
+  const didPresent = () => {
+    if (nav.current) {
+      nav.current.setRoot(SalahTimesSettings, { nav: nav.current });
+    }
+  };
 
   return (
     <IonModal
       mode="ios"
       trigger={triggerId}
       className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      onDidPresent={didPresent}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
@@ -45,104 +52,7 @@ const BottomSheetSalahTimesSettings = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <section className="text-center">
-          <h5>Select Location</h5>
-          <section className="flex justify-center gap-2">
-            <IonButton
-              onClick={async () => {
-                const location = await Geolocation.getCurrentPosition();
-                console.log(location.coords.latitude);
-                console.log(location.coords.longitude);
-                alert(location.coords.latitude + location.coords.longitude);
-              }}
-            >
-              Auto-Detect
-            </IonButton>
-            <IonButton>Select Manually</IonButton>
-          </section>
-        </section>
-        <section className="mt-10 text-center">
-          <h5>Calculation Method</h5>
-          <IonButton
-            style={{
-              "--background": "transparent",
-            }}
-            onClick={() => {
-              setMadhab("earlier");
-            }}
-            className="w-full"
-          >
-            <section className="flex items-center justify-between w-full px-4 py-2 border border-gray-500 rounded-md">
-              <p>Select calculation method</p>
-              <p>
-                <MdOutlineChevronRight />
-              </p>
-            </section>
-          </IonButton>
-
-          {/* <IonList>
-            <IonItem>
-              <IonSelect
-                aria-label="Calculation Method"
-                interface="modal"
-                placeholder="Select a calculation method"
-              >
-                <IonSelectOption value="apples">
-                  Muslim World League
-                </IonSelectOption>
-                <IonSelectOption value="oranges">ISNA</IonSelectOption>
-                <IonSelectOption value="bananas">
-                  Moonsighting Committee
-                </IonSelectOption>
-              </IonSelect>
-            </IonItem>
-          </IonList> */}
-        </section>
-        <section className="mt-10 text-center">
-          <h5 className="mb-5">Madhab / Asr Time</h5>
-          <section className="flex justify-center gap-2 m-3">
-            <IonButton
-              style={{
-                "--background": "transparent",
-              }}
-              onClick={() => {
-                setMadhab("earlier");
-              }}
-              className={`${
-                madhab === "earlier"
-                  ? "bg-blue-500 rounded-md"
-                  : "border rounded-md"
-              }`}
-            >
-              <section className="text-sm text-white">
-                <p className="mb-2">
-                  <strong>Earlier Asr Time</strong>
-                </p>
-                <p className="text-xs">Shafi'i, Maliki & Hanbali</p>
-              </section>
-            </IonButton>
-            <IonButton
-              style={{
-                "--background": "transparent",
-              }}
-              onClick={() => {
-                setMadhab("later");
-              }}
-              className={` ${
-                madhab === "later"
-                  ? "bg-blue-500 rounded-md"
-                  : "border rounded-md"
-              }`}
-            >
-              <section className="text-sm text-white">
-                <p className="mb-2">
-                  <strong>Later Asr Time </strong>
-                </p>
-                <p className="text-xs">Hanafi</p>
-              </section>
-            </IonButton>
-          </section>
-        </section>
+        <IonNav ref={nav}></IonNav>
       </IonContent>
     </IonModal>
   );

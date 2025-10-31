@@ -24,6 +24,8 @@ vi.mock("@capacitor/geolocation", () => ({
 
 import { Geolocation } from "@capacitor/geolocation";
 
+// const [userLocationCoords, setUserLocationCoords] = vi.fn()
+
 // describe("location unit testing", () => {
 
 // })
@@ -33,10 +35,11 @@ describe("location integration testing", () => {
 
   beforeEach(async () => {
     render(<BottomSheetSalahTimesSettings triggerId="test-trigger" />);
-    autoDetectBtn = await screen.findByText("Auto-Detect");
+    // autoDetectBtn = await screen.findByText("Auto-Detect");
   });
 
   it("triggers location detection", async () => {
+    const autoDetectBtn = await screen.findByText("Auto-Detect");
     expect(autoDetectBtn).toBeInTheDocument();
     await userEvent.click(autoDetectBtn);
     await expect(Geolocation.checkPermissions()).resolves.toEqual({
@@ -45,21 +48,16 @@ describe("location integration testing", () => {
     expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
 
     // Now ensure state and DB are updated
+    // UI should be updated with coords
+    // DB update function should be called
   });
 
-  it("handles location success", async () => {
-    expect(autoDetectBtn).toBeInTheDocument();
-
-    // Permissions would be checked
-    await userEvent.click(autoDetectBtn);
-
-    // Denied? Display alert to user
-    // Prompt? Await user choice
-    // Granted? Proceed with capturing coords
-    // coords would be captured
-    // state would be updated
-    // db would be updated via update db function
-  });
+  // Denied? Display alert to user
+  // Prompt? Await user choice
+  // Granted? Proceed with capturing coords
+  // coords would be captured
+  // state would be updated
+  // db would be updated via update db function
 
   it("handles location failure", () => {});
 });

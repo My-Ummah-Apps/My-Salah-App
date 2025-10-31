@@ -33,18 +33,14 @@ describe("Prayer Times", () => {
     expect(selectLocationText).toBeInTheDocument();
   });
 
-  it("shows location settings", async () => {
+  it("shows location option", async () => {
     // userEvent.click(setUpBtn);
     await act(async () => {
       await userEvent.click(setUpBtn);
     });
 
-    const selectLocationText = await screen.findByText("Select Manually");
-    expect(selectLocationText).toBeInTheDocument();
-    const autoDetectLocationBtn = await screen.findByText("Auto-Detect");
-    expect(autoDetectLocationBtn).toBeInTheDocument();
-    const manualLocationBtn = await screen.findByText("Select Manually");
-    expect(manualLocationBtn).toBeInTheDocument();
+    const locationBtn = await screen.findByText("Select location");
+    expect(locationBtn).toBeInTheDocument();
   });
 
   it("shows calculation method settings", async () => {
