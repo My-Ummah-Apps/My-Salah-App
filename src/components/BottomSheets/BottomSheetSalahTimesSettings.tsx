@@ -3,6 +3,7 @@ import {
   IonHeader,
   IonModal,
   IonNav,
+  IonPage,
   IonTitle,
   IonToolbar,
   isPlatform,
@@ -12,8 +13,8 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 
-import { useRef } from "react";
-import SalahTimesSettings from "../Settings/SalahTimesSettings";
+import { useRef, useState } from "react";
+import SalahTimesSettingsPage from "../../pages/SalahTimesSettingsPage";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -22,11 +23,17 @@ interface BottomSheetSalahTimesSettingsProps {
 const BottomSheetSalahTimesSettings = ({
   triggerId,
 }: BottomSheetSalahTimesSettingsProps) => {
+  const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
+
   const nav = useRef<HTMLIonNavElement>(null);
 
   const didPresent = () => {
     if (nav.current) {
-      nav.current.setRoot(SalahTimesSettings, { nav: nav.current });
+      nav.current.setRoot(SalahTimesSettingsPage, {
+        nav: nav.current,
+        madhab,
+        setMadhab,
+      });
     }
   };
 
@@ -46,14 +53,16 @@ const BottomSheetSalahTimesSettings = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Salah Times Settings</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonNav ref={nav}></IonNav>
-      </IonContent>
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Salah Times Settings</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonNav ref={nav}></IonNav>
+        </IonContent>
+      </IonPage>
     </IonModal>
   );
 };

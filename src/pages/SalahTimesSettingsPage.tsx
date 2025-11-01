@@ -1,43 +1,41 @@
-import { IonButton } from "@ionic/react";
-import { useState } from "react";
+import { IonButton, IonContent } from "@ionic/react";
 import { MdOutlineChevronRight } from "react-icons/md";
+import LocationSettingsPage from "./LocationSettingsPage";
 
-const SalahTimesSettings = () => {
-  const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
+interface SalahTimesSettingsPageProps {
+  nav: HTMLIonNavElement;
+  madhab: string | null;
+  setMadhab: React.Dispatch<React.SetStateAction<"earlier" | "later">>;
+}
+
+const SalahTimesSettingsPage = ({
+  nav,
+  setMadhab,
+  madhab,
+}: SalahTimesSettingsPageProps) => {
+  const navigateToLocationSettingsPage = () =>
+    nav.push(LocationSettingsPage, { nav });
 
   return (
-    <>
-      <section className="text-center">
-        <h5>Location</h5>
-        <IonButton
-          style={{
-            "--background": "transparent",
-          }}
-          onClick={() => {}}
-          className="w-full"
-        >
-          <section className="flex items-center justify-between w-full px-4 py-2 border border-gray-500 rounded-md">
+    <IonContent>
+      <section className="mt-10 text-center">
+        <section className="text-center">
+          <h5>Location</h5>
+          <IonButton
+            style={{
+              "--background": "transparent",
+            }}
+            onClick={navigateToLocationSettingsPage}
+            className="flex items-center justify-between w-full px-4 py-2 border border-gray-500 rounded-md"
+          >
+            {/* <section className=""> */}
             <p>Select location</p>
             <p>
               <MdOutlineChevronRight />
             </p>
-          </section>
-        </IonButton>
-        {/* <section className="flex justify-center gap-2">
-            <IonButton
-              onClick={async () => {
-                const location = await Geolocation.getCurrentPosition();
-                console.log(location.coords.latitude);
-                console.log(location.coords.longitude);
-                alert(location.coords.latitude + location.coords.longitude);
-              }}
-            >
-              Auto-Detect
-            </IonButton>
-            <IonButton>Select Manually</IonButton>
-          </section> */}
-      </section>
-      <section className="mt-10 text-center">
+            {/* </section> */}
+          </IonButton>
+        </section>
         <h5>Calculation Method</h5>
         <IonButton
           style={{
@@ -99,8 +97,8 @@ const SalahTimesSettings = () => {
           </IonButton>
         </section>
       </section>
-    </>
+    </IonContent>
   );
 };
 
-export default SalahTimesSettings;
+export default SalahTimesSettingsPage;

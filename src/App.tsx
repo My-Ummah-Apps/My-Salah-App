@@ -589,10 +589,10 @@ const App = () => {
       console.log(`ERROR ENTERING ${preferenceName} into DB`);
       console.error(error);
     } finally {
-      let DBResultPreferences = await dbConnection.current?.query(
-        `SELECT * FROM userPreferencesTable`
-      );
-      console.log("DBResultPreferences: ", DBResultPreferences);
+      // let DBResultPreferences = await dbConnection.current?.query(
+      //   `SELECT * FROM userPreferencesTable`
+      // );
+      // console.log("DBResultPreferences: ", DBResultPreferences);
       await checkAndOpenOrCloseDBConnection(dbConnection, "close");
     }
   };
