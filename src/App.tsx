@@ -62,6 +62,7 @@ import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
 import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 import SalahTimesPage from "./pages/SalahTimesPage";
+import { checkAndOpenOrCloseDBConnection } from "./utils/dbUtils";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -136,7 +137,7 @@ const App = () => {
     isDatabaseInitialised,
     sqliteConnection,
     dbConnection,
-    checkAndOpenOrCloseDBConnection,
+    // checkAndOpenOrCloseDBConnection,
   } = useSQLiteDB();
 
   useEffect(() => {
@@ -184,7 +185,7 @@ const App = () => {
         await modifyDataInUserPreferencesTable("isExistingUser", "1");
       }
 
-      await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
@@ -229,7 +230,7 @@ const App = () => {
       ) {
         try {
           await modifyDataInUserPreferencesTable("dailyNotification", "0");
-          await checkAndOpenOrCloseDBConnection("open");
+          await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
           DBResultPreferences = await dbConnection.current?.query(
             `SELECT * FROM userPreferencesTable`
@@ -240,7 +241,7 @@ const App = () => {
             error
           );
         } finally {
-          await checkAndOpenOrCloseDBConnection("close");
+          await checkAndOpenOrCloseDBConnection(dbConnection, "close");
         }
       }
       try {
@@ -260,7 +261,7 @@ const App = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      checkAndOpenOrCloseDBConnection("close");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
     }
   };
 
@@ -564,7 +565,7 @@ const App = () => {
     preferenceValue: string | string[]
   ) => {
     try {
-      await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
       if (preferenceName === "reasons") {
         const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
@@ -592,7 +593,7 @@ const App = () => {
         `SELECT * FROM userPreferencesTable`
       );
       console.log("DBResultPreferences: ", DBResultPreferences);
-      await checkAndOpenOrCloseDBConnection("close");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
     }
   };
 
@@ -609,9 +610,9 @@ const App = () => {
               render={() => (
                 <HomePage
                   dbConnection={dbConnection}
-                  checkAndOpenOrCloseDBConnection={
-                    checkAndOpenOrCloseDBConnection
-                  }
+                  // checkAndOpenOrCloseDBConnection={
+                  //   checkAndOpenOrCloseDBConnection
+                  // }
                   modifyDataInUserPreferencesTable={
                     modifyDataInUserPreferencesTable
                   }
@@ -638,9 +639,9 @@ const App = () => {
                 <SettingsPage
                   sqliteConnection={sqliteConnection}
                   dbConnection={dbConnection}
-                  checkAndOpenOrCloseDBConnection={
-                    checkAndOpenOrCloseDBConnection
-                  }
+                  // checkAndOpenOrCloseDBConnection={
+                  //   checkAndOpenOrCloseDBConnection
+                  // }
                   theme={theme}
                   handleTheme={handleTheme}
                   fetchDataFromDB={fetchDataFromDB}
@@ -658,9 +659,9 @@ const App = () => {
               render={() => (
                 <StatsPage
                   dbConnection={dbConnection}
-                  checkAndOpenOrCloseDBConnection={
-                    checkAndOpenOrCloseDBConnection
-                  }
+                  // checkAndOpenOrCloseDBConnection={
+                  //   checkAndOpenOrCloseDBConnection
+                  // }
                   userPreferences={userPreferences}
                   fetchedSalahData={fetchedSalahData}
                   activeStreakCount={activeStreakCount}

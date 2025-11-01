@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { DBConnectionStateType } from "../types/types";
+
 import {
   SQLiteConnection,
   SQLiteDBConnection,
   CapacitorSQLite,
 } from "@capacitor-community/sqlite";
+import { checkAndOpenOrCloseDBConnection } from "./dbUtils";
 
 const useSQLiteDB = () => {
   const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection
@@ -60,44 +61,44 @@ const useSQLiteDB = () => {
     initialiseDB();
   }, []);
 
-  async function checkAndOpenOrCloseDBConnection(
-    action: DBConnectionStateType
-  ) {
-    try {
-      if (!dbConnection || !dbConnection.current) {
-        throw new Error(
-          `Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`
-        );
-      }
+  // async function checkAndOpenOrCloseDBConnection(
+  //   action: DBConnectionStateType
+  // ) {
+  //   try {
+  //     if (!dbConnection || !dbConnection.current) {
+  //       throw new Error(
+  //         `Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`
+  //       );
+  //     }
 
-      const isDatabaseOpen = await dbConnection.current.isDBOpen();
+  //     const isDatabaseOpen = await dbConnection.current.isDBOpen();
 
-      if (
-        (action === "open" && isDatabaseOpen.result === true) ||
-        (action === "close" && isDatabaseOpen.result === false)
-      ) {
-        return;
-      }
+  //     if (
+  //       (action === "open" && isDatabaseOpen.result === true) ||
+  //       (action === "close" && isDatabaseOpen.result === false)
+  //     ) {
+  //       return;
+  //     }
 
-      if (isDatabaseOpen.result === undefined) {
-        throw new Error(
-          "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
-        );
-      } else if (action === "open" && isDatabaseOpen.result === false) {
-        await dbConnection.current.open();
-        console.log("DB CONNECTION OPENED");
-      } else if (action === "close" && isDatabaseOpen.result === true) {
-        await dbConnection.current.close();
-        console.log("DB CONNECTION CLOSED");
-      } else {
-        throw new Error(
-          `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
-        );
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //     if (isDatabaseOpen.result === undefined) {
+  //       throw new Error(
+  //         "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
+  //       );
+  //     } else if (action === "open" && isDatabaseOpen.result === false) {
+  //       await dbConnection.current.open();
+  //       console.log("DB CONNECTION OPENED");
+  //     } else if (action === "close" && isDatabaseOpen.result === true) {
+  //       await dbConnection.current.close();
+  //       console.log("DB CONNECTION CLOSED");
+  //     } else {
+  //       throw new Error(
+  //         `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   // Check and update table structure here
   const initialiseTables = async () => {
@@ -108,7 +109,7 @@ const useSQLiteDB = () => {
         );
       }
 
-      await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
       const salahDataTable = `
         CREATE TABLE IF NOT EXISTS salahDataTable(
@@ -143,7 +144,7 @@ const useSQLiteDB = () => {
 
         const isDatabaseOpen = await dbConnection.current.isDBOpen();
         if (isDatabaseOpen.result) {
-          await checkAndOpenOrCloseDBConnection("close");
+          await checkAndOpenOrCloseDBConnection(dbConnection, "close");
         }
       } catch (error) {
         console.error(error);

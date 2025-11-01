@@ -6,7 +6,6 @@ import { Dialog } from "@capacitor/dialog";
 
 import {
   SalahRecordsArrayType,
-  DBConnectionStateType,
   userPreferencesType,
   SalahByDateObjType,
   PreferenceType,
@@ -29,9 +28,9 @@ import {
 
 interface HomePageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
     value: string
@@ -55,7 +54,7 @@ interface HomePageProps {
 
 const HomePage = ({
   dbConnection,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   modifyDataInUserPreferencesTable,
   setShowJoyRideEditIcon,
   showJoyRideEditIcon,
@@ -216,7 +215,7 @@ const HomePage = ({
           <section className="h-full home-page-components-wrap">
             <SalahTable
               dbConnection={dbConnection}
-              checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+              // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
               modifyDataInUserPreferencesTable={
                 modifyDataInUserPreferencesTable
               }
@@ -235,7 +234,7 @@ const HomePage = ({
             />
             <MissedSalahsListBottomSheet
               dbConnection={dbConnection}
-              checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+              // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
               setFetchedSalahData={setFetchedSalahData}
               // presentingElement={presentingElement}
               setShowMissedSalahsSheet={setShowMissedSalahsSheet}

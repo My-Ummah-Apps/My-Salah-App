@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import BottomSheetSalahTimesSettings from "./BottomSheetSalahTimesSettings";
+import BottomSheetSalahTimesSettings from "../BottomSheets/BottomSheetSalahTimesSettings";
 import userEvent from "@testing-library/user-event";
 
 import { vi } from "vitest";
@@ -31,7 +31,7 @@ import { Geolocation } from "@capacitor/geolocation";
 // })
 
 describe("location integration testing", () => {
-  let autoDetectBtn: HTMLButtonElement;
+  // let autoDetectBtn: HTMLButtonElement;
 
   beforeEach(async () => {
     render(<BottomSheetSalahTimesSettings triggerId="test-trigger" />);

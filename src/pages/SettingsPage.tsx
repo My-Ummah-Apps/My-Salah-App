@@ -3,12 +3,7 @@ import { motion } from "framer-motion";
 
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
-import {
-  DBConnectionStateType,
-  PreferenceType,
-  themeType,
-  userPreferencesType,
-} from "../types/types";
+import { PreferenceType, themeType, userPreferencesType } from "../types/types";
 import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetNotifications from "../components/BottomSheets/BottomSheetNotifications";
@@ -34,13 +29,14 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import BottomSheetThemeOptions from "../components/BottomSheets/BottomSheetThemeOptions";
+import { checkAndOpenOrCloseDBConnection } from "../utils/dbUtils";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   theme: themeType;
   handleTheme: (theme?: themeType) => string;
   fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
@@ -55,7 +51,7 @@ interface SettingsPageProps {
 const SettingsPage = ({
   sqliteConnection,
   dbConnection,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   theme,
   handleTheme,
   fetchDataFromDB,
@@ -118,7 +114,7 @@ const SettingsPage = ({
       if (!sqliteConnection.current) {
         throw new Error("sqliteConnection does not exist");
       }
-      await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
       const rawBackupData = await dbConnection.current!.exportToJson("full");
       rawBackupData.export!.overwrite = true;
       const exportedDBAsJson = JSON.stringify(rawBackupData.export);
@@ -168,13 +164,13 @@ const SettingsPage = ({
     } finally {
       diaglogElement.current?.close();
       setDialogElementText("");
-      await checkAndOpenOrCloseDBConnection("close");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
     }
   };
 
   const handleDBImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      await checkAndOpenOrCloseDBConnection("close");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
       const reader = new FileReader();
       reader.onload = async (e) => {
         if (!sqliteConnection.current) {

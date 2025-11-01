@@ -16,7 +16,6 @@ import {
 
 import {
   SalahRecordsArrayType,
-  DBConnectionStateType,
   SalahNamesType,
   SalahsType,
   SalahStatusType,
@@ -27,9 +26,9 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface CalenderProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   userStartDate: string;
   fetchedSalahData: SalahRecordsArrayType;
   statsToShow: SalahNamesType | "All";
@@ -37,7 +36,7 @@ interface CalenderProps {
 
 const Calendar = ({
   dbConnection,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   fetchedSalahData,
   userStartDate,
   statsToShow,
@@ -316,7 +315,7 @@ const Calendar = ({
       {/* </motion.div> */}
       <BottomSheetSingleDateView
         dbConnection={dbConnection}
-        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setShowDailySalahDataModal={setShowDailySalahDataModal}
         setClickedDate={setClickedDate}
         showDailySalahDataModal={showDailySalahDataModal}

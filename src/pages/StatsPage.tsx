@@ -13,7 +13,6 @@ import {
   userPreferencesType,
 } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
-import { DBConnectionStateType } from "../types/types";
 import ReasonsCard from "../components/Stats/ReasonsCard";
 import BottomSheetReasons from "../components/BottomSheets/BottomSheetReasons";
 import StreakCounter from "../components/Stats/StreakCounter";
@@ -34,14 +33,15 @@ import {
 
 import { useLocation } from "react-router-dom";
 import SalahSegmentTabs from "../components/Stats/SalahSegmentTabs";
+import { checkAndOpenOrCloseDBConnection } from "../utils/dbUtils";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
 interface StatsPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   streakDatesObjectsArr: streakDatesObjType[];
@@ -50,7 +50,7 @@ interface StatsPageProps {
 
 const StatsPage = ({
   dbConnection,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   userPreferences,
   fetchedSalahData,
   streakDatesObjectsArr,
@@ -167,7 +167,7 @@ const StatsPage = ({
 
   const fetchSalahDataFromDB = async () => {
     try {
-      await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
       let DBResultAllSalahData = await dbConnection.current!.query(
         `SELECT * FROM salahDataTable`
       );
@@ -257,7 +257,7 @@ const StatsPage = ({
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection("close");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
     }
   };
 
@@ -308,9 +308,9 @@ const StatsPage = ({
                 )}
                 <Calendar
                   dbConnection={dbConnection}
-                  checkAndOpenOrCloseDBConnection={
-                    checkAndOpenOrCloseDBConnection
-                  }
+                  // checkAndOpenOrCloseDBConnection={
+                  //   checkAndOpenOrCloseDBConnection
+                  // }
                   userStartDate={userPreferences.userStartDate}
                   fetchedSalahData={fetchedSalahData}
                   statsToShow={statsToShow}

@@ -15,7 +15,7 @@ import {
   SalahByDateObjType,
   userPreferencesType,
 } from "../../types/types";
-import { DBConnectionStateType } from "../../types/types";
+
 import {
   createLocalisedDate,
   isValidDate,
@@ -31,6 +31,7 @@ import {
 import { isToday, isYesterday, parse } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { IonModal, IonTextarea } from "@ionic/react";
+import { checkAndOpenOrCloseDBConnection } from "../../utils/dbUtils";
 
 interface SalahStatusBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -38,9 +39,9 @@ interface SalahStatusBottomSheetProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   userPreferences: userPreferencesType;
   setShowBoxAnimation: React.Dispatch<React.SetStateAction<boolean>>;
   showUpdateStatusModal: boolean;
@@ -54,7 +55,7 @@ interface SalahStatusBottomSheetProps {
 
 const BottomSheetSalahStatus = ({
   dbConnection,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
   selectedSalahAndDate,
@@ -114,7 +115,7 @@ const BottomSheetSalahStatus = ({
     const selectedSalah = Object.values(selectedSalahAndDate).toString();
 
     try {
-      await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
       const res = await dbConnection.current!.query(
         `SELECT * FROM salahDataTable 
@@ -136,7 +137,7 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection("close");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
     }
 
     return false;
@@ -155,7 +156,7 @@ const BottomSheetSalahStatus = ({
     const salahDataToInsertIntoDB = [];
 
     try {
-      await checkAndOpenOrCloseDBConnection("open");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
       const reasonsToInsert =
         selectedReasons.length > 0 &&
@@ -254,7 +255,7 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection("close");
+      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
     }
   };
 

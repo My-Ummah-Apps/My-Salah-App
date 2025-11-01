@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Joyride, { CallBackProps, Step } from "react-joyride";
 
 import {
-  DBConnectionStateType,
   PreferenceType,
   SalahNamesType,
   SalahByDateObjType,
@@ -27,9 +26,9 @@ import { useEffect, useRef, useState } from "react";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  checkAndOpenOrCloseDBConnection: (
-    action: DBConnectionStateType
-  ) => Promise<void>;
+  // checkAndOpenOrCloseDBConnection: (
+  //   action: DBConnectionStateType
+  // ) => Promise<void>;
   modifyDataInUserPreferencesTable: (
     preference: PreferenceType,
     value: string
@@ -54,7 +53,7 @@ interface SalahTableProps {
 
 const SalahTable = ({
   dbConnection,
-  checkAndOpenOrCloseDBConnection,
+  // checkAndOpenOrCloseDBConnection,
   modifyDataInUserPreferencesTable,
   setShowJoyRideEditIcon,
   showJoyRideEditIcon,
@@ -386,7 +385,7 @@ const SalahTable = ({
         </AutoSizer>
       </div>
       <BottomSheetSalahStatus
-        checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
+        // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
         setFetchedSalahData={setFetchedSalahData}
         fetchedSalahData={fetchedSalahData}
         userPreferences={userPreferences}
