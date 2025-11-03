@@ -3,6 +3,7 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonInput,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -45,8 +46,10 @@ const BottomSheetLocationSettings = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <section className="flex justify-center gap-2">
+        <section className="p-2 mx-5 my-5 text-center border rounded-lg">
+          <h2 className="text-lg">Method 1</h2>
           <IonButton
+            expand="block"
             onClick={async () => {
               const location = await Geolocation.getCurrentPosition();
               console.log(location.coords.latitude);
@@ -56,7 +59,26 @@ const BottomSheetLocationSettings = ({
           >
             Auto-Detect
           </IonButton>
-          <IonButton>Select Manually</IonButton>
+        </section>
+        <section className="p-2 mx-5 my-5 text-center border rounded-lg">
+          <h2 className="text-lg">Method 2</h2>
+          <p>Enter Location Manually</p>
+          <IonInput
+            placeholder="location"
+            className="bg-[var(--textarea-bg-color)] rounded-lg text-[var(--ion-text-color)] my-2"
+          ></IonInput>
+        </section>
+        <section className="p-2 mx-5 my-5 text-center border rounded-lg">
+          <h2 className="text-lg">Method 3</h2>
+          <p>Enter Longitude / Latitude Manually</p>
+          <IonInput
+            placeholder="latitude"
+            className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
+          ></IonInput>
+          <IonInput
+            placeholder="longitude"
+            className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
+          ></IonInput>
         </section>
       </IonContent>
     </IonModal>
