@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import BottomSheetSalahTimesSettings from "../BottomSheets/BottomSheetSalahTimesSettings";
+
 import userEvent from "@testing-library/user-event";
 
 import { vi } from "vitest";
@@ -23,6 +23,7 @@ vi.mock("@capacitor/geolocation", () => ({
 }));
 
 import { Geolocation } from "@capacitor/geolocation";
+import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
 
 // const [userLocationCoords, setUserLocationCoords] = vi.fn()
 

@@ -3,22 +3,43 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonModal,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import { Geolocation } from "@capacitor/geolocation";
+import {
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
+} from "../../utils/constants";
 
-interface LocationSettingsPageProps {
-  nav: HTMLIonNavElement;
+interface BottomSheetLocationSettingsProps {
+  triggerId: string;
 }
 
-const LocationSettingsPage = ({ nav }: LocationSettingsPageProps) => {
+const BottomSheetLocationSettings = ({
+  triggerId,
+}: BottomSheetLocationSettingsProps) => {
   return (
-    <>
+    <IonModal
+      mode="ios"
+      className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      // presentingElement={presentingElement!}
+      // style={{ "--height": "95vh" }}
+      // expandToScroll={false}
+      // className="modal-fit-content"
+      onWillDismiss={() => {
+        // setNewReasonInput("");
+      }}
+      trigger={triggerId}
+      initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+      breakpoints={MODAL_BREAKPOINTS}
+    >
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={() => nav.pop()}>Back</IonButton>
+            {/* <IonButton onClick={() => nav.pop()}>Back</IonButton> */}
           </IonButtons>
           <IonTitle>Location</IonTitle>
         </IonToolbar>
@@ -38,8 +59,8 @@ const LocationSettingsPage = ({ nav }: LocationSettingsPageProps) => {
           <IonButton>Select Manually</IonButton>
         </section>
       </IonContent>
-    </>
+    </IonModal>
   );
 };
 
-export default LocationSettingsPage;
+export default BottomSheetLocationSettings;
