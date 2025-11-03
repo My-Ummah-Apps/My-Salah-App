@@ -46,8 +46,14 @@ const BottomSheetLocationSettings = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <section className="p-2 mx-5 mb-5 text-center">
+          <p>
+            To calculate Salah times, the app requires your location, you can
+            use one of the three methods below.
+          </p>
+        </section>
         <section className="p-2 mx-5 my-5 text-center border rounded-lg">
-          <h2 className="text-lg">Method 1</h2>
+          <h2 className="text-lg">GPS</h2>
           <IonButton
             expand="block"
             onClick={async () => {
@@ -57,7 +63,7 @@ const BottomSheetLocationSettings = ({
               alert(location.coords.latitude + location.coords.longitude);
             }}
           >
-            Auto-Detect
+            Find My Location
           </IonButton>
         </section>
         <section className="p-2 mx-5 my-5 text-center border rounded-lg">
@@ -70,7 +76,7 @@ const BottomSheetLocationSettings = ({
         </section>
         <section className="p-2 mx-5 my-5 text-center border rounded-lg">
           <h2 className="text-lg">Method 3</h2>
-          <p>Enter Longitude / Latitude Manually</p>
+          <p>Enter Coordinates</p>
           <IonInput
             placeholder="latitude"
             className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"

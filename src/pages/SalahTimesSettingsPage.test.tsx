@@ -40,7 +40,9 @@ describe("location integration testing", () => {
   });
 
   it("triggers location detection", async () => {
-    const autoDetectBtn = await screen.findByText("Auto-Detect");
+    const selectLocationBtn = await screen.findByText(/select location/i);
+    await userEvent.click(selectLocationBtn);
+    const autoDetectBtn = await screen.findByText(/GPS/i);
     expect(autoDetectBtn).toBeInTheDocument();
     await userEvent.click(autoDetectBtn);
     await expect(Geolocation.checkPermissions()).resolves.toEqual({
