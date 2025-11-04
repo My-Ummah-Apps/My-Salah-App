@@ -61,8 +61,14 @@ describe("location integration testing", () => {
     const findMyLocationText = await screen.findByText(/find my location/i);
     expect(findMyLocationText).toBeInTheDocument();
 
-    const locationInput = await screen.findByPlaceholderText(/location/i);
+    const locationInput = await screen.findByLabelText(/location/i);
     expect(locationInput).toBeInTheDocument();
+
+    const latitudeInput = await screen.findByLabelText(/latitude/i);
+    expect(latitudeInput).toBeInTheDocument();
+
+    const longitudeInput = await screen.findByLabelText(/longitude/i);
+    expect(longitudeInput).toBeInTheDocument();
   });
 
   // const autoDetectBtn = await screen.findByText(/gps/i);
