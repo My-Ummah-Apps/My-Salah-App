@@ -26,10 +26,6 @@ const BottomSheetSalahTimesSettings = ({
 }: BottomSheetSalahTimesSettingsProps) => {
   const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
 
-  // useEffect(() => {
-  //   console.log("madhab is: ", madhab);
-  // }, [madhab]);
-
   return (
     <IonModal
       mode="ios"
@@ -60,12 +56,12 @@ const BottomSheetSalahTimesSettings = ({
                 style={{
                   "--background": "transparent",
                 }}
-                className="flex items-center justify-between w-full px-4 py-2 border border-gray-500 rounded-md"
+                className="flex items-center mx-5 border border-gray-500 rounded-md"
               >
-                {/* <section className=""> */}
                 <p>Select location</p>
-
-                {/* </section> */}
+                <p>
+                  <MdOutlineChevronRight />
+                </p>
               </IonButton>
               <BottomSheetLocationSettings triggerId="open-location-settings" />
             </section>
@@ -75,14 +71,12 @@ const BottomSheetSalahTimesSettings = ({
                 "--background": "transparent",
               }}
               onClick={() => {}}
-              className="w-full"
+              className="flex items-center mx-5 border border-gray-500 rounded-md"
             >
-              <section className="flex items-center justify-between w-full px-4 py-2 border border-gray-500 rounded-md">
-                <p>Select calculation method</p>
-                <p>
-                  <MdOutlineChevronRight />
-                </p>
-              </section>
+              <p>Select calculation method</p>
+              <p>
+                <MdOutlineChevronRight />
+              </p>
             </IonButton>
           </section>
           <section className="mt-10 text-center">
@@ -97,7 +91,7 @@ const BottomSheetSalahTimesSettings = ({
                 }}
                 className={`${
                   madhab === "earlier"
-                    ? "bg-blue-500 rounded-md"
+                    ? "bg-green-800 rounded-md"
                     : "border rounded-md"
                 }`}
               >
@@ -117,7 +111,7 @@ const BottomSheetSalahTimesSettings = ({
                 }}
                 className={` ${
                   madhab === "later"
-                    ? "bg-blue-500 rounded-md"
+                    ? "bg-green-800 rounded-md"
                     : "border rounded-md"
                 }`}
               >

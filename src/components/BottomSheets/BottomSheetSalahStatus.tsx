@@ -544,6 +544,7 @@ const BottomSheetSalahStatus = ({
           </section>
           <div className="text-sm notes-wrap">
             <IonTextarea
+              aria-label="notes"
               autoGrow={true}
               rows={1}
               className="pl-2 rounded-lg text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"

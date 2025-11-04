@@ -83,6 +83,7 @@ BottomSheetStartDateProps) => {
             {" "}
             <section className="flex">
               <input
+                aria-label="reason"
                 className="p-1 rounded-md text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"
                 onChange={(e) => {
                   if (e.target.value.length > CHAR_LIMIT) return;
@@ -95,6 +96,7 @@ BottomSheetStartDateProps) => {
                 value={newReasonInput}
               ></input>
               <button
+                aria-label="Add reason"
                 className="px-2 ml-2 text-white bg-blue-600 rounded-md"
                 onClick={async () => {
                   if (newReasonInput.length === 0) return;

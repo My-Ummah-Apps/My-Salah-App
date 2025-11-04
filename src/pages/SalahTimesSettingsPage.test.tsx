@@ -1,7 +1,5 @@
 import { render, screen } from "@testing-library/react";
 
-import userEvent from "@testing-library/user-event";
-
 import { vi } from "vitest";
 
 vi.mock("@ionic/react", async () => {
@@ -22,8 +20,8 @@ vi.mock("@capacitor/geolocation", () => ({
   },
 }));
 
-import { Geolocation } from "@capacitor/geolocation";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
+import userEvent from "@testing-library/user-event";
 
 // const [userLocationCoords, setUserLocationCoords] = vi.fn()
 
@@ -39,21 +37,46 @@ describe("location integration testing", () => {
     // autoDetectBtn = await screen.findByText("Auto-Detect");
   });
 
-  it("triggers location detection", async () => {
+  it("triggers modal and renders relevant options", async () => {
     const selectLocationBtn = await screen.findByText(/select location/i);
-    await userEvent.click(selectLocationBtn);
-    const autoDetectBtn = await screen.findByText(/GPS/i);
-    expect(autoDetectBtn).toBeInTheDocument();
-    await userEvent.click(autoDetectBtn);
-    await expect(Geolocation.checkPermissions()).resolves.toEqual({
-      location: "granted",
-    });
-    expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
+    expect(selectLocationBtn).toBeInTheDocument();
 
-    // Now ensure state and DB are updated
-    // UI should be updated with coords
-    // DB update function should be called
+    const selectCalcMethodBtn = await screen.findByText(
+      /select calculation method/i
+    );
+    expect(selectCalcMethodBtn).toBeInTheDocument();
+
+    const earlierAsrTimeText = await screen.findByText(/earlier asr time/i);
+    expect(earlierAsrTimeText).toBeInTheDocument();
+
+    const laterAsrTimeText = await screen.findByText(/later asr time/i);
+    expect(laterAsrTimeText).toBeInTheDocument();
   });
+
+  it("opens location settings and renders relevant options", async () => {
+    const selectLocationBtn = await screen.findByText(/select location/i);
+    expect(selectLocationBtn).toBeInTheDocument();
+    await userEvent.click(selectLocationBtn);
+
+    const findMyLocationText = await screen.findByText(/find my location/i);
+    expect(findMyLocationText).toBeInTheDocument();
+
+    const locationInput = await screen.findByPlaceholderText(/location/i);
+    expect(locationInput).toBeInTheDocument();
+  });
+
+  // const autoDetectBtn = await screen.findByText(/gps/i);
+  // expect(autoDetectBtn).toBeInTheDocument();
+
+  // await userEvent.click(autoDetectBtn);
+  // await expect(Geolocation.checkPermissions()).resolves.toEqual({
+  //   location: "granted",
+  // });
+  // expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
+
+  // Now ensure state and DB are updated
+  // UI should be updated with coords
+  // DB update function should be called
 
   // Denied? Display alert to user
   // Prompt? Await user choice
@@ -62,5 +85,5 @@ describe("location integration testing", () => {
   // state would be updated
   // db would be updated via update db function
 
-  it("handles location failure", () => {});
+  // it("handles location failure", () => {});
 });

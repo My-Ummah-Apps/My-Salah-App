@@ -39,9 +39,6 @@ const BottomSheetLocationSettings = ({
     >
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
-            {/* <IonButton onClick={() => nav.pop()}>Back</IonButton> */}
-          </IonButtons>
           <IonTitle>Location</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -53,7 +50,8 @@ const BottomSheetLocationSettings = ({
           </p>
         </section>
         <section className="p-2 mx-5 my-5 text-center border rounded-lg">
-          <h2 className="text-lg">GPS</h2>
+          <h2 className="text-lg">Method 1</h2>
+          <p>Use Device GPS</p>
           <IonButton
             expand="block"
             onClick={async () => {
@@ -70,6 +68,7 @@ const BottomSheetLocationSettings = ({
           <h2 className="text-lg">Method 2</h2>
           <p>Enter Location Manually</p>
           <IonInput
+            aria-label="location"
             placeholder="location"
             className="bg-[var(--textarea-bg-color)] rounded-lg text-[var(--ion-text-color)] my-2"
           ></IonInput>
@@ -78,10 +77,12 @@ const BottomSheetLocationSettings = ({
           <h2 className="text-lg">Method 3</h2>
           <p>Enter Coordinates</p>
           <IonInput
+            aria-label="latitude"
             placeholder="latitude"
             className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
           ></IonInput>
           <IonInput
+            aria-label="longitude"
             placeholder="longitude"
             className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
           ></IonInput>
