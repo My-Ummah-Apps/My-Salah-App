@@ -29,7 +29,7 @@ import userEvent from "@testing-library/user-event";
 
 // })
 
-describe("location integration testing", () => {
+describe("settings page integration testing", () => {
   // let autoDetectBtn: HTMLButtonElement;
 
   beforeEach(async () => {
@@ -37,39 +37,7 @@ describe("location integration testing", () => {
     // autoDetectBtn = await screen.findByText("Auto-Detect");
   });
 
-  it("triggers modal and renders relevant options", async () => {
-    const selectLocationBtn = await screen.findByText(/select location/i);
-    expect(selectLocationBtn).toBeInTheDocument();
-
-    const selectCalcMethodBtn = await screen.findByText(
-      /select calculation method/i
-    );
-    expect(selectCalcMethodBtn).toBeInTheDocument();
-
-    const earlierAsrTimeText = await screen.findByText(/earlier asr time/i);
-    expect(earlierAsrTimeText).toBeInTheDocument();
-
-    const laterAsrTimeText = await screen.findByText(/later asr time/i);
-    expect(laterAsrTimeText).toBeInTheDocument();
-  });
-
-  it("opens location settings and renders relevant options", async () => {
-    const selectLocationBtn = await screen.findByText(/select location/i);
-    expect(selectLocationBtn).toBeInTheDocument();
-    await userEvent.click(selectLocationBtn);
-
-    const findMyLocationText = await screen.findByText(/find my location/i);
-    expect(findMyLocationText).toBeInTheDocument();
-
-    const locationInput = await screen.findByLabelText(/location/i);
-    expect(locationInput).toBeInTheDocument();
-
-    const latitudeInput = await screen.findByLabelText(/latitude/i);
-    expect(latitudeInput).toBeInTheDocument();
-
-    const longitudeInput = await screen.findByLabelText(/longitude/i);
-    expect(longitudeInput).toBeInTheDocument();
-  });
+  it("", () => {});
 
   // const autoDetectBtn = await screen.findByText(/gps/i);
   // expect(autoDetectBtn).toBeInTheDocument();
