@@ -1,6 +1,5 @@
 import {
   IonButton,
-  IonButtons,
   IonContent,
   IonHeader,
   IonInput,
@@ -58,7 +57,7 @@ const BottomSheetLocationSettings = ({
               const location = await Geolocation.getCurrentPosition();
               console.log(location.coords.latitude);
               console.log(location.coords.longitude);
-              alert(location.coords.latitude + location.coords.longitude);
+              // alert(location.coords.latitude + location.coords.longitude);
             }}
           >
             Find My Location

@@ -9,7 +9,7 @@ const mockUserPrefs = {
   location: "",
 };
 
-describe("Prayer Times integration tests", () => {
+describe("Integration tests for Salah times page", () => {
   let setUpBtn: HTMLButtonElement;
   beforeEach(() => {
     render(<SalahTimesPage userPreferences={mockUserPrefs} />);
@@ -24,7 +24,6 @@ describe("Prayer Times integration tests", () => {
   });
 
   it("opens onboarding modal when setup button is clicked", async () => {
-    // userEvent.click(setUpBtn);
     await act(async () => {
       await userEvent.click(setUpBtn);
     });
@@ -34,28 +33,17 @@ describe("Prayer Times integration tests", () => {
   });
 
   describe("it opens the salah times settings sheet and renders relevant options", () => {
-    it("renders 'select location' option", async () => {
+    it("renders relevant options in the main salah times settings bottom sheet", async () => {
       await act(async () => {
         await userEvent.click(setUpBtn);
       });
       const selectLocationBtn = await screen.findByText(/select location/i);
       expect(selectLocationBtn).toBeInTheDocument();
-    });
 
-    it("renders 'select calculation method' option", async () => {
-      await act(async () => {
-        await userEvent.click(setUpBtn);
-      });
       const selectCalcMethodBtn = await screen.findByText(
         /select calculation method/i
       );
       expect(selectCalcMethodBtn).toBeInTheDocument();
-    });
-
-    it("renders later / earlier asr options", async () => {
-      await act(async () => {
-        await userEvent.click(setUpBtn);
-      });
 
       const earlierAsrTimeText = await screen.findByText(/earlier asr time/i);
       expect(earlierAsrTimeText).toBeInTheDocument();
@@ -64,7 +52,7 @@ describe("Prayer Times integration tests", () => {
       expect(laterAsrTimeText).toBeInTheDocument();
     });
 
-    it("opens location settings and renders relevant options", async () => {
+    it("opens location settings bottom sheet and renders relevant options", async () => {
       await act(async () => {
         await userEvent.click(setUpBtn);
       });
