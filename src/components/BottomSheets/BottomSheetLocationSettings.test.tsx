@@ -35,11 +35,16 @@ vi.mock("@ionic/react", async () => {
 
 vi.mock("capacitor-native-settings", () => ({
   NativeSettings: {
-    open: vi.fn(),
+    openIOS: vi.fn(),
+    openAndroid: vi.fn(),
   },
 }));
 
-import { NativeSettings } from "capacitor-native-settings";
+import {
+  AndroidSettings,
+  IOSSettings,
+  NativeSettings,
+} from "capacitor-native-settings";
 
 vi.mock("@capacitor/geolocation", () => ({
   Geolocation: {
@@ -59,25 +64,44 @@ vi.mock("@capacitor/geolocation", () => ({
 
 import { Geolocation } from "@capacitor/geolocation";
 
-describe("Unit tests for GPS location button functionality", () => {
+// vi.mock("@capaitor/core", () => ({
+//   Capacitor: {
+//     getPlatform: vi.fn().mockReturnValue("ios"),
+//   },
+// }));
+
+import { Capacitor } from "@capacitor/core";
+
+describe("Unit tests for GPS location button functionality when location permission is denied", () => {
   let findMyLocationBtn: HTMLButtonElement;
   beforeEach(() => {
+    vi.clearAllMocks();
     render(<BottomSheetLocationSettings triggerId={"testId"} />);
     findMyLocationBtn = screen.getByText(/find my location/i);
-  });
 
-  it("triggers native settings alert when user taps on find my location button but permission has been denied", async () => {
-    vi.mocked(Geolocation.checkPermissions).mockResolvedValueOnce({
+    vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
       location: "denied",
       coarseLocation: "denied",
     });
+  });
+
+  it("opens iOS app settings when permission is denied", async () => {
+    Capacitor.getPlatform = vi.fn(() => "ios");
+
     await userEvent.click(findMyLocationBtn);
 
-    await waitFor(() => {
-      expect(NativeSettings.open).toHaveBeenCalled();
+    expect(NativeSettings.openIOS).toHaveBeenCalledWith({
+      option: IOSSettings.App,
     });
-    expect(
-      screen.findByText(/please turn on location permissions/i)
-    ).toBeInTheDocument();
+  });
+
+  it("opens Android app settings when permission is denied", async () => {
+    Capacitor.getPlatform = vi.fn(() => "android");
+
+    await userEvent.click(findMyLocationBtn);
+
+    expect(NativeSettings.openAndroid).toHaveBeenCalledWith({
+      option: AndroidSettings.Location,
+    });
   });
 });
