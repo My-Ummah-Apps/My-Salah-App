@@ -1,7 +1,7 @@
 // const autoDetectBtn = await screen.findByText(/gps/i);
 // expect(autoDetectBtn).toBeInTheDocument();
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
@@ -51,26 +51,42 @@ vi.mock("@capacitor/geolocation", () => ({
     getCurrentPosition: vi.fn().mockResolvedValue({
       coords: { latitude: 53.48, longitude: -3.44 },
     }),
-    checkPermissions: vi.fn().mockResolvedValue({
-      location: "granted",
-      coarseLocation: "granted",
-    }),
-    requestPermissions: vi.fn().mockResolvedValue({
-      location: "granted",
-      coarseLocation: "granted",
-    }),
+    checkPermissions: vi.fn(),
+    requestPermissions: vi.fn(),
   },
 }));
 
 import { Geolocation } from "@capacitor/geolocation";
 
-// vi.mock("@capaitor/core", () => ({
-//   Capacitor: {
-//     getPlatform: vi.fn().mockReturnValue("ios"),
-//   },
-// }));
-
 import { Capacitor } from "@capacitor/core";
+
+describe("Unit tests for GPS location button when permission is prompt", () => {
+  let findMyLocationBtn: HTMLButtonElement;
+  beforeEach(() => {
+    vi.clearAllMocks();
+    render(<BottomSheetLocationSettings triggerId={"testId"} />);
+    findMyLocationBtn = screen.getByText(/find my location/i);
+
+    vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
+      location: "prompt",
+      coarseLocation: "prompt",
+    });
+  });
+
+  it("asks user for permission", async () => {
+    await userEvent.click(findMyLocationBtn);
+    expect(Geolocation.requestPermissions).toHaveBeenCalled();
+    expect(NativeSettings.openAndroid).not.toHaveBeenCalled();
+    expect(NativeSettings.openIOS).not.toHaveBeenCalled();
+  });
+});
+
+// describe("Unit tests for GPS location button functionality when location permission is granted", () => {
+//   expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
+//     expect(Geolocation.getCurrentPosition).toEqual({
+//       coords: { latitude: 53.48, longitude: -3.44 },
+//     });
+// });
 
 describe("Unit tests for GPS location button functionality when location permission is denied", () => {
   let findMyLocationBtn: HTMLButtonElement;
