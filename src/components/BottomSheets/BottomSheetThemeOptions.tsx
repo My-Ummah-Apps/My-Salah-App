@@ -2,24 +2,25 @@ import { IonModal } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  updateUserPreferences,
 } from "../../utils/constants";
-import { PreferenceType, themeType } from "../../types/types";
+import { themeType, userPreferencesType } from "../../types/types";
 import { MdCheck } from "react-icons/md";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface BottomSheetAboutUsProps {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   triggerId: string;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   theme: themeType;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string
-  ) => Promise<void>;
   handleTheme: (theme?: themeType) => string;
 }
 
 const BottomSheetThemeOptions = ({
+  dbConnection,
   triggerId,
   theme,
-  modifyDataInUserPreferencesTable,
+  setUserPreferences,
 }: BottomSheetAboutUsProps) => {
   return (
     <IonModal
@@ -39,7 +40,12 @@ const BottomSheetThemeOptions = ({
               aria-pressed={theme === "light"}
               className="w-full text-left"
               onClick={async () => {
-                await modifyDataInUserPreferencesTable("theme", "light");
+                await updateUserPreferences(
+                  dbConnection,
+                  "theme",
+                  "light",
+                  setUserPreferences
+                );
               }}
             >
               Light
@@ -50,7 +56,12 @@ const BottomSheetThemeOptions = ({
             <button
               aria-pressed={theme === "dark"}
               onClick={async () => {
-                await modifyDataInUserPreferencesTable("theme", "dark");
+                await updateUserPreferences(
+                  dbConnection,
+                  "theme",
+                  "dark",
+                  setUserPreferences
+                );
               }}
               className="w-full text-left"
             >
@@ -62,7 +73,12 @@ const BottomSheetThemeOptions = ({
             <button
               aria-pressed={theme === "system"}
               onClick={async () => {
-                await modifyDataInUserPreferencesTable("theme", "system");
+                await updateUserPreferences(
+                  dbConnection,
+                  "theme",
+                  "system",
+                  setUserPreferences
+                );
               }}
               className="w-full text-left"
             >

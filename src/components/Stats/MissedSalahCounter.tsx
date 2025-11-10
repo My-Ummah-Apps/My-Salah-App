@@ -1,31 +1,28 @@
-import {
-  SalahByDateObjType,
-  PreferenceType,
-  userPreferencesType,
-} from "../../types/types";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { SalahByDateObjType, userPreferencesType } from "../../types/types";
 
 import {
   getMissedSalahCount,
+  updateUserPreferences,
   salahStatusColorsHexCodes,
 } from "../../utils/constants";
 import Joyride, { CallBackProps } from "react-joyride";
 
 interface MissedSalahCounterProps {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   isMultiEditMode: boolean;
   setShowMissedSalahsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   missedSalahList: SalahByDateObjType;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string
-  ) => Promise<void>;
   userPreferences: userPreferencesType;
 }
 
 const MissedSalahCounter = ({
+  dbConnection,
   isMultiEditMode,
   setShowMissedSalahsSheet,
   missedSalahList,
-  modifyDataInUserPreferencesTable,
+  setUserPreferences,
   userPreferences,
 }: MissedSalahCounterProps) => {
   const joyRideMissedSalahCounterToolTip = [
@@ -38,7 +35,12 @@ const MissedSalahCounter = ({
 
   const handleJoyRideCompletion = async (data: CallBackProps) => {
     if (data.status === "ready") {
-      await modifyDataInUserPreferencesTable("isMissedSalahToolTipShown", "1");
+      await updateUserPreferences(
+        dbConnection,
+        "isMissedSalahToolTipShown",
+        "1",
+        setUserPreferences
+      );
     }
   };
 

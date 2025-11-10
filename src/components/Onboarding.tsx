@@ -2,26 +2,29 @@ import { useRef } from "react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { LATEST_APP_VERSION } from "../utils/changelog";
-import { PreferenceType } from "../types/types";
-import { scheduleDailyNotification } from "../utils/constants";
+import { userPreferencesType } from "../types/types";
+import {
+  updateUserPreferences,
+  scheduleDailyNotification,
+} from "../utils/constants";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface OnboardingProps {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string
-  ) => Promise<void>;
 }
 
 const Onboarding = ({
+  dbConnection,
+  setUserPreferences,
   setShowOnboarding,
   setShowJoyRideEditIcon,
-  modifyDataInUserPreferencesTable,
 }: OnboardingProps) => {
   const swiperRef = useRef<SwiperInstance | null>(null);
 
@@ -70,7 +73,12 @@ const Onboarding = ({
               className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
               onClick={async () => {
                 handleGenderSelect();
-                await modifyDataInUserPreferencesTable("userGender", "male");
+                await updateUserPreferences(
+                  dbConnection,
+                  "userGender",
+                  "male",
+                  setUserPreferences
+                );
 
                 localStorage.setItem("appVersion", LATEST_APP_VERSION);
               }}
@@ -81,7 +89,12 @@ const Onboarding = ({
               className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
               onClick={async () => {
                 handleGenderSelect();
-                await modifyDataInUserPreferencesTable("userGender", "female");
+                await updateUserPreferences(
+                  dbConnection,
+                  "userGender",
+                  "female",
+                  setUserPreferences
+                );
 
                 localStorage.setItem("appVersion", LATEST_APP_VERSION);
               }}
@@ -110,13 +123,17 @@ const Onboarding = ({
                   setShowOnboarding(false);
                   setShowJoyRideEditIcon(true);
                   scheduleDailyNotification(21, 0);
-                  await modifyDataInUserPreferencesTable(
+                  await updateUserPreferences(
+                    dbConnection,
                     "dailyNotification",
-                    "1"
+                    "1",
+                    setUserPreferences
                   );
-                  await modifyDataInUserPreferencesTable(
+                  await updateUserPreferences(
+                    dbConnection,
                     "dailyNotificationTime",
-                    "21:00"
+                    "21:00",
+                    setUserPreferences
                   );
                 } else {
                   //   setShowIntroModal(false);

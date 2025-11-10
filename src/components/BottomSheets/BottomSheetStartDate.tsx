@@ -3,28 +3,29 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   isValidDate,
   MODAL_BREAKPOINTS,
+  updateUserPreferences,
   showAlert,
   showToast,
 } from "../../utils/constants";
-import { PreferenceType, userPreferencesType } from "../../types/types";
+import { userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
 import { isAfter, startOfDay } from "date-fns";
 import { IonModal } from "@ionic/react";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface BottomSheetStartDateProps {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   triggerId: string;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string
-  ) => Promise<void>;
   fetchDataFromDB: () => Promise<void>;
 }
 
 const BottomSheetStartDate = ({
+  dbConnection,
   triggerId,
+  setUserPreferences,
   userPreferences,
-  modifyDataInUserPreferencesTable,
   fetchDataFromDB,
 }: BottomSheetStartDateProps) => {
   const datePickerRef = useRef<HTMLInputElement | null>(null);
@@ -37,9 +38,11 @@ const BottomSheetStartDate = ({
   const handleStartDateChange = async () => {
     if (datePickerRef.current) {
       if (isValidDate(datePickerRef.current.value)) {
-        await modifyDataInUserPreferencesTable(
+        await updateUserPreferences(
+          dbConnection,
           "userStartDate",
-          datePickerRef.current.value
+          datePickerRef.current.value,
+          setUserPreferences
         );
       } else {
         showAlert("Invalid Date", "Please enter a valid date");

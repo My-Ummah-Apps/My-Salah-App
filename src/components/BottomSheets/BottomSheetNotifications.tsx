@@ -3,27 +3,26 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 
 import { AndroidSettings } from "capacitor-native-settings";
 
-import { PreferenceType, userPreferencesType } from "../../types/types";
+import { userPreferencesType } from "../../types/types";
 import {
   checkNotificationPermissions,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  updateUserPreferences,
   promptToOpenDeviceSettings,
   scheduleDailyNotification,
 } from "../../utils/constants";
 import { IonModal, IonToggle, isPlatform } from "@ionic/react";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 const BottomSheetNotifications = ({
+  dbConnection,
   triggerId,
-  modifyDataInUserPreferencesTable,
   setUserPreferences,
   userPreferences,
 }: {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   triggerId: string;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string
-  ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }) => {
@@ -76,7 +75,12 @@ const BottomSheetNotifications = ({
       requestPermission.display === "prompt-with-rationale" ||
       requestPermission.display === "denied"
     ) {
-      await modifyDataInUserPreferencesTable("dailyNotification", "0");
+      await updateUserPreferences(
+        dbConnection,
+        "dailyNotification",
+        "0",
+        setUserPreferences
+      );
     }
   };
 
@@ -88,9 +92,11 @@ const BottomSheetNotifications = ({
     const [hour, minute] = e.target.value.split(":").map(Number);
 
     scheduleDailyNotification(hour, minute);
-    await modifyDataInUserPreferencesTable(
+    await updateUserPreferences(
+      dbConnection,
       "dailyNotificationTime",
-      e.target.value
+      e.target.value,
+      setUserPreferences
     );
   };
 
@@ -103,9 +109,11 @@ const BottomSheetNotifications = ({
     }));
 
     const modifyDBAndState = async () => {
-      await modifyDataInUserPreferencesTable(
+      await updateUserPreferences(
+        dbConnection,
         "dailyNotification",
-        notificationValue
+        notificationValue,
+        setUserPreferences
       );
     };
 

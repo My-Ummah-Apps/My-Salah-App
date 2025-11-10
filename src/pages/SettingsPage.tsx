@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
-import { PreferenceType, themeType, userPreferencesType } from "../types/types";
+import { themeType, userPreferencesType } from "../types/types";
 import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetNotifications from "../components/BottomSheets/BottomSheetNotifications";
@@ -13,6 +13,7 @@ import {
 } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import {
+  updateUserPreferences,
   //  pageTransitionStyles,
   showToast,
 } from "../utils/constants";
@@ -34,16 +35,9 @@ import { checkAndOpenOrCloseDBConnection } from "../utils/dbUtils";
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
   theme: themeType;
   handleTheme: (theme?: themeType) => string;
   fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string | string[]
-  ) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }
@@ -51,11 +45,9 @@ interface SettingsPageProps {
 const SettingsPage = ({
   sqliteConnection,
   dbConnection,
-  // checkAndOpenOrCloseDBConnection,
   theme,
   handleTheme,
   fetchDataFromDB,
-  modifyDataInUserPreferencesTable,
   setUserPreferences,
   userPreferences,
 }: SettingsPageProps) => {
@@ -86,20 +78,6 @@ const SettingsPage = ({
   // useEffect(() => {
   //   setPresentingElement(page.current);
   // }, []);
-
-  // const handleStartDateChange = async () => {
-  //   if (datePickerRef.current) {
-  //     // setSelectedStartDate(datePickerRef.current.value);
-  //     setSelectedStartDate(datePickerRef.current.value);
-  //     await modifyDataInUserPreferencesTable(
-  //       "userStartDate",
-  //       datePickerRef.current.value
-  //     );
-  //     await fetchDataFromDB();
-
-  //     console.log(datePickerRef.current.value);
-  //   }
-  // };
 
   const triggerInput = () => {
     if (importDBRef.current) {
@@ -236,9 +214,19 @@ const SettingsPage = ({
   useEffect(() => {
     const updateStateAndDB = async () => {
       if (isMissedSalahCounterOptionChecked) {
-        await modifyDataInUserPreferencesTable("showMissedSalahCount", "1");
+        await updateUserPreferences(
+          dbConnection,
+          "showMissedSalahCount",
+          "1",
+          setUserPreferences
+        );
       } else {
-        await modifyDataInUserPreferencesTable("showMissedSalahCount", "0");
+        await updateUserPreferences(
+          dbConnection,
+          "showMissedSalahCount",
+          "0",
+          setUserPreferences
+        );
       }
     };
 
@@ -274,10 +262,8 @@ const SettingsPage = ({
               </div>
               <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
               <BottomSheetNotifications
+                dbConnection={dbConnection}
                 triggerId="open-notification-options-sheet"
-                modifyDataInUserPreferencesTable={
-                  modifyDataInUserPreferencesTable
-                }
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
               />
@@ -290,11 +276,10 @@ const SettingsPage = ({
               />
             </div>
             <BottomSheetThemeOptions
+              dbConnection={dbConnection}
               triggerId={"open-theme-options-sheet"}
+              setUserPreferences={setUserPreferences}
               theme={theme}
-              modifyDataInUserPreferencesTable={
-                modifyDataInUserPreferencesTable
-              }
               handleTheme={handleTheme}
             />
             <div
@@ -326,12 +311,11 @@ const SettingsPage = ({
                 subText={`Change app start date`}
               />
               <BottomSheetStartDate
+                dbConnection={dbConnection}
                 triggerId={"open-change-start-date-sheet"}
+                setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 fetchDataFromDB={fetchDataFromDB}
-                modifyDataInUserPreferencesTable={
-                  modifyDataInUserPreferencesTable
-                }
               />
               <SettingIndividual
                 id="open-edit-reasons-sheet"
@@ -339,10 +323,9 @@ const SettingsPage = ({
                 subText={`Add or remove reasons`}
               />
               <BottomSheetEditReasons
+                dbConnection={dbConnection}
                 triggerId={"open-edit-reasons-sheet"}
-                modifyDataInUserPreferencesTable={
-                  modifyDataInUserPreferencesTable
-                }
+                setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 // presentingElement={presentingElement}
               />

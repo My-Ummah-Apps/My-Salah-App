@@ -6,6 +6,7 @@ import { StatusBar, Style } from "@capacitor/status-bar";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
 import { Capacitor } from "@capacitor/core";
 import {
+  PreferenceType,
   SalahByDateObjType,
   SalahNamesType,
   userPreferencesType,
@@ -15,6 +16,8 @@ import {
   IOSSettings,
   NativeSettings,
 } from "capacitor-native-settings";
+import { checkAndOpenOrCloseDBConnection } from "./dbUtils";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 export const MODAL_BREAKPOINTS = [0, 1];
 export const INITIAL_MODAL_BREAKPOINT = 1;
@@ -215,5 +218,41 @@ export const promptToOpenDeviceSettings = async (
         option: androidOption,
       });
     }
+  }
+};
+
+export const updateUserPreferences = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  preferenceName: PreferenceType,
+  preferenceValue: string | string[],
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>
+) => {
+  try {
+    await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+
+    if (preferenceName === "reasons") {
+      const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
+      await dbConnection.current?.run(query, [
+        preferenceValue.toString(),
+        preferenceName,
+      ]);
+    } else {
+      const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+      await dbConnection.current?.run(query, [preferenceName, preferenceValue]);
+    }
+
+    setUserPreferences((userPreferences: userPreferencesType) => ({
+      ...userPreferences,
+      [preferenceName]: preferenceValue,
+    }));
+  } catch (error) {
+    console.log(`ERROR ENTERING ${preferenceName} into DB`);
+    console.error(error);
+  } finally {
+    // let DBResultPreferences = await dbConnection.current?.query(
+    //   `SELECT * FROM userPreferencesTable`
+    // );
+    // console.log("DBResultPreferences: ", DBResultPreferences?.values);
+    await checkAndOpenOrCloseDBConnection(dbConnection, "close");
   }
 };

@@ -28,6 +28,7 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   dictPreferencesDefaultValues,
+  updateUserPreferences,
   setStatusAndNavBarBGColor,
 } from "./utils/constants";
 import {
@@ -182,7 +183,12 @@ const App = () => {
   const fetchDataFromDB = async (isDBImported?: boolean) => {
     try {
       if (isDBImported) {
-        await modifyDataInUserPreferencesTable("isExistingUser", "1");
+        await updateUserPreferences(
+          dbConnection,
+          "isExistingUser",
+          "1",
+          setUserPreferences
+        );
       }
 
       await checkAndOpenOrCloseDBConnection(dbConnection, "open");
@@ -229,7 +235,12 @@ const App = () => {
         notificationValue === "1"
       ) {
         try {
-          await modifyDataInUserPreferencesTable("dailyNotification", "0");
+          await updateUserPreferences(
+            dbConnection,
+            "dailyNotification",
+            "0",
+            setUserPreferences
+          );
           await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
           DBResultPreferences = await dbConnection.current?.query(
@@ -339,9 +350,11 @@ const App = () => {
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
       } else {
-        await modifyDataInUserPreferencesTable(
+        await updateUserPreferences(
+          dbConnection,
           preference,
-          dictPreferencesDefaultValues[preference]
+          dictPreferencesDefaultValues[preference],
+          setUserPreferences
         );
       }
     };
@@ -560,43 +573,6 @@ const App = () => {
     }
   };
 
-  const modifyDataInUserPreferencesTable = async (
-    preferenceName: PreferenceType,
-    preferenceValue: string | string[]
-  ) => {
-    try {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
-
-      if (preferenceName === "reasons") {
-        const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-        await dbConnection.current?.run(query, [
-          preferenceValue.toString(),
-          preferenceName,
-        ]);
-      } else {
-        const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
-        await dbConnection.current?.run(query, [
-          preferenceName,
-          preferenceValue,
-        ]);
-      }
-
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        [preferenceName]: preferenceValue,
-      }));
-    } catch (error) {
-      console.log(`ERROR ENTERING ${preferenceName} into DB`);
-      console.error(error);
-    } finally {
-      // let DBResultPreferences = await dbConnection.current?.query(
-      //   `SELECT * FROM userPreferencesTable`
-      // );
-      // console.log("DBResultPreferences: ", DBResultPreferences);
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
-    }
-  };
-
   return (
     <IonApp>
       <IonReactRouter>
@@ -610,12 +586,7 @@ const App = () => {
               render={() => (
                 <HomePage
                   dbConnection={dbConnection}
-                  // checkAndOpenOrCloseDBConnection={
-                  //   checkAndOpenOrCloseDBConnection
-                  // }
-                  modifyDataInUserPreferencesTable={
-                    modifyDataInUserPreferencesTable
-                  }
+                  setUserPreferences={setUserPreferences}
                   setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                   showJoyRideEditIcon={showJoyRideEditIcon}
                   userPreferences={userPreferences}
@@ -639,16 +610,10 @@ const App = () => {
                 <SettingsPage
                   sqliteConnection={sqliteConnection}
                   dbConnection={dbConnection}
-                  // checkAndOpenOrCloseDBConnection={
-                  //   checkAndOpenOrCloseDBConnection
-                  // }
+                  setUserPreferences={setUserPreferences}
                   theme={theme}
                   handleTheme={handleTheme}
                   fetchDataFromDB={fetchDataFromDB}
-                  modifyDataInUserPreferencesTable={
-                    modifyDataInUserPreferencesTable
-                  }
-                  setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
                 />
               )}
@@ -659,9 +624,6 @@ const App = () => {
               render={() => (
                 <StatsPage
                   dbConnection={dbConnection}
-                  // checkAndOpenOrCloseDBConnection={
-                  //   checkAndOpenOrCloseDBConnection
-                  // }
                   userPreferences={userPreferences}
                   fetchedSalahData={fetchedSalahData}
                   activeStreakCount={activeStreakCount}
@@ -703,7 +665,8 @@ const App = () => {
         <Onboarding
           setShowOnboarding={setShowOnboarding}
           setShowJoyRideEditIcon={setShowJoyRideEditIcon}
-          modifyDataInUserPreferencesTable={modifyDataInUserPreferencesTable}
+          dbConnection={dbConnection}
+          setUserPreferences={setUserPreferences}
         />
       )}
       {showMajorUpdateOverlay && (

@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Joyride, { CallBackProps, Step } from "react-joyride";
 
 import {
-  PreferenceType,
   SalahNamesType,
   SalahByDateObjType,
   userPreferencesType,
@@ -19,6 +18,7 @@ import {
   salahTableIndividualSquareStyles,
   salahNamesArr,
   showAlert,
+  updateUserPreferences,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -26,13 +26,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string
-  ) => Promise<void>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   showJoyRideEditIcon: boolean;
   setFetchedSalahData: React.Dispatch<
@@ -53,8 +47,7 @@ interface SalahTableProps {
 
 const SalahTable = ({
   dbConnection,
-  // checkAndOpenOrCloseDBConnection,
-  modifyDataInUserPreferencesTable,
+  setUserPreferences,
   setShowJoyRideEditIcon,
   showJoyRideEditIcon,
   setFetchedSalahData,
@@ -136,7 +129,12 @@ const SalahTable = ({
 
     if (data.status === "ready") {
       setShowJoyRideEditIcon(false);
-      await modifyDataInUserPreferencesTable("isExistingUser", "1");
+      await updateUserPreferences(
+        dbConnection,
+        "isExistingUser",
+        "1",
+        setUserPreferences
+      );
     }
   };
 

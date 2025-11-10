@@ -8,7 +8,6 @@ import {
   SalahRecordsArrayType,
   userPreferencesType,
   SalahByDateObjType,
-  PreferenceType,
 } from "../types/types";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -28,13 +27,7 @@ import {
 
 interface HomePageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
-  modifyDataInUserPreferencesTable: (
-    preference: PreferenceType,
-    value: string
-  ) => Promise<void>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   showJoyRideEditIcon: boolean;
   setFetchedSalahData: React.Dispatch<
@@ -54,8 +47,7 @@ interface HomePageProps {
 
 const HomePage = ({
   dbConnection,
-  // checkAndOpenOrCloseDBConnection,
-  modifyDataInUserPreferencesTable,
+  setUserPreferences,
   setShowJoyRideEditIcon,
   showJoyRideEditIcon,
   setFetchedSalahData,
@@ -121,12 +113,11 @@ const HomePage = ({
               {getMissedSalahCount(missedSalahList) > 0 &&
               userPreferences.showMissedSalahCount === "1" ? (
                 <MissedSalahCounter
+                  dbConnection={dbConnection}
                   setShowMissedSalahsSheet={setShowMissedSalahsSheet}
                   isMultiEditMode={isMultiEditMode}
                   missedSalahList={missedSalahList}
-                  modifyDataInUserPreferencesTable={
-                    modifyDataInUserPreferencesTable
-                  }
+                  setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
                 />
               ) : null}
@@ -215,10 +206,7 @@ const HomePage = ({
           <section className="h-full home-page-components-wrap">
             <SalahTable
               dbConnection={dbConnection}
-              // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
-              modifyDataInUserPreferencesTable={
-                modifyDataInUserPreferencesTable
-              }
+              setUserPreferences={setUserPreferences}
               setShowJoyRideEditIcon={setShowJoyRideEditIcon}
               showJoyRideEditIcon={showJoyRideEditIcon}
               userPreferences={userPreferences}
