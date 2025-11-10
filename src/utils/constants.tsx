@@ -10,6 +10,11 @@ import {
   SalahNamesType,
   userPreferencesType,
 } from "../types/types";
+import {
+  AndroidSettings,
+  IOSSettings,
+  NativeSettings,
+} from "capacitor-native-settings";
 
 export const MODAL_BREAKPOINTS = [0, 1];
 export const INITIAL_MODAL_BREAKPOINT = 1;
@@ -187,4 +192,28 @@ export const setStatusAndNavBarBGColor = async (
     await EdgeToEdge.setBackgroundColor({ color: backgroundColor });
   }
   await StatusBar.setStyle({ style: textColor });
+};
+
+export const promptToOpenDeviceSettings = async (
+  message: string,
+  androidOption: AndroidSettings
+) => {
+  const { value } = await Dialog.confirm({
+    title: "Open Settings",
+    message: message,
+    okButtonTitle: "Settings",
+    cancelButtonTitle: "Cancel",
+  });
+
+  if (value) {
+    if (Capacitor.getPlatform() === "ios") {
+      NativeSettings.openIOS({
+        option: IOSSettings.App,
+      });
+    } else if (Capacitor.getPlatform() === "android") {
+      NativeSettings.openAndroid({
+        option: androidOption,
+      });
+    }
+  }
 };

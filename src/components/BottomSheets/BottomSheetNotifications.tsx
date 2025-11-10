@@ -1,18 +1,14 @@
 import { useEffect, useState } from "react";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { Capacitor } from "@capacitor/core";
-import { Dialog } from "@capacitor/dialog";
-import {
-  NativeSettings,
-  AndroidSettings,
-  IOSSettings,
-} from "capacitor-native-settings";
+
+import { AndroidSettings } from "capacitor-native-settings";
 
 import { PreferenceType, userPreferencesType } from "../../types/types";
 import {
   checkNotificationPermissions,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  promptToOpenDeviceSettings,
   scheduleDailyNotification,
 } from "../../utils/constants";
 import { IonModal, IonToggle, isPlatform } from "@ionic/react";
@@ -34,27 +30,6 @@ const BottomSheetNotifications = ({
   const [dailyNotificationToggle, setDailyNotificationToggle] =
     useState<boolean>(userPreferences.dailyNotification === "1" ? true : false);
 
-  const showNotificationsAlert = async () => {
-    const { value } = await Dialog.confirm({
-      title: "Open Settings",
-      message: `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
-      okButtonTitle: "Settings",
-      cancelButtonTitle: "Cancel",
-    });
-
-    if (value) {
-      if (Capacitor.getPlatform() === "ios") {
-        NativeSettings.openIOS({
-          option: IOSSettings.App,
-        });
-      } else if (Capacitor.getPlatform() === "android") {
-        NativeSettings.openAndroid({
-          option: AndroidSettings.AppNotification,
-        });
-      }
-    }
-  };
-
   const cancelNotification = async (id: number) => {
     await LocalNotifications.cancel({ notifications: [{ id: id }] });
   };
@@ -63,7 +38,10 @@ const BottomSheetNotifications = ({
     const userNotificationPermission = await checkNotificationPermissions();
 
     if (userNotificationPermission === "denied") {
-      showNotificationsAlert();
+      await promptToOpenDeviceSettings(
+        `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
+        AndroidSettings.AppNotification
+      );
     } else if (userNotificationPermission === "granted") {
       if (dailyNotificationToggle === true) {
         cancelNotification(1);
