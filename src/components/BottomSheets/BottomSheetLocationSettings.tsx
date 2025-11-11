@@ -24,19 +24,35 @@ const BottomSheetLocationSettings = ({
   triggerId,
 }: BottomSheetLocationSettingsProps) => {
   const handlePermissions = async () => {
-    const permissionStatus = await Geolocation.checkPermissions();
+    const { location } = await Geolocation.checkPermissions();
+    // const { location } = await Geolocation.requestPermissions();
+    // console.log(location);
 
-    if (permissionStatus.location === "granted") {
+    if (location === "granted") {
       const location = await Geolocation.getCurrentPosition();
+      // Update state and DB here
+
       console.log(location.coords.latitude);
       console.log(location.coords.longitude);
       // alert(location.coords.latitude + location.coords.longitude);
-    } else if (
-      permissionStatus.location === "prompt" ||
-      permissionStatus.location === "prompt-with-rationale"
-    ) {
-      const permissionStatus = await Geolocation.requestPermissions();
-    } else if (permissionStatus.location === "denied") {
+    } else if (location === "prompt" || location === "prompt-with-rationale") {
+      try {
+        const locationPermissions = await Geolocation.requestPermissions();
+        // console.log(permissionStatus);
+
+        if (locationPermissions.location === "granted") {
+          const location = await Geolocation.getCurrentPosition();
+          // Update state and DB here
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      // console.log(await Geolocation.requestPermissions());
+
+      // // const { location } = await Geolocation.requestPermissions();
+    } else if (location === "denied") {
+      console.log("SYSTEM LOCATION PERMISSIONS DENIED");
+
       await promptToOpenDeviceSettings(
         "You currently have location turned off for this application, you can open Settings to re-enable it",
         AndroidSettings.Location

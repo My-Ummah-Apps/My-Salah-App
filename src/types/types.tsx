@@ -13,6 +13,8 @@ export interface userPreferencesType {
   haptics: string;
   theme: "dark" | "light" | "system";
   location: string;
+  latitude: string;
+  longitude: string;
 }
 
 export type PreferenceType = keyof userPreferencesType;

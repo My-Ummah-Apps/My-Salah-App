@@ -54,10 +54,10 @@ vi.mock("@capacitor/geolocation", () => ({
 
 import { Geolocation } from "@capacitor/geolocation";
 
-import { Capacitor } from "@capacitor/core";
-
 describe("Unit tests for GPS location button when permission is prompt", () => {
   let findMyLocationBtn: HTMLButtonElement;
+  const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
+
   beforeEach(() => {
     vi.clearAllMocks();
     render(<BottomSheetLocationSettings triggerId={"testId"} />);
@@ -71,15 +71,16 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
 
   it("asks user for permission", async () => {
     await userEvent.click(findMyLocationBtn);
+    expect(Geolocation.checkPermissions).toHaveBeenCalled();
     expect(Geolocation.requestPermissions).toHaveBeenCalled();
-    // expect(NativeSettings.openAndroid).not.toHaveBeenCalled();
-    // expect(NativeSettings.openIOS).not.toHaveBeenCalled();
+    expect(promptSpy).not.toHaveBeenCalled();
   });
 });
 
 describe("Unit tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
   const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
+  const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPreferences");
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -103,7 +104,6 @@ describe("Unit tests for GPS location button functionality when location permiss
     await expect(Geolocation.getCurrentPosition()).resolves.toEqual({
       coords: { latitude: 53.48, longitude: -3.44 },
     });
-    expect(promptSpy).not.toHaveBeenCalled();
     expect(promptSpy).not.toHaveBeenCalled();
   });
 });

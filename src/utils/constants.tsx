@@ -46,6 +46,8 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   haptics: "0",
   theme: "dark",
   location: "",
+  latitude: "",
+  longitude: "",
 };
 
 export const reasonsStyles =
