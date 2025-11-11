@@ -12,7 +12,9 @@ import { Geolocation } from "@capacitor/geolocation";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  promptToOpenDeviceSettings,
 } from "../../utils/constants";
+import { AndroidSettings } from "capacitor-native-settings";
 
 interface BottomSheetLocationSettingsProps {
   triggerId: string;
@@ -21,6 +23,27 @@ interface BottomSheetLocationSettingsProps {
 const BottomSheetLocationSettings = ({
   triggerId,
 }: BottomSheetLocationSettingsProps) => {
+  const handlePermissions = async () => {
+    const permissionStatus = await Geolocation.checkPermissions();
+
+    if (permissionStatus.location === "granted") {
+      const location = await Geolocation.getCurrentPosition();
+      console.log(location.coords.latitude);
+      console.log(location.coords.longitude);
+      // alert(location.coords.latitude + location.coords.longitude);
+    } else if (
+      permissionStatus.location === "prompt" ||
+      permissionStatus.location === "prompt-with-rationale"
+    ) {
+      const permissionStatus = await Geolocation.requestPermissions();
+    } else if (permissionStatus.location === "denied") {
+      await promptToOpenDeviceSettings(
+        "You currently have location turned off for this application, you can open Settings to re-enable it",
+        AndroidSettings.Location
+      );
+    }
+  };
+
   return (
     <IonModal
       mode="ios"
@@ -54,10 +77,7 @@ const BottomSheetLocationSettings = ({
           <IonButton
             expand="block"
             onClick={async () => {
-              const location = await Geolocation.getCurrentPosition();
-              console.log(location.coords.latitude);
-              console.log(location.coords.longitude);
-              // alert(location.coords.latitude + location.coords.longitude);
+              await handlePermissions();
             }}
           >
             Find My Location

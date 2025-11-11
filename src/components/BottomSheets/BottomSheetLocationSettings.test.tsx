@@ -5,6 +5,8 @@ import { render, screen } from "@testing-library/react";
 import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
+import * as constantsFile from "../../utils/constants";
+import { AndroidSettings } from "capacitor-native-settings";
 
 // await userEvent.click(autoDetectBtn);
 // await expect(Geolocation.checkPermissions()).resolves.toEqual({
@@ -33,14 +35,12 @@ vi.mock("@ionic/react", async () => {
   };
 });
 
-vi.mock("capacitor-native-settings", () => ({
-  NativeSettings: {
-    openIOS: vi.fn(),
-    openAndroid: vi.fn(),
-  },
-}));
-
-import { NativeSettings } from "capacitor-native-settings";
+// vi.mock("capacitor-native-settings", () => ({
+//   NativeSettings: {
+//     openIOS: vi.fn(),
+//     openAndroid: vi.fn(),
+//   },
+// }));
 
 vi.mock("@capacitor/geolocation", () => ({
   Geolocation: {
@@ -72,13 +72,15 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
   it("asks user for permission", async () => {
     await userEvent.click(findMyLocationBtn);
     expect(Geolocation.requestPermissions).toHaveBeenCalled();
-    expect(NativeSettings.openAndroid).not.toHaveBeenCalled();
-    expect(NativeSettings.openIOS).not.toHaveBeenCalled();
+    // expect(NativeSettings.openAndroid).not.toHaveBeenCalled();
+    // expect(NativeSettings.openIOS).not.toHaveBeenCalled();
   });
 });
 
 describe("Unit tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
+  const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
+
   beforeEach(() => {
     vi.clearAllMocks();
     render(<BottomSheetLocationSettings triggerId={"testId"} />);
@@ -101,13 +103,14 @@ describe("Unit tests for GPS location button functionality when location permiss
     await expect(Geolocation.getCurrentPosition()).resolves.toEqual({
       coords: { latitude: 53.48, longitude: -3.44 },
     });
-    expect(NativeSettings.openAndroid).not.toHaveBeenCalled();
-    expect(NativeSettings.openIOS).not.toHaveBeenCalled();
+    expect(promptSpy).not.toHaveBeenCalled();
+    expect(promptSpy).not.toHaveBeenCalled();
   });
 });
 
 describe("Unit tests for GPS location button functionality when location permission is denied", () => {
   let findMyLocationBtn: HTMLButtonElement;
+  const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
   beforeEach(() => {
     vi.clearAllMocks();
     render(<BottomSheetLocationSettings triggerId={"testId"} />);
@@ -119,25 +122,15 @@ describe("Unit tests for GPS location button functionality when location permiss
     });
   });
 
-  it("opens iOS app settings when permission is denied", async () => {
-    Capacitor.getPlatform = vi.fn(() => "ios");
-
+  it("shows user a prompt to open system settings when location permissions are turned off in system settings", async () => {
     await userEvent.click(findMyLocationBtn);
 
-    // expect(NativeSettings.openIOS).toHaveBeenCalledWith({
-    //   option: IOSSettings.App,
-    // });
-  });
-
-  it("opens Android app settings when permission is denied", async () => {
-    Capacitor.getPlatform = vi.fn(() => "android");
-
-    await userEvent.click(findMyLocationBtn);
-
-    // expect(openNativeSettings).toHaveBeenCalled();
-
-    // expect(NativeSettings.openAndroid).toHaveBeenCalledWith({
-    //   option: AndroidSettings.Location,
-    // });
+    expect(promptSpy).toHaveBeenCalledWith(
+      expect.any(String),
+      AndroidSettings.Location
+    );
+    expect(promptSpy).toHaveBeenCalledTimes(1);
+    expect(Geolocation.requestPermissions).not.toHaveBeenCalled();
+    expect(Geolocation.getCurrentPosition).not.toHaveBeenCalled();
   });
 });
