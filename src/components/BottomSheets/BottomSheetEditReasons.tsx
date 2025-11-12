@@ -3,7 +3,7 @@ import {
   defaultReasons,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPreferences,
+  updateUserPrefs,
   showAlert,
   showConfirmMsg,
   showToast,
@@ -115,7 +115,7 @@ BottomSheetStartDateProps) => {
                     ...userPreferences.reasons,
                     newReasonInput,
                   ];
-                  await updateUserPreferences(
+                  await updateUserPrefs(
                     dbConnection,
                     "reasons",
                     updatedReasons,
@@ -136,7 +136,7 @@ BottomSheetStartDateProps) => {
                   "This will reset all reasons to the app’s default reasons. Are you sure you want to proceed?"
                 );
                 if (!reasonConfirmMsgRes) return;
-                await updateUserPreferences(
+                await updateUserPrefs(
                   dbConnection,
                   "reasons",
                   defaultReasons.split(","),
@@ -190,7 +190,7 @@ BottomSheetStartDateProps) => {
                       const modifiedReasons = userPreferences.reasons.filter(
                         (item) => item !== reason
                       );
-                      await updateUserPreferences(
+                      await updateUserPrefs(
                         dbConnection,
                         "reasons",
                         modifiedReasons,

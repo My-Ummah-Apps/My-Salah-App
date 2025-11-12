@@ -1,18 +1,24 @@
 import { render, screen } from "@testing-library/react";
 import SalahTimesPage from "./SalahTimesPage";
-import { dictPreferencesDefaultValues } from "../utils/constants";
+
 import userEvent from "@testing-library/user-event";
 import { act } from "react";
-
-const mockUserPrefs = {
-  ...dictPreferencesDefaultValues,
-  location: "",
-};
+import {
+  mockdbConnection,
+  mockUserPrefs,
+  mockUserPrefsState,
+} from "../__mocks__/test-utils";
 
 describe("Integration tests for Salah times page", () => {
   let setUpBtn: HTMLButtonElement;
   beforeEach(() => {
-    render(<SalahTimesPage userPreferences={mockUserPrefs} />);
+    render(
+      <SalahTimesPage
+        dbConnection={mockdbConnection}
+        setUserPreferences={mockUserPrefsState}
+        userPreferences={mockUserPrefs}
+      />
+    );
     setUpBtn = screen.getByText("Set up Salah Times");
   });
 

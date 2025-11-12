@@ -16,13 +16,19 @@ import {
 import { useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { userPreferencesType } from "../../types/types";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
 }
 
 const BottomSheetSalahTimesSettings = ({
   triggerId,
+  dbConnection,
+  setUserPreferences,
 }: BottomSheetSalahTimesSettingsProps) => {
   const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
 
@@ -63,7 +69,11 @@ const BottomSheetSalahTimesSettings = ({
                   <MdOutlineChevronRight />
                 </p>
               </IonButton>
-              <BottomSheetLocationSettings triggerId="open-location-settings" />
+              <BottomSheetLocationSettings
+                triggerId="open-location-settings"
+                dbConnection={dbConnection}
+                setUserPreferences={setUserPreferences}
+              />
             </section>
             <h5>Calculation Method</h5>
             <IonButton

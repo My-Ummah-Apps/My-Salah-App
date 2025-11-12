@@ -2,7 +2,7 @@ import { IonModal } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPreferences,
+  updateUserPrefs,
 } from "../../utils/constants";
 import { themeType, userPreferencesType } from "../../types/types";
 import { MdCheck } from "react-icons/md";
@@ -40,7 +40,7 @@ const BottomSheetThemeOptions = ({
               aria-pressed={theme === "light"}
               className="w-full text-left"
               onClick={async () => {
-                await updateUserPreferences(
+                await updateUserPrefs(
                   dbConnection,
                   "theme",
                   "light",
@@ -56,7 +56,7 @@ const BottomSheetThemeOptions = ({
             <button
               aria-pressed={theme === "dark"}
               onClick={async () => {
-                await updateUserPreferences(
+                await updateUserPrefs(
                   dbConnection,
                   "theme",
                   "dark",
@@ -73,7 +73,7 @@ const BottomSheetThemeOptions = ({
             <button
               aria-pressed={theme === "system"}
               onClick={async () => {
-                await updateUserPreferences(
+                await updateUserPrefs(
                   dbConnection,
                   "theme",
                   "system",

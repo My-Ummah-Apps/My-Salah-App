@@ -28,7 +28,7 @@ import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
   dictPreferencesDefaultValues,
-  updateUserPreferences,
+  updateUserPrefs,
   setStatusAndNavBarBGColor,
 } from "./utils/constants";
 import {
@@ -183,7 +183,7 @@ const App = () => {
   const fetchDataFromDB = async (isDBImported?: boolean) => {
     try {
       if (isDBImported) {
-        await updateUserPreferences(
+        await updateUserPrefs(
           dbConnection,
           "isExistingUser",
           "1",
@@ -235,13 +235,19 @@ const App = () => {
         notificationValue === "1"
       ) {
         try {
-          await updateUserPreferences(
+          await updateUserPrefs(
             dbConnection,
             "dailyNotification",
             "0",
             setUserPreferences
           );
           await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+
+          // const locationPref = "location";
+          // await dbConnection.current?.run(
+          //   `DELETE FROM userPreferencesTable WHERE preferenceName = ?`,
+          //   [locationPref]
+          // );
 
           DBResultPreferences = await dbConnection.current?.query(
             `SELECT * FROM userPreferencesTable`
@@ -350,7 +356,7 @@ const App = () => {
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
       } else {
-        await updateUserPreferences(
+        await updateUserPrefs(
           dbConnection,
           preference,
           dictPreferencesDefaultValues[preference],
@@ -635,7 +641,11 @@ const App = () => {
               exact
               path="/SalahTimesPage"
               render={() => (
-                <SalahTimesPage userPreferences={userPreferences} />
+                <SalahTimesPage
+                  dbConnection={dbConnection}
+                  setUserPreferences={setUserPreferences}
+                  userPreferences={userPreferences}
+                />
               )}
             />
           </IonRouterOutlet>

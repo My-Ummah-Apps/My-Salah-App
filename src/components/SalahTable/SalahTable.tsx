@@ -18,7 +18,7 @@ import {
   salahTableIndividualSquareStyles,
   salahNamesArr,
   showAlert,
-  updateUserPreferences,
+  updateUserPrefs,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -129,7 +129,7 @@ const SalahTable = ({
 
     if (data.status === "ready") {
       setShowJoyRideEditIcon(false);
-      await updateUserPreferences(
+      await updateUserPrefs(
         dbConnection,
         "isExistingUser",
         "1",

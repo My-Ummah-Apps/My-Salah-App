@@ -45,7 +45,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   saveButtonTapCount: "0",
   haptics: "0",
   theme: "dark",
-  location: "",
+  locationName: "",
   latitude: "",
   longitude: "",
 };
@@ -223,7 +223,7 @@ export const promptToOpenDeviceSettings = async (
   }
 };
 
-export const updateUserPreferences = async (
+export const updateUserPrefs = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   preferenceName: PreferenceType,
   preferenceValue: string | string[],
@@ -251,10 +251,10 @@ export const updateUserPreferences = async (
     console.log(`ERROR ENTERING ${preferenceName} into DB`);
     console.error(error);
   } finally {
-    // let DBResultPreferences = await dbConnection.current?.query(
-    //   `SELECT * FROM userPreferencesTable`
-    // );
-    // console.log("DBResultPreferences: ", DBResultPreferences?.values);
+    let DBResultPreferences = await dbConnection.current?.query(
+      `SELECT * FROM userPreferencesTable`
+    );
+    console.log("DBResultPreferences: ", DBResultPreferences?.values);
     await checkAndOpenOrCloseDBConnection(dbConnection, "close");
   }
 };

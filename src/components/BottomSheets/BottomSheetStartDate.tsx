@@ -3,7 +3,7 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   isValidDate,
   MODAL_BREAKPOINTS,
-  updateUserPreferences,
+  updateUserPrefs,
   showAlert,
   showToast,
 } from "../../utils/constants";
@@ -38,7 +38,7 @@ const BottomSheetStartDate = ({
   const handleStartDateChange = async () => {
     if (datePickerRef.current) {
       if (isValidDate(datePickerRef.current.value)) {
-        await updateUserPreferences(
+        await updateUserPrefs(
           dbConnection,
           "userStartDate",
           datePickerRef.current.value,

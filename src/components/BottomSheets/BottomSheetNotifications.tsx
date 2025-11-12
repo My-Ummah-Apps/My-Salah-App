@@ -8,7 +8,7 @@ import {
   checkNotificationPermissions,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPreferences,
+  updateUserPrefs,
   promptToOpenDeviceSettings,
   scheduleDailyNotification,
 } from "../../utils/constants";
@@ -75,7 +75,7 @@ const BottomSheetNotifications = ({
       requestPermission.display === "prompt-with-rationale" ||
       requestPermission.display === "denied"
     ) {
-      await updateUserPreferences(
+      await updateUserPrefs(
         dbConnection,
         "dailyNotification",
         "0",
@@ -92,7 +92,7 @@ const BottomSheetNotifications = ({
     const [hour, minute] = e.target.value.split(":").map(Number);
 
     scheduleDailyNotification(hour, minute);
-    await updateUserPreferences(
+    await updateUserPrefs(
       dbConnection,
       "dailyNotificationTime",
       e.target.value,
@@ -109,7 +109,7 @@ const BottomSheetNotifications = ({
     }));
 
     const modifyDBAndState = async () => {
-      await updateUserPreferences(
+      await updateUserPrefs(
         dbConnection,
         "dailyNotification",
         notificationValue,

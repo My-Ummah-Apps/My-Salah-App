@@ -12,7 +12,7 @@ export interface userPreferencesType {
   saveButtonTapCount: string;
   haptics: string;
   theme: "dark" | "light" | "system";
-  location: string;
+  locationName: string;
   latitude: string;
   longitude: string;
 }

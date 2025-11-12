@@ -8,12 +8,19 @@ import {
 } from "@ionic/react";
 import { userPreferencesType } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 interface SalahTimesPageProps {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }
 
-const SalahTimesPage = ({ userPreferences }: SalahTimesPageProps) => {
+const SalahTimesPage = ({
+  dbConnection,
+  setUserPreferences,
+  userPreferences,
+}: SalahTimesPageProps) => {
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -22,7 +29,7 @@ const SalahTimesPage = ({ userPreferences }: SalahTimesPageProps) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {userPreferences.location === "" && (
+        {userPreferences.locationName === "" && (
           <section className="flex flex-col items-center justify-center h-full text-center">
             <h1>Salah Times Not Set</h1>
             <IonButton id="open-salah-times-settings-sheet" className="w-1/2">
@@ -33,6 +40,8 @@ const SalahTimesPage = ({ userPreferences }: SalahTimesPageProps) => {
       </IonContent>
       <BottomSheetSalahTimesSettings
         triggerId={"open-salah-times-settings-sheet"}
+        dbConnection={dbConnection}
+        setUserPreferences={setUserPreferences}
       />
     </IonPage>
   );

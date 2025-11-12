@@ -3,10 +3,7 @@ import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { LATEST_APP_VERSION } from "../utils/changelog";
 import { userPreferencesType } from "../types/types";
-import {
-  updateUserPreferences,
-  scheduleDailyNotification,
-} from "../utils/constants";
+import { updateUserPrefs, scheduleDailyNotification } from "../utils/constants";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -73,7 +70,7 @@ const Onboarding = ({
               className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
               onClick={async () => {
                 handleGenderSelect();
-                await updateUserPreferences(
+                await updateUserPrefs(
                   dbConnection,
                   "userGender",
                   "male",
@@ -89,7 +86,7 @@ const Onboarding = ({
               className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
               onClick={async () => {
                 handleGenderSelect();
-                await updateUserPreferences(
+                await updateUserPrefs(
                   dbConnection,
                   "userGender",
                   "female",
@@ -123,13 +120,13 @@ const Onboarding = ({
                   setShowOnboarding(false);
                   setShowJoyRideEditIcon(true);
                   scheduleDailyNotification(21, 0);
-                  await updateUserPreferences(
+                  await updateUserPrefs(
                     dbConnection,
                     "dailyNotification",
                     "1",
                     setUserPreferences
                   );
-                  await updateUserPreferences(
+                  await updateUserPrefs(
                     dbConnection,
                     "dailyNotificationTime",
                     "21:00",

@@ -13,27 +13,68 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   promptToOpenDeviceSettings,
+  updateUserPrefs,
 } from "../../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { userPreferencesType } from "../../types/types";
 
 interface BottomSheetLocationSettingsProps {
   triggerId: string;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
 }
 
 const BottomSheetLocationSettings = ({
   triggerId,
+  dbConnection,
+  setUserPreferences,
 }: BottomSheetLocationSettingsProps) => {
   const handlePermissions = async () => {
     const { location } = await Geolocation.checkPermissions();
     // const { location } = await Geolocation.requestPermissions();
     // console.log(location);
+    // ! This if statement is only here for testing purposes in the browser, can be removed later
+    // if (Capacitor.getPlatform() === "web") {
+    //   const location = await Geolocation.getCurrentPosition();
+    //   const latitude = location.coords.latitude.toString();
+    //   const longitude = location.coords.longitude.toString();
+    //   await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
+    //   await updateUserPrefs(dbConnection, "longitude", "", setUserPreferences);
+    //   await updateUserPrefs(
+    //     dbConnection,
+    //     "latitude",
+    //     latitude,
+    //     setUserPreferences
+    //   );
+    //   await updateUserPrefs(
+    //     dbConnection,
+    //     "longitude",
+    //     longitude,
+    //     setUserPreferences
+    //   );
+
+    //   return;
+    // }
 
     if (location === "granted") {
       const location = await Geolocation.getCurrentPosition();
-      // Update state and DB here
+      const latitude = location.coords.latitude.toString();
+      const longitude = location.coords.longitude.toString();
+      await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
+      await updateUserPrefs(
+        dbConnection,
+        "longitude",
+        latitude,
+        setUserPreferences
+      );
+      await updateUserPrefs(
+        dbConnection,
+        "longitude",
+        longitude,
+        setUserPreferences
+      );
 
-      console.log(location.coords.latitude);
-      console.log(location.coords.longitude);
       // alert(location.coords.latitude + location.coords.longitude);
     } else if (location === "prompt" || location === "prompt-with-rationale") {
       try {

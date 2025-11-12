@@ -53,6 +53,10 @@ vi.mock("@capacitor/geolocation", () => ({
 }));
 
 import { Geolocation } from "@capacitor/geolocation";
+import {
+  mockdbConnection,
+  mockUserPrefsState,
+} from "../../__mocks__/test-utils";
 
 describe("Unit tests for GPS location button when permission is prompt", () => {
   let findMyLocationBtn: HTMLButtonElement;
@@ -60,7 +64,13 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    render(<BottomSheetLocationSettings triggerId={"testId"} />);
+    render(
+      <BottomSheetLocationSettings
+        triggerId={"testId"}
+        dbConnection={mockdbConnection}
+        setUserPreferences={mockUserPrefsState}
+      />
+    );
     findMyLocationBtn = screen.getByText(/find my location/i);
 
     vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
@@ -80,11 +90,18 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
 describe("Unit tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
   const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
-  const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPreferences");
+  // ! CONTINUE FROM HERE, ASSERT THAT THE UPDATE PREFS FUNCTION IS CALLED WHEN PERMISSION IS GRANTED
+  const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPrefs");
 
   beforeEach(() => {
     vi.clearAllMocks();
-    render(<BottomSheetLocationSettings triggerId={"testId"} />);
+    render(
+      <BottomSheetLocationSettings
+        triggerId={"testId"}
+        dbConnection={mockdbConnection}
+        setUserPreferences={mockUserPrefsState}
+      />
+    );
     findMyLocationBtn = screen.getByText(/find my location/i);
 
     vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
@@ -104,6 +121,7 @@ describe("Unit tests for GPS location button functionality when location permiss
     await expect(Geolocation.getCurrentPosition()).resolves.toEqual({
       coords: { latitude: 53.48, longitude: -3.44 },
     });
+    expect(updatePrefsSpy).toHaveBeenCalled();
     expect(promptSpy).not.toHaveBeenCalled();
   });
 });
@@ -113,7 +131,13 @@ describe("Unit tests for GPS location button functionality when location permiss
   const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
   beforeEach(() => {
     vi.clearAllMocks();
-    render(<BottomSheetLocationSettings triggerId={"testId"} />);
+    render(
+      <BottomSheetLocationSettings
+        triggerId={"testId"}
+        dbConnection={mockdbConnection}
+        setUserPreferences={mockUserPrefsState}
+      />
+    );
     findMyLocationBtn = screen.getByText(/find my location/i);
 
     vi.mocked(Geolocation.checkPermissions).mockResolvedValue({

@@ -3,7 +3,7 @@ import { SalahByDateObjType, userPreferencesType } from "../../types/types";
 
 import {
   getMissedSalahCount,
-  updateUserPreferences,
+  updateUserPrefs,
   salahStatusColorsHexCodes,
 } from "../../utils/constants";
 import Joyride, { CallBackProps } from "react-joyride";
@@ -35,7 +35,7 @@ const MissedSalahCounter = ({
 
   const handleJoyRideCompletion = async (data: CallBackProps) => {
     if (data.status === "ready") {
-      await updateUserPreferences(
+      await updateUserPrefs(
         dbConnection,
         "isMissedSalahToolTipShown",
         "1",

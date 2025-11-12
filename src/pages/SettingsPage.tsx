@@ -13,7 +13,7 @@ import {
 } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import {
-  updateUserPreferences,
+  updateUserPrefs,
   //  pageTransitionStyles,
   showToast,
 } from "../utils/constants";
@@ -214,14 +214,14 @@ const SettingsPage = ({
   useEffect(() => {
     const updateStateAndDB = async () => {
       if (isMissedSalahCounterOptionChecked) {
-        await updateUserPreferences(
+        await updateUserPrefs(
           dbConnection,
           "showMissedSalahCount",
           "1",
           setUserPreferences
         );
       } else {
-        await updateUserPreferences(
+        await updateUserPrefs(
           dbConnection,
           "showMissedSalahCount",
           "0",
