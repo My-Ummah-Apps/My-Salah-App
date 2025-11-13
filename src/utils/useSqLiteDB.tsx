@@ -150,7 +150,7 @@ const useSQLiteDB = () => {
     isDatabaseInitialised,
     sqliteConnection,
     dbConnection,
-    checkAndOpenOrCloseDBConnection,
+    initialiseTables,
   };
 };
 

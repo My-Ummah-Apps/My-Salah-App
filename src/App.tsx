@@ -138,7 +138,7 @@ const App = () => {
     isDatabaseInitialised,
     sqliteConnection,
     dbConnection,
-    // checkAndOpenOrCloseDBConnection,
+    initialiseTables,
   } = useSQLiteDB();
 
   useEffect(() => {
@@ -183,6 +183,7 @@ const App = () => {
   const fetchDataFromDB = async (isDBImported?: boolean) => {
     try {
       if (isDBImported) {
+        await initialiseTables();
         await updateUserPrefs(
           dbConnection,
           "isExistingUser",
