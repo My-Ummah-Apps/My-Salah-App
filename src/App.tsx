@@ -193,6 +193,11 @@ const App = () => {
 
       await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
+      const res = await dbConnection.current?.query(
+        `SELECT name, type FROM sqlite_master WHERE type='table'`
+      );
+      console.log("res: ", res);
+
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );

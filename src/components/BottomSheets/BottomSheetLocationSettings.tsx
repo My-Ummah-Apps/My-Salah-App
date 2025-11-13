@@ -18,6 +18,7 @@ import {
 import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../../types/types";
+// import { Capacitor } from "@capacitor/core";
 
 interface BottomSheetLocationSettingsProps {
   triggerId: string;
@@ -32,8 +33,7 @@ const BottomSheetLocationSettings = ({
 }: BottomSheetLocationSettingsProps) => {
   const handlePermissions = async () => {
     const { location } = await Geolocation.checkPermissions();
-    // const { location } = await Geolocation.requestPermissions();
-    // console.log(location);
+
     // ! This if statement is only here for testing purposes in the browser, can be removed later
     // if (Capacitor.getPlatform() === "web") {
     //   const location = await Geolocation.getCurrentPosition();

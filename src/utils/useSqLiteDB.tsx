@@ -15,10 +15,32 @@ const useSQLiteDB = () => {
 
   useEffect(() => {
     const initialiseDB = async () => {
+      const upgradeStatements = [
+        {
+          toVersion: 2,
+          statements: [
+            `CREATE TABLE IF NOT EXISTS user_locations_table(
+          id INTEGER PRIMARY KEY NOT NULL,
+          name TEXT NOT NULL,
+          latitude REAL NOT NULL,
+          longitude REAL NOT NULL,
+          is_selected INTEGER DEFAULT 0
+        )`,
+
+            `CREATE UNIQUE INDEX IF NOT EXISTS idx_single_selected_location ON user_locations_table (is_selected) WHERE is_selected = 1`,
+          ],
+        },
+      ];
+
       try {
         if (sqliteConnection.current) return; // If sqliteConnection.current is not undefined or null it means the dbConnection has already been initalised so return out of the function
 
         sqliteConnection.current = new SQLiteConnection(CapacitorSQLite); // Create a new SQLiteConnection instance and assign it to sqliteConnection.current.
+
+        await sqliteConnection.current.addUpgradeStatement(
+          "mysalahappdatabase",
+          upgradeStatements
+        );
 
         const connectionConsistency =
           await sqliteConnection.current.checkConnectionsConsistency();
@@ -46,7 +68,7 @@ const useSQLiteDB = () => {
               "mysalahappdatabase",
               false,
               "no-encryption",
-              1,
+              2,
               false
             );
         }
@@ -61,45 +83,6 @@ const useSQLiteDB = () => {
     initialiseDB();
   }, []);
 
-  // async function checkAndOpenOrCloseDBConnection(
-  //   action: DBConnectionStateType
-  // ) {
-  //   try {
-  //     if (!dbConnection || !dbConnection.current) {
-  //       throw new Error(
-  //         `Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`
-  //       );
-  //     }
-
-  //     const isDatabaseOpen = await dbConnection.current.isDBOpen();
-
-  //     if (
-  //       (action === "open" && isDatabaseOpen.result === true) ||
-  //       (action === "close" && isDatabaseOpen.result === false)
-  //     ) {
-  //       return;
-  //     }
-
-  //     if (isDatabaseOpen.result === undefined) {
-  //       throw new Error(
-  //         "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
-  //       );
-  //     } else if (action === "open" && isDatabaseOpen.result === false) {
-  //       await dbConnection.current.open();
-  //       console.log("DB CONNECTION OPENED");
-  //     } else if (action === "close" && isDatabaseOpen.result === true) {
-  //       await dbConnection.current.close();
-  //       console.log("DB CONNECTION CLOSED");
-  //     } else {
-  //       throw new Error(
-  //         `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   // Check and update table structure here
   const initialiseTables = async () => {
     try {
@@ -111,8 +94,8 @@ const useSQLiteDB = () => {
 
       await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
-      const salahDataTable = `
-        CREATE TABLE IF NOT EXISTS salahDataTable(
+      const createTablesSql: string[] = [
+        `CREATE TABLE IF NOT EXISTS salahDataTable(
         id INTEGER PRIMARY KEY NOT NULL,
         date TEXT NOT NULL, 
         salahName TEXT NOT NULL, 
@@ -120,18 +103,29 @@ const useSQLiteDB = () => {
         reasons TEXT DEFAULT '', 
         notes TEXT DEFAULT ''
         ) STRICT;
-        `;
+        `,
 
-      const uniqueIndexQuery = `CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_date_salahName ON salahDataTable (date, salahName)`;
+        `CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_date_salahName ON salahDataTable (date, salahName)`,
 
-      const userPreferencesTable = `CREATE TABLE IF NOT EXISTS userPreferencesTable(
-        preferenceName TEXT PRIMARY KEY NOT NULL, 
+        `CREATE TABLE IF NOT EXISTS userPreferencesTable(
+        preferenceName TEXT PRIMARY KEY NOT NULL,
         preferenceValue TEXT NOT NULL DEFAULT ''
-        ) STRICT`;
+        ) STRICT`,
 
-      await dbConnection.current.execute(userPreferencesTable);
-      await dbConnection.current.execute(salahDataTable);
-      await dbConnection.current.execute(uniqueIndexQuery);
+        `CREATE TABLE IF NOT EXISTS user_locations_table(
+          id INTEGER PRIMARY KEY NOT NULL,
+          name TEXT NOT NULL,
+          latitude REAL NOT NULL,
+          longitude REAL NOT NULL,
+          is_selected INTEGER DEFAULT 0
+        )`,
+
+        `CREATE UNIQUE INDEX IF NOT EXISTS idx_single_selected_location ON user_locations_table (is_selected) WHERE is_selected = 1`,
+      ];
+
+      for (const sql of createTablesSql) {
+        await dbConnection.current.execute(sql);
+      }
     } catch (error) {
       console.error(error);
     } finally {
