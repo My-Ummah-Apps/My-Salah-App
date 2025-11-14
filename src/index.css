@@ -180,6 +180,10 @@ ion-textarea textarea {
   /* --color: var(--ion-text-color) !important; */
 }
 
+ion-loading {
+  --background: var(--ion-background-color) !important;
+}
+
 ion-toolbar {
   --background: var(--ion-background-color);
   --color: var(--ion-text-color);

@@ -90,8 +90,8 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
 describe("Unit tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
   const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
-  // ! CONTINUE FROM HERE, ASSERT THAT THE UPDATE PREFS FUNCTION IS CALLED WHEN PERMISSION IS GRANTED
-  const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPrefs");
+
+  // const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPrefs");
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -111,6 +111,10 @@ describe("Unit tests for GPS location button functionality when location permiss
   });
 
   it("retrieves location coordinates", async () => {
+    await expect(Geolocation.getCurrentPosition()).resolves.toEqual({
+      coords: { latitude: 53.48, longitude: -3.44 },
+    });
+
     await userEvent.click(findMyLocationBtn);
 
     expect(Geolocation.checkPermissions).toHaveBeenCalled();
@@ -118,11 +122,24 @@ describe("Unit tests for GPS location button functionality when location permiss
 
     expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
 
-    await expect(Geolocation.getCurrentPosition()).resolves.toEqual({
-      coords: { latitude: 53.48, longitude: -3.44 },
-    });
-    expect(updatePrefsSpy).toHaveBeenCalled();
+    // expect(updatePrefsSpy).toHaveBeenCalled();
     expect(promptSpy).not.toHaveBeenCalled();
+  });
+
+  it("shows alert for user to name location after coordinates are retrieved", async () => {
+    vi.mocked(Geolocation.getCurrentPosition).mockResolvedValue({
+      coords: { latitude: 53.48, longitude: -3.44 },
+    } as GeolocationPosition);
+
+    await userEvent.click(findMyLocationBtn);
+
+    // assert that the spinner is visible
+    const locationLoader = await screen.findByRole("alertdialog");
+    expect(locationLoader).toBeInTheDocument();
+    // assert here that the alert function is triggered via spyOn
+
+    await screen.findByText(/enter location name/i);
+    // enter location name > hit save > assert that DB was updated by spying on DB updater function
   });
 });
 

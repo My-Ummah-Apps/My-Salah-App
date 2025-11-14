@@ -3,21 +3,24 @@ import {
   IonContent,
   IonHeader,
   IonInput,
+  IonLoading,
   IonModal,
   IonTitle,
   IonToolbar,
   isPlatform,
+  useIonLoading,
 } from "@ionic/react";
 import { Geolocation } from "@capacitor/geolocation";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   promptToOpenDeviceSettings,
-  updateUserPrefs,
 } from "../../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../../types/types";
+import { Capacitor } from "@capacitor/core";
+
 // import { Capacitor } from "@capacitor/core";
 
 interface BottomSheetLocationSettingsProps {
@@ -28,52 +31,64 @@ interface BottomSheetLocationSettingsProps {
 
 const BottomSheetLocationSettings = ({
   triggerId,
-  dbConnection,
-  setUserPreferences,
 }: BottomSheetLocationSettingsProps) => {
-  const handlePermissions = async () => {
+  const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
+
+  const handleLocationPermissions = async () => {
     const { location } = await Geolocation.checkPermissions();
 
     // ! This if statement is only here for testing purposes in the browser, can be removed later
     // if (Capacitor.getPlatform() === "web") {
-    //   const location = await Geolocation.getCurrentPosition();
-    //   const latitude = location.coords.latitude.toString();
-    //   const longitude = location.coords.longitude.toString();
-    //   await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
-    //   await updateUserPrefs(dbConnection, "longitude", "", setUserPreferences);
-    //   await updateUserPrefs(
-    //     dbConnection,
-    //     "latitude",
-    //     latitude,
-    //     setUserPreferences
-    //   );
-    //   await updateUserPrefs(
-    //     dbConnection,
-    //     "longitude",
-    //     longitude,
-    //     setUserPreferences
-    //   );
+    //   // setShowLocationSpinner(true);
+    //   try {
+    //     const location = await Geolocation.getCurrentPosition();
+    //     const latitude = location.coords.latitude.toString();
+    //     const longitude = location.coords.longitude.toString();
+    //   } catch (error) {
+    //     await dismissLocationSpinner();
+    //     console.error(error);
+    //   }
+    //   // await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
+    //   // await updateUserPrefs(dbConnection, "longitude", "", setUserPreferences);
+    //   // await updateUserPrefs(
+    //   //   dbConnection,
+    //   //   "latitude",
+    //   //   latitude,
+    //   //   setUserPreferences
+    //   // );
+    //   // await updateUserPrefs(
+    //   //   dbConnection,
+    //   //   "longitude",
+    //   //   longitude,
+    //   //   setUserPreferences
+    //   // );
 
     //   return;
     // }
 
     if (location === "granted") {
-      const location = await Geolocation.getCurrentPosition();
-      const latitude = location.coords.latitude.toString();
-      const longitude = location.coords.longitude.toString();
-      await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
-      await updateUserPrefs(
-        dbConnection,
-        "longitude",
-        latitude,
-        setUserPreferences
-      );
-      await updateUserPrefs(
-        dbConnection,
-        "longitude",
-        longitude,
-        setUserPreferences
-      );
+      // setShowLocationSpinner(true);
+      try {
+        const location = await Geolocation.getCurrentPosition();
+        const latitude = location.coords.latitude.toString();
+        const longitude = location.coords.longitude.toString();
+      } catch (error) {
+        await dismissLocationSpinner();
+        console.error(error);
+      }
+      // await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
+      // await updateUserPrefs(
+      //   dbConnection,
+      //   "longitude",
+      //   latitude,
+      //   setUserPreferences
+      // );
+      // await updateUserPrefs(
+      //   dbConnection,
+      //   "longitude",
+      //   longitude,
+      //   setUserPreferences
+      // );
 
       // alert(location.coords.latitude + location.coords.longitude);
     } else if (location === "prompt" || location === "prompt-with-rationale") {
@@ -122,6 +137,11 @@ const BottomSheetLocationSettings = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <IonLoading
+          // trigger="open-location-spinner"
+          message="Detecting location..."
+          // duration={3000}
+        />
         <section className="p-2 mx-5 mb-5 text-center">
           <p>
             To calculate Salah times, the app requires your location, you can
@@ -134,7 +154,11 @@ const BottomSheetLocationSettings = ({
           <IonButton
             expand="block"
             onClick={async () => {
-              await handlePermissions();
+              await presentLocationSpinner({
+                message: "Detecting location...",
+                backdropDismiss: false,
+              });
+              await handleLocationPermissions();
             }}
           >
             Find My Location
