@@ -82,7 +82,7 @@ const BottomSheetLocationSettings = ({
         // console.log(permissionStatus);
 
         if (locationPermissions.location === "granted") {
-          const location = await Geolocation.getCurrentPosition();
+          // const location = await Geolocation.getCurrentPosition();
           // Update state and DB here
         }
       } catch (error) {

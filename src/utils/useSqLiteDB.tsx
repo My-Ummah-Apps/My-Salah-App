@@ -19,15 +19,15 @@ const useSQLiteDB = () => {
         {
           toVersion: 2,
           statements: [
-            `CREATE TABLE IF NOT EXISTS user_locations_table(
+            `CREATE TABLE IF NOT EXISTS userLocationsTable(
           id INTEGER PRIMARY KEY NOT NULL,
-          name TEXT NOT NULL,
+          locationName TEXT NOT NULL,
           latitude REAL NOT NULL,
           longitude REAL NOT NULL,
-          is_selected INTEGER DEFAULT 0
-        )`,
+          isSelected INTEGER DEFAULT 0
+        ) STRICT`,
 
-            `CREATE UNIQUE INDEX IF NOT EXISTS idx_single_selected_location ON user_locations_table (is_selected) WHERE is_selected = 1`,
+            `CREATE UNIQUE INDEX IF NOT EXISTS idx_single_selected_location ON userLocationsTable (isSelected) WHERE isSelected = 1`,
           ],
         },
       ];
@@ -85,6 +85,8 @@ const useSQLiteDB = () => {
 
   // Check and update table structure here
   const initialiseTables = async () => {
+    console.log("Initialising tables...");
+
     try {
       if (!dbConnection.current) {
         throw new Error(
@@ -112,15 +114,15 @@ const useSQLiteDB = () => {
         preferenceValue TEXT NOT NULL DEFAULT ''
         ) STRICT`,
 
-        `CREATE TABLE IF NOT EXISTS user_locations_table(
+        `CREATE TABLE IF NOT EXISTS userLocationsTable(
           id INTEGER PRIMARY KEY NOT NULL,
-          name TEXT NOT NULL,
+          locationName TEXT NOT NULL,
           latitude REAL NOT NULL,
           longitude REAL NOT NULL,
-          is_selected INTEGER DEFAULT 0
-        )`,
+          isSelected INTEGER DEFAULT 0
+        ) STRICT`,
 
-        `CREATE UNIQUE INDEX IF NOT EXISTS idx_single_selected_location ON user_locations_table (is_selected) WHERE is_selected = 1`,
+        `CREATE UNIQUE INDEX IF NOT EXISTS idx_single_selected_location ON userLocationsTable (isSelected) WHERE isSelected = 1`,
       ];
 
       for (const sql of createTablesSql) {
@@ -140,6 +142,7 @@ const useSQLiteDB = () => {
         if (isDatabaseOpen.result) {
           await checkAndOpenOrCloseDBConnection(dbConnection, "close");
         }
+        console.log("Table initialisation complete");
       } catch (error) {
         console.error(error);
       }

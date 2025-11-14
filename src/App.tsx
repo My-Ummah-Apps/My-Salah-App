@@ -194,6 +194,13 @@ const App = () => {
 
       await checkAndOpenOrCloseDBConnection(dbConnection, "open");
 
+      // await dbConnection.current?.execute(
+      //   `DROP TABLE IF EXISTS user_locations_table;`
+      // );
+      //  await dbConnection.current?.execute(
+      //   `DROP TABLE IF EXISTS userLocationsTable`
+      // );
+
       const res = await dbConnection.current?.query(
         `SELECT name, type FROM sqlite_master WHERE type='table'`
       );
