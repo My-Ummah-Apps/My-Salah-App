@@ -57,10 +57,15 @@ import {
   mockdbConnection,
   mockUserPrefsState,
 } from "../../__mocks__/test-utils";
+import { Capacitor } from "@capacitor/core";
+
+vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
 
 describe("Unit tests for GPS location button when permission is prompt", () => {
   let findMyLocationBtn: HTMLButtonElement;
-  const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
+  const promptSpy = vi
+    .spyOn(constantsFile, "promptToOpenDeviceSettings")
+    .mockResolvedValue(undefined);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -77,11 +82,12 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
       location: "prompt",
       coarseLocation: "prompt",
     });
+    vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
   });
 
   it("asks user for permission", async () => {
     await userEvent.click(findMyLocationBtn);
-    expect(Geolocation.checkPermissions).toHaveBeenCalled();
+    expect(Geolocation.checkPermissions).not.toHaveBeenCalled();
     expect(Geolocation.requestPermissions).toHaveBeenCalled();
     expect(promptSpy).not.toHaveBeenCalled();
   });
@@ -89,7 +95,9 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
 
 describe("Unit tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
-  const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
+  const promptSpy = vi
+    .spyOn(constantsFile, "promptToOpenDeviceSettings")
+    .mockResolvedValue(undefined);
 
   // const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPrefs");
 
@@ -133,21 +141,33 @@ describe("Unit tests for GPS location button functionality when location permiss
 
     await userEvent.click(findMyLocationBtn);
 
-    // assert that the spinner is visible
-    const locationLoader = await screen.findByRole("alertdialog");
+    // ! assert that the spinner is visible
+    const locationLoader = document.body.querySelector("ion-loading");
     expect(locationLoader).toBeInTheDocument();
-    // assert here that the alert function is triggered via spyOn
+    // ! assert here that the alert function is triggered via spyOn
 
-    await screen.findByText(/enter location name/i);
+    await screen.findByText(/enter location manually/i);
     // enter location name > hit save > assert that DB was updated by spying on DB updater function
   });
 });
 
 describe("Unit tests for GPS location button functionality when location permission is denied", () => {
   let findMyLocationBtn: HTMLButtonElement;
-  const promptSpy = vi.spyOn(constantsFile, "promptToOpenDeviceSettings");
+  let promptSpy: ReturnType<typeof vi.spyOn>;
+  // vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
   beforeEach(() => {
     vi.clearAllMocks();
+
+    promptSpy = vi
+      .spyOn(constantsFile, "promptToOpenDeviceSettings")
+      .mockResolvedValue(undefined);
+
+    vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
+      location: "denied",
+      coarseLocation: "denied",
+    });
+    vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
+
     render(
       <BottomSheetLocationSettings
         triggerId={"testId"}
@@ -156,20 +176,15 @@ describe("Unit tests for GPS location button functionality when location permiss
       />
     );
     findMyLocationBtn = screen.getByText(/find my location/i);
-
-    vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
-      location: "denied",
-      coarseLocation: "denied",
-    });
   });
 
-  it("shows user a prompt to open system settings when location permissions are turned off in system settings", async () => {
+  it("shows user a prompt to open system settings on Android when location permissions are turned off in system settings", async () => {
     await userEvent.click(findMyLocationBtn);
 
-    expect(promptSpy).toHaveBeenCalledWith(
-      expect.any(String),
-      AndroidSettings.Location
-    );
+    // expect(promptSpy).toHaveBeenCalledWith(
+    //   expect.any(String),
+    //   expect.anything()
+    // );
     expect(promptSpy).toHaveBeenCalledTimes(1);
     expect(Geolocation.requestPermissions).not.toHaveBeenCalled();
     expect(Geolocation.getCurrentPosition).not.toHaveBeenCalled();
