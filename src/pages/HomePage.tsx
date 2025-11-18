@@ -222,7 +222,6 @@ const HomePage = ({
             />
             <MissedSalahsListBottomSheet
               dbConnection={dbConnection}
-              // checkAndOpenOrCloseDBConnection={checkAndOpenOrCloseDBConnection}
               setFetchedSalahData={setFetchedSalahData}
               // presentingElement={presentingElement}
               setShowMissedSalahsSheet={setShowMissedSalahsSheet}

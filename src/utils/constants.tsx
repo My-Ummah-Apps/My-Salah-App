@@ -16,7 +16,7 @@ import {
   IOSSettings,
   NativeSettings,
 } from "capacitor-native-settings";
-import { checkAndOpenOrCloseDBConnection } from "./dbUtils";
+import { toggleDBConnection } from "./dbUtils";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 export const MODAL_BREAKPOINTS = [0, 1];
@@ -230,7 +230,7 @@ export const updateUserPrefs = async (
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>
 ) => {
   try {
-    await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+    await toggleDBConnection(dbConnection, "open");
 
     if (preferenceName === "reasons") {
       const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
@@ -255,6 +255,6 @@ export const updateUserPrefs = async (
       `SELECT * FROM userPreferencesTable`
     );
     console.log("DBResultPreferences: ", DBResultPreferences?.values);
-    await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+    await toggleDBConnection(dbConnection, "close");
   }
 };

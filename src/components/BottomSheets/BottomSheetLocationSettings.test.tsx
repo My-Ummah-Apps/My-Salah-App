@@ -59,13 +59,11 @@ import {
 } from "../../__mocks__/test-utils";
 import { Capacitor } from "@capacitor/core";
 
-vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
+const getPlatformSpy = vi.spyOn(Capacitor, "getPlatform");
 
 describe("Unit tests for GPS location button when permission is prompt", () => {
   let findMyLocationBtn: HTMLButtonElement;
-  const promptSpy = vi
-    .spyOn(constantsFile, "promptToOpenDeviceSettings")
-    .mockResolvedValue(undefined);
+  let promptSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -82,7 +80,10 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
       location: "prompt",
       coarseLocation: "prompt",
     });
-    vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
+    getPlatformSpy.mockReturnValue("android");
+    promptSpy = vi
+      .spyOn(constantsFile, "promptToOpenDeviceSettings")
+      .mockResolvedValue(undefined);
   });
 
   it("asks user for permission", async () => {
@@ -95,9 +96,7 @@ describe("Unit tests for GPS location button when permission is prompt", () => {
 
 describe("Unit tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
-  const promptSpy = vi
-    .spyOn(constantsFile, "promptToOpenDeviceSettings")
-    .mockResolvedValue(undefined);
+  let promptSpy: ReturnType<typeof vi.spyOn>;
 
   // const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPrefs");
 
@@ -116,6 +115,9 @@ describe("Unit tests for GPS location button functionality when location permiss
       location: "granted",
       coarseLocation: "granted",
     });
+    promptSpy = vi
+      .spyOn(constantsFile, "promptToOpenDeviceSettings")
+      .mockResolvedValue(undefined);
   });
 
   it("retrieves location coordinates", async () => {
@@ -154,19 +156,20 @@ describe("Unit tests for GPS location button functionality when location permiss
 describe("Unit tests for GPS location button functionality when location permission is denied", () => {
   let findMyLocationBtn: HTMLButtonElement;
   let promptSpy: ReturnType<typeof vi.spyOn>;
-  // vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
+
   beforeEach(() => {
     vi.clearAllMocks();
-
-    promptSpy = vi
-      .spyOn(constantsFile, "promptToOpenDeviceSettings")
-      .mockResolvedValue(undefined);
 
     vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
       location: "denied",
       coarseLocation: "denied",
     });
-    vi.spyOn(Capacitor, "getPlatform").mockReturnValue("android");
+
+    promptSpy = vi
+      .spyOn(constantsFile, "promptToOpenDeviceSettings")
+      .mockResolvedValue(undefined);
+
+    getPlatformSpy.mockReturnValue("android");
 
     render(
       <BottomSheetLocationSettings

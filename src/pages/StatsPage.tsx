@@ -33,15 +33,12 @@ import {
 
 import { useLocation } from "react-router-dom";
 import SalahSegmentTabs from "../components/Stats/SalahSegmentTabs";
-import { checkAndOpenOrCloseDBConnection } from "../utils/dbUtils";
+import { toggleDBConnection } from "../utils/dbUtils";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
 interface StatsPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
   userPreferences: userPreferencesType;
   fetchedSalahData: SalahRecordsArrayType;
   streakDatesObjectsArr: streakDatesObjType[];
@@ -50,7 +47,6 @@ interface StatsPageProps {
 
 const StatsPage = ({
   dbConnection,
-  // checkAndOpenOrCloseDBConnection,
   userPreferences,
   fetchedSalahData,
   streakDatesObjectsArr,
@@ -167,7 +163,7 @@ const StatsPage = ({
 
   const fetchSalahDataFromDB = async () => {
     try {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
       let DBResultAllSalahData = await dbConnection.current!.query(
         `SELECT * FROM salahDataTable`
       );
@@ -257,7 +253,7 @@ const StatsPage = ({
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
     }
   };
 
@@ -308,9 +304,6 @@ const StatsPage = ({
                 )}
                 <Calendar
                   dbConnection={dbConnection}
-                  // checkAndOpenOrCloseDBConnection={
-                  //   checkAndOpenOrCloseDBConnection
-                  // }
                   userStartDate={userPreferences.userStartDate}
                   fetchedSalahData={fetchedSalahData}
                   statsToShow={statsToShow}

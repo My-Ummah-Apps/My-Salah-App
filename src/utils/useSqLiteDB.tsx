@@ -5,7 +5,7 @@ import {
   SQLiteDBConnection,
   CapacitorSQLite,
 } from "@capacitor-community/sqlite";
-import { checkAndOpenOrCloseDBConnection } from "./dbUtils";
+import { toggleDBConnection } from "./dbUtils";
 
 const useSQLiteDB = () => {
   const sqliteConnection = useRef<SQLiteConnection>(); // This is the connection to the dbConnection
@@ -94,7 +94,7 @@ const useSQLiteDB = () => {
         );
       }
 
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
 
       const createTablesSql: string[] = [
         `CREATE TABLE IF NOT EXISTS salahDataTable(
@@ -140,7 +140,7 @@ const useSQLiteDB = () => {
 
         const isDatabaseOpen = await dbConnection.current.isDBOpen();
         if (isDatabaseOpen.result) {
-          await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+          await toggleDBConnection(dbConnection, "close");
         }
         console.log("Table initialisation complete");
       } catch (error) {

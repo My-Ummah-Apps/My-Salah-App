@@ -11,13 +11,10 @@ import {
 import format from "date-fns/format";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { IonContent, IonModal } from "@ionic/react";
-import { checkAndOpenOrCloseDBConnection } from "../../utils/dbUtils";
+import { toggleDBConnection } from "../../utils/dbUtils";
 
 interface BottomSheetSingleDateViewProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
   showDailySalahDataModal: boolean;
   setShowDailySalahDataModal: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedDate: React.Dispatch<React.SetStateAction<string>>;
@@ -27,7 +24,6 @@ interface BottomSheetSingleDateViewProps {
 
 const BottomSheetSingleDateView = ({
   dbConnection,
-  // checkAndOpenOrCloseDBConnection,
   showDailySalahDataModal,
   setShowDailySalahDataModal,
   setClickedDate,
@@ -54,7 +50,7 @@ const BottomSheetSingleDateView = ({
 
   const grabSingleDateData = async (clickedDate: string) => {
     try {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
       const query = `SELECT * FROM salahDataTable WHERE date = ?`;
       const data = await dbConnection.current!.query(query, [clickedDate]);
 
@@ -100,7 +96,7 @@ const BottomSheetSingleDateView = ({
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
     }
   };
 

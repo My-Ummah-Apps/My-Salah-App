@@ -63,7 +63,7 @@ import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
 import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 import SalahTimesPage from "./pages/SalahTimesPage";
-import { checkAndOpenOrCloseDBConnection } from "./utils/dbUtils";
+import { toggleDBConnection as toggleDBConnection } from "./utils/dbUtils";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -192,7 +192,7 @@ const App = () => {
         );
       }
 
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
 
       const res = await dbConnection.current?.query(
         `SELECT name, type FROM sqlite_master WHERE type='table'`
@@ -247,7 +247,7 @@ const App = () => {
             "0",
             setUserPreferences
           );
-          await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+          await toggleDBConnection(dbConnection, "open");
 
           // const locationPref = "location";
           // await dbConnection.current?.run(
@@ -264,7 +264,7 @@ const App = () => {
             error
           );
         } finally {
-          await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+          await toggleDBConnection(dbConnection, "close");
         }
       }
       try {
@@ -284,7 +284,7 @@ const App = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
     }
   };
 

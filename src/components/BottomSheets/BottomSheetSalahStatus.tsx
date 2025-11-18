@@ -31,7 +31,7 @@ import {
 import { isToday, isYesterday, parse } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { IonModal, IonTextarea } from "@ionic/react";
-import { checkAndOpenOrCloseDBConnection } from "../../utils/dbUtils";
+import { toggleDBConnection } from "../../utils/dbUtils";
 
 interface SalahStatusBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -39,9 +39,6 @@ interface SalahStatusBottomSheetProps {
     React.SetStateAction<SalahRecordsArrayType>
   >;
   fetchedSalahData: SalahRecordsArrayType;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
   userPreferences: userPreferencesType;
   setShowBoxAnimation: React.Dispatch<React.SetStateAction<boolean>>;
   showUpdateStatusModal: boolean;
@@ -55,7 +52,6 @@ interface SalahStatusBottomSheetProps {
 
 const BottomSheetSalahStatus = ({
   dbConnection,
-  // checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   fetchedSalahData,
   selectedSalahAndDate,
@@ -115,7 +111,7 @@ const BottomSheetSalahStatus = ({
     const selectedSalah = Object.values(selectedSalahAndDate).toString();
 
     try {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
 
       const res = await dbConnection.current!.query(
         `SELECT * FROM salahDataTable 
@@ -137,7 +133,7 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
     }
 
     return false;
@@ -156,7 +152,7 @@ const BottomSheetSalahStatus = ({
     const salahDataToInsertIntoDB = [];
 
     try {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
 
       const reasonsToInsert =
         selectedReasons.length > 0 &&
@@ -255,7 +251,7 @@ const BottomSheetSalahStatus = ({
     } catch (error) {
       console.error(error);
     } finally {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
     }
   };
 

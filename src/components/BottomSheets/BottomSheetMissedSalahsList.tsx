@@ -19,13 +19,10 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { IonButton, IonContent, IonModal } from "@ionic/react";
-import { checkAndOpenOrCloseDBConnection } from "../../utils/dbUtils";
+import { toggleDBConnection } from "../../utils/dbUtils";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // checkAndOpenOrCloseDBConnection: (
-  //   action: DBConnectionStateType
-  // ) => Promise<void>;
   setFetchedSalahData: React.Dispatch<
     React.SetStateAction<SalahRecordsArrayType>
   >;
@@ -37,7 +34,6 @@ interface MissedSalahsListBottomSheetProps {
 
 const MissedSalahsListBottomSheet = ({
   dbConnection,
-  // checkAndOpenOrCloseDBConnection,
   setFetchedSalahData,
   // presentingElement,
   setShowMissedSalahsSheet,
@@ -51,11 +47,11 @@ const MissedSalahsListBottomSheet = ({
     if (!showMissedSalahsSheet) return;
 
     const openDBConnection = async () => {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
     };
 
     const closeDBConnection = async () => {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
     };
 
     openDBConnection();

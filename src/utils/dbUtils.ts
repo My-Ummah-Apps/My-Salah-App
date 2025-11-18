@@ -1,14 +1,14 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { DBConnectionStateType } from "../types/types";
 
-export async function checkAndOpenOrCloseDBConnection(
+export async function toggleDBConnection(
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   action: DBConnectionStateType
 ) {
   try {
     if (!dbConnection || !dbConnection.current) {
       throw new Error(
-        `Database connection not initialised within checkAndOpenOrCloseDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`
+        `Database connection not initialised within toggleDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`
       );
     }
 
@@ -23,7 +23,7 @@ export async function checkAndOpenOrCloseDBConnection(
 
     if (isDatabaseOpen.result === undefined) {
       throw new Error(
-        "isDatabaseOpen.result is undefined within checkAndOpenOrCloseDBConnection"
+        "isDatabaseOpen.result is undefined within toggleDBConnection"
       );
     } else if (action === "open" && isDatabaseOpen.result === false) {
       await dbConnection.current.open();

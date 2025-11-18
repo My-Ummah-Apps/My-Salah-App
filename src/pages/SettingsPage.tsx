@@ -30,7 +30,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import BottomSheetThemeOptions from "../components/BottomSheets/BottomSheetThemeOptions";
-import { checkAndOpenOrCloseDBConnection } from "../utils/dbUtils";
+import { toggleDBConnection } from "../utils/dbUtils";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -92,7 +92,7 @@ const SettingsPage = ({
       if (!sqliteConnection.current) {
         throw new Error("sqliteConnection does not exist");
       }
-      await checkAndOpenOrCloseDBConnection(dbConnection, "open");
+      await toggleDBConnection(dbConnection, "open");
       const rawBackupData = await dbConnection.current!.exportToJson("full");
       rawBackupData.export!.overwrite = true;
       const exportedDBAsJson = JSON.stringify(rawBackupData.export);
@@ -142,13 +142,13 @@ const SettingsPage = ({
     } finally {
       diaglogElement.current?.close();
       setDialogElementText("");
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
     }
   };
 
   const handleDBImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      await checkAndOpenOrCloseDBConnection(dbConnection, "close");
+      await toggleDBConnection(dbConnection, "close");
       const reader = new FileReader();
       reader.onload = async (e) => {
         if (!sqliteConnection.current) {
