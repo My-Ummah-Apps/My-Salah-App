@@ -35,6 +35,7 @@ const BottomSheetLocationSettings = ({
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
 
   const handleLocationPermissions = async () => {
+    const device = Capacitor.getPlatform();
     // ! This if statement is only here for manual testing purposes in the browser, can be removed later
     // if (Capacitor.getPlatform() === "web") {
     //   try {
@@ -62,8 +63,6 @@ const BottomSheetLocationSettings = ({
     //   //   setUserPreferences
     //   // );
     // }
-
-    const device = Capacitor.getPlatform();
 
     if (device === "ios" || device === "android") {
       const { location } = await Geolocation.checkPermissions();

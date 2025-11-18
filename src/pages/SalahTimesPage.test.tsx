@@ -19,7 +19,7 @@ describe("Integration tests for Salah times page", () => {
         userPreferences={mockUserPrefs}
       />
     );
-    setUpBtn = screen.getByText("Set up Salah Times");
+    setUpBtn = screen.getByText(/set up salah times/i);
   });
 
   it("shows fallback if no location is selected", () => {
@@ -70,7 +70,7 @@ describe("Integration tests for Salah times page", () => {
       const findMyLocationText = await screen.findByText(/find my location/i);
       expect(findMyLocationText).toBeInTheDocument();
 
-      const locationInput = await screen.findByLabelText(/location/i);
+      const locationInput = await screen.findByText(/enter location manually/i);
       expect(locationInput).toBeInTheDocument();
 
       const latitudeInput = await screen.findByLabelText(/latitude/i);
