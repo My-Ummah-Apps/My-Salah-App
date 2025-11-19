@@ -165,6 +165,11 @@ ion-modal::part(backdrop) {
   /* background-color: rgba(0, 0, 0, 1) !important; */
 }
 
+ion-alert {
+  --background: var(--card-bg-color) !important;
+  color: var(--text-color);
+}
+
 ion-textarea {
   max-height: 50px !important;
   overflow-y: auto;
