@@ -21,6 +21,7 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../../types/types";
 import { Capacitor } from "@capacitor/core";
 import { useState } from "react";
+import Toast from "../Toast";
 
 // import { Capacitor } from "@capacitor/core";
 
@@ -36,6 +37,8 @@ const BottomSheetLocationSettings = ({
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationNameInput, setShowLocationNameInput] =
     useState<boolean>(false);
+  const [showLocationFailureToast, setShowLocationFailureToast] =
+    useState(false);
 
   const handleLocationPermissions = async () => {
     const device = Capacitor.getPlatform();
@@ -50,8 +53,10 @@ const BottomSheetLocationSettings = ({
         dismissLocationSpinner();
         setShowLocationNameInput(true);
       } catch (error) {
-        await dismissLocationSpinner();
+        setShowLocationFailureToast(true);
         console.error(error);
+      } finally {
+        await dismissLocationSpinner();
       }
       // await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
       // await updateUserPrefs(dbConnection, "longitude", "", setUserPreferences);
@@ -152,8 +157,24 @@ const BottomSheetLocationSettings = ({
           onDidDismiss={() => {
             setShowLocationNameInput(false);
           }}
-          header="Enter Location Name"
-          buttons={["Cancel, Save"]}
+          header="Location"
+          message="Please enter a location name"
+          buttons={[
+            {
+              text: "Cancel",
+              role: "cancel",
+              handler: () => {
+                console.log("Alert canceled");
+              },
+            },
+            {
+              text: "Save",
+              role: "confirm",
+              handler: () => {
+                console.log("Alert confirmed");
+              },
+            },
+          ]}
           inputs={[
             {
               placeholder: "Location",
@@ -211,6 +232,11 @@ const BottomSheetLocationSettings = ({
             className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
           ></IonInput>
         </section>
+        <Toast
+          isOpen={showLocationFailureToast}
+          message="Unable to retrieve location, please try again"
+          setShow={setShowLocationFailureToast}
+        />
       </IonContent>
     </IonModal>
   );

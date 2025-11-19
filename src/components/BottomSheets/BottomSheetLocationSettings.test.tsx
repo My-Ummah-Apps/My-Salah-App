@@ -149,18 +149,31 @@ describe("tests for GPS location button functionality when location permission i
 
     await userEvent.click(findMyLocationBtn);
 
-    // ! assert that the spinner is visible
     const locationLoader = document.body.querySelector("ion-loading");
     expect(locationLoader).toBeInTheDocument();
-    // ! assert here that the alert function is triggered via spyOn
-    const locationNameInput = await screen.findByText(/enter location name/i);
+
+    const locationNameInput = await screen.findByText(
+      /Please enter a location name/i
+    );
     expect(locationNameInput).toBeInTheDocument();
 
     await screen.findByText(/enter location manually/i);
-    // enter location name > hit save > assert that DB was updated by spying on DB updater function
   });
 
-  it("shows error message when app is unable to retrieve coords", () => {});
+  // TODO: Add test to test following flow: enter location name > hit save > assert that DB was updated by spying on DB updater function
+
+  it("shows error message when app is unable to retrieve coords after user has granted location permission", async () => {
+    vi.mocked(Geolocation.getCurrentPosition).mockRejectedValue(
+      new Error("Failed to retrieve position")
+    );
+
+    await userEvent.click(findMyLocationBtn);
+
+    const locationErrorMsg = await screen.findByText(
+      /Unable to retrieve location, please try again/i
+    );
+    expect(locationErrorMsg).toBeInTheDocument();
+  });
 });
 
 describe("tests for GPS location button functionality when location permission is denied", () => {
