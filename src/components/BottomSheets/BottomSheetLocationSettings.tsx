@@ -66,12 +66,13 @@ const BottomSheetLocationSettings = ({
 
     if (device === "ios" || device === "android") {
       const { location } = await Geolocation.checkPermissions();
+      console.log("LOcation: ", location);
 
       if (location === "granted") {
         try {
-          const location = await Geolocation.getCurrentPosition();
-          const latitude = location.coords.latitude.toString();
-          const longitude = location.coords.longitude.toString();
+          const position = await Geolocation.getCurrentPosition();
+          const latitude = position.coords.latitude.toString();
+          const longitude = position.coords.longitude.toString();
         } catch (error) {
           await dismissLocationSpinner();
           console.error(error);
@@ -141,11 +142,11 @@ const BottomSheetLocationSettings = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonLoading
+        {/* <IonLoading
           // trigger="open-location-spinner"
           message="Detecting location..."
           // duration={3000}
-        />
+        /> */}
         <section className="p-2 mx-5 mb-5 text-center">
           <p>
             To calculate Salah times, the app requires your location, you can
@@ -158,11 +159,17 @@ const BottomSheetLocationSettings = ({
           <IonButton
             expand="block"
             onClick={async () => {
-              await presentLocationSpinner({
+              presentLocationSpinner({
                 message: "Detecting location...",
                 backdropDismiss: false,
               });
-              await handleLocationPermissions();
+              try {
+                await handleLocationPermissions();
+              } catch (error) {
+                console.error(error);
+              } finally {
+                await dismissLocationSpinner();
+              }
             }}
           >
             Find My Location

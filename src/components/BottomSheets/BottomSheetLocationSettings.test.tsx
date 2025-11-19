@@ -2,7 +2,6 @@
 // expect(autoDetectBtn).toBeInTheDocument();
 
 import { render, screen } from "@testing-library/react";
-import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import * as constantsFile from "../../utils/constants";
@@ -53,6 +52,7 @@ vi.mock("@capacitor/geolocation", () => ({
 }));
 
 import { Geolocation } from "@capacitor/geolocation";
+
 import {
   mockdbConnection,
   mockUserPrefsState,
@@ -60,6 +60,8 @@ import {
 import { Capacitor } from "@capacitor/core";
 
 const getPlatformSpy = vi.spyOn(Capacitor, "getPlatform");
+
+import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
 
 describe("Unit tests for GPS location button when permission is prompt", () => {
   let findMyLocationBtn: HTMLButtonElement;
