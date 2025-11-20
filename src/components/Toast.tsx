@@ -23,7 +23,7 @@ const Toast = ({
       }}
       positionAnchor="nav-bar"
       message={message}
-      duration={duration || 1500}
+      duration={duration || 2000}
       onDidDismiss={() => setShow(false)}
     />
   );

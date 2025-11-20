@@ -42,9 +42,16 @@ const BottomSheetLocationSettings = ({
 
   const handleLocationPermissions = async () => {
     const device = Capacitor.getPlatform();
-    // ! This if statement is only here for manual testing purposes in the browser, can be removed later
-    if (Capacitor.getPlatform() === "web") {
+
+    const { location: locationPermission } =
+      await Geolocation.checkPermissions();
+    console.log("Permission: ", locationPermission);
+
+    if (locationPermission === "granted") {
+      console.log("PERMISSION GRANTED");
+
       try {
+        new Error("ERROR THROWN");
         const location = await Geolocation.getCurrentPosition();
         const latitude = location.coords.latitude.toString();
         const longitude = location.coords.longitude.toString();
@@ -53,16 +60,16 @@ const BottomSheetLocationSettings = ({
         dismissLocationSpinner();
         setShowLocationNameInput(true);
       } catch (error) {
+        console.log("Failed to obtain location");
         setShowLocationFailureToast(true);
         console.error(error);
       } finally {
-        await dismissLocationSpinner();
+        dismissLocationSpinner();
       }
       // await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
-      // await updateUserPrefs(dbConnection, "longitude", "", setUserPreferences);
       // await updateUserPrefs(
       //   dbConnection,
-      //   "latitude",
+      //   "longitude",
       //   latitude,
       //   setUserPreferences
       // );
@@ -72,62 +79,38 @@ const BottomSheetLocationSettings = ({
       //   longitude,
       //   setUserPreferences
       // );
-      return;
-    }
 
-    if (device === "ios" || device === "android") {
-      const { location } = await Geolocation.checkPermissions();
-
-      if (location === "granted") {
-        try {
-          // const position = await Geolocation.getCurrentPosition();
-          // const latitude = position.coords.latitude.toString();
-          // const longitude = position.coords.longitude.toString();
-        } catch (error) {
-          await dismissLocationSpinner();
-          console.error(error);
-        }
-        // await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
-        // await updateUserPrefs(
-        //   dbConnection,
-        //   "longitude",
-        //   latitude,
-        //   setUserPreferences
-        // );
-        // await updateUserPrefs(
-        //   dbConnection,
-        //   "longitude",
-        //   longitude,
-        //   setUserPreferences
-        // );
-
-        // alert(location.coords.latitude + location.coords.longitude);
-      } else if (
-        location === "prompt" ||
-        location === "prompt-with-rationale"
-      ) {
-        try {
-          const locationPermissions = await Geolocation.requestPermissions();
-          // console.log(permissionStatus);
-
-          if (locationPermissions.location === "granted") {
+      // alert(location.coords.latitude + location.coords.longitude);
+    } else if (
+      locationPermission === "prompt" ||
+      locationPermission === "prompt-with-rationale"
+    ) {
+      try {
+        let locationRequest;
+        if (device === "ios" || device === "android") {
+          locationRequest = await Geolocation.requestPermissions();
+          if (locationRequest.location === "granted") {
             // const location = await Geolocation.getCurrentPosition();
             // Update state and DB here
           }
-        } catch (error) {
-          console.error(error);
+        } else if (device === "web") {
+          locationRequest = await Geolocation.getCurrentPosition();
+          if (locationRequest.coords) {
+            console.log(locationRequest.coords);
+            // const location = await Geolocation.getCurrentPosition();
+            // Update state and DB here
+          }
         }
-        // console.log(await Geolocation.requestPermissions());
-
-        // // const { location } = await Geolocation.requestPermissions();
-      } else if (location === "denied") {
-        console.log("SYSTEM LOCATION PERMISSIONS DENIED");
-
-        await promptToOpenDeviceSettings(
-          "You currently have location turned off for this application, you can open Settings to re-enable it",
-          AndroidSettings.Location
-        );
+      } catch (error) {
+        console.error(error);
       }
+    } else if (locationPermission === "denied") {
+      console.log("SYSTEM LOCATION PERMISSIONS DENIED");
+
+      await promptToOpenDeviceSettings(
+        "You currently have location turned off for this application, you can open Settings to re-enable it",
+        AndroidSettings.Location
+      );
     }
   };
 
@@ -233,7 +216,7 @@ const BottomSheetLocationSettings = ({
           ></IonInput>
         </section>
         <Toast
-          isOpen={showLocationFailureToast}
+          isOpen={true}
           message="Unable to retrieve location, please try again"
           setShow={setShowLocationFailureToast}
         />

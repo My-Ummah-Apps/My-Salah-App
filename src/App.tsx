@@ -197,7 +197,7 @@ const App = () => {
       const res = await dbConnection.current?.query(
         `SELECT name, type FROM sqlite_master WHERE type='table'`
       );
-      console.log("res: ", res);
+      console.log("res: ", res?.values);
 
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
@@ -656,7 +656,7 @@ const App = () => {
             />
           </IonRouterOutlet>
 
-          <IonTabBar slot="bottom">
+          <IonTabBar id="nav-bar" slot="bottom">
             <IonTabButton tab="HomePage" href="/HomePage">
               <IonIcon icon={homeOutline} />
               <IonLabel>Home</IonLabel>
