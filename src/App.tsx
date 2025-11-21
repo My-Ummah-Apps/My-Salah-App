@@ -42,6 +42,7 @@ import {
   SalahByDateObjType,
   streakDatesObjType,
   themeType,
+  LocationsDataObjTypeArr,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
@@ -73,6 +74,7 @@ const App = () => {
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
   );
+  const [userLocations, setUserLocations] = useState<LocationsDataObjTypeArr>();
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [showJoyRideEditIcon, setShowJoyRideEditIcon] =
     useState<boolean>(false);
@@ -197,7 +199,7 @@ const App = () => {
       const res = await dbConnection.current?.query(
         `SELECT name, type FROM sqlite_master WHERE type='table'`
       );
-      console.log("res: ", res?.values);
+      console.log("tables: ", res?.values);
 
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
@@ -205,6 +207,10 @@ const App = () => {
 
       const DBResultAllSalahData = await dbConnection.current?.query(
         `SELECT * FROM salahDataTable`
+      );
+
+      const DBResultLocations = await dbConnection.current?.query(
+        `SELECT * FROM userLocationsTable`
       );
 
       // console.log("DBResultPreferences: ", DBResultPreferences?.values);
@@ -219,6 +225,18 @@ const App = () => {
           "DBResultAllSalahData or !DBResultAllSalahData.values do not exist"
         );
       }
+      if (!DBResultLocations || !DBResultLocations.values) {
+        throw new Error(
+          "DBResultLocations or !DBResultLocations.values do not exist"
+        );
+      }
+
+      const locations = await dbConnection.current?.query(
+        `SELECT * FROM userLocationsTable`
+      );
+      console.log("Locations from DB: ", locations);
+
+      setUserLocations(DBResultLocations.values);
 
       const userNotificationPermission = await checkNotificationPermissions();
 
@@ -651,6 +669,7 @@ const App = () => {
                   dbConnection={dbConnection}
                   setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
+                  setUserLocations={setUserLocations}
                 />
               )}
             />

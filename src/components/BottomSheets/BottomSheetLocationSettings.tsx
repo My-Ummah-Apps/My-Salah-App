@@ -18,27 +18,63 @@ import {
 } from "../../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { userPreferencesType } from "../../types/types";
+
 import { Capacitor } from "@capacitor/core";
 import { useState } from "react";
 import Toast from "../Toast";
+import { toggleDBConnection } from "../../utils/dbUtils";
+import { LocationsDataObjTypeArr } from "../../types/types";
 
 // import { Capacitor } from "@capacitor/core";
 
 interface BottomSheetLocationSettingsProps {
   triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  // setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  setUserLocations: React.Dispatch<
+    React.SetStateAction<LocationsDataObjTypeArr | undefined>
+  >;
 }
 
 const BottomSheetLocationSettings = ({
   triggerId,
-}: BottomSheetLocationSettingsProps) => {
+  dbConnection,
+  setUserLocations,
+}: // setUserPreferences,
+BottomSheetLocationSettingsProps) => {
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationNameInput, setShowLocationNameInput] =
     useState<boolean>(false);
   const [showLocationFailureToast, setShowLocationFailureToast] =
     useState(false);
+
+  const addUserLocation = async (
+    locationName: string,
+    latitude: number,
+    longitude: number
+  ) => {
+    try {
+      await toggleDBConnection(dbConnection, "open");
+
+      const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
+        VALUES (?, ?, ?, ?);
+        `;
+
+      const params = [locationName, latitude, longitude, "0"];
+
+      await dbConnection.current?.run(stmnt, params);
+
+      const res = await dbConnection.current?.query(
+        "SELECT * from userLocationsTable"
+      );
+
+      setUserLocations(res?.values);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      toggleDBConnection(dbConnection, "close");
+    }
+  };
 
   const handleGrantedPermission = async () => {
     console.log("PERMISSION GRANTED");
@@ -166,8 +202,10 @@ const BottomSheetLocationSettings = ({
             {
               text: "Save",
               role: "confirm",
-              handler: () => {
-                console.log("Alert confirmed");
+              handler: async (alertData) => {
+                console.log("Alert confirmed", alertData.locationName);
+
+                await addUserLocation(alertData.locationName);
               },
             },
           ]}

@@ -24,6 +24,16 @@ export type PreferenceObjType = {
   preferenceValue: string;
 };
 
+type LocationsDataObjType = {
+  id: number;
+  locationName: string;
+  latitude: number;
+  longitude: number;
+  isSelected: number;
+};
+
+export type LocationsDataObjTypeArr = LocationsDataObjType[];
+
 export type themeType = "light" | "dark" | "system";
 
 export type SalahStatusType =

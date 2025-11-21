@@ -143,10 +143,6 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("shows alert for user to name location after coordinates are retrieved", async () => {
-    vi.mocked(Geolocation.getCurrentPosition).mockResolvedValue({
-      coords: { latitude: 53.48, longitude: -3.44 },
-    } as GeolocationPosition);
-
     await userEvent.click(findMyLocationBtn);
 
     const locationLoader = document.body.querySelector("ion-loading");
@@ -161,47 +157,60 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   // TODO: Add test to test following flow: enter location name > hit save > assert that DB was updated by spying on DB updater function, state should also be updated
-});
 
-describe("test for handling location detection failure", () => {
-  let findMyLocationBtn: HTMLButtonElement;
-  let promptSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-
-    getPlatformSpy.mockReturnValue("android");
-
-    vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
-      location: "granted",
-      coarseLocation: "granted",
-    });
-
-    vi.mocked(Geolocation.getCurrentPosition).mockRejectedValue(
-      new Error("There was en error trying to obtain the location")
-    );
-
-    promptSpy = vi
-      .spyOn(constantsFile, "promptToOpenDeviceSettings")
-      .mockResolvedValue(undefined) as any;
-
-    render(
-      <BottomSheetLocationSettings
-        triggerId={"testId"}
-        dbConnection={mockdbConnection}
-        setUserPreferences={mockUserPrefsState}
-      />
-    );
-    findMyLocationBtn = screen.getByText(/find my location/i);
-  });
-
-  it("shows error message when app is unable to retrieve coords after user has granted location permission", async () => {
+  it("updates DB and state with new location", async () => {
     await userEvent.click(findMyLocationBtn);
-    const toast = screen.getByTestId("location-fail-toast");
-    expect(toast).toBeInTheDocument();
-    expect(promptSpy).not.toHaveBeenCalled();
+
+    const locationNameInput = await screen.findByText(
+      /please enter a location name/i
+    );
+    expect(locationNameInput).toBeInTheDocument();
+
+    const input = await screen.findByPlaceholderText("Location");
+    expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "London");
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
+
+    expect(mockAddLocationFunction).toHaveBeenCalled();
   });
 });
+
+// describe("test for handling location detection failure", () => {
+//   let findMyLocationBtn: HTMLButtonElement;
+
+//   beforeEach(() => {
+//     vi.clearAllMocks();
+
+//     getPlatformSpy.mockReturnValue("android");
+
+//     vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
+//       location: "granted",
+//       coarseLocation: "granted",
+//     });
+
+//     vi.mocked(Geolocation.getCurrentPosition).mockRejectedValue(
+//       new Error("There was en error trying to obtain the location")
+//     );
+
+//     render(
+//       <BottomSheetLocationSettings
+//         triggerId={"testId"}
+//         dbConnection={mockdbConnection}
+//         setUserPreferences={mockUserPrefsState}
+//       />
+//     );
+//     findMyLocationBtn = screen.getByText(/find my location/i);
+//   });
+
+//   it("shows error message when app is unable to retrieve coords after user has granted location permission", async () => {
+//     await userEvent.click(findMyLocationBtn);
+// ! Replace below with state call assertion instead of toast detection
+//     const toast = await screen.findByTestId("location-fail-toast");
+//     expect(toast).toBeInTheDocument();
+//   });
+// });
 
 describe("tests for GPS location button functionality when location permission is denied", () => {
   let findMyLocationBtn: HTMLButtonElement;

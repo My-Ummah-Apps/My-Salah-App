@@ -6,7 +6,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { userPreferencesType } from "../types/types";
+import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
@@ -14,12 +14,16 @@ interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  setUserLocations: React.Dispatch<
+    React.SetStateAction<LocationsDataObjTypeArr | undefined>
+  >;
 }
 
 const SalahTimesPage = ({
   dbConnection,
   setUserPreferences,
   userPreferences,
+  setUserLocations,
 }: SalahTimesPageProps) => {
   return (
     <IonPage>
@@ -42,6 +46,7 @@ const SalahTimesPage = ({
         triggerId={"open-salah-times-settings-sheet"}
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
+        setUserLocations={setUserLocations}
       />
     </IonPage>
   );
