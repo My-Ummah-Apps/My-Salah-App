@@ -17,6 +17,7 @@ const Toast = ({
 }: IonToastProps) => {
   return (
     <IonToast
+      data-testid="location-fail-toast"
       isOpen={isOpen}
       onWillDismiss={() => {
         if (setIsNextCounterLoading) setIsNextCounterLoading(false);

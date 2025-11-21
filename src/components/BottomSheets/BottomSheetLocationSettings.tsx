@@ -44,10 +44,12 @@ const BottomSheetLocationSettings = ({
     console.log("PERMISSION GRANTED");
 
     try {
-      new Error("ERROR THROWN");
+      // throw new Error("ERROR THROWN");
       const location = await Geolocation.getCurrentPosition();
-      const latitude = location.coords.latitude.toString();
-      const longitude = location.coords.longitude.toString();
+      // const latitude = location.coords.latitude.toString();
+      // const longitude = location.coords.longitude.toString();
+      const latitude = location.coords.latitude;
+      const longitude = location.coords.longitude;
       console.log(latitude, longitude);
 
       dismissLocationSpinner();
