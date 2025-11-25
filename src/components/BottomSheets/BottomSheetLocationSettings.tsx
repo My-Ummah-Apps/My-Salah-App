@@ -20,7 +20,7 @@ import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { Capacitor } from "@capacitor/core";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Toast from "../Toast";
 import { toggleDBConnection } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
@@ -47,6 +47,9 @@ BottomSheetLocationSettingsProps) => {
     useState<boolean>(false);
   const [showLocationFailureToast, setShowLocationFailureToast] =
     useState(false);
+
+  let latitude = useRef<number>();
+  let longitude = useRef<number>();
 
   const addUserLocation = async (
     locationName: string,
@@ -82,10 +85,8 @@ BottomSheetLocationSettingsProps) => {
     try {
       // throw new Error("ERROR THROWN");
       const location = await Geolocation.getCurrentPosition();
-      // const latitude = location.coords.latitude.toString();
-      // const longitude = location.coords.longitude.toString();
-      const latitude = location.coords.latitude;
-      const longitude = location.coords.longitude;
+      latitude.current = location.coords.latitude;
+      longitude.current = location.coords.longitude;
       console.log(latitude, longitude);
 
       dismissLocationSpinner();
@@ -186,7 +187,37 @@ BottomSheetLocationSettingsProps) => {
       <IonContent>
         <IonAlert
           isOpen={showLocationNameInput}
-          onDidDismiss={() => {
+          onDidDismiss={async ({ detail }) => {
+            console.log(detail.data.values[0], detail.role);
+            const inputValue = detail.data.values[0];
+
+            if (detail.role === "confirm" && detail.data) {
+              console.log("latitude: ", latitude.current);
+              console.log("longitude: ", longitude.current);
+
+              if (latitude.current && longitude.current) {
+                await addUserLocation(
+                  inputValue,
+                  latitude.current,
+                  longitude.current
+                );
+              } else {
+                // TODO: Add error message?
+              }
+
+              try {
+                await toggleDBConnection(dbConnection, "open");
+                const res = await dbConnection.current?.query(
+                  `SELECT * FROM userLocationsTable`
+                );
+                console.log("Locations: ", res?.values);
+              } catch (error) {
+                console.error(error);
+              } finally {
+                await toggleDBConnection(dbConnection, "close");
+              }
+            }
+
             setShowLocationNameInput(false);
           }}
           header="Location"
@@ -196,16 +227,17 @@ BottomSheetLocationSettingsProps) => {
               text: "Cancel",
               role: "cancel",
               handler: () => {
-                console.log("Alert canceled");
+                console.log("Alert cancelled");
               },
             },
             {
               text: "Save",
               role: "confirm",
-              handler: async (alertData) => {
-                console.log("Alert confirmed", alertData.locationName);
 
-                await addUserLocation(alertData.locationName);
+              handler: async (data) => {
+                if (!data[0]) {
+                  return false;
+                }
               },
             },
           ]}
