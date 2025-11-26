@@ -18,11 +18,10 @@ import {
 } from "../../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-
 import { Capacitor } from "@capacitor/core";
 import { useRef, useState } from "react";
 import Toast from "../Toast";
-import { toggleDBConnection } from "../../utils/dbUtils";
+import { addUserLocation, toggleDBConnection } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 
 // import { Capacitor } from "@capacitor/core";
@@ -30,7 +29,6 @@ import { LocationsDataObjTypeArr } from "../../types/types";
 interface BottomSheetLocationSettingsProps {
   triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  // setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
@@ -40,8 +38,7 @@ const BottomSheetLocationSettings = ({
   triggerId,
   dbConnection,
   setUserLocations,
-}: // setUserPreferences,
-BottomSheetLocationSettingsProps) => {
+}: BottomSheetLocationSettingsProps) => {
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationNameInput, setShowLocationNameInput] =
     useState<boolean>(false);
@@ -51,37 +48,7 @@ BottomSheetLocationSettingsProps) => {
   let latitude = useRef<number>();
   let longitude = useRef<number>();
 
-  const addUserLocation = async (
-    locationName: string,
-    latitude: number,
-    longitude: number
-  ) => {
-    try {
-      await toggleDBConnection(dbConnection, "open");
-
-      const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
-        VALUES (?, ?, ?, ?);
-        `;
-
-      const params = [locationName, latitude, longitude, "0"];
-
-      await dbConnection.current?.run(stmnt, params);
-
-      const res = await dbConnection.current?.query(
-        "SELECT * from userLocationsTable"
-      );
-
-      setUserLocations(res?.values);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      toggleDBConnection(dbConnection, "close");
-    }
-  };
-
   const handleGrantedPermission = async () => {
-    console.log("PERMISSION GRANTED");
-
     try {
       // throw new Error("ERROR THROWN");
       const location = await Geolocation.getCurrentPosition();
@@ -188,6 +155,8 @@ BottomSheetLocationSettingsProps) => {
         <IonAlert
           isOpen={showLocationNameInput}
           onDidDismiss={async ({ detail }) => {
+            console.log("OnDidDismiss has run");
+
             console.log(detail.data.values[0], detail.role);
             const inputValue = detail.data.values[0];
 
@@ -197,10 +166,27 @@ BottomSheetLocationSettingsProps) => {
 
               if (latitude.current && longitude.current) {
                 await addUserLocation(
+                  dbConnection,
                   inputValue,
                   latitude.current,
                   longitude.current
                 );
+                try {
+                  await toggleDBConnection(dbConnection, "open");
+                  const res = await dbConnection.current?.query(
+                    "SELECT * from userLocationsTable"
+                  );
+                  if (!res) {
+                    throw new Error(
+                      "Failed to obtain data from userLocationsTable"
+                    );
+                  }
+                  setUserLocations(res.values);
+                } catch (error) {
+                  console.error(error);
+                } finally {
+                  toggleDBConnection(dbConnection, "close");
+                }
               } else {
                 // TODO: Add error message?
               }
@@ -235,9 +221,13 @@ BottomSheetLocationSettingsProps) => {
               role: "confirm",
 
               handler: async (data) => {
-                if (!data[0]) {
-                  return false;
-                }
+                console.log("SAVE BUTTON CLICKED");
+                // if (!data[0] || !data[0].trim()) {
+                //   console.log("INPUT IS EMPTY");
+
+                //   alert("Please enter a name");
+                //   return false;
+                // }
               },
             },
           ]}

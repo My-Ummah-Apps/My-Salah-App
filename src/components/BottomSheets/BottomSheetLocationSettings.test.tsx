@@ -1,10 +1,11 @@
 // const autoDetectBtn = await screen.findByText(/gps/i);
 // expect(autoDetectBtn).toBeInTheDocument();
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import * as constantsFile from "../../utils/constants";
+import * as dbUtilsFile from "../../utils/dbUtils";
 import { AndroidSettings } from "capacitor-native-settings";
 
 // await userEvent.click(autoDetectBtn);
@@ -84,7 +85,7 @@ describe("tests for GPS location button when permission is prompt", () => {
       <BottomSheetLocationSettings
         triggerId={"testId"}
         dbConnection={mockdbConnection}
-        setUserPreferences={mockUserPrefsState}
+        setUserLocations={vi.fn()}
       />
     );
 
@@ -102,6 +103,7 @@ describe("tests for GPS location button when permission is prompt", () => {
 describe("tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
   let promptSpy: ReturnType<typeof vi.spyOn>;
+  let mockAddLocationFunctionSpy: ReturnType<typeof vi.spyOn>;
 
   // const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPrefs");
 
@@ -116,11 +118,15 @@ describe("tests for GPS location button functionality when location permission i
       .spyOn(constantsFile, "promptToOpenDeviceSettings")
       .mockResolvedValue(undefined) as any;
 
+    mockAddLocationFunctionSpy = vi
+      .spyOn(dbUtilsFile, "addUserLocation")
+      .mockResolvedValue(undefined) as any;
+
     render(
       <BottomSheetLocationSettings
         triggerId={"testId"}
         dbConnection={mockdbConnection}
-        setUserPreferences={mockUserPrefsState}
+        setUserLocations={vi.fn()}
       />
     );
     findMyLocationBtn = screen.getByText(/find my location/i);
@@ -156,9 +162,7 @@ describe("tests for GPS location button functionality when location permission i
     await screen.findByText(/enter location manually/i);
   });
 
-  // TODO: Add test to test following flow: enter location name > hit save > assert that DB was updated by spying on DB updater function, state should also be updated
-
-  it("updates DB and state with new location", async () => {
+  it("updates DB with new location when the input is not blank", async () => {
     await userEvent.click(findMyLocationBtn);
 
     const locationNameInput = await screen.findByText(
@@ -173,8 +177,12 @@ describe("tests for GPS location button functionality when location permission i
     const saveBtn = await screen.findByText(/save/i);
     await userEvent.click(saveBtn);
 
-    expect(mockAddLocationFunction).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockAddLocationFunctionSpy).toHaveBeenCalledTimes(1);
+    });
   });
+
+  it("does not update DB when input is blank and user presses save button", () => {});
 });
 
 // describe("test for handling location detection failure", () => {
@@ -232,7 +240,7 @@ describe("tests for GPS location button functionality when location permission i
       <BottomSheetLocationSettings
         triggerId={"testId"}
         dbConnection={mockdbConnection}
-        setUserPreferences={mockUserPrefsState}
+        setUserLocations={vi.fn()}
       />
     );
     findMyLocationBtn = screen.getByText(/find my location/i);

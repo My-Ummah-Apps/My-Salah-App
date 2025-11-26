@@ -40,3 +40,27 @@ export async function toggleDBConnection(
     console.error(error);
   }
 }
+
+export const addUserLocation = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  locationName: string,
+  latitude: number,
+  longitude: number
+) => {
+  console.log("addUserLocation function called");
+
+  try {
+    await toggleDBConnection(dbConnection, "open");
+
+    const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
+        VALUES (?, ?, ?, ?);
+        `;
+
+    const params = [locationName, latitude, longitude, 0];
+    await dbConnection.current?.run(stmnt, params);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    toggleDBConnection(dbConnection, "close");
+  }
+};
