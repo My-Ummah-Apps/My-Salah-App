@@ -41,6 +41,26 @@ export async function toggleDBConnection(
   }
 }
 
+export const fetchAllLocations = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>
+) => {
+  try {
+    await toggleDBConnection(dbConnection, "open");
+    const res = await dbConnection.current?.query(
+      "SELECT * from userLocationsTable"
+    );
+    if (!res) {
+      throw new Error("Failed to obtain data from userLocationsTable");
+    }
+
+    return res.values;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    toggleDBConnection(dbConnection, "close");
+  }
+};
+
 export const addUserLocation = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   locationName: string,

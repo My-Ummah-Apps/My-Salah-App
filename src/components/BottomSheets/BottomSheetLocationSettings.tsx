@@ -21,7 +21,11 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { useRef, useState } from "react";
 import Toast from "../Toast";
-import { addUserLocation, toggleDBConnection } from "../../utils/dbUtils";
+import {
+  addUserLocation,
+  fetchAllLocations,
+  toggleDBConnection,
+} from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 
 // import { Capacitor } from "@capacitor/core";
@@ -172,37 +176,17 @@ const BottomSheetLocationSettings = ({
                   latitude.current,
                   longitude.current
                 );
-                try {
-                  await toggleDBConnection(dbConnection, "open");
-                  const res = await dbConnection.current?.query(
-                    "SELECT * from userLocationsTable"
-                  );
-                  if (!res) {
-                    throw new Error(
-                      "Failed to obtain data from userLocationsTable"
-                    );
-                  }
-                  setUserLocations(res.values);
-                } catch (error) {
-                  console.error(error);
-                } finally {
-                  toggleDBConnection(dbConnection, "close");
+
+                const locations = await fetchAllLocations(dbConnection);
+                if (locations) {
+                  setUserLocations(locations);
                 }
               } else {
                 // TODO: Add error message?
               }
 
-              try {
-                await toggleDBConnection(dbConnection, "open");
-                const res = await dbConnection.current?.query(
-                  `SELECT * FROM userLocationsTable`
-                );
-                console.log("Locations: ", res?.values);
-              } catch (error) {
-                console.error(error);
-              } finally {
-                await toggleDBConnection(dbConnection, "close");
-              }
+              const res = await fetchAllLocations(dbConnection);
+              console.log("Locations: ", res);
             }
 
             setShowLocationNameInput(false);

@@ -5,6 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react";
 import {
   mockdbConnection,
+  mockSetUserLocations,
   mockUserPrefs,
   mockUserPrefsState,
 } from "../__mocks__/test-utils";
@@ -17,6 +18,7 @@ describe("Integration tests for Salah times page", () => {
         dbConnection={mockdbConnection}
         setUserPreferences={mockUserPrefsState}
         userPreferences={mockUserPrefs}
+        setUserLocations={mockSetUserLocations}
       />
     );
     setUpBtn = screen.getByText(/set up salah times/i);

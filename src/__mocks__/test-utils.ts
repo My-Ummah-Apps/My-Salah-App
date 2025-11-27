@@ -12,3 +12,5 @@ export const mockdbConnection = {
     query: vi.fn().mockResolvedValue({ values: [] }),
   },
 } as unknown as React.MutableRefObject<SQLiteDBConnection | undefined>;
+
+export const mockSetUserLocations = vi.fn();
