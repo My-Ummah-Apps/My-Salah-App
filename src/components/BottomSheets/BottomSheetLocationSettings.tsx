@@ -153,6 +153,7 @@ const BottomSheetLocationSettings = ({
       </IonHeader>
       <IonContent>
         <IonAlert
+          data-testid="location-name-alert"
           isOpen={showLocationNameInput}
           onDidDismiss={async ({ detail }) => {
             console.log("OnDidDismiss has run");
@@ -222,12 +223,14 @@ const BottomSheetLocationSettings = ({
 
               handler: async (data) => {
                 console.log("SAVE BUTTON CLICKED");
-                // if (!data[0] || !data[0].trim()) {
-                //   console.log("INPUT IS EMPTY");
+                console.log("DATA: ", data);
 
-                //   alert("Please enter a name");
-                //   return false;
-                // }
+                if (!data[0] || !data[0].trim()) {
+                  console.log("INPUT IS EMPTY");
+
+                  alert("Please enter a name");
+                  return false;
+                }
               },
             },
           ]}

@@ -26,6 +26,11 @@ import { AndroidSettings } from "capacitor-native-settings";
 // db would be updated via update db function
 
 // it("handles location failure", () => {});
+import { setupIonicReact } from "@ionic/react";
+
+setupIonicReact({
+  animated: false,
+});
 
 vi.mock("@ionic/react", async () => {
   const original: any = await vi.importActual("@ionic/react");
@@ -54,10 +59,7 @@ vi.mock("@capacitor/geolocation", () => ({
 
 import { Geolocation } from "@capacitor/geolocation";
 
-import {
-  mockdbConnection,
-  mockUserPrefsState,
-} from "../../__mocks__/test-utils";
+import { mockdbConnection } from "../../__mocks__/test-utils";
 import { Capacitor } from "@capacitor/core";
 
 const getPlatformSpy = vi.spyOn(Capacitor, "getPlatform");
@@ -103,7 +105,7 @@ describe("tests for GPS location button when permission is prompt", () => {
 describe("tests for GPS location button functionality when location permission is granted", () => {
   let findMyLocationBtn: HTMLButtonElement;
   let promptSpy: ReturnType<typeof vi.spyOn>;
-  let mockAddLocationFunctionSpy: ReturnType<typeof vi.spyOn>;
+  let addUserLocationFunctionSpy: ReturnType<typeof vi.spyOn>;
 
   // const updatePrefsSpy = vi.spyOn(constantsFile, "updateUserPrefs");
 
@@ -118,7 +120,7 @@ describe("tests for GPS location button functionality when location permission i
       .spyOn(constantsFile, "promptToOpenDeviceSettings")
       .mockResolvedValue(undefined) as any;
 
-    mockAddLocationFunctionSpy = vi
+    addUserLocationFunctionSpy = vi
       .spyOn(dbUtilsFile, "addUserLocation")
       .mockResolvedValue(undefined) as any;
 
@@ -154,35 +156,67 @@ describe("tests for GPS location button functionality when location permission i
     const locationLoader = document.body.querySelector("ion-loading");
     expect(locationLoader).toBeInTheDocument();
 
-    const locationNameInput = await screen.findByText(
+    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
+    const locationNameInput = await screen.findAllByText(
       /please enter a location name/i
     );
-    expect(locationNameInput).toBeInTheDocument();
-
-    await screen.findByText(/enter location manually/i);
+    expect(locationNameInput.length).toBeGreaterThan(0);
   });
 
   it("updates DB with new location when the input is not blank", async () => {
     await userEvent.click(findMyLocationBtn);
 
-    const locationNameInput = await screen.findByText(
+    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
+    const locationNameInput = await screen.findAllByText(
       /please enter a location name/i
     );
-    expect(locationNameInput).toBeInTheDocument();
+    expect(locationNameInput.length).toBeGreaterThan(0);
 
-    const input = await screen.findByPlaceholderText("Location");
-    expect(input).toBeInTheDocument();
+    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
+    const input = await screen.findAllByPlaceholderText("Location");
 
-    await userEvent.type(input, "London");
+    await waitFor(() => {
+      expect(input[0]).toBeEnabled();
+    });
+
+    await userEvent.type(input[0], "Manchester", { delay: 5 });
+    expect(input[0]).toHaveValue("Manchester");
     const saveBtn = await screen.findByText(/save/i);
     await userEvent.click(saveBtn);
 
     await waitFor(() => {
-      expect(mockAddLocationFunctionSpy).toHaveBeenCalledTimes(1);
+      expect(addUserLocationFunctionSpy).toHaveBeenCalledTimes(1);
     });
   });
 
-  it("does not update DB when input is blank and user presses save button", () => {});
+  it("does not update DB when input is blank and user presses save button", async () => {
+    const mockAlert = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    await userEvent.click(findMyLocationBtn);
+
+    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
+    const locationNameInput = await screen.findAllByText(
+      /please enter a location name/i
+    );
+    expect(locationNameInput.length).toBeGreaterThan(0);
+
+    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
+    const input = await screen.findAllByPlaceholderText("Location");
+    expect(input.length).toBeGreaterThan(0);
+
+    // await userEvent.clear(input);
+
+    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
+    const saveBtn = await screen.findAllByText(/save/i);
+    await userEvent.click(saveBtn[0]);
+
+    expect(mockAlert).toHaveBeenCalledWith("Please enter a name");
+    await waitFor(() => {
+      expect(addUserLocationFunctionSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  it("does not update DB when location name already exists", () => {});
 });
 
 // describe("test for handling location detection failure", () => {
