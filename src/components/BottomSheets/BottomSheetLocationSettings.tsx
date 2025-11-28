@@ -46,6 +46,7 @@ const BottomSheetLocationSettings = ({
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationNameInput, setShowLocationNameInput] =
     useState<boolean>(false);
+  const [locationName, setLocationName] = useState("");
   const [showLocationFailureToast, setShowLocationFailureToast] =
     useState(false);
 
@@ -156,74 +157,54 @@ const BottomSheetLocationSettings = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonAlert
-          data-testid="location-name-alert"
-          isOpen={showLocationNameInput}
-          onDidDismiss={async ({ detail }) => {
-            console.log("OnDidDismiss has run");
+        {showLocationNameInput && (
+          <section className="flex flex-col items-center justify-center w-2/3 h-2/5 absolute z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-[color:var(--card-bg-color)]">
+            <div className="px-5">
+              <h4>Enter location name</h4>
+              <IonInput
+                // label="Location Name Input"
+                onIonInput={(e) => setLocationName(e.detail.value ?? "")}
+              ></IonInput>
+            </div>
+            <div className="px-5">
+              <IonButton
+                onClick={() => {
+                  setShowLocationNameInput(false);
+                }}
+              >
+                Cancel
+              </IonButton>
+              <IonButton
+                onClick={async () => {
+                  console.log("locationName:", locationName);
 
-            console.log(detail.data.values[0], detail.role);
-            const inputValue = detail.data.values[0];
+                  if (locationName) {
+                    if (latitude.current && longitude.current) {
+                      await addUserLocation(
+                        dbConnection,
+                        locationName,
+                        latitude.current,
+                        longitude.current
+                      );
 
-            if (detail.role === "confirm" && detail.data) {
-              console.log("latitude: ", latitude.current);
-              console.log("longitude: ", longitude.current);
+                      const locations = await fetchAllLocations(dbConnection);
+                      console.log("Locations: ", locations);
+                      if (locations) {
+                        setUserLocations(locations);
+                      }
+                    } else {
+                      // TODO: Add error message?
+                    }
+                  }
 
-              if (latitude.current && longitude.current) {
-                await addUserLocation(
-                  dbConnection,
-                  inputValue,
-                  latitude.current,
-                  longitude.current
-                );
-
-                const locations = await fetchAllLocations(dbConnection);
-                if (locations) {
-                  setUserLocations(locations);
-                }
-              } else {
-                // TODO: Add error message?
-              }
-
-              const res = await fetchAllLocations(dbConnection);
-              console.log("Locations: ", res);
-            }
-
-            setShowLocationNameInput(false);
-          }}
-          header="Location"
-          message="Please enter a location name"
-          buttons={[
-            {
-              text: "Cancel",
-              role: "cancel",
-              handler: () => {
-                console.log("Alert cancelled");
-              },
-            },
-            {
-              text: "Save",
-              role: "confirm",
-
-              handler: async (data) => {
-                console.log("SAVE BUTTON CLICKED");
-                console.log("DATA: ", data);
-
-                if (!data[0] || !data[0].trim()) {
-                  console.log("INPUT IS EMPTY");
-
-                  alert("Please enter a name");
-                  return false;
-                }
-              },
-            },
-          ]}
-          inputs={[
-            {
-              placeholder: "Location",
-            },
-          ]}
-        ></IonAlert>
+                  setShowLocationNameInput(false);
+                }}
+              >
+                Save
+              </IonButton>
+            </div>
+          </section>
+        )}
         <section className="p-2 mx-5 mb-5 text-center">
           <p>
             To calculate Salah times, the app requires your location, you can
