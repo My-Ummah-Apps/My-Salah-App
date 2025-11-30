@@ -181,6 +181,11 @@ input {
   /* background: var(--textarea-bg-color) !important; */
 }
 
+ion-input,
+input {
+  background: var(--textarea-bg-color) !important;
+}
+
 ion-textarea textarea {
   /* --color: var(--ion-text-color) !important; */
 }

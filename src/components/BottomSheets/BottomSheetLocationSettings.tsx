@@ -19,13 +19,9 @@ import {
 import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Toast from "../Toast";
-import {
-  addUserLocation,
-  fetchAllLocations,
-  toggleDBConnection,
-} from "../../utils/dbUtils";
+import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 
 // import { Capacitor } from "@capacitor/core";
@@ -49,9 +45,16 @@ const BottomSheetLocationSettings = ({
   const [locationName, setLocationName] = useState("");
   const [showLocationFailureToast, setShowLocationFailureToast] =
     useState(false);
+  const [showLocationNameError, setShowLocationNameError] = useState(false);
 
   let latitude = useRef<number>();
   let longitude = useRef<number>();
+
+  const resetLocationInput = () => {
+    setShowLocationNameInput(false);
+    setLocationName("");
+    setShowLocationNameError(false);
+  };
 
   const handleGrantedPermission = async () => {
     try {
@@ -136,6 +139,10 @@ const BottomSheetLocationSettings = ({
     }
   };
 
+  useEffect(() => {
+    console.log(showLocationNameError);
+  }, [showLocationNameError]);
+
   return (
     <IonModal
       mode="ios"
@@ -159,17 +166,27 @@ const BottomSheetLocationSettings = ({
       <IonContent>
         {showLocationNameInput && (
           <section className="flex flex-col items-center justify-center w-2/3 h-2/5 absolute z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-[color:var(--card-bg-color)]">
-            <div className="px-5">
-              <h4>Enter location name</h4>
-              <IonInput
-                // label="Location Name Input"
-                onIonInput={(e) => setLocationName(e.detail.value ?? "")}
-              ></IonInput>
+            <div className="px-5 text-center">
+              <h5>Enter location name</h5>
+              <input
+                className="py-2 mt-2 rounded-lg"
+                aria-label="Location name"
+                type="text"
+                placeholder="e.g. Home"
+                onChange={(e) => setLocationName(e.target.value)}
+              ></input>
+              <p
+                className={`mb-1 text-xs text-red-500 ${
+                  showLocationNameError ? "visible" : "hidden"
+                }`}
+              >
+                Please enter a location name
+              </p>
             </div>
             <div className="px-5">
               <IonButton
                 onClick={() => {
-                  setShowLocationNameInput(false);
+                  resetLocationInput();
                 }}
               >
                 Cancel
@@ -178,26 +195,28 @@ const BottomSheetLocationSettings = ({
                 onClick={async () => {
                   console.log("locationName:", locationName);
 
-                  if (locationName) {
-                    if (latitude.current && longitude.current) {
-                      await addUserLocation(
-                        dbConnection,
-                        locationName,
-                        latitude.current,
-                        longitude.current
-                      );
-
-                      const locations = await fetchAllLocations(dbConnection);
-                      console.log("Locations: ", locations);
-                      if (locations) {
-                        setUserLocations(locations);
-                      }
-                    } else {
-                      // TODO: Add error message?
-                    }
+                  if (locationName.trim() === "") {
+                    setShowLocationNameError(true);
+                    return;
                   }
 
-                  setShowLocationNameInput(false);
+                  if (latitude.current && longitude.current) {
+                    await addUserLocation(
+                      dbConnection,
+                      locationName,
+                      latitude.current,
+                      longitude.current
+                    );
+
+                    const locations = await fetchAllLocations(dbConnection);
+                    console.log("Locations: ", locations);
+                    if (locations) {
+                      setUserLocations(locations);
+                    }
+                    resetLocationInput();
+                  } else {
+                    console.error("lat / long undefined");
+                  }
                 }}
               >
                 Save

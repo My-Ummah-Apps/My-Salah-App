@@ -156,33 +156,26 @@ describe("tests for GPS location button functionality when location permission i
     const locationLoader = document.body.querySelector("ion-loading");
     expect(locationLoader).toBeInTheDocument();
 
-    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
-    const locationNameInput = await screen.findAllByText(
-      /please enter a location name/i
-    );
-    expect(locationNameInput.length).toBeGreaterThan(0);
+    const inputs = await screen.findAllByPlaceholderText(/e.g. home/i);
+    expect(inputs[0]).toBeInTheDocument();
   });
 
   it("updates DB with new location when the input is not blank", async () => {
     await userEvent.click(findMyLocationBtn);
 
-    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
-    const locationNameInput = await screen.findAllByText(
-      /please enter a location name/i
-    );
-    expect(locationNameInput.length).toBeGreaterThan(0);
+    const locationNameHeading = await screen.findByText(/enter location name/i);
+    expect(locationNameHeading).toBeInTheDocument();
 
-    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
-    const input = await screen.findAllByPlaceholderText("Location");
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(input[0]).toBeEnabled();
-    });
-
-    await userEvent.type(input[0], "Manchester", { delay: 5 });
-    expect(input[0]).toHaveValue("Manchester");
+    await userEvent.type(input, "Manchester", { delay: 5 });
+    expect(input).toHaveValue("Manchester");
     const saveBtn = await screen.findByText(/save/i);
     await userEvent.click(saveBtn);
+
+    const errorText = screen.queryByText(/please enter a location name/i);
+    expect(errorText).not.toBeInTheDocument();
 
     await waitFor(() => {
       expect(addUserLocationFunctionSpy).toHaveBeenCalledTimes(1);
@@ -190,27 +183,18 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("does not update DB when input is blank and user presses save button", async () => {
-    const mockAlert = vi.spyOn(window, "alert").mockImplementation(() => {});
-
     await userEvent.click(findMyLocationBtn);
 
-    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
-    const locationNameInput = await screen.findAllByText(
-      /please enter a location name/i
-    );
-    expect(locationNameInput.length).toBeGreaterThan(0);
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
 
-    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
-    const input = await screen.findAllByPlaceholderText("Location");
-    expect(input.length).toBeGreaterThan(0);
+    await userEvent.clear(input);
 
-    // await userEvent.clear(input);
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
 
-    // findAllBy is being used here instead of just findBy to sidestep issues with Ionic components sometimes rendering twice which was causing flaky tests due to RTL detecting multiple of the same components and then failing
-    const saveBtn = await screen.findAllByText(/save/i);
-    await userEvent.click(saveBtn[0]);
-
-    expect(mockAlert).toHaveBeenCalledWith("Please enter a name");
+    const errorText = await screen.findByText(/please enter a location name/i);
+    expect(errorText).toBeInTheDocument();
     await waitFor(() => {
       expect(addUserLocationFunctionSpy).not.toHaveBeenCalled();
     });
