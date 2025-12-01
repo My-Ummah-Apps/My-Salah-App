@@ -40,13 +40,6 @@ vi.mock("@ionic/react", async () => {
   };
 });
 
-// vi.mock("capacitor-native-settings", () => ({
-//   NativeSettings: {
-//     openIOS: vi.fn(),
-//     openAndroid: vi.fn(),
-//   },
-// }));
-
 vi.mock("@capacitor/geolocation", () => ({
   Geolocation: {
     getCurrentPosition: vi.fn().mockResolvedValue({
@@ -143,7 +136,6 @@ describe("tests for GPS location button functionality when location permission i
 
     expect(Geolocation.checkPermissions).toHaveBeenCalled();
     expect(Geolocation.requestPermissions).not.toHaveBeenCalled();
-
     expect(Geolocation.getCurrentPosition).toHaveBeenCalled();
 
     // expect(updatePrefsSpy).toHaveBeenCalled();
@@ -194,10 +186,62 @@ describe("tests for GPS location button functionality when location permission i
     await userEvent.click(saveBtn);
 
     const errorText = await screen.findByText(/please enter a location name/i);
-    expect(errorText).toBeInTheDocument();
+    expect(errorText).toBeVisible();
     await waitFor(() => {
       expect(addUserLocationFunctionSpy).not.toHaveBeenCalled();
     });
+  });
+
+  it("clears error message upon user saving a location", async () => {
+    await userEvent.click(findMyLocationBtn);
+
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+
+    await userEvent.clear(input);
+
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
+    const errorText = await screen.findByText(/please enter a location name/i);
+    expect(errorText).toBeVisible();
+
+    await userEvent.type(input, "Manchester", { delay: 5 });
+    expect(input).toHaveValue("Manchester");
+    await userEvent.click(saveBtn);
+
+    await userEvent.click(findMyLocationBtn);
+    const input2 = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input2).toBeInTheDocument();
+    expect(input2).toHaveValue("");
+    const errorTextQuery = screen.queryByText(/please enter a location name/i);
+    expect(errorTextQuery).toHaveClass("invisible");
+  });
+
+  it("clears error message upon user pressing cancel button", async () => {
+    await userEvent.click(findMyLocationBtn);
+
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+
+    await userEvent.clear(input);
+
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
+    const errorText = await screen.findByText(/please enter a location name/i);
+    expect(errorText).toBeVisible();
+
+    await userEvent.type(input, "Manchester", { delay: 5 });
+    expect(input).toHaveValue("Manchester");
+
+    const cancelBtn = await screen.findByText(/cancel/i);
+    await userEvent.click(cancelBtn);
+
+    await userEvent.click(findMyLocationBtn);
+    const input2 = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input2).toBeInTheDocument();
+    expect(input2).toHaveValue("");
+    const errorTextQuery = screen.queryByText(/please enter a location name/i);
+    expect(errorTextQuery).toHaveClass("invisible");
   });
 
   it("does not update DB when location name already exists", () => {});

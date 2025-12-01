@@ -169,7 +169,7 @@ const BottomSheetLocationSettings = ({
             <div className="px-5 text-center">
               <h5>Enter location name</h5>
               <input
-                className="py-2 mt-2 rounded-lg"
+                className="px-2 py-2 mt-2 rounded-lg"
                 aria-label="Location name"
                 type="text"
                 placeholder="e.g. Home"
@@ -177,7 +177,7 @@ const BottomSheetLocationSettings = ({
               ></input>
               <p
                 className={`mb-1 text-xs text-red-500 ${
-                  showLocationNameError ? "visible" : "hidden"
+                  showLocationNameError ? "visible" : "invisible"
                 }`}
               >
                 Please enter a location name
