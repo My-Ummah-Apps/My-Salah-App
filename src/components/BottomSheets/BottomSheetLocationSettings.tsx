@@ -165,11 +165,11 @@ const BottomSheetLocationSettings = ({
       </IonHeader>
       <IonContent>
         {showLocationNameInput && (
-          <section className="flex flex-col items-center justify-center w-2/3 h-2/5 absolute z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-[color:var(--card-bg-color)]">
+          <section className="flex flex-col items-center justify-center w-4/5 absolute z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-[color:var(--card-bg-color)] rounded-lg max-w-[300px]">
             <div className="px-5 text-center">
               <h5>Enter location name</h5>
               <input
-                className="px-2 py-2 mt-2 rounded-lg"
+                className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
                 aria-label="Location name"
                 type="text"
                 placeholder="e.g. Home"
@@ -183,8 +183,11 @@ const BottomSheetLocationSettings = ({
                 Please enter a location name
               </p>
             </div>
-            <div className="px-5">
+            <div className="flex justify-end w-full">
               <IonButton
+                className="p-0 text-base text-white"
+                size="small"
+                fill="clear"
                 onClick={() => {
                   resetLocationInput();
                 }}
@@ -192,6 +195,9 @@ const BottomSheetLocationSettings = ({
                 Cancel
               </IonButton>
               <IonButton
+                className="text-base text-white"
+                size="small"
+                fill="clear"
                 onClick={async () => {
                   console.log("locationName:", locationName);
 

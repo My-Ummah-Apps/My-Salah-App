@@ -244,7 +244,24 @@ describe("tests for GPS location button functionality when location permission i
     expect(errorTextQuery).toHaveClass("invisible");
   });
 
-  it("does not update DB when location name already exists", () => {});
+  // it("does not update DB when location name already exists", async () => {
+  //   await userEvent.click(findMyLocationBtn);
+
+  //   const input = await screen.findByPlaceholderText(/e.g. home/i);
+  //   expect(input).toBeInTheDocument();
+
+  //   await userEvent.clear(input);
+
+  //   const saveBtn = await screen.findByText(/save/i);
+  //   await userEvent.click(saveBtn);
+  //   const errorText = await screen.findByText(/please enter a location name/i);
+  //   expect(errorText).toBeVisible();
+
+  //   await userEvent.type(input, "Manchester", { delay: 5 });
+  //   expect(input).toHaveValue("Manchester");
+  //   await userEvent.click(saveBtn);
+
+  // });
 });
 
 // describe("test for handling location detection failure", () => {
