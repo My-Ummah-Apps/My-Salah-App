@@ -52,7 +52,11 @@ vi.mock("@capacitor/geolocation", () => ({
 
 import { Geolocation } from "@capacitor/geolocation";
 
-import { mockdbConnection } from "../../__mocks__/test-utils";
+import {
+  mockdbConnection,
+  mockSetUserLocations,
+  mockUserLocations,
+} from "../../__mocks__/test-utils";
 import { Capacitor } from "@capacitor/core";
 
 const getPlatformSpy = vi.spyOn(Capacitor, "getPlatform");
@@ -81,6 +85,7 @@ describe("tests for GPS location button when permission is prompt", () => {
         triggerId={"testId"}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
+        userLocations={mockUserLocations}
       />
     );
 
@@ -122,6 +127,7 @@ describe("tests for GPS location button functionality when location permission i
         triggerId={"testId"}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
+        userLocations={mockUserLocations}
       />
     );
     findMyLocationBtn = screen.getByText(/find my location/i);
@@ -161,8 +167,8 @@ describe("tests for GPS location button functionality when location permission i
     const input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
 
-    await userEvent.type(input, "Manchester", { delay: 5 });
-    expect(input).toHaveValue("Manchester");
+    await userEvent.type(input, "Berlin", { delay: 5 });
+    expect(input).toHaveValue("Berlin");
     const saveBtn = await screen.findByText(/save/i);
     await userEvent.click(saveBtn);
 
@@ -189,13 +195,14 @@ describe("tests for GPS location button functionality when location permission i
     expect(errorText).toBeVisible();
     await waitFor(() => {
       expect(addUserLocationFunctionSpy).not.toHaveBeenCalled();
+      expect(mockSetUserLocations).not.toHaveBeenCalled();
     });
   });
 
   it("clears error message upon user saving a location", async () => {
     await userEvent.click(findMyLocationBtn);
 
-    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    let input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
 
     await userEvent.clear(input);
@@ -205,22 +212,22 @@ describe("tests for GPS location button functionality when location permission i
     const errorText = await screen.findByText(/please enter a location name/i);
     expect(errorText).toBeVisible();
 
-    await userEvent.type(input, "Manchester", { delay: 5 });
-    expect(input).toHaveValue("Manchester");
+    await userEvent.type(input, "London", { delay: 5 });
+    expect(input).toHaveValue("London");
     await userEvent.click(saveBtn);
 
     await userEvent.click(findMyLocationBtn);
-    const input2 = await screen.findByPlaceholderText(/e.g. home/i);
-    expect(input2).toBeInTheDocument();
-    expect(input2).toHaveValue("");
+    input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue("");
     const errorTextQuery = screen.queryByText(/please enter a location name/i);
-    expect(errorTextQuery).toHaveClass("invisible");
+    expect(errorTextQuery).not.toBeInTheDocument();
   });
 
   it("clears error message upon user pressing cancel button", async () => {
     await userEvent.click(findMyLocationBtn);
 
-    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    let input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
 
     await userEvent.clear(input);
@@ -230,38 +237,41 @@ describe("tests for GPS location button functionality when location permission i
     const errorText = await screen.findByText(/please enter a location name/i);
     expect(errorText).toBeVisible();
 
-    await userEvent.type(input, "Manchester", { delay: 5 });
-    expect(input).toHaveValue("Manchester");
+    await userEvent.type(input, "London", { delay: 5 });
+    expect(input).toHaveValue("London");
 
     const cancelBtn = await screen.findByText(/cancel/i);
     await userEvent.click(cancelBtn);
 
     await userEvent.click(findMyLocationBtn);
-    const input2 = await screen.findByPlaceholderText(/e.g. home/i);
-    expect(input2).toBeInTheDocument();
-    expect(input2).toHaveValue("");
+    input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue("");
     const errorTextQuery = screen.queryByText(/please enter a location name/i);
-    expect(errorTextQuery).toHaveClass("invisible");
+    expect(errorTextQuery).not.toBeInTheDocument();
   });
 
-  // it("does not update DB when location name already exists", async () => {
-  //   await userEvent.click(findMyLocationBtn);
+  it("does not update DB or state when location name already exists", async () => {
+    await userEvent.click(findMyLocationBtn);
 
-  //   const input = await screen.findByPlaceholderText(/e.g. home/i);
-  //   expect(input).toBeInTheDocument();
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue("");
 
-  //   await userEvent.clear(input);
+    const saveBtn = await screen.findByText(/save/i);
 
-  //   const saveBtn = await screen.findByText(/save/i);
-  //   await userEvent.click(saveBtn);
-  //   const errorText = await screen.findByText(/please enter a location name/i);
-  //   expect(errorText).toBeVisible();
+    await userEvent.type(input, "Manchester", { delay: 5 });
+    expect(input).toHaveValue("Manchester");
+    await userEvent.click(saveBtn);
 
-  //   await userEvent.type(input, "Manchester", { delay: 5 });
-  //   expect(input).toHaveValue("Manchester");
-  //   await userEvent.click(saveBtn);
+    const errorMsg = await screen.findByText(/location already exists/i);
+    expect(errorMsg).toBeInTheDocument();
 
-  // });
+    await waitFor(() => {
+      expect(addUserLocationFunctionSpy).not.toHaveBeenCalled();
+      expect(mockSetUserLocations).not.toHaveBeenCalled();
+    });
+  });
 });
 
 // describe("test for handling location detection failure", () => {
@@ -320,6 +330,7 @@ describe("tests for GPS location button functionality when location permission i
         triggerId={"testId"}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
+        userLocations={mockUserLocations}
       />
     );
     findMyLocationBtn = screen.getByText(/find my location/i);

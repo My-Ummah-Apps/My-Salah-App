@@ -670,6 +670,7 @@ const App = () => {
                   setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
                   setUserLocations={setUserLocations}
+                  userLocations={userLocations}
                 />
               )}
             />

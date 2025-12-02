@@ -29,6 +29,7 @@ interface BottomSheetSalahTimesSettingsProps {
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
+  userLocations: LocationsDataObjTypeArr | undefined;
 }
 
 const BottomSheetSalahTimesSettings = ({
@@ -36,6 +37,7 @@ const BottomSheetSalahTimesSettings = ({
   dbConnection,
   setUserPreferences,
   setUserLocations,
+  userLocations,
 }: BottomSheetSalahTimesSettingsProps) => {
   const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
 
@@ -80,6 +82,7 @@ const BottomSheetSalahTimesSettings = ({
                 triggerId="open-location-settings"
                 dbConnection={dbConnection}
                 setUserLocations={setUserLocations}
+                userLocations={userLocations}
                 // setUserPreferences={setUserPreferences}
               />
             </section>

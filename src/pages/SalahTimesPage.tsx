@@ -17,6 +17,7 @@ interface SalahTimesPageProps {
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
+  userLocations: LocationsDataObjTypeArr | undefined;
 }
 
 const SalahTimesPage = ({
@@ -24,6 +25,7 @@ const SalahTimesPage = ({
   setUserPreferences,
   userPreferences,
   setUserLocations,
+  userLocations,
 }: SalahTimesPageProps) => {
   return (
     <IonPage>
@@ -47,6 +49,7 @@ const SalahTimesPage = ({
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
         setUserLocations={setUserLocations}
+        userLocations={userLocations}
       />
     </IonPage>
   );

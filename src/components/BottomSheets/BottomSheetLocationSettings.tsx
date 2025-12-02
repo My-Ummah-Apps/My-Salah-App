@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonButton,
   IonContent,
   IonHeader,
@@ -24,20 +23,20 @@ import Toast from "../Toast";
 import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 
-// import { Capacitor } from "@capacitor/core";
-
 interface BottomSheetLocationSettingsProps {
   triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
+  userLocations: LocationsDataObjTypeArr | undefined;
 }
 
 const BottomSheetLocationSettings = ({
   triggerId,
   dbConnection,
   setUserLocations,
+  userLocations,
 }: BottomSheetLocationSettingsProps) => {
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationNameInput, setShowLocationNameInput] =
@@ -45,7 +44,10 @@ const BottomSheetLocationSettings = ({
   const [locationName, setLocationName] = useState("");
   const [showLocationFailureToast, setShowLocationFailureToast] =
     useState(false);
-  const [showLocationNameError, setShowLocationNameError] = useState(false);
+  const [showEmptyLocationError, setShowEmptyLocationError] = useState(false);
+
+  const [showDuplicateLocationError, setShowDuplicateLocationError] =
+    useState(false);
 
   let latitude = useRef<number>();
   let longitude = useRef<number>();
@@ -53,7 +55,8 @@ const BottomSheetLocationSettings = ({
   const resetLocationInput = () => {
     setShowLocationNameInput(false);
     setLocationName("");
-    setShowLocationNameError(false);
+    setShowEmptyLocationError(false);
+    setShowDuplicateLocationError(false);
   };
 
   const handleGrantedPermission = async () => {
@@ -140,8 +143,8 @@ const BottomSheetLocationSettings = ({
   };
 
   useEffect(() => {
-    console.log(showLocationNameError);
-  }, [showLocationNameError]);
+    console.log("showDuplicateLocationError: ", showDuplicateLocationError);
+  }, [showDuplicateLocationError]);
 
   return (
     <IonModal
@@ -175,13 +178,16 @@ const BottomSheetLocationSettings = ({
                 placeholder="e.g. Home"
                 onChange={(e) => setLocationName(e.target.value)}
               ></input>
-              <p
-                className={`mb-1 text-xs text-red-500 ${
-                  showLocationNameError ? "visible" : "invisible"
-                }`}
-              >
-                Please enter a location name
-              </p>
+              {showEmptyLocationError && (
+                <p className={`mb-1 text-xs text-red-500`}>
+                  {"Please enter a location name"}
+                </p>
+              )}
+              {showDuplicateLocationError && (
+                <p className={`mb-1 text-xs text-red-500`}>
+                  {"Location already exists"}
+                </p>
+              )}
             </div>
             <div className="flex justify-end w-full">
               <IonButton
@@ -199,10 +205,31 @@ const BottomSheetLocationSettings = ({
                 size="small"
                 fill="clear"
                 onClick={async () => {
-                  console.log("locationName:", locationName);
+                  const locationNameTrimmed = locationName.trim();
+                  console.log("locationNameTrimmed:", locationNameTrimmed);
+                  if (locationNameTrimmed === "") {
+                    setShowDuplicateLocationError(false);
+                    setShowEmptyLocationError(true);
+                    return;
+                  }
 
-                  if (locationName.trim() === "") {
-                    setShowLocationNameError(true);
+                  if (!userLocations) {
+                    console.error("LocationNames state is undefined");
+                    return;
+                  }
+
+                  const locationNames = userLocations.map((loc) =>
+                    loc.locationName.toLowerCase()
+                  );
+                  console.log("Locations: ", locationNames);
+
+                  if (
+                    locationNames.includes(locationNameTrimmed.toLowerCase())
+                  ) {
+                    console.log("DUPLICATE LOCATION");
+
+                    setShowEmptyLocationError(false);
+                    setShowDuplicateLocationError(true);
                     return;
                   }
 
@@ -216,9 +243,12 @@ const BottomSheetLocationSettings = ({
 
                     const locations = await fetchAllLocations(dbConnection);
                     console.log("Locations: ", locations);
+
                     if (locations) {
                       setUserLocations(locations);
                     }
+                    console.log("RESETTING INPUT");
+
                     resetLocationInput();
                   } else {
                     console.error("lat / long undefined");
