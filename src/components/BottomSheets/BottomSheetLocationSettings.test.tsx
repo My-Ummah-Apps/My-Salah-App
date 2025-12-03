@@ -158,6 +158,41 @@ describe("tests for GPS location button functionality when location permission i
     expect(inputs[0]).toBeInTheDocument();
   });
 
+  it("clears input upon save button being clicked and location being added successfully", async () => {
+    await userEvent.click(findMyLocationBtn);
+
+    let input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "Berlin", { delay: 5 });
+    expect(input).toHaveValue("Berlin");
+
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
+
+    await userEvent.click(findMyLocationBtn);
+
+    input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toHaveValue("");
+  });
+
+  it("clears input upon cancel button being clicked", async () => {
+    await userEvent.click(findMyLocationBtn);
+    let input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "Berlin", { delay: 5 });
+    expect(input).toHaveValue("Berlin");
+
+    const cancelBtn = screen.getByText(/cancel/i);
+    expect(cancelBtn).toBeInTheDocument();
+
+    await userEvent.click(cancelBtn);
+    await userEvent.click(findMyLocationBtn);
+    input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toHaveValue("");
+  });
+
   it("updates DB with new location when the input is not blank", async () => {
     await userEvent.click(findMyLocationBtn);
 
