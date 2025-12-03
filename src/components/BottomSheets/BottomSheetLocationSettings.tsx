@@ -43,11 +43,13 @@ const BottomSheetLocationSettings = ({
     useState<boolean>(false);
   const [locationName, setLocationName] = useState("");
   const [showLocationFailureToast, setShowLocationFailureToast] =
-    useState(false);
-  const [showEmptyLocationError, setShowEmptyLocationError] = useState(false);
-
+    useState<boolean>(false);
+  const [showLocationAddedToast, setShowLocationAddedToast] =
+    useState<boolean>(false);
+  const [showEmptyLocationError, setShowEmptyLocationError] =
+    useState<boolean>(false);
   const [showDuplicateLocationError, setShowDuplicateLocationError] =
-    useState(false);
+    useState<boolean>(false);
 
   let latitude = useRef<number>();
   let longitude = useRef<number>();
@@ -246,6 +248,7 @@ const BottomSheetLocationSettings = ({
 
                     if (locations) {
                       setUserLocations(locations);
+                      setShowLocationAddedToast(true);
                     }
                     console.log("RESETTING INPUT");
 
@@ -315,6 +318,11 @@ const BottomSheetLocationSettings = ({
           isOpen={showLocationFailureToast}
           message="Unable to retrieve location, please try again"
           setShow={setShowLocationFailureToast}
+        />
+        <Toast
+          isOpen={showLocationAddedToast}
+          message="Location added successfully"
+          setShow={setShowLocationAddedToast}
         />
       </IonContent>
     </IonModal>

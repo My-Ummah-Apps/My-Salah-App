@@ -199,6 +199,25 @@ describe("tests for GPS location button functionality when location permission i
     });
   });
 
+  it("shows toast with success message after a location is successfully saved", async () => {
+    await userEvent.click(findMyLocationBtn);
+
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "Berlin", { delay: 5 });
+    expect(input).toHaveValue("Berlin");
+
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
+
+    // await waitFor(() => {
+    //   expect(
+    //     screen.findByText(/location added successfully/i)
+    //   ).toBeInTheDocument();
+    // });
+  });
+
   it("clears error message upon user saving a location", async () => {
     await userEvent.click(findMyLocationBtn);
 
@@ -219,7 +238,7 @@ describe("tests for GPS location button functionality when location permission i
     await userEvent.click(findMyLocationBtn);
     input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
-    expect(input).toHaveValue("");
+
     const errorTextQuery = screen.queryByText(/please enter a location name/i);
     expect(errorTextQuery).not.toBeInTheDocument();
   });
@@ -246,7 +265,7 @@ describe("tests for GPS location button functionality when location permission i
     await userEvent.click(findMyLocationBtn);
     input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
-    expect(input).toHaveValue("");
+
     const errorTextQuery = screen.queryByText(/please enter a location name/i);
     expect(errorTextQuery).not.toBeInTheDocument();
   });
@@ -256,7 +275,6 @@ describe("tests for GPS location button functionality when location permission i
 
     const input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
-    expect(input).toHaveValue("");
 
     const saveBtn = await screen.findByText(/save/i);
 

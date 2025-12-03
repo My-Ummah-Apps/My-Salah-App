@@ -45,7 +45,7 @@ describe("Integration tests for Salah times page", () => {
       await act(async () => {
         await userEvent.click(setUpBtn);
       });
-      const selectLocationBtn = await screen.findByText(/select location/i);
+      const selectLocationBtn = await screen.findByText(/add location/i);
       expect(selectLocationBtn).toBeInTheDocument();
 
       const selectCalcMethodBtn = await screen.findByText(
@@ -65,7 +65,7 @@ describe("Integration tests for Salah times page", () => {
         await userEvent.click(setUpBtn);
       });
 
-      const selectLocationBtn = await screen.findByText(/select location/i);
+      const selectLocationBtn = await screen.findByText(/add location/i);
       expect(selectLocationBtn).toBeInTheDocument();
       await userEvent.click(selectLocationBtn);
 

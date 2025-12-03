@@ -25,7 +25,7 @@ export const mockUserLocations = [
   },
   {
     id: 2,
-    isSelected: 0,
+    isSelected: 1,
     latitude: 54.9421056,
     locationName: "Doha",
     longitude: -1.5204352,

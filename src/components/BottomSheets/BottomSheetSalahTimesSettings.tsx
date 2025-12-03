@@ -73,7 +73,7 @@ const BottomSheetSalahTimesSettings = ({
                 }}
                 className="flex items-center mx-5 border border-gray-500 rounded-md"
               >
-                <p>Select location</p>
+                <p>Add location</p>
                 <p>
                   <MdOutlineChevronRight />
                 </p>
