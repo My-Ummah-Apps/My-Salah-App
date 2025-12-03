@@ -6,6 +6,7 @@ interface IonToastProps {
   message: string;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   duration?: number;
+  testId: string;
 }
 
 const Toast = ({
@@ -14,10 +15,11 @@ const Toast = ({
   message,
   setShow,
   duration,
+  testId,
 }: IonToastProps) => {
   return (
     <IonToast
-      data-testid="location-fail-toast"
+      data-testid={testId}
       isOpen={isOpen}
       onWillDismiss={() => {
         if (setIsNextCounterLoading) setIsNextCounterLoading(false);

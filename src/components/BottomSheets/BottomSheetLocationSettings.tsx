@@ -318,11 +318,13 @@ const BottomSheetLocationSettings = ({
           isOpen={showLocationFailureToast}
           message="Unable to retrieve location, please try again"
           setShow={setShowLocationFailureToast}
+          testId={"location-fail-toast"}
         />
         <Toast
           isOpen={showLocationAddedToast}
           message="Location added successfully"
           setShow={setShowLocationAddedToast}
+          testId={"location-successfully-added-toast"}
         />
       </IonContent>
     </IonModal>

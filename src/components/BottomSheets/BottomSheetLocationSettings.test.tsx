@@ -246,11 +246,12 @@ describe("tests for GPS location button functionality when location permission i
     const saveBtn = await screen.findByText(/save/i);
     await userEvent.click(saveBtn);
 
-    // await waitFor(() => {
-    //   expect(
-    //     screen.findByText(/location added successfully/i)
-    //   ).toBeInTheDocument();
-    // });
+    const toast = await screen.findByTestId(
+      "location-successfully-added-toast"
+    );
+
+    expect(toast).toHaveAttribute("message", "Location added successfully");
+    expect(toast).toHaveAttribute("is-open", "true");
   });
 
   it("clears error message upon user saving a location", async () => {
@@ -348,7 +349,7 @@ describe("tests for GPS location button functionality when location permission i
 //       <BottomSheetLocationSettings
 //         triggerId={"testId"}
 //         dbConnection={mockdbConnection}
-//         setUserPreferences={mockUserPrefsState}
+//         // setUserPreferences={mockUserPrefsState}
 //       />
 //     );
 //     findMyLocationBtn = screen.getByText(/find my location/i);
@@ -356,9 +357,12 @@ describe("tests for GPS location button functionality when location permission i
 
 //   it("shows error message when app is unable to retrieve coords after user has granted location permission", async () => {
 //     await userEvent.click(findMyLocationBtn);
-// ! Replace below with state call assertion instead of toast detection
+//     // ! Replace below with state call assertion instead of toast detection
 //     const toast = await screen.findByTestId("location-fail-toast");
-//     expect(toast).toBeInTheDocument();
+//     expect(toast).toHaveAttribute("message", "Location added successfully");
+//     expect(toast).toHaveAttribute("is-open", "true");
+//     // const toast = await screen.findByTestId("location-fail-toast");
+//     // expect(toast).toBeInTheDocument();
 //   });
 // });
 
