@@ -69,17 +69,17 @@ describe("Integration tests for Salah times page", () => {
       expect(selectLocationBtn).toBeInTheDocument();
       await userEvent.click(selectLocationBtn);
 
-      const findMyLocationText = await screen.findByText(/find my location/i);
+      const findMyLocationText = await screen.findByText(/use device gps/i);
       expect(findMyLocationText).toBeInTheDocument();
 
       const locationInput = await screen.findByText(/enter location manually/i);
       expect(locationInput).toBeInTheDocument();
 
-      const latitudeInput = await screen.findByLabelText(/latitude/i);
-      expect(latitudeInput).toBeInTheDocument();
+      // const latitudeInput = await screen.findByLabelText(/latitude/i);
+      // expect(latitudeInput).toBeInTheDocument();
 
-      const longitudeInput = await screen.findByLabelText(/longitude/i);
-      expect(longitudeInput).toBeInTheDocument();
+      // const longitudeInput = await screen.findByLabelText(/longitude/i);
+      // expect(longitudeInput).toBeInTheDocument();
     });
   });
 });

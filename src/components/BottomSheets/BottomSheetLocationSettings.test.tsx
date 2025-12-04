@@ -89,7 +89,7 @@ describe("tests for GPS location button when permission is prompt", () => {
       />
     );
 
-    findMyLocationBtn = screen.getByText(/find my location/i);
+    findMyLocationBtn = screen.getByText(/Use Device GPS/i);
   });
 
   it("asks user for permission", async () => {
@@ -130,7 +130,7 @@ describe("tests for GPS location button functionality when location permission i
         userLocations={mockUserLocations}
       />
     );
-    findMyLocationBtn = screen.getByText(/find my location/i);
+    findMyLocationBtn = screen.getByText(/Use Device GPS/i);
   });
 
   it("retrieves location coordinates", async () => {
@@ -154,8 +154,8 @@ describe("tests for GPS location button functionality when location permission i
     const locationLoader = document.body.querySelector("ion-loading");
     expect(locationLoader).toBeInTheDocument();
 
-    const inputs = await screen.findAllByPlaceholderText(/e.g. home/i);
-    expect(inputs[0]).toBeInTheDocument();
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
   });
 
   it("clears input upon save button being clicked and location being added successfully", async () => {
@@ -333,6 +333,7 @@ describe("tests for GPS location button functionality when location permission i
 
 //   beforeEach(() => {
 //     vi.clearAllMocks();
+//     vi.resetAllMocks();
 
 //     getPlatformSpy.mockReturnValue("android");
 
@@ -341,28 +342,35 @@ describe("tests for GPS location button functionality when location permission i
 //       coarseLocation: "granted",
 //     });
 
-//     vi.mocked(Geolocation.getCurrentPosition).mockRejectedValue(
-//       new Error("There was en error trying to obtain the location")
-//     );
-
 //     render(
 //       <BottomSheetLocationSettings
 //         triggerId={"testId"}
 //         dbConnection={mockdbConnection}
+//         setUserLocations={vi.fn()}
+//         userLocations={mockUserLocations}
 //         // setUserPreferences={mockUserPrefsState}
 //       />
 //     );
-//     findMyLocationBtn = screen.getByText(/find my location/i);
+//     findMyLocationBtn = screen.getByText(/Use Device GPS/i);
+//   });
+
+//   afterEach(() => {
+//     vi.clearAllMocks();
+//     vi.resetAllMocks();
 //   });
 
 //   it("shows error message when app is unable to retrieve coords after user has granted location permission", async () => {
+//     vi.mocked(Geolocation.getCurrentPosition).mockRejectedValue(
+//       new Error("There was en error trying to obtain the location")
+//     );
 //     await userEvent.click(findMyLocationBtn);
-//     // ! Replace below with state call assertion instead of toast detection
+
 //     const toast = await screen.findByTestId("location-fail-toast");
-//     expect(toast).toHaveAttribute("message", "Location added successfully");
+//     expect(toast).toHaveAttribute(
+//       "message",
+//       "Unable to retrieve location, please try again"
+//     );
 //     expect(toast).toHaveAttribute("is-open", "true");
-//     // const toast = await screen.findByTestId("location-fail-toast");
-//     // expect(toast).toBeInTheDocument();
 //   });
 // });
 
@@ -390,7 +398,7 @@ describe("tests for GPS location button functionality when location permission i
         userLocations={mockUserLocations}
       />
     );
-    findMyLocationBtn = screen.getByText(/find my location/i);
+    findMyLocationBtn = screen.getByText(/Use Device GPS/i);
   });
 
   it("shows user a prompt to open system settings on Android when location permissions are turned off in system settings", async () => {
