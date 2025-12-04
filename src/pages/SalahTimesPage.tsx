@@ -35,13 +35,15 @@ const SalahTimesPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {userPreferences.locationName === "" && (
+        {userLocations?.length === 0 ? (
           <section className="flex flex-col items-center justify-center h-full text-center">
             <h1>Salah Times Not Set</h1>
             <IonButton id="open-salah-times-settings-sheet" className="w-1/2">
               Set up Salah Times
             </IonButton>
           </section>
+        ) : (
+          <div>hello</div>
         )}
       </IonContent>
       <BottomSheetSalahTimesSettings

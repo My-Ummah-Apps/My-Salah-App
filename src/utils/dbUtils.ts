@@ -65,7 +65,8 @@ export const addUserLocation = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   locationName: string,
   latitude: number,
-  longitude: number
+  longitude: number,
+  isSelected: number
 ) => {
   console.log("addUserLocation function called");
 
@@ -76,12 +77,12 @@ export const addUserLocation = async (
         VALUES (?, ?, ?, ?);
         `;
 
-    const params = [locationName, latitude, longitude, 0];
+    const params = [locationName, latitude, longitude, isSelected];
     await dbConnection.current?.run(stmnt, params);
   } catch (error) {
     console.error(error);
   } finally {
-    toggleDBConnection(dbConnection, "close");
+    await toggleDBConnection(dbConnection, "close");
   }
 };
 

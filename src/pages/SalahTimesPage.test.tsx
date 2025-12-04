@@ -6,11 +6,12 @@ import { act } from "react";
 import {
   mockdbConnection,
   mockSetUserLocations,
+  mockUserLocations,
   mockUserPrefs,
   mockUserPrefsState,
 } from "../__mocks__/test-utils";
 
-describe("Integration tests for Salah times page", () => {
+describe("Integration tests for Salah times page when no locations exist", () => {
   let setUpBtn: HTMLButtonElement;
   beforeEach(() => {
     render(
@@ -19,12 +20,13 @@ describe("Integration tests for Salah times page", () => {
         setUserPreferences={mockUserPrefsState}
         userPreferences={mockUserPrefs}
         setUserLocations={mockSetUserLocations}
+        userLocations={[]}
       />
     );
     setUpBtn = screen.getByText(/set up salah times/i);
   });
 
-  it("shows fallback if no location is selected", () => {
+  it("shows fallback if no locations exist", () => {
     const fallbackText = screen.getByText("Salah Times Not Set");
     expect(fallbackText).toBeInTheDocument();
 
@@ -81,5 +83,24 @@ describe("Integration tests for Salah times page", () => {
       // const longitudeInput = await screen.findByLabelText(/longitude/i);
       // expect(longitudeInput).toBeInTheDocument();
     });
+  });
+});
+
+describe("ingeration tests for when atleast one location exists", () => {
+  beforeEach(() => {
+    render(
+      <SalahTimesPage
+        dbConnection={mockdbConnection}
+        setUserPreferences={mockUserPrefsState}
+        userPreferences={mockUserPrefs}
+        setUserLocations={mockSetUserLocations}
+        userLocations={mockUserLocations}
+      />
+    );
+  });
+
+  it("displays location which has isSelected property set to 1", () => {
+    const locationName = screen.getByText(/doha/i);
+    expect(locationName).toBeInTheDocument();
   });
 });

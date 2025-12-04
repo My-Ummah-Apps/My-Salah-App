@@ -236,11 +236,14 @@ const BottomSheetLocationSettings = ({
                   }
 
                   if (latitude.current && longitude.current) {
+                    // ! Replace below, grab locations from DB and then compare against what the DB returns as opposed to state
+                    const isSelected = userLocations.length === 0 ? 1 : 0;
                     await addUserLocation(
                       dbConnection,
                       locationName,
                       latitude.current,
-                      longitude.current
+                      longitude.current,
+                      isSelected
                     );
 
                     const locations = await fetchAllLocations(dbConnection);
@@ -250,6 +253,7 @@ const BottomSheetLocationSettings = ({
                       setUserLocations(locations);
                       setShowLocationAddedToast(true);
                     }
+
                     console.log("RESETTING INPUT");
 
                     resetLocationInput();
