@@ -65,13 +65,16 @@ export const addUserLocation = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   locationName: string,
   latitude: number,
-  longitude: number,
-  isSelected: number
+  longitude: number
 ) => {
-  console.log("addUserLocation function called");
-
   try {
     await toggleDBConnection(dbConnection, "open");
+
+    const locations = (await fetchAllLocations(dbConnection)) || [];
+    // const numberOfRows = `SELECT COUNT (*) AS count FROM userLocationsTable`;
+    // console.log("numberOfRows: ", numberOfRows);
+
+    const isSelected = locations.length === 0 ? 1 : 0;
 
     const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
         VALUES (?, ?, ?, ?);
