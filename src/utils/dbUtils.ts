@@ -42,7 +42,8 @@ export async function toggleDBConnection(
 }
 
 export const fetchAllLocations = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  keepOpen: boolean = false
 ) => {
   try {
     await toggleDBConnection(dbConnection, "open");
@@ -57,7 +58,9 @@ export const fetchAllLocations = async (
   } catch (error) {
     console.error(error);
   } finally {
-    toggleDBConnection(dbConnection, "close");
+    if (!keepOpen) {
+      await toggleDBConnection(dbConnection, "close");
+    }
   }
 };
 
@@ -70,7 +73,8 @@ export const addUserLocation = async (
   try {
     await toggleDBConnection(dbConnection, "open");
 
-    const locations = (await fetchAllLocations(dbConnection)) || [];
+    const locations = (await fetchAllLocations(dbConnection, true)) || [];
+
     // const numberOfRows = `SELECT COUNT (*) AS count FROM userLocationsTable`;
     // console.log("numberOfRows: ", numberOfRows);
 

@@ -103,4 +103,9 @@ describe("ingeration tests for when atleast one location exists", () => {
     const locationName = screen.getByText(/doha/i);
     expect(locationName).toBeInTheDocument();
   });
+
+  it("triggers bottom sheet showing locations list", () => {
+    const chevron = screen.getByLabelText(/show all locations/i);
+    expect(chevron).toBeInTheDocument();
+  });
 });

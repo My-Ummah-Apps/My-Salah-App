@@ -2,6 +2,7 @@ import {
   IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -9,6 +10,8 @@ import {
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { chevronDownOutline } from "ionicons/icons";
+import { FaChevronDown } from "react-icons/fa6";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -43,7 +46,29 @@ const SalahTimesPage = ({
             </IonButton>
           </section>
         ) : (
-          <div>hello</div>
+          <section>
+            <div>
+              {userLocations?.map((location, index) => (
+                <section key={index} className="flex">
+                  <p>
+                    {location.isSelected === 1 ? location.locationName : ""}
+                  </p>
+                </section>
+              ))}{" "}
+              <p>
+                {" "}
+                <IonIcon
+                  icon={chevronDownOutline}
+                  aria-label="Show all locations"
+                  data-testid="locations-chevron"
+                />
+                {/* <FaChevronDown
+                      aria-label="Show all locations"
+                      data-testid="locations-chevron"
+                    /> */}
+              </p>
+            </div>
+          </section>
         )}
       </IonContent>
       <BottomSheetSalahTimesSettings
