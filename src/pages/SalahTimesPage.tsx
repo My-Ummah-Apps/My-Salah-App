@@ -12,6 +12,7 @@ import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomShee
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { chevronDownOutline } from "ionicons/icons";
 import { FaChevronDown } from "react-icons/fa6";
+import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -48,14 +49,14 @@ const SalahTimesPage = ({
         ) : (
           <section>
             <div>
-              {userLocations?.map((location, index) => (
-                <section key={index} className="flex">
+              {userLocations?.map((location) => (
+                <section key={location.id} className="flex">
                   <p>
                     {location.isSelected === 1 ? location.locationName : ""}
                   </p>
                 </section>
               ))}{" "}
-              <p>
+              <IonButton id="open-locations-sheet">
                 {" "}
                 <IonIcon
                   icon={chevronDownOutline}
@@ -66,11 +67,17 @@ const SalahTimesPage = ({
                       aria-label="Show all locations"
                       data-testid="locations-chevron"
                     /> */}
-              </p>
+              </IonButton>
             </div>
           </section>
         )}
       </IonContent>
+      <BottomSheetLocationsList
+        triggerId={"open-locations-sheet"}
+        dbConnection={dbConnection}
+        setUserLocations={setUserLocations}
+        userLocations={userLocations}
+      />
       <BottomSheetSalahTimesSettings
         triggerId={"open-salah-times-settings-sheet"}
         dbConnection={dbConnection}

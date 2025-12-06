@@ -24,7 +24,7 @@ import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 
 interface BottomSheetLocationSettingsProps {
-  triggerId: string;
+  triggerId?: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
@@ -249,6 +249,7 @@ const BottomSheetLocationSettings = ({
                     if (locations) {
                       setUserLocations(locations);
                       setShowLocationAddedToast(true);
+                      // TODO: Close the add location sheet here
                     } else {
                       console.error("Locations undefined");
                     }

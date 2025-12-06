@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import SalahTimesPage from "./SalahTimesPage";
 
 import userEvent from "@testing-library/user-event";
@@ -104,8 +104,24 @@ describe("ingeration tests for when atleast one location exists", () => {
     expect(locationName).toBeInTheDocument();
   });
 
-  it("triggers bottom sheet showing locations list", () => {
+  it("triggers bottom sheet showing locations list", async () => {
     const chevron = screen.getByLabelText(/show all locations/i);
     expect(chevron).toBeInTheDocument();
+    await waitFor(() => {
+      userEvent.click(chevron);
+    });
+
+    const headingText = await screen.findByText(/locations/i);
+    expect(headingText).toBeInTheDocument();
+
+    const firstLocation = await screen.findByText(/doha/i);
+    expect(firstLocation).toBeInTheDocument();
+
+    const addNewLocationBtn = screen.getByLabelText(/add new location/i);
+    expect(addNewLocationBtn).toBeInTheDocument();
   });
+
+  // expect(screen.getAllByRole("listitem")).toHaveLength(
+  //   mockUserLocations.length
+  // );
 });

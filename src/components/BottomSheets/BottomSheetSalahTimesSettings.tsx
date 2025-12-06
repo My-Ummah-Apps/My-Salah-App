@@ -67,7 +67,7 @@ const BottomSheetSalahTimesSettings = ({
             <section className="text-center">
               <h5>Location</h5>
               <IonButton
-                id="open-location-settings"
+                id="open-location-settings-sheet"
                 style={{
                   "--background": "transparent",
                 }}
@@ -79,7 +79,7 @@ const BottomSheetSalahTimesSettings = ({
                 </p>
               </IonButton>
               <BottomSheetLocationSettings
-                triggerId="open-location-settings"
+                triggerId="open-location-settings-sheet"
                 dbConnection={dbConnection}
                 setUserLocations={setUserLocations}
                 userLocations={userLocations}
