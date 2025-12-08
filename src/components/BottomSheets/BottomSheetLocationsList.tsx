@@ -10,6 +10,8 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
+  IonList,
+  IonItem,
 } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
@@ -18,7 +20,13 @@ import {
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { LocationsDataObjTypeArr } from "../../types/types";
-import { add } from "ionicons/icons";
+import {
+  add,
+  addOutline,
+  pencilOutline,
+  trashBinOutline,
+  trashOutline,
+} from "ionicons/icons";
 import BottomSheetSalahTimesSettings from "./BottomSheetSalahTimesSettings";
 import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
 
@@ -61,11 +69,31 @@ const BottomSheetLocationsList = ({
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <ul>
+          <IonList>
             {userLocations?.map((location) => (
-              <li key={location.id}>{location.locationName}</li>
+              <section
+                className="flex items-center justify-between border-b"
+                key={location.id}
+              >
+                <IonItem lines="none">{location.locationName}</IonItem>
+                <section className="flex items-center">
+                  <IonButton
+                    data-testid="edit-location-btn"
+                    fill="clear"
+                    aria-label="edit location"
+                  >
+                    <IonIcon icon={pencilOutline}></IonIcon>
+                  </IonButton>
+                  <IonButton fill="clear" aria-label="delete location">
+                    <IonIcon
+                      data-testid="delete-location-btn"
+                      icon={trashOutline}
+                    ></IonIcon>
+                  </IonButton>
+                </section>
+              </section>
             ))}
-          </ul>
+          </IonList>
           <IonFab
             aria-label="add new location"
             slot="fixed"
@@ -78,12 +106,14 @@ const BottomSheetLocationsList = ({
           </IonFab>
         </IonContent>
       </IonPage>
-      <BottomSheetLocationSettings
+      // ! replace bottom sheet trigger method to set state as opposed to
+      triggerId
+      {/* <BottomSheetLocationSettings
         triggerId={"open-location-settings-sheet"}
         dbConnection={dbConnection}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
-      />
+      /> */}
     </IonModal>
   );
 };

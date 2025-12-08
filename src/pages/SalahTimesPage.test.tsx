@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import SalahTimesPage from "./SalahTimesPage";
 
 import userEvent from "@testing-library/user-event";
@@ -87,7 +87,7 @@ describe("Integration tests for Salah times page when no locations exist", () =>
 });
 
 describe("ingeration tests for when atleast one location exists", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(
       <SalahTimesPage
         dbConnection={mockdbConnection}
@@ -97,31 +97,44 @@ describe("ingeration tests for when atleast one location exists", () => {
         userLocations={mockUserLocations}
       />
     );
-  });
 
-  it("displays location which has isSelected property set to 1", () => {
-    const locationName = screen.getByText(/doha/i);
-    expect(locationName).toBeInTheDocument();
-  });
-
-  it("triggers bottom sheet showing locations list", async () => {
     const chevron = screen.getByLabelText(/show all locations/i);
     expect(chevron).toBeInTheDocument();
-    await waitFor(() => {
-      userEvent.click(chevron);
-    });
+    // await waitFor(() => {
+    await userEvent.click(chevron);
+    // });
+  });
 
+  it("displays location (which has isSelected property set to 1) in both the salah times page and locations list bottom sheet", () => {
+    const locationName = screen.getAllByText(/doha/i);
+    expect(locationName).toHaveLength(2);
+  });
+
+  it("displays header text", async () => {
     const headingText = await screen.findByText(/locations/i);
     expect(headingText).toBeInTheDocument();
+  });
 
-    const firstLocation = await screen.findByText(/doha/i);
-    expect(firstLocation).toBeInTheDocument();
-
+  it("shows add new location fab", async () => {
     const addNewLocationBtn = screen.getByLabelText(/add new location/i);
     expect(addNewLocationBtn).toBeInTheDocument();
   });
 
-  // expect(screen.getAllByRole("listitem")).toHaveLength(
-  //   mockUserLocations.length
-  // );
+  // it("displays all locations", async () => {
+  //     expect(screen.getAllByRole("listitem")).toHaveLength(
+  //     mockUserLocations.length
+  //   );
+  // });
+
+  it("displays edit icon on each list item", () => {
+    const editBtn = screen.getAllByTestId(/edit-location-btn/i);
+    expect(editBtn).toHaveLength(mockUserLocations.length);
+  });
+
+  it("displays delete icon on each list item", () => {
+    const editBtn = screen.getAllByTestId(/delete-location-btn/i);
+    expect(editBtn).toHaveLength(mockUserLocations.length);
+  });
+
+  // await waitFor(() => expect(true).toBe(true));
 });
