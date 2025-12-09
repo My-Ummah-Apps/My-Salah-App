@@ -20,15 +20,9 @@ import {
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { LocationsDataObjTypeArr } from "../../types/types";
-import {
-  add,
-  addOutline,
-  pencilOutline,
-  trashBinOutline,
-  trashOutline,
-} from "ionicons/icons";
-import BottomSheetSalahTimesSettings from "./BottomSheetSalahTimesSettings";
-import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
+import { add, pencilOutline, trashOutline } from "ionicons/icons";
+import { useEffect, useState } from "react";
+import ActionSheet from "../ActionSheet";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -47,6 +41,9 @@ const BottomSheetLocationsList = ({
   setUserLocations,
   userLocations,
 }: BottomSheetSalahTimesSettingsProps) => {
+  const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
+    useState(false);
+
   return (
     <IonModal
       mode="ios"
@@ -75,7 +72,9 @@ const BottomSheetLocationsList = ({
                 className="flex items-center justify-between border-b"
                 key={location.id}
               >
-                <IonItem lines="none">{location.locationName}</IonItem>
+                <IonItem data-testid="list-item" lines="none">
+                  {location.locationName}
+                </IonItem>
                 <section className="flex items-center">
                   <IonButton
                     data-testid="edit-location-btn"
@@ -84,12 +83,51 @@ const BottomSheetLocationsList = ({
                   >
                     <IonIcon icon={pencilOutline}></IonIcon>
                   </IonButton>
-                  <IonButton fill="clear" aria-label="delete location">
+                  <IonButton
+                    fill="clear"
+                    aria-label="delete location"
+                    onClick={() => {
+                      setShowDeleteLocationActionSheet(true);
+                      console.log("Delete button clicked");
+                    }}
+                  >
                     <IonIcon
                       data-testid="delete-location-btn"
                       icon={trashOutline}
                     ></IonIcon>
                   </IonButton>
+                  <ActionSheet
+                    setState={setShowDeleteLocationActionSheet}
+                    isOpen={showDeleteLocationActionSheet}
+                    header="Are you sure you want to delete this location?"
+                    buttons={[
+                      {
+                        text: "Delete location?",
+                        role: "destructive",
+                        handler: async () => {
+                          // if (counterId == null) {
+                          //   console.error(
+                          //     "CounterId does not exist within Reset Tasbeeh ActionSheet Buttons"
+                          //   );
+                          //   return;
+                          // }
+                          // await resetSingleCounter(counterId);
+                          // closeSlidingItems();
+                          // setShowResetToast(true);
+                          // setCounterId(null);
+                          // setShowDeleteLocationActionSheet(false);
+                        },
+                      },
+                      {
+                        text: "Cancel",
+                        role: "cancel",
+                        handler: async () => {
+                          // setShowDeleteLocationActionSheet(false);
+                          // setCounterId(null);
+                        },
+                      },
+                    ]}
+                  />
                 </section>
               </section>
             ))}

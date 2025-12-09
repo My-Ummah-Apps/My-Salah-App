@@ -120,11 +120,11 @@ describe("ingeration tests for when atleast one location exists", () => {
     expect(addNewLocationBtn).toBeInTheDocument();
   });
 
-  // it("displays all locations", async () => {
-  //     expect(screen.getAllByRole("listitem")).toHaveLength(
-  //     mockUserLocations.length
-  //   );
-  // });
+  it("displays all locations", async () => {
+    expect(screen.getAllByTestId("list-item")).toHaveLength(
+      mockUserLocations.length
+    );
+  });
 
   it("displays edit icon on each list item", () => {
     const editBtn = screen.getAllByTestId(/edit-location-btn/i);
@@ -134,6 +134,14 @@ describe("ingeration tests for when atleast one location exists", () => {
   it("displays delete icon on each list item", () => {
     const editBtn = screen.getAllByTestId(/delete-location-btn/i);
     expect(editBtn).toHaveLength(mockUserLocations.length);
+  });
+
+  it("prompts user to confirm they want to delete an item after user has tapped on the delete button", async () => {
+    const deleteBtn = screen.getAllByTestId(/delete-location-btn/i);
+    await userEvent.click(deleteBtn[0]);
+
+    const actionSheetText = await screen.findByText(/delete Location?/i);
+    expect(actionSheetText).toBeInTheDocument();
   });
 
   // await waitFor(() => expect(true).toBe(true));

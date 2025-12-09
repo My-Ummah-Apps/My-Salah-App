@@ -121,22 +121,25 @@ export const addUserLocation = async (
 
 // }
 
-// export const deleteUserLocation = async (dbConnection, id) => {
-//   try {
-//     await toggleDBConnection(dbConnection, "open");
+export const deleteUserLocation = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  id: number
+) => {
+  try {
+    await toggleDBConnection(dbConnection, "open");
 
-//     const stmnt = `DELETE FROM userlocationsTable WHERE id =?`;
+    const stmnt = `DELETE FROM userlocationsTable WHERE id = ?`;
 
-//     const params = [id];
+    const params = [id];
 
-//     await dbConnection.current.execute(stmnt, params);
+    await dbConnection.current.execute(stmnt, params);
 
-//     const res = await db.current.query(stmnt);
-//     setUserLocations(res.values);
-//     // if this was the active location, make the first location in the new list active
-//   } catch (error) {
-//     console.error(error);
-//   } finally {
-//     await toggleDBConnection(dbConnection, "close");
-//   }
-// };
+    const res = await db.current.query(stmnt);
+    setUserLocations(res.values);
+    // if this was the active location, make the first location in the new list active
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await toggleDBConnection(dbConnection, "close");
+  }
+};
