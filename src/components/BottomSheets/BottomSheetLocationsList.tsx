@@ -23,6 +23,7 @@ import { LocationsDataObjTypeArr } from "../../types/types";
 import { add, pencilOutline, trashOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import ActionSheet from "../ActionSheet";
+import { deleteUserLocation } from "../../utils/dbUtils";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -41,8 +42,16 @@ const BottomSheetLocationsList = ({
   setUserLocations,
   userLocations,
 }: BottomSheetSalahTimesSettingsProps) => {
+  console.log("BOTTOMSHEET LOCATIONS LIST RENDERED");
+
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
+  const [showEditLocationActionSheet, setShowEditLocationActionSheet] =
+    useState(false);
+
+  const [locationToDeleteId, setLocationToDeleteId] = useState<null | number>(
+    null
+  );
 
   return (
     <IonModal
@@ -87,6 +96,8 @@ const BottomSheetLocationsList = ({
                     fill="clear"
                     aria-label="delete location"
                     onClick={() => {
+                      // setShowDeleteLocationActionSheet(false);
+                      setLocationToDeleteId(location.id);
                       setShowDeleteLocationActionSheet(true);
                       console.log("Delete button clicked");
                     }}
@@ -96,38 +107,6 @@ const BottomSheetLocationsList = ({
                       icon={trashOutline}
                     ></IonIcon>
                   </IonButton>
-                  <ActionSheet
-                    setState={setShowDeleteLocationActionSheet}
-                    isOpen={showDeleteLocationActionSheet}
-                    header="Are you sure you want to delete this location?"
-                    buttons={[
-                      {
-                        text: "Delete location?",
-                        role: "destructive",
-                        handler: async () => {
-                          // if (counterId == null) {
-                          //   console.error(
-                          //     "CounterId does not exist within Reset Tasbeeh ActionSheet Buttons"
-                          //   );
-                          //   return;
-                          // }
-                          // await resetSingleCounter(counterId);
-                          // closeSlidingItems();
-                          // setShowResetToast(true);
-                          // setCounterId(null);
-                          // setShowDeleteLocationActionSheet(false);
-                        },
-                      },
-                      {
-                        text: "Cancel",
-                        role: "cancel",
-                        handler: async () => {
-                          // setShowDeleteLocationActionSheet(false);
-                          // setCounterId(null);
-                        },
-                      },
-                    ]}
-                  />
                 </section>
               </section>
             ))}
@@ -152,6 +131,41 @@ const BottomSheetLocationsList = ({
         setUserLocations={setUserLocations}
         userLocations={userLocations}
       /> */}
+      <ActionSheet
+        // trigger="open-delete-location-action-sheet"
+        setState={setShowDeleteLocationActionSheet}
+        isOpen={showDeleteLocationActionSheet}
+        // isOpen={!!locationToDelete}
+        header="Are you sure you want to delete this location?"
+        buttons={[
+          {
+            text: "Delete location?",
+            role: "destructive",
+            handler: async () => {
+              if (locationToDeleteId === null) {
+                console.error(
+                  "locationToDeleteId does not exist within delete location ActionSheet handler"
+                );
+                return;
+              }
+              await deleteUserLocation(dbConnection, locationToDeleteId);
+              // await resetSingleCounter(counterId);
+              // closeSlidingItems();
+              // setShowResetToast(true);
+              // setCounterId(null);
+              // setShowDeleteLocationActionSheet(false);
+            },
+          },
+          {
+            text: "Cancel",
+            role: "cancel",
+            handler: async () => {
+              // setShowDeleteLocationActionSheet(false);
+              // setCounterId(null);
+            },
+          },
+        ]}
+      />
     </IonModal>
   );
 };

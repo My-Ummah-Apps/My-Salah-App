@@ -127,15 +127,16 @@ export const deleteUserLocation = async (
 ) => {
   try {
     await toggleDBConnection(dbConnection, "open");
+    console.log("EXECUTING DELETION, ID IS: ", id);
 
-    const stmnt = `DELETE FROM userlocationsTable WHERE id = ?`;
+    const stmnt = `DELETE FROM userLocationsTable WHERE id = ?`;
 
     const params = [id];
 
-    await dbConnection.current.execute(stmnt, params);
+    await dbConnection.current?.execute(stmnt, params);
 
-    const res = await db.current.query(stmnt);
-    setUserLocations(res.values);
+    // const res = await db.current.query(stmnt);
+    // setUserLocations(res.values);
     // if this was the active location, make the first location in the new list active
   } catch (error) {
     console.error(error);

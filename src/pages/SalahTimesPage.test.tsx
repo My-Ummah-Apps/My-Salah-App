@@ -144,5 +144,17 @@ describe("ingeration tests for when atleast one location exists", () => {
     expect(actionSheetText).toBeInTheDocument();
   });
 
+  it("deletes item after user confirms decision", async () => {
+    const deleteBtn = screen.getAllByTestId(/delete-location-btn/i);
+    await userEvent.click(deleteBtn[0]);
+
+    const actionSheetText = await screen.findByText(/delete Location?/i);
+    expect(actionSheetText).toBeInTheDocument();
+
+    userEvent.click(actionSheetText);
+    const locationName = screen.getByText(/doha/i);
+    expect(locationName).not.toBeInTheDocument();
+  });
+
   // await waitFor(() => expect(true).toBe(true));
 });
