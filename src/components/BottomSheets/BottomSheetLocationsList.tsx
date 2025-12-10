@@ -21,9 +21,10 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { LocationsDataObjTypeArr } from "../../types/types";
 import { add, pencilOutline, trashOutline } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ActionSheet from "../ActionSheet";
-import { deleteUserLocation } from "../../utils/dbUtils";
+import { deleteUserLocation, fetchAllLocations } from "../../utils/dbUtils";
+import Toast from "../Toast";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -52,6 +53,7 @@ const BottomSheetLocationsList = ({
   const [locationToDeleteId, setLocationToDeleteId] = useState<null | number>(
     null
   );
+  const [showDeleteLocationToast, setShowDeleteLocationToast] = useState(false);
 
   return (
     <IonModal
@@ -149,11 +151,11 @@ const BottomSheetLocationsList = ({
                 return;
               }
               await deleteUserLocation(dbConnection, locationToDeleteId);
-              // await resetSingleCounter(counterId);
-              // closeSlidingItems();
+              const locations = await fetchAllLocations(dbConnection);
+              setUserLocations(locations);
+              setLocationToDeleteId(null);
+
               // setShowResetToast(true);
-              // setCounterId(null);
-              // setShowDeleteLocationActionSheet(false);
             },
           },
           {
@@ -165,6 +167,12 @@ const BottomSheetLocationsList = ({
             },
           },
         ]}
+      />
+      <Toast
+        isOpen={showDeleteLocationToast}
+        message="Location deleted"
+        setShow={setShowDeleteLocationToast}
+        testId={"location-deletion-toast"}
       />
     </IonModal>
   );

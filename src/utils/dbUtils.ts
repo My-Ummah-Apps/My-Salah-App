@@ -133,7 +133,7 @@ export const deleteUserLocation = async (
 
     const params = [id];
 
-    await dbConnection.current?.execute(stmnt, params);
+    await dbConnection.current?.run(stmnt, params);
 
     // const res = await db.current.query(stmnt);
     // setUserLocations(res.values);
