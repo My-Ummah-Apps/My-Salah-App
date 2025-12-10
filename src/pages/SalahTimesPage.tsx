@@ -3,6 +3,9 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -10,7 +13,11 @@ import {
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { chevronDownOutline } from "ionicons/icons";
+import {
+  alarmOutline,
+  chevronDownOutline,
+  pencilOutline,
+} from "ionicons/icons";
 import { FaChevronDown } from "react-icons/fa6";
 import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
 
@@ -31,6 +38,8 @@ const SalahTimesPage = ({
   setUserLocations,
   userLocations,
 }: SalahTimesPageProps) => {
+  const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -40,12 +49,27 @@ const SalahTimesPage = ({
       </IonHeader>
       <IonContent>
         {userLocations?.length === 0 ? (
-          <section className="flex flex-col items-center justify-center h-full text-center">
-            <h1>Salah Times Not Set</h1>
-            <IonButton id="open-salah-times-settings-sheet" className="w-1/2">
-              Set up Salah Times
-            </IonButton>
-          </section>
+          <>
+            <IonList>
+              {salahNames.map((salahName, i) => (
+                <IonItem key={salahName + i}>
+                  <IonLabel>{salahName}</IonLabel>
+                  <div className="flex items-center" slot="end">
+                    <p>--:--</p>
+                    <IonButton slot="end" fill="clear">
+                      <IonIcon icon={alarmOutline} />
+                    </IonButton>
+                  </div>
+                </IonItem>
+              ))}
+            </IonList>
+            <section className="flex flex-col items-center justify-center h-full text-center">
+              <h1>Salah Times Not Set</h1>
+              <IonButton id="open-salah-times-settings-sheet" className="w-1/2">
+                Add Location
+              </IonButton>
+            </section>
+          </>
         ) : (
           <section>
             <div>

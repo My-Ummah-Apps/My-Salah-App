@@ -23,7 +23,7 @@ describe("Integration tests for Salah times page when no locations exist", () =>
         userLocations={[]}
       />
     );
-    setUpBtn = screen.getByText(/set up salah times/i);
+    setUpBtn = screen.getByText(/Add Location/i);
   });
 
   it("shows fallback if no locations exist", () => {
@@ -31,6 +31,12 @@ describe("Integration tests for Salah times page when no locations exist", () =>
     expect(fallbackText).toBeInTheDocument();
 
     expect(setUpBtn).toBeInTheDocument();
+
+    const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+    salahNames.forEach((salahName) => {
+      expect(salahName).toBeInTheDocument();
+    });
   });
 
   it("opens onboarding modal when setup button is clicked", async () => {
