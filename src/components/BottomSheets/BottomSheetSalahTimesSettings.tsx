@@ -15,7 +15,7 @@ import {
 
 import { useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
-import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
+import BottomSheetLocationSettings from "./BottomSheetAddLocation";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   LocationsDataObjTypeArr,
@@ -66,7 +66,7 @@ const BottomSheetSalahTimesSettings = ({
           <section className="mt-10 text-center">
             <section className="text-center">
               <h5>Location</h5>
-              <IonButton
+              {/* <IonButton
                 id="open-location-settings-sheet"
                 style={{
                   "--background": "transparent",
@@ -77,14 +77,14 @@ const BottomSheetSalahTimesSettings = ({
                 <p>
                   <MdOutlineChevronRight />
                 </p>
-              </IonButton>
-              <BottomSheetLocationSettings
+              </IonButton> */}
+              {/* <BottomSheetLocationSettings
                 triggerId="open-location-settings-sheet"
                 dbConnection={dbConnection}
                 setUserLocations={setUserLocations}
                 userLocations={userLocations}
                 // setUserPreferences={setUserPreferences}
-              />
+              /> */}
             </section>
             <h5>Calculation Method</h5>
             <IonButton

@@ -1,7 +1,13 @@
 import {
   IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonContent,
   IonHeader,
+  IonIcon,
   IonInput,
   IonModal,
   IonTitle,
@@ -22,6 +28,7 @@ import { useEffect, useRef, useState } from "react";
 import Toast from "../Toast";
 import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
+import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
 
 interface BottomSheetLocationSettingsProps {
   triggerId?: string;
@@ -150,18 +157,18 @@ const BottomSheetLocationSettings = ({
 
   return (
     <IonModal
-      mode="ios"
-      className={`${isPlatform("ios") ? "" : "modal-height"}`}
-      // presentingElement={presentingElement!}
-      // style={{ "--height": "95vh" }}
-      // expandToScroll={false}
       // className="modal-fit-content"
-      onWillDismiss={() => {
-        // setNewReasonInput("");
-      }}
+      mode="ios"
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
+      // className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      // presentingElement={presentingElement!}
+      // style={{ "--height": "95vh" }}
+      // expandToScroll={false}
+      onWillDismiss={() => {
+        // setNewReasonInput("");
+      }}
     >
       <IonHeader>
         <IonToolbar>
@@ -267,46 +274,80 @@ const BottomSheetLocationSettings = ({
             </div>
           </section>
         )}
-        <section className="p-2 mx-5 mb-5 text-center">
+        <section className="px-2 mx-5 mt-2 text-center">
           <p>
             To calculate Salah times, the app requires your location, you can
             use one of the three methods below.
           </p>
         </section>
-        <section className="p-2 mx-5 my-5 text-center border rounded-lg">
-          <h2 className="text-lg">Method 1</h2>
-          {/* <p>Use Device GPS</p> */}
-          <IonButton
-            expand="block"
-            onClick={async () => {
-              presentLocationSpinner({
-                message: "Detecting location...",
-                backdropDismiss: false,
-              });
-              try {
-                await handleLocationPermissions();
-              } catch (error) {
-                console.error(error);
-              } finally {
-                await dismissLocationSpinner();
-              }
-            }}
-          >
-            Use Device GPS
-          </IonButton>
-        </section>
-        <section className="p-2 mx-5 my-5 text-center border rounded-lg">
-          <h2 className="text-lg">Method 2</h2>
-          <IonButton expand="block">Enter Location Manually</IonButton>
+        <IonCard>
+          <IonCardHeader className="pt-0 pb-1">
+            <IonCardTitle>GPS</IonCardTitle>
+            <IonCardSubtitle>Method 1</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            Automatically detects your current location using your device’s GPS.
+            <div className="flex justify-end">
+              <IonButton
+                className="mt-5 text-sm"
+                color="tertiary"
+                onClick={async () => {
+                  presentLocationSpinner({
+                    message: "Detecting location...",
+                    backdropDismiss: false,
+                  });
+                  try {
+                    await handleLocationPermissions();
+                  } catch (error) {
+                    console.error(error);
+                  } finally {
+                    await dismissLocationSpinner();
+                  }
+                }}
+              >
+                <IonIcon className="mr-2" icon={locationOutline} />
+                Use Device GPS
+              </IonButton>
+            </div>
+          </IonCardContent>
+        </IonCard>
+
+        <IonCard>
+          <IonCardHeader className="pt-0 pb-1">
+            <IonCardTitle>Search City</IonCardTitle>
+            <IonCardSubtitle>Method 2</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            Search for a city by name and select it from the results.{" "}
+            <div className="flex justify-end">
+              <IonButton className="mt-5 text-sm" color="tertiary">
+                <IonIcon className="mr-2" icon={searchOutline} />
+                Search Manually
+              </IonButton>
+            </div>
+          </IonCardContent>
           {/* <IonInput
             aria-label="location"
             placeholder="location"
             className="bg-[var(--textarea-bg-color)] rounded-lg text-[var(--ion-text-color)] my-2"
           ></IonInput> */}
-        </section>
-        <section className="p-2 mx-5 my-5 text-center border rounded-lg">
-          <h2 className="text-lg">Method 3</h2>
-          <IonButton expand="block">Enter Coordinates</IonButton>
+        </IonCard>
+
+        <IonCard>
+          <IonCardHeader className="pt-0 pb-1">
+            <IonCardTitle>Enter Coordinates</IonCardTitle>
+            <IonCardSubtitle>Method 3</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            Manually enter a latitude and longitude if you already know the
+            exact location.
+            <div className="flex justify-end">
+              <IonButton className="mt-5 text-sm" color="tertiary">
+                <IonIcon className="mr-2" icon={globeOutline} />
+                Enter Coordinates
+              </IonButton>
+            </div>
+          </IonCardContent>
           {/* <IonInput
             aria-label="latitude"
             placeholder="latitude"
@@ -317,7 +358,8 @@ const BottomSheetLocationSettings = ({
             placeholder="longitude"
             className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
           ></IonInput> */}
-        </section>
+        </IonCard>
+
         <Toast
           isOpen={showLocationFailureToast}
           message="Unable to retrieve location, please try again"

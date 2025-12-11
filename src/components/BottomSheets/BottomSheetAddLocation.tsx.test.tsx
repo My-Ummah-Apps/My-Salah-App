@@ -61,7 +61,7 @@ import { Capacitor } from "@capacitor/core";
 
 const getPlatformSpy = vi.spyOn(Capacitor, "getPlatform");
 
-import BottomSheetLocationSettings from "./BottomSheetLocationSettings";
+import BottomSheetLocationSettings from "./BottomSheetAddLocation";
 
 describe("tests for GPS location button when permission is prompt", () => {
   let findMyLocationBtn: HTMLButtonElement;
