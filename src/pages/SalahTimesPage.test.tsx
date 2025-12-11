@@ -12,7 +12,7 @@ import {
 } from "../__mocks__/test-utils";
 
 describe("Integration tests for Salah times page when no locations exist", () => {
-  let setUpBtn: HTMLButtonElement;
+  let addLocationBtn: HTMLButtonElement;
   beforeEach(() => {
     render(
       <SalahTimesPage
@@ -23,73 +23,77 @@ describe("Integration tests for Salah times page when no locations exist", () =>
         userLocations={[]}
       />
     );
-    setUpBtn = screen.getByText(/Add Location/i);
+    addLocationBtn = screen.getByText(/Add Location/i);
   });
 
   it("shows fallback if no locations exist", () => {
     const fallbackText = screen.getByText("Salah Times Not Set");
     expect(fallbackText).toBeInTheDocument();
 
-    expect(setUpBtn).toBeInTheDocument();
+    expect(addLocationBtn).toBeInTheDocument();
 
     const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
     salahNames.forEach((salahName) => {
-      expect(salahName).toBeInTheDocument();
+      const el = screen.getByText(salahName);
+      expect(el).toBeInTheDocument();
     });
   });
 
-  it("opens onboarding modal when setup button is clicked", async () => {
+  it("opens modal which displays different options to add a location when add location button button is clicked", async () => {
     await act(async () => {
-      await userEvent.click(setUpBtn);
+      await userEvent.click(addLocationBtn);
     });
 
-    const selectLocationText = await screen.findByText("Salah Times Settings");
+    const selectLocationText = await screen.findByText(
+      /To calculate Salah times, the app requires your location, you can use one of the three methods below./i
+    );
     expect(selectLocationText).toBeInTheDocument();
   });
 
-  describe("it opens the salah times settings sheet and renders relevant options", () => {
-    it("renders relevant options in the main salah times settings bottom sheet", async () => {
-      await act(async () => {
-        await userEvent.click(setUpBtn);
-      });
-      const selectLocationBtn = await screen.findByText(/add location/i);
-      expect(selectLocationBtn).toBeInTheDocument();
+  // describe("it opens the salah times settings sheet and renders relevant options", () => {
+  // TODO: Below it block needs to be moved to different test file
+  // it("renders relevant options in the main salah times settings bottom sheet", async () => {
+  //   await act(async () => {
+  //     await userEvent.click(addLocationBtn);
+  //   });
+  //   const selectLocationBtn = await screen.findByText(/add location/i);
+  //   expect(selectLocationBtn).toBeInTheDocument();
 
-      const selectCalcMethodBtn = await screen.findByText(
-        /select calculation method/i
-      );
-      expect(selectCalcMethodBtn).toBeInTheDocument();
+  //   const selectCalcMethodBtn = await screen.findByText(
+  //     /select calculation method/i
+  //   );
+  //   expect(selectCalcMethodBtn).toBeInTheDocument();
 
-      const earlierAsrTimeText = await screen.findByText(/earlier asr time/i);
-      expect(earlierAsrTimeText).toBeInTheDocument();
+  //   const earlierAsrTimeText = await screen.findByText(/earlier asr time/i);
+  //   expect(earlierAsrTimeText).toBeInTheDocument();
 
-      const laterAsrTimeText = await screen.findByText(/later asr time/i);
-      expect(laterAsrTimeText).toBeInTheDocument();
+  //   const laterAsrTimeText = await screen.findByText(/later asr time/i);
+  //   expect(laterAsrTimeText).toBeInTheDocument();
+  // });
+
+  it("opens location settings bottom sheet and renders relevant options", async () => {
+    await act(async () => {
+      await userEvent.click(addLocationBtn);
     });
 
-    it("opens location settings bottom sheet and renders relevant options", async () => {
-      await act(async () => {
-        await userEvent.click(setUpBtn);
-      });
+    const selectLocationBtn = await screen.findByText(/add location/i);
+    expect(selectLocationBtn).toBeInTheDocument();
+    await userEvent.click(selectLocationBtn);
 
-      const selectLocationBtn = await screen.findByText(/add location/i);
-      expect(selectLocationBtn).toBeInTheDocument();
-      await userEvent.click(selectLocationBtn);
+    const gpsBtn = await screen.findByText(/use device gps/i);
+    expect(gpsBtn).toBeInTheDocument();
 
-      const findMyLocationText = await screen.findByText(/use device gps/i);
-      expect(findMyLocationText).toBeInTheDocument();
+    const searchManuallyBtn = await screen.findByText(/search manually/i);
+    expect(searchManuallyBtn).toBeInTheDocument();
 
-      const locationInput = await screen.findByText(/enter location manually/i);
-      expect(locationInput).toBeInTheDocument();
+    const enterCoordsText = await screen.findAllByText(/enter coordinates/i);
+    expect(enterCoordsText).toHaveLength(2);
 
-      // const latitudeInput = await screen.findByLabelText(/latitude/i);
-      // expect(latitudeInput).toBeInTheDocument();
-
-      // const longitudeInput = await screen.findByLabelText(/longitude/i);
-      // expect(longitudeInput).toBeInTheDocument();
-    });
+    // const longitudeInput = await screen.findByLabelText(/longitude/i);
+    // expect(longitudeInput).toBeInTheDocument();
   });
+  // });
 });
 
 describe("ingeration tests for when atleast one location exists", () => {

@@ -64,9 +64,13 @@ const SalahTimesPage = ({
                 </IonItem>
               ))}
             </IonList>
-            <section className="flex flex-col items-center justify-center h-full text-center">
-              <h1>Salah Times Not Set</h1>
+            <section
+              className="text-center"
+              // className="flex flex-col items-center justify-center h-full text-center"
+            >
+              <h4>Salah Times Not Set</h4>
               <IonButton
+                size="small"
                 onClick={() => {}}
                 id="open-location-settings-sheet"
                 className="w-1/2"
