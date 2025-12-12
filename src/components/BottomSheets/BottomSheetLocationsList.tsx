@@ -119,14 +119,17 @@ const BottomSheetLocationsList = ({
             vertical="bottom"
             horizontal="end"
           >
-            <IonFabButton id="open-location-settings-sheet">
+            <IonFabButton
+              id="open-location-settings-sheet"
+              aria-label="add location"
+              data-testid="add-location-btn"
+            >
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
           </IonFab>
         </IonContent>
       </IonPage>
-      // ! replace bottom sheet trigger method to set state as opposed to
-      triggerId
+
       {/* <BottomSheetAddLocation
         triggerId={"open-location-settings-sheet"}
         dbConnection={dbConnection}

@@ -335,8 +335,6 @@ describe("tests for GPS location button functionality when location permission i
 });
 
 describe("tests asserting location settings bottom sheet is triggered / not triggered upon user adding a location", () => {
-  let gpsBtn: HTMLButtonElement;
-
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -354,7 +352,15 @@ describe("tests asserting location settings bottom sheet is triggered / not trig
         setShowSalahTimesSettingsSheet={mocksetShowSalahTimesSettingsSheet}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
-        userLocations={[]}
+        userLocations={[
+          {
+            id: 1,
+            isSelected: 0,
+            latitude: 53.483959,
+            locationName: "Manchester",
+            longitude: -2.244644,
+          },
+        ]}
       />
     );
     const gpsBtn = screen.getByText(/Use Device GPS/i);
