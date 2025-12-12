@@ -63,6 +63,7 @@ import BottomSheetAddLocation from "./BottomSheetAddLocation";
 const getPlatformSpy = vi.spyOn(Capacitor, "getPlatform");
 
 const mocksetShowAddLocationSheet = vi.fn();
+const mocksetShowSalahTimesSettingsSheet = vi.fn();
 
 describe("tests for GPS location button when permission is prompt", () => {
   let gpsBtn: HTMLButtonElement;
@@ -85,6 +86,7 @@ describe("tests for GPS location button when permission is prompt", () => {
       <BottomSheetAddLocation
         setShowAddLocationSheet={mocksetShowAddLocationSheet}
         showAddLocationSheet={true}
+        setShowSalahTimesSettingsSheet={mocksetShowSalahTimesSettingsSheet}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
         userLocations={mockUserLocations}
@@ -128,6 +130,7 @@ describe("tests for GPS location button functionality when location permission i
       <BottomSheetAddLocation
         setShowAddLocationSheet={mocksetShowAddLocationSheet}
         showAddLocationSheet={true}
+        setShowSalahTimesSettingsSheet={mocksetShowSalahTimesSettingsSheet}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
         userLocations={mockUserLocations}
@@ -348,6 +351,7 @@ describe("tests asserting location settings bottom sheet is triggered / not trig
       <BottomSheetAddLocation
         setShowAddLocationSheet={mocksetShowAddLocationSheet}
         showAddLocationSheet={true}
+        setShowSalahTimesSettingsSheet={mocksetShowSalahTimesSettingsSheet}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
         userLocations={[]}
@@ -384,6 +388,7 @@ describe("tests asserting location settings bottom sheet is triggered / not trig
       <BottomSheetAddLocation
         setShowAddLocationSheet={mocksetShowAddLocationSheet}
         showAddLocationSheet={true}
+        setShowSalahTimesSettingsSheet={mocksetShowSalahTimesSettingsSheet}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
         userLocations={mockUserLocations}
@@ -435,6 +440,7 @@ describe("tests asserting location settings bottom sheet is triggered / not trig
 //       <BottomSheetAddLocation
 //         setShowAddLocationSheet={mocksetShowAddLocationSheet}
 //         showAddLocationSheet={true}
+// setShowSalahTimesSettingsSheet = { mocksetShowSalahTimesSettingsSheet };
 //         dbConnection={mockdbConnection}
 //         setUserLocations={vi.fn()}
 //         userLocations={mockUserLocations}
@@ -484,6 +490,7 @@ describe("tests for GPS location button functionality when location permission i
       <BottomSheetAddLocation
         setShowAddLocationSheet={mocksetShowAddLocationSheet}
         showAddLocationSheet={true}
+        setShowSalahTimesSettingsSheet={mocksetShowSalahTimesSettingsSheet}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
         userLocations={mockUserLocations}

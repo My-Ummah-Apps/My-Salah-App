@@ -15,7 +15,7 @@ import {
 
 import { useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
-import BottomSheetLocationSettings from "./BottomSheetAddLocation";
+
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   LocationsDataObjTypeArr,
@@ -23,7 +23,8 @@ import {
 } from "../../types/types";
 
 interface BottomSheetSalahTimesSettingsProps {
-  triggerId: string;
+  setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showSalahTimesSettingsSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setUserLocations: React.Dispatch<
@@ -33,7 +34,8 @@ interface BottomSheetSalahTimesSettingsProps {
 }
 
 const BottomSheetSalahTimesSettings = ({
-  triggerId,
+  setShowSalahTimesSettingsSheet,
+  showSalahTimesSettingsSheet,
   dbConnection,
   setUserPreferences,
   setUserLocations,
@@ -44,15 +46,16 @@ const BottomSheetSalahTimesSettings = ({
   return (
     <IonModal
       mode="ios"
-      trigger={triggerId}
+      isOpen={showSalahTimesSettingsSheet}
       className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
       // className="modal-fit-content"
-      onWillDismiss={() => {
-        // setNewReasonInput("");
+      onDidDismiss={() => {
+        setShowSalahTimesSettingsSheet(false);
       }}
+      onWillDismiss={() => {}}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >

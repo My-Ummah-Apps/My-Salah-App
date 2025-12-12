@@ -43,6 +43,8 @@ const SalahTimesPage = ({
   const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
+  const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
+    useState(false);
 
   return (
     <IonPage>
@@ -84,6 +86,7 @@ const SalahTimesPage = ({
               <BottomSheetAddLocation
                 setShowAddLocationSheet={setShowAddLocationSheet}
                 showAddLocationSheet={showAddLocationSheet}
+                setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
                 dbConnection={dbConnection}
                 setUserLocations={setUserLocations}
                 userLocations={userLocations}
@@ -124,7 +127,8 @@ const SalahTimesPage = ({
         userLocations={userLocations}
       />
       <BottomSheetSalahTimesSettings
-        triggerId={"open-salah-times-settings-sheet"}
+        setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
+        showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
         setUserLocations={setUserLocations}
