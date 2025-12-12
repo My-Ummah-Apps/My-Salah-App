@@ -52,25 +52,6 @@ describe("Integration tests for Salah times page when no locations exist", () =>
   });
 
   // describe("it opens the salah times settings sheet and renders relevant options", () => {
-  // TODO: Below it block needs to be moved to different test file
-  // it("renders relevant options in the main salah times settings bottom sheet", async () => {
-  //   await act(async () => {
-  //     await userEvent.click(addLocationBtn);
-  //   });
-  //   const selectLocationBtn = await screen.findByText(/add location/i);
-  //   expect(selectLocationBtn).toBeInTheDocument();
-
-  //   const selectCalcMethodBtn = await screen.findByText(
-  //     /select calculation method/i
-  //   );
-  //   expect(selectCalcMethodBtn).toBeInTheDocument();
-
-  //   const earlierAsrTimeText = await screen.findByText(/earlier asr time/i);
-  //   expect(earlierAsrTimeText).toBeInTheDocument();
-
-  //   const laterAsrTimeText = await screen.findByText(/later asr time/i);
-  //   expect(laterAsrTimeText).toBeInTheDocument();
-  // });
 
   it("opens location settings bottom sheet and renders relevant options", async () => {
     await act(async () => {

@@ -30,7 +30,7 @@ import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
 
-interface BottomSheetLocationSettingsProps {
+interface BottomSheetAddLocationProps {
   triggerId?: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
@@ -39,12 +39,12 @@ interface BottomSheetLocationSettingsProps {
   userLocations: LocationsDataObjTypeArr | undefined;
 }
 
-const BottomSheetLocationSettings = ({
+const BottomSheetAddLocation = ({
   triggerId,
   dbConnection,
   setUserLocations,
   userLocations,
-}: BottomSheetLocationSettingsProps) => {
+}: BottomSheetAddLocationProps) => {
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationNameInput, setShowLocationNameInput] =
     useState<boolean>(false);
@@ -151,9 +151,9 @@ const BottomSheetLocationSettings = ({
     }
   };
 
-  useEffect(() => {
-    console.log("showDuplicateLocationError: ", showDuplicateLocationError);
-  }, [showDuplicateLocationError]);
+  // useEffect(() => {
+  //   console.log("showDuplicateLocationError: ", showDuplicateLocationError);
+  // }, [showDuplicateLocationError]);
 
   return (
     <IonModal
@@ -256,6 +256,9 @@ const BottomSheetLocationSettings = ({
                     if (locations) {
                       setUserLocations(locations);
                       setShowLocationAddedToast(true);
+                      if (userLocations.length > 1) {
+                        // setShowLocationSettingsSheet(true)
+                      }
                       // TODO: Close the add location sheet here
                     } else {
                       console.error("Locations undefined");
@@ -377,4 +380,4 @@ const BottomSheetLocationSettings = ({
   );
 };
 
-export default BottomSheetLocationSettings;
+export default BottomSheetAddLocation;

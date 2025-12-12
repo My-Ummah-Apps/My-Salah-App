@@ -65,19 +65,6 @@ const BottomSheetSalahTimesSettings = ({
         <IonContent>
           <section className="mt-10 text-center">
             <section className="text-center">
-              <h5>Location</h5>
-              {/* <IonButton
-                id="open-location-settings-sheet"
-                style={{
-                  "--background": "transparent",
-                }}
-                className="flex items-center mx-5 border border-gray-500 rounded-md"
-              >
-                <p>Add location</p>
-                <p>
-                  <MdOutlineChevronRight />
-                </p>
-              </IonButton> */}
               {/* <BottomSheetLocationSettings
                 triggerId="open-location-settings-sheet"
                 dbConnection={dbConnection}

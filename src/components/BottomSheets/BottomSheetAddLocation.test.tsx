@@ -58,13 +58,12 @@ import {
   mockUserLocations,
 } from "../../__mocks__/test-utils";
 import { Capacitor } from "@capacitor/core";
+import BottomSheetAddLocation from "./BottomSheetAddLocation";
 
 const getPlatformSpy = vi.spyOn(Capacitor, "getPlatform");
 
-import BottomSheetLocationSettings from "./BottomSheetAddLocation";
-
 describe("tests for GPS location button when permission is prompt", () => {
-  let findMyLocationBtn: HTMLButtonElement;
+  let gpsBtn: HTMLButtonElement;
   let promptSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
@@ -81,7 +80,7 @@ describe("tests for GPS location button when permission is prompt", () => {
       .mockResolvedValue(undefined) as any;
 
     render(
-      <BottomSheetLocationSettings
+      <BottomSheetAddLocation
         triggerId={"testId"}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
@@ -89,11 +88,11 @@ describe("tests for GPS location button when permission is prompt", () => {
       />
     );
 
-    findMyLocationBtn = screen.getByText(/Use Device GPS/i);
+    gpsBtn = screen.getByText(/Use Device GPS/i);
   });
 
   it("asks user for permission", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
     // expect(Geolocation.checkPermissions).toHaveBeenCalled();
     expect(Geolocation.requestPermissions).toHaveBeenCalled();
     expect(promptSpy).not.toHaveBeenCalled();
@@ -101,7 +100,7 @@ describe("tests for GPS location button when permission is prompt", () => {
 });
 
 describe("tests for GPS location button functionality when location permission is granted", () => {
-  let findMyLocationBtn: HTMLButtonElement;
+  let gpsBtn: HTMLButtonElement;
   let promptSpy: ReturnType<typeof vi.spyOn>;
   let addUserLocationFunctionSpy: ReturnType<typeof vi.spyOn>;
 
@@ -123,14 +122,14 @@ describe("tests for GPS location button functionality when location permission i
       .mockResolvedValue(undefined) as any;
 
     render(
-      <BottomSheetLocationSettings
+      <BottomSheetAddLocation
         triggerId={"testId"}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
         userLocations={mockUserLocations}
       />
     );
-    findMyLocationBtn = screen.getByText(/Use Device GPS/i);
+    gpsBtn = screen.getByText(/Use Device GPS/i);
   });
 
   it("retrieves location coordinates", async () => {
@@ -138,7 +137,7 @@ describe("tests for GPS location button functionality when location permission i
       coords: { latitude: 53.48, longitude: -3.44 },
     });
 
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     expect(Geolocation.checkPermissions).toHaveBeenCalled();
     expect(Geolocation.requestPermissions).not.toHaveBeenCalled();
@@ -149,7 +148,7 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("shows alert for user to name location after coordinates are retrieved", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     const locationLoader = document.body.querySelector("ion-loading");
     expect(locationLoader).toBeInTheDocument();
@@ -159,7 +158,7 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("clears input upon save button being clicked and location being added successfully", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     let input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
@@ -170,14 +169,14 @@ describe("tests for GPS location button functionality when location permission i
     const saveBtn = await screen.findByText(/save/i);
     await userEvent.click(saveBtn);
 
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toHaveValue("");
   });
 
   it("clears input upon cancel button being clicked", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
     let input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
 
@@ -188,13 +187,13 @@ describe("tests for GPS location button functionality when location permission i
     expect(cancelBtn).toBeInTheDocument();
 
     await userEvent.click(cancelBtn);
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
     input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toHaveValue("");
   });
 
   it("updates DB with new location when the input is not blank", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     const locationNameHeading = await screen.findByText(/enter location name/i);
     expect(locationNameHeading).toBeInTheDocument();
@@ -216,7 +215,7 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("does not update DB when input is blank and user presses save button", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     const input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
@@ -235,7 +234,7 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("shows toast with success message after a location is successfully saved", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     const input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
@@ -255,7 +254,7 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("clears error message upon user saving a location", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     let input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
@@ -271,7 +270,7 @@ describe("tests for GPS location button functionality when location permission i
     expect(input).toHaveValue("London");
     await userEvent.click(saveBtn);
 
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
     input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
 
@@ -280,7 +279,7 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("clears error message upon user pressing cancel button", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     let input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
@@ -298,7 +297,7 @@ describe("tests for GPS location button functionality when location permission i
     const cancelBtn = await screen.findByText(/cancel/i);
     await userEvent.click(cancelBtn);
 
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
     input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
 
@@ -307,7 +306,7 @@ describe("tests for GPS location button functionality when location permission i
   });
 
   it("does not update DB or state when location name already exists", async () => {
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     const input = await screen.findByPlaceholderText(/e.g. home/i);
     expect(input).toBeInTheDocument();
@@ -328,8 +327,92 @@ describe("tests for GPS location button functionality when location permission i
   });
 });
 
+describe("tests asserting location settings bottom sheet is triggered / not triggered upon user adding a location", () => {
+  let gpsBtn: HTMLButtonElement;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    vi.mocked(Geolocation.checkPermissions).mockResolvedValue({
+      location: "granted",
+      coarseLocation: "granted",
+    });
+  });
+
+  it("opens the settings bottom sheet when a location is successfully detected and saved with no existing locations", async () => {
+    render(
+      <BottomSheetAddLocation
+        triggerId={"testId"}
+        dbConnection={mockdbConnection}
+        setUserLocations={vi.fn()}
+        userLocations={[]}
+      />
+    );
+    const gpsBtn = screen.getByText(/Use Device GPS/i);
+    await userEvent.click(gpsBtn);
+
+    const locationNameHeading = await screen.findByText(/enter location name/i);
+    expect(locationNameHeading).toBeInTheDocument();
+
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "Berlin", { delay: 5 });
+
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
+
+    const selectCalcMethodBtn = await screen.findByText(
+      /select calculation method/i
+    );
+    expect(selectCalcMethodBtn).toBeInTheDocument();
+
+    const earlierAsrTimeText = await screen.findByText(/earlier asr time/i);
+    expect(earlierAsrTimeText).toBeInTheDocument();
+
+    const laterAsrTimeText = await screen.findByText(/later asr time/i);
+    expect(laterAsrTimeText).toBeInTheDocument();
+  });
+
+  it("does not open the settings bottom sheet when a location is successfully detected and saved while other locations already exist", async () => {
+    render(
+      <BottomSheetAddLocation
+        triggerId={"testId"}
+        dbConnection={mockdbConnection}
+        setUserLocations={vi.fn()}
+        userLocations={mockUserLocations}
+      />
+    );
+
+    const gpsBtn = screen.getByText(/Use Device GPS/i);
+    await userEvent.click(gpsBtn);
+
+    const locationNameHeading = await screen.findByText(/enter location name/i);
+    expect(locationNameHeading).toBeInTheDocument();
+
+    const input = await screen.findByPlaceholderText(/e.g. home/i);
+    expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "Berlin", { delay: 5 });
+
+    const saveBtn = await screen.findByText(/save/i);
+    await userEvent.click(saveBtn);
+
+    const selectCalcMethodBtn = screen.queryByText(
+      /select calculation method/i
+    );
+    expect(selectCalcMethodBtn).not.toBeInTheDocument();
+
+    const earlierAsrTimeText = screen.queryByText(/earlier asr time/i);
+    expect(earlierAsrTimeText).not.toBeInTheDocument();
+
+    const laterAsrTimeText = screen.queryByText(/later asr time/i);
+    expect(laterAsrTimeText).not.toBeInTheDocument();
+  });
+});
+
 // describe("test for handling location detection failure", () => {
-//   let findMyLocationBtn: HTMLButtonElement;
+//   let gpsBtn: HTMLButtonElement;
 
 //   beforeEach(() => {
 //     vi.clearAllMocks();
@@ -343,7 +426,7 @@ describe("tests for GPS location button functionality when location permission i
 //     });
 
 //     render(
-//       <BottomSheetLocationSettings
+//       <BottomSheetAddLocation
 //         triggerId={"testId"}
 //         dbConnection={mockdbConnection}
 //         setUserLocations={vi.fn()}
@@ -351,7 +434,7 @@ describe("tests for GPS location button functionality when location permission i
 //         // setUserPreferences={mockUserPrefsState}
 //       />
 //     );
-//     findMyLocationBtn = screen.getByText(/Use Device GPS/i);
+//     gpsBtn = screen.getByText(/Use Device GPS/i);
 //   });
 
 //   afterEach(() => {
@@ -363,7 +446,7 @@ describe("tests for GPS location button functionality when location permission i
 //     vi.mocked(Geolocation.getCurrentPosition).mockRejectedValue(
 //       new Error("There was en error trying to obtain the location")
 //     );
-//     await userEvent.click(findMyLocationBtn);
+//     await userEvent.click(gpsBtn);
 
 //     const toast = await screen.findByTestId("location-fail-toast");
 //     expect(toast).toHaveAttribute(
@@ -375,7 +458,7 @@ describe("tests for GPS location button functionality when location permission i
 // });
 
 describe("tests for GPS location button functionality when location permission is denied", () => {
-  let findMyLocationBtn: HTMLButtonElement;
+  let gpsBtn: HTMLButtonElement;
   let promptSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
@@ -391,19 +474,19 @@ describe("tests for GPS location button functionality when location permission i
       .mockResolvedValue(undefined) as any;
 
     render(
-      <BottomSheetLocationSettings
+      <BottomSheetAddLocation
         triggerId={"testId"}
         dbConnection={mockdbConnection}
         setUserLocations={vi.fn()}
         userLocations={mockUserLocations}
       />
     );
-    findMyLocationBtn = screen.getByText(/Use Device GPS/i);
+    gpsBtn = screen.getByText(/Use Device GPS/i);
   });
 
   it("shows user a prompt to open system settings on Android when location permissions are turned off in system settings", async () => {
     getPlatformSpy.mockReturnValue("android");
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     expect(promptSpy).toHaveBeenCalledWith(
       expect.any(String),
@@ -416,7 +499,7 @@ describe("tests for GPS location button functionality when location permission i
 
   it("shows user a prompt to open system settings on iOS when location permissions are turned off in system settings", async () => {
     getPlatformSpy.mockReturnValue("ios");
-    await userEvent.click(findMyLocationBtn);
+    await userEvent.click(gpsBtn);
 
     expect(promptSpy).toHaveBeenCalledWith(
       expect.any(String),
