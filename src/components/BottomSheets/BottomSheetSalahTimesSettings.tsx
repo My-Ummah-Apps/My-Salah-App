@@ -65,7 +65,7 @@ const BottomSheetSalahTimesSettings = ({
         <IonContent>
           <section className="mt-10 text-center">
             <section className="text-center">
-              {/* <BottomSheetLocationSettings
+              {/* <BottomSheetAddLocation
                 triggerId="open-location-settings-sheet"
                 dbConnection={dbConnection}
                 setUserLocations={setUserLocations}

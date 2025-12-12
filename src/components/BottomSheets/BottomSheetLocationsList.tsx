@@ -127,7 +127,7 @@ const BottomSheetLocationsList = ({
       </IonPage>
       // ! replace bottom sheet trigger method to set state as opposed to
       triggerId
-      {/* <BottomSheetLocationSettings
+      {/* <BottomSheetAddLocation
         triggerId={"open-location-settings-sheet"}
         dbConnection={dbConnection}
         setUserLocations={setUserLocations}

@@ -20,7 +20,8 @@ import {
 } from "ionicons/icons";
 import { FaChevronDown } from "react-icons/fa6";
 import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
-import BottomSheetLocationSettings from "../components/BottomSheets/BottomSheetAddLocation";
+import BottomSheetAddLocation from "../components/BottomSheets/BottomSheetAddLocation";
+import { useState } from "react";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -40,6 +41,8 @@ const SalahTimesPage = ({
   userLocations,
 }: SalahTimesPageProps) => {
   const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+  const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
 
   return (
     <IonPage>
@@ -71,14 +74,16 @@ const SalahTimesPage = ({
               <h4>Salah Times Not Set</h4>
               <IonButton
                 size="small"
-                onClick={() => {}}
-                id="open-location-settings-sheet"
+                onClick={() => {
+                  setShowAddLocationSheet(true);
+                }}
                 className="w-1/2"
               >
                 Add Location
               </IonButton>
-              <BottomSheetLocationSettings
-                triggerId="open-location-settings-sheet"
+              <BottomSheetAddLocation
+                setShowAddLocationSheet={setShowAddLocationSheet}
+                showAddLocationSheet={showAddLocationSheet}
                 dbConnection={dbConnection}
                 setUserLocations={setUserLocations}
                 userLocations={userLocations}

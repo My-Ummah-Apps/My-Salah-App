@@ -31,7 +31,8 @@ import { LocationsDataObjTypeArr } from "../../types/types";
 import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
 
 interface BottomSheetAddLocationProps {
-  triggerId?: string;
+  setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showAddLocationSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
@@ -40,7 +41,8 @@ interface BottomSheetAddLocationProps {
 }
 
 const BottomSheetAddLocation = ({
-  triggerId,
+  setShowAddLocationSheet,
+  showAddLocationSheet,
   dbConnection,
   setUserLocations,
   userLocations,
@@ -159,7 +161,8 @@ const BottomSheetAddLocation = ({
     <IonModal
       // className="modal-fit-content"
       mode="ios"
-      trigger={triggerId}
+      isOpen={showAddLocationSheet}
+      // trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
       // className={`${isPlatform("ios") ? "" : "modal-height"}`}
@@ -254,12 +257,12 @@ const BottomSheetAddLocation = ({
                     console.log("Locations: ", locations);
 
                     if (locations) {
+                      // if (userLocations.length > 1) {
+                      //  setShowAddLocationSheet(false);
+                      // }
+                      setShowAddLocationSheet(false);
                       setUserLocations(locations);
                       setShowLocationAddedToast(true);
-                      if (userLocations.length > 1) {
-                        // setShowLocationSettingsSheet(true)
-                      }
-                      // TODO: Close the add location sheet here
                     } else {
                       console.error("Locations undefined");
                     }
