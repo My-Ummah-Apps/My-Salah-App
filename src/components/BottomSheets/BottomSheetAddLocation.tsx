@@ -32,8 +32,10 @@ import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
 
 interface BottomSheetAddLocationProps {
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showAddLocationSheet: boolean;
-  setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showAddLocationSheet?: boolean;
+  setShowSalahTimesSettingsSheet?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
@@ -155,10 +157,6 @@ const BottomSheetAddLocation = ({
     }
   };
 
-  // useEffect(() => {
-  //   console.log("showDuplicateLocationError: ", showDuplicateLocationError);
-  // }, [showDuplicateLocationError]);
-
   return (
     <IonModal
       // className="modal-fit-content"
@@ -172,7 +170,7 @@ const BottomSheetAddLocation = ({
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
       onDidDismiss={() => {
-        setShowSalahTimesSettingsSheet(false);
+        setShowAddLocationSheet(false);
       }}
     >
       <IonHeader>

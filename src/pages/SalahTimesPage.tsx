@@ -104,17 +104,16 @@ const SalahTimesPage = ({
                   </p>
                 </section>
               ))}{" "}
-              <IonButton id="open-locations-sheet">
+              <IonButton
+                aria-label="show all locations"
+                id="open-locations-sheet"
+              >
                 {" "}
                 <IonIcon
                   icon={chevronDownOutline}
-                  aria-label="Show all locations"
+                  aria-hidden="false"
                   data-testid="locations-chevron"
                 />
-                {/* <FaChevronDown
-                      aria-label="Show all locations"
-                      data-testid="locations-chevron"
-                    /> */}
               </IonButton>
             </div>
           </section>
@@ -125,6 +124,8 @@ const SalahTimesPage = ({
         dbConnection={dbConnection}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
+        setShowAddLocationSheet={setShowAddLocationSheet}
+        showAddLocationSheet={showAddLocationSheet}
       />
       <BottomSheetSalahTimesSettings
         setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}

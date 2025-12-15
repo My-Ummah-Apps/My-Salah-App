@@ -25,6 +25,7 @@ import { useState } from "react";
 import ActionSheet from "../ActionSheet";
 import { deleteUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import Toast from "../Toast";
+import BottomSheetAddLocation from "./BottomSheetAddLocation";
 
 interface BottomSheetSalahTimesSettingsProps {
   triggerId: string;
@@ -34,6 +35,8 @@ interface BottomSheetSalahTimesSettingsProps {
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
+  setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showAddLocationSheet: boolean;
 }
 
 const BottomSheetLocationsList = ({
@@ -42,9 +45,9 @@ const BottomSheetLocationsList = ({
   //   setUserPreferences,
   setUserLocations,
   userLocations,
+  setShowAddLocationSheet,
+  showAddLocationSheet,
 }: BottomSheetSalahTimesSettingsProps) => {
-  console.log("BOTTOMSHEET LOCATIONS LIST RENDERED");
-
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
   const [showEditLocationActionSheet, setShowEditLocationActionSheet] =
@@ -114,6 +117,10 @@ const BottomSheetLocationsList = ({
             ))}
           </IonList>
           <IonFab
+            onClick={() => {
+              console.log("CLICK");
+              setShowAddLocationSheet(true);
+            }}
             aria-label="add new location"
             slot="fixed"
             vertical="bottom"
@@ -130,12 +137,6 @@ const BottomSheetLocationsList = ({
         </IonContent>
       </IonPage>
 
-      {/* <BottomSheetAddLocation
-        triggerId={"open-location-settings-sheet"}
-        dbConnection={dbConnection}
-        setUserLocations={setUserLocations}
-        userLocations={userLocations}
-      /> */}
       <ActionSheet
         // trigger="open-delete-location-action-sheet"
         setState={setShowDeleteLocationActionSheet}
@@ -157,7 +158,6 @@ const BottomSheetLocationsList = ({
               const locations = await fetchAllLocations(dbConnection);
               setUserLocations(locations);
               setLocationToDeleteId(null);
-
               // setShowResetToast(true);
             },
           },
@@ -176,6 +176,15 @@ const BottomSheetLocationsList = ({
         message="Location deleted"
         setShow={setShowDeleteLocationToast}
         testId={"location-deletion-toast"}
+      />
+      <BottomSheetAddLocation
+        setShowAddLocationSheet={setShowAddLocationSheet}
+        showAddLocationSheet={showAddLocationSheet}
+        // setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
+        dbConnection={dbConnection}
+        setUserLocations={setUserLocations}
+        userLocations={userLocations}
+        // setUserPreferences={setUserPreferences}
       />
     </IonModal>
   );

@@ -15,7 +15,6 @@ const ActionSheet = ({
   isOpen,
   setState,
 }: ActionSheetProps) => {
-  console.log("Rendering ActionSheet component");
   return (
     <IonActionSheet
       cssClass={"action-sheet-custom"}
