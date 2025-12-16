@@ -51,6 +51,7 @@ const SalahTimesPage = ({
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
     useState(false);
+  const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
 
   return (
     <IonPage>
@@ -132,9 +133,11 @@ const SalahTimesPage = ({
                 </section>
               ))}{" "}
               <IonButton
-                className="text-[var(--ion-text-color)] px-0"
+                onClick={() => {
+                  setShowLocationsListSheet(true);
+                }}
+                className={`text-[var(--ion-text-color)] px-0`}
                 aria-label="show all locations"
-                id="open-locations-sheet"
                 fill="clear"
                 // size="small"
               >
@@ -150,7 +153,8 @@ const SalahTimesPage = ({
         )}
       </IonContent>
       <BottomSheetLocationsList
-        triggerId={"open-locations-sheet"}
+        setShowLocationsListSheet={setShowLocationsListSheet}
+        showLocationsListSheet={showLocationsListSheet}
         dbConnection={dbConnection}
         setUserLocations={setUserLocations}
         userLocations={userLocations}

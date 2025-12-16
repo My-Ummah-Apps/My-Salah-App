@@ -34,6 +34,8 @@ interface BottomSheetSalahTimesSettingsProps {
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
+  setShowLocationsListSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showLocationsListSheet: boolean;
   userLocations: LocationsDataObjTypeArr | undefined;
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showAddLocationSheet: boolean;
@@ -44,6 +46,8 @@ const BottomSheetLocationsList = ({
   dbConnection,
   //   setUserPreferences,
   setUserLocations,
+  setShowLocationsListSheet,
+  showLocationsListSheet,
   userLocations,
   setShowAddLocationSheet,
   showAddLocationSheet,
@@ -60,6 +64,7 @@ const BottomSheetLocationsList = ({
 
   return (
     <IonModal
+      isOpen={showLocationsListSheet}
       mode="ios"
       trigger={triggerId}
       className={`${isPlatform("ios") ? "" : "modal-height"}`}
@@ -67,8 +72,8 @@ const BottomSheetLocationsList = ({
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
       // className="modal-fit-content"
-      onWillDismiss={() => {
-        // setNewReasonInput("");
+      onDidDismiss={() => {
+        setShowLocationsListSheet(false);
       }}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
