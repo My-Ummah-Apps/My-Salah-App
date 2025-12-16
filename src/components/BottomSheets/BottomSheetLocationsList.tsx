@@ -118,18 +118,17 @@ const BottomSheetLocationsList = ({
           </IonList>
           <IonFab
             onClick={() => {
-              console.log("CLICK");
+              console.log("CLICKy");
               setShowAddLocationSheet(true);
             }}
-            aria-label="add new location"
             slot="fixed"
             vertical="bottom"
             horizontal="end"
+            data-testid="add-location-btn"
           >
             <IonFabButton
               id="open-location-settings-sheet"
               aria-label="add location"
-              data-testid="add-location-btn"
             >
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
@@ -180,11 +179,9 @@ const BottomSheetLocationsList = ({
       <BottomSheetAddLocation
         setShowAddLocationSheet={setShowAddLocationSheet}
         showAddLocationSheet={showAddLocationSheet}
-        // setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
         dbConnection={dbConnection}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
-        // setUserPreferences={setUserPreferences}
       />
     </IonModal>
   );

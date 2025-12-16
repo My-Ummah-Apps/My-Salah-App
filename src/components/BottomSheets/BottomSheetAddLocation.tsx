@@ -260,7 +260,7 @@ const BottomSheetAddLocation = ({
                       console.log("LOCATIONS: ", locations.length);
 
                       if (locations.length === 1) {
-                        setShowSalahTimesSettingsSheet(true);
+                        setShowSalahTimesSettingsSheet?.(true);
                       }
                       setShowAddLocationSheet(false);
                       setUserLocations(locations);

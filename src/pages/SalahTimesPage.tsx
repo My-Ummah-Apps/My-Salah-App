@@ -1,5 +1,10 @@
 import {
   IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonContent,
   IonHeader,
   IonIcon,
@@ -16,9 +21,10 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   alarmOutline,
   chevronDownOutline,
+  notificationsOutline,
   pencilOutline,
 } from "ionicons/icons";
-import { FaChevronDown } from "react-icons/fa6";
+
 import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/BottomSheetAddLocation";
 import { useState } from "react";
@@ -54,21 +60,42 @@ const SalahTimesPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <section className="flex">
+          <IonCard color="primary">
+            <IonCardHeader>
+              <IonCardTitle>Card Title</IonCardTitle>
+              <IonCardSubtitle>Current Salah</IonCardSubtitle>
+            </IonCardHeader>
+
+            <IonCardContent>Time Remaining:</IonCardContent>
+          </IonCard>
+          <IonCard color="primary">
+            <IonCardHeader>
+              <IonCardTitle>Card Title</IonCardTitle>
+              <IonCardSubtitle>Next Salah</IonCardSubtitle>
+            </IonCardHeader>
+
+            <IonCardContent>Time Remaining:</IonCardContent>
+          </IonCard>
+        </section>
+        <IonList>
+          {salahNames.map((salahName, i) => (
+            <IonItem key={salahName + i}>
+              <IonLabel>{salahName}</IonLabel>
+              <div className="flex items-center" slot="end">
+                <p>--:--</p>
+                <IonButton slot="end" fill="clear">
+                  <IonIcon
+                    className="text-[var(--ion-text-color)] text-lg"
+                    icon={notificationsOutline}
+                  />
+                </IonButton>
+              </div>
+            </IonItem>
+          ))}
+        </IonList>
         {userLocations?.length === 0 ? (
           <>
-            <IonList>
-              {salahNames.map((salahName, i) => (
-                <IonItem key={salahName + i}>
-                  <IonLabel>{salahName}</IonLabel>
-                  <div className="flex items-center" slot="end">
-                    <p>--:--</p>
-                    <IonButton slot="end" fill="clear">
-                      <IonIcon icon={alarmOutline} />
-                    </IonButton>
-                  </div>
-                </IonItem>
-              ))}
-            </IonList>
             <section
               className="text-center"
               // className="flex flex-col items-center justify-center h-full text-center"
@@ -95,18 +122,21 @@ const SalahTimesPage = ({
             </section>
           </>
         ) : (
-          <section>
-            <div>
+          <section className="mx-5">
+            <section className="flex items-center justify-center text-lg">
               {userLocations?.map((location) => (
-                <section key={location.id} className="flex">
+                <section key={location.id}>
                   <p>
                     {location.isSelected === 1 ? location.locationName : ""}
                   </p>
                 </section>
               ))}{" "}
               <IonButton
+                className="text-[var(--ion-text-color)] px-0"
                 aria-label="show all locations"
                 id="open-locations-sheet"
+                fill="clear"
+                // size="small"
               >
                 {" "}
                 <IonIcon
@@ -115,7 +145,7 @@ const SalahTimesPage = ({
                   data-testid="locations-chevron"
                 />
               </IonButton>
-            </div>
+            </section>
           </section>
         )}
       </IonContent>

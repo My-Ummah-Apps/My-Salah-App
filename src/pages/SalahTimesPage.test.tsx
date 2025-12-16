@@ -139,11 +139,13 @@ describe("ingeration tests for when atleast one location exists", () => {
     const deleteBtn = screen.getAllByTestId(/delete-location-btn/i);
     await userEvent.click(deleteBtn[0]);
 
-    const actionSheetText = await screen.findByText(/delete Location?/i);
-    expect(actionSheetText).toBeInTheDocument();
+    const actionSheetDeleteOption = await screen.findByText(
+      /delete location?/i
+    );
+    expect(actionSheetDeleteOption).toBeInTheDocument();
 
-    userEvent.click(actionSheetText);
-    const locationName = screen.getByText(/doha/i);
+    userEvent.click(actionSheetDeleteOption);
+    const locationName = screen.queryByText(/doha/i);
     expect(locationName).not.toBeInTheDocument();
 
     const locationDeleteToast = await screen.findByTestId(

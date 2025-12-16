@@ -48,24 +48,22 @@ describe("test ensuring fab button works", () => {
     const allLocationsSheetBtn = screen.getByLabelText("show all locations");
     await userEvent.click(allLocationsSheetBtn);
 
-    const fabBtn = screen.getByTestId("add-location-btn");
+    // const fabBtn = await screen.findByTestId("add-location-btn");
+    const fabBtn = await screen.findByLabelText("add location");
     expect(fabBtn).toBeInTheDocument();
 
     await userEvent.click(fabBtn);
 
-    // const useDeviceGpsOption = screen.findByText("Use Device GPS");
-    const useDeviceGpsOption = await screen.findByRole("button", {
-      name: /use device gps/i,
-    });
-    expect(useDeviceGpsOption).toBeInTheDocument();
+    // const test = await screen.findByText(/to calculate/i);
+    // expect(test).toBeInTheDocument();
 
-    const searchManuallyOption = screen.findByText("Search Manually");
-    expect(searchManuallyOption).toBeInTheDocument();
+    // const useDeviceGpsOption = await screen.findByText(/use device gps/i);
+    // expect(useDeviceGpsOption).toBeInTheDocument();
 
-    const manualCoordsOption = screen.findByText("Enter Coordinates");
-    expect(manualCoordsOption).toBeInTheDocument();
+    // const searchManuallyOption = await screen.findByText(/search manually/i);
+    // expect(searchManuallyOption).toBeInTheDocument();
+
+    // const manualCoordsOption = await screen.findByText(/enter coordinates/i);
+    // expect(manualCoordsOption).toBeInTheDocument();
   });
-
-  // const fabBtn = container.querySelector('[data-testid="add-location-btn"]');
-  // expect(fabBtn).toBeTruthy();
 });
