@@ -12,7 +12,6 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
-  isPlatform,
   useIonLoading,
 } from "@ionic/react";
 import { Geolocation } from "@capacitor/geolocation";
@@ -63,13 +62,24 @@ const BottomSheetAddLocation = ({
     useState<boolean>(false);
   const [showDuplicateLocationError, setShowDuplicateLocationError] =
     useState<boolean>(false);
+  const [useManualCoordinates, setUseManualCoordinates] = useState(false);
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
 
-  let latitude = useRef<number>();
-  let longitude = useRef<number>();
+  // let latitude = useRef<number | null>(null);
+  // let longitude = useRef<number | null>(null);
 
-  const resetLocationInput = () => {
+  const clearLatLong = () => {
+    // latitude.current = null;
+    // longitude.current = null;
+    setLatitude(null);
+    setLongitude(null);
+  };
+
+  const clearInputPromptFields = () => {
     setShowLocationNameInput(false);
     setLocationName("");
+    clearLatLong();
     setShowEmptyLocationError(false);
     setShowDuplicateLocationError(false);
   };
@@ -78,8 +88,10 @@ const BottomSheetAddLocation = ({
     try {
       // throw new Error("ERROR THROWN");
       const location = await Geolocation.getCurrentPosition();
-      latitude.current = location.coords.latitude;
-      longitude.current = location.coords.longitude;
+      // latitude.current = location.coords.latitude;
+      // longitude.current = location.coords.longitude;
+      setLatitude(location.coords.latitude);
+      setLongitude(location.coords.longitude);
       console.log(latitude, longitude);
 
       dismissLocationSpinner();
@@ -157,6 +169,10 @@ const BottomSheetAddLocation = ({
     }
   };
 
+  useEffect(() => {
+    console.log("useEffect location name: ", locationName);
+  }, [locationName]);
+
   return (
     <IonModal
       // className="modal-fit-content"
@@ -182,14 +198,14 @@ const BottomSheetAddLocation = ({
         {showLocationNameInput && (
           <section className="flex flex-col items-center justify-center w-4/5 absolute z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-[color:var(--card-bg-color)] rounded-lg max-w-[300px]">
             <div className="px-5 text-center">
-              <h5>Enter location name</h5>
-              <input
+              {/* <h5>Enter location name</h5> */}
+              <IonInput
                 className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
                 aria-label="Location name"
                 type="text"
-                placeholder="e.g. Home"
-                onChange={(e) => setLocationName(e.target.value)}
-              ></input>
+                placeholder="Location name (e.g. Home)"
+                onIonInput={(e) => setLocationName(e.detail.value || "")}
+              ></IonInput>
               {showEmptyLocationError && (
                 <p className={`mb-1 text-xs text-red-500`}>
                   {"Please enter a location name"}
@@ -200,6 +216,30 @@ const BottomSheetAddLocation = ({
                   {"Location already exists"}
                 </p>
               )}
+              {useManualCoordinates && (
+                <>
+                  <IonInput
+                    className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
+                    aria-label="Latitude"
+                    type="text"
+                    placeholder="Latitude"
+                    value={latitude}
+                    onIonInput={(e) =>
+                      setLatitude(Number(e.detail.value) || null)
+                    }
+                  ></IonInput>
+                  <IonInput
+                    className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
+                    aria-label="Longitude"
+                    type="text"
+                    placeholder="Longitude"
+                    value={longitude}
+                    onIonInput={(e) =>
+                      setLongitude(Number(e.detail.value) || null)
+                    }
+                  ></IonInput>
+                </>
+              )}
             </div>
             <div className="flex justify-end w-full">
               <IonButton
@@ -207,7 +247,8 @@ const BottomSheetAddLocation = ({
                 size="small"
                 fill="clear"
                 onClick={() => {
-                  resetLocationInput();
+                  clearInputPromptFields();
+                  setUseManualCoordinates(false);
                 }}
               >
                 Cancel
@@ -245,12 +286,12 @@ const BottomSheetAddLocation = ({
                     return;
                   }
 
-                  if (latitude.current && longitude.current) {
+                  if (latitude && longitude) {
                     await addUserLocation(
                       dbConnection,
                       locationName,
-                      latitude.current,
-                      longitude.current
+                      latitude,
+                      longitude
                     );
 
                     const locations = await fetchAllLocations(dbConnection);
@@ -271,10 +312,12 @@ const BottomSheetAddLocation = ({
 
                     console.log("RESETTING INPUT");
 
-                    resetLocationInput();
+                    clearInputPromptFields();
                   } else {
                     console.error("lat / long undefined");
                   }
+
+                  setUseManualCoordinates(false);
                 }}
               >
                 Save
@@ -350,7 +393,14 @@ const BottomSheetAddLocation = ({
             Manually enter a latitude and longitude if you already know the
             exact location.
             <div className="flex justify-end">
-              <IonButton className="mt-5 text-sm" color="tertiary">
+              <IonButton
+                onClick={() => {
+                  setUseManualCoordinates(true);
+                  setShowLocationNameInput(true);
+                }}
+                className="mt-5 text-sm"
+                color="tertiary"
+              >
                 <IonIcon className="mr-2" icon={globeOutline} />
                 Enter Coordinates
               </IonButton>

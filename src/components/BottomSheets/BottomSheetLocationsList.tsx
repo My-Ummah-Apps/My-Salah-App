@@ -28,7 +28,7 @@ import Toast from "../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
 
 interface BottomSheetSalahTimesSettingsProps {
-  triggerId: string;
+  // triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   //   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setUserLocations: React.Dispatch<
@@ -42,7 +42,7 @@ interface BottomSheetSalahTimesSettingsProps {
 }
 
 const BottomSheetLocationsList = ({
-  triggerId,
+  // triggerId,
   dbConnection,
   //   setUserPreferences,
   setUserLocations,
@@ -66,7 +66,7 @@ const BottomSheetLocationsList = ({
     <IonModal
       isOpen={showLocationsListSheet}
       mode="ios"
-      trigger={triggerId}
+      // trigger={triggerId}
       className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}

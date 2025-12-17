@@ -15,7 +15,7 @@ describe.skip("tests ensuring all items are rendered", () => {
   beforeEach(() => {
     render(
       <BottomSheetLocationsList
-        triggerId={"testId"}
+        // triggerId={"testId"}
         dbConnection={mockdbConnection}
         userLocations={mockUserLocations}
         setUserLocations={vi.fn()}
