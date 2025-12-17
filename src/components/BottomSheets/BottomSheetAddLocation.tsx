@@ -194,7 +194,7 @@ const BottomSheetAddLocation = ({
       <IonContent>
         {showLocationNameInput && (
           <section className="flex flex-col items-center justify-center w-4/5 absolute z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-[color:var(--card-bg-color)] rounded-lg max-w-[300px]">
-            <div className="px-5 text-center">
+            <div className="py-3 text-center">
               {/* <h5>Enter location name</h5> */}
               <IonInput
                 className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
@@ -240,7 +240,7 @@ const BottomSheetAddLocation = ({
             </div>
             <div className="flex justify-end w-full">
               <IonButton
-                className="p-0 text-base text-white"
+                className="p-0 text-base text-[var(--ion-text-color)]"
                 size="small"
                 fill="clear"
                 onClick={() => {
@@ -250,7 +250,7 @@ const BottomSheetAddLocation = ({
                 Cancel
               </IonButton>
               <IonButton
-                className="text-base text-white"
+                className="text-base text-[var(--ion-text-color)]"
                 size="small"
                 fill="clear"
                 onClick={async () => {
@@ -365,17 +365,18 @@ const BottomSheetAddLocation = ({
           <IonCardContent>
             Search for a city by name and select it from the results.{" "}
             <div className="flex justify-end">
-              <IonButton className="mt-5 text-sm" color="tertiary">
+              <IonButton
+                onClick={() => {
+                  setShowLocationNameInput(true);
+                }}
+                className="mt-5 text-sm"
+                color="tertiary"
+              >
                 <IonIcon className="mr-2" icon={searchOutline} />
                 Search Manually
               </IonButton>
             </div>
           </IonCardContent>
-          {/* <IonInput
-            aria-label="location"
-            placeholder="location"
-            className="bg-[var(--textarea-bg-color)] rounded-lg text-[var(--ion-text-color)] my-2"
-          ></IonInput> */}
         </IonCard>
 
         <IonCard>

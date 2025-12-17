@@ -99,14 +99,15 @@ const BottomSheetLocationsList = ({
                   {location.locationName}
                 </IonItem>
                 <section className="flex items-center">
-                  <IonButton
+                  {/* <IonButton
                     data-testid="edit-location-btn"
                     fill="clear"
                     aria-label="edit location"
                   >
                     <IonIcon icon={pencilOutline}></IonIcon>
-                  </IonButton>
+                  </IonButton> */}
                   <IonButton
+                    className="text-[var(--ion-text-color)]"
                     fill="clear"
                     aria-label="delete location"
                     onClick={() => {

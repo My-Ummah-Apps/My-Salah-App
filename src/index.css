@@ -181,8 +181,7 @@ input {
   /* background: var(--textarea-bg-color) !important; */
 }
 
-ion-input,
-input {
+ion-input {
   background: var(--textarea-bg-color) !important;
 }
 
