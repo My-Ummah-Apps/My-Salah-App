@@ -39,6 +39,8 @@ interface BottomSheetSalahTimesSettingsProps {
   userLocations: LocationsDataObjTypeArr | undefined;
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showAddLocationSheet: boolean;
+  setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BottomSheetLocationsList = ({
@@ -51,6 +53,8 @@ const BottomSheetLocationsList = ({
   userLocations,
   setShowAddLocationSheet,
   showAddLocationSheet,
+  setShowLocationFailureToast,
+  setShowLocationAddedToast,
 }: BottomSheetSalahTimesSettingsProps) => {
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
@@ -187,6 +191,8 @@ const BottomSheetLocationsList = ({
         dbConnection={dbConnection}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
+        setShowLocationFailureToast={setShowLocationFailureToast}
+        setShowLocationAddedToast={setShowLocationAddedToast}
       />
     </IonModal>
   );

@@ -40,6 +40,8 @@ interface BottomSheetAddLocationProps {
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
+  setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BottomSheetAddLocation = ({
@@ -49,15 +51,13 @@ const BottomSheetAddLocation = ({
   dbConnection,
   setUserLocations,
   userLocations,
+  setShowLocationFailureToast,
+  setShowLocationAddedToast,
 }: BottomSheetAddLocationProps) => {
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationNameInput, setShowLocationNameInput] =
     useState<boolean>(false);
   const [locationName, setLocationName] = useState("");
-  const [showLocationFailureToast, setShowLocationFailureToast] =
-    useState<boolean>(false);
-  const [showLocationAddedToast, setShowLocationAddedToast] =
-    useState<boolean>(false);
   const [showEmptyLocationError, setShowEmptyLocationError] =
     useState<boolean>(false);
   const [showDuplicateLocationError, setShowDuplicateLocationError] =
@@ -76,12 +76,13 @@ const BottomSheetAddLocation = ({
     setLongitude(null);
   };
 
-  const clearInputPromptFields = () => {
+  const handleInputPromptDismissed = () => {
     setShowLocationNameInput(false);
     setLocationName("");
     clearLatLong();
     setShowEmptyLocationError(false);
     setShowDuplicateLocationError(false);
+    setUseManualCoordinates(false);
   };
 
   const handleGrantedPermission = async () => {
@@ -169,10 +170,6 @@ const BottomSheetAddLocation = ({
     }
   };
 
-  useEffect(() => {
-    console.log("useEffect location name: ", locationName);
-  }, [locationName]);
-
   return (
     <IonModal
       // className="modal-fit-content"
@@ -247,8 +244,7 @@ const BottomSheetAddLocation = ({
                 size="small"
                 fill="clear"
                 onClick={() => {
-                  clearInputPromptFields();
-                  setUseManualCoordinates(false);
+                  handleInputPromptDismissed();
                 }}
               >
                 Cancel
@@ -312,12 +308,10 @@ const BottomSheetAddLocation = ({
 
                     console.log("RESETTING INPUT");
 
-                    clearInputPromptFields();
+                    handleInputPromptDismissed();
                   } else {
                     console.error("lat / long undefined");
                   }
-
-                  setUseManualCoordinates(false);
                 }}
               >
                 Save
@@ -417,19 +411,6 @@ const BottomSheetAddLocation = ({
             className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
           ></IonInput> */}
         </IonCard>
-
-        <Toast
-          isOpen={showLocationFailureToast}
-          message="Unable to retrieve location, please try again"
-          setShow={setShowLocationFailureToast}
-          testId={"location-fail-toast"}
-        />
-        <Toast
-          isOpen={showLocationAddedToast}
-          message="Location added successfully"
-          setShow={setShowLocationAddedToast}
-          testId={"location-successfully-added-toast"}
-        />
       </IonContent>
     </IonModal>
   );

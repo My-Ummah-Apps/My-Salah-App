@@ -18,16 +18,12 @@ import {
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import {
-  alarmOutline,
-  chevronDownOutline,
-  notificationsOutline,
-  pencilOutline,
-} from "ionicons/icons";
+import { chevronDownOutline, notificationsOutline } from "ionicons/icons";
 
 import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/BottomSheetAddLocation";
 import { useState } from "react";
+import Toast from "../components/Toast";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -52,6 +48,10 @@ const SalahTimesPage = ({
   const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
     useState(false);
   const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
+  const [showLocationFailureToast, setShowLocationFailureToast] =
+    useState<boolean>(false);
+  const [showLocationAddedToast, setShowLocationAddedToast] =
+    useState<boolean>(false);
 
   return (
     <IonPage>
@@ -118,6 +118,8 @@ const SalahTimesPage = ({
                 dbConnection={dbConnection}
                 setUserLocations={setUserLocations}
                 userLocations={userLocations}
+                setShowLocationFailureToast={setShowLocationFailureToast}
+                setShowLocationAddedToast={setShowLocationAddedToast}
                 // setUserPreferences={setUserPreferences}
               />
             </section>
@@ -160,6 +162,8 @@ const SalahTimesPage = ({
         userLocations={userLocations}
         setShowAddLocationSheet={setShowAddLocationSheet}
         showAddLocationSheet={showAddLocationSheet}
+        setShowLocationFailureToast={setShowLocationFailureToast}
+        setShowLocationAddedToast={setShowLocationAddedToast}
       />
       <BottomSheetSalahTimesSettings
         setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
@@ -168,6 +172,18 @@ const SalahTimesPage = ({
         setUserPreferences={setUserPreferences}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
+      />
+      <Toast
+        isOpen={showLocationFailureToast}
+        message="Unable to retrieve location, please try again"
+        setShow={setShowLocationFailureToast}
+        testId={"location-fail-toast"}
+      />
+      <Toast
+        isOpen={showLocationAddedToast}
+        message="Location added successfully"
+        setShow={setShowLocationAddedToast}
+        testId={"location-successfully-added-toast"}
       />
     </IonPage>
   );
