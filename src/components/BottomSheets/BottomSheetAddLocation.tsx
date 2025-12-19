@@ -23,8 +23,8 @@ import {
 import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
-import { useEffect, useRef, useState } from "react";
-import Toast from "../Toast";
+import { useState } from "react";
+
 import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
@@ -66,12 +66,7 @@ const BottomSheetAddLocation = ({
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
 
-  // let latitude = useRef<number | null>(null);
-  // let longitude = useRef<number | null>(null);
-
   const clearLatLong = () => {
-    // latitude.current = null;
-    // longitude.current = null;
     setLatitude(null);
     setLongitude(null);
   };
@@ -89,8 +84,7 @@ const BottomSheetAddLocation = ({
     try {
       // throw new Error("ERROR THROWN");
       const location = await Geolocation.getCurrentPosition();
-      // latitude.current = location.coords.latitude;
-      // longitude.current = location.coords.longitude;
+
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
       console.log(latitude, longitude);
@@ -104,21 +98,6 @@ const BottomSheetAddLocation = ({
     } finally {
       dismissLocationSpinner();
     }
-    // await updateUserPrefs(dbConnection, "latitude", "", setUserPreferences);
-    // await updateUserPrefs(
-    //   dbConnection,
-    //   "longitude",
-    //   latitude,
-    //   setUserPreferences
-    // );
-    // await updateUserPrefs(
-    //   dbConnection,
-    //   "longitude",
-    //   longitude,
-    //   setUserPreferences
-    // );
-
-    // alert(location.coords.latitude + location.coords.longitude);
   };
 
   const handleLocationPermissions = async () => {
@@ -401,16 +380,6 @@ const BottomSheetAddLocation = ({
               </IonButton>
             </div>
           </IonCardContent>
-          {/* <IonInput
-            aria-label="latitude"
-            placeholder="latitude"
-            className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
-          ></IonInput>
-          <IonInput
-            aria-label="longitude"
-            placeholder="longitude"
-            className="bg-[var(--textarea-bg-color)] text-[var(--ion-text-color)] rounded-lg my-2"
-          ></IonInput> */}
         </IonCard>
       </IonContent>
     </IonModal>
