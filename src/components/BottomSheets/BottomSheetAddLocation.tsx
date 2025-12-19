@@ -55,7 +55,7 @@ const BottomSheetAddLocation = ({
   setShowLocationAddedToast,
 }: BottomSheetAddLocationProps) => {
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
-  const [showLocationNameInput, setShowLocationNameInput] =
+  const [showLocationDetailsInput, setShowLocationDetailsInput] =
     useState<boolean>(false);
   const [locationName, setLocationName] = useState("");
   const [showEmptyLocationError, setShowEmptyLocationError] =
@@ -74,7 +74,7 @@ const BottomSheetAddLocation = ({
   };
 
   const handleInputPromptDismissed = () => {
-    setShowLocationNameInput(false);
+    setShowLocationDetailsInput(false);
     setLocationName("");
     clearLatLong();
     setShowEmptyLocationError(false);
@@ -94,7 +94,7 @@ const BottomSheetAddLocation = ({
       console.log(latitude, longitude);
 
       dismissLocationSpinner();
-      setShowLocationNameInput(true);
+      setShowLocationDetailsInput(true);
     } catch (error) {
       console.log("Failed to obtain location");
       setShowLocationFailureToast(true);
@@ -156,6 +156,7 @@ const BottomSheetAddLocation = ({
   return (
     <IonModal
       // className="modal-fit-content"
+
       mode="ios"
       isOpen={showAddLocationSheet}
       // trigger={triggerId}
@@ -175,9 +176,9 @@ const BottomSheetAddLocation = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {showLocationNameInput && (
+        {showLocationDetailsInput && (
           <section className="flex flex-col items-center justify-center w-4/5 absolute z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-[color:var(--card-bg-color)] rounded-lg max-w-[300px]">
-            <div className="py-3 text-center">
+            <div className="pt-3 text-center">
               <IonInput
                 className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
                 aria-label="Location name"
@@ -188,17 +189,15 @@ const BottomSheetAddLocation = ({
 
               <p
                 className={`mb-1 text-xs text-red-500 ${
-                  showEmptyLocationError ? "visible" : "invisible"
+                  showEmptyLocationError || showDuplicateLocationError
+                    ? "visible"
+                    : "invisible"
                 }`}
               >
-                {"Please enter a location name"}
+                {showEmptyLocationError
+                  ? "Please enter a location name"
+                  : "Location already exists"}
               </p>
-
-              {showDuplicateLocationError && (
-                <p className={`mb-1 text-xs text-red-500`}>
-                  {"Location already exists"}
-                </p>
-              )}
 
               {useManualCoordinates && (
                 <>
@@ -215,21 +214,20 @@ const BottomSheetAddLocation = ({
 
                   <p
                     className={`mb-1 text-xs text-red-500 ${
-                      showEmptyLongitudeError ? "visible" : "invisible"
+                      showEmptyLatitudeError ? "visible" : "invisible"
                     }`}
                   >
                     {"Please enter latitude"}
                   </p>
-
                   <IonInput
                     className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
                     aria-label="Longitude"
                     type="text"
                     placeholder="Longitude"
                     value={longitude}
-                    onIonInput={(e) =>
-                      setLongitude(Number(e.detail.value) || null)
-                    }
+                    onIonInput={(e) => {
+                      setLongitude(Number(e.detail.value) || null);
+                    }}
                   ></IonInput>
 
                   <p
@@ -258,27 +256,24 @@ const BottomSheetAddLocation = ({
                 size="small"
                 fill="clear"
                 onClick={async () => {
+                  setShowDuplicateLocationError(false);
+                  setShowEmptyLocationError(false);
+                  setShowEmptyLatitudeError(false);
+                  setShowEmptyLongitudeError(false);
                   const locationNameTrimmed = locationName.trim();
 
                   console.log("locationNameTrimmed:", locationNameTrimmed);
                   if (locationNameTrimmed === "") {
-                    setShowDuplicateLocationError(false);
                     setShowEmptyLocationError(true);
                     // return;
-                  } else {
-                    setShowEmptyLocationError(false);
                   }
 
                   if (latitude === null) {
                     setShowEmptyLatitudeError(true);
-                  } else {
-                    setShowEmptyLatitudeError(false);
                   }
 
                   if (longitude === null) {
                     setShowEmptyLongitudeError(true);
-                  } else {
-                    setShowEmptyLongitudeError(false);
                   }
 
                   if (!userLocations) {
@@ -357,6 +352,7 @@ const BottomSheetAddLocation = ({
                 className="mt-5 text-sm"
                 color="tertiary"
                 onClick={async () => {
+                  if (showLocationDetailsInput) return;
                   presentLocationSpinner({
                     message: "Detecting location...",
                     backdropDismiss: false,
@@ -387,7 +383,8 @@ const BottomSheetAddLocation = ({
             <div className="flex justify-end">
               <IonButton
                 onClick={() => {
-                  setShowLocationNameInput(true);
+                  if (showLocationDetailsInput) return;
+                  setShowLocationDetailsInput(true);
                 }}
                 className="mt-5 text-sm"
                 color="tertiary"
@@ -410,8 +407,9 @@ const BottomSheetAddLocation = ({
             <div className="flex justify-end">
               <IonButton
                 onClick={() => {
+                  if (showLocationDetailsInput) return;
                   setUseManualCoordinates(true);
-                  setShowLocationNameInput(true);
+                  setShowLocationDetailsInput(true);
                 }}
                 className="mt-5 text-sm"
                 color="tertiary"

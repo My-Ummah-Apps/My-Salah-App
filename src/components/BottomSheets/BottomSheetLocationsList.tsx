@@ -26,6 +26,7 @@ import ActionSheet from "../ActionSheet";
 import { deleteUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import Toast from "../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
+import { MdCheck } from "react-icons/md";
 
 interface BottomSheetSalahTimesSettingsProps {
   // triggerId: string;
@@ -98,6 +99,8 @@ const BottomSheetLocationsList = ({
                 <IonItem data-testid="list-item" lines="none">
                   {location.locationName}
                 </IonItem>
+
+                {/* {theme === "dark" && <MdCheck />} */}
                 <section className="flex items-center">
                   {/* <IonButton
                     data-testid="edit-location-btn"
