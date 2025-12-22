@@ -23,7 +23,11 @@ import { LocationsDataObjTypeArr } from "../../types/types";
 import { add, pencilOutline, trashOutline } from "ionicons/icons";
 import { useState } from "react";
 import ActionSheet from "../ActionSheet";
-import { deleteUserLocation, fetchAllLocations } from "../../utils/dbUtils";
+import {
+  deleteUserLocation,
+  fetchAllLocations,
+  updateActiveLocation,
+} from "../../utils/dbUtils";
 import Toast from "../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
 import { MdCheck } from "react-icons/md";
@@ -93,15 +97,22 @@ const BottomSheetLocationsList = ({
           <IonList>
             {userLocations?.map((location) => (
               <section
-                className="flex items-center justify-between border-b"
                 key={location.id}
+                onClick={async () => {
+                  await updateActiveLocation(dbConnection, location.id);
+                  const locations = await fetchAllLocations(dbConnection);
+                  setUserLocations(locations);
+                }}
+                className="flex items-center justify-between border-b"
               >
-                <IonItem data-testid="list-item" lines="none">
-                  {location.locationName}
-                </IonItem>
+                <div className="flex items-center mx-2">
+                  {location.isSelected === 1 && <MdCheck />}
+                  <IonItem data-testid="list-item" lines="none">
+                    {location.locationName}
+                  </IonItem>
+                </div>
 
-                {/* {theme === "dark" && <MdCheck />} */}
-                <section className="flex items-center">
+                <div className="flex items-center">
                   {/* <IonButton
                     data-testid="edit-location-btn"
                     fill="clear"
@@ -114,7 +125,6 @@ const BottomSheetLocationsList = ({
                     fill="clear"
                     aria-label="delete location"
                     onClick={() => {
-                      // setShowDeleteLocationActionSheet(false);
                       setLocationToDeleteId(location.id);
                       setShowDeleteLocationActionSheet(true);
                       console.log("Delete button clicked");
@@ -125,13 +135,12 @@ const BottomSheetLocationsList = ({
                       icon={trashOutline}
                     ></IonIcon>
                   </IonButton>
-                </section>
+                </div>
               </section>
             ))}
           </IonList>
           <IonFab
             onClick={() => {
-              console.log("CLICKy");
               setShowAddLocationSheet(true);
             }}
             slot="fixed"

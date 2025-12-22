@@ -144,3 +144,25 @@ export const deleteUserLocation = async (
     await toggleDBConnection(dbConnection, "close");
   }
 };
+
+export const updateActiveLocation = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  id: number
+) => {
+  try {
+    await toggleDBConnection(dbConnection, "open");
+
+    await dbConnection.current?.run(
+      `UPDATE userlocationsTable SET isSelected = 0`
+    );
+    await dbConnection.current?.run(
+      `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
+      [id]
+    );
+    console.log("NEW ACTIVE LOCATION ID IS: ", id);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await toggleDBConnection(dbConnection, "close");
+  }
+};
