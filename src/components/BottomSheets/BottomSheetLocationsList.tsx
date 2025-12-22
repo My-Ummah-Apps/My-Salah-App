@@ -124,7 +124,8 @@ const BottomSheetLocationsList = ({
                     className="text-[var(--ion-text-color)]"
                     fill="clear"
                     aria-label="delete location"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setLocationToDeleteId(location.id);
                       setShowDeleteLocationActionSheet(true);
                       console.log("Delete button clicked");
@@ -169,16 +170,32 @@ const BottomSheetLocationsList = ({
             text: "Delete location?",
             role: "destructive",
             handler: async () => {
+              if (!userLocations) return;
+
               if (locationToDeleteId === null) {
                 console.error(
                   "locationToDeleteId does not exist within delete location ActionSheet handler"
                 );
                 return;
               }
+
               await deleteUserLocation(dbConnection, locationToDeleteId);
+              setLocationToDeleteId(null);
               const locations = await fetchAllLocations(dbConnection);
               setUserLocations(locations);
-              setLocationToDeleteId(null);
+
+              if (!locations || locations.length === 0) return;
+
+              const activeLocation = locations.find(
+                (location) => location.isSelected === 1
+              );
+
+              if (!activeLocation) {
+                await updateActiveLocation(dbConnection, locations[0].id);
+                const updatedLocations = await fetchAllLocations(dbConnection);
+                setUserLocations(updatedLocations);
+              }
+
               // setShowResetToast(true);
             },
           },
