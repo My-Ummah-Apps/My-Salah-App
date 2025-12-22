@@ -1,5 +1,6 @@
 import {
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -18,7 +19,11 @@ import {
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { chevronDownOutline, notificationsOutline } from "ionicons/icons";
+import {
+  chevronDownOutline,
+  notificationsOutline,
+  settingsOutline,
+} from "ionicons/icons";
 
 import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/BottomSheetAddLocation";
@@ -58,6 +63,20 @@ const SalahTimesPage = ({
       <IonHeader className="ion-no-border">
         <IonToolbar className="header-toolbar">
           <IonTitle>Salah Times</IonTitle>
+          <IonButtons slot="primary">
+            <IonButton
+              onClick={() => setShowSalahTimesSettingsSheet(true)}
+              style={{
+                "--padding-end": "12px",
+                "--ripple-color": "transparent",
+              }}
+            >
+              <IonIcon
+                className="text-[var(--ion-text-color)] text-lg"
+                icon={settingsOutline}
+              />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
