@@ -12,9 +12,7 @@ export interface userPreferencesType {
   saveButtonTapCount: string;
   haptics: string;
   theme: "dark" | "light" | "system";
-  locationName: string;
-  latitude: string;
-  longitude: string;
+  timeFormat: "12hr" | "24hr";
 }
 
 export type PreferenceType = keyof userPreferencesType;

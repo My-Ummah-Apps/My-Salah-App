@@ -45,9 +45,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   saveButtonTapCount: "0",
   haptics: "0",
   theme: "dark",
-  locationName: "",
-  latitude: "",
-  longitude: "",
+  timeFormat: "12hr",
 };
 
 export const reasonsStyles =

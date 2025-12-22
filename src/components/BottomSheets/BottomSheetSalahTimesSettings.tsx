@@ -7,10 +7,16 @@ import {
   IonTitle,
   IonToolbar,
   isPlatform,
+  IonToggle,
+  IonList,
+  IonItem,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  updateUserPrefs,
 } from "../../utils/constants";
 
 import { useState } from "react";
@@ -27,6 +33,7 @@ interface BottomSheetSalahTimesSettingsProps {
   showSalahTimesSettingsSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
@@ -38,6 +45,7 @@ const BottomSheetSalahTimesSettings = ({
   showSalahTimesSettingsSheet,
   dbConnection,
   setUserPreferences,
+  userPreferences,
   setUserLocations,
   userLocations,
 }: BottomSheetSalahTimesSettingsProps) => {
@@ -92,7 +100,7 @@ const BottomSheetSalahTimesSettings = ({
           </section>
           <section className="mt-10 text-center">
             <h5 className="mb-5">Madhab / Asr Time</h5>
-            <section className="flex justify-center gap-2 m-3">
+            <div className="flex justify-center gap-2 m-3">
               <IonButton
                 style={{
                   "--background": "transparent",
@@ -106,12 +114,12 @@ const BottomSheetSalahTimesSettings = ({
                     : "border rounded-md"
                 }`}
               >
-                <section className="text-sm text-white">
+                <div className="text-sm text-white">
                   <p className="mb-2">
                     <strong>Earlier Asr Time</strong>
                   </p>
                   <p className="text-xs">Shafi'i, Maliki & Hanbali</p>
-                </section>
+                </div>
               </IonButton>
               <IonButton
                 style={{
@@ -126,14 +134,38 @@ const BottomSheetSalahTimesSettings = ({
                     : "border rounded-md"
                 }`}
               >
-                <section className="text-sm text-white">
+                <div className="text-sm text-white">
                   <p className="mb-2">
                     <strong>Later Asr Time </strong>
                   </p>
                   <p className="text-xs">Hanafi</p>
-                </section>
+                </div>
               </IonButton>
-            </section>
+            </div>
+          </section>
+          <section className="flex items-center justify-between mx-2">
+            <h6>24-Hour Time</h6>
+            <IonToggle
+              style={{ "--track-background": "#555" }}
+              checked={userPreferences.timeFormat === "24hr" ? true : false}
+              onIonChange={async (e) => {
+                const selectedTimeFormat =
+                  e.detail.checked === true ? "24hr" : "12hr";
+
+                await updateUserPrefs(
+                  dbConnection,
+                  "timeFormat",
+                  selectedTimeFormat,
+                  setUserPreferences
+                );
+              }}
+            ></IonToggle>
+          </section>
+          <section className="mx-2">
+            <h5>Advanced Settings</h5>
+            <h6>High Latitude Rule</h6>
+            <h6>Custom Angles</h6>
+            <h6>Custom Adjustments Per Salah</h6>
           </section>
         </IonContent>
       </IonPage>

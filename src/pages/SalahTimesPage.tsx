@@ -189,6 +189,7 @@ const SalahTimesPage = ({
         showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
       />
