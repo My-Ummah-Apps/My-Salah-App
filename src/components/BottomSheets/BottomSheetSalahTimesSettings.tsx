@@ -27,6 +27,7 @@ import {
   LocationsDataObjTypeArr,
   userPreferencesType,
 } from "../../types/types";
+import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -75,24 +76,19 @@ const BottomSheetSalahTimesSettings = ({
         </IonHeader>
         <IonContent>
           <section className="mt-10 text-center">
-            <section className="text-center">
-              {/* <BottomSheetAddLocation
-                triggerId="open-location-settings-sheet"
-                dbConnection={dbConnection}
-                setUserLocations={setUserLocations}
-                userLocations={userLocations}
-                // setUserPreferences={setUserPreferences}
-              /> */}
-            </section>
+            <section className="text-center"></section>
             <h5>Calculation Method</h5>
             <IonButton
+              id="open-salah-calculations-sheet"
               style={{
                 "--background": "transparent",
               }}
-              onClick={() => {}}
+              // onClick={() => {
+
+              // }}
               className="flex items-center mx-5 border border-gray-500 rounded-md"
             >
-              <p>Select calculation method</p>
+              <p>Select Calculation method</p>
               <p>
                 <MdOutlineChevronRight />
               </p>
@@ -168,6 +164,12 @@ const BottomSheetSalahTimesSettings = ({
             <h6>Custom Adjustments Per Salah</h6>
           </section>
         </IonContent>
+        <BottomSheetCalculationMethods
+          triggerId="open-salah-calculations-sheet"
+          dbConnection={dbConnection}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+        />
       </IonPage>
     </IonModal>
   );

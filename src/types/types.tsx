@@ -12,6 +12,20 @@ export interface userPreferencesType {
   saveButtonTapCount: string;
   haptics: string;
   theme: "dark" | "light" | "system";
+  prayerCalculationMethod:
+    | "MuslimWorldLeague"
+    | "Egyptian"
+    | "Karachi"
+    | "UmmAlQura"
+    | "Dubai"
+    | "Qatar"
+    | "Kuwait"
+    | "MoonsightingCommittee"
+    | "NorthAmerica"
+    | "Singapore"
+    | "Turkey"
+    | "Tehran"
+    | "Other";
   timeFormat: "12hr" | "24hr";
 }
 

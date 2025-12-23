@@ -46,6 +46,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   haptics: "0",
   theme: "dark",
   timeFormat: "12hr",
+  prayerCalculationMethod: "",
 };
 
 export const reasonsStyles =
