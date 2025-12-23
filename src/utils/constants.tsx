@@ -47,6 +47,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   theme: "dark",
   timeFormat: "12hr",
   prayerCalculationMethod: "",
+  madhab: "",
 };
 
 export const reasonsStyles =

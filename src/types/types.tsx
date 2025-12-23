@@ -26,6 +26,7 @@ export interface userPreferencesType {
     | "Turkey"
     | "Tehran"
     | "Other";
+  madhab: "Hanafi" | "shafiMalikiHanbali";
   timeFormat: "12hr" | "24hr";
 }
 

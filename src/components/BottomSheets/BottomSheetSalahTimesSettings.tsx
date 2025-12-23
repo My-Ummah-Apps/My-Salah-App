@@ -50,8 +50,6 @@ const BottomSheetSalahTimesSettings = ({
   setUserLocations,
   userLocations,
 }: BottomSheetSalahTimesSettingsProps) => {
-  const [madhab, setMadhab] = useState<"earlier" | "later">("earlier");
-
   return (
     <IonModal
       mode="ios"
@@ -83,9 +81,6 @@ const BottomSheetSalahTimesSettings = ({
               style={{
                 "--background": "transparent",
               }}
-              // onClick={() => {
-
-              // }}
               className="flex items-center mx-5 border border-gray-500 rounded-md"
             >
               <p>Select Calculation method</p>
@@ -101,11 +96,16 @@ const BottomSheetSalahTimesSettings = ({
                 style={{
                   "--background": "transparent",
                 }}
-                onClick={() => {
-                  setMadhab("earlier");
+                onClick={async () => {
+                  await updateUserPrefs(
+                    dbConnection,
+                    "madhab",
+                    "shafiMalikiHanbali",
+                    setUserPreferences
+                  );
                 }}
                 className={`${
-                  madhab === "earlier"
+                  userPreferences.madhab === "shafiMalikiHanbali"
                     ? "bg-green-800 rounded-md"
                     : "border rounded-md"
                 }`}
@@ -121,11 +121,16 @@ const BottomSheetSalahTimesSettings = ({
                 style={{
                   "--background": "transparent",
                 }}
-                onClick={() => {
-                  setMadhab("later");
+                onClick={async () => {
+                  await updateUserPrefs(
+                    dbConnection,
+                    "madhab",
+                    "Hanafi",
+                    setUserPreferences
+                  );
                 }}
                 className={` ${
-                  madhab === "later"
+                  userPreferences.madhab === "Hanafi"
                     ? "bg-green-800 rounded-md"
                     : "border rounded-md"
                 }`}
