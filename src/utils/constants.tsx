@@ -48,6 +48,11 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   timeFormat: "12hr",
   prayerCalculationMethod: "",
   madhab: "",
+  fajrIncrement: 0,
+  dhuhrIncrement: 0,
+  asrIncrement: 0,
+  maghribIncrement: 0,
+  ishaIncrement: 0,
 };
 
 export const reasonsStyles =

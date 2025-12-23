@@ -8,10 +8,6 @@ import {
   IonToolbar,
   isPlatform,
   IonToggle,
-  IonList,
-  IonItem,
-  IonSelect,
-  IonSelectOption,
 } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
@@ -19,7 +15,6 @@ import {
   updateUserPrefs,
 } from "../../utils/constants";
 
-import { useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -28,6 +23,7 @@ import {
   userPreferencesType,
 } from "../../types/types";
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
+import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomAdjustments";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -130,7 +126,7 @@ const BottomSheetSalahTimesSettings = ({
                   );
                 }}
                 className={` ${
-                  userPreferences.madhab === "Hanafi"
+                  userPreferences.madhab === "hanafi"
                     ? "bg-green-800 rounded-md"
                     : "border rounded-md"
                 }`}
@@ -166,7 +162,16 @@ const BottomSheetSalahTimesSettings = ({
             <h5>Advanced Settings</h5>
             <h6>High Latitude Rule</h6>
             <h6>Custom Angles</h6>
-            <h6>Custom Adjustments Per Salah</h6>
+            <section>
+              <h6 className="mb-4">Custom Adjustments Per Salah</h6>
+              <div
+                id="open-custom-adjustments-sheet"
+                className="flex items-center justify-between p-2 border rounded-lg"
+              >
+                <p>Fajr Adjustment</p>
+                <p>0 minutes</p>
+              </div>
+            </section>
           </section>
         </IonContent>
         <BottomSheetCalculationMethods
@@ -175,6 +180,7 @@ const BottomSheetSalahTimesSettings = ({
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
         />
+        <BottomSheetSalahTimeCustomAdjustments triggerId="open-custom-adjustments-sheet" />
       </IonPage>
     </IonModal>
   );

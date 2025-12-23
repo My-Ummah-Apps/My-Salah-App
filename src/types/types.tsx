@@ -26,7 +26,12 @@ export interface userPreferencesType {
     | "Turkey"
     | "Tehran"
     | "Other";
-  madhab: "Hanafi" | "shafiMalikiHanbali";
+  madhab: "hanafi" | "shafiMalikiHanbali";
+  fajrIncrement: number;
+  dhuhrIncrement: number;
+  asrIncrement: number;
+  maghribIncrement: number;
+  ishaIncrement: number;
   timeFormat: "12hr" | "24hr";
 }
 

@@ -217,6 +217,13 @@ ion-button {
   -webkit-tap-highlight-color: transparent;
 }
 
+ion-picker {
+  --highlight-background: var(--primary-color);
+  filter: brightness(0.8);
+  --fade-background-rgb: var(--card-bg-color) !important;
+  /* --highlight-border-radius: 50px; */
+}
+
 .modal-fit-content {
   --height: auto;
 }
