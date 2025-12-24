@@ -11,10 +11,7 @@ import {
   updateUserPrefs,
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import {
-  LocationsDataObjTypeArr,
-  userPreferencesType,
-} from "../../types/types";
+import { userPreferencesType } from "../../types/types";
 
 // import { CalculationMethod } from "adhan";
 

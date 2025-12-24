@@ -25,6 +25,7 @@ import {
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
 import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomAdjustments";
 import { useState } from "react";
+import BottomSheetLatitudeRules from "./BottomSheetLatitudeRules";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -91,10 +92,12 @@ const BottomSheetSalahTimesSettings = ({
               }}
               className="flex items-center mx-5 border border-gray-500 rounded-md"
             >
-              <p>Select Calculation method</p>
               <p>
-                <MdOutlineChevronRight />
+                {userPreferences.prayerCalculationMethod === ""
+                  ? "Select Calculation method"
+                  : userPreferences.prayerCalculationMethod}
               </p>
+              <p>{/* <MdOutlineChevronRight /> */}</p>
             </IonButton>
           </section>
           <section className="mt-10 text-center">
@@ -133,7 +136,7 @@ const BottomSheetSalahTimesSettings = ({
                   await updateUserPrefs(
                     dbConnection,
                     "madhab",
-                    "Hanafi",
+                    "hanafi",
                     setUserPreferences
                   );
                 }}
@@ -172,7 +175,21 @@ const BottomSheetSalahTimesSettings = ({
           </section>
           <section className="mx-2">
             <h5>Advanced Settings</h5>
-            <h6>High Latitude Rule</h6>
+            <div>
+              <h6>High Latitude Rule</h6>
+              <IonButton
+                id="open-salah-latitude-rules-sheet"
+                style={{
+                  "--background": "transparent",
+                }}
+                className="flex items-center mx-5 border border-gray-500 rounded-md"
+              >
+                <p>Select Latitude Rule</p>
+                {/* <p>
+                  <MdOutlineChevronRight />
+                </p> */}
+              </IonButton>
+            </div>
             <h6>Custom Angles</h6>
             <section>
               <h6 className="mb-4">Custom Adjustments Per Salah</h6>
@@ -248,6 +265,12 @@ const BottomSheetSalahTimesSettings = ({
         </IonContent>
         <BottomSheetCalculationMethods
           triggerId="open-salah-calculations-sheet"
+          dbConnection={dbConnection}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+        />
+        <BottomSheetLatitudeRules
+          triggerId="open-salah-latitude-rules-sheet"
           dbConnection={dbConnection}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}

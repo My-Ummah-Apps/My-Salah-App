@@ -25,8 +25,14 @@ export interface userPreferencesType {
     | "Singapore"
     | "Turkey"
     | "Tehran"
-    | "Other";
-  madhab: "hanafi" | "shafiMalikiHanbali";
+    | "Other"
+    | "";
+  prayerLatitudeRule:
+    | "MiddleOfTheNight"
+    | "SeventhOfTheNight"
+    | "TwilightAngle"
+    | "";
+  madhab: "hanafi" | "shafiMalikiHanbali" | "";
   fajrIncrement: string;
   dhuhrIncrement: string;
   asrIncrement: string;

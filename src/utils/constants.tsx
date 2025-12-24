@@ -48,6 +48,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   timeFormat: "12hr",
   prayerCalculationMethod: "",
   madhab: "",
+  prayerLatitudeRule: "",
   fajrIncrement: "0",
   dhuhrIncrement: "0",
   asrIncrement: "0",
