@@ -24,6 +24,7 @@ import {
 } from "../../types/types";
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
 import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomAdjustments";
+import { useState } from "react";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,6 +47,17 @@ const BottomSheetSalahTimesSettings = ({
   setUserLocations,
   userLocations,
 }: BottomSheetSalahTimesSettingsProps) => {
+  const [customAdjustmentSalah, setCustomAdjustmentSalah] = useState<
+    | "fajrIncrement"
+    | "dhuhrIncrement"
+    | "asrIncrement"
+    | "maghribIncrement"
+    | "ishaIncrement"
+  >("fajrIncrement");
+
+  const [showCustomAdjustmentsSheet, setShowCustomAdjustmentsSheet] =
+    useState<boolean>(false);
+
   return (
     <IonModal
       mode="ios"
@@ -165,11 +177,71 @@ const BottomSheetSalahTimesSettings = ({
             <section>
               <h6 className="mb-4">Custom Adjustments Per Salah</h6>
               <div
-                id="open-custom-adjustments-sheet"
-                className="flex items-center justify-between p-2 border rounded-lg"
+                onClick={() => {
+                  setCustomAdjustmentSalah("fajrIncrement");
+                  setShowCustomAdjustmentsSheet(true);
+                }}
+                className="flex items-center justify-between p-2 mb-4 border rounded-lg"
               >
                 <p>Fajr Adjustment</p>
-                <p>0 minutes</p>
+                <p>
+                  {" "}
+                  {userPreferences.fajrIncrement}{" "}
+                  {userPreferences.fajrIncrement === "1" ? "minute" : "minutes"}
+                </p>
+              </div>
+              <div
+                onClick={() => {
+                  setCustomAdjustmentSalah("dhuhrIncrement");
+                  setShowCustomAdjustmentsSheet(true);
+                }}
+                className="flex items-center justify-between p-2 mb-4 border rounded-lg"
+              >
+                <p>Dhuhr Adjustment</p>
+                <p>
+                  {" "}
+                  {userPreferences.dhuhrIncrement}{" "}
+                  {userPreferences.dhuhrIncrement === "1"
+                    ? "minute"
+                    : "minutes"}
+                </p>
+              </div>
+              <div
+                onClick={() => {
+                  setCustomAdjustmentSalah("asrIncrement");
+                  setShowCustomAdjustmentsSheet(true);
+                }}
+                className="flex items-center justify-between p-2 mb-4 border rounded-lg"
+              >
+                <p>Asr Adjustment</p>
+                {userPreferences.asrIncrement}{" "}
+                {userPreferences.asrIncrement === "1" ? "minute" : "minutes"}
+              </div>
+              <div
+                onClick={() => {
+                  setCustomAdjustmentSalah("maghribIncrement");
+                  setShowCustomAdjustmentsSheet(true);
+                }}
+                className="flex items-center justify-between p-2 mb-4 border rounded-lg"
+              >
+                <p>Maghrib Adjustment</p>
+                {userPreferences.maghribIncrement}{" "}
+                {userPreferences.maghribIncrement === "1"
+                  ? "minute"
+                  : "minutes"}
+              </div>
+              <div
+                onClick={() => {
+                  setCustomAdjustmentSalah("ishaIncrement");
+                  setShowCustomAdjustmentsSheet(true);
+                }}
+                className="flex items-center justify-between p-2 mb-4 border rounded-lg"
+              >
+                <p>Isha Adjustment</p>
+                <p>
+                  {userPreferences.ishaIncrement}{" "}
+                  {userPreferences.ishaIncrement === "1" ? "minute" : "minutes"}
+                </p>
               </div>
             </section>
           </section>
@@ -180,7 +252,14 @@ const BottomSheetSalahTimesSettings = ({
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
         />
-        <BottomSheetSalahTimeCustomAdjustments triggerId="open-custom-adjustments-sheet" />
+        <BottomSheetSalahTimeCustomAdjustments
+          setShowCustomAdjustmentsSheet={setShowCustomAdjustmentsSheet}
+          showCustomAdjustmentsSheet={showCustomAdjustmentsSheet}
+          customAdjustmentSalah={customAdjustmentSalah}
+          dbConnection={dbConnection}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+        />
       </IonPage>
     </IonModal>
   );

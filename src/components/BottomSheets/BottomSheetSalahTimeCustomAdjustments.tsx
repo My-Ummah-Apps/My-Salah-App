@@ -7,32 +7,75 @@ import {
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  updateUserPrefs,
 } from "../../utils/constants";
+import { userPreferencesType } from "../../types/types";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { useState } from "react";
 
 interface BottomSheetSalahTimeCustomAdjustmentsProps {
-  triggerId: string;
+  setShowCustomAdjustmentsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showCustomAdjustmentsSheet: boolean;
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
+  customAdjustmentSalah:
+    | "fajrIncrement"
+    | "dhuhrIncrement"
+    | "asrIncrement"
+    | "maghribIncrement"
+    | "ishaIncrement";
 }
 
 const BottomSheetSalahTimeCustomAdjustments = ({
-  triggerId,
+  showCustomAdjustmentsSheet,
+  dbConnection,
+  setUserPreferences,
+  userPreferences,
+  setShowCustomAdjustmentsSheet,
+  customAdjustmentSalah,
 }: BottomSheetSalahTimeCustomAdjustmentsProps) => {
+  const [increment, setIncrement] = useState(
+    userPreferences[customAdjustmentSalah]
+  );
+
   const arr = [];
   for (let i = -60; i <= 60; i++) {
-    arr.push(i);
+    arr.push(String(i));
   }
-
-  console.log(arr);
 
   return (
     <IonModal
       className="modal-fit-content"
       mode="ios"
-      trigger={triggerId}
+      isOpen={showCustomAdjustmentsSheet}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
+      onWillPresent={() => {
+        setIncrement(userPreferences[customAdjustmentSalah]);
+      }}
+      onWillDismiss={async () => {
+        console.log("customAdjustmentSalah: ", customAdjustmentSalah);
+        // if (!customAdjustmentSalah) return;
+        await updateUserPrefs(
+          dbConnection,
+          customAdjustmentSalah,
+          String(increment),
+          setUserPreferences
+        );
+        setIncrement("0");
+      }}
+      onDidDismiss={() => {
+        setShowCustomAdjustmentsSheet(false);
+      }}
     >
       <IonPicker className="my-5">
-        <IonPickerColumn value={0}>
+        <IonPickerColumn
+          value={increment}
+          onIonChange={({ detail }) => {
+            setIncrement(String(detail.value));
+          }}
+        >
           {arr.map((item) => {
             return (
               <IonPickerColumnOption key={item} value={item}>

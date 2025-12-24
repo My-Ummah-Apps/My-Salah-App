@@ -27,11 +27,11 @@ export interface userPreferencesType {
     | "Tehran"
     | "Other";
   madhab: "hanafi" | "shafiMalikiHanbali";
-  fajrIncrement: number;
-  dhuhrIncrement: number;
-  asrIncrement: number;
-  maghribIncrement: number;
-  ishaIncrement: number;
+  fajrIncrement: string;
+  dhuhrIncrement: string;
+  asrIncrement: string;
+  maghribIncrement: string;
+  ishaIncrement: string;
   timeFormat: "12hr" | "24hr";
 }
 
