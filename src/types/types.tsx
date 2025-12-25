@@ -1,3 +1,19 @@
+export type CalculationMethodsType =
+  | "MuslimWorldLeague"
+  | "Egyptian"
+  | "Karachi"
+  | "UmmAlQura"
+  | "Dubai"
+  | "Qatar"
+  | "Kuwait"
+  | "MoonsightingCommittee"
+  | "NorthAmerica"
+  | "Singapore"
+  | "Turkey"
+  | "Tehran"
+  | "Other"
+  | null;
+
 export interface userPreferencesType {
   userStartDate: string;
   userGender: string;
@@ -12,27 +28,15 @@ export interface userPreferencesType {
   saveButtonTapCount: string;
   haptics: string;
   theme: "dark" | "light" | "system";
-  prayerCalculationMethod:
-    | "MuslimWorldLeague"
-    | "Egyptian"
-    | "Karachi"
-    | "UmmAlQura"
-    | "Dubai"
-    | "Qatar"
-    | "Kuwait"
-    | "MoonsightingCommittee"
-    | "NorthAmerica"
-    | "Singapore"
-    | "Turkey"
-    | "Tehran"
-    | "Other"
-    | "";
+  prayerCalculationMethod: CalculationMethodsType;
+  madhab: "hanafi" | "shafiMalikiHanbali";
   prayerLatitudeRule:
     | "MiddleOfTheNight"
     | "SeventhOfTheNight"
     | "TwilightAngle"
     | "";
-  madhab: "hanafi" | "shafiMalikiHanbali" | "";
+  fajrAngle: string;
+  ishaAngle: string;
   fajrIncrement: string;
   dhuhrIncrement: string;
   asrIncrement: string;
