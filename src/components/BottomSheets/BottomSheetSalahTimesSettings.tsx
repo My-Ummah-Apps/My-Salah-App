@@ -31,7 +31,7 @@ import {
 } from "../../types/types";
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
 import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomAdjustments";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BottomSheetLatitudeRules from "./BottomSheetLatitudeRules";
 import BottomSheetCustomAngles from "./BottomSheetCustomAngles";
 
@@ -56,6 +56,11 @@ const BottomSheetSalahTimesSettings = ({
   setUserLocations,
   userLocations,
 }: BottomSheetSalahTimesSettingsProps) => {
+  const [selectedCalculationMethod, setSelectedCalculationMethod] =
+    useState<CalculationMethodsType | null>(
+      userPreferences.prayerCalculationMethod
+    );
+
   const [customAdjustmentSalah, setCustomAdjustmentSalah] = useState<
     | "fajrIncrement"
     | "dhuhrIncrement"
@@ -68,13 +73,16 @@ const BottomSheetSalahTimesSettings = ({
     "fajrAngle" | "ishaAngle"
   >("fajrAngle");
 
-  const [calculationMethod, setCalculationMethod] =
-    useState<CalculationMethodsType | null>(null);
-
   const [showCustomAdjustmentsSheet, setShowCustomAdjustmentsSheet] =
     useState<boolean>(false);
   const [showCustomAnglesSheet, setShowCustomAnglesSheet] =
     useState<boolean>(false);
+
+  const methodObj = CalculationMethod["Egyptian"]().highLatitudeRule;
+  console.log("methodObj: ", methodObj);
+
+  var params = CalculationMethod.UmmAlQura();
+  console.log(params);
 
   return (
     <IonModal
@@ -203,7 +211,11 @@ const BottomSheetSalahTimesSettings = ({
                     }}
                     className="flex items-center mx-5 border border-gray-500 rounded-md"
                   >
-                    <p>Select Latitude Rule</p>
+                    <p>
+                      {CalculationMethod[
+                        selectedCalculationMethod || "MuslimWorldLeague"
+                      ]().highLatitudeRule.toString()}
+                    </p>
                     {/* <p>
                   <MdOutlineChevronRight />
                 </p> */}
@@ -321,6 +333,7 @@ const BottomSheetSalahTimesSettings = ({
         <BottomSheetCalculationMethods
           triggerId="open-salah-calculations-sheet"
           dbConnection={dbConnection}
+          setSelectedCalculationMethod={setSelectedCalculationMethod}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
         />

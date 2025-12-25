@@ -11,13 +11,16 @@ import {
   updateUserPrefs,
 } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { userPreferencesType } from "../../types/types";
+import { CalculationMethodsType, userPreferencesType } from "../../types/types";
 
 // import { CalculationMethod } from "adhan";
 
 interface BottomSheetCalculationMethodsProps {
   triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setSelectedCalculationMethod: React.Dispatch<
+    React.SetStateAction<CalculationMethodsType | null>
+  >;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }
@@ -25,6 +28,7 @@ interface BottomSheetCalculationMethodsProps {
 const BottomSheetCalculationMethods = ({
   triggerId,
   dbConnection,
+  setSelectedCalculationMethod,
   setUserPreferences,
   userPreferences,
 }: BottomSheetCalculationMethodsProps) => {
@@ -57,6 +61,7 @@ const BottomSheetCalculationMethods = ({
                 "MuslimWorldLeague",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("MuslimWorldLeague");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "MuslimWorldLeague"
@@ -78,6 +83,7 @@ const BottomSheetCalculationMethods = ({
                 "Egyptian",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Egyptian");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Egyptian"
@@ -100,6 +106,7 @@ const BottomSheetCalculationMethods = ({
                 "Karachi",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Karachi");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Karachi"
@@ -121,6 +128,7 @@ const BottomSheetCalculationMethods = ({
                 "UmmAlQura",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("UmmAlQura");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "UmmAlQura"
@@ -144,6 +152,7 @@ const BottomSheetCalculationMethods = ({
                 "Dubai",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Dubai");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Dubai"
@@ -166,6 +175,7 @@ const BottomSheetCalculationMethods = ({
                 "Qatar",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Qatar");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Qatar"
@@ -187,6 +197,7 @@ const BottomSheetCalculationMethods = ({
                 "Kuwait",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Kuwait");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Kuwait"
@@ -208,6 +219,7 @@ const BottomSheetCalculationMethods = ({
                 "MoonsightingCommittee",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("MoonsightingCommittee");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod ===
@@ -233,6 +245,7 @@ const BottomSheetCalculationMethods = ({
                 "Singapore",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Singapore");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Singapore"
@@ -254,6 +267,7 @@ const BottomSheetCalculationMethods = ({
                 "Turkey",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Turkey");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Turkey"
@@ -275,6 +289,7 @@ const BottomSheetCalculationMethods = ({
                 "Tehran",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("Tehran");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "Tehran"
@@ -298,6 +313,7 @@ const BottomSheetCalculationMethods = ({
                 "NorthAmerica",
                 setUserPreferences
               );
+              setSelectedCalculationMethod("NorthAmerica");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "NorthAmerica"
