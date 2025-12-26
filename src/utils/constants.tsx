@@ -46,16 +46,16 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   haptics: "0",
   theme: "dark",
   timeFormat: "12hr",
-  prayerCalculationMethod: "",
-  madhab: "shafiMalikiHanbali",
-  prayerLatitudeRule: "",
+  prayerCalculationMethod: "MuslimWorldLeague",
+  madhab: "shafi",
+  prayerLatitudeRule: "middleofthenight",
   fajrAngle: "18",
   ishaAngle: "17",
-  fajrIncrement: "0",
-  dhuhrIncrement: "0",
-  asrIncrement: "0",
-  maghribIncrement: "0",
-  ishaIncrement: "0",
+  fajrAdjustment: "0",
+  dhuhrAdjustment: "0",
+  asrAdjustment: "0",
+  maghribAdjustment: "0",
+  ishaAdjustment: "0",
 };
 
 export const reasonsStyles =
@@ -259,10 +259,10 @@ export const updateUserPrefs = async (
     console.log(`ERROR ENTERING ${preferenceName} into DB`);
     console.error(error);
   } finally {
-    let DBResultPreferences = await dbConnection.current?.query(
-      `SELECT * FROM userPreferencesTable`
-    );
-    console.log("DBResultPreferences: ", DBResultPreferences?.values);
+    // let DBResultPreferences = await dbConnection.current?.query(
+    //   `SELECT * FROM userPreferencesTable`
+    // );
+    // console.log("DBResultPreferences: ", DBResultPreferences?.values);
     await toggleDBConnection(dbConnection, "close");
   }
 };

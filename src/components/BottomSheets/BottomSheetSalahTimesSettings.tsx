@@ -62,12 +62,12 @@ const BottomSheetSalahTimesSettings = ({
     );
 
   const [customAdjustmentSalah, setCustomAdjustmentSalah] = useState<
-    | "fajrIncrement"
-    | "dhuhrIncrement"
-    | "asrIncrement"
-    | "maghribIncrement"
-    | "ishaIncrement"
-  >("fajrIncrement");
+    | "fajrAdjustment"
+    | "dhuhrAdjustment"
+    | "asrAdjustment"
+    | "maghribAdjustment"
+    | "ishaAdjustment"
+  >("fajrAdjustment");
 
   const [customAngleSalah, setCustomAngleSalah] = useState<
     "fajrAngle" | "ishaAngle"
@@ -78,11 +78,13 @@ const BottomSheetSalahTimesSettings = ({
   const [showCustomAnglesSheet, setShowCustomAnglesSheet] =
     useState<boolean>(false);
 
-  const methodObj = CalculationMethod["Egyptian"]().highLatitudeRule;
-  console.log("methodObj: ", methodObj);
+  // const methodObj = CalculationMethod["Egyptian"]().highLatitudeRule;
+  // console.log("methodObj: ", methodObj);
 
-  var params = CalculationMethod.UmmAlQura();
-  console.log(params);
+  // var params = CalculationMethod.UmmAlQura();
+  // console.log(params);
+
+  // console.log(HighLatitudeRule.recommended());
 
   return (
     <IonModal
@@ -138,12 +140,12 @@ const BottomSheetSalahTimesSettings = ({
                       await updateUserPrefs(
                         dbConnection,
                         "madhab",
-                        "shafiMalikiHanbali",
+                        "shafi",
                         setUserPreferences
                       );
                     }}
                     className={`${
-                      userPreferences.madhab === "shafiMalikiHanbali"
+                      userPreferences.madhab === "shafi"
                         ? "bg-green-800 rounded-md"
                         : "border rounded-md"
                     }`}
@@ -253,7 +255,7 @@ const BottomSheetSalahTimesSettings = ({
                   {/* <div className="flex flex-wrap"> */}
                   <div
                     onClick={() => {
-                      setCustomAdjustmentSalah("fajrIncrement");
+                      setCustomAdjustmentSalah("fajrAdjustment");
                       setShowCustomAdjustmentsSheet(true);
                     }}
                     className="flex items-center justify-between p-2 mb-4 border rounded-lg"
@@ -261,15 +263,15 @@ const BottomSheetSalahTimesSettings = ({
                     <p>Fajr Adjustment</p>
                     <p>
                       {" "}
-                      {userPreferences.fajrIncrement}{" "}
-                      {userPreferences.fajrIncrement === "1"
+                      {userPreferences.fajrAdjustment}{" "}
+                      {userPreferences.fajrAdjustment === "1"
                         ? "minute"
                         : "minutes"}
                     </p>
                   </div>
                   <div
                     onClick={() => {
-                      setCustomAdjustmentSalah("dhuhrIncrement");
+                      setCustomAdjustmentSalah("dhuhrAdjustment");
                       setShowCustomAdjustmentsSheet(true);
                     }}
                     className="flex items-center justify-between p-2 mb-4 border rounded-lg"
@@ -277,49 +279,49 @@ const BottomSheetSalahTimesSettings = ({
                     <p>Dhuhr Adjustment</p>
                     <p>
                       {" "}
-                      {userPreferences.dhuhrIncrement}{" "}
-                      {userPreferences.dhuhrIncrement === "1"
+                      {userPreferences.dhuhrAdjustment}{" "}
+                      {userPreferences.dhuhrAdjustment === "1"
                         ? "minute"
                         : "minutes"}
                     </p>
                   </div>
                   <div
                     onClick={() => {
-                      setCustomAdjustmentSalah("asrIncrement");
+                      setCustomAdjustmentSalah("asrAdjustment");
                       setShowCustomAdjustmentsSheet(true);
                     }}
                     className="flex items-center justify-between p-2 mb-4 border rounded-lg"
                   >
                     <p>Asr Adjustment</p>
-                    {userPreferences.asrIncrement}{" "}
-                    {userPreferences.asrIncrement === "1"
+                    {userPreferences.asrAdjustment}{" "}
+                    {userPreferences.asrAdjustment === "1"
                       ? "minute"
                       : "minutes"}
                   </div>
                   <div
                     onClick={() => {
-                      setCustomAdjustmentSalah("maghribIncrement");
+                      setCustomAdjustmentSalah("maghribAdjustment");
                       setShowCustomAdjustmentsSheet(true);
                     }}
                     className="flex items-center justify-between p-2 mb-4 border rounded-lg"
                   >
                     <p>Maghrib Adjustment</p>
-                    {userPreferences.maghribIncrement}{" "}
-                    {userPreferences.maghribIncrement === "1"
+                    {userPreferences.maghribAdjustment}{" "}
+                    {userPreferences.maghribAdjustment === "1"
                       ? "minute"
                       : "minutes"}
                   </div>
                   <div
                     onClick={() => {
-                      setCustomAdjustmentSalah("ishaIncrement");
+                      setCustomAdjustmentSalah("ishaAdjustment");
                       setShowCustomAdjustmentsSheet(true);
                     }}
                     className="flex items-center justify-between p-2 mb-4 border rounded-lg"
                   >
                     <p>Isha Adjustment</p>
                     <p>
-                      {userPreferences.ishaIncrement}{" "}
-                      {userPreferences.ishaIncrement === "1"
+                      {userPreferences.ishaAdjustment}{" "}
+                      {userPreferences.ishaAdjustment === "1"
                         ? "minute"
                         : "minutes"}
                     </p>
@@ -334,6 +336,7 @@ const BottomSheetSalahTimesSettings = ({
           triggerId="open-salah-calculations-sheet"
           dbConnection={dbConnection}
           setSelectedCalculationMethod={setSelectedCalculationMethod}
+          selectedCalculationMethod={selectedCalculationMethod}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
         />

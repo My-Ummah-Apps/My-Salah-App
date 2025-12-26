@@ -64,7 +64,16 @@ import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
 import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 import SalahTimesPage from "./pages/SalahTimesPage";
-import { toggleDBConnection as toggleDBConnection } from "./utils/dbUtils";
+import {
+  fetchAllLocations,
+  toggleDBConnection as toggleDBConnection,
+} from "./utils/dbUtils";
+import {
+  CalculationMethod,
+  Coordinates,
+  PrayerTimes,
+  SunnahTimes,
+} from "adhan";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -196,10 +205,10 @@ const App = () => {
 
       await toggleDBConnection(dbConnection, "open");
 
-      const res = await dbConnection.current?.query(
-        `SELECT name, type FROM sqlite_master WHERE type='table'`
-      );
-      console.log("tables: ", res?.values);
+      // const res = await dbConnection.current?.query(
+      //   `SELECT name, type FROM sqlite_master WHERE type='table'`
+      // );
+      // console.log("tables: ", res?.values);
 
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
@@ -209,9 +218,10 @@ const App = () => {
         `SELECT * FROM salahDataTable`
       );
 
-      const DBResultLocations = await dbConnection.current?.query(
-        `SELECT * FROM userLocationsTable`
-      );
+      // const DBResultLocations = await dbConnection.current?.query(
+      //   `SELECT * FROM userLocationsTable`
+      // );
+      const DBResultLocations = await fetchAllLocations(dbConnection, true);
 
       // console.log("DBResultPreferences: ", DBResultPreferences?.values);
 
@@ -231,12 +241,11 @@ const App = () => {
         );
       }
 
-      const locations = await dbConnection.current?.query(
-        `SELECT * FROM userLocationsTable`
-      );
-      console.log("Locations from DB: ", locations);
-
-      setUserLocations(DBResultLocations.values);
+      // const locations = await dbConnection.current?.query(
+      //   `SELECT * FROM userLocationsTable`
+      // );
+      // console.log("Locations from DB: ", locations);
+      setUserLocations(DBResultLocations);
 
       const userNotificationPermission = await checkNotificationPermissions();
 
@@ -294,6 +303,8 @@ const App = () => {
         await handleUserPreferencesDataFromDB(
           DBResultPreferences.values as PreferenceObjType[]
         );
+
+        await handleActiveLocationSalahTimes();
 
         await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       } catch (error) {
@@ -463,6 +474,65 @@ const App = () => {
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
     generateStreaks([...singleSalahObjArr]);
+  };
+
+  // const [activeLocation, setActiveLocation] = useState();
+
+  const handleActiveLocationSalahTimes = async () => {
+    const locations = await fetchAllLocations(dbConnection);
+
+    const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
+
+    const locale = navigator.language;
+
+    const coordinates = new Coordinates(
+      activeLocation?.latitude,
+      activeLocation?.longitude
+    );
+    const params =
+      CalculationMethod[
+        userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
+      ]();
+
+    params.madhab = userPreferences.madhab;
+    params.highLatitudeRule = userPreferences.prayerLatitudeRule;
+    params.fajrAngle = Number(userPreferences.fajrAngle);
+    params.ishaAngle = Number(userPreferences.ishaAngle);
+    params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
+    params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
+    params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
+    params.methodAdjustments.maghrib = Number(
+      userPreferences.maghribAdjustment
+    );
+    params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
+
+    const date = new Date();
+
+    const extractSalahTime = (
+      salah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha"
+    ) => {
+      const salahTime = new PrayerTimes(coordinates, date, params)[salah];
+
+      return salahTime.toLocaleTimeString(locale, {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    };
+
+    const fajrTime = extractSalahTime("fajr");
+    const dhuhrTime = extractSalahTime("dhuhr");
+    const asrTime = extractSalahTime("asr");
+    const maghribTime = extractSalahTime("maghrib");
+    const ishaTime = extractSalahTime("isha");
+
+    console.log("fajrTime: ", fajrTime);
+    console.log("dhuhrTime: ", dhuhrTime);
+    console.log("asrTime: ", asrTime);
+    console.log("maghribTime: ", maghribTime);
+    console.log("ishaTime: ", ishaTime);
+
+    // const sunnahTimes = new SunnahTimes(prayerTimes);
+    // console.log("sunnahTimes: ", sunnahTimes);
   };
 
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {

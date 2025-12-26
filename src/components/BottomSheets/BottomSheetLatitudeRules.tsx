@@ -52,12 +52,12 @@ const BottomSheetLatitudeRules = ({
               await updateUserPrefs(
                 dbConnection,
                 "prayerLatitudeRule",
-                "MiddleOfTheNight",
+                "middleofthenight",
                 setUserPreferences
               );
             }}
             className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.prayerLatitudeRule === "MiddleOfTheNight"
+              userPreferences.prayerLatitudeRule === "middleofthenight"
                 ? "bg-blue-500"
                 : ""
             }`}
@@ -73,12 +73,12 @@ const BottomSheetLatitudeRules = ({
               await updateUserPrefs(
                 dbConnection,
                 "prayerLatitudeRule",
-                "SeventhOfTheNight",
+                "seventhofthenight",
                 setUserPreferences
               );
             }}
             className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.prayerLatitudeRule === "SeventhOfTheNight"
+              userPreferences.prayerLatitudeRule === "seventhofthenight"
                 ? "bg-blue-500"
                 : ""
             }`}
@@ -97,12 +97,12 @@ const BottomSheetLatitudeRules = ({
               await updateUserPrefs(
                 dbConnection,
                 "prayerLatitudeRule",
-                "TwilightAngle",
+                "twilightangle",
                 setUserPreferences
               );
             }}
             className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.prayerLatitudeRule === "TwilightAngle"
+              userPreferences.prayerLatitudeRule === "twilightangle"
                 ? "bg-blue-500"
                 : ""
             }`}

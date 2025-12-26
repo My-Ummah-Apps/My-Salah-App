@@ -29,19 +29,18 @@ export interface userPreferencesType {
   haptics: string;
   theme: "dark" | "light" | "system";
   prayerCalculationMethod: CalculationMethodsType;
-  madhab: "hanafi" | "shafiMalikiHanbali";
+  madhab: "hanafi" | "shafi";
   prayerLatitudeRule:
-    | "MiddleOfTheNight"
-    | "SeventhOfTheNight"
-    | "TwilightAngle"
-    | "";
+    | "middleofthenight"
+    | "seventhofthenight"
+    | "twilightangle";
   fajrAngle: string;
   ishaAngle: string;
-  fajrIncrement: string;
-  dhuhrIncrement: string;
-  asrIncrement: string;
-  maghribIncrement: string;
-  ishaIncrement: string;
+  fajrAdjustment: string;
+  dhuhrAdjustment: string;
+  asrAdjustment: string;
+  maghribAdjustment: string;
+  ishaAdjustment: string;
   timeFormat: "12hr" | "24hr";
 }
 

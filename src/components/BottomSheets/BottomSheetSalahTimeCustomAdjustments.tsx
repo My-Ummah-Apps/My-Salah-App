@@ -20,11 +20,11 @@ interface BottomSheetSalahTimeCustomAdjustmentsProps {
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   customAdjustmentSalah:
-    | "fajrIncrement"
-    | "dhuhrIncrement"
-    | "asrIncrement"
-    | "maghribIncrement"
-    | "ishaIncrement";
+    | "fajrAdjustment"
+    | "dhuhrAdjustment"
+    | "asrAdjustment"
+    | "maghribAdjustment"
+    | "ishaAdjustment";
 }
 
 const BottomSheetSalahTimeCustomAdjustments = ({
