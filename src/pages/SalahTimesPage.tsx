@@ -106,24 +106,26 @@ const SalahTimesPage = ({
             <IonCardContent>Time Remaining:</IonCardContent>
           </IonCard>
         </section>
-        <IonList>
-          {Object.entries(salahTimes).map(([name, time]) => (
-            <IonItem key={name + time}>
-              <IonLabel>
-                {name.charAt(0).toUpperCase() + name.slice(1)}
-              </IonLabel>
-              <div className="flex items-center" slot="end">
-                <p>{time}</p>
-                <IonButton slot="end" fill="clear">
-                  <IonIcon
-                    className="text-[var(--ion-text-color)] text-lg"
-                    icon={notificationsOutline}
-                  />
-                </IonButton>
-              </div>
-            </IonItem>
-          ))}
-        </IonList>
+        <section className="">
+          <IonList inset={true}>
+            {Object.entries(salahTimes).map(([name, time]) => (
+              <IonItem key={name + time}>
+                <IonLabel>
+                  {name.charAt(0).toUpperCase() + name.slice(1)}
+                </IonLabel>
+                <div className="flex items-center" slot="end">
+                  <p>{time}</p>
+                  <IonButton slot="end" fill="clear">
+                    <IonIcon
+                      className="text-[var(--ion-text-color)] text-lg"
+                      icon={notificationsOutline}
+                    />
+                  </IonButton>
+                </div>
+              </IonItem>
+            ))}
+          </IonList>
+        </section>
         {userLocations?.length === 0 ? (
           <>
             <section
