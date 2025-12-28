@@ -38,6 +38,13 @@ interface SalahTimesPageProps {
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
+  salahTimes: {
+    fajr: string;
+    dhuhr: string;
+    asr: string;
+    maghrib: string;
+    isha: string;
+  };
 }
 
 const SalahTimesPage = ({
@@ -46,6 +53,7 @@ const SalahTimesPage = ({
   userPreferences,
   setUserLocations,
   userLocations,
+  salahTimes,
 }: SalahTimesPageProps) => {
   const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
@@ -99,11 +107,13 @@ const SalahTimesPage = ({
           </IonCard>
         </section>
         <IonList>
-          {salahNames.map((salahName, i) => (
-            <IonItem key={salahName + i}>
-              <IonLabel>{salahName}</IonLabel>
+          {Object.entries(salahTimes).map(([name, time]) => (
+            <IonItem key={name + time}>
+              <IonLabel>
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </IonLabel>
               <div className="flex items-center" slot="end">
-                <p>--:--</p>
+                <p>{time}</p>
                 <IonButton slot="end" fill="clear">
                   <IonIcon
                     className="text-[var(--ion-text-color)] text-lg"

@@ -97,6 +97,13 @@ const App = () => {
   const [userPreferences, setUserPreferences] = useState<userPreferencesType>(
     dictPreferencesDefaultValues
   );
+  const [salahTimes, setSalahtimes] = useState({
+    fajr: "",
+    dhuhr: "",
+    asr: "",
+    maghrib: "",
+    isha: "",
+  });
   const [theme, setTheme] = useState<themeType>("dark");
 
   const handleTheme = (theme?: themeType) => {
@@ -409,6 +416,14 @@ const App = () => {
     await batchAssignPreferences();
   };
 
+  // useEffect(() => {
+  //   const calculateTimes = async () => {
+  //     await handleActiveLocationSalahTimes();
+  //   };
+
+  //   calculateTimes();
+  // }, [userLocations]);
+
   // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
   let userStartDateForSalahTrackingFunc: string;
   useEffect(() => {
@@ -494,6 +509,8 @@ const App = () => {
         userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
       ]();
 
+    console.log("params: ", params);
+
     params.madhab = userPreferences.madhab;
     params.highLatitudeRule = userPreferences.prayerLatitudeRule;
     params.fajrAngle = Number(userPreferences.fajrAngle);
@@ -519,17 +536,15 @@ const App = () => {
       });
     };
 
-    const fajrTime = extractSalahTime("fajr");
-    const dhuhrTime = extractSalahTime("dhuhr");
-    const asrTime = extractSalahTime("asr");
-    const maghribTime = extractSalahTime("maghrib");
-    const ishaTime = extractSalahTime("isha");
+    setSalahtimes({
+      fajr: extractSalahTime("fajr"),
+      dhuhr: extractSalahTime("dhuhr"),
+      asr: extractSalahTime("asr"),
+      maghrib: extractSalahTime("maghrib"),
+      isha: extractSalahTime("isha"),
+    });
 
-    console.log("fajrTime: ", fajrTime);
-    console.log("dhuhrTime: ", dhuhrTime);
-    console.log("asrTime: ", asrTime);
-    console.log("maghribTime: ", maghribTime);
-    console.log("ishaTime: ", ishaTime);
+    console.log("salahTimes: ", salahTimes);
 
     // const sunnahTimes = new SunnahTimes(prayerTimes);
     // console.log("sunnahTimes: ", sunnahTimes);
@@ -741,6 +756,7 @@ const App = () => {
                   userPreferences={userPreferences}
                   setUserLocations={setUserLocations}
                   userLocations={userLocations}
+                  salahTimes={salahTimes}
                 />
               )}
             />
