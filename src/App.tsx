@@ -586,7 +586,8 @@ const App = () => {
     let allSalahTimes = new PrayerTimes(coordinates, date, params);
 
     let next = allSalahTimes.nextPrayer();
-    let nextPrayerTime;
+    let nextSalahTime;
+    let currentSalah;
 
     // const sunnahTimes = new SunnahTimes(allSalahTimes);
     // console.log("sunnahTimes: ", sunnahTimes);
@@ -597,28 +598,21 @@ const App = () => {
 
       allSalahTimes = new PrayerTimes(coordinates, tomorrow, params);
 
+      currentSalah = "Isha";
       next = allSalahTimes.nextPrayer();
-      console.log("next: ", next);
-      nextPrayerTime = allSalahTimes.timeForPrayer(next);
-      console.log("nextPrayerTime: ", nextPrayerTime);
+
+      nextSalahTime = allSalahTimes.timeForPrayer(next);
     } else {
-      nextPrayerTime = allSalahTimes.timeForPrayer(next);
-      console.log("nextPrayerTime: ", nextPrayerTime);
-      console.log("next: ", next);
+      nextSalahTime = allSalahTimes.timeForPrayer(next);
+      currentSalah = allSalahTimes.currentPrayer();
     }
 
-    const currentPrayer = allSalahTimes.currentPrayer();
-    console.log("currentPrayer: ", currentPrayer);
-
     const now = new Date();
-    const diffMs = nextPrayerTime.getTime() - now.getTime();
-
+    const diffMs = nextSalahTime.getTime() - now.getTime();
     const hours = Math.floor(diffMs / 1000 / 60 / 60);
     const minutes = Math.floor((diffMs / 1000 / 60) % 60);
-    const seconds = Math.floor((diffMs / 1000) % 60);
 
-    console.log("Next prayer:", next);
-    console.log(`In ${hours}h ${minutes}m ${seconds}s`);
+    return { nextSalah: next, hoursRemaining: hours, minsRemaining: minutes };
   };
 
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {

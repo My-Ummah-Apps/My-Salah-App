@@ -35,8 +35,8 @@ const BottomSheetCustomAngles = ({
 }: BottomSheetCustomAnglesProps) => {
   const [increment, setIncrement] = useState(userPreferences[customAngleSalah]);
 
-  const angleOptions = Array.from({ length: 20 }, (_, i) =>
-    (9 + i / 2).toString()
+  const angleOptions = Array.from({ length: 37 }, (_, i) =>
+    (7 + i / 2).toString()
   );
 
   return (

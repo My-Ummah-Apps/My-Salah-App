@@ -1,11 +1,6 @@
 import {
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
   IonIcon,
@@ -27,7 +22,7 @@ import {
 
 import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/BottomSheetAddLocation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toast from "../components/Toast";
 
 interface SalahTimesPageProps {
@@ -45,7 +40,18 @@ interface SalahTimesPageProps {
     maghrib: string;
     isha: string;
   };
-  calculateActiveLocationSalahTimes: () => Promise<void>;
+  calculateActiveLocationSalahTimes: () => Promise<{
+    nextSalah:
+      | "fajr"
+      | "dhuhr"
+      | "asr"
+      | "maghrib"
+      | "isha"
+      | "sunrise"
+      | "none";
+    hoursRemaining: number;
+    minsRemaining: number;
+  }>;
 }
 
 const SalahTimesPage = ({
@@ -57,8 +63,6 @@ const SalahTimesPage = ({
   salahTimes,
   calculateActiveLocationSalahTimes,
 }: SalahTimesPageProps) => {
-  const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
-
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
     useState(false);
@@ -67,6 +71,32 @@ const SalahTimesPage = ({
     useState<boolean>(false);
   const [showLocationAddedToast, setShowLocationAddedToast] =
     useState<boolean>(false);
+
+  const [nextSalahNameAndTime, setNextSalahNameAndTime] = useState({
+    nextSalah: "",
+    hoursRemaining: 0,
+    minsRemaining: 0,
+  });
+
+  useEffect(() => {
+    const getNextSalah = async () => {
+      const { nextSalah, hoursRemaining, minsRemaining } =
+        await calculateActiveLocationSalahTimes();
+      setNextSalahNameAndTime({
+        nextSalah: nextSalah,
+        hoursRemaining: hoursRemaining,
+        minsRemaining: minsRemaining,
+      });
+    };
+
+    getNextSalah();
+
+    const interval = setInterval(() => {
+      getNextSalah();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [userLocations]);
 
   return (
     <IonPage>
@@ -90,43 +120,18 @@ const SalahTimesPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <section className="flex">
-          <IonCard color="primary">
-            <IonCardHeader>
-              <IonCardTitle>Card Title</IonCardTitle>
-              <IonCardSubtitle>Current Salah</IonCardSubtitle>
-            </IonCardHeader>
-
-            <IonCardContent>Time Remaining:</IonCardContent>
-          </IonCard>
-          <IonCard color="primary">
-            <IonCardHeader>
-              <IonCardTitle>Card Title</IonCardTitle>
-              <IonCardSubtitle>Next Salah</IonCardSubtitle>
-            </IonCardHeader>
-
-            <IonCardContent>Time Remaining:</IonCardContent>
-          </IonCard>
-        </section>
-        <section className="">
-          <IonList inset={true}>
-            {Object.entries(salahTimes).map(([name, time]) => (
-              <IonItem key={name + time}>
-                <IonLabel>
-                  {name.charAt(0).toUpperCase() + name.slice(1)}
-                </IonLabel>
-                <div className="flex items-center" slot="end">
-                  <p>{time === "Invalid Date" ? "--:--" : time}</p>
-                  <IonButton slot="end" fill="clear">
-                    <IonIcon
-                      className="text-[var(--ion-text-color)] text-lg"
-                      icon={notificationsOutline}
-                    />
-                  </IonButton>
-                </div>
-              </IonItem>
-            ))}
-          </IonList>
+        <section className="rounded-2xl bg-[color:var(--card-bg-color)] p-4 m-5">
+          <div>
+            <p className="mb-1 text-lg">Upcoming Salah</p>
+            <p className="mb-1 font-bold ">
+              {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
+                nextSalahNameAndTime.nextSalah.slice(1)}
+            </p>
+            <p className="font-light">
+              {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+              {nextSalahNameAndTime.minsRemaining} minutes to go
+            </p>
+          </div>
         </section>
         {userLocations?.length === 0 ? (
           <>
@@ -159,7 +164,7 @@ const SalahTimesPage = ({
           </>
         ) : (
           <section className="mx-5">
-            <section className="flex items-center justify-center text-lg">
+            <section className="flex items-center justify-center">
               {userLocations?.map((location) => (
                 <section key={location.id}>
                   <p>
@@ -171,10 +176,16 @@ const SalahTimesPage = ({
                 onClick={() => {
                   setShowLocationsListSheet(true);
                 }}
-                className={`text-[var(--ion-text-color)] px-0`}
+                style={{
+                  "--padding-start": "3px",
+                  "--padding-end": "0",
+                  "--padding-top": "0",
+                  "--padding-bottom": "0",
+                }}
+                className={`text-[var(--ion-text-color)] p-0`}
                 aria-label="show all locations"
                 fill="clear"
-                // size="small"
+                size="small"
               >
                 {" "}
                 <IonIcon
@@ -186,6 +197,26 @@ const SalahTimesPage = ({
             </section>
           </section>
         )}
+        <section className="">
+          <IonList inset={true}>
+            {Object.entries(salahTimes).map(([name, time]) => (
+              <IonItem key={name + time}>
+                <IonLabel>
+                  {name.charAt(0).toUpperCase() + name.slice(1)}
+                </IonLabel>
+                <div className="flex items-center" slot="end">
+                  <p>{time === "Invalid Date" ? "--:--" : time}</p>
+                  <IonButton slot="end" fill="clear">
+                    <IonIcon
+                      className="text-[var(--ion-text-color)] text-lg"
+                      icon={notificationsOutline}
+                    />
+                  </IonButton>
+                </div>
+              </IonItem>
+            ))}
+          </IonList>
+        </section>
       </IonContent>
       <BottomSheetLocationsList
         setShowLocationsListSheet={setShowLocationsListSheet}
