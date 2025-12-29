@@ -120,17 +120,23 @@ const SalahTimesPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <section className="rounded-2xl bg-[color:var(--card-bg-color)] p-4 m-5">
+        <section className="rounded-2xl bg-[color:var(--card-bg-color)] p-4 m-5 flex gap-2">
           <div>
             <p className="mb-1 text-lg">Upcoming Salah</p>
             <p className="mb-1 font-bold ">
               {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
                 nextSalahNameAndTime.nextSalah.slice(1)}
             </p>
-            <p className="font-light">
-              {nextSalahNameAndTime.hoursRemaining} hours and{" "}
-              {nextSalahNameAndTime.minsRemaining} minutes to go
-            </p>
+            {nextSalahNameAndTime.hoursRemaining > 0 && (
+              <p className="font-light">
+                {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+              </p>
+            )}
+            <p>{nextSalahNameAndTime.minsRemaining} minutes to go</p>
+          </div>
+          <div className="h-full border-l-2 border-gray-300 border-solid">
+            <p className="ml-4">Current Salah</p>
+            <p className="ml-4">Isha</p>
           </div>
         </section>
         {userLocations?.length === 0 ? (

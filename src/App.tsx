@@ -194,7 +194,7 @@ const App = () => {
 
     calc();
   }, [
-    userPreferences.prayerCalculationMethod,
+    // userPreferences.prayerCalculationMethod,
     userPreferences.madhab,
     userPreferences.prayerLatitudeRule,
     userPreferences.fajrAngle,

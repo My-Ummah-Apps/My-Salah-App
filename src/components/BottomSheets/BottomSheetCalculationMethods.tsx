@@ -4,6 +4,7 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
@@ -38,20 +39,19 @@ const BottomSheetCalculationMethods = ({
   userPreferences,
   calculateActiveLocationSalahTimes,
 }: BottomSheetCalculationMethodsProps) => {
-  const setDefaults = async () => {
+  const setDefaults = async (calcMethod: CalculationMethodsType) => {
     if (!userPreferences.prayerCalculationMethod) return;
 
     const locations = await fetchAllLocations(dbConnection);
     const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
 
-    const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
+    // const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
+    const params = CalculationMethod[calcMethod]();
 
     const latitudeRule =
       typeof params.highLatitudeRule === "string"
         ? params.highLatitudeRule
         : params.highLatitudeRule(activeLocation.latitude);
-
-    console.log("HighLatitudeRule: ", params.highLatitudeRule);
 
     await updateUserPrefs(
       dbConnection,
@@ -112,7 +112,7 @@ const BottomSheetCalculationMethods = ({
   return (
     <IonModal
       // className="modal-fit-content"
-
+      // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       mode="ios"
       //   isOpen={showAddLocationSheet}
       trigger={triggerId}
@@ -125,11 +125,15 @@ const BottomSheetCalculationMethods = ({
     >
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Calculation Methods</IonTitle>
+          <IonTitle className="">Calculation Methods</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <section className="px-4">
+          <p className="mb-5">
+            Prayer times can vary depending on the calculation method used.
+            Select the method that’s commonly followed in your region.
+          </p>
           <div
             onClick={async () => {
               await updateUserPrefs(
@@ -138,7 +142,7 @@ const BottomSheetCalculationMethods = ({
                 "MuslimWorldLeague",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("MuslimWorldLeague");
               setSelectedCalculationMethod("MuslimWorldLeague");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -161,7 +165,7 @@ const BottomSheetCalculationMethods = ({
                 "Egyptian",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Egyptian");
               setSelectedCalculationMethod("Egyptian");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -185,7 +189,7 @@ const BottomSheetCalculationMethods = ({
                 "Karachi",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Karachi");
               setSelectedCalculationMethod("Karachi");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -208,7 +212,7 @@ const BottomSheetCalculationMethods = ({
                 "UmmAlQura",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("UmmAlQura");
               setSelectedCalculationMethod("UmmAlQura");
               console.log("UMM AL QURA SELECTED");
             }}
@@ -234,7 +238,7 @@ const BottomSheetCalculationMethods = ({
                 "Dubai",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Dubai");
               setSelectedCalculationMethod("Dubai");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -258,7 +262,7 @@ const BottomSheetCalculationMethods = ({
                 "Qatar",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Qatar");
               setSelectedCalculationMethod("Qatar");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -281,7 +285,7 @@ const BottomSheetCalculationMethods = ({
                 "Kuwait",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Kuwait");
               setSelectedCalculationMethod("Kuwait");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -304,7 +308,7 @@ const BottomSheetCalculationMethods = ({
                 "MoonsightingCommittee",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("MoonsightingCommittee");
               setSelectedCalculationMethod("MoonsightingCommittee");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -330,7 +334,7 @@ const BottomSheetCalculationMethods = ({
                 "Singapore",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Singapore");
               setSelectedCalculationMethod("Singapore");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -353,7 +357,7 @@ const BottomSheetCalculationMethods = ({
                 "Turkey",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Turkey");
               setSelectedCalculationMethod("Turkey");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -376,7 +380,7 @@ const BottomSheetCalculationMethods = ({
                 "Tehran",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("Tehran");
               setSelectedCalculationMethod("Tehran");
             }}
             className={`p-2 mb-5 border rounded-lg ${
@@ -401,7 +405,7 @@ const BottomSheetCalculationMethods = ({
                 "NorthAmerica",
                 setUserPreferences
               );
-              await setDefaults();
+              await setDefaults("NorthAmerica");
               setSelectedCalculationMethod("NorthAmerica");
             }}
             className={`p-2 mb-5 border rounded-lg ${
