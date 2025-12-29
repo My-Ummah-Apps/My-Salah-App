@@ -159,7 +159,6 @@ export const updateActiveLocation = async (
       `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
       [id]
     );
-    console.log("NEW ACTIVE LOCATION ID IS: ", id);
   } catch (error) {
     console.error(error);
   } finally {

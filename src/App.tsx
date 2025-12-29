@@ -204,8 +204,6 @@ const App = () => {
     userPreferences.asrAdjustment,
     userPreferences.maghribAdjustment,
     userPreferences.ishaAdjustment,
-    // userLocations,
-    // ! Add active location change detection
   ]);
 
   useEffect(() => {
@@ -419,7 +417,11 @@ const App = () => {
           ...userPreferences,
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
+
+        await calculateActiveLocationSalahTimes();
       } else {
+        console.log("preference: ", preference);
+
         await updateUserPrefs(
           dbConnection,
           preference,
@@ -427,7 +429,7 @@ const App = () => {
           setUserPreferences
         );
 
-        // await calculateActiveLocationSalahTimes();
+        await calculateActiveLocationSalahTimes();
       }
     };
 
@@ -530,13 +532,18 @@ const App = () => {
       activeLocation?.latitude,
       activeLocation?.longitude
     );
-    // ! Below is undefined and is causing a bug
+
     console.log("activeLocation: ", activeLocation);
 
     const params =
       CalculationMethod[
         userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
       ]();
+
+    console.log(
+      "userPreferences.prayerCalculationMethod: ",
+      userPreferences.prayerCalculationMethod
+    );
 
     console.log("params: ", params);
 
@@ -821,6 +828,9 @@ const App = () => {
                   setUserLocations={setUserLocations}
                   userLocations={userLocations}
                   salahTimes={salahTimes}
+                  calculateActiveLocationSalahTimes={
+                    calculateActiveLocationSalahTimes
+                  }
                 />
               )}
             />

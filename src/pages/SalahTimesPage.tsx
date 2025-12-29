@@ -45,6 +45,7 @@ interface SalahTimesPageProps {
     maghrib: string;
     isha: string;
   };
+  calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 
 const SalahTimesPage = ({
@@ -54,6 +55,7 @@ const SalahTimesPage = ({
   setUserLocations,
   userLocations,
   salahTimes,
+  calculateActiveLocationSalahTimes,
 }: SalahTimesPageProps) => {
   const salahNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
@@ -114,7 +116,7 @@ const SalahTimesPage = ({
                   {name.charAt(0).toUpperCase() + name.slice(1)}
                 </IonLabel>
                 <div className="flex items-center" slot="end">
-                  <p>{time}</p>
+                  <p>{time === "Invalid Date" ? "--:--" : time}</p>
                   <IonButton slot="end" fill="clear">
                     <IonIcon
                       className="text-[var(--ion-text-color)] text-lg"
@@ -195,6 +197,7 @@ const SalahTimesPage = ({
         showAddLocationSheet={showAddLocationSheet}
         setShowLocationFailureToast={setShowLocationFailureToast}
         setShowLocationAddedToast={setShowLocationAddedToast}
+        calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <BottomSheetSalahTimesSettings
         setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
@@ -204,6 +207,7 @@ const SalahTimesPage = ({
         userPreferences={userPreferences}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
+        calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <Toast
         isOpen={showLocationFailureToast}

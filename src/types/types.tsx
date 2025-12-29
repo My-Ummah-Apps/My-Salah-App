@@ -12,7 +12,7 @@ export type CalculationMethodsType =
   | "Turkey"
   | "Tehran"
   | "Other"
-  | null;
+  | "";
 
 export interface userPreferencesType {
   userStartDate: string;

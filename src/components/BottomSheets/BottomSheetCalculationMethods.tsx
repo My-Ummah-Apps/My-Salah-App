@@ -26,6 +26,7 @@ interface BottomSheetCalculationMethodsProps {
   selectedCalculationMethod: CalculationMethodsType | null;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 
 const BottomSheetCalculationMethods = ({
@@ -35,6 +36,7 @@ const BottomSheetCalculationMethods = ({
   selectedCalculationMethod,
   setUserPreferences,
   userPreferences,
+  calculateActiveLocationSalahTimes,
 }: BottomSheetCalculationMethodsProps) => {
   const setDefaults = async () => {
     if (!userPreferences.prayerCalculationMethod) return;
@@ -105,6 +107,8 @@ const BottomSheetCalculationMethods = ({
       String(params.methodAdjustments.isha),
       setUserPreferences
     );
+
+    // await calculateActiveLocationSalahTimes();
   };
 
   return (
@@ -145,10 +149,10 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Muslim World League</h5>
+            <p className="mt-0 font-bold text-md">Muslim World League</p>
             <p className="text-sm">
-              Muslim World League. Standard Fajr time with an angle of 18°.
-              Earlier Isha time with an angle of 17°.
+              Standard Fajr time with an angle of 18°. Earlier Isha time with an
+              angle of 17°.
             </p>
           </div>
           <div
@@ -168,7 +172,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Egypt</h5>
+            <h6 className="mt-0 font-bold text-md">Egypt</h6>
             <p className="text-sm">
               Egyptian General Authority of Survey. Early Fajr time using an
               angle 19.5° and a slightly earlier Isha time using an angle of
@@ -192,7 +196,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Karachi</h5>
+            <p className="mt-0 font-bold text-md">Karachi</p>
             <p className="text-sm">
               University of Islamic Sciences, Karachi. A generally applicable
               method that uses standard Fajr and Isha angles of 18°.
@@ -208,6 +212,7 @@ const BottomSheetCalculationMethods = ({
               );
               await setDefaults();
               setSelectedCalculationMethod("UmmAlQura");
+              console.log("UMM AL QURA SELECTED");
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences.prayerCalculationMethod === "UmmAlQura"
@@ -215,7 +220,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">UmmAlQura</h5>
+            <p className="mt-0 font-bold text-md">UmmAlQura</p>
             <p className="text-sm">
               Umm al-Qura University, Makkah. Uses a fixed interval of 90
               minutes from maghrib to calculate Isha. And a slightly earlier
@@ -240,7 +245,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Dubai</h5>
+            <p className="mt-0 font-bold text-md">Dubai</p>
             <p className="text-sm">
               Used in the UAE. Slightly earlier Fajr time and slightly later
               Isha time with angles of 18.2° for Fajr and Isha in addition to 3
@@ -264,7 +269,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Qatar</h5>
+            <p className="mt-0 font-bold text-md">Qatar</p>
             <p className="text-sm">
               Same Isha interval as ummAlQura but with the standard Fajr time
               using an angle of 18°.
@@ -287,7 +292,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Kuwait</h5>
+            <p className="mt-0 font-bold text-md">Kuwait</p>
             <p className="text-sm">
               Standard Fajr time with an angle of 18°. Slightly earlier Isha
               time with an angle of 17.5°.
@@ -311,7 +316,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Moonsighting Committee</h5>
+            <p className="mt-0 font-bold text-md">Moonsighting Committee</p>
             <p className="text-sm">
               Method developed by Khalid Shaukat, founder of Moonsighting
               Committee Worldwide. Uses standard 18° angles for Fajr and Isha in
@@ -337,7 +342,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Singapore</h5>
+            <p className="mt-0 font-bold text-md">Singapore</p>
             <p className="text-sm">
               Used in Singapore, Malaysia, and Indonesia. Early Fajr time with
               an angle of 20° and standard Isha time with an angle of 18°.
@@ -360,7 +365,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Turkey</h5>
+            <p className="mt-0 font-bold text-md">Turkey</p>
             <p className="text-sm">
               An approximation of the Diyanet method used in Turkey. This
               approximation is less accurate outside the region of Turkey.
@@ -383,7 +388,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">Tehran</h5>
+            <p className="mt-0 font-bold text-md">Tehran</p>
             <p className="text-sm">
               Institute of Geophysics, University of Tehran. Early Isha time
               with an angle of 14°. Slightly later Fajr time with an angle of
@@ -408,7 +413,7 @@ const BottomSheetCalculationMethods = ({
                 : ""
             }`}
           >
-            <h5 className="mt-0">North America</h5>
+            <p className="mt-0 font-bold text-md">North America</p>
             <p className="text-sm">
               Also known as the ISNA method. Can be used for North America, but
               the moonsightingCommittee method is preferable. Gives later Fajr

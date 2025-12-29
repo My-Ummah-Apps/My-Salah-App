@@ -46,6 +46,7 @@ interface BottomSheetSalahTimesSettingsProps {
   showAddLocationSheet: boolean;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
+  calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 
 const BottomSheetLocationsList = ({
@@ -60,6 +61,7 @@ const BottomSheetLocationsList = ({
   showAddLocationSheet,
   setShowLocationFailureToast,
   setShowLocationAddedToast,
+  calculateActiveLocationSalahTimes,
 }: BottomSheetSalahTimesSettingsProps) => {
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
@@ -102,6 +104,7 @@ const BottomSheetLocationsList = ({
                   await updateActiveLocation(dbConnection, location.id);
                   const locations = await fetchAllLocations(dbConnection);
                   setUserLocations(locations);
+                  await calculateActiveLocationSalahTimes();
                 }}
                 className="flex items-center justify-between border-b"
               >

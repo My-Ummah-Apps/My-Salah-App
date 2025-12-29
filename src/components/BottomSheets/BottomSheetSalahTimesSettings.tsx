@@ -45,6 +45,7 @@ interface BottomSheetSalahTimesSettingsProps {
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
+  calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 
 const BottomSheetSalahTimesSettings = ({
@@ -55,6 +56,7 @@ const BottomSheetSalahTimesSettings = ({
   userPreferences,
   setUserLocations,
   userLocations,
+  calculateActiveLocationSalahTimes,
 }: BottomSheetSalahTimesSettingsProps) => {
   const [selectedCalculationMethod, setSelectedCalculationMethod] =
     useState<CalculationMethodsType | null>(
@@ -120,7 +122,7 @@ const BottomSheetSalahTimesSettings = ({
               className="flex items-center mx-5 border border-gray-500 rounded-md"
             >
               <p>
-                {userPreferences.prayerCalculationMethod === null
+                {userPreferences.prayerCalculationMethod === ""
                   ? "Select Calculation method"
                   : userPreferences.prayerCalculationMethod}
               </p>
@@ -339,6 +341,7 @@ const BottomSheetSalahTimesSettings = ({
           selectedCalculationMethod={selectedCalculationMethod}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
+          calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
         />
         <BottomSheetLatitudeRules
           triggerId="open-salah-latitude-rules-sheet"
