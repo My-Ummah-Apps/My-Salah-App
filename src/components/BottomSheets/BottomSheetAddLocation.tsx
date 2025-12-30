@@ -10,8 +10,6 @@ import {
   IonIcon,
   IonInput,
   IonModal,
-  IonTitle,
-  IonToolbar,
   useIonLoading,
 } from "@ionic/react";
 import { Geolocation } from "@capacitor/geolocation";
@@ -23,11 +21,27 @@ import {
 import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
 import { LocationsDataObjTypeArr } from "../../types/types";
 import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
+
+import cities from "../../assets/city_list.json";
+
+console.log("LENGHT: ", cities.length);
+
+const allCities = cities.map(
+  (obj: { country: string; name: string; lat: number; lon: number }) => {
+    return {
+      country: obj.country,
+      city: obj.name,
+      latitude: obj.lat,
+      longitude: obj.lon,
+      search: obj.name.toLowerCase(),
+    };
+  }
+);
 
 interface BottomSheetAddLocationProps {
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -67,6 +81,7 @@ const BottomSheetAddLocation = ({
   const [useManualCoordinates, setUseManualCoordinates] = useState(false);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
+  const [citySearchMode, setCitySearchMode] = useState(false);
 
   const clearLatLong = () => {
     setLatitude(null);
@@ -82,6 +97,7 @@ const BottomSheetAddLocation = ({
     setUseManualCoordinates(false);
     setShowEmptyLatitudeError(false);
     setShowEmptyLongitudeError(false);
+    setCitySearchMode(false);
   };
 
   const handleGrantedPermission = async () => {
@@ -186,7 +202,17 @@ const BottomSheetAddLocation = ({
                 placeholder="Location name"
                 onIonInput={(e) => setLocationName(e.detail.value || "")}
               ></IonInput>
-
+              {/* user starts typing, start filtering and matching what the users typed to the city names */}
+              {citySearchMode && locationName && (
+                <ul>
+                  {allCities
+                    .filter((obj) => obj.city.includes(locationName))
+                    .slice(0, 10)
+                    .map((obj) => (
+                      <li key={obj.latitude + obj.longitude}>{obj.city}</li>
+                    ))}
+                </ul>
+              )}
               <p
                 className={`mb-1 text-xs text-red-500 ${
                   showEmptyLocationError || showDuplicateLocationError
@@ -345,7 +371,7 @@ const BottomSheetAddLocation = ({
         </section>
         <IonCard>
           <IonCardHeader className="pt-0 pb-1">
-            <IonCardTitle>GPS</IonCardTitle>
+            <IonCardTitle className="">GPS</IonCardTitle>
             <IonCardSubtitle>Method 1</IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
@@ -411,6 +437,7 @@ const BottomSheetAddLocation = ({
                 onClick={() => {
                   if (showLocationDetailsInput) return;
                   setShowLocationDetailsInput(true);
+                  setCitySearchMode(true);
                 }}
                 className="mt-5 text-sm"
                 color="tertiary"
