@@ -111,14 +111,15 @@ const BottomSheetCalculationMethods = ({
 
   return (
     <IonModal
+      style={{ "--height": "80vh" }}
       // className="modal-fit-content"
       // className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      className={`${isPlatform("ios") ? "" : "modal-height"}`}
       mode="ios"
       //   isOpen={showAddLocationSheet}
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
-      // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}

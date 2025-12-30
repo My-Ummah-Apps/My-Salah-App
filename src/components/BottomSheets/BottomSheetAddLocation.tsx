@@ -200,16 +200,36 @@ const BottomSheetAddLocation = ({
                 aria-label="Location name"
                 type="text"
                 placeholder="Location name"
-                onIonInput={(e) => setLocationName(e.detail.value || "")}
+                onIonInput={(e) => {
+                  setLocationName(e.detail.value || "");
+                  if (citySearchMode === false) {
+                    setCitySearchMode(true);
+                  }
+                  setShowDuplicateLocationError(false);
+                  setShowEmptyLocationError(false);
+                }}
+                value={locationName}
               ></IonInput>
-              {/* user starts typing, start filtering and matching what the users typed to the city names */}
               {citySearchMode && locationName && (
                 <ul>
                   {allCities
-                    .filter((obj) => obj.city.includes(locationName))
+                    .filter((obj) =>
+                      obj.search.includes(locationName.toLowerCase())
+                    )
                     .slice(0, 10)
                     .map((obj) => (
-                      <li key={obj.latitude + obj.longitude}>{obj.city}</li>
+                      <li
+                        key={obj.latitude + obj.longitude}
+                        className="py-2 border-b border-stone-700"
+                        onClick={() => {
+                          setLocationName(obj.city);
+                          setLatitude(obj.latitude);
+                          setLongitude(obj.longitude);
+                          setCitySearchMode(false);
+                        }}
+                      >
+                        {obj.city}, {obj.country}
+                      </li>
                     ))}
                 </ul>
               )}
@@ -311,7 +331,6 @@ const BottomSheetAddLocation = ({
                     loc.locationName.toLowerCase()
                   );
                   console.log("Locations: ", locationNames);
-
                   if (
                     locationNames.includes(locationNameTrimmed.toLowerCase())
                   ) {
