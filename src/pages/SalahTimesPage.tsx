@@ -41,14 +41,12 @@ interface SalahTimesPageProps {
     isha: string;
   };
   calculateActiveLocationSalahTimes: () => Promise<{
-    nextSalah:
-      | "fajr"
-      | "dhuhr"
-      | "asr"
-      | "maghrib"
-      | "isha"
-      | "sunrise"
-      | "none";
+    nextSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
+    // | "sunrise"
+    // | "none";
+    currentSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
+    // | "sunrise"
+    // | "none";
     hoursRemaining: number;
     minsRemaining: number;
   }>;
@@ -73,6 +71,7 @@ const SalahTimesPage = ({
     useState<boolean>(false);
 
   const [nextSalahNameAndTime, setNextSalahNameAndTime] = useState({
+    currentSalah: "",
     nextSalah: "",
     hoursRemaining: 0,
     minsRemaining: 0,
@@ -80,9 +79,10 @@ const SalahTimesPage = ({
 
   useEffect(() => {
     const getNextSalah = async () => {
-      const { nextSalah, hoursRemaining, minsRemaining } =
+      const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
         await calculateActiveLocationSalahTimes();
       setNextSalahNameAndTime({
+        currentSalah: currentSalah,
         nextSalah: nextSalah,
         hoursRemaining: hoursRemaining,
         minsRemaining: minsRemaining,
@@ -120,7 +120,7 @@ const SalahTimesPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <section className="rounded-2xl bg-[color:var(--card-bg-color)] p-4 m-5 flex gap-2">
+        <section className="rounded-2xl bg-[color:var(--card-bg-color)] p-4 m-5">
           <div>
             <p className="mb-1 text-lg">Upcoming Salah</p>
             <p className="mb-1 font-bold ">
@@ -134,10 +134,10 @@ const SalahTimesPage = ({
             )}
             <p>{nextSalahNameAndTime.minsRemaining} minutes to go</p>
           </div>
-          <div className="h-full border-l-2 border-gray-300 border-solid">
+          {/* <div className="h-full border-l-2 border-gray-300 border-solid">
             <p className="ml-4">Current Salah</p>
-            <p className="ml-4">Isha</p>
-          </div>
+            <p className="ml-4">{nextSalahNameAndTime.currentSalah}</p>
+          </div> */}
         </section>
         {userLocations?.length === 0 ? (
           <>

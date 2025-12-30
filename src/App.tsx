@@ -607,12 +607,22 @@ const App = () => {
       currentSalah = allSalahTimes.currentPrayer();
     }
 
+    if (next === "sunrise") {
+      next = "dhuhr";
+      nextSalahTime = allSalahTimes.timeForPrayer(next);
+    }
+
     const now = new Date();
     const diffMs = nextSalahTime.getTime() - now.getTime();
     const hours = Math.floor(diffMs / 1000 / 60 / 60);
     const minutes = Math.floor((diffMs / 1000 / 60) % 60);
 
-    return { nextSalah: next, hoursRemaining: hours, minsRemaining: minutes };
+    return {
+      currentSalah: currentSalah,
+      nextSalah: next,
+      hoursRemaining: hours,
+      minsRemaining: minutes,
+    };
   };
 
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {

@@ -171,9 +171,9 @@ const BottomSheetAddLocation = ({
       }}
     >
       <IonHeader>
-        <IonToolbar>
+        {/* <IonToolbar>
           <IonTitle>Location</IonTitle>
-        </IonToolbar>
+        </IonToolbar> */}
       </IonHeader>
       <IonContent>
         {showLocationDetailsInput && (
@@ -334,10 +334,13 @@ const BottomSheetAddLocation = ({
             </div>
           </section>
         )}
-        <section className="px-2 mx-5 mt-2 text-center">
+        <section className="px-2 mx-5 mt-10 text-sm text-center">
           <p>
             To calculate Salah times, the app requires your location, you can
-            use one of the three methods below.
+            use one of the three methods below. <br></br>
+            <br></br>For the most accurate results, Methods 1 & 2 (GPS and
+            latitude/longitude) are recommended. Method 3 (City search) is less
+            precise and may give less accurate Salah times.
           </p>
         </section>
         <IonCard>
@@ -372,34 +375,10 @@ const BottomSheetAddLocation = ({
             </div>
           </IonCardContent>
         </IonCard>
-
-        <IonCard>
-          <IonCardHeader className="pt-0 pb-1">
-            <IonCardTitle>Search City</IonCardTitle>
-            <IonCardSubtitle>Method 2</IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>
-            Search for a city by name and select it from the results.{" "}
-            <div className="flex justify-end">
-              <IonButton
-                onClick={() => {
-                  if (showLocationDetailsInput) return;
-                  setShowLocationDetailsInput(true);
-                }}
-                className="mt-5 text-sm"
-                color="tertiary"
-              >
-                <IonIcon className="mr-2" icon={searchOutline} />
-                Search Manually
-              </IonButton>
-            </div>
-          </IonCardContent>
-        </IonCard>
-
         <IonCard>
           <IonCardHeader className="pt-0 pb-1">
             <IonCardTitle>Enter Coordinates</IonCardTitle>
-            <IonCardSubtitle>Method 3</IonCardSubtitle>
+            <IonCardSubtitle>Method 2</IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             Manually enter a latitude and longitude if you already know the
@@ -416,6 +395,28 @@ const BottomSheetAddLocation = ({
               >
                 <IonIcon className="mr-2" icon={globeOutline} />
                 Enter Coordinates
+              </IonButton>
+            </div>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardHeader className="pt-0 pb-1">
+            <IonCardTitle>Search City</IonCardTitle>
+            <IonCardSubtitle>Method 3</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            Search for a city by name and select it from the results.{" "}
+            <div className="flex justify-end">
+              <IonButton
+                onClick={() => {
+                  if (showLocationDetailsInput) return;
+                  setShowLocationDetailsInput(true);
+                }}
+                className="mt-5 text-sm"
+                color="tertiary"
+              >
+                <IonIcon className="mr-2" icon={searchOutline} />
+                Search Manually
               </IonButton>
             </div>
           </IonCardContent>
