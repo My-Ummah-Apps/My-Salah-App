@@ -30,7 +30,6 @@ import {
   dictPreferencesDefaultValues,
   updateUserPrefs,
   setStatusAndNavBarBGColor,
-  generateActiveLocationParams,
   getSalahTimes,
 } from "./utils/constants";
 import {
@@ -70,12 +69,6 @@ import {
   fetchAllLocations,
   toggleDBConnection as toggleDBConnection,
 } from "./utils/dbUtils";
-import {
-  CalculationMethod,
-  Coordinates,
-  PrayerTimes,
-  SunnahTimes,
-} from "adhan";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -198,7 +191,7 @@ const App = () => {
   }, [
     // userPreferences.prayerCalculationMethod,
     userPreferences.madhab,
-    userPreferences.prayerLatitudeRule,
+    userPreferences.highLatitudeRule,
     userPreferences.fajrAngle,
     userPreferences.ishaAngle,
     userPreferences.fajrAdjustment,

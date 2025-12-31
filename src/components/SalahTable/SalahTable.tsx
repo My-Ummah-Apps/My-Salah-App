@@ -269,7 +269,7 @@ const SalahTable = ({
                   key={salahName}
                   style={{ marginLeft: "0" }}
                   className="items-center text-sm"
-                  label={salahName}
+                  label={salahName === "Asar" ? "Asr" : salahName}
                   dataKey={""}
                   width={120}
                   flexGrow={1}

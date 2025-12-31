@@ -61,7 +61,7 @@ BottomSheetCalculationMethodsProps) => {
     );
     await updateUserPrefs(
       dbConnection,
-      "prayerLatitudeRule",
+      "highLatitudeRule",
       latitudeRule,
       setUserPreferences
     );

@@ -49,7 +49,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   timeFormat: "12hr",
   prayerCalculationMethod: "MuslimWorldLeague",
   madhab: "shafi",
-  prayerLatitudeRule: "middleofthenight",
+  highLatitudeRule: "middleofthenight",
   fajrAngle: "18",
   ishaAngle: "17",
   fajrAdjustment: "0",
@@ -339,7 +339,7 @@ export const generateActiveLocationParams = async (
   // console.log("params before amendments: ", params);
 
   params.madhab = userPreferences.madhab;
-  params.highLatitudeRule = userPreferences.prayerLatitudeRule;
+  params.highLatitudeRule = userPreferences.highLatitudeRule;
   params.fajrAngle = Number(userPreferences.fajrAngle);
   params.ishaAngle = Number(userPreferences.ishaAngle);
   params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);

@@ -51,13 +51,13 @@ const BottomSheetLatitudeRules = ({
             onClick={async () => {
               await updateUserPrefs(
                 dbConnection,
-                "prayerLatitudeRule",
+                "highLatitudeRule",
                 "middleofthenight",
                 setUserPreferences
               );
             }}
             className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.prayerLatitudeRule === "middleofthenight"
+              userPreferences.highLatitudeRule === "middleofthenight"
                 ? "bg-blue-500"
                 : ""
             }`}
@@ -72,13 +72,13 @@ const BottomSheetLatitudeRules = ({
             onClick={async () => {
               await updateUserPrefs(
                 dbConnection,
-                "prayerLatitudeRule",
+                "highLatitudeRule",
                 "seventhofthenight",
                 setUserPreferences
               );
             }}
             className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.prayerLatitudeRule === "seventhofthenight"
+              userPreferences.highLatitudeRule === "seventhofthenight"
                 ? "bg-blue-500"
                 : ""
             }`}
@@ -96,13 +96,13 @@ const BottomSheetLatitudeRules = ({
             onClick={async () => {
               await updateUserPrefs(
                 dbConnection,
-                "prayerLatitudeRule",
+                "highLatitudeRule",
                 "twilightangle",
                 setUserPreferences
               );
             }}
             className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.prayerLatitudeRule === "twilightangle"
+              userPreferences.highLatitudeRule === "twilightangle"
                 ? "bg-blue-500"
                 : ""
             }`}

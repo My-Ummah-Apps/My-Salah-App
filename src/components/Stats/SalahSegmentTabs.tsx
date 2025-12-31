@@ -28,7 +28,7 @@ const SalahSegmentTabs = ({
         <IonLabel>Dhuhr</IonLabel>
       </IonSegmentButton>
       <IonSegmentButton value="Asar">
-        <IonLabel>Asar</IonLabel>
+        <IonLabel>Asr</IonLabel>
       </IonSegmentButton>
       <IonSegmentButton value="Maghrib">
         <IonLabel>Maghrib</IonLabel>

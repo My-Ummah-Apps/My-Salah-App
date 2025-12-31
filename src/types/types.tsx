@@ -31,10 +31,7 @@ export interface userPreferencesType {
   timeFormat: "12hr" | "24hr";
   prayerCalculationMethod: CalculationMethodsType;
   madhab: "hanafi" | "shafi";
-  prayerLatitudeRule:
-    | "middleofthenight"
-    | "seventhofthenight"
-    | "twilightangle";
+  highLatitudeRule: "middleofthenight" | "seventhofthenight" | "twilightangle";
   fajrAngle: string;
   ishaAngle: string;
   fajrAdjustment: string;
@@ -92,7 +89,13 @@ export type SalahDataType = {
   [date: string]: string[];
 };
 
-export type SalahNamesType = "Fajr" | "Dhuhr" | "Asr" | "Maghrib" | "Isha";
+export type SalahNamesType =
+  | "Fajr"
+  | "Dhuhr"
+  | "Asr"
+  | "Asar"
+  | "Maghrib"
+  | "Isha";
 
 export interface SalahEntryType {
   salahName: SalahNamesType;
