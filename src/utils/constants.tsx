@@ -1,7 +1,7 @@
 import { Dialog } from "@capacitor/dialog";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { format, isValid, parse } from "date-fns";
+import { addDays, format, isValid, parse } from "date-fns";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
 import { Capacitor } from "@capacitor/core";
@@ -16,8 +16,9 @@ import {
   IOSSettings,
   NativeSettings,
 } from "capacitor-native-settings";
-import { toggleDBConnection } from "./dbUtils";
+import { fetchAllLocations, toggleDBConnection } from "./dbUtils";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { CalculationMethod, Coordinates, PrayerTimes } from "adhan";
 
 export const MODAL_BREAKPOINTS = [0, 1];
 export const INITIAL_MODAL_BREAKPOINT = 1;
@@ -266,4 +267,187 @@ export const updateUserPrefs = async (
     console.log("DBResultPreferences: ", DBResultPreferences?.values);
     await toggleDBConnection(dbConnection, "close");
   }
+};
+
+export const scheduleSalahTimesNotifications = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  salahName: SalahNamesType
+) => {
+  const today = new Date();
+
+  const nextSevenDays = Array.from({ length: 7 }, (_, i) => {
+    return addDays(today, i);
+  });
+
+  console.log("nextSevenDays: ", nextSevenDays);
+
+  const locations = await fetchAllLocations(dbConnection);
+
+  const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
+
+  await createNotificationChannel();
+
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: 1,
+        title: `${salahName}`,
+        body: `It's time to pray ${salahName}`,
+        schedule: {
+          on: {
+            // hour: hour,
+            // minute: minute,
+          },
+          allowWhileIdle: true,
+          repeats: true,
+        },
+        channelId: "daily-reminder",
+        // foreground: true, // iOS only
+      },
+    ],
+  });
+};
+
+// scheduleSalahTimesNotifications(dbConnection, "Fajr");
+
+export const generateActiveLocationParams = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  userPreferences: userPreferencesType
+) => {
+  // if (!isDatabaseInitialised) return;
+
+  const locations = await fetchAllLocations(dbConnection);
+  const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
+
+  const coordinates = new Coordinates(
+    activeLocation?.latitude,
+    activeLocation?.longitude
+  );
+
+  // console.log("activeLocation: ", activeLocation);
+
+  const params =
+    CalculationMethod[
+      userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
+    ]();
+
+  // console.log(
+  //   "userPreferences.prayerCalculationMethod: ",
+  //   userPreferences.prayerCalculationMethod
+  // );
+
+  // console.log("params before amendments: ", params);
+
+  params.madhab = userPreferences.madhab;
+  params.highLatitudeRule = userPreferences.prayerLatitudeRule;
+  params.fajrAngle = Number(userPreferences.fajrAngle);
+  params.ishaAngle = Number(userPreferences.ishaAngle);
+  params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
+  params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
+  params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
+  params.methodAdjustments.maghrib = Number(userPreferences.maghribAdjustment);
+  params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
+  params.shafaq = userPreferences.shafaqRule;
+
+  // console.log("params after amendments:", params);
+
+  return { params, coordinates };
+};
+
+export const getSalahTimes = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  userPreferences: userPreferencesType,
+  setSalahtimes: React.Dispatch<
+    React.SetStateAction<{
+      fajr: string;
+      sunrise: string;
+      dhuhr: string;
+      asr: string;
+      maghrib: string;
+      isha: string;
+    }>
+  >
+) => {
+  const todaysDate = new Date();
+
+  const { params, coordinates } = await generateActiveLocationParams(
+    dbConnection,
+    userPreferences
+  );
+
+  const extractSalahTime = (
+    salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha"
+  ) => {
+    const salahTime = new PrayerTimes(coordinates, todaysDate, params)[salah];
+
+    const locale = navigator.language;
+
+    return salahTime.toLocaleTimeString(locale, {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  setSalahtimes({
+    fajr: extractSalahTime("fajr"),
+    sunrise: extractSalahTime("sunrise"),
+    dhuhr: extractSalahTime("dhuhr"),
+    asr: extractSalahTime("asr"),
+    maghrib: extractSalahTime("maghrib"),
+    isha: extractSalahTime("isha"),
+  });
+
+  // console.log("salahTimes: ", salahTimes);
+};
+
+export const getNextSalah = async (
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  userPreferences: userPreferencesType
+) => {
+  const { params, coordinates } = await generateActiveLocationParams(
+    dbConnection,
+    userPreferences
+  );
+  const todaysDate = new Date();
+
+  let allSalahTimes = new PrayerTimes(coordinates, todaysDate, params);
+
+  let next = allSalahTimes.nextPrayer();
+  let nextSalahTime;
+  let currentSalah;
+
+  // const sunnahTimes = new SunnahTimes(allSalahTimes);
+  // console.log("sunnahTimes: ", sunnahTimes);
+
+  if (next === "none") {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    allSalahTimes = new PrayerTimes(coordinates, tomorrow, params);
+
+    currentSalah = "Isha";
+    next = allSalahTimes.nextPrayer();
+
+    nextSalahTime = allSalahTimes.timeForPrayer(next);
+  } else {
+    nextSalahTime = allSalahTimes.timeForPrayer(next);
+    currentSalah = allSalahTimes.currentPrayer();
+  }
+
+  if (next === "sunrise") {
+    next = "dhuhr";
+    nextSalahTime = allSalahTimes.timeForPrayer(next);
+  }
+
+  const now = new Date();
+  const diffMs = nextSalahTime.getTime() - now.getTime();
+  const hours = Math.floor(diffMs / 1000 / 60 / 60);
+  const minutes = Math.floor((diffMs / 1000 / 60) % 60);
+
+  return {
+    currentSalah: currentSalah,
+    nextSalah: next,
+    hoursRemaining: hours,
+    minsRemaining: minutes,
+  };
 };

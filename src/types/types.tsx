@@ -92,7 +92,7 @@ export type SalahDataType = {
   [date: string]: string[];
 };
 
-export type SalahNamesType = "Fajr" | "Dhuhr" | "Asar" | "Maghrib" | "Isha";
+export type SalahNamesType = "Fajr" | "Dhuhr" | "Asr" | "Maghrib" | "Isha";
 
 export interface SalahEntryType {
   salahName: SalahNamesType;

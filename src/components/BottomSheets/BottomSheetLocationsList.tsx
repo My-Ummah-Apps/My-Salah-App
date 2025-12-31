@@ -14,12 +14,16 @@ import {
   IonItem,
 } from "@ionic/react";
 import {
+  getSalahTimes,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { LocationsDataObjTypeArr } from "../../types/types";
+import {
+  LocationsDataObjTypeArr,
+  userPreferencesType,
+} from "../../types/types";
 import { add, pencilOutline, trashOutline } from "ionicons/icons";
 import { useState } from "react";
 import ActionSheet from "../ActionSheet";
@@ -46,7 +50,18 @@ interface BottomSheetSalahTimesSettingsProps {
   showAddLocationSheet: boolean;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
-  calculateActiveLocationSalahTimes: () => Promise<void>;
+  // calculateActiveLocationSalahTimes: () => Promise<void>;
+  userPreferences: userPreferencesType;
+  setSalahtimes: React.Dispatch<
+    React.SetStateAction<{
+      fajr: string;
+      sunrise: string;
+      dhuhr: string;
+      asr: string;
+      maghrib: string;
+      isha: string;
+    }>
+  >;
 }
 
 const BottomSheetLocationsList = ({
@@ -61,7 +76,9 @@ const BottomSheetLocationsList = ({
   showAddLocationSheet,
   setShowLocationFailureToast,
   setShowLocationAddedToast,
-  calculateActiveLocationSalahTimes,
+  // calculateActiveLocationSalahTimes,
+  userPreferences,
+  setSalahtimes,
 }: BottomSheetSalahTimesSettingsProps) => {
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
@@ -104,7 +121,12 @@ const BottomSheetLocationsList = ({
                   await updateActiveLocation(dbConnection, location.id);
                   const locations = await fetchAllLocations(dbConnection);
                   setUserLocations(locations);
-                  await calculateActiveLocationSalahTimes();
+                  // await calculateActiveLocationSalahTimes();
+                  await getSalahTimes(
+                    dbConnection,
+                    userPreferences,
+                    setSalahtimes
+                  );
                 }}
                 className="flex items-center justify-between border-b"
               >

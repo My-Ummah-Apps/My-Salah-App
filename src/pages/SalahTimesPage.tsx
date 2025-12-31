@@ -24,6 +24,7 @@ import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLoca
 import BottomSheetAddLocation from "../components/BottomSheets/BottomSheetAddLocation";
 import { useEffect, useState } from "react";
 import Toast from "../components/Toast";
+import { getNextSalah } from "../utils/constants";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -33,6 +34,16 @@ interface SalahTimesPageProps {
     React.SetStateAction<LocationsDataObjTypeArr | undefined>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
+  setSalahtimes: React.Dispatch<
+    React.SetStateAction<{
+      fajr: string;
+      sunrise: string;
+      dhuhr: string;
+      asr: string;
+      maghrib: string;
+      isha: string;
+    }>
+  >;
   salahTimes: {
     fajr: string;
     dhuhr: string;
@@ -40,16 +51,16 @@ interface SalahTimesPageProps {
     maghrib: string;
     isha: string;
   };
-  calculateActiveLocationSalahTimes: () => Promise<{
-    nextSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
-    // | "sunrise"
-    // | "none";
-    currentSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
-    // | "sunrise"
-    // | "none";
-    hoursRemaining: number;
-    minsRemaining: number;
-  }>;
+  // calculateActiveLocationSalahTimes: () => Promise<{
+  //   nextSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
+  //   // | "sunrise"
+  //   // | "none";
+  //   currentSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
+  //   // | "sunrise"
+  //   // | "none";
+  //   hoursRemaining: number;
+  //   minsRemaining: number;
+  // }>;
 }
 
 const SalahTimesPage = ({
@@ -58,9 +69,10 @@ const SalahTimesPage = ({
   userPreferences,
   setUserLocations,
   userLocations,
+  setSalahtimes,
   salahTimes,
-  calculateActiveLocationSalahTimes,
-}: SalahTimesPageProps) => {
+}: // calculateActiveLocationSalahTimes,
+SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
     useState(false);
@@ -78,9 +90,11 @@ const SalahTimesPage = ({
   });
 
   useEffect(() => {
-    const getNextSalah = async () => {
+    const getNextSalahDetails = async () => {
+      // const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
+      //   await calculateActiveLocationSalahTimes();
       const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
-        await calculateActiveLocationSalahTimes();
+        await getNextSalah(dbConnection, userPreferences);
       setNextSalahNameAndTime({
         currentSalah: currentSalah,
         nextSalah: nextSalah,
@@ -89,10 +103,10 @@ const SalahTimesPage = ({
       });
     };
 
-    getNextSalah();
+    getNextSalahDetails();
 
     const interval = setInterval(() => {
-      getNextSalah();
+      getNextSalahDetails();
     }, 60000);
 
     return () => clearInterval(interval);
@@ -234,7 +248,9 @@ const SalahTimesPage = ({
         showAddLocationSheet={showAddLocationSheet}
         setShowLocationFailureToast={setShowLocationFailureToast}
         setShowLocationAddedToast={setShowLocationAddedToast}
-        calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
+        setSalahtimes={setSalahtimes}
+        userPreferences={userPreferences}
+        // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <BottomSheetSalahTimesSettings
         setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
@@ -244,7 +260,7 @@ const SalahTimesPage = ({
         userPreferences={userPreferences}
         setUserLocations={setUserLocations}
         userLocations={userLocations}
-        calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
+        // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <Toast
         isOpen={showLocationFailureToast}

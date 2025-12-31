@@ -29,8 +29,6 @@ import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
 
 import cities from "../../assets/city_list.json";
 
-console.log("LENGHT: ", cities.length);
-
 const allCities = cities.map(
   (obj: { country: string; name: string; lat: number; lon: number }) => {
     return {

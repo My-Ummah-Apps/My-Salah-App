@@ -27,7 +27,7 @@ interface BottomSheetCalculationMethodsProps {
   selectedCalculationMethod: CalculationMethodsType | null;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  calculateActiveLocationSalahTimes: () => Promise<void>;
+  // calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 
 const BottomSheetCalculationMethods = ({
@@ -37,8 +37,8 @@ const BottomSheetCalculationMethods = ({
   selectedCalculationMethod,
   setUserPreferences,
   userPreferences,
-  calculateActiveLocationSalahTimes,
-}: BottomSheetCalculationMethodsProps) => {
+}: // calculateActiveLocationSalahTimes,
+BottomSheetCalculationMethodsProps) => {
   const setDefaults = async (calcMethod: CalculationMethodsType) => {
     if (!userPreferences.prayerCalculationMethod) return;
 

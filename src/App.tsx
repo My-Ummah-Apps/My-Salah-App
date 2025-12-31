@@ -30,6 +30,8 @@ import {
   dictPreferencesDefaultValues,
   updateUserPrefs,
   setStatusAndNavBarBGColor,
+  generateActiveLocationParams,
+  getSalahTimes,
 } from "./utils/constants";
 import {
   DBResultDataObjType,
@@ -189,7 +191,7 @@ const App = () => {
     if (!isDatabaseInitialised) return;
 
     const calc = async () => {
-      await calculateActiveLocationSalahTimes();
+      await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
     };
 
     calc();
@@ -418,7 +420,7 @@ const App = () => {
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
 
-        await calculateActiveLocationSalahTimes();
+        await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
       } else {
         console.log("preference: ", preference);
 
@@ -429,7 +431,7 @@ const App = () => {
           setUserPreferences
         );
 
-        await calculateActiveLocationSalahTimes();
+        await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
       }
     };
 
@@ -518,113 +520,6 @@ const App = () => {
   };
 
   // const [activeLocation, setActiveLocation] = useState();
-
-  const calculateActiveLocationSalahTimes = async () => {
-    // if (!isDatabaseInitialised) return;
-
-    const locations = await fetchAllLocations(dbConnection);
-
-    const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
-
-    const locale = navigator.language;
-
-    const coordinates = new Coordinates(
-      activeLocation?.latitude,
-      activeLocation?.longitude
-    );
-
-    console.log("activeLocation: ", activeLocation);
-
-    const params =
-      CalculationMethod[
-        userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
-      ]();
-
-    console.log(
-      "userPreferences.prayerCalculationMethod: ",
-      userPreferences.prayerCalculationMethod
-    );
-
-    console.log("params: ", params);
-
-    params.madhab = userPreferences.madhab;
-    params.highLatitudeRule = userPreferences.prayerLatitudeRule;
-    params.fajrAngle = Number(userPreferences.fajrAngle);
-    params.ishaAngle = Number(userPreferences.ishaAngle);
-    params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
-    params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
-    params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
-    params.methodAdjustments.maghrib = Number(
-      userPreferences.maghribAdjustment
-    );
-    params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
-    params.shafaq = userPreferences.shafaqRule;
-
-    const date = new Date();
-
-    const extractSalahTime = (
-      salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha"
-    ) => {
-      const salahTime = new PrayerTimes(coordinates, date, params)[salah];
-
-      return salahTime.toLocaleTimeString(locale, {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    };
-
-    setSalahtimes({
-      fajr: extractSalahTime("fajr"),
-      sunrise: extractSalahTime("sunrise"),
-      dhuhr: extractSalahTime("dhuhr"),
-      asr: extractSalahTime("asr"),
-      maghrib: extractSalahTime("maghrib"),
-      isha: extractSalahTime("isha"),
-    });
-
-    console.log("salahTimes: ", salahTimes);
-
-    let allSalahTimes = new PrayerTimes(coordinates, date, params);
-
-    let next = allSalahTimes.nextPrayer();
-    let nextSalahTime;
-    let currentSalah;
-
-    // const sunnahTimes = new SunnahTimes(allSalahTimes);
-    // console.log("sunnahTimes: ", sunnahTimes);
-
-    if (next === "none") {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      allSalahTimes = new PrayerTimes(coordinates, tomorrow, params);
-
-      currentSalah = "Isha";
-      next = allSalahTimes.nextPrayer();
-
-      nextSalahTime = allSalahTimes.timeForPrayer(next);
-    } else {
-      nextSalahTime = allSalahTimes.timeForPrayer(next);
-      currentSalah = allSalahTimes.currentPrayer();
-    }
-
-    if (next === "sunrise") {
-      next = "dhuhr";
-      nextSalahTime = allSalahTimes.timeForPrayer(next);
-    }
-
-    const now = new Date();
-    const diffMs = nextSalahTime.getTime() - now.getTime();
-    const hours = Math.floor(diffMs / 1000 / 60 / 60);
-    const minutes = Math.floor((diffMs / 1000 / 60) % 60);
-
-    return {
-      currentSalah: currentSalah,
-      nextSalah: next,
-      hoursRemaining: hours,
-      minsRemaining: minutes,
-    };
-  };
 
   const generateStreaks = (fetchedSalahData: SalahRecordsArrayType) => {
     const reversedFetchedSalahDataArr = fetchedSalahData.reverse();
@@ -832,10 +727,11 @@ const App = () => {
                   userPreferences={userPreferences}
                   setUserLocations={setUserLocations}
                   userLocations={userLocations}
+                  setSalahtimes={setSalahtimes}
                   salahTimes={salahTimes}
-                  calculateActiveLocationSalahTimes={
-                    calculateActiveLocationSalahTimes
-                  }
+                  // calculateActiveLocationSalahTimes={
+                  //   calculateActiveLocationSalahTimes
+                  // }
                 />
               )}
             />
