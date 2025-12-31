@@ -80,6 +80,7 @@ const BottomSheetSalahTimesSettings = ({
     useState<boolean>(false);
   const [showCustomAnglesSheet, setShowCustomAnglesSheet] =
     useState<boolean>(false);
+  const [showShafaqRulesSheet, setShowShafaqRulesSheet] = useState(false);
 
   // const methodObj = CalculationMethod["Egyptian"]().highLatitudeRule;
   // console.log("methodObj: ", methodObj);
@@ -338,7 +339,9 @@ const BottomSheetSalahTimesSettings = ({
                     <section className="text-center"></section>
                     <h5>Shafaq Rule</h5>
                     <IonButton
-                      id="open-shafaq-rules-sheet"
+                      onClick={() => {
+                        setShowShafaqRulesSheet(true);
+                      }}
                       style={{
                         "--background": "transparent",
                       }}
@@ -385,7 +388,8 @@ const BottomSheetSalahTimesSettings = ({
           userPreferences={userPreferences}
         />
         <BottomSheetShafaqRules
-          triggerId="open-shafaq-rules-sheet"
+          setShowShafaqRulesSheet={setShowShafaqRulesSheet}
+          showShafaqRulesSheet={showShafaqRulesSheet}
           dbConnection={dbConnection}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}

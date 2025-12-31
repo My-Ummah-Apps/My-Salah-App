@@ -16,14 +16,17 @@ import { userPreferencesType } from "../../types/types";
 // import { CalculationMethod } from "adhan";
 
 interface BottomSheetShafaqRulesProps {
-  triggerId: string;
+  setShowShafaqRulesSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showShafaqRulesSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }
 
 const BottomSheetShafaqRules = ({
-  triggerId,
+  //   triggerId,
+  setShowShafaqRulesSheet,
+  showShafaqRulesSheet,
   dbConnection,
   setUserPreferences,
   userPreferences,
@@ -32,9 +35,13 @@ const BottomSheetShafaqRules = ({
     <IonModal
       //   className="modal-fit-content"
       mode="ios"
-      trigger={triggerId}
+      isOpen={showShafaqRulesSheet}
+      //   trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
+      onDidDismiss={() => {
+        setShowShafaqRulesSheet(false);
+      }}
       // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
