@@ -558,6 +558,7 @@ const App = () => {
       userPreferences.maghribAdjustment
     );
     params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
+    params.shafaq = userPreferences.shafaqRule;
 
     const date = new Date();
 

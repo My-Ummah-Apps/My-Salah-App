@@ -34,6 +34,7 @@ import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomA
 import { useEffect, useState } from "react";
 import BottomSheetLatitudeRules from "./BottomSheetLatitudeRules";
 import BottomSheetCustomAngles from "./BottomSheetCustomAngles";
+import BottomSheetShafaqRules from "./BottomSheetShafaqRule";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -92,7 +93,7 @@ const BottomSheetSalahTimesSettings = ({
     <IonModal
       mode="ios"
       isOpen={showSalahTimesSettingsSheet}
-      className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
@@ -330,6 +331,24 @@ const BottomSheetSalahTimesSettings = ({
                   </div>
                   {/* </div> */}
                 </section>
+
+                {userPreferences.prayerCalculationMethod ===
+                  "MoonsightingCommittee" && (
+                  <section className="mt-10 text-center">
+                    <section className="text-center"></section>
+                    <h5>Shafaq Rule</h5>
+                    <IonButton
+                      id="open-shafaq-rules-sheet"
+                      style={{
+                        "--background": "transparent",
+                      }}
+                      className="flex items-center mx-5 border border-gray-500 rounded-md"
+                    >
+                      <p>{userPreferences.shafaqRule}</p>
+                      <p>{/* <MdOutlineChevronRight /> */}</p>
+                    </IonButton>
+                  </section>
+                )}
               </section>
             </>
           )}
@@ -361,6 +380,12 @@ const BottomSheetSalahTimesSettings = ({
           setShowCustomAdjustmentsSheet={setShowCustomAdjustmentsSheet}
           showCustomAdjustmentsSheet={showCustomAdjustmentsSheet}
           customAdjustmentSalah={customAdjustmentSalah}
+          dbConnection={dbConnection}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+        />
+        <BottomSheetShafaqRules
+          triggerId="open-shafaq-rules-sheet"
           dbConnection={dbConnection}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}

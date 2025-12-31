@@ -56,6 +56,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   asrAdjustment: "0",
   maghribAdjustment: "0",
   ishaAdjustment: "0",
+  shafaqRule: "general",
 };
 
 export const reasonsStyles =
@@ -259,10 +260,10 @@ export const updateUserPrefs = async (
     console.log(`ERROR ENTERING ${preferenceName} into DB`);
     console.error(error);
   } finally {
-    // let DBResultPreferences = await dbConnection.current?.query(
-    //   `SELECT * FROM userPreferencesTable`
-    // );
-    // console.log("DBResultPreferences: ", DBResultPreferences?.values);
+    let DBResultPreferences = await dbConnection.current?.query(
+      `SELECT * FROM userPreferencesTable`
+    );
+    console.log("DBResultPreferences: ", DBResultPreferences?.values);
     await toggleDBConnection(dbConnection, "close");
   }
 };

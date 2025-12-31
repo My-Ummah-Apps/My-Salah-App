@@ -28,6 +28,7 @@ export interface userPreferencesType {
   saveButtonTapCount: string;
   haptics: string;
   theme: "dark" | "light" | "system";
+  timeFormat: "12hr" | "24hr";
   prayerCalculationMethod: CalculationMethodsType;
   madhab: "hanafi" | "shafi";
   prayerLatitudeRule:
@@ -41,7 +42,7 @@ export interface userPreferencesType {
   asrAdjustment: string;
   maghribAdjustment: string;
   ishaAdjustment: string;
-  timeFormat: "12hr" | "24hr";
+  shafaqRule: "general" | "ahmer" | "abyad";
 }
 
 export type PreferenceType = keyof userPreferencesType;

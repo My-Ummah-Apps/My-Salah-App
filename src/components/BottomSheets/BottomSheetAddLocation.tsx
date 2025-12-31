@@ -214,7 +214,7 @@ const BottomSheetAddLocation = ({
                 <ul>
                   {allCities
                     .filter((obj) =>
-                      obj.search.includes(locationName.toLowerCase())
+                      obj.search.startsWith(locationName.toLowerCase())
                     )
                     .slice(0, 10)
                     .map((obj) => (
@@ -330,7 +330,8 @@ const BottomSheetAddLocation = ({
                   const locationNames = userLocations.map((loc) =>
                     loc.locationName.toLowerCase()
                   );
-                  console.log("Locations: ", locationNames);
+
+                  // ! Need to tighten this further, make it so that duplication is detected when name + lat + long are all the same
                   if (
                     locationNames.includes(locationNameTrimmed.toLowerCase())
                   ) {
@@ -353,8 +354,6 @@ const BottomSheetAddLocation = ({
                     console.log("Locations: ", locations);
 
                     if (locations) {
-                      console.log("LOCATIONS: ", locations.length);
-
                       if (locations.length === 1) {
                         setShowSalahTimesSettingsSheet?.(true);
                       }
