@@ -136,7 +136,7 @@ const BottomSheetLocationsList = ({
                   {/* {location.isSelected === 1 && <MdCheck />} */}
                   <MdCheck
                     className={
-                      location.isSelected === 1 ? "opacity-10" : "opacity-0"
+                      location.isSelected === 1 ? "opacity-100" : "opacity-0"
                     }
                   />
                   <IonItem

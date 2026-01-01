@@ -8,7 +8,11 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
+import {
+  LocationsDataObjTypeArr,
+  SalahNamesType,
+  userPreferencesType,
+} from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
@@ -22,6 +26,8 @@ import Toast from "../components/Toast";
 import { getNextSalah } from "../utils/constants";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
+import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
+import { format } from "date-fns";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -82,19 +88,30 @@ SalahTimesPageProps) => {
   const [nextSalahNameAndTime, setNextSalahNameAndTime] = useState({
     currentSalah: "",
     nextSalah: "",
+    nextSalahTime: 0,
     hoursRemaining: 0,
     minsRemaining: 0,
   });
+
+  const [selectedSalah, setSelectedSalah] = useState<SalahNamesType>("fajr");
+  const [showSalahNotificationsSheet, setShowSalahNotificationsSheet] =
+    useState(false);
 
   useEffect(() => {
     const getNextSalahDetails = async () => {
       // const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
       //   await calculateActiveLocationSalahTimes();
-      const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
-        await getNextSalah(dbConnection, userPreferences);
+      const {
+        currentSalah,
+        nextSalah,
+        nextSalahTime,
+        hoursRemaining,
+        minsRemaining,
+      } = await getNextSalah(dbConnection, userPreferences);
       setNextSalahNameAndTime({
         currentSalah: currentSalah,
         nextSalah: nextSalah,
+        nextSalahTime: nextSalahTime,
         hoursRemaining: hoursRemaining,
         minsRemaining: minsRemaining,
       });
@@ -135,12 +152,15 @@ SalahTimesPageProps) => {
         <section className="p-4 m-5 rounded-2xl">
           <div>
             <p className="mb-1 text-lg text-center ">Upcoming Salah</p>
-            <p className="mb-1 text-6xl font-bold text-center">
+            <p className="mb-5 text-6xl font-bold text-center">
               {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
                 nextSalahNameAndTime.nextSalah.slice(1)}
             </p>
+            <p className="text-4xl text-center">
+              {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")}
+            </p>
             {nextSalahNameAndTime.hoursRemaining > 0 && (
-              <p className="mt-4 font-light text-center">
+              <p className="mt-2 font-light text-center">
                 {nextSalahNameAndTime.hoursRemaining} hours and{" "}
               </p>
             )}
@@ -230,7 +250,18 @@ SalahTimesPageProps) => {
               </p>
               <div className="flex items-center">
                 <p>{time === "Invalid Date" ? "--:--" : time}</p>
-                <IonButton fill="clear" size="small">
+
+                <IonButton
+                  className={name === "sunrise" ? "opacity-0" : "opacity-100"}
+                  onClick={() => {
+                    if (name === "sunrise") return;
+                    console.log(name);
+                    setSelectedSalah(name);
+                    setShowSalahNotificationsSheet(true);
+                  }}
+                  fill="clear"
+                  size="small"
+                >
                   <IonIcon
                     className="text-[var(--ion-text-color)]"
                     icon={notificationsOutline}
@@ -240,6 +271,11 @@ SalahTimesPageProps) => {
             </div>
           ))}
           {/* </IonList> */}
+          <p className="my-10 text-xs text-center">
+            {`Note: These times have been calculated using the
+            ${userPreferences.prayerCalculationMethod} method and may differ from
+            your local Mosque times`}
+          </p>
         </section>
       </IonContent>
       <BottomSheetLocationsList
@@ -265,6 +301,14 @@ SalahTimesPageProps) => {
         setUserLocations={setUserLocations}
         userLocations={userLocations}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
+      />
+      <BottomSheetSalahNotifications
+        setShowSalahNotificationsSheet={setShowSalahNotificationsSheet}
+        showSalahNotificationsSheet={showSalahNotificationsSheet}
+        dbConnection={dbConnection}
+        selectedSalah={selectedSalah}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
       />
       <Toast
         isOpen={showLocationFailureToast}

@@ -59,6 +59,11 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   ishaAdjustment: "0",
   shafaqRule: "general",
   // PolarCircleResolution: "general",
+  fajrNotification: "off",
+  dhuhrNotification: "off",
+  asrNotification: "off",
+  maghribNotification: "off",
+  ishaNotification: "off",
 };
 
 export const reasonsStyles =
@@ -443,6 +448,7 @@ export const getNextSalah = async (
   return {
     currentSalah: currentSalah,
     nextSalah: next,
+    nextSalahTime: nextSalahTime,
     hoursRemaining: hours,
     minsRemaining: minutes,
   };

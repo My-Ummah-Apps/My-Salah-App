@@ -14,6 +14,8 @@ export type CalculationMethodsType =
   | "Other"
   | "";
 
+type SalahNotificationSettings = "off" | "on" | "adhan";
+
 export interface userPreferencesType {
   userStartDate: string;
   userGender: string;
@@ -40,6 +42,11 @@ export interface userPreferencesType {
   maghribAdjustment: string;
   ishaAdjustment: string;
   shafaqRule: "general" | "ahmer" | "abyad";
+  fajrNotification: SalahNotificationSettings;
+  dhuhrNotification: SalahNotificationSettings;
+  asrNotification: SalahNotificationSettings;
+  maghribNotification: SalahNotificationSettings;
+  ishaNotification: SalahNotificationSettings;
   // PolarCircleResolution:
 }
 
@@ -90,13 +97,22 @@ export type SalahDataType = {
   [date: string]: string[];
 };
 
+// export type SalahNamesType =
+//   | "Fajr"
+//   | "Dhuhr"
+//   | "Asr"
+//   | "Asar"
+//   | "Maghrib"
+//   | "Isha";
+
 export type SalahNamesType =
   | "Fajr"
   | "Dhuhr"
   | "Asr"
   | "Asar"
   | "Maghrib"
-  | "Isha";
+  | "Isha"
+  | Lowercase<"Fajr" | "Dhuhr" | "Asr" | "Asar" | "Maghrib" | "Isha">;
 
 export interface SalahEntryType {
   salahName: SalahNamesType;
