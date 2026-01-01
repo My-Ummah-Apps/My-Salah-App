@@ -170,7 +170,7 @@ const BottomSheetAddLocation = ({
   return (
     <IonModal
       // className="modal-fit-content"
-
+      // style={{ "--height": "80vh" }}
       mode="ios"
       isOpen={showAddLocationSheet}
       // trigger={triggerId}
@@ -348,15 +348,16 @@ const BottomSheetAddLocation = ({
                       longitude
                     );
 
-                    const locations = await fetchAllLocations(dbConnection);
-                    console.log("Locations: ", locations);
+                    const { allLocations, activeLocation } =
+                      await fetchAllLocations(dbConnection);
+                    console.log("Locations: ", allLocations);
 
-                    if (locations) {
-                      if (locations.length === 1) {
+                    if (allLocations) {
+                      if (allLocations.length === 1) {
                         setShowSalahTimesSettingsSheet?.(true);
                       }
                       setShowAddLocationSheet(false);
-                      setUserLocations(locations);
+                      setUserLocations(allLocations);
                       setShowLocationAddedToast(true);
                     } else {
                       console.error("Locations undefined");

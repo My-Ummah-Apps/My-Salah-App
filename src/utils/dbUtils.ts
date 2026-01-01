@@ -50,13 +50,19 @@ export const fetchAllLocations = async (
     const res = await dbConnection.current?.query(
       "SELECT * from userLocationsTable"
     );
-    if (!res) {
+    if (!res || !res.values) {
       throw new Error("Failed to obtain data from userLocationsTable");
     }
 
-    return res.values;
+    const allLocations = res.values;
+    const activeLocation = allLocations.filter(
+      (loc) => loc.isSelected === 1
+    )[0];
+
+    return { allLocations, activeLocation };
   } catch (error) {
     console.error(error);
+    return { allLocations: [], activeLocation: null };
   } finally {
     if (!keepOpen) {
       await toggleDBConnection(dbConnection, "close");

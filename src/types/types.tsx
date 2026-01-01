@@ -40,6 +40,7 @@ export interface userPreferencesType {
   maghribAdjustment: string;
   ishaAdjustment: string;
   shafaqRule: "general" | "ahmer" | "abyad";
+  // PolarCircleResolution:
 }
 
 export type PreferenceType = keyof userPreferencesType;

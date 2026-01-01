@@ -58,6 +58,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   maghribAdjustment: "0",
   ishaAdjustment: "0",
   shafaqRule: "general",
+  // PolarCircleResolution: "general",
 };
 
 export const reasonsStyles =
@@ -281,9 +282,9 @@ export const scheduleSalahTimesNotifications = async (
 
   console.log("nextSevenDays: ", nextSevenDays);
 
-  const locations = await fetchAllLocations(dbConnection);
+  const { activeLocation } = await fetchAllLocations(dbConnection);
 
-  const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
+  // const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
 
   await createNotificationChannel();
 
@@ -316,8 +317,10 @@ export const generateActiveLocationParams = async (
 ) => {
   // if (!isDatabaseInitialised) return;
 
-  const locations = await fetchAllLocations(dbConnection);
-  const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
+  const todaysDate = new Date();
+
+  const { activeLocation } = await fetchAllLocations(dbConnection);
+  // const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
 
   const coordinates = new Coordinates(
     activeLocation?.latitude,
@@ -351,7 +354,7 @@ export const generateActiveLocationParams = async (
 
   // console.log("params after amendments:", params);
 
-  return { params, coordinates };
+  return { params, coordinates, todaysDate };
 };
 
 export const getSalahTimes = async (
@@ -368,12 +371,8 @@ export const getSalahTimes = async (
     }>
   >
 ) => {
-  const todaysDate = new Date();
-
-  const { params, coordinates } = await generateActiveLocationParams(
-    dbConnection,
-    userPreferences
-  );
+  const { params, coordinates, todaysDate } =
+    await generateActiveLocationParams(dbConnection, userPreferences);
 
   const extractSalahTime = (
     salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha"

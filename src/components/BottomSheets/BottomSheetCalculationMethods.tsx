@@ -42,8 +42,8 @@ BottomSheetCalculationMethodsProps) => {
   const setDefaults = async (calcMethod: CalculationMethodsType) => {
     if (!userPreferences.prayerCalculationMethod) return;
 
-    const locations = await fetchAllLocations(dbConnection);
-    const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
+    const { activeLocation } = await fetchAllLocations(dbConnection);
+    // const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
 
     // const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
     const params = CalculationMethod[calcMethod]();

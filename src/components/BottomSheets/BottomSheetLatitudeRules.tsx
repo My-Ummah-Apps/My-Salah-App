@@ -37,16 +37,16 @@ const BottomSheetLatitudeRules = ({
       breakpoints={MODAL_BREAKPOINTS}
       // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
-      // style={{ "--height": "95vh" }}
+      style={{ "--height": "80vh" }}
       // expandToScroll={false}
     >
-      <IonHeader>
+      {/* <IonHeader>
         <IonToolbar>
           <IonTitle>Calculation Methods</IonTitle>
         </IonToolbar>
-      </IonHeader>
+      </IonHeader> */}
       <IonContent>
-        <section className="px-4">
+        <section className="px-4 mt-10">
           <div
             onClick={async () => {
               await updateUserPrefs(

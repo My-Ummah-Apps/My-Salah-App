@@ -119,8 +119,10 @@ const BottomSheetLocationsList = ({
                 key={location.id}
                 onClick={async () => {
                   await updateActiveLocation(dbConnection, location.id);
-                  const locations = await fetchAllLocations(dbConnection);
-                  setUserLocations(locations);
+                  const { allLocations } = await fetchAllLocations(
+                    dbConnection
+                  );
+                  setUserLocations(allLocations);
                   // await calculateActiveLocationSalahTimes();
                   await getSalahTimes(
                     dbConnection,
@@ -130,37 +132,45 @@ const BottomSheetLocationsList = ({
                 }}
                 className="flex items-center justify-between border-b"
               >
-                <div className="flex items-center mx-2">
-                  {location.isSelected === 1 && <MdCheck />}
-                  <IonItem data-testid="list-item" lines="none">
+                <div className="flex items-center justify-between mx-2">
+                  {/* {location.isSelected === 1 && <MdCheck />} */}
+                  <MdCheck
+                    className={
+                      location.isSelected === 1 ? "opacity-10" : "opacity-0"
+                    }
+                  />
+                  <IonItem
+                    style={{ "--border-color": "red" }}
+                    data-testid="list-item"
+                    lines="none"
+                  >
                     {location.locationName}
-                  </IonItem>
-                </div>
-
-                <div className="flex items-center">
-                  {/* <IonButton
+                    <div className="flex items-center">
+                      {/* <IonButton
                     data-testid="edit-location-btn"
                     fill="clear"
                     aria-label="edit location"
                   >
                     <IonIcon icon={pencilOutline}></IonIcon>
                   </IonButton> */}
-                  <IonButton
-                    className="text-[var(--ion-text-color)]"
-                    fill="clear"
-                    aria-label="delete location"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setLocationToDeleteId(location.id);
-                      setShowDeleteLocationActionSheet(true);
-                      console.log("Delete button clicked");
-                    }}
-                  >
-                    <IonIcon
-                      data-testid="delete-location-btn"
-                      icon={trashOutline}
-                    ></IonIcon>
-                  </IonButton>
+                      <IonButton
+                        className="text-[var(--ion-text-color)]"
+                        fill="clear"
+                        size="small"
+                        aria-label="delete location"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLocationToDeleteId(location.id);
+                          setShowDeleteLocationActionSheet(true);
+                        }}
+                      >
+                        <IonIcon
+                          data-testid="delete-location-btn"
+                          icon={trashOutline}
+                        ></IonIcon>
+                      </IonButton>
+                    </div>
+                  </IonItem>
                 </div>
               </section>
             ))}
@@ -206,18 +216,21 @@ const BottomSheetLocationsList = ({
 
               await deleteUserLocation(dbConnection, locationToDeleteId);
               setLocationToDeleteId(null);
-              const locations = await fetchAllLocations(dbConnection);
-              setUserLocations(locations);
-
-              if (!locations || locations.length === 0) return;
-
-              const activeLocation = locations.find(
-                (location) => location.isSelected === 1
+              const { allLocations, activeLocation } = await fetchAllLocations(
+                dbConnection
               );
+              setUserLocations(allLocations);
+
+              if (!allLocations || allLocations.length === 0) return;
+
+              // const activeLocation = allLocations.find(
+              //   (location) => location.isSelected === 1
+              // );
 
               if (!activeLocation) {
-                await updateActiveLocation(dbConnection, locations[0].id);
-                const updatedLocations = await fetchAllLocations(dbConnection);
+                await updateActiveLocation(dbConnection, allLocations[0].id);
+                const { allLocations: updatedLocations } =
+                  await fetchAllLocations(dbConnection);
                 setUserLocations(updatedLocations);
               }
 

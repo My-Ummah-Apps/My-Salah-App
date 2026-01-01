@@ -245,7 +245,10 @@ const App = () => {
       // const DBResultLocations = await dbConnection.current?.query(
       //   `SELECT * FROM userLocationsTable`
       // );
-      const DBResultLocations = await fetchAllLocations(dbConnection, true);
+      const { allLocations: DBResultLocations } = await fetchAllLocations(
+        dbConnection,
+        true
+      );
 
       // console.log("DBResultPreferences: ", DBResultPreferences?.values);
 

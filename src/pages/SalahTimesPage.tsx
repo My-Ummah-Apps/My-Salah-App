@@ -134,19 +134,22 @@ SalahTimesPageProps) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <section className="rounded-2xl bg-[color:var(--card-bg-color)] p-4 m-5">
+        {/* bg-[color:var(--card-bg-color)]  */}
+        <section className="p-4 m-5 rounded-2xl">
           <div>
-            <p className="mb-1 text-lg">Upcoming Salah</p>
-            <p className="mb-1 font-bold ">
+            <p className="mb-1 text-lg text-center ">Upcoming Salah</p>
+            <p className="mb-1 text-6xl font-bold text-center">
               {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
                 nextSalahNameAndTime.nextSalah.slice(1)}
             </p>
             {nextSalahNameAndTime.hoursRemaining > 0 && (
-              <p className="font-light">
+              <p className="mt-4 font-light text-center">
                 {nextSalahNameAndTime.hoursRemaining} hours and{" "}
               </p>
             )}
-            <p>{nextSalahNameAndTime.minsRemaining} minutes to go</p>
+            <p className="font-light text-center">
+              {nextSalahNameAndTime.minsRemaining} minutes to go
+            </p>
           </div>
           {/* <div className="h-full border-l-2 border-gray-300 border-solid">
             <p className="ml-4">Current Salah</p>
@@ -217,25 +220,29 @@ SalahTimesPageProps) => {
             </section>
           </section>
         )}
-        <section className="">
-          <IonList inset={true}>
-            {Object.entries(salahTimes).map(([name, time]) => (
-              <IonItem key={name + time}>
-                <IonLabel>
-                  {name.charAt(0).toUpperCase() + name.slice(1)}
-                </IonLabel>
-                <div className="flex items-center" slot="end">
-                  <p>{time === "Invalid Date" ? "--:--" : time}</p>
-                  <IonButton slot="end" fill="clear">
-                    <IonIcon
-                      className="text-[var(--ion-text-color)] text-lg"
-                      icon={notificationsOutline}
-                    />
-                  </IonButton>
-                </div>
-              </IonItem>
-            ))}
-          </IonList>
+        <section className="mx-2">
+          {/* <IonList inset={true}> */}
+
+          {Object.entries(salahTimes).map(([name, time]) => (
+            <div
+              className="flex items-center justify-between py-2 my-4 text-sm border rounded-lg border-stone-600"
+              key={name + time}
+            >
+              <p className="ml-2">
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </p>
+              <div className="flex items-center">
+                <p>{time === "Invalid Date" ? "--:--" : time}</p>
+                <IonButton fill="clear" size="small">
+                  <IonIcon
+                    className="text-[var(--ion-text-color)]"
+                    icon={notificationsOutline}
+                  />
+                </IonButton>
+              </div>
+            </div>
+          ))}
+          {/* </IonList> */}
         </section>
       </IonContent>
       <BottomSheetLocationsList
