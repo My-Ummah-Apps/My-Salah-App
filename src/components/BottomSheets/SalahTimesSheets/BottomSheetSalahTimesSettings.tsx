@@ -14,7 +14,7 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   updateUserPrefs,
-} from "../../utils/constants";
+} from "../../../utils/constants";
 
 import {
   CalculationMethod,
@@ -28,12 +28,13 @@ import {
   CalculationMethodsType,
   LocationsDataObjTypeArr,
   userPreferencesType,
-} from "../../types/types";
+} from "../../../types/types";
+
+import { useState } from "react";
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
-import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomAdjustments";
-import { useEffect, useState } from "react";
 import BottomSheetLatitudeRules from "./BottomSheetLatitudeRules";
 import BottomSheetCustomAngles from "./BottomSheetCustomAngles";
+import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomAdjustments";
 import BottomSheetShafaqRules from "./BottomSheetShafaqRule";
 
 interface BottomSheetSalahTimesSettingsProps {

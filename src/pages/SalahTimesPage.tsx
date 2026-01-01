@@ -4,15 +4,12 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
-import BottomSheetSalahTimesSettings from "../components/BottomSheets/BottomSheetSalahTimesSettings";
+import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   chevronDownOutline,
@@ -20,11 +17,11 @@ import {
   settingsOutline,
 } from "ionicons/icons";
 
-import BottomSheetLocationsList from "../components/BottomSheets/BottomSheetLocationsList";
-import BottomSheetAddLocation from "../components/BottomSheets/BottomSheetAddLocation";
 import { useEffect, useState } from "react";
 import Toast from "../components/Toast";
 import { getNextSalah } from "../utils/constants";
+import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
+import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;

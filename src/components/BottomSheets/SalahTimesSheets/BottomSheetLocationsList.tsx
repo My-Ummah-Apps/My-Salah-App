@@ -6,35 +6,35 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  isPlatform,
   IonFab,
   IonFabButton,
   IonIcon,
   IonList,
   IonItem,
 } from "@ionic/react";
+
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+
+import { add, pencilOutline, trashOutline } from "ionicons/icons";
+import { useState } from "react";
+
+import { MdCheck } from "react-icons/md";
+import {
+  LocationsDataObjTypeArr,
+  userPreferencesType,
+} from "../../../types/types";
 import {
   getSalahTimes,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-} from "../../utils/constants";
-
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+} from "../../../utils/constants";
 import {
-  LocationsDataObjTypeArr,
-  userPreferencesType,
-} from "../../types/types";
-import { add, pencilOutline, trashOutline } from "ionicons/icons";
-import { useState } from "react";
-import ActionSheet from "../ActionSheet";
-import {
-  deleteUserLocation,
   fetchAllLocations,
   updateActiveLocation,
-} from "../../utils/dbUtils";
-import Toast from "../Toast";
+} from "../../../utils/dbUtils";
+import ActionSheet from "../../ActionSheet";
+import Toast from "../../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
-import { MdCheck } from "react-icons/md";
 
 interface BottomSheetSalahTimesSettingsProps {
   // triggerId: string;

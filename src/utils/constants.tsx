@@ -403,11 +403,8 @@ export const getNextSalah = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   userPreferences: userPreferencesType
 ) => {
-  const { params, coordinates } = await generateActiveLocationParams(
-    dbConnection,
-    userPreferences
-  );
-  const todaysDate = new Date();
+  const { params, coordinates, todaysDate } =
+    await generateActiveLocationParams(dbConnection, userPreferences);
 
   let allSalahTimes = new PrayerTimes(coordinates, todaysDate, params);
 

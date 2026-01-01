@@ -4,69 +4,63 @@ import {
   IonPickerColumn,
   IonPickerColumnOption,
 } from "@ionic/react";
+
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+
+import { useState } from "react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   updateUserPrefs,
-} from "../../utils/constants";
-import { userPreferencesType } from "../../types/types";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { useState } from "react";
+} from "../../../utils/constants";
+import { userPreferencesType } from "../../../types/types";
 
-interface BottomSheetSalahTimeCustomAdjustmentsProps {
-  setShowCustomAdjustmentsSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showCustomAdjustmentsSheet: boolean;
+interface BottomSheetCustomAnglesProps {
+  setShowCustomAnglesSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showCustomAnglesSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  customAdjustmentSalah:
-    | "fajrAdjustment"
-    | "dhuhrAdjustment"
-    | "asrAdjustment"
-    | "maghribAdjustment"
-    | "ishaAdjustment";
+  customAngleSalah: "fajrAngle" | "ishaAngle";
 }
 
-const BottomSheetSalahTimeCustomAdjustments = ({
-  showCustomAdjustmentsSheet,
+const BottomSheetCustomAngles = ({
+  setShowCustomAnglesSheet,
+  showCustomAnglesSheet,
   dbConnection,
   setUserPreferences,
   userPreferences,
-  setShowCustomAdjustmentsSheet,
-  customAdjustmentSalah,
-}: BottomSheetSalahTimeCustomAdjustmentsProps) => {
-  const [increment, setIncrement] = useState(
-    userPreferences[customAdjustmentSalah]
-  );
+  customAngleSalah,
+}: BottomSheetCustomAnglesProps) => {
+  const [increment, setIncrement] = useState(userPreferences[customAngleSalah]);
 
-  const arr = [];
-  for (let i = -60; i <= 60; i++) {
-    arr.push(String(i));
-  }
+  const angleOptions = Array.from({ length: 37 }, (_, i) =>
+    (7 + i / 2).toString()
+  );
 
   return (
     <IonModal
       className="modal-fit-content"
       mode="ios"
-      isOpen={showCustomAdjustmentsSheet}
+      isOpen={showCustomAnglesSheet}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
       onWillPresent={() => {
-        setIncrement(userPreferences[customAdjustmentSalah]);
+        setIncrement(userPreferences[customAngleSalah]);
       }}
       onWillDismiss={async () => {
-        console.log("customAdjustmentSalah: ", customAdjustmentSalah);
+        console.log("customAdjustmentSalah: ", customAngleSalah);
         // if (!customAdjustmentSalah) return;
         await updateUserPrefs(
           dbConnection,
-          customAdjustmentSalah,
+          customAngleSalah,
           String(increment),
           setUserPreferences
         );
         setIncrement("0");
       }}
       onDidDismiss={() => {
-        setShowCustomAdjustmentsSheet(false);
+        setShowCustomAnglesSheet(false);
       }}
     >
       <IonPicker className="my-5">
@@ -76,7 +70,7 @@ const BottomSheetSalahTimeCustomAdjustments = ({
             setIncrement(String(detail.value));
           }}
         >
-          {arr.map((item) => {
+          {angleOptions.map((item) => {
             return (
               <IonPickerColumnOption key={item} value={item}>
                 {item}
@@ -89,4 +83,4 @@ const BottomSheetSalahTimeCustomAdjustments = ({
   );
 };
 
-export default BottomSheetSalahTimeCustomAdjustments;
+export default BottomSheetCustomAngles;

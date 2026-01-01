@@ -6,15 +6,19 @@ import {
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
+
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+
+import { CalculationMethod, Coordinates } from "adhan";
+import {
+  CalculationMethodsType,
+  userPreferencesType,
+} from "../../../types/types";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   updateUserPrefs,
-} from "../../utils/constants";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { CalculationMethodsType, userPreferencesType } from "../../types/types";
-import { CalculationMethod, Coordinates } from "adhan";
-import { fetchAllLocations } from "../../utils/dbUtils";
+} from "../../../utils/constants";
 
 // import { CalculationMethod } from "adhan";
 

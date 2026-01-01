@@ -13,21 +13,22 @@ import {
   useIonLoading,
 } from "@ionic/react";
 import { Geolocation } from "@capacitor/geolocation";
+
+import { AndroidSettings } from "capacitor-native-settings";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { Capacitor } from "@capacitor/core";
+import { useState } from "react";
+
+import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
+
+import cities from "../../../assets/city_list.json";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   promptToOpenDeviceSettings,
-} from "../../utils/constants";
-import { AndroidSettings } from "capacitor-native-settings";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { Capacitor } from "@capacitor/core";
-import { useEffect, useState } from "react";
-
-import { addUserLocation, fetchAllLocations } from "../../utils/dbUtils";
-import { LocationsDataObjTypeArr } from "../../types/types";
-import { globeOutline, locationOutline, searchOutline } from "ionicons/icons";
-
-import cities from "../../assets/city_list.json";
+} from "../../../utils/constants";
+import { LocationsDataObjTypeArr } from "../../../types/types";
+import { addUserLocation, fetchAllLocations } from "../../../utils/dbUtils";
 
 const allCities = cities.map(
   (obj: { country: string; name: string; lat: number; lon: number }) => {
@@ -348,8 +349,9 @@ const BottomSheetAddLocation = ({
                       longitude
                     );
 
-                    const { allLocations, activeLocation } =
-                      await fetchAllLocations(dbConnection);
+                    const { allLocations } = await fetchAllLocations(
+                      dbConnection
+                    );
                     console.log("Locations: ", allLocations);
 
                     if (allLocations) {
