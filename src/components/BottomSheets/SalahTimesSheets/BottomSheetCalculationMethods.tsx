@@ -19,6 +19,7 @@ import {
   MODAL_BREAKPOINTS,
   updateUserPrefs,
 } from "../../../utils/constants";
+import { fetchAllLocations } from "../../../utils/dbUtils";
 
 // import { CalculationMethod } from "adhan";
 

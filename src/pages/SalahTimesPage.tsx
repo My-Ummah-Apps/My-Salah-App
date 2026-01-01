@@ -149,30 +149,32 @@ SalahTimesPageProps) => {
       </IonHeader>
       <IonContent>
         {/* bg-[color:var(--card-bg-color)]  */}
-        <section className="p-4 m-5 rounded-2xl">
-          <div>
-            <p className="mb-1 text-lg text-center ">Upcoming Salah</p>
-            <p className="mb-5 text-6xl font-bold text-center">
-              {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
-                nextSalahNameAndTime.nextSalah.slice(1)}
-            </p>
-            <p className="text-4xl text-center">
-              {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")}
-            </p>
-            {nextSalahNameAndTime.hoursRemaining > 0 && (
-              <p className="mt-2 font-light text-center">
-                {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+        {userPreferences.prayerCalculationMethod !== "" &&
+          userLocations?.length !== 0 && (
+            <section className="p-4 m-5 rounded-2xl">
+              <p className="mb-1 text-lg text-center ">Upcoming Salah</p>
+              <p className="mb-5 text-6xl font-bold text-center">
+                {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
+                  nextSalahNameAndTime.nextSalah.slice(1)}
               </p>
-            )}
-            <p className="font-light text-center">
-              {nextSalahNameAndTime.minsRemaining} minutes to go
-            </p>
-          </div>
-          {/* <div className="h-full border-l-2 border-gray-300 border-solid">
+              <p className="text-4xl text-center">
+                {/* {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")} */}
+              </p>
+              {nextSalahNameAndTime.hoursRemaining > 0 && (
+                <p className="mt-2 font-light text-center">
+                  {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+                </p>
+              )}
+              <p className="font-light text-center">
+                {nextSalahNameAndTime.minsRemaining} minutes to go
+              </p>
+
+              {/* <div className="h-full border-l-2 border-gray-300 border-solid">
             <p className="ml-4">Current Salah</p>
             <p className="ml-4">{nextSalahNameAndTime.currentSalah}</p>
           </div> */}
-        </section>
+            </section>
+          )}
         {userLocations?.length === 0 ? (
           <>
             <section
@@ -237,7 +239,14 @@ SalahTimesPageProps) => {
             </section>
           </section>
         )}
-        <section className="mx-2">
+        <section
+          className={`mx-2 ${
+            userLocations?.length === 0 ||
+            userPreferences.prayerCalculationMethod === ""
+              ? "opacity-50"
+              : "opacity-100"
+          }`}
+        >
           {/* <IonList inset={true}> */}
 
           {Object.entries(salahTimes).map(([name, time]) => (
@@ -250,11 +259,19 @@ SalahTimesPageProps) => {
               </p>
               <div className="flex items-center">
                 <p>{time === "Invalid Date" ? "--:--" : time}</p>
-
+                {/* <p>{time}</p> */}
                 <IonButton
                   className={name === "sunrise" ? "opacity-0" : "opacity-100"}
                   onClick={() => {
                     if (name === "sunrise") return;
+
+                    if (
+                      userPreferences.prayerCalculationMethod === "" ||
+                      userLocations?.length === 0
+                    ) {
+                      return;
+                    }
+
                     console.log(name);
                     setSelectedSalah(name);
                     setShowSalahNotificationsSheet(true);
@@ -271,11 +288,14 @@ SalahTimesPageProps) => {
             </div>
           ))}
           {/* </IonList> */}
-          <p className="my-10 text-xs text-center">
-            {`Note: These times have been calculated using the
+          {userPreferences.prayerCalculationMethod !== "" &&
+            userLocations?.length !== 0 && (
+              <p className="my-10 text-xs text-center">
+                {`Note: These times have been calculated using the
             ${userPreferences.prayerCalculationMethod} method and may differ from
             your local Mosque times`}
-          </p>
+              </p>
+            )}
         </section>
       </IonContent>
       <BottomSheetLocationsList

@@ -29,6 +29,7 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
 import {
+  deleteUserLocation,
   fetchAllLocations,
   updateActiveLocation,
 } from "../../../utils/dbUtils";
