@@ -106,93 +106,91 @@ const BottomSheetLocationsList = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonPage>
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Locations</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          <IonList>
-            {userLocations?.map((location) => (
-              <section
-                key={location.id}
-                onClick={async () => {
-                  await updateActiveLocation(dbConnection, location.id);
-                  const { allLocations } = await fetchAllLocations(
-                    dbConnection
-                  );
-                  setUserLocations(allLocations);
-                  // await calculateActiveLocationSalahTimes();
-                  await getSalahTimes(
-                    dbConnection,
-                    userPreferences,
-                    setSalahtimes
-                  );
-                }}
-                className="flex items-center justify-between border-b"
-              >
-                <div className="flex items-center justify-between mx-2">
-                  {/* {location.isSelected === 1 && <MdCheck />} */}
-                  <MdCheck
-                    className={
-                      location.isSelected === 1 ? "opacity-100" : "opacity-0"
-                    }
-                  />
-                  <IonItem
-                    style={{ "--border-color": "red" }}
-                    data-testid="list-item"
-                    lines="none"
-                  >
-                    {location.locationName}
-                    <div className="flex items-center">
-                      {/* <IonButton
+      {/* <IonPage> */}
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Locations</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <IonList>
+          {userLocations?.map((location) => (
+            <section
+              key={location.id}
+              onClick={async () => {
+                await updateActiveLocation(dbConnection, location.id);
+                const { allLocations } = await fetchAllLocations(dbConnection);
+                setUserLocations(allLocations);
+                // await calculateActiveLocationSalahTimes();
+                await getSalahTimes(
+                  dbConnection,
+                  userPreferences,
+                  setSalahtimes
+                );
+              }}
+              className="flex items-center justify-between border-b"
+            >
+              <div className="flex items-center justify-between mx-2">
+                {/* {location.isSelected === 1 && <MdCheck />} */}
+                <MdCheck
+                  className={
+                    location.isSelected === 1 ? "opacity-100" : "opacity-0"
+                  }
+                />
+                <IonItem
+                  style={{ "--border-color": "red" }}
+                  data-testid="list-item"
+                  lines="none"
+                >
+                  {location.locationName}
+                  <div className="flex items-center">
+                    {/* <IonButton
                     data-testid="edit-location-btn"
                     fill="clear"
                     aria-label="edit location"
                   >
                     <IonIcon icon={pencilOutline}></IonIcon>
                   </IonButton> */}
-                      <IonButton
-                        className="text-[var(--ion-text-color)]"
-                        fill="clear"
-                        size="small"
-                        aria-label="delete location"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setLocationToDeleteId(location.id);
-                          setShowDeleteLocationActionSheet(true);
-                        }}
-                      >
-                        <IonIcon
-                          data-testid="delete-location-btn"
-                          icon={trashOutline}
-                        ></IonIcon>
-                      </IonButton>
-                    </div>
-                  </IonItem>
-                </div>
-              </section>
-            ))}
-          </IonList>
-          <IonFab
-            onClick={() => {
-              setShowAddLocationSheet(true);
-            }}
-            slot="fixed"
-            vertical="bottom"
-            horizontal="end"
-            data-testid="add-location-btn"
+                    <IonButton
+                      className="text-[var(--ion-text-color)]"
+                      fill="clear"
+                      size="small"
+                      aria-label="delete location"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLocationToDeleteId(location.id);
+                        setShowDeleteLocationActionSheet(true);
+                      }}
+                    >
+                      <IonIcon
+                        data-testid="delete-location-btn"
+                        icon={trashOutline}
+                      ></IonIcon>
+                    </IonButton>
+                  </div>
+                </IonItem>
+              </div>
+            </section>
+          ))}
+        </IonList>
+        <IonFab
+          onClick={() => {
+            setShowAddLocationSheet(true);
+          }}
+          slot="fixed"
+          vertical="bottom"
+          horizontal="end"
+          data-testid="add-location-btn"
+        >
+          <IonFabButton
+            id="open-location-settings-sheet"
+            aria-label="add location"
           >
-            <IonFabButton
-              id="open-location-settings-sheet"
-              aria-label="add location"
-            >
-              <IonIcon icon={add}></IonIcon>
-            </IonFabButton>
-          </IonFab>
-        </IonContent>
-      </IonPage>
+            <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+        </IonFab>
+      </IonContent>
+      {/* </IonPage> */}
 
       <ActionSheet
         // trigger="open-delete-location-action-sheet"
