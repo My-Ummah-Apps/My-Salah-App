@@ -183,6 +183,7 @@ const BottomSheetAddLocation = ({
       // expandToScroll={false}
       onDidDismiss={() => {
         setShowAddLocationSheet(false);
+        handleInputPromptDismissed();
       }}
     >
       <IonHeader>

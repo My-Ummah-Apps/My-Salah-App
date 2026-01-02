@@ -9,6 +9,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  isPlatform,
 } from "@ionic/react";
 
 import {
@@ -69,6 +70,7 @@ import {
   fetchAllLocations,
   toggleDBConnection as toggleDBConnection,
 } from "./utils/dbUtils";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -175,6 +177,34 @@ const App = () => {
 
     initializeApp();
   }, [isDatabaseInitialised]);
+
+  useEffect(() => {
+    const createAndroidNotificationChannels = async () => {
+      if (isPlatform("android")) {
+        await LocalNotifications.createChannel({
+          id: "salah-reminders-with-adhan",
+          name: "Salah reminders with adhan",
+          importance: 4,
+          description: "Salah reminders",
+          sound: "adhan.mp3",
+          visibility: 1,
+          vibration: true,
+        });
+
+        await LocalNotifications.createChannel({
+          id: "salah-reminders-without-adhan",
+          name: "Salah reminders without adhan",
+          importance: 4,
+          description: "Salah reminders",
+          sound: "default",
+          visibility: 1,
+          vibration: true,
+        });
+      }
+    };
+
+    createAndroidNotificationChannels();
+  }, []);
 
   useEffect(() => {
     handleTheme(userPreferences.theme);

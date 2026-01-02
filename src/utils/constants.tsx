@@ -291,8 +291,6 @@ export const scheduleSalahTimesNotifications = async (
 
   // const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
 
-  await createNotificationChannel();
-
   await LocalNotifications.schedule({
     notifications: [
       {

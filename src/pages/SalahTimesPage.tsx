@@ -183,7 +183,6 @@ SalahTimesPageProps) => {
             >
               <h4>Salah Times Not Set</h4>
               <IonButton
-                size="small"
                 onClick={() => {
                   setShowAddLocationSheet(true);
                 }}
