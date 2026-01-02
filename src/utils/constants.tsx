@@ -302,38 +302,47 @@ export const scheduleSalahTimesNotifications = async (
   const useAdhan = setting;
 
   if (useAdhan === "on" || useAdhan === "adhan") {
-    // if (device === "android") {
-    // ! Inset for loop to schedule next seven days worth of notifications
     const { params, coordinates, todaysDate } =
       await generateActiveLocationParams(dbConnection, userPreferences);
 
     console.log(salahName, setting);
-
     console.log(coordinates, todaysDate, params);
 
-    const salahTime = new PrayerTimes(coordinates, todaysDate, params)["fajr"];
+    const arr = [];
 
-    console.log("salahTime: ", salahTime);
+    for (let i = 0; i < nextSevenDays.length; i++) {
+      const salahTime = new PrayerTimes(coordinates, nextSevenDays[i], params)[
+        salahName
+      ];
 
-    await LocalNotifications.schedule({
-      notifications: [
-        {
-          id: 1, // ! These will need unique IDs for each notification
-          title: `${salahName}`,
-          body: `It's time to pray ${salahName}`,
-          schedule: {
-            //  at:
-            allowWhileIdle: true,
-            repeats: false,
+      arr.push(salahTime);
+
+      console.log("arr: ", arr);
+    }
+    // ! Re-enable if else device checks when not in prod
+    // if (device === "android") {
+    for (let i = 0; i < arr.length; i++) {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id: 1, // ! These will need unique IDs for each notification
+            title: `${salahName}`,
+            body: `It's time to pray ${salahName}`,
+            schedule: {
+              at: arr[i],
+              allowWhileIdle: true,
+              repeats: false,
+            },
+            sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
+            channelId:
+              useAdhan === "adhan"
+                ? "salah-reminders-with-adhan"
+                : "salah-reminders-without-adhan",
           },
-          sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
-          channelId:
-            useAdhan === "adhan"
-              ? "salah-reminders-with-adhan"
-              : "salah-reminders-without-adhan",
-        },
-      ],
-    });
+        ],
+      });
+    }
+
     // } else if (device === "ios") {
     // await LocalNotifications.schedule({
     //   notifications: [
