@@ -182,6 +182,16 @@ const App = () => {
     const createAndroidNotificationChannels = async () => {
       if (isPlatform("android")) {
         await LocalNotifications.createChannel({
+          id: "daily-reminder",
+          name: "Reminders",
+          importance: 4,
+          description: "General reminders",
+          sound: "default",
+          visibility: 1,
+          vibration: true,
+        });
+
+        await LocalNotifications.createChannel({
           id: "salah-reminders-with-adhan",
           name: "Salah reminders with adhan",
           importance: 4,

@@ -10,6 +10,7 @@ import {
   SalahByDateObjType,
   SalahNamesType,
   userPreferencesType,
+  SalahNotificationSettings,
 } from "../types/types";
 import {
   AndroidSettings,
@@ -19,6 +20,8 @@ import {
 import { fetchAllLocations, toggleDBConnection } from "./dbUtils";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { CalculationMethod, Coordinates, PrayerTimes } from "adhan";
+
+const device = Capacitor.getPlatform();
 
 export const MODAL_BREAKPOINTS = [0, 1];
 export const INITIAL_MODAL_BREAKPOINT = 1;
@@ -95,25 +98,25 @@ export const checkNotificationPermissions = async () => {
   return userNotificationPermission.display;
 };
 
-const createNotificationChannel = async () => {
-  await LocalNotifications.createChannel({
-    id: "daily-reminder",
-    name: "Reminders",
-    importance: 4,
-    description: "General reminders",
-    sound: "default",
-    visibility: 1,
-    vibration: true,
-  });
-};
+// const createNotificationChannel = async () => {
+//   await LocalNotifications.createChannel({
+//     id: "daily-reminder",
+//     name: "Reminders",
+//     importance: 4,
+//     description: "General reminders",
+//     sound: "default",
+//     visibility: 1,
+//     vibration: true,
+//   });
+// };
 
 export const scheduleDailyNotification = async (
   hour: number,
   minute: number
 ) => {
-  if (Capacitor.getPlatform() === "android") {
-    await createNotificationChannel();
-  }
+  // if (device === "android") {
+  //   await createNotificationChannel();
+  // }
 
   await LocalNotifications.schedule({
     notifications: [
@@ -209,7 +212,7 @@ export const setStatusAndNavBarBGColor = async (
   backgroundColor: string,
   textColor: Style
 ) => {
-  if (Capacitor.getPlatform() === "android") {
+  if (device === "android") {
     await EdgeToEdge.setBackgroundColor({ color: backgroundColor });
   }
   await StatusBar.setStyle({ style: textColor });
@@ -227,11 +230,11 @@ export const promptToOpenDeviceSettings = async (
   });
 
   if (value) {
-    if (Capacitor.getPlatform() === "ios") {
+    if (device === "ios") {
       NativeSettings.openIOS({
         option: IOSSettings.App,
       });
-    } else if (Capacitor.getPlatform() === "android") {
+    } else if (device === "android") {
       NativeSettings.openAndroid({
         option: androidOption,
       });
@@ -277,7 +280,8 @@ export const updateUserPrefs = async (
 
 export const scheduleSalahTimesNotifications = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  salahName: SalahNamesType
+  salahName: SalahNamesType,
+  setting: SalahNotificationSettings
 ) => {
   const today = new Date();
 
@@ -287,29 +291,51 @@ export const scheduleSalahTimesNotifications = async (
 
   console.log("nextSevenDays: ", nextSevenDays);
 
-  const { activeLocation } = await fetchAllLocations(dbConnection);
+  // const { activeLocation } = await fetchAllLocations(dbConnection);
+  const useAdhan = setting;
 
-  // const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
+  if (useAdhan === "on" || useAdhan === "adhan") {
+    if (device === "android") {
+      // ! Inset for loop to schedule next seven days worth of notifications
 
-  await LocalNotifications.schedule({
-    notifications: [
-      {
-        id: 1,
-        title: `${salahName}`,
-        body: `It's time to pray ${salahName}`,
-        schedule: {
-          on: {
-            // hour: hour,
-            // minute: minute,
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id: 1, // ! These will need unique IDs for each notification
+            title: `${salahName}`,
+            body: `It's time to pray ${salahName}`,
+            schedule: {
+              //  at:
+              allowWhileIdle: true,
+              repeats: false,
+            },
+            sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
+            channelId:
+              useAdhan === "adhan"
+                ? "salah-reminders-with-adhan"
+                : "salah-reminders-without-adhan",
           },
-          allowWhileIdle: true,
-          repeats: true,
-        },
-        channelId: "daily-reminder",
-        // foreground: true, // iOS only
-      },
-    ],
-  });
+        ],
+      });
+    } else if (device === "ios") {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id: 1, // ! These will need unique IDs for each notification
+            title: `${salahName}`,
+            body: `It's time to pray ${salahName}`,
+            schedule: {
+              // at:
+              allowWhileIdle: true,
+              repeats: false,
+            },
+            sound: useAdhan === "adhan" ? "adhan.wav" : "default",
+            // foreground: true, // iOS only
+          },
+        ],
+      });
+    }
+  }
 };
 
 // scheduleSalahTimesNotifications(dbConnection, "Fajr");

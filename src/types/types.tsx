@@ -14,7 +14,7 @@ export type CalculationMethodsType =
   | "Other"
   | "";
 
-type SalahNotificationSettings = "off" | "on" | "adhan";
+export type SalahNotificationSettings = "off" | "on" | "adhan";
 
 export interface userPreferencesType {
   userStartDate: string;
