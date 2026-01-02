@@ -9,8 +9,10 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { SalahNamesType, userPreferencesType } from "../../../types/types";
 import {
+  cancelSalahReminderNotifications,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  scheduleSalahTimesNotifications,
   updateUserPrefs,
 } from "../../../utils/constants";
 
@@ -34,7 +36,7 @@ const BottomSheetSalahNotifications = ({
   userPreferences,
 }: BottomSheetSalahNotificationsProps) => {
   const key = `${selectedSalah}Notification`;
-  console.log("key: ", key);
+  //   console.log("key: ", key);
 
   return (
     <IonModal
@@ -66,6 +68,8 @@ const BottomSheetSalahNotifications = ({
                 "off",
                 setUserPreferences
               );
+
+              await cancelSalahReminderNotifications(selectedSalah);
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences[key] === "off" ? "bg-blue-500" : ""
@@ -82,6 +86,13 @@ const BottomSheetSalahNotifications = ({
                 "on",
                 setUserPreferences
               );
+
+              await scheduleSalahTimesNotifications(
+                dbConnection,
+                selectedSalah,
+                userPreferences,
+                "on"
+              );
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences[key] === "on" ? "bg-blue-500" : ""
@@ -97,6 +108,13 @@ const BottomSheetSalahNotifications = ({
                 key,
                 "adhan",
                 setUserPreferences
+              );
+
+              await scheduleSalahTimesNotifications(
+                dbConnection,
+                selectedSalah,
+                userPreferences,
+                "adhan"
               );
             }}
             className={`p-2 mb-5 border rounded-lg ${

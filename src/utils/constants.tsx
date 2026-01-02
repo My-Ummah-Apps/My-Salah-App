@@ -278,9 +278,16 @@ export const updateUserPrefs = async (
   }
 };
 
+export const cancelSalahReminderNotifications = async (
+  salahName: SalahNamesType
+) => {
+  // ! Might need to loop through all notifications and cancel them one by one or there might be a way of obtaining all scheduled notifications and cancelled relevant ones that way
+};
+
 export const scheduleSalahTimesNotifications = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   salahName: SalahNamesType,
+  userPreferences: userPreferencesType,
   setting: SalahNotificationSettings
 ) => {
   const today = new Date();
@@ -295,50 +302,58 @@ export const scheduleSalahTimesNotifications = async (
   const useAdhan = setting;
 
   if (useAdhan === "on" || useAdhan === "adhan") {
-    if (device === "android") {
-      // ! Inset for loop to schedule next seven days worth of notifications
+    // if (device === "android") {
+    // ! Inset for loop to schedule next seven days worth of notifications
+    const { params, coordinates, todaysDate } =
+      await generateActiveLocationParams(dbConnection, userPreferences);
 
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            id: 1, // ! These will need unique IDs for each notification
-            title: `${salahName}`,
-            body: `It's time to pray ${salahName}`,
-            schedule: {
-              //  at:
-              allowWhileIdle: true,
-              repeats: false,
-            },
-            sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
-            channelId:
-              useAdhan === "adhan"
-                ? "salah-reminders-with-adhan"
-                : "salah-reminders-without-adhan",
+    console.log(salahName, setting);
+
+    console.log(coordinates, todaysDate, params);
+
+    const salahTime = new PrayerTimes(coordinates, todaysDate, params)["fajr"];
+
+    console.log("salahTime: ", salahTime);
+
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: 1, // ! These will need unique IDs for each notification
+          title: `${salahName}`,
+          body: `It's time to pray ${salahName}`,
+          schedule: {
+            //  at:
+            allowWhileIdle: true,
+            repeats: false,
           },
-        ],
-      });
-    } else if (device === "ios") {
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            id: 1, // ! These will need unique IDs for each notification
-            title: `${salahName}`,
-            body: `It's time to pray ${salahName}`,
-            schedule: {
-              // at:
-              allowWhileIdle: true,
-              repeats: false,
-            },
-            sound: useAdhan === "adhan" ? "adhan.wav" : "default",
-            // foreground: true, // iOS only
-          },
-        ],
-      });
-    }
+          sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
+          channelId:
+            useAdhan === "adhan"
+              ? "salah-reminders-with-adhan"
+              : "salah-reminders-without-adhan",
+        },
+      ],
+    });
+    // } else if (device === "ios") {
+    // await LocalNotifications.schedule({
+    //   notifications: [
+    //     {
+    //       id: 1, // ! These will need unique IDs for each notification
+    //       title: `${salahName}`,
+    //       body: `It's time to pray ${salahName}`,
+    //       schedule: {
+    //         // at:
+    //         allowWhileIdle: true,
+    //         repeats: false,
+    //       },
+    //       sound: useAdhan === "adhan" ? "adhan.wav" : "default",
+    //       // foreground: true, // iOS only
+    //     },
+    //   ],
+    // });
+    // }
   }
 };
-
-// scheduleSalahTimesNotifications(dbConnection, "Fajr");
 
 export const generateActiveLocationParams = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
@@ -349,6 +364,7 @@ export const generateActiveLocationParams = async (
   const todaysDate = new Date();
 
   const { activeLocation } = await fetchAllLocations(dbConnection);
+
   // const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
 
   const coordinates = new Coordinates(

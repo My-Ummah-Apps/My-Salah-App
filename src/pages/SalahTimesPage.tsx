@@ -271,7 +271,7 @@ SalahTimesPageProps) => {
                       return;
                     }
 
-                    console.log(name);
+                    console.log("name: ", name);
                     setSelectedSalah(name);
                     setShowSalahNotificationsSheet(true);
                   }}
