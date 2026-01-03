@@ -27,7 +27,6 @@ import { getNextSalah } from "../utils/constants";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
-import { format } from "date-fns";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -151,12 +150,18 @@ SalahTimesPageProps) => {
         {/* bg-[color:var(--card-bg-color)]  */}
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations?.length !== 0 && (
-            <section className="p-4 m-5 rounded-2xl">
-              <p className="mb-1 text-lg text-center ">Upcoming Salah</p>
-              <p className="mb-5 text-6xl font-bold text-center">
+            <section className="p-4 my-5 mx-2 rounded-lg bg-[color:var(--card-bg-color)] ">
+              {/* <p className="mb-1 text-lg text-center ">Upcoming Salah</p> */}
+              {/* <p className="mb-5 text-6xl font-bold text-center">
                 {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
                   nextSalahNameAndTime.nextSalah.slice(1)}
-              </p>
+              </p> */}
+              {nextSalahNameAndTime.currentSalah !== "sunrise" && (
+                <p className="mb-5 text-6xl font-bold text-center">
+                  {nextSalahNameAndTime.currentSalah.charAt(0).toUpperCase() +
+                    nextSalahNameAndTime.currentSalah.slice(1)}
+                </p>
+              )}
               <p className="text-4xl text-center">
                 {/* {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")} */}
               </p>
@@ -166,13 +171,12 @@ SalahTimesPageProps) => {
                 </p>
               )}
               <p className="font-light text-center">
-                {nextSalahNameAndTime.minsRemaining} minutes to go
+                {nextSalahNameAndTime.minsRemaining} minutes to go until
               </p>
-
-              {/* <div className="h-full border-l-2 border-gray-300 border-solid">
-            <p className="ml-4">Current Salah</p>
-            <p className="ml-4">{nextSalahNameAndTime.currentSalah}</p>
-          </div> */}
+              <p className="mt-2 mb-5 text-2xl font-bold text-center">
+                {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
+                  nextSalahNameAndTime.nextSalah.slice(1)}
+              </p>
             </section>
           )}
         {userLocations?.length === 0 ? (
@@ -238,8 +242,9 @@ SalahTimesPageProps) => {
             </section>
           </section>
         )}
+
         <section
-          className={`mx-2 ${
+          className={`mx-2 rounded-lg   ${
             userLocations?.length === 0 ||
             userPreferences.prayerCalculationMethod === ""
               ? "opacity-50"
@@ -250,7 +255,12 @@ SalahTimesPageProps) => {
 
           {Object.entries(salahTimes).map(([name, time]) => (
             <div
-              className="flex items-center justify-between py-2 my-4 text-sm border rounded-lg border-stone-600"
+              // && name !== "sunrise"
+              className={`bg-[color:var(--card-bg-color)] flex items-center justify-between py-1 text-sm border-[var(--app-border-color)] rounded-lg ${
+                name === nextSalahNameAndTime.currentSalah
+                  ? "my-2 rounded-lg shadow-md scale-102"
+                  : ""
+              }`}
               key={name + time}
             >
               <p className="ml-2">
@@ -258,7 +268,6 @@ SalahTimesPageProps) => {
               </p>
               <div className="flex items-center">
                 <p>{time === "Invalid Date" ? "--:--" : time}</p>
-                {/* <p>{time}</p> */}
                 <IonButton
                   className={name === "sunrise" ? "opacity-0" : "opacity-100"}
                   onClick={() => {
@@ -287,15 +296,15 @@ SalahTimesPageProps) => {
             </div>
           ))}
           {/* </IonList> */}
-          {userPreferences.prayerCalculationMethod !== "" &&
-            userLocations?.length !== 0 && (
-              <p className="my-10 text-xs text-center">
-                {`Note: These times have been calculated using the
+        </section>
+        {userPreferences.prayerCalculationMethod !== "" &&
+          userLocations?.length !== 0 && (
+            <p className="mx-10 my-10 text-xs text-center">
+              {`Note: These times have been calculated using the
             ${userPreferences.prayerCalculationMethod} method and may differ from
             your local Mosque times`}
-              </p>
-            )}
-        </section>
+            </p>
+          )}
       </IonContent>
       <BottomSheetLocationsList
         setShowLocationsListSheet={setShowLocationsListSheet}
@@ -317,8 +326,6 @@ SalahTimesPageProps) => {
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
-        setUserLocations={setUserLocations}
-        userLocations={userLocations}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <BottomSheetSalahNotifications

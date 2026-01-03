@@ -278,11 +278,11 @@ export const updateUserPrefs = async (
   }
 };
 
-export const cancelSalahReminderNotifications = async (
-  salahName: SalahNamesType
-) => {
-  // ! Might need to loop through all notifications and cancel them one by one or there might be a way of obtaining all scheduled notifications and cancelled relevant ones that way
-};
+export const cancelSalahReminderNotifications = async () =>
+  // salahName: SalahNamesType
+  {
+    // ! Might need to loop through all notifications and cancel them one by one or there might be a way of obtaining all scheduled notifications and cancelled relevant ones that way
+  };
 
 export const scheduleSalahTimesNotifications = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,

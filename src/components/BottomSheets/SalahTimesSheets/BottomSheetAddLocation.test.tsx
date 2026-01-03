@@ -4,8 +4,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
-import * as constantsFile from "../../utils/constants";
-import * as dbUtilsFile from "../../utils/dbUtils";
+import * as constantsFile from "../../../utils/constants";
+import * as dbUtilsFile from "../../../utils/dbUtils";
 import { AndroidSettings } from "capacitor-native-settings";
 
 // await userEvent.click(autoDetectBtn);
@@ -56,7 +56,7 @@ import {
   mockdbConnection,
   mockSetUserLocations,
   mockUserLocations,
-} from "../../__mocks__/test-utils";
+} from "../../../__mocks__/test-utils";
 import { Capacitor } from "@capacitor/core";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
 

@@ -1,10 +1,4 @@
-import {
-  IonContent,
-  IonHeader,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonContent, IonModal } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../../../types/types";

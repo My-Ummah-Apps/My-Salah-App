@@ -6,10 +6,10 @@ import {
   mockUserLocations,
   mockUserPrefs,
   mockUserPrefsState,
-} from "../../__mocks__/test-utils";
+} from "../../../__mocks__/test-utils";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
-import SalahTimesPage from "../../pages/SalahTimesPage";
+import SalahTimesPage from "../../../pages/SalahTimesPage";
 
 describe.skip("tests ensuring all items are rendered", () => {
   beforeEach(() => {

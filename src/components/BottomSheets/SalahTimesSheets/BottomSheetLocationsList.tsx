@@ -3,7 +3,6 @@ import {
   IonHeader,
   IonModal,
   IonButton,
-  IonPage,
   IonTitle,
   IonToolbar,
   IonFab,
@@ -15,7 +14,7 @@ import {
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-import { add, pencilOutline, trashOutline } from "ionicons/icons";
+import { add, trashOutline } from "ionicons/icons";
 import { useState } from "react";
 
 import { MdCheck } from "react-icons/md";
@@ -83,8 +82,8 @@ const BottomSheetLocationsList = ({
 }: BottomSheetSalahTimesSettingsProps) => {
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
-  const [showEditLocationActionSheet, setShowEditLocationActionSheet] =
-    useState(false);
+  // const [showEditLocationActionSheet, setShowEditLocationActionSheet] =
+  //   useState(false);
 
   const [locationToDeleteId, setLocationToDeleteId] = useState<null | number>(
     null
