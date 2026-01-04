@@ -10,6 +10,7 @@ import {
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  prayerCalculationMethodLabels,
   updateUserPrefs,
 } from "../../../utils/constants";
 
@@ -132,7 +133,9 @@ BottomSheetSalahTimesSettingsProps) => {
                 <p>
                   {userPreferences.prayerCalculationMethod === ""
                     ? "Select Calculation method"
-                    : userPreferences.prayerCalculationMethod}
+                    : prayerCalculationMethodLabels[
+                        userPreferences.prayerCalculationMethod
+                      ]}
                 </p>
                 <p>
                   <MdOutlineChevronRight />
@@ -152,7 +155,11 @@ BottomSheetSalahTimesSettingsProps) => {
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2">
               <p className="">Madhab / Asr Time:</p>
               <div className="flex items-center gap-1">
-                <p>{userPreferences.madhab}</p>
+                <p>
+                  {userPreferences.madhab === "shafi"
+                    ? "Earlier Asr"
+                    : "Later Asr"}
+                </p>
                 <p>
                   <MdOutlineChevronRight />
                 </p>
