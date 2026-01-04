@@ -299,7 +299,7 @@ SalahTimesPageProps) => {
         </section>
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations?.length !== 0 && (
-            <p className="mx-10 my-10 text-xs text-center">
+            <p className="mx-10 my-5 text-xs text-center">
               {`Note: These times have been calculated using the
             ${userPreferences.prayerCalculationMethod} method and may differ from
             your local Mosque times`}

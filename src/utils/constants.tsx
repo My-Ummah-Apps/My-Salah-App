@@ -35,6 +35,21 @@ export const pageTransitionStyles = {
   transition: { duration: 0.2 },
 };
 
+export const prayerCalculationMethodLabels: Record<string, string> = {
+  MuslimWorldLeague: "Muslim World League",
+  Egyptian: "Egyptian General Authority of Survey",
+  Karachi: "University of Islamic Sciences, Karachi",
+  UmmAlQura: "Umm Al-Qura University, Makkah",
+  Dubai: "Dubai - UAE",
+  Qatar: "Qatar Ministry of Awqaf",
+  Kuwait: "Kuwait",
+  MoonsightingCommittee: "Moonsighting Committee",
+  Singapore: "Singapore / Malaysia / Indonesia",
+  Turkey: "Diyanet, Turkey",
+  Tehran: "University of Tehran",
+  NorthAmerica: "North America (ISNA)",
+};
+
 export const dictPreferencesDefaultValues: userPreferencesType = {
   userGender: "male",
   userStartDate: format(new Date(), "yyyy-MM-dd"),

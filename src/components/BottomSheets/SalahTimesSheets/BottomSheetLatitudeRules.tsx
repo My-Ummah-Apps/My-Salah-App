@@ -41,11 +41,11 @@ const BottomSheetLatitudeRules = ({
       style={{ "--height": "80vh" }}
       // expandToScroll={false}
     >
-      {/* <IonHeader>
+      <IonHeader>
         <IonToolbar>
-          <IonTitle>Calculation Methods</IonTitle>
+          <IonTitle>Latitude Options</IonTitle>
         </IonToolbar>
-      </IonHeader> */}
+      </IonHeader>
       <IonContent>
         <section className="px-4 mt-10">
           <div
