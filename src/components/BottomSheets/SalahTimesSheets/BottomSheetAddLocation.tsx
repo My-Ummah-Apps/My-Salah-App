@@ -202,6 +202,7 @@ const BottomSheetAddLocation = ({
                 placeholder="Location name"
                 onIonInput={(e) => {
                   setLocationName(e.detail.value || "");
+                  // ! Below is causing search mode to be turned on for all button clicks
                   if (citySearchMode === false) {
                     setCitySearchMode(true);
                   }

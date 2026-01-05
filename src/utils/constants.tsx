@@ -293,11 +293,51 @@ export const updateUserPrefs = async (
   }
 };
 
-export const cancelSalahReminderNotifications = async () =>
-  // salahName: SalahNamesType
-  {
-    // ! Might need to loop through all notifications and cancel them one by one or there might be a way of obtaining all scheduled notifications and cancelled relevant ones that way
-  };
+export const cancelSalahReminderNotifications = async (
+  salahName: SalahNamesType
+) => {
+  console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
+
+  const pendingNotifications = await LocalNotifications.getPending();
+  const notificationsToCancel = pendingNotifications.notifications
+    .filter((item) => item.title === salahName)
+    .map((n) => ({
+      id: n.id,
+    }));
+
+  await LocalNotifications.cancel({ notifications: notificationsToCancel });
+
+  console.log("notificationsToCancel: ", notificationsToCancel);
+  console.log(
+    "pending notifications after cancelling: ",
+    await LocalNotifications.getPending()
+  );
+};
+
+const salahIdMap = {
+  fajr: 1,
+  dhuhr: 2,
+  asr: 3,
+  maghrib: 4,
+  isha: 5,
+};
+
+const generateNotificationId = (salahName: SalahNamesType, date: Date) => {
+  const dateFormatted = format(date, "ddMMyyyy");
+
+  return Number(dateFormatted + salahIdMap[salahName]);
+};
+
+export const toLocalDateFromUTCClock = (utcDate: Date) => {
+  return new Date(
+    utcDate.getUTCFullYear(),
+    utcDate.getUTCMonth(),
+    utcDate.getUTCDate(),
+    utcDate.getUTCHours(),
+    utcDate.getUTCMinutes(),
+    utcDate.getUTCSeconds()
+  );
+};
 
 export const scheduleSalahTimesNotifications = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
@@ -330,13 +370,44 @@ export const scheduleSalahTimesNotifications = async (
         salahName
       ];
 
-      arr.push(salahTime);
+      const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
 
-      console.log("arr: ", arr);
+      // console.log("SalahTime: ", salahTime);
+      // console.log("localisedSalahTime: ", localisedSalahTime);
+
+      if (today < localisedSalahTime) {
+        arr.push(localisedSalahTime);
+      }
+
+      // console.log("arr: ", arr);
     }
-    // ! Re-enable if else device checks when not in prod
-    // if (device === "android") {
-    for (let i = 0; i < arr.length; i++) {
+    // ! remove web when not in dev
+    if (device === "android" || device === "web") {
+      for (let i = 0; i < arr.length; i++) {
+        const uniqueId = generateNotificationId(salahName, arr[i]);
+        console.log("Unique ID: ", typeof uniqueId);
+
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              id: uniqueId,
+              title: `${salahName}`,
+              body: `It's time to pray ${salahName}`,
+              schedule: {
+                at: arr[i],
+                allowWhileIdle: true,
+                repeats: false,
+              },
+              sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
+              channelId:
+                useAdhan === "adhan"
+                  ? "salah-reminders-with-adhan"
+                  : "salah-reminders-without-adhan",
+            },
+          ],
+        });
+      }
+    } else if (device === "ios") {
       await LocalNotifications.schedule({
         notifications: [
           {
@@ -344,39 +415,19 @@ export const scheduleSalahTimesNotifications = async (
             title: `${salahName}`,
             body: `It's time to pray ${salahName}`,
             schedule: {
-              at: arr[i],
+              // at:
               allowWhileIdle: true,
               repeats: false,
             },
-            sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
-            channelId:
-              useAdhan === "adhan"
-                ? "salah-reminders-with-adhan"
-                : "salah-reminders-without-adhan",
+            sound: useAdhan === "adhan" ? "adhan.wav" : "default",
+            // foreground: true, // iOS only
           },
         ],
       });
     }
-
-    // } else if (device === "ios") {
-    // await LocalNotifications.schedule({
-    //   notifications: [
-    //     {
-    //       id: 1, // ! These will need unique IDs for each notification
-    //       title: `${salahName}`,
-    //       body: `It's time to pray ${salahName}`,
-    //       schedule: {
-    //         // at:
-    //         allowWhileIdle: true,
-    //         repeats: false,
-    //       },
-    //       sound: useAdhan === "adhan" ? "adhan.wav" : "default",
-    //       // foreground: true, // iOS only
-    //     },
-    //   ],
-    // });
-    // }
   }
+
+  console.log("PENDING NOTIFICATIONS: ", await LocalNotifications.getPending());
 };
 
 export const generateActiveLocationParams = async (

@@ -125,7 +125,7 @@ BottomSheetSalahTimesSettingsProps) => {
               "padding-top": "10px",
             }}
             id="open-salah-calculations-sheet"
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2">
               <p className="">Calculation Method:</p>
@@ -150,7 +150,7 @@ BottomSheetSalahTimesSettingsProps) => {
             style={{
               ...buttonStyles,
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2">
               <p className="">Madhab / Asr Time:</p>
@@ -189,7 +189,7 @@ BottomSheetSalahTimesSettingsProps) => {
           </div>
         </section>
 
-        <p className="text-[var(--ion-text-color)] mx-4 mt-5 mb-1 font-thin text-sm text-center">
+        <p className="text-[var(--ion-text-color)] mx-4 mt-5 mb-1 font-thin font-light text-center">
           Advanced Settings
         </p>
         <section className="px-2 mx-2  rounded-lg bg-[color:var(--card-bg-color)]">
@@ -201,7 +201,7 @@ BottomSheetSalahTimesSettingsProps) => {
               ...buttonStyles,
               "padding-top": "10px",
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2">
               <p className="">High Latitude Rule:</p>
@@ -228,7 +228,7 @@ BottomSheetSalahTimesSettingsProps) => {
             style={{
               ...buttonStyles,
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2 ">
               <p className="">Fajr Angle:</p>
@@ -251,7 +251,7 @@ BottomSheetSalahTimesSettingsProps) => {
               ...buttonStyles,
               "padding-bottom": "10px",
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full">
               <p className="">Isha Angle:</p>
@@ -275,7 +275,7 @@ BottomSheetSalahTimesSettingsProps) => {
             style={{
               ...buttonStyles,
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2 pt-4">
               <p className="">Fajr Adjustment:</p>
@@ -308,7 +308,7 @@ BottomSheetSalahTimesSettingsProps) => {
             style={{
               ...buttonStyles,
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2">
               <p className="">Dhuhr Adjustment:</p>
@@ -336,7 +336,7 @@ BottomSheetSalahTimesSettingsProps) => {
             style={{
               ...buttonStyles,
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2">
               <p className="">Asr Adjustment:</p>
@@ -362,7 +362,7 @@ BottomSheetSalahTimesSettingsProps) => {
             style={{
               ...buttonStyles,
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full border-b border-[var(--app-border-color)] pb-2">
               <p className="">Maghrib Adjustment:</p>
@@ -392,7 +392,7 @@ BottomSheetSalahTimesSettingsProps) => {
               // "min-height": "40px",
               "padding-bottom": "10px",
             }}
-            className="text-[var(--ion-text-color)] text-sm mb-4"
+            className="text-[var(--ion-text-color)] font-light mb-4"
           >
             <div className="flex items-center justify-between w-full">
               <p className="">Isha Adjustment:</p>
@@ -425,7 +425,7 @@ BottomSheetSalahTimesSettingsProps) => {
               }}
               className="text-[var(--ion-text-color)] text-sm"
             >
-              <div className="flex items-center justify-between w-full ">
+              <div className="flex items-center justify-between w-full font-light">
                 <p className="">Shafaq Rule:</p>
                 <div className="flex items-center gap-1">
                   <p>{userPreferences.shafaqRule}</p>

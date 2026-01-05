@@ -64,6 +64,7 @@ const BottomSheetSalahNotifications = ({
               );
 
               await cancelSalahReminderNotifications(selectedSalah);
+              console.log("SELECTED SALAH: ", selectedSalah);
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences[key] === "off" ? "bg-blue-500" : ""
