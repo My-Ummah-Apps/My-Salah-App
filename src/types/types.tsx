@@ -97,14 +97,6 @@ export type SalahDataType = {
   [date: string]: string[];
 };
 
-// export type SalahNamesType =
-//   | "Fajr"
-//   | "Dhuhr"
-//   | "Asr"
-//   | "Asar"
-//   | "Maghrib"
-//   | "Isha";
-
 export type SalahNamesType =
   | "Fajr"
   | "Dhuhr"

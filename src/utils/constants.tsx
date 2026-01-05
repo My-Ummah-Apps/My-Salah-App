@@ -1,7 +1,7 @@
 import { Dialog } from "@capacitor/dialog";
 import { Toast } from "@capacitor/toast";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { addDays, format, isValid, parse } from "date-fns";
+import { addDays, addMinutes, format, isValid, parse } from "date-fns";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
 import { Capacitor } from "@capacitor/core";
@@ -307,7 +307,6 @@ export const cancelSalahReminderNotifications = async (
 
   await LocalNotifications.cancel({ notifications: notificationsToCancel });
 
-  console.log("notificationsToCancel: ", notificationsToCancel);
   console.log(
     "pending notifications after cancelling: ",
     await LocalNotifications.getPending()
@@ -347,11 +346,17 @@ export const scheduleSalahTimesNotifications = async (
 ) => {
   const today = new Date();
 
+  const customAdjustment = Number(
+    userPreferences[
+      `${salahName.toLowerCase()}Adjustment` as keyof userPreferencesType
+    ]
+  );
+
   const nextSevenDays = Array.from({ length: 7 }, (_, i) => {
     return addDays(today, i);
   });
 
-  console.log("nextSevenDays: ", nextSevenDays);
+  // console.log("nextSevenDays: ", nextSevenDays);
 
   // const { activeLocation } = await fetchAllLocations(dbConnection);
   const useAdhan = setting;
@@ -376,7 +381,8 @@ export const scheduleSalahTimesNotifications = async (
       // console.log("localisedSalahTime: ", localisedSalahTime);
 
       if (today < localisedSalahTime) {
-        arr.push(localisedSalahTime);
+        // arr.push(localisedSalahTime);
+        arr.push(addMinutes(localisedSalahTime, customAdjustment));
       }
 
       // console.log("arr: ", arr);
@@ -407,24 +413,25 @@ export const scheduleSalahTimesNotifications = async (
           ],
         });
       }
-    } else if (device === "ios") {
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            id: 1, // ! These will need unique IDs for each notification
-            title: `${salahName}`,
-            body: `It's time to pray ${salahName}`,
-            schedule: {
-              // at:
-              allowWhileIdle: true,
-              repeats: false,
-            },
-            sound: useAdhan === "adhan" ? "adhan.wav" : "default",
-            // foreground: true, // iOS only
-          },
-        ],
-      });
     }
+    // else if (device === "ios") {
+    //   await LocalNotifications.schedule({
+    //     notifications: [
+    //       {
+    //         id: 1, // ! These will need unique IDs for each notification
+    //         title: `${salahName}`,
+    //         body: `It's time to pray ${salahName}`,
+    //         schedule: {
+    //           // at:
+    //           allowWhileIdle: true,
+    //           repeats: false,
+    //         },
+    //         sound: useAdhan === "adhan" ? "adhan.wav" : "default",
+    //         // foreground: true, // iOS only
+    //       },
+    //     ],
+    //   });
+    // }
   }
 
   console.log("PENDING NOTIFICATIONS: ", await LocalNotifications.getPending());

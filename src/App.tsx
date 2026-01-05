@@ -32,6 +32,7 @@ import {
   updateUserPrefs,
   setStatusAndNavBarBGColor,
   getSalahTimes,
+  scheduleSalahTimesNotifications,
 } from "./utils/constants";
 import {
   DBResultDataObjType,
@@ -228,6 +229,26 @@ const App = () => {
     };
 
     calc();
+
+    const scheduleSalahNotifications = async () => {
+      if (userPreferences.fajrNotification === "on") {
+        await scheduleSalahTimesNotifications(
+          dbConnection,
+          "fajr",
+          userPreferences,
+          "on"
+        );
+      } else if (userPreferences.fajrNotification === "adhan") {
+        await scheduleSalahTimesNotifications(
+          dbConnection,
+          "fajr",
+          userPreferences,
+          "adhan"
+        );
+      }
+    };
+
+    scheduleSalahNotifications();
   }, [
     // userPreferences.prayerCalculationMethod,
     userPreferences.madhab,
