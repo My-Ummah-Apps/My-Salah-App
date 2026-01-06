@@ -352,7 +352,7 @@ export const scheduleSalahTimesNotifications = async (
     ]
   );
 
-  const nextSevenDays = Array.from({ length: 7 }, (_, i) => {
+  const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
     return addDays(today, i);
   });
 

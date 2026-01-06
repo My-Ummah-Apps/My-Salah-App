@@ -1,4 +1,10 @@
-import { IonContent, IonModal } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonModal,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { SalahNamesType, userPreferencesType } from "../../../types/types";
@@ -47,11 +53,14 @@ const BottomSheetSalahNotifications = ({
       //   style={{ "--height": "80vh" }}
       // expandToScroll={false}
     >
-      {/* <IonHeader>
+      <IonHeader>
         <IonToolbar>
-          <IonTitle>Calculation Methods</IonTitle>
+          <IonTitle>
+            {selectedSalah.charAt(0).toUpperCase() + selectedSalah.slice(1)}{" "}
+            Notifications
+          </IonTitle>
         </IonToolbar>
-      </IonHeader> */}
+      </IonHeader>
       <IonContent>
         <section className="px-4 mt-10">
           <div
@@ -75,6 +84,8 @@ const BottomSheetSalahNotifications = ({
           </div>
           <div
             onClick={async () => {
+              await cancelSalahReminderNotifications(selectedSalah);
+
               await updateUserPrefs(
                 dbConnection,
                 key,
@@ -98,6 +109,8 @@ const BottomSheetSalahNotifications = ({
           </div>
           <div
             onClick={async () => {
+              await cancelSalahReminderNotifications(selectedSalah);
+
               await updateUserPrefs(
                 dbConnection,
                 key,
