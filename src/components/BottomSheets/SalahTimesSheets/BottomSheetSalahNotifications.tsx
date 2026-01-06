@@ -12,9 +12,12 @@ import {
   cancelSalahReminderNotifications,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  promptToOpenDeviceSettings,
   scheduleSalahTimesNotifications,
   updateUserPrefs,
 } from "../../../utils/constants";
+import { AndroidSettings } from "capacitor-native-settings";
+import { Capacitor } from "@capacitor/core";
 
 // import { CalculationMethod } from "adhan";
 
@@ -37,6 +40,26 @@ const BottomSheetSalahNotifications = ({
 }: BottomSheetSalahNotificationsProps) => {
   const key = `${selectedSalah}Notification`;
   //   console.log("key: ", key);
+
+  const handleBatteryOptimisation = async () => {
+    if (
+      userPreferences.hasSeenBatteryPrompt === "0" &&
+      Capacitor.getPlatform() === "android"
+    ) {
+      await promptToOpenDeviceSettings(
+        "Ensure prayer notifications arrive on time",
+        "Some Android phones delay notifications to save battery. Disabling battery optimisation helps prayer notifications arrive on time.",
+        AndroidSettings.BatteryOptimization
+      );
+
+      await updateUserPrefs(
+        dbConnection,
+        "hasSeenBatteryPrompt",
+        "1",
+        setUserPreferences
+      );
+    }
+  };
 
   return (
     <IonModal
@@ -99,6 +122,8 @@ const BottomSheetSalahNotifications = ({
                 userPreferences,
                 "on"
               );
+
+              await handleBatteryOptimisation();
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences[key] === "on" ? "bg-blue-500" : ""
@@ -123,6 +148,8 @@ const BottomSheetSalahNotifications = ({
                 userPreferences,
                 "adhan"
               );
+
+              await handleBatteryOptimisation();
             }}
             className={`p-2 mb-5 border rounded-lg ${
               userPreferences[key] === "adhan" ? "bg-blue-500" : ""

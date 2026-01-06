@@ -38,6 +38,7 @@ const BottomSheetNotifications = ({
 
     if (userNotificationPermission === "denied") {
       await promptToOpenDeviceSettings(
+        `open settings`,
         `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
         AndroidSettings.AppNotification
       );

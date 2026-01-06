@@ -82,6 +82,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   asrNotification: "off",
   maghribNotification: "off",
   ishaNotification: "off",
+  hasSeenBatteryPrompt: "0",
 };
 
 export const reasonsStyles =
@@ -234,13 +235,14 @@ export const setStatusAndNavBarBGColor = async (
 };
 
 export const promptToOpenDeviceSettings = async (
+  title: string,
   message: string,
   androidOption: AndroidSettings
 ) => {
   const { value } = await Dialog.confirm({
-    title: "Open Settings",
+    title: title,
     message: message,
-    okButtonTitle: "Settings",
+    okButtonTitle: "Open settings",
     cancelButtonTitle: "Cancel",
   });
 

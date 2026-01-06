@@ -16,19 +16,21 @@ export type CalculationMethodsType =
 
 export type SalahNotificationSettings = "off" | "on" | "adhan";
 
+type binaryValue = "0" | "1";
+
 export interface userPreferencesType {
   userStartDate: string;
   userGender: string;
-  dailyNotification: string;
+  dailyNotification: binaryValue;
   dailyNotificationTime: string;
   reasons: string[];
-  showReasons: string;
-  showMissedSalahCount: string;
-  isExistingUser: string;
-  isMissedSalahToolTipShown: string;
+  showReasons: binaryValue;
+  showMissedSalahCount: binaryValue;
+  isExistingUser: binaryValue;
+  isMissedSalahToolTipShown: binaryValue;
   appLaunchCount: string;
   saveButtonTapCount: string;
-  haptics: string;
+  haptics: binaryValue;
   theme: "dark" | "light" | "system";
   timeFormat: "12hr" | "24hr";
   prayerCalculationMethod: CalculationMethodsType;
@@ -47,6 +49,7 @@ export interface userPreferencesType {
   asrNotification: SalahNotificationSettings;
   maghribNotification: SalahNotificationSettings;
   ishaNotification: SalahNotificationSettings;
+  hasSeenBatteryPrompt: binaryValue;
   // PolarCircleResolution:
 }
 
