@@ -104,7 +104,6 @@ const BottomSheetSalahNotifications = ({
                 "adhan",
                 setUserPreferences
               );
-
               await scheduleSalahTimesNotifications(
                 dbConnection,
                 selectedSalah,

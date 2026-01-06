@@ -231,20 +231,37 @@ const App = () => {
     calc();
 
     const scheduleSalahNotifications = async () => {
-      if (userPreferences.fajrNotification === "on") {
-        await scheduleSalahTimesNotifications(
-          dbConnection,
-          "fajr",
-          userPreferences,
-          "on"
-        );
-      } else if (userPreferences.fajrNotification === "adhan") {
-        await scheduleSalahTimesNotifications(
-          dbConnection,
-          "fajr",
-          userPreferences,
-          "adhan"
-        );
+      const salahs: SalahNamesType[] = [
+        "fajr",
+        "dhuhr",
+        "asr",
+        "maghrib",
+        "isha",
+      ];
+
+      for (let i = 0; i < salahs.length; i++) {
+        const salahAdjustmentKey = `${salahs[i]}Notification`;
+
+        const salahNotificationSetting =
+          userPreferences[salahAdjustmentKey as keyof userPreferencesType];
+
+        if (
+          salahNotificationSetting === "on" ||
+          salahNotificationSetting === "adhan"
+        ) {
+          console.log(
+            "salahNotificationSetting is: ",
+            salahNotificationSetting,
+            "for Salah: ",
+            salahAdjustmentKey
+          );
+          await scheduleSalahTimesNotifications(
+            dbConnection,
+            salahs[i],
+            userPreferences,
+            salahNotificationSetting
+          );
+        }
       }
     };
 

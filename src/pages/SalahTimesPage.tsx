@@ -23,10 +23,17 @@ import {
 
 import { useEffect, useState } from "react";
 import Toast from "../components/Toast";
-import { getNextSalah } from "../utils/constants";
+import {
+  checkNotificationPermissions,
+  getNextSalah,
+  promptToOpenDeviceSettings,
+  updateUserPrefs,
+} from "../utils/constants";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
+import { AndroidSettings } from "capacitor-native-settings";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -125,6 +132,31 @@ SalahTimesPageProps) => {
     return () => clearInterval(interval);
   }, [userLocations]);
 
+  const handleNotificationPermissions = async () => {
+    const userNotificationPermission = await checkNotificationPermissions();
+
+    if (userNotificationPermission === "denied") {
+      await promptToOpenDeviceSettings(
+        `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
+        AndroidSettings.AppNotification
+      );
+      return "denied";
+    } else if (userNotificationPermission === "granted") {
+      return "granted";
+    } else if (
+      userNotificationPermission === "prompt" ||
+      userNotificationPermission === "prompt-with-rationale"
+    ) {
+      const requestPermission = await LocalNotifications.requestPermissions();
+
+      if (requestPermission.display === "granted") {
+        return "granted";
+      } else if (requestPermission.display === "denied") {
+        return "denied";
+      }
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -151,17 +183,16 @@ SalahTimesPageProps) => {
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations?.length !== 0 && (
             <section className="p-4 my-5 mx-2 rounded-lg bg-[color:var(--card-bg-color)] ">
-              {/* <p className="mb-1 text-lg text-center ">Upcoming Salah</p> */}
-              {/* <p className="mb-5 text-6xl font-bold text-center">
-                {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
-                  nextSalahNameAndTime.nextSalah.slice(1)}
-              </p> */}
-              {nextSalahNameAndTime.currentSalah !== "sunrise" && (
-                <p className="mb-5 text-6xl font-bold text-center">
-                  {nextSalahNameAndTime.currentSalah.charAt(0).toUpperCase() +
-                    nextSalahNameAndTime.currentSalah.slice(1)}
-                </p>
-              )}
+              <p className="mb-1 text-lg text-center font-extralight">
+                Current Salah
+              </p>
+              {nextSalahNameAndTime.currentSalah !== "sunrise" &&
+                nextSalahNameAndTime.currentSalah !== "none" && (
+                  <p className="mb-5 text-6xl font-bold text-center">
+                    {nextSalahNameAndTime.currentSalah.charAt(0).toUpperCase() +
+                      nextSalahNameAndTime.currentSalah.slice(1)}
+                  </p>
+                )}
               <p className="text-4xl text-center">
                 {/* {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")} */}
               </p>
@@ -218,7 +249,7 @@ SalahTimesPageProps) => {
                 </section>
               ))}{" "}
               <IonButton
-                onClick={() => {
+                onClick={async () => {
                   setShowLocationsListSheet(true);
                 }}
                 style={{
@@ -270,19 +301,24 @@ SalahTimesPageProps) => {
                 <p>{time === "Invalid Date" ? "--:--" : time}</p>
                 <IonButton
                   className={name === "sunrise" ? "opacity-0" : "opacity-100"}
-                  onClick={() => {
+                  onClick={async () => {
                     if (name === "sunrise") return;
 
                     if (
+                      userPreferences.prayerCalculationMethod === null ||
                       userPreferences.prayerCalculationMethod === "" ||
                       userLocations?.length === 0
                     ) {
                       return;
                     }
 
-                    console.log("name: ", name);
-                    setSelectedSalah(name);
-                    setShowSalahNotificationsSheet(true);
+                    const notificationPermission =
+                      await handleNotificationPermissions();
+
+                    if (notificationPermission === "granted") {
+                      setSelectedSalah(name);
+                      setShowSalahNotificationsSheet(true);
+                    }
                   }}
                   fill="clear"
                   size="small"

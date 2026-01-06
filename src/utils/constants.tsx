@@ -144,7 +144,7 @@ export const scheduleDailyNotification = async (
             hour: hour,
             minute: minute,
           },
-          allowWhileIdle: true,
+          // allowWhileIdle: true,
           repeats: true,
         },
         channelId: "daily-reminder",
