@@ -65,7 +65,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   haptics: "0",
   theme: "dark",
   timeFormat: "12hr",
-  prayerCalculationMethod: "MuslimWorldLeague",
+  prayerCalculationMethod: "",
   madhab: "shafi",
   highLatitudeRule: "middleofthenight",
   fajrAngle: "18",
@@ -75,14 +75,14 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   asrAdjustment: "0",
   maghribAdjustment: "0",
   ishaAdjustment: "0",
-  shafaqRule: "general",
-  // PolarCircleResolution: "general",
   fajrNotification: "off",
   dhuhrNotification: "off",
   asrNotification: "off",
   maghribNotification: "off",
   ishaNotification: "off",
   hasSeenBatteryPrompt: "0",
+  shafaqRule: "general",
+  polarCircleResolution: "unresolved",
 };
 
 export const reasonsStyles =
@@ -508,6 +508,8 @@ export const getSalahTimes = async (
   ) => {
     const salahTime = new PrayerTimes(coordinates, todaysDate, params)[salah];
 
+    console.log("salahTimes: ", salahTime);
+
     const locale = navigator.language;
 
     return salahTime.toLocaleTimeString(locale, {
@@ -524,8 +526,6 @@ export const getSalahTimes = async (
     maghrib: extractSalahTime("maghrib"),
     isha: extractSalahTime("isha"),
   });
-
-  // console.log("salahTimes: ", salahTimes);
 };
 
 export const getNextSalah = async (

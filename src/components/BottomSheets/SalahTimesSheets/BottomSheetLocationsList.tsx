@@ -122,11 +122,11 @@ const BottomSheetLocationsList = ({
                 const { allLocations } = await fetchAllLocations(dbConnection);
                 setUserLocations(allLocations);
                 // await calculateActiveLocationSalahTimes();
-                await getSalahTimes(
-                  dbConnection,
-                  userPreferences,
-                  setSalahtimes
-                );
+                // await getSalahTimes(
+                //   dbConnection,
+                //   userPreferences,
+                //   setSalahtimes
+                // );
               }}
               className="flex items-center justify-between border-b"
             >

@@ -50,7 +50,7 @@ export interface userPreferencesType {
   maghribNotification: SalahNotificationSettings;
   ishaNotification: SalahNotificationSettings;
   hasSeenBatteryPrompt: binaryValue;
-  // PolarCircleResolution:
+  polarCircleResolution: "aqrabBalad" | "aqrabYaum" | "unresolved";
 }
 
 export type PreferenceType = keyof userPreferencesType;

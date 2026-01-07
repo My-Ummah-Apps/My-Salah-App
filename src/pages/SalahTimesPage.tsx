@@ -223,7 +223,7 @@ SalahTimesPageProps) => {
                 }}
                 className="w-1/2"
               >
-                Add Location
+                Set Up Salah Times
               </IonButton>
               <BottomSheetAddLocation
                 setShowAddLocationSheet={setShowAddLocationSheet}
@@ -287,9 +287,9 @@ SalahTimesPageProps) => {
           {Object.entries(salahTimes).map(([name, time]) => (
             <div
               // && name !== "sunrise"
-              className={`bg-[color:var(--card-bg-color)] flex items-center justify-between py-1 text-sm border-[var(--app-border-color)] rounded-lg ${
+              className={`bg-[color:var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg ${
                 name === nextSalahNameAndTime.currentSalah
-                  ? "my-2 rounded-lg shadow-md scale-102"
+                  ? "my-2 rounded-lg shadow-md scale-102 border border-[var(--app-border-color)]"
                   : ""
               }`}
               key={name + time}
@@ -335,7 +335,7 @@ SalahTimesPageProps) => {
         </section>
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations?.length !== 0 && (
-            <p className="mx-10 my-5 text-xs text-center">
+            <p className="mx-10 my-5 text-xs font-thin text-center">
               {`Note: These times have been calculated using the
             ${userPreferences.prayerCalculationMethod} method and may differ from
             your local Mosque times`}

@@ -222,7 +222,13 @@ const App = () => {
   }, [userPreferences.theme]);
 
   useEffect(() => {
-    if (!isDatabaseInitialised) return;
+    if (
+      !isDatabaseInitialised ||
+      userPreferences.prayerCalculationMethod === ""
+    )
+      return;
+
+    console.log("USEEFFECT FOR CALC HAS RUN");
 
     const calc = async () => {
       await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
@@ -267,7 +273,7 @@ const App = () => {
 
     scheduleSalahNotifications();
   }, [
-    // userPreferences.prayerCalculationMethod,
+    userPreferences.prayerCalculationMethod,
     userPreferences.madhab,
     userPreferences.highLatitudeRule,
     userPreferences.fajrAngle,
@@ -277,6 +283,9 @@ const App = () => {
     userPreferences.asrAdjustment,
     userPreferences.maghribAdjustment,
     userPreferences.ishaAdjustment,
+    userPreferences.shafaqRule,
+    userPreferences.polarCircleResolution,
+    userLocations,
   ]);
 
   useEffect(() => {
@@ -494,7 +503,7 @@ const App = () => {
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
 
-        await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
+        // await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
       } else {
         console.log("preference: ", preference);
 
@@ -505,7 +514,7 @@ const App = () => {
           setUserPreferences
         );
 
-        await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
+        // await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
       }
     };
 

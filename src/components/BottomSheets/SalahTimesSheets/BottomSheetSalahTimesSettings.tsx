@@ -30,6 +30,7 @@ import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomA
 import BottomSheetShafaqRules from "./BottomSheetShafaqRule";
 import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetMadhabOptions from "./BottomSheetMadhabOptions";
+import BottomSheetPolarCircleSetting from "./BottomSheetPolarCircleSetting";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -437,6 +438,28 @@ BottomSheetSalahTimesSettingsProps) => {
             </IonButton>
           </section>
         )}
+        <section className="px-2 mx-2 my-5  rounded-lg bg-[color:var(--card-bg-color)]">
+          <IonButton
+            // size="small"
+            id="open-polar-circle-settings-sheet"
+            expand="full"
+            style={{
+              ...buttonStyles,
+              "min-height": "40px",
+            }}
+            className="text-[var(--ion-text-color)] text-sm"
+          >
+            <div className="flex items-center justify-between w-full font-light">
+              <p className="">Polar Circle Resolution:</p>
+              <div className="flex items-center gap-1">
+                <p>{userPreferences.polarCircleResolution}</p>
+                <p>
+                  <MdOutlineChevronRight />
+                </p>
+              </div>
+            </div>
+          </IonButton>
+        </section>
       </IonContent>
       <BottomSheetCalculationMethods
         triggerId="open-salah-calculations-sheet"
@@ -478,6 +501,12 @@ BottomSheetSalahTimesSettingsProps) => {
       <BottomSheetShafaqRules
         setShowShafaqRulesSheet={setShowShafaqRulesSheet}
         showShafaqRulesSheet={showShafaqRulesSheet}
+        dbConnection={dbConnection}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
+      />
+      <BottomSheetPolarCircleSetting
+        triggerId="open-polar-circle-settings-sheet"
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
