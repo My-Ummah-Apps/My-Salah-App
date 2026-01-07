@@ -183,15 +183,19 @@ SalahTimesPageProps) => {
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations?.length !== 0 && (
             <section className="p-4 my-5 mx-2 rounded-lg bg-[color:var(--card-bg-color)] ">
-              <p className="mb-1 text-lg text-center font-extralight">
-                Current Salah
-              </p>
               {nextSalahNameAndTime.currentSalah !== "sunrise" &&
                 nextSalahNameAndTime.currentSalah !== "none" && (
-                  <p className="mb-5 text-6xl font-bold text-center">
-                    {nextSalahNameAndTime.currentSalah.charAt(0).toUpperCase() +
-                      nextSalahNameAndTime.currentSalah.slice(1)}
-                  </p>
+                  <>
+                    <p className="mb-1 text-lg text-center font-extralight">
+                      Current Salah
+                    </p>
+                    <p className="mb-5 text-6xl font-bold text-center">
+                      {nextSalahNameAndTime.currentSalah
+                        .charAt(0)
+                        .toUpperCase() +
+                        nextSalahNameAndTime.currentSalah.slice(1)}
+                    </p>
+                  </>
                 )}
               <p className="text-4xl text-center">
                 {/* {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")} */}
@@ -335,7 +339,7 @@ SalahTimesPageProps) => {
         </section>
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations?.length !== 0 && (
-            <p className="mx-10 my-5 text-xs font-thin text-center">
+            <p className="mx-10 my-5 text-xs text-center text-gray-400">
               {`Note: These times have been calculated using the
             ${userPreferences.prayerCalculationMethod} method and may differ from
             your local Mosque times`}

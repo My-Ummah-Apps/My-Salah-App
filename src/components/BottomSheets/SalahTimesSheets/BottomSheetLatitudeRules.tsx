@@ -1,6 +1,7 @@
 import {
   IonContent,
   IonHeader,
+  IonIcon,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -13,6 +14,7 @@ import {
   MODAL_BREAKPOINTS,
   updateUserPrefs,
 } from "../../../utils/constants";
+import { checkmarkCircle, statsChartOutline } from "ionicons/icons";
 
 // import { CalculationMethod } from "adhan";
 
@@ -31,61 +33,90 @@ const BottomSheetLatitudeRules = ({
 }: BottomSheetLatitudeRulesProps) => {
   return (
     <IonModal
-      //   className="modal-fit-content"
+      className="modal-fit-content"
       mode="ios"
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
       // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
-      style={{ "--height": "80vh" }}
       // expandToScroll={false}
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Latitude Options</IonTitle>
+      <IonHeader className="ion-no-border">
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
+          <IonTitle>High Latitude Rule</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <section className="px-4 mt-10">
-          <div
-            onClick={async () => {
-              await updateUserPrefs(
-                dbConnection,
-                "highLatitudeRule",
-                "middleofthenight",
-                setUserPreferences
-              );
-            }}
-            className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.highLatitudeRule === "middleofthenight"
-                ? "bg-blue-500"
-                : ""
-            }`}
-          >
-            <h5 className="mt-0">Middle Of The Night</h5>
-            <p className="text-sm">
+      {/* <IonContent> */}
+      <section className="mx-4">
+        <div
+          onClick={async () => {
+            await updateUserPrefs(
+              dbConnection,
+              "highLatitudeRule",
+              "middleofthenight",
+              setUserPreferences
+            );
+          }}
+          className={`p-2 mb-5 rounded-lg flex justify-between bg-[var(--sheet-option-bg)] border ${
+            userPreferences.highLatitudeRule === "middleofthenight"
+              ? "border-blue-500"
+              : "border-transparent"
+          }`}
+        >
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.highLatitudeRule === "middleofthenight"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+
+          <div>
+            <p className="mt-0">Middle Of The Night</p>
+            <p className="text-xs">
               Fajr will never be earlier than the middle of the night and Isha
               will never be later than the middle of the night.
             </p>
           </div>
-          <div
-            onClick={async () => {
-              await updateUserPrefs(
-                dbConnection,
-                "highLatitudeRule",
-                "seventhofthenight",
-                setUserPreferences
-              );
-            }}
-            className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.highLatitudeRule === "seventhofthenight"
-                ? "bg-blue-500"
-                : ""
-            }`}
-          >
-            <h5 className="mt-0">Seventh Of The Night</h5>
-            <p className="text-sm">
+        </div>
+        <div
+          onClick={async () => {
+            await updateUserPrefs(
+              dbConnection,
+              "highLatitudeRule",
+              "seventhofthenight",
+              setUserPreferences
+            );
+          }}
+          className={`p-2 mb-5 rounded-lg flex justify-between bg-[var(--sheet-option-bg)] border  ${
+            userPreferences.highLatitudeRule === "seventhofthenight"
+              ? "border-blue-500"
+              : "border-transparent"
+          }`}
+        >
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.highLatitudeRule === "seventhofthenight"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />{" "}
+          </div>
+          <div>
+            <p className="mt-0">Seventh Of The Night</p>
+            <p className="text-xs">
               Fajr will never be earlier than the beginning of the last seventh
               of the night and Isha will never be later than the end of the
               first seventh of the night. This is recommended to use for
@@ -93,31 +124,45 @@ const BottomSheetLatitudeRules = ({
               difficult to perform.
             </p>
           </div>
-          <div
-            onClick={async () => {
-              await updateUserPrefs(
-                dbConnection,
-                "highLatitudeRule",
-                "twilightangle",
-                setUserPreferences
-              );
-            }}
-            className={`p-2 mb-5 border rounded-lg ${
-              userPreferences.highLatitudeRule === "twilightangle"
-                ? "bg-blue-500"
-                : ""
-            }`}
-          >
-            <h5 className="mt-0">Twilight Angle</h5>
-            <p className="text-sm">
+        </div>
+        <div
+          onClick={async () => {
+            await updateUserPrefs(
+              dbConnection,
+              "highLatitudeRule",
+              "twilightangle",
+              setUserPreferences
+            );
+          }}
+          className={`p-2 mb-5 rounded-lg flex justify-between bg-[var(--sheet-option-bg)] border ${
+            userPreferences.highLatitudeRule === "twilightangle"
+              ? "border-blue-500"
+              : "border-transparent"
+          }`}
+        >
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={`${
+                userPreferences.highLatitudeRule === "twilightangle"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />{" "}
+          </div>
+          <div>
+            <p className="mt-0">Twilight Angle</p>
+            <p className="text-xs">
               The night is divided into portions of roughly 1/3. The exact value
               is derived by dividing the fajr/isha angles by 60. This can be
               used to prevent difficult fajr and isha times at certain
               locations.
             </p>
           </div>
-        </section>
-      </IonContent>
+        </div>
+      </section>
+      {/* </IonContent> */}
     </IonModal>
   );
 };

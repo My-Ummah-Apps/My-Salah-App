@@ -82,7 +82,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   ishaNotification: "off",
   hasSeenBatteryPrompt: "0",
   shafaqRule: "general",
-  polarCircleResolution: "unresolved",
+  polarCircleResolution: "Unresolved",
 };
 
 export const reasonsStyles =
@@ -449,14 +449,16 @@ export const generateActiveLocationParams = async (
 
   const { activeLocation } = await fetchAllLocations(dbConnection);
 
-  // const activeLocation = locations?.filter((loc) => loc.isSelected === 1)[0];
-
   const coordinates = new Coordinates(
     activeLocation?.latitude,
     activeLocation?.longitude
   );
 
   // console.log("activeLocation: ", activeLocation);
+  // console.log(
+  //   "serPreferences.prayerCalculationMethod: ",
+  //   CalculationMethod[userPreferences.prayerCalculationMethod]()
+  // );
 
   const params =
     CalculationMethod[
@@ -480,6 +482,7 @@ export const generateActiveLocationParams = async (
   params.methodAdjustments.maghrib = Number(userPreferences.maghribAdjustment);
   params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
   params.shafaq = userPreferences.shafaqRule;
+  params.polarCircleResolution = userPreferences.polarCircleResolution;
 
   // console.log("params after amendments:", params);
 

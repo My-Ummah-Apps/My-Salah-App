@@ -75,6 +75,7 @@ const BottomSheetSalahTimeCustomAdjustments = ({
           value={increment}
           onIonChange={({ detail }) => {
             setIncrement(String(detail.value));
+            console.log("CHANGED");
           }}
         >
           {arr.map((item) => {
