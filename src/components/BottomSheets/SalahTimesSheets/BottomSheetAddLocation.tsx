@@ -387,7 +387,7 @@ const BottomSheetAddLocation = ({
             use one of the three methods below. <br></br>
             <br></br>For the most accurate results, Methods 1 & 2 (GPS and
             latitude/longitude) are recommended. Method 3 (City search) is less
-            precise and may give less accurate Salah times.
+            precise so may give less accurate Salah times.
           </p>
         </section>
         <IonCard>
