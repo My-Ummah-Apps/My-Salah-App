@@ -80,8 +80,12 @@ const BottomSheetSalahNotifications = ({
       }}
       // style={{ "--height": "80vh" }}
     >
-      <IonHeader>
-        <IonToolbar>
+      <IonHeader className="ion-no-border">
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
           <IonTitle>
             {selectedSalah.charAt(0).toUpperCase() + selectedSalah.slice(1)}{" "}
             Notifications

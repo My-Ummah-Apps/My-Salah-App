@@ -1,8 +1,11 @@
 import {
+  IonHeader,
   IonModal,
   IonPicker,
   IonPickerColumn,
   IonPickerColumnOption,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -63,7 +66,18 @@ const BottomSheetCustomAngles = ({
         setShowCustomAnglesSheet(false);
       }}
     >
-      <IonPicker className="my-5">
+      <IonHeader className="ion-no-border">
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
+          <IonTitle>
+            {customAngleSalah === "fajrAngle" ? "Fajr Angle" : "Isha Angle"}
+          </IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonPicker className="">
         <IonPickerColumn
           value={increment}
           onIonChange={({ detail }) => {
