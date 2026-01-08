@@ -80,10 +80,16 @@ BottomSheetSalahTimesSettingsProps) => {
 
   // console.log(HighLatitudeRule.recommended());
 
-  const latitudeRuleDict = {
+  const latitudeRuleValues = {
     middleofthenight: "Middle of the Night",
     seventhofthenight: "Seventh of the Night",
     twilightangle: "Twilight Angle",
+  };
+
+  const polarCircleResolutionValues = {
+    unresolved: "Unresolved (default)",
+    aqrabBalad: "Closest City",
+    aqrabYaum: "Closest Date",
   };
 
   const buttonStyles = {
@@ -212,7 +218,7 @@ BottomSheetSalahTimesSettingsProps) => {
             <div className="flex items-center justify-between w-full py-3  px-1 bg-[color:var(--card-bg-color)] rounded-lg">
               <p className="">High Latitude Rule:</p>
               <div className="flex items-center gap-1">
-                <p>{latitudeRuleDict[userPreferences.highLatitudeRule]}</p>
+                <p>{latitudeRuleValues[userPreferences.highLatitudeRule]}</p>
                 {/* <p>
                   {CalculationMethod[
                     selectedCalculationMethod || "MuslimWorldLeague"
@@ -466,7 +472,13 @@ BottomSheetSalahTimesSettingsProps) => {
             <div className="flex items-center justify-between w-full py-3  px-1 bg-[color:var(--card-bg-color)] rounded-lg font-light">
               <p className="">Polar Circle Resolution:</p>
               <div className="flex items-center gap-1">
-                <p>{userPreferences.polarCircleResolution}</p>
+                <p>
+                  {
+                    polarCircleResolutionValues[
+                      userPreferences.polarCircleResolution
+                    ]
+                  }
+                </p>
                 <p>
                   <MdOutlineChevronRight />
                 </p>

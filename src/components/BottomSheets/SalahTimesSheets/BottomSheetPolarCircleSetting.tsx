@@ -1,6 +1,7 @@
 import {
   IonContent,
   IonHeader,
+  IonIcon,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -13,6 +14,7 @@ import {
   MODAL_BREAKPOINTS,
   updateUserPrefs,
 } from "../../../utils/constants";
+import { checkmarkCircle } from "ionicons/icons";
 
 // import { CalculationMethod } from "adhan";
 
@@ -42,17 +44,21 @@ const BottomSheetPolarCircleSetting = ({
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
     >
-      <IonHeader>
-        <IonToolbar>
+      <IonHeader className="ion-no-border">
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
           <IonTitle>Polar Circle Resolution</IonTitle>
         </IonToolbar>
       </IonHeader>
       {/* <IonContent> */}
-      <section className="px-4 mt-10">
-        <p className="mb-5">
+      <section className="px-4">
+        {/* <p className="mb-5">
           Shafaq is used to determine what type of twilight to use in order to
           determine the time for Isha.
-        </p>
+        </p> */}
         <div
           onClick={async () => {
             await updateUserPrefs(
@@ -62,20 +68,35 @@ const BottomSheetPolarCircleSetting = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.polarCircleResolution === "Unresolved"
-              ? "bg-blue-500"
-              : ""
+          className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)]  ${
+            userPreferences.polarCircleResolution === "unresolved"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">Unresolved</h5>
-          <p className="text-sm">
-            (default) Leaves sunrise and sunset prayer times undefined when they
-            can't be computed
-          </p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.polarCircleResolution === "unresolved"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+          <div>
+            <p className="mt-0">Unresolved (default)</p>
+            <p className="text-xs">
+              Leaves sunrise and sunset prayer times undefined when they can't
+              be computed
+            </p>
+          </div>
         </div>
         <div
           onClick={async () => {
+            console.log("LOGGED");
+
             await updateUserPrefs(
               dbConnection,
               "polarCircleResolution",
@@ -83,17 +104,30 @@ const BottomSheetPolarCircleSetting = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.polarCircleResolution === "AqrabBalad"
-              ? "bg-blue-500"
-              : ""
+          className={`p-2 mb-5 border rounded-lg bg-[var(--sheet-option-bg)] flex ${
+            userPreferences.polarCircleResolution === "aqrabBalad"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">AqrabBalad</h5>
-          <p className="text-sm">
-            Finds the closest location for which sunrise and sunset prayer times
-            can be computed
-          </p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.polarCircleResolution === "aqrabBalad"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+          <div>
+            <p className="mt-0">Closest City</p>
+            <p className="text-xs">
+              Finds the closest location for which sunrise and sunset prayer
+              times can be computed
+            </p>
+          </div>
         </div>
         <div
           onClick={async () => {
@@ -104,17 +138,30 @@ const BottomSheetPolarCircleSetting = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.polarCircleResolution === "AqrabYaum"
-              ? "bg-blue-500"
-              : ""
+          className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)] ${
+            userPreferences.polarCircleResolution === "aqrabYaum"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">AqrabYaum</h5>
-          <p className="text-sm">
-            Finds the closest date (forward or backward) for which sunrise and
-            sunset prayer times can be computed
-          </p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.polarCircleResolution === "aqrabYaum"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+          <div>
+            <p className="mt-0">Closest Date</p>
+            <p className="text-xs">
+              Finds the closest date (forward or backward) for which sunrise and
+              sunset prayer times can be computed
+            </p>
+          </div>
         </div>
       </section>
       {/* </IonContent> */}

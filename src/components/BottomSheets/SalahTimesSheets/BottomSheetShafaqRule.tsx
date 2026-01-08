@@ -60,7 +60,7 @@ const BottomSheetShafaqRules = ({
         </IonToolbar>
       </IonHeader>
       <section className="px-4">
-        <p className="mb-5 text-sm">
+        <p className="mb-5 text-xs">
           Shafaq is used to determine what type of twilight to use in order to
           determine the time for Isha.
         </p>
@@ -127,7 +127,7 @@ const BottomSheetShafaqRules = ({
           </div>
           <div>
             <p className="mt-0">Ahmer</p>
-            <p className="text-sm">
+            <p className="text-xs">
               Ahmer means the twilight is the red glow in the sky. Used by the
               Shafi, Maliki, and Hanbali madhabs. This generally produces an
               earlier Isha time.
@@ -162,7 +162,7 @@ const BottomSheetShafaqRules = ({
           </div>
           <div>
             <p className="mt-0">Abyad</p>
-            <p className="text-sm">
+            <p className="text-xs">
               Abyad means the twilight is the white glow in the sky. Used by the
               Hanafi madhab. This generally produces a later Isha time.
             </p>

@@ -82,7 +82,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   ishaNotification: "off",
   hasSeenBatteryPrompt: "0",
   shafaqRule: "general",
-  polarCircleResolution: "Unresolved",
+  polarCircleResolution: "unresolved",
 };
 
 export const reasonsStyles =
