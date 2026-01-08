@@ -1,4 +1,11 @@
-import { IonContent, IonModal } from "@ionic/react";
+import {
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonModal,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../../../types/types";
@@ -7,6 +14,7 @@ import {
   MODAL_BREAKPOINTS,
   updateUserPrefs,
 } from "../../../utils/constants";
+import { checkmarkCircle } from "ionicons/icons";
 
 // import { CalculationMethod } from "adhan";
 
@@ -42,14 +50,17 @@ const BottomSheetShafaqRules = ({
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
     >
-      {/* <IonHeader>
-        <IonToolbar>
-          <IonTitle>Calculation Methods</IonTitle>
+      <IonHeader className="ion-no-border">
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
+          <IonTitle>Shafaq Rule</IonTitle>
         </IonToolbar>
-      </IonHeader> */}
-      {/* <IonContent> */}
-      <section className="px-4 mt-10">
-        <p className="mb-5">
+      </IonHeader>
+      <section className="px-4">
+        <p className="mb-5 text-sm">
           Shafaq is used to determine what type of twilight to use in order to
           determine the time for Isha.
         </p>
@@ -62,16 +73,31 @@ const BottomSheetShafaqRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.shafaqRule === "general" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 border rounded-lg bg-[var(--sheet-option-bg)] flex ${
+            userPreferences.shafaqRule === "general"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">General</h5>
-          <p className="text-sm">
-            General is a combination of Ahmer and Abyad. This is the defualt
-            value and will provide more reasonable times for locations at higher
-            latitudes.
-          </p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.shafaqRule === "general"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+          <div>
+            <p className="mt-0">General</p>
+            <p className="text-xs">
+              General is a combination of Ahmer and Abyad. This is the defualt
+              value and will provide more reasonable times for locations at
+              higher latitudes.
+            </p>
+          </div>
         </div>
         <div
           onClick={async () => {
@@ -82,16 +108,31 @@ const BottomSheetShafaqRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.shafaqRule === "ahmer" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 border rounded-lg bg-[var(--sheet-option-bg)] flex ${
+            userPreferences.shafaqRule === "ahmer"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">Ahmer</h5>
-          <p className="text-sm">
-            Ahmer means the twilight is the red glow in the sky. Used by the
-            Shafi, Maliki, and Hanbali madhabs. This generally produces an
-            earlier Isha time.
-          </p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.shafaqRule === "ahmer"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+          <div>
+            <p className="mt-0">Ahmer</p>
+            <p className="text-sm">
+              Ahmer means the twilight is the red glow in the sky. Used by the
+              Shafi, Maliki, and Hanbali madhabs. This generally produces an
+              earlier Isha time.
+            </p>
+          </div>
         </div>
         <div
           onClick={async () => {
@@ -102,15 +143,30 @@ const BottomSheetShafaqRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.shafaqRule === "abyad" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)] ${
+            userPreferences.shafaqRule === "abyad"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">Abyad</h5>
-          <p className="text-sm">
-            Abyad means the twilight is the white glow in the sky. Used by the
-            Hanafi madhab. This generally produces a later Isha time.
-          </p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.shafaqRule === "abyad"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+          <div>
+            <p className="mt-0">Abyad</p>
+            <p className="text-sm">
+              Abyad means the twilight is the white glow in the sky. Used by the
+              Hanafi madhab. This generally produces a later Isha time.
+            </p>
+          </div>
         </div>
       </section>
       {/* </IonContent> */}

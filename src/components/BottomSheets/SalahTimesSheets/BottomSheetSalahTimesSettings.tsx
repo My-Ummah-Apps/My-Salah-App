@@ -80,6 +80,12 @@ BottomSheetSalahTimesSettingsProps) => {
 
   // console.log(HighLatitudeRule.recommended());
 
+  const latitudeRuleDict = {
+    middleofthenight: "Middle of the Night",
+    seventhofthenight: "Seventh of the Night",
+    twilightangle: "Twilight Angle",
+  };
+
   const buttonStyles = {
     "--background": "transparent",
     padding: 0,
@@ -206,7 +212,7 @@ BottomSheetSalahTimesSettingsProps) => {
             <div className="flex items-center justify-between w-full py-3  px-1 bg-[color:var(--card-bg-color)] rounded-lg">
               <p className="">High Latitude Rule:</p>
               <div className="flex items-center gap-1">
-                <p>{userPreferences.highLatitudeRule}</p>
+                <p>{latitudeRuleDict[userPreferences.highLatitudeRule]}</p>
                 {/* <p>
                   {CalculationMethod[
                     selectedCalculationMethod || "MuslimWorldLeague"
