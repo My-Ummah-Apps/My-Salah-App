@@ -19,7 +19,12 @@ import {
 } from "../../../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
 import { Capacitor } from "@capacitor/core";
-import { checkmarkCircle, notificationsOff } from "ionicons/icons";
+import {
+  checkmarkCircle,
+  megaphone,
+  notifications,
+  notificationsOff,
+} from "ionicons/icons";
 
 // import { CalculationMethod } from "adhan";
 
@@ -41,7 +46,7 @@ const BottomSheetSalahNotifications = ({
   userPreferences,
 }: BottomSheetSalahNotificationsProps) => {
   const key = `${selectedSalah}Notification`;
-  //   console.log("key: ", key);
+  console.log("key: ", key);
 
   const handleBatteryOptimisation = async () => {
     if (
@@ -84,30 +89,32 @@ const BottomSheetSalahNotifications = ({
         </IonToolbar>
       </IonHeader>
       {/* <IonContent > */}
-      <section className="px-4 mt-10">
+      <section className="px-4">
         <div
           onClick={async () => {
             await updateUserPrefs(dbConnection, key, "off", setUserPreferences);
 
             await cancelSalahReminderNotifications(selectedSalah);
           }}
-          className={`p-2 mb-5 border rounded-lg flex justify-between ${
-            userPreferences[key] === "off" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 border rounded-lg flex justify-between bg-[var(--sheet-option-bg)] ${
+            userPreferences[key] === "off"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
           <div className="flex">
             <div className="mr-2">
               <IonIcon
                 color="primary"
-                // className={` ${
-                //   userPreferences.madhab === "shafi" ? "opacity-100" : "opacity-0"
-                // }`}
+                className={` ${
+                  userPreferences[key] === "off" ? "opacity-100" : "opacity-0"
+                }`}
                 icon={checkmarkCircle}
               />
             </div>
             <div>
               <p className="mt-0">Silent</p>
-              <p className="text-sm">No notifications will be sent.</p>
+              <p className="text-xs">No notifications will be sent.</p>
             </div>
           </div>
           <div
@@ -132,12 +139,35 @@ const BottomSheetSalahNotifications = ({
 
             await handleBatteryOptimisation();
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences[key] === "on" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 border rounded-lg flex justify-between bg-[var(--sheet-option-bg)]  ${
+            userPreferences[key] === "on"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <p className="mt-0">Notification</p>
-          <p className="text-sm">Banner notification with default sound.</p>
+          <div className="flex">
+            <div className="mr-2">
+              <IonIcon
+                color="primary"
+                className={` ${
+                  userPreferences[key] === "on" ? "opacity-100" : "opacity-0"
+                }`}
+                icon={checkmarkCircle}
+              />
+            </div>
+            <div>
+              <p className="mt-0">On</p>
+              <p className="text-xs">
+                Banner notification only with default system sound.
+              </p>
+            </div>
+          </div>
+          <div
+            // className="flex items-center mr-4"
+            className="flex items-center "
+          >
+            <IonIcon icon={notifications} />
+          </div>
         </div>
         <div
           onClick={async () => {
@@ -158,14 +188,35 @@ const BottomSheetSalahNotifications = ({
 
             await handleBatteryOptimisation();
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences[key] === "adhan" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 border rounded-lg flex justify-between bg-[var(--sheet-option-bg)] ${
+            userPreferences[key] === "adhan"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <p className="mt-0">Adhan</p>
-          <p className="text-sm">
-            Adhan by [insert name] + banner notification
-          </p>
+          <div className="flex">
+            <div className="mr-2">
+              <IonIcon
+                color="primary"
+                className={` ${
+                  userPreferences[key] === "adhan" ? "opacity-100" : "opacity-0"
+                }`}
+                icon={checkmarkCircle}
+              />
+            </div>
+            <div>
+              <p className="mt-0">Athan</p>
+              <p className="text-xs">
+                Athan by Mishary Rashid Al-Afasy + banner notification
+              </p>
+            </div>
+          </div>
+          <div
+            // className="flex items-center mr-4"
+            className="flex items-center "
+          >
+            <IonIcon icon={megaphone} />
+          </div>
         </div>
       </section>
       {/* </IonContent> */}

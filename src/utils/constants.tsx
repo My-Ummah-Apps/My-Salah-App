@@ -508,7 +508,7 @@ export const getSalahTimes = async (
   ) => {
     const salahTime = new PrayerTimes(coordinates, todaysDate, params)[salah];
 
-    console.log("salahTimes: ", salahTime);
+    // console.log("salahTimes: ", salahTime);
 
     const locale = navigator.language;
 
