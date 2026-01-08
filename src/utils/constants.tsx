@@ -301,11 +301,16 @@ export const cancelSalahReminderNotifications = async (
   console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
 
   const pendingNotifications = await LocalNotifications.getPending();
+
   const notificationsToCancel = pendingNotifications.notifications
     .filter((item) => item.title === salahName)
     .map((n) => ({
       id: n.id,
     }));
+
+  console.log("notificationsToCancel: ", notificationsToCancel);
+
+  if (notificationsToCancel.length === 0) return;
 
   await LocalNotifications.cancel({ notifications: notificationsToCancel });
 
@@ -360,10 +365,14 @@ export const scheduleSalahTimesNotifications = async (
 
   // console.log("nextSevenDays: ", nextSevenDays);
 
-  // const { activeLocation } = await fetchAllLocations(dbConnection);
-  const useAdhan = setting;
+  const sound =
+    setting === "adhan"
+      ? device === "android"
+        ? "adhan.mp3"
+        : "adhan.wav"
+      : "default";
 
-  if (useAdhan === "on" || useAdhan === "adhan") {
+  if (setting === "on" || setting === "adhan") {
     const { params, coordinates, todaysDate } =
       await generateActiveLocationParams(dbConnection, userPreferences);
 
@@ -390,50 +399,30 @@ export const scheduleSalahTimesNotifications = async (
       // console.log("arr: ", arr);
     }
     // ! remove web when not in dev
-    if (device === "android" || device === "web") {
-      for (let i = 0; i < arr.length; i++) {
-        const uniqueId = generateNotificationId(salahName, arr[i]);
-        console.log("Unique ID: ", typeof uniqueId);
+    // if (device === "android" || device === "web") {
+    for (let i = 0; i < arr.length; i++) {
+      const uniqueId = generateNotificationId(salahName, arr[i]);
 
-        await LocalNotifications.schedule({
-          notifications: [
-            {
-              id: uniqueId,
-              title: `${salahName}`,
-              body: `It's time to pray ${salahName}`,
-              schedule: {
-                at: arr[i],
-                allowWhileIdle: true,
-                repeats: false,
-              },
-              sound: useAdhan === "adhan" ? "adhan.mp3" : "default",
-              channelId:
-                useAdhan === "adhan"
-                  ? "salah-reminders-with-adhan"
-                  : "salah-reminders-without-adhan",
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id: uniqueId,
+            title: `${salahName}`,
+            body: `It's time to pray ${salahName}`,
+            schedule: {
+              at: arr[i],
+              allowWhileIdle: true,
+              repeats: false,
             },
-          ],
-        });
-      }
+            sound: sound,
+            channelId:
+              setting === "adhan"
+                ? "salah-reminders-with-adhan"
+                : "salah-reminders-without-adhan",
+          },
+        ],
+      });
     }
-    // else if (device === "ios") {
-    //   await LocalNotifications.schedule({
-    //     notifications: [
-    //       {
-    //         id: 1, // ! These will need unique IDs for each notification
-    //         title: `${salahName}`,
-    //         body: `It's time to pray ${salahName}`,
-    //         schedule: {
-    //           // at:
-    //           allowWhileIdle: true,
-    //           repeats: false,
-    //         },
-    //         sound: useAdhan === "adhan" ? "adhan.wav" : "default",
-    //         // foreground: true, // iOS only
-    //       },
-    //     ],
-    //   });
-    // }
   }
 
   console.log("PENDING NOTIFICATIONS: ", await LocalNotifications.getPending());
@@ -449,12 +438,16 @@ export const generateActiveLocationParams = async (
 
   const { activeLocation } = await fetchAllLocations(dbConnection);
 
+  console.log("activeLocation: ", activeLocation);
+  if (!activeLocation) {
+    throw new Error("No active location found");
+  }
+
   const coordinates = new Coordinates(
-    activeLocation?.latitude,
-    activeLocation?.longitude
+    activeLocation.latitude,
+    activeLocation.longitude
   );
 
-  // console.log("activeLocation: ", activeLocation);
   // console.log(
   //   "serPreferences.prayerCalculationMethod: ",
   //   CalculationMethod[userPreferences.prayerCalculationMethod]()
@@ -484,7 +477,7 @@ export const generateActiveLocationParams = async (
   params.shafaq = userPreferences.shafaqRule;
   params.polarCircleResolution = userPreferences.polarCircleResolution;
 
-  // console.log("params after amendments:", params);
+  console.log("params after amendments:", params);
 
   return { params, coordinates, todaysDate };
 };
@@ -505,6 +498,10 @@ export const getSalahTimes = async (
 ) => {
   const { params, coordinates, todaysDate } =
     await generateActiveLocationParams(dbConnection, userPreferences);
+
+  console.log("params: ", params);
+  console.log("coordinates: ", coordinates);
+  console.log("todaysDate: ", todaysDate);
 
   const extractSalahTime = (
     salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha"

@@ -60,7 +60,7 @@ export type PreferenceObjType = {
   preferenceValue: string;
 };
 
-type LocationsDataObjType = {
+export type LocationsDataObjType = {
   id: number;
   locationName: string;
   latitude: number;

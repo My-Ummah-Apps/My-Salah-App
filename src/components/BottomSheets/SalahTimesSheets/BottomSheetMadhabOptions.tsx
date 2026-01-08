@@ -1,6 +1,7 @@
 import {
   IonContent,
   IonHeader,
+  IonIcon,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -13,6 +14,7 @@ import {
   MODAL_BREAKPOINTS,
   updateUserPrefs,
 } from "../../../utils/constants";
+import { checkmarkCircle } from "ionicons/icons";
 
 // import { CalculationMethod } from "adhan";
 
@@ -52,11 +54,7 @@ const BottomSheetMadhabOptions = ({
         </IonToolbar>
       </IonHeader>
       {/* <IonContent> */}
-      <section className="px-4 mt-10">
-        {/* <p className="mb-5">
-            Shafaq is used to determine what type of twilight to use in order to
-            determine the time for Isha.
-          </p> */}
+      <section className="mx-4">
         <div
           onClick={async () => {
             await updateUserPrefs(
@@ -66,13 +64,28 @@ const BottomSheetMadhabOptions = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.madhab === "shafi" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 rounded-lg flex  bg-[var(--sheet-option-bg)] border ${
+            userPreferences.madhab === "shafi"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">Earlier Asr Time</h5>
-          <p className="text-sm">Shafi'i, Maliki & Hanbali</p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.madhab === "shafi" ? "opacity-100" : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />
+          </div>
+
+          <div>
+            <p className="mt-0">Shafi'i, Maliki & Hanbali</p>
+            <p className="text-xs">Earlier Asr time</p>
+          </div>
         </div>
+
         <div
           onClick={async () => {
             await updateUserPrefs(
@@ -82,12 +95,28 @@ const BottomSheetMadhabOptions = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg ${
-            userPreferences.madhab === "hanafi" ? "bg-blue-500" : ""
+          className={`p-2 mb-5 rounded-lg flex  bg-[var(--sheet-option-bg)] border  ${
+            userPreferences.madhab === "hanafi"
+              ? "border-blue-500"
+              : "border-transparent"
           }`}
         >
-          <h5 className="mt-0">Later Asr Time</h5>
-          <p className="text-sm">Hanafi</p>
+          <div className="mr-2">
+            <IonIcon
+              color="primary"
+              className={` ${
+                userPreferences.madhab === "hanafi"
+                  ? "opacity-100"
+                  : "opacity-0"
+              }`}
+              icon={checkmarkCircle}
+            />{" "}
+          </div>
+          {/* ! HANAFI NOW! */}
+          <div>
+            <p className="mt-0">Hanafi</p>
+            <p className="text-xs">Later Asr time</p>
+          </div>
         </div>
       </section>
       {/* </IonContent> */}

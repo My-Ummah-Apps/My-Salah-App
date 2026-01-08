@@ -62,7 +62,7 @@ const BottomSheetLatitudeRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 rounded-lg flex justify-between bg-[var(--sheet-option-bg)] border ${
+          className={`p-2 mb-5 rounded-lg flex bg-[var(--sheet-option-bg)] border ${
             userPreferences.highLatitudeRule === "middleofthenight"
               ? "border-blue-500"
               : "border-transparent"
@@ -97,7 +97,7 @@ const BottomSheetLatitudeRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 rounded-lg flex justify-between bg-[var(--sheet-option-bg)] border  ${
+          className={`p-2 mb-5 rounded-lg flex bg-[var(--sheet-option-bg)] border  ${
             userPreferences.highLatitudeRule === "seventhofthenight"
               ? "border-blue-500"
               : "border-transparent"
@@ -134,7 +134,7 @@ const BottomSheetLatitudeRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 rounded-lg flex justify-between bg-[var(--sheet-option-bg)] border ${
+          className={`p-2 mb-5 rounded-lg flex bg-[var(--sheet-option-bg)] border ${
             userPreferences.highLatitudeRule === "twilightangle"
               ? "border-blue-500"
               : "border-transparent"

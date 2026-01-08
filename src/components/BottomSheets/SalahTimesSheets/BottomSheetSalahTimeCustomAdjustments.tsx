@@ -1,8 +1,11 @@
 import {
+  IonHeader,
   IonModal,
   IonPicker,
   IonPickerColumn,
   IonPickerColumnOption,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -40,6 +43,14 @@ const BottomSheetSalahTimeCustomAdjustments = ({
     userPreferences[customAdjustmentSalah]
   );
 
+  const salahMap = {
+    fajrAdjustment: "Fajr Adjustment",
+    dhuhrAdjustment: "Dhuhr Adjustment",
+    asrAdjustment: "Asr Adjustment",
+    maghribAdjustment: "Maghrib Adjustment",
+    ishaAdjustment: "Isha Adjustment",
+  };
+
   const arr = [];
   for (let i = -60; i <= 60; i++) {
     arr.push(String(i));
@@ -70,7 +81,16 @@ const BottomSheetSalahTimeCustomAdjustments = ({
         setShowCustomAdjustmentsSheet(false);
       }}
     >
-      <IonPicker className="my-5">
+      <IonHeader className="ion-no-border">
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
+          <IonTitle>{salahMap[customAdjustmentSalah]}</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonPicker className="">
         <IonPickerColumn
           value={increment}
           onIonChange={({ detail }) => {

@@ -329,13 +329,17 @@ const App = () => {
         `SELECT * FROM salahDataTable`
       );
 
+      const DBResultLocations = await dbConnection.current?.query(
+        `SELECT * FROM userLocationsTable`
+      );
+
       // const DBResultLocations = await dbConnection.current?.query(
       //   `SELECT * FROM userLocationsTable`
       // );
-      const { allLocations: DBResultLocations } = await fetchAllLocations(
-        dbConnection,
-        true
-      );
+      // const { allLocations: DBResultLocations } = await fetchAllLocations(
+      //   dbConnection,
+      //   true
+      // );
 
       // console.log("DBResultPreferences: ", DBResultPreferences?.values);
 
@@ -359,7 +363,7 @@ const App = () => {
       //   `SELECT * FROM userLocationsTable`
       // );
       // console.log("Locations from DB: ", locations);
-      setUserLocations(DBResultLocations);
+      setUserLocations(DBResultLocations.values);
 
       const userNotificationPermission = await checkNotificationPermissions();
 

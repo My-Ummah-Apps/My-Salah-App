@@ -28,7 +28,11 @@ import {
   promptToOpenDeviceSettings,
 } from "../../../utils/constants";
 import { LocationsDataObjTypeArr } from "../../../types/types";
-import { addUserLocation, fetchAllLocations } from "../../../utils/dbUtils";
+import {
+  addUserLocation,
+  fetchAllLocations,
+  toggleDBConnection,
+} from "../../../utils/dbUtils";
 
 const allCities = cities.map(
   (obj: { country: string; name: string; lat: number; lon: number }) => {
@@ -344,32 +348,59 @@ const BottomSheetAddLocation = ({
                   }
 
                   if (latitude && longitude && locationName) {
-                    await addUserLocation(
-                      dbConnection,
-                      locationName,
-                      latitude,
-                      longitude
-                    );
+                    try {
+                      const isSelected = userLocations.length === 0 ? 1 : 0;
 
-                    const { allLocations } = await fetchAllLocations(
-                      dbConnection
-                    );
-                    console.log("Locations: ", allLocations);
+                      await toggleDBConnection(dbConnection, "open");
 
-                    if (allLocations) {
-                      if (allLocations.length === 1) {
-                        setShowSalahTimesSettingsSheet?.(true);
+                      const result = await addUserLocation(
+                        dbConnection,
+                        locationName,
+                        latitude,
+                        longitude,
+                        isSelected
+                      );
+
+                      if (!result?.changes?.lastId) {
+                        throw new Error(
+                          "Failed to insert location: no ID returned"
+                        );
                       }
-                      setShowAddLocationSheet(false);
-                      setUserLocations(allLocations);
-                      setShowLocationAddedToast(true);
-                    } else {
-                      console.error("Locations undefined");
+
+                      const { allLocations } = await fetchAllLocations(
+                        dbConnection
+                      );
+
+                      console.log("Locations: ", allLocations);
+
+                      if (allLocations) {
+                        if (allLocations.length === 1) {
+                          setShowSalahTimesSettingsSheet?.(true);
+                        }
+                        setShowAddLocationSheet(false);
+                        setUserLocations(allLocations);
+                        setShowLocationAddedToast(true);
+                        setUserLocations([
+                          ...userLocations,
+                          {
+                            id: result.changes.lastId,
+                            locationName: locationName,
+                            latitude: latitude,
+                            longitude: longitude,
+                            isSelected: userLocations.length === 0 ? 1 : 0,
+                          },
+                        ]);
+                      } else {
+                        console.error("Locations undefined");
+                      }
+
+                      console.log("RESETTING INPUT");
+
+                      handleInputPromptDismissed();
+                    } catch (error) {
+                    } finally {
+                      await toggleDBConnection(dbConnection, "close");
                     }
-
-                    console.log("RESETTING INPUT");
-
-                    handleInputPromptDismissed();
                   } else {
                     console.error("lat / long undefined");
                     return;

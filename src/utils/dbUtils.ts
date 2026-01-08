@@ -1,5 +1,9 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { DBConnectionStateType } from "../types/types";
+import {
+  DBConnectionStateType,
+  LocationsDataObjType,
+  LocationsDataObjTypeArr,
+} from "../types/types";
 
 export async function toggleDBConnection(
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
@@ -27,10 +31,10 @@ export async function toggleDBConnection(
       );
     } else if (action === "open" && isDatabaseOpen.result === false) {
       await dbConnection.current.open();
-      // console.log("DB CONNECTION OPENED");
+      console.log("DB CONNECTION OPENED");
     } else if (action === "close" && isDatabaseOpen.result === true) {
       await dbConnection.current.close();
-      // console.log("DB CONNECTION CLOSED");
+      console.log("DB CONNECTION CLOSED");
     } else {
       throw new Error(
         `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
@@ -45,8 +49,14 @@ export const fetchAllLocations = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   keepOpen: boolean = false
 ) => {
+  console.log("FETCH ALL LOCATIONS FUNCTION IS BEING RUN");
+
   try {
-    await toggleDBConnection(dbConnection, "open");
+    console.log("OPENING DB CONNECTION");
+
+    // await toggleDBConnection(dbConnection, "open");
+    console.log("CONNECTION OPENED");
+
     const res = await dbConnection.current?.query(
       "SELECT * from userLocationsTable"
     );
@@ -54,18 +64,24 @@ export const fetchAllLocations = async (
       throw new Error("Failed to obtain data from userLocationsTable");
     }
 
-    const allLocations = res.values;
-    const activeLocation = allLocations.filter(
+    console.log("res: ", res.values);
+
+    const allLocations: LocationsDataObjTypeArr = res.values;
+    const activeLocation: LocationsDataObjType = allLocations.filter(
       (loc) => loc.isSelected === 1
     )[0];
 
+    console.log("all locationsssss: ", allLocations);
+    console.log("activeLocation: ", activeLocation);
+
     return { allLocations, activeLocation };
   } catch (error) {
-    console.error(error);
+    console.error("fetchAllLocations failed", error);
     return { allLocations: [], activeLocation: null };
   } finally {
     if (!keepOpen) {
-      await toggleDBConnection(dbConnection, "close");
+      console.log("CLOSING DB");
+      // await toggleDBConnection(dbConnection, "close");
     }
   }
 };
@@ -74,26 +90,20 @@ export const addUserLocation = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   locationName: string,
   latitude: number,
-  longitude: number
+  longitude: number,
+  isSelected: number
 ) => {
-  try {
-    await toggleDBConnection(dbConnection, "open");
+  // const locations = await fetchAllLocations(dbConnection, true);
 
-    const locations = await fetchAllLocations(dbConnection, true);
+  // const isSelected = locations.allLocations.length === 0 ? 1 : 0;
 
-    const isSelected = locations.allLocations.length === 0 ? 1 : 0;
-
-    const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
+  const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
         VALUES (?, ?, ?, ?);
         `;
 
-    const params = [locationName, latitude, longitude, isSelected];
-    await dbConnection.current?.run(stmnt, params);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    await toggleDBConnection(dbConnection, "close");
-  }
+  const params = [locationName, latitude, longitude, isSelected];
+  const lastId = await dbConnection.current?.run(stmnt, params);
+  return lastId;
 };
 
 // export const modifyUserLocation = async (dbConnection, id, name, lat, long, isSelected) => {

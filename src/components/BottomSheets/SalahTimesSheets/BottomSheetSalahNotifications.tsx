@@ -1,6 +1,7 @@
 import {
   IonContent,
   IonHeader,
+  IonIcon,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -18,6 +19,7 @@ import {
 } from "../../../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
 import { Capacitor } from "@capacitor/core";
+import { checkmarkCircle, notificationsOff } from "ionicons/icons";
 
 // import { CalculationMethod } from "adhan";
 
@@ -88,14 +90,32 @@ const BottomSheetSalahNotifications = ({
             await updateUserPrefs(dbConnection, key, "off", setUserPreferences);
 
             await cancelSalahReminderNotifications(selectedSalah);
-            console.log("SELECTED SALAH: ", selectedSalah);
           }}
-          className={`p-2 mb-5 border rounded-lg ${
+          className={`p-2 mb-5 border rounded-lg flex justify-between ${
             userPreferences[key] === "off" ? "bg-blue-500" : ""
           }`}
         >
-          <h5 className="mt-0">Silent</h5>
-          <p className="text-sm">No notifications will be sent.</p>
+          <div className="flex">
+            <div className="mr-2">
+              <IonIcon
+                color="primary"
+                // className={` ${
+                //   userPreferences.madhab === "shafi" ? "opacity-100" : "opacity-0"
+                // }`}
+                icon={checkmarkCircle}
+              />
+            </div>
+            <div>
+              <p className="mt-0">Silent</p>
+              <p className="text-sm">No notifications will be sent.</p>
+            </div>
+          </div>
+          <div
+            // className="flex items-center mr-4"
+            className="flex items-center "
+          >
+            <IonIcon icon={notificationsOff} />
+          </div>
         </div>
         <div
           onClick={async () => {
@@ -116,7 +136,7 @@ const BottomSheetSalahNotifications = ({
             userPreferences[key] === "on" ? "bg-blue-500" : ""
           }`}
         >
-          <h5 className="mt-0">Notification</h5>
+          <p className="mt-0">Notification</p>
           <p className="text-sm">Banner notification with default sound.</p>
         </div>
         <div
@@ -142,7 +162,7 @@ const BottomSheetSalahNotifications = ({
             userPreferences[key] === "adhan" ? "bg-blue-500" : ""
           }`}
         >
-          <h5 className="mt-0">Adhan</h5>
+          <p className="mt-0">Adhan</p>
           <p className="text-sm">
             Adhan by [insert name] + banner notification
           </p>
