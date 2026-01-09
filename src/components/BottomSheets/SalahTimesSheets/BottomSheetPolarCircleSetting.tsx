@@ -69,7 +69,7 @@ const BottomSheetPolarCircleSetting = ({
             );
           }}
           className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)]  ${
-            userPreferences.polarCircleResolution === "unresolved"
+            userPreferences.polarCircleResolution === "Unresolved"
               ? "border-blue-500"
               : "border-transparent"
           }`}
@@ -78,7 +78,7 @@ const BottomSheetPolarCircleSetting = ({
             <IonIcon
               color="primary"
               className={` ${
-                userPreferences.polarCircleResolution === "unresolved"
+                userPreferences.polarCircleResolution === "Unresolved"
                   ? "opacity-100"
                   : "opacity-0"
               }`}
@@ -105,7 +105,7 @@ const BottomSheetPolarCircleSetting = ({
             );
           }}
           className={`p-2 mb-5 border rounded-lg bg-[var(--sheet-option-bg)] flex ${
-            userPreferences.polarCircleResolution === "aqrabBalad"
+            userPreferences.polarCircleResolution === "AqrabBalad"
               ? "border-blue-500"
               : "border-transparent"
           }`}
@@ -114,7 +114,7 @@ const BottomSheetPolarCircleSetting = ({
             <IonIcon
               color="primary"
               className={` ${
-                userPreferences.polarCircleResolution === "aqrabBalad"
+                userPreferences.polarCircleResolution === "AqrabBalad"
                   ? "opacity-100"
                   : "opacity-0"
               }`}
@@ -139,7 +139,7 @@ const BottomSheetPolarCircleSetting = ({
             );
           }}
           className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)] ${
-            userPreferences.polarCircleResolution === "aqrabYaum"
+            userPreferences.polarCircleResolution === "AqrabYaum"
               ? "border-blue-500"
               : "border-transparent"
           }`}
@@ -148,7 +148,7 @@ const BottomSheetPolarCircleSetting = ({
             <IonIcon
               color="primary"
               className={` ${
-                userPreferences.polarCircleResolution === "aqrabYaum"
+                userPreferences.polarCircleResolution === "AqrabYaum"
                   ? "opacity-100"
                   : "opacity-0"
               }`}

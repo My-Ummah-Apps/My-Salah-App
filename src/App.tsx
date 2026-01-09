@@ -228,7 +228,7 @@ const App = () => {
     )
       return;
 
-    console.log("USEEFFECT FOR CALC HAS RUN");
+    if (userLocations?.length === 0) return;
 
     const calc = async () => {
       await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
@@ -255,12 +255,6 @@ const App = () => {
           salahNotificationSetting === "on" ||
           salahNotificationSetting === "adhan"
         ) {
-          console.log(
-            "salahNotificationSetting is: ",
-            salahNotificationSetting,
-            "for Salah: ",
-            salahAdjustmentKey
-          );
           await scheduleSalahTimesNotifications(
             dbConnection,
             salahs[i],

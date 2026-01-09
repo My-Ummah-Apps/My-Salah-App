@@ -86,6 +86,22 @@ const BottomSheetAddLocation = ({
   const [longitude, setLongitude] = useState<number | null>(null);
   const [citySearchMode, setCitySearchMode] = useState(false);
 
+  const addUserLocation = async (
+    dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+    locationName: string,
+    latitude: number,
+    longitude: number,
+    isSelected: number
+  ) => {
+    const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
+        VALUES (?, ?, ?, ?);
+        `;
+
+    const params = [locationName, latitude, longitude, isSelected];
+    const lastId = await dbConnection.current?.run(stmnt, params);
+    return lastId;
+  };
+
   const clearLatLong = () => {
     setLatitude(null);
     setLongitude(null);

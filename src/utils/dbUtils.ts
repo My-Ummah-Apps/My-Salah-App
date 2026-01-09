@@ -46,17 +46,9 @@ export async function toggleDBConnection(
 }
 
 export const fetchAllLocations = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  keepOpen: boolean = false
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>
 ) => {
-  console.log("FETCH ALL LOCATIONS FUNCTION IS BEING RUN");
-
   try {
-    console.log("OPENING DB CONNECTION");
-
-    // await toggleDBConnection(dbConnection, "open");
-    console.log("CONNECTION OPENED");
-
     const res = await dbConnection.current?.query(
       "SELECT * from userLocationsTable"
     );
@@ -64,46 +56,16 @@ export const fetchAllLocations = async (
       throw new Error("Failed to obtain data from userLocationsTable");
     }
 
-    console.log("res: ", res.values);
-
     const allLocations: LocationsDataObjTypeArr = res.values;
     const activeLocation: LocationsDataObjType = allLocations.filter(
       (loc) => loc.isSelected === 1
     )[0];
 
-    console.log("all locationsssss: ", allLocations);
-    console.log("activeLocation: ", activeLocation);
-
     return { allLocations, activeLocation };
   } catch (error) {
     console.error("fetchAllLocations failed", error);
     return { allLocations: [], activeLocation: null };
-  } finally {
-    if (!keepOpen) {
-      console.log("CLOSING DB");
-      // await toggleDBConnection(dbConnection, "close");
-    }
   }
-};
-
-export const addUserLocation = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  locationName: string,
-  latitude: number,
-  longitude: number,
-  isSelected: number
-) => {
-  // const locations = await fetchAllLocations(dbConnection, true);
-
-  // const isSelected = locations.allLocations.length === 0 ? 1 : 0;
-
-  const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
-        VALUES (?, ?, ?, ?);
-        `;
-
-  const params = [locationName, latitude, longitude, isSelected];
-  const lastId = await dbConnection.current?.run(stmnt, params);
-  return lastId;
 };
 
 // export const modifyUserLocation = async (dbConnection, id, name, lat, long, isSelected) => {
@@ -133,48 +95,3 @@ export const addUserLocation = async (
 // }
 
 // }
-
-export const deleteUserLocation = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  id: number
-) => {
-  try {
-    await toggleDBConnection(dbConnection, "open");
-    console.log("EXECUTING DELETION, ID IS: ", id);
-
-    const stmnt = `DELETE FROM userLocationsTable WHERE id = ?`;
-
-    const params = [id];
-
-    await dbConnection.current?.run(stmnt, params);
-
-    // const res = await db.current.query(stmnt);
-    // setUserLocations(res.values);
-    // if this was the active location, make the first location in the new list active
-  } catch (error) {
-    console.error(error);
-  } finally {
-    await toggleDBConnection(dbConnection, "close");
-  }
-};
-
-export const updateActiveLocation = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  id: number
-) => {
-  try {
-    await toggleDBConnection(dbConnection, "open");
-
-    await dbConnection.current?.run(
-      `UPDATE userlocationsTable SET isSelected = 0`
-    );
-    await dbConnection.current?.run(
-      `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
-      [id]
-    );
-  } catch (error) {
-    console.error(error);
-  } finally {
-    await toggleDBConnection(dbConnection, "close");
-  }
-};

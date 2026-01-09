@@ -25,7 +25,7 @@ import {
   prayerCalculationMethodLabels,
   updateUserPrefs,
 } from "../../../utils/constants";
-import { fetchAllLocations } from "../../../utils/dbUtils";
+import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 import { useState } from "react";
 
 // import { CalculationMethod } from "adhan";
@@ -58,14 +58,24 @@ BottomSheetCalculationMethodsProps) => {
   const setDefaults = async (calcMethod: CalculationMethodsType) => {
     if (!userPreferences.prayerCalculationMethod) return;
 
-    const { activeLocation } = await fetchAllLocations(dbConnection);
+    let allLocations;
+
+    try {
+      await toggleDBConnection(dbConnection, "open");
+
+      allLocations = await fetchAllLocations(dbConnection);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      await toggleDBConnection(dbConnection, "close");
+    }
 
     const params = CalculationMethod[calcMethod]();
 
     const latitudeRule =
       typeof params.highLatitudeRule === "string"
         ? params.highLatitudeRule
-        : params.highLatitudeRule(activeLocation.latitude);
+        : params.highLatitudeRule(allLocations?.activeLocation.latitude);
 
     await updateUserPrefs(
       dbConnection,

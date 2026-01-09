@@ -435,51 +435,56 @@ export const generateActiveLocationParams = async (
   // if (!isDatabaseInitialised) return;
 
   const todaysDate = new Date();
+  let allLocations;
 
-  const { activeLocation } = await fetchAllLocations(dbConnection);
+  try {
+    await toggleDBConnection(dbConnection, "open");
+    allLocations = await fetchAllLocations(dbConnection);
+    if (!allLocations) throw new Error("All locations does not exist");
 
-  console.log("activeLocation: ", activeLocation);
-  if (!activeLocation) {
-    throw new Error("No active location found");
+    if (allLocations.allLocations.length === 0) {
+      return;
+    }
+
+    if (!allLocations.activeLocation) {
+      throw new Error("No active location found");
+    }
+
+    const coordinates = new Coordinates(
+      allLocations.activeLocation.latitude,
+      allLocations.activeLocation.longitude
+    );
+
+    const params =
+      CalculationMethod[
+        userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
+      ]();
+
+    console.log("params before amendments: ", params);
+
+    params.madhab = userPreferences.madhab;
+    params.highLatitudeRule = userPreferences.highLatitudeRule;
+    params.fajrAngle = Number(userPreferences.fajrAngle);
+    params.ishaAngle = Number(userPreferences.ishaAngle);
+    params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
+    params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
+    params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
+    params.methodAdjustments.maghrib = Number(
+      userPreferences.maghribAdjustment
+    );
+    params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
+    params.shafaq = userPreferences.shafaqRule;
+    params.polarCircleResolution = userPreferences.polarCircleResolution;
+
+    console.log("params after amendments:", params);
+
+    return { params, coordinates, todaysDate };
+  } catch (error) {
+    console.error("Error fetching locations: ", error);
+    // throw error;
+  } finally {
+    await toggleDBConnection(dbConnection, "close");
   }
-
-  const coordinates = new Coordinates(
-    activeLocation.latitude,
-    activeLocation.longitude
-  );
-
-  // console.log(
-  //   "serPreferences.prayerCalculationMethod: ",
-  //   CalculationMethod[userPreferences.prayerCalculationMethod]()
-  // );
-
-  const params =
-    CalculationMethod[
-      userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
-    ]();
-
-  // console.log(
-  //   "userPreferences.prayerCalculationMethod: ",
-  //   userPreferences.prayerCalculationMethod
-  // );
-
-  // console.log("params before amendments: ", params);
-
-  params.madhab = userPreferences.madhab;
-  params.highLatitudeRule = userPreferences.highLatitudeRule;
-  params.fajrAngle = Number(userPreferences.fajrAngle);
-  params.ishaAngle = Number(userPreferences.ishaAngle);
-  params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
-  params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
-  params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
-  params.methodAdjustments.maghrib = Number(userPreferences.maghribAdjustment);
-  params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
-  params.shafaq = userPreferences.shafaqRule;
-  params.polarCircleResolution = userPreferences.polarCircleResolution;
-
-  console.log("params after amendments:", params);
-
-  return { params, coordinates, todaysDate };
 };
 
 export const getSalahTimes = async (

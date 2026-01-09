@@ -104,7 +104,7 @@ BottomSheetSalahTimesSettingsProps) => {
     "--inner-padding-top": "0",
     "--inner-padding-bottom": "0",
     "--margin-bottom": "0",
-    "min-height": "0",
+    minHeight: "0",
   };
 
   return (

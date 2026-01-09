@@ -30,6 +30,7 @@ import {
 import {
   deleteUserLocation,
   fetchAllLocations,
+  toggleDBConnection,
   updateActiveLocation,
 } from "../../../utils/dbUtils";
 import ActionSheet from "../../ActionSheet";
@@ -90,6 +91,25 @@ const BottomSheetLocationsList = ({
   );
   const [showDeleteLocationToast, setShowDeleteLocationToast] = useState(false);
 
+  const updateActiveLocation = async (id: number) => {
+    await dbConnection.current?.run(
+      `UPDATE userlocationsTable SET isSelected = 0`
+    );
+    await dbConnection.current?.run(
+      `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
+      [id]
+    );
+  };
+
+  const deleteUserLocation = async (
+    dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+    id: number
+  ) => {
+    const stmnt = `DELETE FROM userLocationsTable WHERE id = ?`;
+    const params = [id];
+    await dbConnection.current?.run(stmnt, params);
+  };
+
   return (
     <IonModal
       isOpen={showLocationsListSheet}
@@ -118,9 +138,29 @@ const BottomSheetLocationsList = ({
             <section
               key={location.id}
               onClick={async () => {
-                await updateActiveLocation(dbConnection, location.id);
-                const { allLocations } = await fetchAllLocations(dbConnection);
-                setUserLocations(allLocations);
+                // const updatedLocations = userLocations.map((item) =>
+                //   item.id === location.id
+                //     ? { ...item, isSelected: 1 }
+                //     : { ...item, isSelected: 0 }
+                // );
+
+                // console.log(updatedLocations);
+
+                // setUserLocations(updatedLocations);
+
+                try {
+                  await toggleDBConnection(dbConnection, "open");
+                  await updateActiveLocation(location.id);
+                  const { allLocations } = await fetchAllLocations(
+                    dbConnection
+                  );
+                  setUserLocations(allLocations);
+                } catch (error) {
+                  console.error(error);
+                } finally {
+                  await toggleDBConnection(dbConnection, "close");
+                }
+
                 // await calculateActiveLocationSalahTimes();
                 // await getSalahTimes(
                 //   dbConnection,
@@ -212,25 +252,39 @@ const BottomSheetLocationsList = ({
                 return;
               }
 
-              await deleteUserLocation(dbConnection, locationToDeleteId);
-              setLocationToDeleteId(null);
-              const { allLocations, activeLocation } = await fetchAllLocations(
-                dbConnection
-              );
-              setUserLocations(allLocations);
+              try {
+                await toggleDBConnection(dbConnection, "open");
 
-              if (!allLocations || allLocations.length === 0) return;
+                await deleteUserLocation(dbConnection, locationToDeleteId);
+
+                setLocationToDeleteId(null);
+
+                const { allLocations, activeLocation } =
+                  await fetchAllLocations(dbConnection);
+
+                if (!allLocations || allLocations.length === 0) {
+                  throw new Error("Error obtaining all locations");
+                }
+
+                if (!activeLocation) {
+                  console.log(
+                    "ACTIVE LOCATION DOES NOT EXIST, CHANGING ACTIVE LOCATION TO: ",
+                    allLocations,
+                    allLocations[0].id
+                  );
+
+                  await updateActiveLocation(allLocations[0].id);
+                  const { allLocations: updatedLocations } =
+                    await fetchAllLocations(dbConnection);
+                  setUserLocations(updatedLocations);
+                }
+
+                setUserLocations(allLocations);
+              } catch (error) {}
 
               // const activeLocation = allLocations.find(
               //   (location) => location.isSelected === 1
               // );
-
-              if (!activeLocation) {
-                await updateActiveLocation(dbConnection, allLocations[0].id);
-                const { allLocations: updatedLocations } =
-                  await fetchAllLocations(dbConnection);
-                setUserLocations(updatedLocations);
-              }
 
               // setShowResetToast(true);
             },
