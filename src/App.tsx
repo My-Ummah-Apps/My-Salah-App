@@ -81,7 +81,9 @@ const App = () => {
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {}
   );
-  const [userLocations, setUserLocations] = useState<LocationsDataObjTypeArr>();
+  const [userLocations, setUserLocations] = useState<LocationsDataObjTypeArr>(
+    []
+  );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [showJoyRideEditIcon, setShowJoyRideEditIcon] =
     useState<boolean>(false);

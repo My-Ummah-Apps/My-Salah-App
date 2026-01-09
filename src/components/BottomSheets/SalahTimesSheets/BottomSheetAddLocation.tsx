@@ -54,7 +54,7 @@ interface BottomSheetAddLocationProps {
   >;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
-    React.SetStateAction<LocationsDataObjTypeArr | undefined>
+    React.SetStateAction<LocationsDataObjTypeArr>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;

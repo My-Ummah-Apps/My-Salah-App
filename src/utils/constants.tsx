@@ -435,24 +435,25 @@ export const generateActiveLocationParams = async (
   // if (!isDatabaseInitialised) return;
 
   const todaysDate = new Date();
-  let allLocations;
 
   try {
     await toggleDBConnection(dbConnection, "open");
-    allLocations = await fetchAllLocations(dbConnection);
-    if (!allLocations) throw new Error("All locations does not exist");
+    const { allLocations, activeLocation } = await fetchAllLocations(
+      dbConnection
+    );
 
-    if (allLocations.allLocations.length === 0) {
+    if (allLocations.length === 0 || !activeLocation) {
+      // throw new Error("All locations does not exist");
       return;
     }
 
-    if (!allLocations.activeLocation) {
+    if (!activeLocation) {
       throw new Error("No active location found");
     }
 
     const coordinates = new Coordinates(
-      allLocations.activeLocation.latitude,
-      allLocations.activeLocation.longitude
+      activeLocation.latitude,
+      activeLocation.longitude
     );
 
     const params =
@@ -501,8 +502,14 @@ export const getSalahTimes = async (
     }>
   >
 ) => {
-  const { params, coordinates, todaysDate } =
-    await generateActiveLocationParams(dbConnection, userPreferences);
+  const result = await generateActiveLocationParams(
+    dbConnection,
+    userPreferences
+  );
+
+  if (!result) return;
+
+  const { params, coordinates, todaysDate } = result;
 
   console.log("params: ", params);
   console.log("coordinates: ", coordinates);
@@ -537,8 +544,14 @@ export const getNextSalah = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   userPreferences: userPreferencesType
 ) => {
-  const { params, coordinates, todaysDate } =
-    await generateActiveLocationParams(dbConnection, userPreferences);
+  const result = await generateActiveLocationParams(
+    dbConnection,
+    userPreferences
+  );
+
+  if (!result) return;
+
+  const { params, coordinates, todaysDate } = result;
 
   let allSalahTimes = new PrayerTimes(coordinates, todaysDate, params);
 

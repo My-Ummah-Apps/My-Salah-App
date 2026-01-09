@@ -15,7 +15,7 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { add, trashOutline } from "ionicons/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { MdCheck } from "react-icons/md";
 import {
@@ -27,12 +27,7 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
-import {
-  deleteUserLocation,
-  fetchAllLocations,
-  toggleDBConnection,
-  updateActiveLocation,
-} from "../../../utils/dbUtils";
+import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 import ActionSheet from "../../ActionSheet";
 import Toast from "../../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
@@ -42,7 +37,7 @@ interface BottomSheetSalahTimesSettingsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   //   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setUserLocations: React.Dispatch<
-    React.SetStateAction<LocationsDataObjTypeArr | undefined>
+    React.SetStateAction<LocationsDataObjTypeArr>
   >;
   setShowLocationsListSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showLocationsListSheet: boolean;
@@ -109,6 +104,10 @@ const BottomSheetLocationsList = ({
     const params = [id];
     await dbConnection.current?.run(stmnt, params);
   };
+
+  useEffect(() => {
+    console.log("userLocations in useEffect: ", userLocations);
+  }, [userLocations]);
 
   return (
     <IonModal
@@ -262,31 +261,25 @@ const BottomSheetLocationsList = ({
                 const { allLocations, activeLocation } =
                   await fetchAllLocations(dbConnection);
 
-                if (!allLocations || allLocations.length === 0) {
-                  throw new Error("Error obtaining all locations");
-                }
+                // if (!allLocations || allLocations.length === 0) {
+                //   throw new Error("Error obtaining all locations");
+                // }
 
-                if (!activeLocation) {
-                  console.log(
-                    "ACTIVE LOCATION DOES NOT EXIST, CHANGING ACTIVE LOCATION TO: ",
-                    allLocations,
-                    allLocations[0].id
-                  );
-
+                if (!activeLocation && allLocations.length > 0) {
                   await updateActiveLocation(allLocations[0].id);
-                  const { allLocations: updatedLocations } =
-                    await fetchAllLocations(dbConnection);
-                  setUserLocations(updatedLocations);
+
+                  const amendedLocations = allLocations.map((item, i) => ({
+                    ...item,
+                    isSelected: i === 0 ? 1 : 0,
+                  }));
+
+                  setUserLocations(amendedLocations);
                 }
 
-                setUserLocations(allLocations);
-              } catch (error) {}
-
-              // const activeLocation = allLocations.find(
-              //   (location) => location.isSelected === 1
-              // );
-
-              // setShowResetToast(true);
+                // setUserLocations(allLocations);
+              } catch (error) {
+                console.error(error);
+              }
             },
           },
           {

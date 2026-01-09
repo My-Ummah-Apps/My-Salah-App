@@ -40,7 +40,7 @@ interface SalahTimesPageProps {
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   setUserLocations: React.Dispatch<
-    React.SetStateAction<LocationsDataObjTypeArr | undefined>
+    React.SetStateAction<LocationsDataObjTypeArr>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
   setSalahtimes: React.Dispatch<
@@ -107,13 +107,15 @@ SalahTimesPageProps) => {
     const getNextSalahDetails = async () => {
       // const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
       //   await calculateActiveLocationSalahTimes();
+      const result = await getNextSalah(dbConnection, userPreferences);
+      if (!result) return;
       const {
         currentSalah,
         nextSalah,
         nextSalahTime,
         hoursRemaining,
         minsRemaining,
-      } = await getNextSalah(dbConnection, userPreferences);
+      } = result;
       setNextSalahNameAndTime({
         currentSalah: currentSalah,
         nextSalah: nextSalah,
