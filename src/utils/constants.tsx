@@ -438,6 +438,8 @@ export const generateActiveLocationParams = async (
 
   try {
     await toggleDBConnection(dbConnection, "open");
+    console.log("RUNNING IN CONSTNSTS");
+
     const { allLocations, activeLocation } = await fetchAllLocations(
       dbConnection
     );

@@ -68,7 +68,7 @@ const BottomSheetPolarCircleSetting = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)]  ${
+          className={`options-wrap   ${
             userPreferences.polarCircleResolution === "Unresolved"
               ? "border-blue-500"
               : "border-transparent"
@@ -138,7 +138,7 @@ const BottomSheetPolarCircleSetting = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)] ${
+          className={`options-wrap  ${
             userPreferences.polarCircleResolution === "AqrabYaum"
               ? "border-blue-500"
               : "border-transparent"

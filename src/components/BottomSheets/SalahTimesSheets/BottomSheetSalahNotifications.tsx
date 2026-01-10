@@ -100,7 +100,7 @@ const BottomSheetSalahNotifications = ({
 
             await cancelSalahReminderNotifications(selectedSalah);
           }}
-          className={`p-2 mb-5 border rounded-lg flex justify-between bg-[var(--sheet-option-bg)] ${
+          className={`options-wrap justify-between ${
             userPreferences[key] === "off"
               ? "border-blue-500"
               : "border-transparent"
@@ -143,7 +143,7 @@ const BottomSheetSalahNotifications = ({
 
             await handleBatteryOptimisation();
           }}
-          className={`p-2 mb-5 border rounded-lg flex justify-between bg-[var(--sheet-option-bg)]  ${
+          className={`options-wrap justify-between  ${
             userPreferences[key] === "on"
               ? "border-blue-500"
               : "border-transparent"
@@ -192,7 +192,7 @@ const BottomSheetSalahNotifications = ({
 
             await handleBatteryOptimisation();
           }}
-          className={`p-2 mb-5 border rounded-lg flex justify-between bg-[var(--sheet-option-bg)] ${
+          className={`options-wrap justify-between ${
             userPreferences[key] === "adhan"
               ? "border-blue-500"
               : "border-transparent"

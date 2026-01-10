@@ -10,6 +10,7 @@ import {
   IonIcon,
   IonList,
   IonItem,
+  isPlatform,
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -113,8 +114,7 @@ const BottomSheetLocationsList = ({
     <IonModal
       isOpen={showLocationsListSheet}
       mode="ios"
-      // trigger={triggerId}
-      // className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
@@ -150,6 +150,8 @@ const BottomSheetLocationsList = ({
                 try {
                   await toggleDBConnection(dbConnection, "open");
                   await updateActiveLocation(location.id);
+                  console.log("LOCATIONS LIST SHEET");
+
                   const { allLocations } = await fetchAllLocations(
                     dbConnection
                   );
@@ -257,6 +259,7 @@ const BottomSheetLocationsList = ({
                 await deleteUserLocation(dbConnection, locationToDeleteId);
 
                 setLocationToDeleteId(null);
+                console.log("LOCATIONS SHEET LIST 2 ");
 
                 const { allLocations, activeLocation } =
                   await fetchAllLocations(dbConnection);

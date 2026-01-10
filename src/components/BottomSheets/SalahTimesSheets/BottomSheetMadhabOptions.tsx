@@ -64,7 +64,7 @@ const BottomSheetMadhabOptions = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 rounded-lg flex  bg-[var(--sheet-option-bg)] border ${
+          className={`options-wrap ${
             userPreferences.madhab === "shafi"
               ? "border-blue-500"
               : "border-transparent"
@@ -95,7 +95,7 @@ const BottomSheetMadhabOptions = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 rounded-lg flex  bg-[var(--sheet-option-bg)] border  ${
+          className={`options-wrap   ${
             userPreferences.madhab === "hanafi"
               ? "border-blue-500"
               : "border-transparent"

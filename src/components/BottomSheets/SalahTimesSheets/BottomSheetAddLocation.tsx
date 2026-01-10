@@ -382,6 +382,7 @@ const BottomSheetAddLocation = ({
                           "Failed to insert location: no ID returned"
                         );
                       }
+                      console.log("ADD LOCATION SHEET");
 
                       const { allLocations } = await fetchAllLocations(
                         dbConnection

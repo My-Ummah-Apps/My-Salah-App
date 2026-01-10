@@ -73,7 +73,7 @@ const BottomSheetShafaqRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg bg-[var(--sheet-option-bg)] flex ${
+          className={`options-wrap ${
             userPreferences.shafaqRule === "general"
               ? "border-blue-500"
               : "border-transparent"
@@ -108,7 +108,7 @@ const BottomSheetShafaqRules = ({
               setUserPreferences
             );
           }}
-          className={`p-2 mb-5 border rounded-lg bg-[var(--sheet-option-bg)] flex ${
+          className={`options-wrap ${
             userPreferences.shafaqRule === "ahmer"
               ? "border-blue-500"
               : "border-transparent"

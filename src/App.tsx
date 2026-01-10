@@ -312,11 +312,6 @@ const App = () => {
 
       await toggleDBConnection(dbConnection, "open");
 
-      // const res = await dbConnection.current?.query(
-      //   `SELECT name, type FROM sqlite_master WHERE type='table'`
-      // );
-      // console.log("tables: ", res?.values);
-
       let DBResultPreferences = await dbConnection.current?.query(
         `SELECT * FROM userPreferencesTable`
       );
@@ -328,16 +323,6 @@ const App = () => {
       const DBResultLocations = await dbConnection.current?.query(
         `SELECT * FROM userLocationsTable`
       );
-
-      // const DBResultLocations = await dbConnection.current?.query(
-      //   `SELECT * FROM userLocationsTable`
-      // );
-      // const { allLocations: DBResultLocations } = await fetchAllLocations(
-      //   dbConnection,
-      //   true
-      // );
-
-      // console.log("DBResultPreferences: ", DBResultPreferences?.values);
 
       if (!DBResultPreferences || !DBResultPreferences.values) {
         throw new Error(
@@ -355,10 +340,6 @@ const App = () => {
         );
       }
 
-      // const locations = await dbConnection.current?.query(
-      //   `SELECT * FROM userLocationsTable`
-      // );
-      // console.log("Locations from DB: ", locations);
       setUserLocations(DBResultLocations.values);
 
       const userNotificationPermission = await checkNotificationPermissions();
