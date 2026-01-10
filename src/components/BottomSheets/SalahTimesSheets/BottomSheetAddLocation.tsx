@@ -97,8 +97,12 @@ const BottomSheetAddLocation = ({
         VALUES (?, ?, ?, ?);
         `;
 
+    if (!dbConnection || !dbConnection.current) {
+      throw new Error("dbConnection / dbconnection.current does not exist");
+    }
+
     const params = [locationName, latitude, longitude, isSelected];
-    const lastId = await dbConnection.current?.run(stmnt, params);
+    const lastId = await dbConnection.current.run(stmnt, params);
     return lastId;
   };
 

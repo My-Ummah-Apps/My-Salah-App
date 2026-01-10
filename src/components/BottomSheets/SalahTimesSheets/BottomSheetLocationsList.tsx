@@ -88,10 +88,14 @@ const BottomSheetLocationsList = ({
   const [showDeleteLocationToast, setShowDeleteLocationToast] = useState(false);
 
   const updateActiveLocation = async (id: number) => {
-    await dbConnection.current?.run(
+    if (!dbConnection || !dbConnection.current) {
+      throw new Error("dbConnection / dbconnection.current does not exist");
+    }
+
+    await dbConnection.current.run(
       `UPDATE userlocationsTable SET isSelected = 0`
     );
-    await dbConnection.current?.run(
+    await dbConnection.current.run(
       `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
       [id]
     );
@@ -103,7 +107,12 @@ const BottomSheetLocationsList = ({
   ) => {
     const stmnt = `DELETE FROM userLocationsTable WHERE id = ?`;
     const params = [id];
-    await dbConnection.current?.run(stmnt, params);
+
+    if (!dbConnection || !dbConnection.current) {
+      throw new Error("dbConnection / dbconnection.current does not exist");
+    }
+
+    await dbConnection.current.run(stmnt, params);
   };
 
   useEffect(() => {

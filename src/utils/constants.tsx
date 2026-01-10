@@ -266,17 +266,21 @@ export const updateUserPrefs = async (
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>
 ) => {
   try {
+    if (!dbConnection || !dbConnection.current) {
+      throw new Error("dbConnection / dbconnection.current does not exist");
+    }
+
     await toggleDBConnection(dbConnection, "open");
 
     if (preferenceName === "reasons") {
       const query = `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`;
-      await dbConnection.current?.run(query, [
+      await dbConnection.current.run(query, [
         preferenceValue.toString(),
         preferenceName,
       ]);
     } else {
       const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
-      await dbConnection.current?.run(query, [preferenceName, preferenceValue]);
+      await dbConnection.current.run(query, [preferenceName, preferenceValue]);
     }
 
     setUserPreferences((userPreferences: userPreferencesType) => ({
@@ -287,7 +291,10 @@ export const updateUserPrefs = async (
     console.log(`ERROR ENTERING ${preferenceName} into DB`);
     console.error(error);
   } finally {
-    let DBResultPreferences = await dbConnection.current?.query(
+    if (!dbConnection || !dbConnection.current) {
+      throw new Error("dbConnection / dbconnection.current does not exist");
+    }
+    let DBResultPreferences = await dbConnection.current.query(
       `SELECT * FROM userPreferencesTable`
     );
     console.log("DBResultPreferences: ", DBResultPreferences?.values);

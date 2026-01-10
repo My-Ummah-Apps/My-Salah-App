@@ -300,6 +300,10 @@ const App = () => {
 
   const fetchDataFromDB = async (isDBImported?: boolean) => {
     try {
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection / dbconnection.current does not exist");
+      }
+
       if (isDBImported) {
         await initialiseTables();
         await updateUserPrefs(
@@ -312,15 +316,15 @@ const App = () => {
 
       await toggleDBConnection(dbConnection, "open");
 
-      let DBResultPreferences = await dbConnection.current?.query(
+      let DBResultPreferences = await dbConnection.current.query(
         `SELECT * FROM userPreferencesTable`
       );
 
-      const DBResultAllSalahData = await dbConnection.current?.query(
+      const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`
       );
 
-      const DBResultLocations = await dbConnection.current?.query(
+      const DBResultLocations = await dbConnection.current.query(
         `SELECT * FROM userLocationsTable`
       );
 
@@ -372,12 +376,12 @@ const App = () => {
           await toggleDBConnection(dbConnection, "open");
 
           // const locationPref = "location";
-          // await dbConnection.current?.run(
+          // await dbConnection.current.run(
           //   `DELETE FROM userPreferencesTable WHERE preferenceName = ?`,
           //   [locationPref]
           // );
 
-          DBResultPreferences = await dbConnection.current?.query(
+          DBResultPreferences = await dbConnection.current.query(
             `SELECT * FROM userPreferencesTable`
           );
         } catch (error) {
@@ -416,6 +420,10 @@ const App = () => {
     let DBResultPreferencesValues = DBResultPreferences;
 
     try {
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection / dbconnection.current does not exist");
+      }
+
       if (DBResultPreferencesValues.length === 0) {
         const params = Object.keys(dictPreferencesDefaultValues)
           .map((key) => {
@@ -434,8 +442,8 @@ const App = () => {
         VALUES ${placeholders};
         `;
 
-        await dbConnection.current?.run(insertQuery, params);
-        const DBResultPreferencesQuery = await dbConnection.current?.query(
+        await dbConnection.current.run(insertQuery, params);
+        const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
         );
 
@@ -447,7 +455,7 @@ const App = () => {
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
       } else if (DBResultPreferencesValues.length > 0) {
-        const DBResultPreferencesQuery = await dbConnection.current?.query(
+        const DBResultPreferencesQuery = await dbConnection.current.query(
           `SELECT * FROM userPreferencesTable`
         );
 

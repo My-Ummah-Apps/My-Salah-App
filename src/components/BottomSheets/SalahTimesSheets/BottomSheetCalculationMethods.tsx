@@ -59,9 +59,9 @@ BottomSheetCalculationMethodsProps) => {
 
   const calculationMethods = [
     {
-      calculationMethod: "MuslimWorldLeague",
+      calculationMethod: "Dubai",
       description:
-        "Standard Fajr time with an angle of 18°. Earlier Isha time with an angle of 17°.",
+        "Used in the UAE. Slightly earlier Fajr time and slightly later sha time with angles of 18.2° for Fajr and Isha in addition to 3 minute offsets for sunrise, Dhuhr, Asr, and Maghrib.",
     },
     {
       calculationMethod: "Egyptian",
@@ -69,19 +69,14 @@ BottomSheetCalculationMethodsProps) => {
         "Early Fajr time using an angle 19.5° and a slightly earlier Isha time using an angle of 17.5°.",
     },
     {
+      calculationMethod: "MuslimWorldLeague",
+      description:
+        "Standard Fajr time with an angle of 18°. Earlier Isha time with an angle of 17°.",
+    },
+    {
       calculationMethod: "Karachi",
       description:
         " University of Islamic Sciences, Karachi. A generally applicable method that uses standard Fajr and Isha angles of 18°.",
-    },
-    {
-      calculationMethod: "UmmAlQura",
-      description:
-        "Uses a fixed interval of 90 minutes from maghrib to calculate Isha. And a slightly earlier Fajr time with an angle of 18.5°. Note: you should add a +30 minute custom adjustment for Isha during Ramadan.",
-    },
-    {
-      calculationMethod: "Dubai",
-      description:
-        "Used in the UAE. Slightly earlier Fajr time and slightly later sha time with angles of 18.2° for Fajr and Isha in addition to 3 minute offsets for sunrise, Dhuhr, Asr, and Maghrib.",
     },
     {
       calculationMethod: "Kuwait",
@@ -99,99 +94,101 @@ BottomSheetCalculationMethodsProps) => {
         "Early Fajr time with an angle of 20° and standard Isha time with an angle of 18°.",
     },
     {
-      calculationMethod: "Turkey",
-      description:
-        "An approximation of the Diyanet method used in Turkey. This approximation is less accurate outside the region of Turkey.",
-    },
-    {
       calculationMethod: "Tehran",
       description:
         "Institute of Geophysics, University of Tehran. Early Isha time with an angle of 14°. Slightly later Fajr time with an angle of 17.7°. Calculates Maghrib based on the sun reaching an angle of 4.5° below the horizon.",
+    },
+    {
+      calculationMethod: "Turkey",
+      description:
+        "An approximation of the Diyanet method used in Turkey. This approximation is less accurate outside the region of Turkey.",
     },
     {
       calculationMethod: "NorthAmerica",
       description:
         "Islamic Society of North America. Can be used for North America, but the Moonsighting Committee method is preferable. Gives later Fajr times and early Isha times with angles of 15°.",
     },
+    {
+      calculationMethod: "UmmAlQura",
+      description:
+        "Uses a fixed interval of 90 minutes from maghrib to calculate Isha. And a slightly earlier Fajr time with an angle of 18.5°. Note: you should add a +30 minute custom adjustment for Isha during Ramadan.",
+    },
   ];
 
-  const setDefaults = async (calcMethod) => {
-    if (!userPreferences.prayerCalculationMethod) return;
-
-    let allLocations;
+  const setAdhanLibraryDefaults = async (calcMethod) => {
+    // if (!userPreferences.prayerCalculationMethod) return;
 
     try {
       await toggleDBConnection(dbConnection, "open");
-      console.log("CACLULAITON METHODS SHEET");
 
-      allLocations = await fetchAllLocations(dbConnection);
+      const allLocations = await fetchAllLocations(dbConnection);
+
+      const params = CalculationMethod[calcMethod]();
+
+      const latitudeRule =
+        typeof params.highLatitudeRule === "string"
+          ? params.highLatitudeRule
+          : params.highLatitudeRule(allLocations.activeLocation.latitude);
+
+      const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection / dbconnection.current does not exist");
+      }
+
+      await dbConnection.current.run(query, [
+        "prayerCalculationMethod",
+        calcMethod,
+      ]);
+      await dbConnection.current.run(query, ["madhab", params.madhab]);
+      await dbConnection.current.run(query, ["highLatitudeRule", latitudeRule]);
+      await dbConnection.current.run(query, [
+        "fajrAngle",
+        String(params.fajrAngle),
+      ]);
+      await dbConnection.current.run(query, [
+        "ishaAngle",
+        String(params.ishaAngle),
+      ]);
+      await dbConnection.current.run(query, [
+        "fajrAdjustment",
+        String(params.methodAdjustments.fajr),
+      ]);
+      await dbConnection.current.run(query, [
+        "dhuhrAdjustment",
+        String(params.methodAdjustments.dhuhr),
+      ]);
+      await dbConnection.current.run(query, [
+        "asrAdjustment",
+        String(params.methodAdjustments.asr),
+      ]);
+      await dbConnection.current.run(query, [
+        "maghribAdjustment",
+        String(params.methodAdjustments.maghrib),
+      ]);
+      await dbConnection.current.run(query, [
+        "ishaAdjustment",
+        String(params.methodAdjustments.isha),
+      ]);
+
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        prayerCalculationMethod: calcMethod,
+        madhab: params.madhab,
+        highLatitudeRule: latitudeRule,
+        fajrAngle: params.fajrAngle,
+        ishaAngle: params.ishaAngle,
+        fajrAdjustment: params.methodAdjustments.fajr,
+        dhuhrAdjustment: params.methodAdjustments.dhuhr,
+        asrAdjustment: params.methodAdjustments.asr,
+        maghribAdjustment: params.methodAdjustments.maghrib,
+        ishaAdjustment: params.methodAdjustments.isha,
+      }));
     } catch (error) {
       console.error(error);
     } finally {
       await toggleDBConnection(dbConnection, "close");
     }
-
-    const params = CalculationMethod[calcMethod]();
-
-    const latitudeRule =
-      typeof params.highLatitudeRule === "string"
-        ? params.highLatitudeRule
-        : params.highLatitudeRule(allLocations?.activeLocation.latitude);
-
-    await updateUserPrefs(
-      dbConnection,
-      "madhab",
-      params.madhab,
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "highLatitudeRule",
-      latitudeRule,
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "fajrAngle",
-      String(params.fajrAngle),
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "ishaAngle",
-      String(params.ishaAngle),
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "fajrAdjustment",
-      String(params.methodAdjustments.fajr),
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "dhuhrAdjustment",
-      String(params.methodAdjustments.dhuhr),
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "asrAdjustment",
-      String(params.methodAdjustments.asr),
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "maghribAdjustment",
-      String(params.methodAdjustments.maghrib),
-      setUserPreferences
-    );
-    await updateUserPrefs(
-      dbConnection,
-      "ishaAdjustment",
-      String(params.methodAdjustments.isha),
-      setUserPreferences
-    );
   };
 
   const countryOptions = [
@@ -265,7 +262,6 @@ BottomSheetCalculationMethodsProps) => {
             value={segmentOption}
             onIonChange={(e) => {
               console.log("e.detail: ", e.detail.value);
-
               setSegmentOption(e.detail.value as "country" | "manual");
             }}
           >
@@ -325,13 +321,7 @@ BottomSheetCalculationMethodsProps) => {
                 <div
                   key={`${item}${i}`}
                   onClick={async () => {
-                    await updateUserPrefs(
-                      dbConnection,
-                      "prayerCalculationMethod",
-                      item.calculationMethod,
-                      setUserPreferences
-                    );
-                    await setDefaults(item.calculationMethod);
+                    await setAdhanLibraryDefaults(item.calculationMethod);
                     setSelectedCalculationMethod(item.calculationMethod);
                   }}
                   className={`options-wrap  ${

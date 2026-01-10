@@ -49,7 +49,11 @@ export const fetchAllLocations = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>
 ) => {
   try {
-    const res = await dbConnection.current?.query(
+    if (!dbConnection || !dbConnection.current) {
+      throw new Error("dbConnection / dbconnection.current does not exist");
+    }
+
+    const res = await dbConnection.current.query(
       "SELECT * from userLocationsTable"
     );
     if (!res || !res.values) {
