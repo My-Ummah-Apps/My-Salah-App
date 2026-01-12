@@ -15,7 +15,7 @@ import {
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-import { CalculationMethod } from "adhan";
+import { CalculationMethod, Coordinates, HighLatitudeRule } from "adhan";
 import {
   CalculationMethodsType,
   countryOptionsType,
@@ -88,6 +88,8 @@ BottomSheetCalculationMethodsProps) => {
     "UmmAlQura",
   ] as const;
 
+  type calculationMethod = (typeof calculationMethods)[number];
+
   const countryToMethod: Record<countryOptionsType, CalculationMethodsType> = {
     Egypt: "Egyptian",
     Pakistan: "Karachi",
@@ -104,8 +106,6 @@ BottomSheetCalculationMethodsProps) => {
     Indonesia: "Singapore",
     Other: "MoonsightingCommittee",
   };
-
-  type calculationMethod = (typeof calculationMethods)[number];
 
   const calculationMethodsDetails: {
     calculationMethod: calculationMethod;
@@ -177,16 +177,14 @@ BottomSheetCalculationMethodsProps) => {
 
       const allLocations = await fetchAllLocations(dbConnection);
 
-      // if (!allLocations.activeLocation) {
-      //   throw new Error("Active location does not exist");
-      // }
-
       const params = CalculationMethod[calcMethod]();
 
-      const latitudeRule =
-        typeof params.highLatitudeRule === "string"
-          ? params.highLatitudeRule
-          : params.highLatitudeRule(allLocations.activeLocation.latitude);
+      const coordinates = new Coordinates(
+        allLocations.activeLocation!.latitude,
+        allLocations.activeLocation!.longitude
+      );
+
+      const latitudeRule = HighLatitudeRule.recommended(coordinates);
 
       const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
 
@@ -355,7 +353,6 @@ BottomSheetCalculationMethodsProps) => {
                     }
                     await setAdhanLibraryDefaults(item.calculationMethod);
                     // setSelectedCalculationMethod(item.calculationMethod);
-
                     await updateUserPrefs(
                       dbConnection,
                       "country",
