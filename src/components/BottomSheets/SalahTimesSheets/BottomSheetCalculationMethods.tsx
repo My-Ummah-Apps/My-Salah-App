@@ -179,12 +179,28 @@ BottomSheetCalculationMethodsProps) => {
 
       const params = CalculationMethod[calcMethod]();
 
+      if (!allLocations.activeLocation) {
+        console.error("Active location does not exist");
+        return;
+      }
+
       const coordinates = new Coordinates(
-        allLocations.activeLocation!.latitude,
-        allLocations.activeLocation!.longitude
+        allLocations.activeLocation.latitude,
+        allLocations.activeLocation.longitude
       );
 
-      const latitudeRule = HighLatitudeRule.recommended(coordinates);
+      const defaultCalcMethodValues = {
+        prayerCalculationMethod: calcMethod,
+        madhab: params.madhab,
+        highLatitudeRule: HighLatitudeRule.recommended(coordinates),
+        fajrAngle: String(params.fajrAngle),
+        ishaAngle: String(params.ishaAngle),
+        fajrAdjustment: String(params.methodAdjustments.fajr),
+        dhuhrAdjustment: String(params.methodAdjustments.dhuhr),
+        asrAdjustment: String(params.methodAdjustments.asr),
+        maghribAdjustment: String(params.methodAdjustments.maghrib),
+        ishaAdjustment: String(params.methodAdjustments.isha),
+      };
 
       const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
 
@@ -192,53 +208,14 @@ BottomSheetCalculationMethodsProps) => {
         throw new Error("dbConnection / dbconnection.current does not exist");
       }
 
-      await dbConnection.current.run(query, [
-        "prayerCalculationMethod",
-        calcMethod,
-      ]);
-      await dbConnection.current.run(query, ["madhab", params.madhab]);
-      await dbConnection.current.run(query, ["highLatitudeRule", latitudeRule]);
-      await dbConnection.current.run(query, [
-        "fajrAngle",
-        String(params.fajrAngle),
-      ]);
-      await dbConnection.current.run(query, [
-        "ishaAngle",
-        String(params.ishaAngle),
-      ]);
-      await dbConnection.current.run(query, [
-        "fajrAdjustment",
-        String(params.methodAdjustments.fajr),
-      ]);
-      await dbConnection.current.run(query, [
-        "dhuhrAdjustment",
-        String(params.methodAdjustments.dhuhr),
-      ]);
-      await dbConnection.current.run(query, [
-        "asrAdjustment",
-        String(params.methodAdjustments.asr),
-      ]);
-      await dbConnection.current.run(query, [
-        "maghribAdjustment",
-        String(params.methodAdjustments.maghrib),
-      ]);
-      await dbConnection.current.run(query, [
-        "ishaAdjustment",
-        String(params.methodAdjustments.isha),
-      ]);
+      for (const [key, value] of Object.entries(defaultCalcMethodValues)) {
+        console.log(key, value);
+        await dbConnection.current.run(query, [key, value]);
+      }
 
       setUserPreferences((userPreferences: userPreferencesType) => ({
         ...userPreferences,
-        prayerCalculationMethod: calcMethod,
-        madhab: params.madhab,
-        highLatitudeRule: latitudeRule,
-        fajrAngle: params.fajrAngle,
-        ishaAngle: params.ishaAngle,
-        fajrAdjustment: params.methodAdjustments.fajr,
-        dhuhrAdjustment: params.methodAdjustments.dhuhr,
-        asrAdjustment: params.methodAdjustments.asr,
-        maghribAdjustment: params.methodAdjustments.maghrib,
-        ishaAdjustment: params.methodAdjustments.isha,
+        ...defaultCalcMethodValues,
       }));
     } catch (error) {
       console.error(error);
