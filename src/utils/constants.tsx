@@ -12,6 +12,7 @@ import {
   userPreferencesType,
   SalahNotificationSettings,
   SalahNamesTypeAdhanLibrary,
+  salahTimesObjType,
 } from "../types/types";
 import {
   AndroidSettings,
@@ -511,16 +512,7 @@ export const generateActiveLocationParams = async (
 export const getSalahTimes = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   userPreferences: userPreferencesType,
-  setSalahtimes: React.Dispatch<
-    React.SetStateAction<{
-      fajr: string;
-      sunrise: string;
-      dhuhr: string;
-      asr: string;
-      maghrib: string;
-      isha: string;
-    }>
-  >
+  setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>
 ) => {
   const result = await generateActiveLocationParams(
     dbConnection,

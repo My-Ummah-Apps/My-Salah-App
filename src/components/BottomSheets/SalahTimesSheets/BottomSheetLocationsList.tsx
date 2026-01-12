@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { MdCheck } from "react-icons/md";
 import {
   LocationsDataObjTypeArr,
+  salahTimesObjType,
   userPreferencesType,
 } from "../../../types/types";
 import {
@@ -48,16 +49,7 @@ interface BottomSheetSalahTimesSettingsProps {
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
   // calculateActiveLocationSalahTimes: () => Promise<void>;
   userPreferences: userPreferencesType;
-  setSalahtimes: React.Dispatch<
-    React.SetStateAction<{
-      fajr: string;
-      sunrise: string;
-      dhuhr: string;
-      asr: string;
-      maghrib: string;
-      isha: string;
-    }>
-  >;
+  setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
 }
 
 const BottomSheetLocationsList = ({

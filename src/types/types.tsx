@@ -133,6 +133,15 @@ export type SalahNamesTypeAdhanLibrary =
   | "maghrib"
   | "isha";
 
+export type salahTimesObjType = {
+  fajr: string;
+  sunrise: string;
+  dhuhr: string;
+  asr: string;
+  maghrib: string;
+  isha: string;
+};
+
 export interface SalahEntryType {
   salahName: SalahNamesType;
   salahStatus: SalahStatusType;

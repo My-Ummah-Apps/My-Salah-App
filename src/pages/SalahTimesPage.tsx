@@ -11,6 +11,7 @@ import {
 import {
   LocationsDataObjTypeArr,
   SalahNamesTypeAdhanLibrary,
+  salahTimesObjType,
   userPreferencesType,
 } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
@@ -42,33 +43,8 @@ interface SalahTimesPageProps {
     React.SetStateAction<LocationsDataObjTypeArr>
   >;
   userLocations: LocationsDataObjTypeArr | undefined;
-  setSalahtimes: React.Dispatch<
-    React.SetStateAction<{
-      fajr: string;
-      sunrise: string;
-      dhuhr: string;
-      asr: string;
-      maghrib: string;
-      isha: string;
-    }>
-  >;
-  salahTimes: {
-    fajr: string;
-    dhuhr: string;
-    asr: string;
-    maghrib: string;
-    isha: string;
-  };
-  // calculateActiveLocationSalahTimes: () => Promise<{
-  //   nextSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
-  //   // | "sunrise"
-  //   // | "none";
-  //   currentSalah: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha";
-  //   // | "sunrise"
-  //   // | "none";
-  //   hoursRemaining: number;
-  //   minsRemaining: number;
-  // }>;
+  setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
+  salahTimes: salahTimesObjType;
 }
 
 const SalahTimesPage = ({
@@ -79,8 +55,7 @@ const SalahTimesPage = ({
   userLocations,
   setSalahtimes,
   salahTimes,
-}: // calculateActiveLocationSalahTimes,
-SalahTimesPageProps) => {
+}: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
     useState(false);
@@ -291,7 +266,9 @@ SalahTimesPageProps) => {
         >
           {/* <IonList inset={true}> */}
 
-          {Object.entries(salahTimes).map(([name, time]) => (
+          {(
+            Object.entries(salahTimes) as [keyof typeof salahTimes, string][]
+          ).map(([name, time]) => (
             <div
               // && name !== "sunrise"
               className={`bg-[color:var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg ${
