@@ -24,7 +24,6 @@ import {
   userPreferencesType,
 } from "../../../types/types";
 import {
-  getSalahTimes,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
@@ -73,10 +72,10 @@ const BottomSheetLocationsList = ({
   showAddLocationSheet,
   setShowLocationFailureToast,
   setShowLocationAddedToast,
-  // calculateActiveLocationSalahTimes,
-  userPreferences,
-  setSalahtimes,
-}: BottomSheetSalahTimesSettingsProps) => {
+}: // calculateActiveLocationSalahTimes,
+// userPreferences,
+// setSalahtimes,
+BottomSheetSalahTimesSettingsProps) => {
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
   // const [showEditLocationActionSheet, setShowEditLocationActionSheet] =

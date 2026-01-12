@@ -1,20 +1,10 @@
-import {
-  IonContent,
-  IonHeader,
-  IonModal,
-  IonButton,
-  IonTitle,
-  IonToolbar,
-  IonToggle,
-} from "@ionic/react";
+import { IonContent, IonModal, IonButton, IonToggle } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   prayerCalculationMethodLabels,
   updateUserPrefs,
 } from "../../../utils/constants";
-
-import { CalculationMethod } from "adhan";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
@@ -49,10 +39,10 @@ const BottomSheetSalahTimesSettings = ({
   userPreferences,
 }: // calculateActiveLocationSalahTimes,
 BottomSheetSalahTimesSettingsProps) => {
-  const [selectedCalculationMethod, setSelectedCalculationMethod] =
-    useState<CalculationMethodsType | null>(
-      userPreferences.prayerCalculationMethod
-    );
+  // const [selectedCalculationMethod, setSelectedCalculationMethod] =
+  //   useState<CalculationMethodsType | null>(
+  //     userPreferences.prayerCalculationMethod
+  //   );
 
   const [customAdjustmentSalah, setCustomAdjustmentSalah] = useState<
     | "fajrAdjustment"
@@ -87,9 +77,9 @@ BottomSheetSalahTimesSettingsProps) => {
   };
 
   const polarCircleResolutionValues = {
-    unresolved: "Unresolved (default)",
-    aqrabBalad: "Closest City",
-    aqrabYaum: "Closest Date",
+    Unresolved: "Unresolved (default)",
+    AqrabBalad: "Closest City",
+    AqrabYaum: "Closest Date",
   };
 
   const buttonStyles = {
@@ -490,8 +480,7 @@ BottomSheetSalahTimesSettingsProps) => {
       <BottomSheetCalculationMethods
         triggerId="open-salah-calculations-sheet"
         dbConnection={dbConnection}
-        setSelectedCalculationMethod={setSelectedCalculationMethod}
-        selectedCalculationMethod={selectedCalculationMethod}
+        // setSelectedCalculationMethod={setSelectedCalculationMethod}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}

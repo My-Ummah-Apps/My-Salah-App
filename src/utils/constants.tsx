@@ -11,6 +11,7 @@ import {
   SalahNamesType,
   userPreferencesType,
   SalahNotificationSettings,
+  SalahNamesTypeAdhanLibrary,
 } from "../types/types";
 import {
   AndroidSettings,
@@ -82,7 +83,8 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   ishaNotification: "off",
   hasSeenBatteryPrompt: "0",
   shafaqRule: "general",
-  polarCircleResolution: "unresolved",
+  polarCircleResolution: "Unresolved",
+  country: "",
 };
 
 export const reasonsStyles =
@@ -303,7 +305,7 @@ export const updateUserPrefs = async (
 };
 
 export const cancelSalahReminderNotifications = async (
-  salahName: SalahNamesType
+  salahName: SalahNamesTypeAdhanLibrary
 ) => {
   console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
 
@@ -335,7 +337,10 @@ const salahIdMap = {
   isha: 5,
 };
 
-const generateNotificationId = (salahName: SalahNamesType, date: Date) => {
+const generateNotificationId = (
+  salahName: SalahNamesTypeAdhanLibrary,
+  date: Date
+) => {
   const dateFormatted = format(date, "ddMMyyyy");
 
   return Number(dateFormatted + salahIdMap[salahName]);
@@ -354,16 +359,14 @@ export const toLocalDateFromUTCClock = (utcDate: Date) => {
 
 export const scheduleSalahTimesNotifications = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  salahName: SalahNamesType,
+  salahName: SalahNamesTypeAdhanLibrary,
   userPreferences: userPreferencesType,
   setting: SalahNotificationSettings
 ) => {
   const today = new Date();
 
   const customAdjustment = Number(
-    userPreferences[
-      `${salahName.toLowerCase()}Adjustment` as keyof userPreferencesType
-    ]
+    userPreferences[`${salahName}Adjustment` as keyof userPreferencesType]
   );
 
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
@@ -380,8 +383,13 @@ export const scheduleSalahTimesNotifications = async (
       : "default";
 
   if (setting === "on" || setting === "adhan") {
-    const { params, coordinates, todaysDate } =
-      await generateActiveLocationParams(dbConnection, userPreferences);
+    const result = await generateActiveLocationParams(
+      dbConnection,
+      userPreferences
+    );
+
+    if (!result) return;
+    const { params, coordinates, todaysDate } = result;
 
     console.log(salahName, setting);
     console.log(coordinates, todaysDate, params);
@@ -441,18 +449,21 @@ export const generateActiveLocationParams = async (
 ) => {
   // if (!isDatabaseInitialised) return;
 
+  console.log(
+    "USERPREFS IN generateActiveLocationParams: ",
+    userPreferences.country
+  );
+
   const todaysDate = new Date();
 
   try {
     await toggleDBConnection(dbConnection, "open");
-    console.log("RUNNING IN CONSTNSTS");
 
     const { allLocations, activeLocation } = await fetchAllLocations(
       dbConnection
     );
 
     if (allLocations.length === 0 || !activeLocation) {
-      // throw new Error("All locations does not exist");
       return;
     }
 
@@ -519,6 +530,8 @@ export const getSalahTimes = async (
   if (!result) return;
 
   const { params, coordinates, todaysDate } = result;
+
+  if (!params || !coordinates || !todaysDate) return;
 
   console.log("params: ", params);
   console.log("coordinates: ", coordinates);

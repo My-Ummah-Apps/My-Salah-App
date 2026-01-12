@@ -46,6 +46,7 @@ import {
   streakDatesObjType,
   themeType,
   LocationsDataObjTypeArr,
+  SalahNamesTypeAdhanLibrary,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
@@ -67,10 +68,7 @@ import Onboarding from "./components/Onboarding";
 import { Route } from "react-router-dom";
 import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 import SalahTimesPage from "./pages/SalahTimesPage";
-import {
-  fetchAllLocations,
-  toggleDBConnection as toggleDBConnection,
-} from "./utils/dbUtils";
+import { toggleDBConnection as toggleDBConnection } from "./utils/dbUtils";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
 const App = () => {
@@ -239,7 +237,7 @@ const App = () => {
     calc();
 
     const scheduleSalahNotifications = async () => {
-      const salahs: SalahNamesType[] = [
+      const salahs: SalahNamesTypeAdhanLibrary[] = [
         "fajr",
         "dhuhr",
         "asr",

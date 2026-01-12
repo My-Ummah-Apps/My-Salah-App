@@ -1,5 +1,4 @@
 import {
-  IonContent,
   IonHeader,
   IonIcon,
   IonModal,
@@ -8,7 +7,10 @@ import {
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { SalahNamesType, userPreferencesType } from "../../../types/types";
+import {
+  SalahNamesTypeAdhanLibrary,
+  userPreferencesType,
+} from "../../../types/types";
 import {
   cancelSalahReminderNotifications,
   INITIAL_MODAL_BREAKPOINT,
@@ -26,13 +28,11 @@ import {
   notificationsOff,
 } from "ionicons/icons";
 
-// import { CalculationMethod } from "adhan";
-
 interface BottomSheetSalahNotificationsProps {
   setShowSalahNotificationsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showSalahNotificationsSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  selectedSalah: SalahNamesType;
+  selectedSalah: SalahNamesTypeAdhanLibrary;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
 }
@@ -101,7 +101,7 @@ const BottomSheetSalahNotifications = ({
             await cancelSalahReminderNotifications(selectedSalah);
           }}
           className={`options-wrap justify-between ${
-            userPreferences[key] === "off"
+            userPreferences[key as keyof userPreferencesType] === "off"
               ? "border-blue-500"
               : "border-transparent"
           }`}
@@ -111,7 +111,9 @@ const BottomSheetSalahNotifications = ({
               <IonIcon
                 color="primary"
                 className={` ${
-                  userPreferences[key] === "off" ? "opacity-100" : "opacity-0"
+                  userPreferences[key as keyof userPreferencesType] === "off"
+                    ? "opacity-100"
+                    : "opacity-0"
                 }`}
                 icon={checkmarkCircle}
               />
@@ -144,7 +146,7 @@ const BottomSheetSalahNotifications = ({
             await handleBatteryOptimisation();
           }}
           className={`options-wrap justify-between  ${
-            userPreferences[key] === "on"
+            userPreferences[key as keyof userPreferencesType] === "on"
               ? "border-blue-500"
               : "border-transparent"
           }`}
@@ -154,7 +156,9 @@ const BottomSheetSalahNotifications = ({
               <IonIcon
                 color="primary"
                 className={` ${
-                  userPreferences[key] === "on" ? "opacity-100" : "opacity-0"
+                  userPreferences[key as keyof userPreferencesType] === "on"
+                    ? "opacity-100"
+                    : "opacity-0"
                 }`}
                 icon={checkmarkCircle}
               />
@@ -193,7 +197,7 @@ const BottomSheetSalahNotifications = ({
             await handleBatteryOptimisation();
           }}
           className={`options-wrap justify-between ${
-            userPreferences[key] === "adhan"
+            userPreferences[key as keyof userPreferencesType] === "adhan"
               ? "border-blue-500"
               : "border-transparent"
           }`}
@@ -203,7 +207,9 @@ const BottomSheetSalahNotifications = ({
               <IonIcon
                 color="primary"
                 className={` ${
-                  userPreferences[key] === "adhan" ? "opacity-100" : "opacity-0"
+                  userPreferences[key as keyof userPreferencesType] === "adhan"
+                    ? "opacity-100"
+                    : "opacity-0"
                 }`}
                 icon={checkmarkCircle}
               />

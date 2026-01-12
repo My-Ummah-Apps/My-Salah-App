@@ -15,9 +15,10 @@ import {
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-import { CalculationMethod, Coordinates } from "adhan";
+import { CalculationMethod } from "adhan";
 import {
   CalculationMethodsType,
+  countryOptionsType,
   userPreferencesType,
 } from "../../../types/types";
 import {
@@ -35,10 +36,9 @@ import { checkmarkCircle } from "ionicons/icons";
 interface BottomSheetCalculationMethodsProps {
   triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  setSelectedCalculationMethod: React.Dispatch<
-    React.SetStateAction<CalculationMethodsType | null>
-  >;
-  selectedCalculationMethod: CalculationMethodsType | null;
+  // setSelectedCalculationMethod: React.Dispatch<
+  //   React.SetStateAction<CalculationMethodsType | null>
+  // >;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   // calculateActiveLocationSalahTimes: () => Promise<void>;
@@ -47,8 +47,7 @@ interface BottomSheetCalculationMethodsProps {
 const BottomSheetCalculationMethods = ({
   triggerId,
   dbConnection,
-  setSelectedCalculationMethod,
-  selectedCalculationMethod,
+  // setSelectedCalculationMethod,
   setUserPreferences,
   userPreferences,
 }: // calculateActiveLocationSalahTimes,
@@ -57,7 +56,61 @@ BottomSheetCalculationMethodsProps) => {
     "country"
   );
 
+  const countryOptions: countryOptionsType[] = [
+    "Egypt",
+    "Pakistan",
+    "Saudi Arabia",
+    "UAE",
+    "Qatar",
+    "Kuwait",
+    "Turkey",
+    "Iran",
+    "US",
+    "Canada",
+    "Singapore",
+    "Malaysia",
+    "Indonesia",
+    "Other",
+  ];
+
   const calculationMethods = [
+    "Dubai",
+    "Egyptian",
+    "MuslimWorldLeague",
+    "Karachi",
+    "Kuwait",
+    "MoonsightingCommittee",
+    "Singapore",
+    "Qatar",
+    "Tehran",
+    "Turkey",
+    "NorthAmerica",
+    "UmmAlQura",
+  ] as const;
+
+  const countryToMethod: Record<countryOptionsType, CalculationMethodsType> = {
+    Egypt: "Egyptian",
+    Pakistan: "Karachi",
+    "Saudi Arabia": "UmmAlQura",
+    UAE: "Dubai",
+    Qatar: "Qatar",
+    Kuwait: "Kuwait",
+    Turkey: "Turkey",
+    Iran: "Tehran",
+    US: "NorthAmerica",
+    Canada: "NorthAmerica",
+    Singapore: "Singapore",
+    Malaysia: "Singapore",
+    Indonesia: "Singapore",
+    Other: "MoonsightingCommittee",
+  };
+
+  type calculationMethod = (typeof calculationMethods)[number];
+
+  const calculationMethodsDetails: {
+    calculationMethod: calculationMethod;
+    description: string;
+  }[] = [
     {
       calculationMethod: "Dubai",
       description:
@@ -93,6 +146,7 @@ BottomSheetCalculationMethodsProps) => {
       description:
         "Early Fajr time with an angle of 20° and standard Isha time with an angle of 18°.",
     },
+
     {
       calculationMethod: "Tehran",
       description:
@@ -115,13 +169,17 @@ BottomSheetCalculationMethodsProps) => {
     },
   ];
 
-  const setAdhanLibraryDefaults = async (calcMethod) => {
+  const setAdhanLibraryDefaults = async (calcMethod: calculationMethod) => {
     // if (!userPreferences.prayerCalculationMethod) return;
 
     try {
       await toggleDBConnection(dbConnection, "open");
 
       const allLocations = await fetchAllLocations(dbConnection);
+
+      // if (!allLocations.activeLocation) {
+      //   throw new Error("Active location does not exist");
+      // }
 
       const params = CalculationMethod[calcMethod]();
 
@@ -191,49 +249,6 @@ BottomSheetCalculationMethodsProps) => {
     }
   };
 
-  const countryOptions = [
-    "Egypt",
-    "Pakistan",
-    "Saudi Arabia",
-    "UAE",
-    "Qatar",
-    "Kuwait",
-    "Turkey",
-    "Iran",
-    "US",
-    "Canada",
-    "Singapore",
-    "Malaysia",
-    "Indonesia",
-    "Sudan",
-    "Somalia",
-    "Bangladesh",
-    "India",
-    "Nigeria",
-    "Other",
-  ];
-
-  const countryToMethod: Record<string, string> = {
-    Egypt: "Egyptian General Authority of Survey",
-    Pakistan: "University of Islamic Sciences, Karachi",
-    SaudiArabia: "Umm Al-Qura University, Makkah",
-    UAE: "Dubai - UAE",
-    Qatar: "Qatar Ministry of Awqaf",
-    Kuwait: "Kuwait",
-    Turkey: "Diyanet, Turkey",
-    Iran: "University of Tehran",
-    US: "North America (ISNA)",
-    Canada: "North America (ISNA)",
-    Singapore: "Singapore / Malaysia / Indonesia",
-    Malaysia: "Singapore / Malaysia / Indonesia",
-    Indonesia: "Singapore / Malaysia / Indonesia",
-    Sudan: "Moonsighting Committee",
-    Somalia: "Moonsighting Committee",
-    Bangladesh: "Moonsighting Committee",
-    India: "Moonsighting Committee",
-    Nigeria: "Moonsighting Committee",
-  };
-
   return (
     <IonModal
       style={{ "--height": "80vh" }}
@@ -276,15 +291,22 @@ BottomSheetCalculationMethodsProps) => {
         {segmentOption === "country" && (
           <section className="mx-4">
             <IonSelect
-              label="Select Country"
               placeholder="Select Country"
+              value={userPreferences.country || undefined}
+              label="Select Country"
               onIonChange={async (e) => {
                 console.log(e.detail.value);
-                const selectedCountry = e.detail.value;
+                const selectedCountry: countryOptionsType = e.detail.value;
                 await updateUserPrefs(
                   dbConnection,
                   "prayerCalculationMethod",
                   countryToMethod[selectedCountry],
+                  setUserPreferences
+                );
+                await updateUserPrefs(
+                  dbConnection,
+                  "country",
+                  selectedCountry,
                   setUserPreferences
                 );
               }}
@@ -295,19 +317,23 @@ BottomSheetCalculationMethodsProps) => {
                 </IonSelectOption>
               ))}
             </IonSelect>
-            <p>
-              <span className="font-bold">Using: </span>
-              <span className="text-blue-500 underline">
-                {
-                  prayerCalculationMethodLabels[
-                    userPreferences.prayerCalculationMethod
-                  ]
-                }
-              </span>
-            </p>
-            <p className="text-sm text-gray-400">
-              The most common calculation method used in your country
-            </p>
+            {userPreferences.country !== "" && (
+              <div>
+                <p>
+                  <span className="font-bold">Using: </span>
+                  <span className="text-blue-500">
+                    {
+                      prayerCalculationMethodLabels[
+                        userPreferences.prayerCalculationMethod
+                      ]
+                    }
+                  </span>
+                </p>
+                <p className="text-sm text-gray-400">
+                  The most common calculation method used in your location
+                </p>
+              </div>
+            )}
           </section>
         )}
         {segmentOption === "manual" && (
@@ -316,13 +342,26 @@ BottomSheetCalculationMethodsProps) => {
             Prayer times can vary depending on the calculation method used.
             Select the method that’s commonly followed in your region.
           </p> */}
-            {calculationMethods.map((item, i) => {
+            {calculationMethodsDetails.map((item, i) => {
               return (
                 <div
                   key={`${item}${i}`}
                   onClick={async () => {
+                    if (
+                      userPreferences.prayerCalculationMethod ===
+                      item.calculationMethod
+                    ) {
+                      return;
+                    }
                     await setAdhanLibraryDefaults(item.calculationMethod);
-                    setSelectedCalculationMethod(item.calculationMethod);
+                    // setSelectedCalculationMethod(item.calculationMethod);
+
+                    await updateUserPrefs(
+                      dbConnection,
+                      "country",
+                      "",
+                      setUserPreferences
+                    );
                   }}
                   className={`options-wrap  ${
                     userPreferences.prayerCalculationMethod ===

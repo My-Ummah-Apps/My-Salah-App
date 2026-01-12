@@ -11,8 +11,24 @@ export type CalculationMethodsType =
   | "Singapore"
   | "Turkey"
   | "Tehran"
-  | "Other"
+  // | "Other"
   | "";
+
+export type countryOptionsType =
+  | "Egypt"
+  | "Pakistan"
+  | "Saudi Arabia"
+  | "UAE"
+  | "Qatar"
+  | "Kuwait"
+  | "Turkey"
+  | "Iran"
+  | "US"
+  | "Canada"
+  | "Singapore"
+  | "Malaysia"
+  | "Indonesia"
+  | "Other";
 
 export type SalahNotificationSettings = "off" | "on" | "adhan";
 
@@ -51,6 +67,7 @@ export interface userPreferencesType {
   ishaNotification: SalahNotificationSettings;
   hasSeenBatteryPrompt: binaryValue;
   polarCircleResolution: "AqrabBalad" | "AqrabYaum" | "Unresolved";
+  country: countryOptionsType | "";
 }
 
 export type PreferenceType = keyof userPreferencesType;
@@ -85,6 +102,7 @@ export interface SalahsType {
   Fajr: SalahStatusType;
   Dhuhr: SalahStatusType;
   Asar: SalahStatusType;
+  Asr: SalahStatusType;
   Maghrib: SalahStatusType;
   Isha: SalahStatusType;
 }
@@ -106,8 +124,14 @@ export type SalahNamesType =
   | "Asr"
   | "Asar"
   | "Maghrib"
-  | "Isha"
-  | Lowercase<"Fajr" | "Dhuhr" | "Asr" | "Asar" | "Maghrib" | "Isha">;
+  | "Isha";
+
+export type SalahNamesTypeAdhanLibrary =
+  | "fajr"
+  | "dhuhr"
+  | "asr"
+  | "maghrib"
+  | "isha";
 
 export interface SalahEntryType {
   salahName: SalahNamesType;

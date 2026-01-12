@@ -28,11 +28,7 @@ import {
   promptToOpenDeviceSettings,
 } from "../../../utils/constants";
 import { LocationsDataObjTypeArr } from "../../../types/types";
-import {
-  addUserLocation,
-  fetchAllLocations,
-  toggleDBConnection,
-} from "../../../utils/dbUtils";
+import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 
 const allCities = cities.map(
   (obj: { country: string; name: string; lat: number; lon: number }) => {
@@ -184,6 +180,7 @@ const BottomSheetAddLocation = ({
       console.log("SYSTEM LOCATION PERMISSIONS DENIED");
 
       await promptToOpenDeviceSettings(
+        `Location permission off`,
         "You currently have location turned off for this application, you can open Settings to re-enable it",
         AndroidSettings.Location
       );

@@ -10,7 +10,7 @@ import {
 } from "@ionic/react";
 import {
   LocationsDataObjTypeArr,
-  SalahNamesType,
+  SalahNamesTypeAdhanLibrary,
   userPreferencesType,
 } from "../types/types";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
@@ -27,7 +27,6 @@ import {
   checkNotificationPermissions,
   getNextSalah,
   promptToOpenDeviceSettings,
-  updateUserPrefs,
 } from "../utils/constants";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
@@ -99,7 +98,8 @@ SalahTimesPageProps) => {
     minsRemaining: 0,
   });
 
-  const [selectedSalah, setSelectedSalah] = useState<SalahNamesType>("fajr");
+  const [selectedSalah, setSelectedSalah] =
+    useState<SalahNamesTypeAdhanLibrary>("fajr");
   const [showSalahNotificationsSheet, setShowSalahNotificationsSheet] =
     useState(false);
 
@@ -139,6 +139,7 @@ SalahTimesPageProps) => {
 
     if (userNotificationPermission === "denied") {
       await promptToOpenDeviceSettings(
+        `Notifications are turned off`,
         `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
         AndroidSettings.AppNotification
       );

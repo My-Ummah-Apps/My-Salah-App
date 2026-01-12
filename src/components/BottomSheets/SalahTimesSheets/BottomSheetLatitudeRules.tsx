@@ -1,5 +1,4 @@
 import {
-  IonContent,
   IonHeader,
   IonIcon,
   IonModal,
@@ -14,7 +13,7 @@ import {
   MODAL_BREAKPOINTS,
   updateUserPrefs,
 } from "../../../utils/constants";
-import { checkmarkCircle, statsChartOutline } from "ionicons/icons";
+import { checkmarkCircle } from "ionicons/icons";
 
 // import { CalculationMethod } from "adhan";
 
