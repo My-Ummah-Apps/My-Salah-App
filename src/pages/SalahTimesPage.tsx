@@ -18,7 +18,10 @@ import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimes
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   chevronDownOutline,
-  notificationsOutline,
+  megaphone,
+  notifications,
+  notificationsCircle,
+  notificationsOff,
   settingsOutline,
 } from "ionicons/icons";
 
@@ -27,6 +30,7 @@ import Toast from "../components/Toast";
 import {
   checkNotificationPermissions,
   getNextSalah,
+  prayerCalculationMethodLabels,
   promptToOpenDeviceSettings,
 } from "../utils/constants";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
@@ -286,9 +290,8 @@ const SalahTimesPage = ({
                 <IonButton
                   className={name === "sunrise" ? "opacity-0" : "opacity-100"}
                   onClick={async () => {
-                    if (name === "sunrise") return;
-
                     if (
+                      name === "sunrise" ||
                       userPreferences.prayerCalculationMethod === null ||
                       userPreferences.prayerCalculationMethod === "" ||
                       userLocations?.length === 0
@@ -309,7 +312,25 @@ const SalahTimesPage = ({
                 >
                   <IonIcon
                     className="text-[var(--ion-text-color)]"
-                    icon={notificationsOutline}
+                    icon={
+                      userPreferences[
+                        `${name as Exclude<typeof name, "sunrise">}Notification`
+                      ] === "off"
+                        ? notificationsOff
+                        : userPreferences[
+                            `${
+                              name as Exclude<typeof name, "sunrise">
+                            }Notification`
+                          ] === "on"
+                        ? notifications
+                        : userPreferences[
+                            `${
+                              name as Exclude<typeof name, "sunrise">
+                            }Notification`
+                          ] === "adhan"
+                        ? megaphone
+                        : ""
+                    }
                   />
                 </IonButton>
               </div>
@@ -321,8 +342,15 @@ const SalahTimesPage = ({
           userLocations?.length !== 0 && (
             <p className="mx-10 my-5 text-xs text-center text-gray-400">
               {`Note: These times have been calculated using the
-            ${userPreferences.prayerCalculationMethod} method and may differ from
-            your local Mosque times`}
+            ${
+              prayerCalculationMethodLabels[
+                userPreferences.prayerCalculationMethod
+              ]
+            } method with Fajr Angle ${
+                userPreferences.fajrAngle
+              }° and Isha Angle ${
+                userPreferences.ishaAngle
+              }°, your local mosque times may differ.`}
             </p>
           )}
       </IonContent>

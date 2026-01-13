@@ -137,9 +137,9 @@ BottomSheetSalahTimesSettingsProps) => {
                         userPreferences.prayerCalculationMethod
                       ]}
                 </p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -160,9 +160,9 @@ BottomSheetSalahTimesSettingsProps) => {
                     ? "Earlier Asr"
                     : "Later Asr"}
                 </p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -211,9 +211,9 @@ BottomSheetSalahTimesSettingsProps) => {
                     selectedCalculationMethod || "MuslimWorldLeague"
                   ]().highLatitudeRule.toString()}
                 </p> */}
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -236,9 +236,9 @@ BottomSheetSalahTimesSettingsProps) => {
               <p className="">Fajr Angle:</p>
               <div className="flex items-center gap-1">
                 <p>{userPreferences.fajrAngle}</p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -259,9 +259,9 @@ BottomSheetSalahTimesSettingsProps) => {
               <p className="">Isha Angle:</p>
               <div className="flex items-center gap-1">
                 <p>{userPreferences.ishaAngle}</p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -297,9 +297,9 @@ BottomSheetSalahTimesSettingsProps) => {
                     selectedCalculationMethod || "MuslimWorldLeague"
                   ]().highLatitudeRule.toString()}
                 </p> */}
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -325,9 +325,9 @@ BottomSheetSalahTimesSettingsProps) => {
                     ? "minute"
                     : "minutes"}
                 </p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -351,9 +351,9 @@ BottomSheetSalahTimesSettingsProps) => {
                   {userPreferences.asrAdjustment}{" "}
                   {userPreferences.asrAdjustment === "1" ? "minute" : "minutes"}
                 </p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -379,9 +379,9 @@ BottomSheetSalahTimesSettingsProps) => {
                     ? "minute"
                     : "minutes"}
                 </p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -408,9 +408,9 @@ BottomSheetSalahTimesSettingsProps) => {
                     ? "minute"
                     : "minutes"}
                 </p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>
@@ -466,9 +466,9 @@ BottomSheetSalahTimesSettingsProps) => {
                     ]
                   }
                 </p>
-                <p>
+                {/* <p>
                   <MdOutlineChevronRight />
-                </p>
+                </p> */}
               </div>
             </div>
           </IonButton>

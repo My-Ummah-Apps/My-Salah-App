@@ -103,6 +103,11 @@ const App = () => {
     maghrib: "",
     isha: "",
   });
+
+  useEffect(() => {
+    console.log("Salah times: ", salahTimes);
+  }, [salahTimes]);
+
   const [theme, setTheme] = useState<themeType>("dark");
 
   const handleTheme = (theme?: themeType) => {
@@ -224,7 +229,7 @@ const App = () => {
   useEffect(() => {
     if (
       !isDatabaseInitialised
-      // || userPreferences.prayerCalculationMethod === ""
+      // ||  userPreferences.prayerCalculationMethod === ""
     ) {
       return;
     }

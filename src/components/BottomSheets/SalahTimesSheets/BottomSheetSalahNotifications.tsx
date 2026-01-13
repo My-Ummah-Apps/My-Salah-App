@@ -96,7 +96,6 @@ const BottomSheetSalahNotifications = ({
         <div
           onClick={async () => {
             await updateUserPrefs(dbConnection, key, "off", setUserPreferences);
-
             await cancelSalahReminderNotifications(selectedSalah);
           }}
           className={`options-wrap justify-between ${

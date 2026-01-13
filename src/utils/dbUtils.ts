@@ -64,6 +64,7 @@ export const fetchAllLocations = async (
     const res = await dbConnection.current.query(
       "SELECT * from userLocationsTable"
     );
+
     if (!res || !res.values) {
       throw new Error("Failed to obtain data from userLocationsTable");
     }
