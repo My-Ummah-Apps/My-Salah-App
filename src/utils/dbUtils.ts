@@ -47,7 +47,10 @@ export async function toggleDBConnection(
 
 export const fetchAllLocations = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>
-) => {
+): Promise<{
+  allLocations: LocationsDataObjTypeArr;
+  activeLocation: LocationsDataObjType | null;
+}> => {
   try {
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");

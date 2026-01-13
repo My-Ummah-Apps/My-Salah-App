@@ -259,7 +259,6 @@ BottomSheetSalahTimesSettingsProps) => {
                 await deleteUserLocation(dbConnection, locationToDeleteId);
 
                 setLocationToDeleteId(null);
-                console.log("LOCATIONS SHEET LIST 2 ");
 
                 const { allLocations, activeLocation } =
                   await fetchAllLocations(dbConnection);

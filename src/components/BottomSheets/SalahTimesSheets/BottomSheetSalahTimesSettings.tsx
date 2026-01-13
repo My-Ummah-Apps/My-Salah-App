@@ -7,10 +7,7 @@ import {
 } from "../../../utils/constants";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import {
-  CalculationMethodsType,
-  userPreferencesType,
-} from "../../../types/types";
+import { userPreferencesType } from "../../../types/types";
 
 import { useState } from "react";
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";

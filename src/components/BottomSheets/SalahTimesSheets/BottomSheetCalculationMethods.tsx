@@ -129,7 +129,7 @@ BottomSheetCalculationMethodsProps) => {
     {
       calculationMethod: "Karachi",
       description:
-        " University of Islamic Sciences, Karachi. A generally applicable method that uses standard Fajr and Isha angles of 18°.",
+        "University of Islamic Sciences, Karachi. A generally applicable method that uses standard Fajr and Isha angles of 18°.",
     },
     {
       calculationMethod: "Kuwait",
@@ -139,7 +139,7 @@ BottomSheetCalculationMethodsProps) => {
     {
       calculationMethod: "MoonsightingCommittee",
       description:
-        " Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude. Recommended for North America and the UK.",
+        "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude. Recommended for North America and the UK.",
     },
     {
       calculationMethod: "Singapore",
@@ -175,18 +175,18 @@ BottomSheetCalculationMethodsProps) => {
     try {
       await toggleDBConnection(dbConnection, "open");
 
-      const allLocations = await fetchAllLocations(dbConnection);
+      const { activeLocation } = await fetchAllLocations(dbConnection);
 
       const params = CalculationMethod[calcMethod]();
 
-      if (!allLocations.activeLocation) {
+      if (!activeLocation) {
         console.error("Active location does not exist");
         return;
       }
 
       const coordinates = new Coordinates(
-        allLocations.activeLocation.latitude,
-        allLocations.activeLocation.longitude
+        activeLocation.latitude,
+        activeLocation.longitude
       );
 
       const defaultCalcMethodValues = {

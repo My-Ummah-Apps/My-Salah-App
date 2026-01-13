@@ -68,7 +68,7 @@ const SalahTimesPage = ({
   const [nextSalahNameAndTime, setNextSalahNameAndTime] = useState({
     currentSalah: "",
     nextSalah: "",
-    nextSalahTime: 0,
+    nextSalahTime: null as Date | null,
     hoursRemaining: 0,
     minsRemaining: 0,
   });

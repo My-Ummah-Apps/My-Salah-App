@@ -45,8 +45,7 @@ const BottomSheetSalahNotifications = ({
   setUserPreferences,
   userPreferences,
 }: BottomSheetSalahNotificationsProps) => {
-  const key = `${selectedSalah}Notification`;
-  // console.log("key: ", key);
+  const key: keyof userPreferencesType = `${selectedSalah}Notification`;
 
   const handleBatteryOptimisation = async () => {
     if (
