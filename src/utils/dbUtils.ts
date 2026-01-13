@@ -51,6 +51,11 @@ export const fetchAllLocations = async (
   allLocations: LocationsDataObjTypeArr;
   activeLocation: LocationsDataObjType | null;
 }> => {
+  console.log(
+    "RUNNING FETCH ALL LOCATIONS, DB CONNECTION IS:",
+    dbConnection.current
+  );
+
   try {
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");

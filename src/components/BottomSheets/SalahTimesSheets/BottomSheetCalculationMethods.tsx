@@ -177,6 +177,8 @@ BottomSheetCalculationMethodsProps) => {
 
       const { activeLocation } = await fetchAllLocations(dbConnection);
 
+      console.log("FETCH ALL LOCATIONS CALLE FROM CALCULATION METHODS SHEET");
+
       const params = CalculationMethod[calcMethod]();
 
       if (!activeLocation) {

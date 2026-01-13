@@ -155,6 +155,9 @@ BottomSheetSalahTimesSettingsProps) => {
                   const { allLocations } = await fetchAllLocations(
                     dbConnection
                   );
+                  console.log(
+                    "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET"
+                  );
                   setUserLocations(allLocations);
                 } catch (error) {
                   console.error(error);
@@ -262,7 +265,9 @@ BottomSheetSalahTimesSettingsProps) => {
 
                 const { allLocations, activeLocation } =
                   await fetchAllLocations(dbConnection);
-
+                console.log(
+                  "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET 2"
+                );
                 // if (!allLocations || allLocations.length === 0) {
                 //   throw new Error("Error obtaining all locations");
                 // }

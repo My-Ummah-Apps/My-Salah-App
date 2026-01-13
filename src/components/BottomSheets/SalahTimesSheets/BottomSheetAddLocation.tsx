@@ -388,6 +388,9 @@ const BottomSheetAddLocation = ({
                       const { allLocations } = await fetchAllLocations(
                         dbConnection
                       );
+                      console.log(
+                        "FETCH ALL LOCATIONS CALLE FROM ADD LOCATION SHEET"
+                      );
 
                       console.log("Locations: ", allLocations);
 

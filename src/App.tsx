@@ -223,12 +223,15 @@ const App = () => {
 
   useEffect(() => {
     if (
-      !isDatabaseInitialised ||
-      userPreferences.prayerCalculationMethod === ""
-    )
+      !isDatabaseInitialised
+      // || userPreferences.prayerCalculationMethod === ""
+    ) {
       return;
+    }
 
-    if (userLocations?.length === 0) return;
+    console.log("isDatabaseInitialised:", isDatabaseInitialised);
+
+    if (userLocations.length === 0) return;
 
     const calc = async () => {
       await getSalahTimes(dbConnection, userPreferences, setSalahtimes);

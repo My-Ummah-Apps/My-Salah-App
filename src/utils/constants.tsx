@@ -364,6 +364,8 @@ export const scheduleSalahTimesNotifications = async (
   userPreferences: userPreferencesType,
   setting: SalahNotificationSettings
 ) => {
+  console.log("SCHEDULING");
+
   const today = new Date();
 
   const customAdjustment = Number(
@@ -414,8 +416,7 @@ export const scheduleSalahTimesNotifications = async (
 
       // console.log("arr: ", arr);
     }
-    // ! remove web when not in dev
-    // if (device === "android" || device === "web") {
+
     for (let i = 0; i < arr.length; i++) {
       const uniqueId = generateNotificationId(salahName, arr[i]);
 
@@ -448,21 +449,22 @@ export const generateActiveLocationParams = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   userPreferences: userPreferencesType
 ) => {
-  // if (!isDatabaseInitialised) return;
-
-  console.log(
-    "USERPREFS IN generateActiveLocationParams: ",
-    userPreferences.country
-  );
+  if (!dbConnection.current) {
+    throw new Error("dbconnection does not exist");
+  }
 
   const todaysDate = new Date();
 
   try {
     await toggleDBConnection(dbConnection, "open");
 
+    console.log("Connection open? ", await dbConnection.current?.isDBOpen());
+
     const { allLocations, activeLocation } = await fetchAllLocations(
       dbConnection
     );
+    console.log("FETCH ALL LOCATIONS CALLE FROM CONSTANTS");
+    console.log("Connection open? ", await dbConnection.current?.isDBOpen());
 
     if (allLocations.length === 0 || !activeLocation) {
       return;
@@ -525,9 +527,11 @@ export const getSalahTimes = async (
 
   if (!params || !coordinates || !todaysDate) return;
 
-  console.log("params: ", params);
-  console.log("coordinates: ", coordinates);
-  console.log("todaysDate: ", todaysDate);
+  console.log("params: ", params),
+    "coordinates: ",
+    coordinates,
+    "todaysDate: ",
+    todaysDate;
 
   const extractSalahTime = (
     salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha"
@@ -570,7 +574,7 @@ export const getNextSalah = async (
   let allSalahTimes = new PrayerTimes(coordinates, todaysDate, params);
 
   let next = allSalahTimes.nextPrayer();
-  let nextSalahTime: Date | null;
+  let nextSalahTime: Date | null = null;
   let currentSalah:
     | "none"
     | "fajr"
@@ -594,8 +598,8 @@ export const getNextSalah = async (
 
     nextSalahTime = allSalahTimes.timeForPrayer(next);
   } else if (next === "sunrise") {
-    next = "dhuhr";
-    nextSalahTime = allSalahTimes.timeForPrayer(next);
+    // next = "dhuhr";
+    // nextSalahTime = allSalahTimes.timeForPrayer(next);
   } else {
     nextSalahTime = allSalahTimes.timeForPrayer(next);
     currentSalah = allSalahTimes.currentPrayer();
