@@ -456,6 +456,10 @@ export const generateActiveLocationParams = async (
   const todaysDate = new Date();
 
   try {
+    console.log(
+      "Attempting to open connection within generateActiveLocationParams..."
+    );
+
     await toggleDBConnection(dbConnection, "open");
 
     console.log("Connection open? ", await dbConnection.current?.isDBOpen());
@@ -598,8 +602,9 @@ export const getNextSalah = async (
 
     nextSalahTime = allSalahTimes.timeForPrayer(next);
   } else if (next === "sunrise") {
-    // next = "dhuhr";
-    // nextSalahTime = allSalahTimes.timeForPrayer(next);
+    next = "sunrise";
+    nextSalahTime = allSalahTimes.timeForPrayer(next);
+    currentSalah = "fajr";
   } else {
     nextSalahTime = allSalahTimes.timeForPrayer(next);
     currentSalah = allSalahTimes.currentPrayer();

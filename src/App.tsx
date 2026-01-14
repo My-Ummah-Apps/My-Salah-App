@@ -350,6 +350,9 @@ const App = () => {
         );
       }
 
+      console.log("DBResultAllSalahData: ", DBResultAllSalahData);
+      console.log("DBResultPreferences: ", DBResultPreferences);
+
       setUserLocations(DBResultLocations.values);
 
       const userNotificationPermission = await checkNotificationPermissions();

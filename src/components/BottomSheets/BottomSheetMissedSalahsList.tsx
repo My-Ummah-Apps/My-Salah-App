@@ -147,7 +147,7 @@ const MissedSalahsListBottomSheet = ({
                     layout: { duration: 0.2 },
                   }}
                   key={`${date}-${salah}`}
-                  className={`bg-[color:var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
+                  className={`bg-[var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl`}
                 >
                   <section className="flex items-center justify-between text-[var(--ion-text-color)]">
                     <p>{salah}</p>
@@ -272,7 +272,7 @@ export default MissedSalahsListBottomSheet;
 //   >
 //     <div
 //       key={`${date}-${index}`}
-//       className="bg-[color:var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-1 rounded-2xl"
+//       className="bg-[var(--card-bg-color)] flex justify-between items-center px-4 py-8 mx-3 my-1 rounded-2xl"
 //     >
 //       <div>{createLocalisedDate(date)[1]}</div>
 //       <div>{salah}</div>

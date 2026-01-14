@@ -249,7 +249,7 @@ const SettingsPage = ({
         >
           <div className="settings-page-options-wrap">
             <div
-              className={`flex items-center justify-between individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+              className={`flex items-center justify-between individual-setting-wrap bg-[var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
               id="open-notification-options-sheet"
             >
               <div className="mx-2">
@@ -283,7 +283,7 @@ const SettingsPage = ({
               handleTheme={handleTheme}
             />
             <div
-              className={`flex items-center justify-between individual-setting-wrap bg-[color:var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
+              className={`flex items-center justify-between individual-setting-wrap bg-[var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
             >
               <div className="mx-2">
                 <p className="pt-[0.3rem] pb-[0.1rem] text-lg">

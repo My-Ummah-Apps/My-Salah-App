@@ -46,7 +46,7 @@ const StreakCounter = ({
 
   return (
     <>
-      <div className={`mb-5 bg-[color:var(--card-bg-color)] rounded-2xl`}>
+      <div className={`mb-5 bg-[var(--card-bg-color)] rounded-2xl`}>
         <section className="flex items-center justify-between p-2 text-xs">
           <div>
             {activeStreakObj && activeStreakObj.days > 0 && (

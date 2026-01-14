@@ -26,7 +26,7 @@ const ReasonsCard = ({
     <AnimatePresence>
       <motion.section
         // layout
-        className="text-sm bg-[color:var(--card-bg-color)] mt-5 rounded-2xl h-full"
+        className="text-sm bg-[var(--card-bg-color)] mt-5 rounded-2xl h-full"
       >
         <h1 className="py-4 mx-4 text-lg text-center">
           {`Top Reasons For ${

@@ -160,19 +160,19 @@ BottomSheetStartDateProps) => {
             style={{
               color: charCount === 0 ? "red" : "var(--ion-text-color)",
             }}
-            className="pl-5 text-xs bg-[color:var(--card-bg-color)]"
+            className="pl-5 text-xs bg-[var(--card-bg-color)]"
           >
             {`${charCount} characters left`}
           </motion.p>
         )}
 
-        <ul className="pt-3 px-2 bg-[color:var(--card-bg-color)]">
+        <ul className="pt-3 px-2 bg-[var(--card-bg-color)]">
           <AnimatePresence>
             {userPreferences.reasons
               .sort((a, b) => a.localeCompare(b))
               .map((reason) => (
                 <motion.li
-                  className={`flex justify-between items-center bg-[color:var(--card-bg-color)] px-2 py-4 my-3 rounded-lg`}
+                  className={`flex justify-between items-center bg-[var(--card-bg-color)] px-2 py-4 my-3 rounded-lg`}
                   layout
                   initial={{ x: 0 }}
                   animate={{ x: 0 }}

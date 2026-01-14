@@ -5,10 +5,24 @@ import {
   LocationsDataObjTypeArr,
 } from "../types/types";
 
+let dbLock: Promise<void> = Promise.resolve();
+
+// export function toggleDBConnection(
+//   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+//   action: DBConnectionStateType
+// ) {
+//   dbLock = dbLock.then(() => queuedToggleDBConnection(dbConnection, action));
+
+//   return dbLock;
+// }
+
+// export async function queuedToggleDBConnection(
 export async function toggleDBConnection(
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   action: DBConnectionStateType
 ) {
+  console.log("toggleDBConnection is being run...");
+
   try {
     if (!dbConnection || !dbConnection.current) {
       throw new Error(
@@ -17,15 +31,27 @@ export async function toggleDBConnection(
     }
 
     const isDatabaseOpen = await dbConnection.current.isDBOpen();
+    console.log("isDatabaseOpen: ", isDatabaseOpen);
 
     if (
       (action === "open" && isDatabaseOpen.result === true) ||
       (action === "close" && isDatabaseOpen.result === false)
     ) {
+      console.log(
+        "action is: ",
+        action,
+        "and isDatabaseOpen.result is: ",
+        isDatabaseOpen,
+        "therefore returning"
+      );
       return;
     }
 
     if (isDatabaseOpen.result === undefined) {
+      console.log(
+        "isDatabaseOpen.result === undefined therefore throwing error"
+      );
+
       throw new Error(
         "isDatabaseOpen.result is undefined within toggleDBConnection"
       );
@@ -36,12 +62,15 @@ export async function toggleDBConnection(
       await dbConnection.current.close();
       console.log("DB CONNECTION CLOSED");
     } else {
+      console.log("THROWING ERROR IN ELSE STATEMENT");
       throw new Error(
         `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
       );
     }
   } catch (error) {
-    console.error(error);
+    console.log("THROWING ERROR IN CATCH STATEMENT");
+
+    throw new Error(`toggleDBConnection(${action}) failed: ${error}`);
   }
 }
 

@@ -20,7 +20,6 @@ import {
   chevronDownOutline,
   megaphone,
   notifications,
-  notificationsCircle,
   notificationsOff,
   settingsOutline,
 } from "ionicons/icons";
@@ -161,10 +160,10 @@ const SalahTimesPage = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {/* bg-[color:var(--card-bg-color)]  */}
+        {/* bg-[var(--card-bg-color)]  */}
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations?.length !== 0 && (
-            <section className="p-4 my-5 mx-2 rounded-lg bg-[color:var(--card-bg-color)] ">
+            <section className="p-4 my-5 mx-2 rounded-lg bg-[var(--card-bg-color)] ">
               {nextSalahNameAndTime.currentSalah !== "sunrise" &&
                 nextSalahNameAndTime.currentSalah !== "none" && (
                   <>
@@ -187,10 +186,10 @@ const SalahTimesPage = ({
                   {nextSalahNameAndTime.hoursRemaining} hours and{" "}
                 </p>
               )}
-              <p className="font-light text-center">
+              <p className="text-center font-extralight">
                 {nextSalahNameAndTime.minsRemaining} minutes to go until
               </p>
-              <p className="mt-2 mb-5 text-2xl font-bold text-center">
+              <p className="mt-2 mb-5 text-2xl text-center">
                 {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
                   nextSalahNameAndTime.nextSalah.slice(1)}
               </p>
@@ -275,8 +274,8 @@ const SalahTimesPage = ({
           ).map(([name, time]) => (
             <div
               // && name !== "sunrise"
-              className={`bg-[color:var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg ${
-                name === nextSalahNameAndTime.currentSalah
+              className={`bg-[var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg ${
+                name === nextSalahNameAndTime.currentSalah && name !== "sunrise"
                   ? "my-2 rounded-lg shadow-md scale-102 border border-[var(--app-border-color)]"
                   : ""
               }`}
