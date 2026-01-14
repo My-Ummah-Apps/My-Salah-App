@@ -5,7 +5,7 @@ import {
   LocationsDataObjTypeArr,
 } from "../types/types";
 
-let dbLock: Promise<void> = Promise.resolve();
+// let dbLock: Promise<void> = Promise.resolve();
 
 // export function toggleDBConnection(
 //   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,

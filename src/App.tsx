@@ -238,11 +238,11 @@ const App = () => {
 
     if (userLocations.length === 0) return;
 
-    const calc = async () => {
+    const generateSalahTimes = async () => {
       await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
     };
 
-    calc();
+    generateSalahTimes();
 
     const scheduleSalahNotifications = async () => {
       const salahs: SalahNamesTypeAdhanLibrary[] = [

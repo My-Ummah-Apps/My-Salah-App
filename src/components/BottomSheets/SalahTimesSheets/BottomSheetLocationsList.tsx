@@ -8,8 +8,6 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  IonList,
-  IonItem,
   isPlatform,
 } from "@ionic/react";
 
