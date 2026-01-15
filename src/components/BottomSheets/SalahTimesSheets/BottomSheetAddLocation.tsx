@@ -1,5 +1,6 @@
 import {
   IonButton,
+  IonCheckbox,
   IonHeader,
   IonIcon,
   IonInput,
@@ -79,6 +80,10 @@ const BottomSheetAddLocation = ({
   const [longitude, setLongitude] = useState<number | null>(null);
   const [citySearchMode, setCitySearchMode] = useState(false);
   const [isGpsBtnClicked, setIsGpsBtnClicked] = useState(false);
+  const [
+    isDefaultLocationCheckBoxChecked,
+    setIsDefaultLocationCheckBoxChecked,
+  ] = useState(false);
 
   const addUserLocation = async (
     dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
@@ -93,6 +98,19 @@ const BottomSheetAddLocation = ({
 
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");
+    }
+
+    console.log(
+      "isDefaultLocationCheckBoxChecked: ",
+      isDefaultLocationCheckBoxChecked,
+      "isSelected: ",
+      isSelected
+    );
+
+    if (isDefaultLocationCheckBoxChecked && isSelected === 1) {
+      await dbConnection.current.run(
+        `UPDATE userLocationsTable SET isSelected = 0`
+      );
     }
 
     const params = [locationName, latitude, longitude, isSelected];
@@ -116,6 +134,7 @@ const BottomSheetAddLocation = ({
     setShowEmptyLongitudeError(false);
     setCitySearchMode(false);
     setIsGpsBtnClicked(false);
+    setIsDefaultLocationCheckBoxChecked(false);
   };
 
   const handleGrantedPermission = async () => {
@@ -321,6 +340,18 @@ const BottomSheetAddLocation = ({
                 </>
               )}
             </div>
+            {userLocations && userLocations.length > 0 && (
+              <IonCheckbox
+                className="mb-4 text-xs"
+                labelPlacement="end"
+                checked={isDefaultLocationCheckBoxChecked}
+                onIonChange={(e) =>
+                  setIsDefaultLocationCheckBoxChecked(e.detail.checked)
+                }
+              >
+                Make this the default location
+              </IonCheckbox>
+            )}
             <div className="flex justify-center w-full gap-4">
               <IonButton
                 className="p-0 text-base text-[var(--ion-text-color)]"
@@ -380,7 +411,11 @@ const BottomSheetAddLocation = ({
 
                   if (latitude && longitude && locationName) {
                     try {
-                      const isSelected = userLocations.length === 0 ? 1 : 0;
+                      const isSelected =
+                        userLocations.length === 0 ||
+                        isDefaultLocationCheckBoxChecked
+                          ? 1
+                          : 0;
 
                       await toggleDBConnection(dbConnection, "open");
 
@@ -401,9 +436,10 @@ const BottomSheetAddLocation = ({
                       const { allLocations } = await fetchAllLocations(
                         dbConnection
                       );
-                      console.log(
-                        "FETCH ALL LOCATIONS CALLE FROM ADD LOCATION SHEET"
-                      );
+                      // console.log(
+                      //   "FETCH ALL LOCATIONS CALLE FROM ADD LOCATION SHEET: ",
+                      //   allLocations
+                      // );
 
                       console.log("Locations: ", allLocations);
 
@@ -414,16 +450,17 @@ const BottomSheetAddLocation = ({
                         setShowAddLocationSheet(false);
                         setUserLocations(allLocations);
                         setShowLocationAddedToast(true);
-                        setUserLocations([
-                          ...userLocations,
-                          {
-                            id: result.changes.lastId,
-                            locationName: locationName,
-                            latitude: latitude,
-                            longitude: longitude,
-                            isSelected: userLocations.length === 0 ? 1 : 0,
-                          },
-                        ]);
+                        // setUserLocations([
+                        //   ...userLocations,
+                        //   {
+                        //     id: result.changes.lastId,
+                        //     locationName: locationName,
+                        //     latitude: latitude,
+                        //     longitude: longitude,
+                        //     isSelected: userLocations.length === 0 ? 1 : 0,
+                        //   },
+                        // ]);
+                        setUserLocations(allLocations);
                       } else {
                         console.error("Locations undefined");
                       }

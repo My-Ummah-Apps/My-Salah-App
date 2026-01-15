@@ -19,6 +19,7 @@ import {
   IOSSettings,
   NativeSettings,
 } from "capacitor-native-settings";
+
 import { fetchAllLocations, toggleDBConnection } from "./dbUtils";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { CalculationMethod, Coordinates, PrayerTimes } from "adhan";
@@ -364,8 +365,6 @@ export const scheduleSalahTimesNotifications = async (
   userPreferences: userPreferencesType,
   setting: SalahNotificationSettings
 ) => {
-  console.log("SCHEDULING");
-
   const today = new Date();
 
   const customAdjustment = Number(
@@ -392,10 +391,7 @@ export const scheduleSalahTimesNotifications = async (
     );
 
     if (!result) return;
-    const { params, coordinates, todaysDate } = result;
-
-    console.log(salahName, setting);
-    console.log(coordinates, todaysDate, params);
+    const { params, coordinates } = result;
 
     const arr = [];
 
@@ -404,17 +400,13 @@ export const scheduleSalahTimesNotifications = async (
         salahName
       ];
 
+      console.log("SALAH NAME: ", salahName, "salahTime: ", salahTime);
+
       const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
 
-      // console.log("SalahTime: ", salahTime);
-      // console.log("localisedSalahTime: ", localisedSalahTime);
-
       if (today < localisedSalahTime) {
-        // arr.push(localisedSalahTime);
         arr.push(addMinutes(localisedSalahTime, customAdjustment));
       }
-
-      // console.log("arr: ", arr);
     }
 
     for (let i = 0; i < arr.length; i++) {
@@ -456,19 +448,19 @@ export const generateActiveLocationParams = async (
   const todaysDate = new Date();
 
   try {
-    console.log(
-      "Attempting to open connection within generateActiveLocationParams..."
-    );
+    // console.log(
+    //   "Attempting to open connection within generateActiveLocationParams..."
+    // );
 
     await toggleDBConnection(dbConnection, "open");
 
-    console.log("Connection open? ", await dbConnection.current?.isDBOpen());
+    // console.log("Connection open? ", await dbConnection.current?.isDBOpen());
 
     const { allLocations, activeLocation } = await fetchAllLocations(
       dbConnection
     );
-    console.log("FETCH ALL LOCATIONS CALLE FROM CONSTANTS");
-    console.log("Connection open? ", await dbConnection.current?.isDBOpen());
+    // console.log("FETCH ALL LOCATIONS CALLE FROM CONSTANTS");
+    // console.log("Connection open? ", await dbConnection.current?.isDBOpen());
 
     if (allLocations.length === 0 || !activeLocation) {
       return;
@@ -546,10 +538,28 @@ export const getSalahTimes = async (
 
     const locale = navigator.language;
 
+    console.log(
+      "YO: ",
+      new Intl.DateTimeFormat(locale, {
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: userPreferences.timeFormat === "24hr" ? "h23" : "h12",
+      }).format(salahTime)
+    );
+
+    // return userPreferences.timeFormat === "12hr"
+    //   ? format(salahTime, "hh:mm a")
+    //   : format(salahTime, "HH:mm");
+
     return salahTime.toLocaleTimeString(locale, {
       hour: "2-digit",
       minute: "2-digit",
     });
+    // return new Intl.DateTimeFormat(locale, {
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    //   hour12: userPreferences.timeFormat === "24hr" ? false : true,
+    // }).format(salahTime);
   };
 
   setSalahtimes({

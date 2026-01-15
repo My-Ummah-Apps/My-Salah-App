@@ -1,4 +1,12 @@
-import { IonContent, IonModal, IonButton, IonToggle } from "@ionic/react";
+import {
+  IonContent,
+  IonModal,
+  IonButton,
+  IonToggle,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+} from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -110,11 +118,15 @@ BottomSheetSalahTimesSettingsProps) => {
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      {/* <IonHeader> */}
-      {/* <IonToolbar>
+      <IonHeader className="ion-no-border">
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
           <IonTitle>Salah Times Settings</IonTitle>
         </IonToolbar>
-      </IonHeader> */}
+      </IonHeader>
       <IonContent>
         <section className="px-2 mt-10">
           <IonButton

@@ -234,8 +234,6 @@ const App = () => {
       return;
     }
 
-    console.log("isDatabaseInitialised:", isDatabaseInitialised);
-
     if (userLocations.length === 0) return;
 
     const generateSalahTimes = async () => {

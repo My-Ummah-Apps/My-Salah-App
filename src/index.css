@@ -239,6 +239,14 @@ ion-picker {
   /* --highlight-border-radius: 50px; */
 }
 
+ion-checkbox::part(container) {
+  border: 1px solid var(--app-border-color);
+}
+
+ion-content {
+  /* --background: transparent; */
+}
+
 .modal-fit-content {
   --height: auto;
 }
