@@ -8,6 +8,7 @@ import {
   IonTitle,
 } from "@ionic/react";
 import {
+  getSalahTimes,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   prayerCalculationMethodLabels,
@@ -15,7 +16,7 @@ import {
 } from "../../../utils/constants";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { userPreferencesType } from "../../../types/types";
+import { salahTimesObjType, userPreferencesType } from "../../../types/types";
 
 import { useState } from "react";
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
@@ -33,6 +34,8 @@ interface BottomSheetSalahTimesSettingsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
+
   // calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 
@@ -42,6 +45,7 @@ const BottomSheetSalahTimesSettings = ({
   dbConnection,
   setUserPreferences,
   userPreferences,
+  setSalahtimes,
 }: // calculateActiveLocationSalahTimes,
 BottomSheetSalahTimesSettingsProps) => {
   // const [selectedCalculationMethod, setSelectedCalculationMethod] =

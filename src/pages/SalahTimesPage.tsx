@@ -138,6 +138,10 @@ const SalahTimesPage = ({
     }
   };
 
+  useEffect(() => {
+    console.log("userPreferences.timeFormat: ", userPreferences.timeFormat);
+  }, [userPreferences.timeFormat]);
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -373,6 +377,7 @@ const SalahTimesPage = ({
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
+        setSalahtimes={setSalahtimes}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <BottomSheetSalahNotifications

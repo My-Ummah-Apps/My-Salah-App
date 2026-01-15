@@ -23,6 +23,7 @@ import {
 import { fetchAllLocations, toggleDBConnection } from "./dbUtils";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { CalculationMethod, Coordinates, PrayerTimes } from "adhan";
+import { useEffect } from "react";
 
 const device = Capacitor.getPlatform();
 
@@ -480,7 +481,7 @@ export const generateActiveLocationParams = async (
         userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
       ]();
 
-    console.log("params before amendments: ", params);
+    // console.log("params before amendments: ", params);
 
     params.madhab = userPreferences.madhab;
     params.highLatitudeRule = userPreferences.highLatitudeRule;
@@ -523,11 +524,11 @@ export const getSalahTimes = async (
 
   if (!params || !coordinates || !todaysDate) return;
 
-  console.log("params: ", params),
-    "coordinates: ",
-    coordinates,
-    "todaysDate: ",
-    todaysDate;
+  // console.log("params: ", params),
+  //   "coordinates: ",
+  //   coordinates,
+  //   "todaysDate: ",
+  //   todaysDate;
 
   const extractSalahTime = (
     salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha"
@@ -539,27 +540,15 @@ export const getSalahTimes = async (
     const locale = navigator.language;
 
     console.log(
-      "YO: ",
-      new Intl.DateTimeFormat(locale, {
-        hour: "2-digit",
-        minute: "2-digit",
-        hourCycle: userPreferences.timeFormat === "24hr" ? "h23" : "h12",
-      }).format(salahTime)
+      "userPreferences.timeFormat: ",
+      userPreferences.timeFormat === "24hr"
     );
 
-    // return userPreferences.timeFormat === "12hr"
-    //   ? format(salahTime, "hh:mm a")
-    //   : format(salahTime, "HH:mm");
-
-    return salahTime.toLocaleTimeString(locale, {
+    return new Intl.DateTimeFormat(locale, {
       hour: "2-digit",
       minute: "2-digit",
-    });
-    // return new Intl.DateTimeFormat(locale, {
-    //   hour: "2-digit",
-    //   minute: "2-digit",
-    //   hour12: userPreferences.timeFormat === "24hr" ? false : true,
-    // }).format(salahTime);
+      hourCycle: userPreferences.timeFormat === "24hr" ? "h23" : "h12",
+    }).format(salahTime);
   };
 
   setSalahtimes({

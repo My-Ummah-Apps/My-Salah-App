@@ -285,6 +285,7 @@ const App = () => {
     userPreferences.ishaAdjustment,
     userPreferences.shafaqRule,
     userPreferences.polarCircleResolution,
+    userPreferences.timeFormat,
     userLocations,
   ]);
 
