@@ -84,7 +84,7 @@ const SalahTimesPage = ({
     useState<SalahNamesTypeAdhanLibrary>("fajr");
   const [showSalahNotificationsSheet, setShowSalahNotificationsSheet] =
     useState(false);
-  const [date, setDate] = useState(0);
+  const [dateIncrement, setDateIncrement] = useState(0);
 
   useEffect(() => {
     const getNextSalahDetails = async () => {
@@ -143,6 +143,10 @@ const SalahTimesPage = ({
     }
   };
 
+  useEffect(() => {
+    console.log("dateIncrement: ", dateIncrement);
+  }, [dateIncrement]);
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -166,10 +170,40 @@ const SalahTimesPage = ({
       </IonHeader>
       <IonContent>
         {/* bg-[var(--card-bg-color)]  */}
+
         <section className="salah-times-page-components-wrap">
+          <section className="flex items-center justify-center">
+            {userLocations?.map((location) => (
+              <section key={location.id}>
+                <p>{location.isSelected === 1 ? location.locationName : ""}</p>
+              </section>
+            ))}{" "}
+            <IonButton
+              onClick={async () => {
+                setShowLocationsListSheet(true);
+              }}
+              style={{
+                "--padding-start": "3px",
+                "--padding-end": "0",
+                "--padding-top": "0",
+                "--padding-bottom": "0",
+              }}
+              className={`text-[var(--ion-text-color)] p-0`}
+              aria-label="show all locations"
+              fill="clear"
+              size="small"
+            >
+              {" "}
+              <IonIcon
+                icon={chevronDownOutline}
+                aria-hidden="false"
+                data-testid="locations-chevron"
+              />
+            </IonButton>
+          </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
-              <section className="p-4 my-5 rounded-lg bg-[var(--card-bg-color)] ">
+              <section className="p-4 mb-5 rounded-lg bg-[var(--card-bg-color)] ">
                 {nextSalahNameAndTime.currentSalah !== "sunrise" &&
                   nextSalahNameAndTime.currentSalah !== "none" && (
                     <>
@@ -201,7 +235,8 @@ const SalahTimesPage = ({
                 </p>
               </section>
             )}
-          {userLocations?.length === 0 ? (
+          {/* {userLocations?.length === 0 ? ( */}
+          {userLocations?.length === 0 && (
             <>
               <section
                 className="text-center"
@@ -231,48 +266,16 @@ const SalahTimesPage = ({
                 />
               </section>
             </>
-          ) : (
-            <section className="mx-5">
-              <section className="flex items-center justify-center">
-                {userLocations?.map((location) => (
-                  <section key={location.id}>
-                    <p>
-                      {location.isSelected === 1 ? location.locationName : ""}
-                    </p>
-                  </section>
-                ))}{" "}
-                <IonButton
-                  onClick={async () => {
-                    setShowLocationsListSheet(true);
-                  }}
-                  style={{
-                    "--padding-start": "3px",
-                    "--padding-end": "0",
-                    "--padding-top": "0",
-                    "--padding-bottom": "0",
-                  }}
-                  className={`text-[var(--ion-text-color)] p-0`}
-                  aria-label="show all locations"
-                  fill="clear"
-                  size="small"
-                >
-                  {" "}
-                  <IonIcon
-                    icon={chevronDownOutline}
-                    aria-hidden="false"
-                    data-testid="locations-chevron"
-                  />
-                </IonButton>
-              </section>
-            </section>
           )}
+
           <section className="flex items-center justify-between w-5/6 mx-auto">
             {" "}
             <IonButton
               fill="clear"
               onClick={async () => {
-                setDate((prev) => prev - 1);
-                const dateToShow = subDays(new Date(), date);
+                const todaysDate = new Date();
+                setDateIncrement((prev) => prev - 1);
+                const dateToShow = addDays(todaysDate, dateIncrement);
 
                 console.log("dateToShow: ", dateToShow);
 
@@ -290,23 +293,24 @@ const SalahTimesPage = ({
               />
             </IonButton>
             <p>
-              {date === 0
+              {dateIncrement === 0
                 ? "Today"
-                : date === -1
+                : dateIncrement === -1
                 ? "Yesterday"
-                : date === 1
+                : dateIncrement === 1
                 ? "Tomorrow"
-                : date > 0
-                ? format(addDays(new Date(), date), "PP")
-                : date > 0
-                ? format(subDays(new Date(), date), "PP")
+                : dateIncrement > 0
+                ? format(addDays(new Date(), dateIncrement), "PP")
+                : dateIncrement < 0
+                ? format(addDays(new Date(), dateIncrement), "PP")
                 : ""}
             </p>
             <IonButton
               fill="clear"
               onClick={async () => {
-                setDate((prev) => prev + 1);
-                const dateToShow = addDays(new Date(), date);
+                const todaysDate = new Date();
+                setDateIncrement((prev) => prev + 1);
+                const dateToShow = addDays(todaysDate, dateIncrement);
 
                 console.log("dateToShow: ", dateToShow);
 

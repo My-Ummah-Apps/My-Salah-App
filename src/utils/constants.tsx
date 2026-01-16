@@ -459,7 +459,7 @@ export const generateActiveLocationParams = async (
 
     await toggleDBConnection(dbConnection, "open");
 
-    console.log("Connection open? ", await dbConnection.current?.isDBOpen());
+    // console.log("Connection open? ", await dbConnection.current?.isDBOpen());
 
     const { allLocations, activeLocation } = await fetchAllLocations(
       dbConnection
