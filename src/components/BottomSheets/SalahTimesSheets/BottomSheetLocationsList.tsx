@@ -249,6 +249,8 @@ BottomSheetSalahTimesSettingsProps) => {
                 // setUserLocations(allLocations);
               } catch (error) {
                 console.error(error);
+              } finally {
+                await toggleDBConnection(dbConnection, "close");
               }
             },
           },

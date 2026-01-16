@@ -236,8 +236,15 @@ const App = () => {
 
     if (userLocations.length === 0) return;
 
+    const todaysDate = new Date();
+
     const generateSalahTimes = async () => {
-      await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
+      await getSalahTimes(
+        dbConnection,
+        todaysDate,
+        userPreferences,
+        setSalahtimes
+      );
     };
 
     generateSalahTimes();

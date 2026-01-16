@@ -31,19 +31,19 @@ export async function toggleDBConnection(
     }
 
     const isDatabaseOpen = await dbConnection.current.isDBOpen();
-    // console.log("isDatabaseOpen: ", isDatabaseOpen);
+    console.log("isDatabaseOpen: ", isDatabaseOpen);
 
     if (
       (action === "open" && isDatabaseOpen.result === true) ||
       (action === "close" && isDatabaseOpen.result === false)
     ) {
-      // console.log(
-      //   "action is: ",
-      //   action,
-      //   "and isDatabaseOpen.result is: ",
-      //   isDatabaseOpen,
-      //   "therefore returning"
-      // );
+      console.log(
+        "action is: ",
+        action,
+        "and isDatabaseOpen.result is: ",
+        isDatabaseOpen,
+        "therefore returning"
+      );
       return;
     }
 
@@ -62,14 +62,16 @@ export async function toggleDBConnection(
       await dbConnection.current.close();
       console.log("DB CONNECTION CLOSED");
     } else {
-      // console.log("THROWING ERROR IN ELSE STATEMENT");
+      console.log("THROWING ERROR IN ELSE STATEMENT");
       throw new Error(
         `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
       );
     }
   } catch (error) {
-    // console.log("THROWING ERROR IN CATCH STATEMENT");
-
+    console.log(
+      "THROWING ERROR IN CATCH STATEMENT, isDatabaseOpen is: ",
+      await dbConnection.current?.isDBOpen()
+    );
     throw new Error(`toggleDBConnection(${action}) failed: ${error}`);
   }
 }

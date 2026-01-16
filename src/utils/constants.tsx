@@ -22,8 +22,12 @@ import {
 
 import { fetchAllLocations, toggleDBConnection } from "./dbUtils";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { CalculationMethod, Coordinates, PrayerTimes } from "adhan";
-import { useEffect } from "react";
+import {
+  CalculationMethod,
+  CalculationParameters,
+  Coordinates,
+  PrayerTimes,
+} from "adhan";
 
 const device = Capacitor.getPlatform();
 
@@ -446,7 +450,7 @@ export const generateActiveLocationParams = async (
     throw new Error("dbconnection does not exist");
   }
 
-  const todaysDate = new Date();
+  // const todaysDate = new Date();
 
   try {
     // console.log(
@@ -455,7 +459,7 @@ export const generateActiveLocationParams = async (
 
     await toggleDBConnection(dbConnection, "open");
 
-    // console.log("Connection open? ", await dbConnection.current?.isDBOpen());
+    console.log("Connection open? ", await dbConnection.current?.isDBOpen());
 
     const { allLocations, activeLocation } = await fetchAllLocations(
       dbConnection
@@ -499,7 +503,7 @@ export const generateActiveLocationParams = async (
 
     console.log("params after amendments:", params);
 
-    return { params, coordinates, todaysDate };
+    return { params, coordinates };
   } catch (error) {
     console.error("Error fetching locations: ", error);
     // throw error;
@@ -508,8 +512,27 @@ export const generateActiveLocationParams = async (
   }
 };
 
+export const extractSalahTime = (
+  salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha",
+  coordinates: Coordinates,
+  date: Date,
+  params: CalculationParameters,
+  userPreferences: userPreferencesType
+) => {
+  const salahTime = new PrayerTimes(coordinates, date, params)[salah];
+
+  const locale = navigator.language;
+
+  return new Intl.DateTimeFormat(locale, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: userPreferences.timeFormat === "24hr" ? "h23" : "h12",
+  }).format(salahTime);
+};
+
 export const getSalahTimes = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  date: Date,
   userPreferences: userPreferencesType,
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>
 ) => {
@@ -520,44 +543,35 @@ export const getSalahTimes = async (
 
   if (!result) return;
 
-  const { params, coordinates, todaysDate } = result;
+  const { params, coordinates } = result;
 
-  if (!params || !coordinates || !todaysDate) return;
-
-  // console.log("params: ", params),
-  //   "coordinates: ",
-  //   coordinates,
-  //   "todaysDate: ",
-  //   todaysDate;
-
-  const extractSalahTime = (
-    salah: "fajr" | "sunrise" | "dhuhr" | "asr" | "maghrib" | "isha"
-  ) => {
-    const salahTime = new PrayerTimes(coordinates, todaysDate, params)[salah];
-
-    // console.log("salahTimes: ", salahTime);
-
-    const locale = navigator.language;
-
-    console.log(
-      "userPreferences.timeFormat: ",
-      userPreferences.timeFormat === "24hr"
-    );
-
-    return new Intl.DateTimeFormat(locale, {
-      hour: "2-digit",
-      minute: "2-digit",
-      hourCycle: userPreferences.timeFormat === "24hr" ? "h23" : "h12",
-    }).format(salahTime);
-  };
+  if (!params || !coordinates || !date) return;
 
   setSalahtimes({
-    fajr: extractSalahTime("fajr"),
-    sunrise: extractSalahTime("sunrise"),
-    dhuhr: extractSalahTime("dhuhr"),
-    asr: extractSalahTime("asr"),
-    maghrib: extractSalahTime("maghrib"),
-    isha: extractSalahTime("isha"),
+    fajr: extractSalahTime("fajr", coordinates, date, params, userPreferences),
+    sunrise: extractSalahTime(
+      "sunrise",
+      coordinates,
+      date,
+      params,
+      userPreferences
+    ),
+    dhuhr: extractSalahTime(
+      "dhuhr",
+      coordinates,
+      date,
+      params,
+      userPreferences
+    ),
+    asr: extractSalahTime("asr", coordinates, date, params, userPreferences),
+    maghrib: extractSalahTime(
+      "maghrib",
+      coordinates,
+      date,
+      params,
+      userPreferences
+    ),
+    isha: extractSalahTime("isha", coordinates, date, params, userPreferences),
   });
 };
 
@@ -572,7 +586,9 @@ export const getNextSalah = async (
 
   if (!result) return;
 
-  const { params, coordinates, todaysDate } = result;
+  const { params, coordinates } = result;
+
+  const todaysDate = new Date();
 
   let allSalahTimes = new PrayerTimes(coordinates, todaysDate, params);
 
