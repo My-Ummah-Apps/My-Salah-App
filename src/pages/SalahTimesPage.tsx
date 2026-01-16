@@ -42,7 +42,7 @@ import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
 import { AndroidSettings } from "capacitor-native-settings";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { addDays, format, subDays } from "date-fns";
+import { addDays, format, isEqual, isSameDay, subDays } from "date-fns";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -86,10 +86,10 @@ const SalahTimesPage = ({
     useState<SalahNamesTypeAdhanLibrary>("fajr");
   const [showSalahNotificationsSheet, setShowSalahNotificationsSheet] =
     useState(false);
-  const [dateIncrement, setDateIncrement] = useState(0);
+  const [dateToShow, setDateToShow] = useState(new Date());
 
   useIonViewWillLeave(() => {
-    setDateIncrement(0);
+    setDateToShow(new Date());
   });
 
   useEffect(() => {
@@ -150,8 +150,8 @@ const SalahTimesPage = ({
   };
 
   useEffect(() => {
-    console.log("dateIncrement: ", dateIncrement);
-  }, [dateIncrement]);
+    console.log("dateToShow in useEffect: ", dateToShow);
+  }, [dateToShow]);
 
   return (
     <IonPage>
@@ -271,15 +271,18 @@ const SalahTimesPage = ({
             <IonButton
               fill="clear"
               onClick={async () => {
-                const todaysDate = new Date();
-                setDateIncrement((prev) => prev - 1);
-                const dateToShow = addDays(todaysDate, dateIncrement);
+                // setDateToShow((prev) => addDays(prev, -1));
+                let nextDate = new Date();
+                setDateToShow((prev) => {
+                  nextDate = addDays(prev, -1);
+                  return nextDate;
+                });
 
                 console.log("dateToShow: ", dateToShow);
 
                 await getSalahTimes(
                   dbConnection,
-                  dateToShow,
+                  nextDate,
                   userPreferences,
                   setSalahtimes
                 );
@@ -291,30 +294,28 @@ const SalahTimesPage = ({
               />
             </IonButton>
             <p>
-              {dateIncrement === 0
+              {isSameDay(dateToShow, new Date())
                 ? "Today"
-                : dateIncrement === -1
+                : isSameDay(addDays(new Date(), -1), dateToShow)
                 ? "Yesterday"
-                : dateIncrement === 1
+                : isSameDay(addDays(new Date(), 1), dateToShow)
                 ? "Tomorrow"
-                : dateIncrement > 0
-                ? format(addDays(new Date(), dateIncrement), "PP")
-                : dateIncrement < 0
-                ? format(addDays(new Date(), dateIncrement), "PP")
-                : ""}
+                : dateToShow.toLocaleDateString()}
             </p>
             <IonButton
               fill="clear"
               onClick={async () => {
-                const todaysDate = new Date();
-                setDateIncrement((prev) => prev + 1);
-                const dateToShow = addDays(todaysDate, dateIncrement);
+                let nextDate = new Date();
+                setDateToShow((prev) => {
+                  nextDate = addDays(prev, 1);
+                  return nextDate;
+                });
 
                 console.log("dateToShow: ", dateToShow);
 
                 await getSalahTimes(
                   dbConnection,
-                  dateToShow,
+                  nextDate,
                   userPreferences,
                   setSalahtimes
                 );

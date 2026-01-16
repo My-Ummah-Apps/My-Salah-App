@@ -536,6 +536,8 @@ export const getSalahTimes = async (
   userPreferences: userPreferencesType,
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>
 ) => {
+  console.log("GETTING SALAH TIMES FOR: ", date);
+
   const result = await generateActiveLocationParams(
     dbConnection,
     userPreferences
