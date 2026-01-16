@@ -7,6 +7,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import {
   LocationsDataObjTypeArr,
@@ -20,6 +21,7 @@ import {
   chevronBackOutline,
   chevronDownOutline,
   chevronForwardOutline,
+  listOutline,
   megaphone,
   notifications,
   notificationsOff,
@@ -85,6 +87,10 @@ const SalahTimesPage = ({
   const [showSalahNotificationsSheet, setShowSalahNotificationsSheet] =
     useState(false);
   const [dateIncrement, setDateIncrement] = useState(0);
+
+  useIonViewWillLeave(() => {
+    setDateIncrement(0);
+  });
 
   useEffect(() => {
     const getNextSalahDetails = async () => {
@@ -166,40 +172,32 @@ const SalahTimesPage = ({
               />
             </IonButton>
           </IonButtons>
+          <IonButtons slot="primary">
+            <IonButton
+              onClick={() => setShowLocationsListSheet(true)}
+              style={{
+                "--padding-end": "12px",
+                "--ripple-color": "transparent",
+              }}
+            >
+              <IonIcon
+                className="text-[var(--ion-text-color)] text-lg"
+                icon={listOutline}
+              />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         {/* bg-[var(--card-bg-color)]  */}
 
         <section className="salah-times-page-components-wrap">
-          <section className="flex items-center justify-center">
+          <section className="flex items-center justify-center mb-1">
             {userLocations?.map((location) => (
               <section key={location.id}>
                 <p>{location.isSelected === 1 ? location.locationName : ""}</p>
               </section>
             ))}{" "}
-            <IonButton
-              onClick={async () => {
-                setShowLocationsListSheet(true);
-              }}
-              style={{
-                "--padding-start": "3px",
-                "--padding-end": "0",
-                "--padding-top": "0",
-                "--padding-bottom": "0",
-              }}
-              className={`text-[var(--ion-text-color)] p-0`}
-              aria-label="show all locations"
-              fill="clear"
-              size="small"
-            >
-              {" "}
-              <IonIcon
-                icon={chevronDownOutline}
-                aria-hidden="false"
-                data-testid="locations-chevron"
-              />
-            </IonButton>
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
