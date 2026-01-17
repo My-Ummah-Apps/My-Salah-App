@@ -1,9 +1,5 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import {
-  DBConnectionStateType,
-  LocationsDataObjType,
-  LocationsDataObjTypeArr,
-} from "../types/types";
+import { DBConnectionStateType, LocationsDataObjTypeArr } from "../types/types";
 
 // let dbLock: Promise<void> = Promise.resolve();
 
@@ -80,7 +76,6 @@ export const fetchAllLocations = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>
 ): Promise<{
   allLocations: LocationsDataObjTypeArr;
-  activeLocation: LocationsDataObjType | null;
 }> => {
   // console.log(
   //   "RUNNING FETCH ALL LOCATIONS, DB CONNECTION IS:",
@@ -101,14 +96,11 @@ export const fetchAllLocations = async (
     }
 
     const allLocations: LocationsDataObjTypeArr = res.values;
-    const activeLocation: LocationsDataObjType = allLocations.filter(
-      (loc) => loc.isSelected === 1
-    )[0];
 
-    return { allLocations, activeLocation };
+    return { allLocations };
   } catch (error) {
     console.error("fetchAllLocations failed", error);
-    return { allLocations: [], activeLocation: null };
+    return { allLocations: [] };
   }
 };
 

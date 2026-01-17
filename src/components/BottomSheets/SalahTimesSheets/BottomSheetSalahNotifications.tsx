@@ -8,6 +8,7 @@ import {
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
+  LocationsDataObjTypeArr,
   SalahNamesTypeAdhanLibrary,
   userPreferencesType,
 } from "../../../types/types";
@@ -35,6 +36,7 @@ interface BottomSheetSalahNotificationsProps {
   selectedSalah: SalahNamesTypeAdhanLibrary;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  userLocations: LocationsDataObjTypeArr | undefined;
 }
 
 const BottomSheetSalahNotifications = ({
@@ -44,6 +46,7 @@ const BottomSheetSalahNotifications = ({
   selectedSalah,
   setUserPreferences,
   userPreferences,
+  userLocations,
 }: BottomSheetSalahNotificationsProps) => {
   const key: keyof userPreferencesType = `${selectedSalah}Notification`;
 
@@ -130,12 +133,17 @@ const BottomSheetSalahNotifications = ({
         </div>
         <div
           onClick={async () => {
+            if (!userLocations) {
+              console.error("userLocations is undefined");
+              return;
+            }
+
             await cancelSalahReminderNotifications(selectedSalah);
 
             await updateUserPrefs(dbConnection, key, "on", setUserPreferences);
 
             await scheduleSalahTimesNotifications(
-              dbConnection,
+              userLocations,
               selectedSalah,
               userPreferences,
               "on"
@@ -177,6 +185,11 @@ const BottomSheetSalahNotifications = ({
         </div>
         <div
           onClick={async () => {
+            if (!userLocations) {
+              console.error("userLocations is undefined");
+              return;
+            }
+
             await cancelSalahReminderNotifications(selectedSalah);
 
             await updateUserPrefs(
@@ -185,8 +198,9 @@ const BottomSheetSalahNotifications = ({
               "adhan",
               setUserPreferences
             );
+
             await scheduleSalahTimesNotifications(
-              dbConnection,
+              userLocations,
               selectedSalah,
               userPreferences,
               "adhan"

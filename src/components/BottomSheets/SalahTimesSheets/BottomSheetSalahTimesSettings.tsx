@@ -15,7 +15,10 @@ import {
 } from "../../../utils/constants";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { userPreferencesType } from "../../../types/types";
+import {
+  LocationsDataObjTypeArr,
+  userPreferencesType,
+} from "../../../types/types";
 
 import { useState } from "react";
 import BottomSheetCalculationMethods from "./BottomSheetCalculationMethods";
@@ -33,6 +36,7 @@ interface BottomSheetSalahTimesSettingsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  userLocations: LocationsDataObjTypeArr | undefined;
 
   // calculateActiveLocationSalahTimes: () => Promise<void>;
 }
@@ -43,6 +47,7 @@ const BottomSheetSalahTimesSettings = ({
   dbConnection,
   setUserPreferences,
   userPreferences,
+  userLocations,
 }: // calculateActiveLocationSalahTimes,
 BottomSheetSalahTimesSettingsProps) => {
   // const [selectedCalculationMethod, setSelectedCalculationMethod] =
@@ -493,6 +498,7 @@ BottomSheetSalahTimesSettingsProps) => {
         // setSelectedCalculationMethod={setSelectedCalculationMethod}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
+        userLocations={userLocations}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <BottomSheetMadhabOptions

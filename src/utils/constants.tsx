@@ -13,6 +13,7 @@ import {
   SalahNotificationSettings,
   SalahNamesTypeAdhanLibrary,
   salahTimesObjType,
+  LocationsDataObjTypeArr,
 } from "../types/types";
 import {
   AndroidSettings,
@@ -20,7 +21,7 @@ import {
   NativeSettings,
 } from "capacitor-native-settings";
 
-import { fetchAllLocations, toggleDBConnection } from "./dbUtils";
+import { toggleDBConnection } from "./dbUtils";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   CalculationMethod,
@@ -311,6 +312,15 @@ export const updateUserPrefs = async (
   }
 };
 
+export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
+  const activeLocation = userLocations.find((loc) => loc.isSelected === 1);
+  if (!activeLocation) {
+    console.error("No active location exists");
+  }
+
+  return activeLocation;
+};
+
 export const cancelSalahReminderNotifications = async (
   salahName: SalahNamesTypeAdhanLibrary
 ) => {
@@ -365,7 +375,7 @@ export const toLocalDateFromUTCClock = (utcDate: Date) => {
 };
 
 export const scheduleSalahTimesNotifications = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  userLocations: LocationsDataObjTypeArr,
   salahName: SalahNamesTypeAdhanLibrary,
   userPreferences: userPreferencesType,
   setting: SalahNotificationSettings
@@ -391,7 +401,7 @@ export const scheduleSalahTimesNotifications = async (
 
   if (setting === "on" || setting === "adhan") {
     const result = await generateActiveLocationParams(
-      dbConnection,
+      userLocations,
       userPreferences
     );
 
@@ -405,7 +415,7 @@ export const scheduleSalahTimesNotifications = async (
         salahName
       ];
 
-      console.log("SALAH NAME: ", salahName, "salahTime: ", salahTime);
+      // console.log("SALAH NAME: ", salahName, "salahTime: ", salahTime);
 
       const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
 
@@ -443,73 +453,46 @@ export const scheduleSalahTimesNotifications = async (
 };
 
 export const generateActiveLocationParams = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  userLocations: LocationsDataObjTypeArr,
   userPreferences: userPreferencesType
 ) => {
-  if (!dbConnection.current) {
-    throw new Error("dbconnection does not exist");
+  console.log("USER. LOCATIONS IN GENERATE: ", userLocations);
+
+  const activeLocation = getActiveLocation(userLocations);
+
+  if (userLocations.length === 0 || !activeLocation) {
+    return;
   }
 
-  // const todaysDate = new Date();
-
-  try {
-    // console.log(
-    //   "Attempting to open connection within generateActiveLocationParams..."
-    // );
-
-    await toggleDBConnection(dbConnection, "open");
-
-    // console.log("Connection open? ", await dbConnection.current?.isDBOpen());
-
-    const { allLocations, activeLocation } = await fetchAllLocations(
-      dbConnection
-    );
-    // console.log("FETCH ALL LOCATIONS CALLE FROM CONSTANTS");
-    // console.log("Connection open? ", await dbConnection.current?.isDBOpen());
-
-    if (allLocations.length === 0 || !activeLocation) {
-      return;
-    }
-
-    if (!activeLocation) {
-      throw new Error("No active location found");
-    }
-
-    const coordinates = new Coordinates(
-      activeLocation.latitude,
-      activeLocation.longitude
-    );
-
-    const params =
-      CalculationMethod[
-        userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
-      ]();
-
-    // console.log("params before amendments: ", params);
-
-    params.madhab = userPreferences.madhab;
-    params.highLatitudeRule = userPreferences.highLatitudeRule;
-    params.fajrAngle = Number(userPreferences.fajrAngle);
-    params.ishaAngle = Number(userPreferences.ishaAngle);
-    params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
-    params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
-    params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
-    params.methodAdjustments.maghrib = Number(
-      userPreferences.maghribAdjustment
-    );
-    params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
-    params.shafaq = userPreferences.shafaqRule;
-    params.polarCircleResolution = userPreferences.polarCircleResolution;
-
-    console.log("params after amendments:", params);
-
-    return { params, coordinates };
-  } catch (error) {
-    console.error("Error fetching locations: ", error);
-    // throw error;
-  } finally {
-    await toggleDBConnection(dbConnection, "close");
+  if (!activeLocation) {
+    throw new Error("No active location found");
   }
+
+  const coordinates = new Coordinates(
+    activeLocation.latitude,
+    activeLocation.longitude
+  );
+
+  const params =
+    CalculationMethod[
+      userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
+    ]();
+
+  params.madhab = userPreferences.madhab;
+  params.highLatitudeRule = userPreferences.highLatitudeRule;
+  params.fajrAngle = Number(userPreferences.fajrAngle);
+  params.ishaAngle = Number(userPreferences.ishaAngle);
+  params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
+  params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
+  params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
+  params.methodAdjustments.maghrib = Number(userPreferences.maghribAdjustment);
+  params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
+  params.shafaq = userPreferences.shafaqRule;
+  params.polarCircleResolution = userPreferences.polarCircleResolution;
+
+  console.log("params after amendments:", params);
+
+  return { params, coordinates };
 };
 
 export const extractSalahTime = (
@@ -531,7 +514,7 @@ export const extractSalahTime = (
 };
 
 export const getSalahTimes = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  userLocations: LocationsDataObjTypeArr,
   date: Date,
   userPreferences: userPreferencesType,
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>
@@ -539,7 +522,7 @@ export const getSalahTimes = async (
   console.log("GETTING SALAH TIMES FOR: ", date);
 
   const result = await generateActiveLocationParams(
-    dbConnection,
+    userLocations,
     userPreferences
   );
 
@@ -578,11 +561,11 @@ export const getSalahTimes = async (
 };
 
 export const getNextSalah = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
+  userLocations: LocationsDataObjTypeArr,
   userPreferences: userPreferencesType
 ) => {
   const result = await generateActiveLocationParams(
-    dbConnection,
+    userLocations,
     userPreferences
   );
 

@@ -23,6 +23,7 @@ import {
   userPreferencesType,
 } from "../../../types/types";
 import {
+  getActiveLocation,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
@@ -210,8 +211,6 @@ BottomSheetSalahTimesSettingsProps) => {
             text: "Delete location?",
             role: "destructive",
             handler: async () => {
-              if (!userLocations) return;
-
               if (locationToDeleteId === null) {
                 console.error(
                   "locationToDeleteId does not exist within delete location ActionSheet handler"
@@ -226,14 +225,15 @@ BottomSheetSalahTimesSettingsProps) => {
 
                 setLocationToDeleteId(null);
 
-                const { allLocations, activeLocation } =
-                  await fetchAllLocations(dbConnection);
+                const { allLocations } = await fetchAllLocations(dbConnection);
                 console.log(
                   "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET 2"
                 );
                 // if (!allLocations || allLocations.length === 0) {
                 //   throw new Error("Error obtaining all locations");
                 // }
+
+                const activeLocation = getActiveLocation(allLocations);
 
                 if (!activeLocation && allLocations.length > 0) {
                   await updateActiveLocation(allLocations[0].id);

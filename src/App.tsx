@@ -240,7 +240,7 @@ const App = () => {
 
     const generateSalahTimes = async () => {
       await getSalahTimes(
-        dbConnection,
+        userLocations,
         todaysDate,
         userPreferences,
         setSalahtimes
@@ -269,7 +269,7 @@ const App = () => {
           salahNotificationSetting === "adhan"
         ) {
           await scheduleSalahTimesNotifications(
-            dbConnection,
+            userLocations,
             salahs[i],
             userPreferences,
             salahNotificationSetting

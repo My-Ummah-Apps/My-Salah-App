@@ -19,15 +19,17 @@ import { CalculationMethod, Coordinates, HighLatitudeRule } from "adhan";
 import {
   CalculationMethodsType,
   countryOptionsType,
+  LocationsDataObjTypeArr,
   userPreferencesType,
 } from "../../../types/types";
 import {
+  getActiveLocation,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   prayerCalculationMethodLabels,
   updateUserPrefs,
 } from "../../../utils/constants";
-import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
+import { toggleDBConnection } from "../../../utils/dbUtils";
 import { useState } from "react";
 import { checkmarkCircle } from "ionicons/icons";
 
@@ -41,6 +43,8 @@ interface BottomSheetCalculationMethodsProps {
   // >;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  userLocations: LocationsDataObjTypeArr | undefined;
+
   // calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 
@@ -50,6 +54,7 @@ const BottomSheetCalculationMethods = ({
   // setSelectedCalculationMethod,
   setUserPreferences,
   userPreferences,
+  userLocations,
 }: // calculateActiveLocationSalahTimes,
 BottomSheetCalculationMethodsProps) => {
   const [segmentOption, setSegmentOption] = useState<"manual" | "country">(
@@ -172,12 +177,17 @@ BottomSheetCalculationMethodsProps) => {
   const setAdhanLibraryDefaults = async (calcMethod: calculationMethod) => {
     // if (!userPreferences.prayerCalculationMethod) return;
 
+    if (!userLocations) {
+      console.error(
+        "Unable to set calculation method as no user locations exist"
+      );
+      return;
+    }
+
     try {
       await toggleDBConnection(dbConnection, "open");
 
-      const { activeLocation } = await fetchAllLocations(dbConnection);
-
-      console.log("FETCH ALL LOCATIONS CALLE FROM CALCULATION METHODS SHEET");
+      const activeLocation = getActiveLocation(userLocations);
 
       const params = CalculationMethod[calcMethod]();
 

@@ -19,7 +19,6 @@ import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimes
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   chevronBackOutline,
-  chevronDownOutline,
   chevronForwardOutline,
   listOutline,
   megaphone,
@@ -42,7 +41,7 @@ import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
 import { AndroidSettings } from "capacitor-native-settings";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { addDays, format, isEqual, isSameDay, subDays } from "date-fns";
+import { addDays, isSameDay } from "date-fns";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -96,7 +95,12 @@ const SalahTimesPage = ({
     const getNextSalahDetails = async () => {
       // const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
       //   await calculateActiveLocationSalahTimes();
-      const result = await getNextSalah(dbConnection, userPreferences);
+      if (!userLocations) {
+        console.error("userLocations is undefined");
+        return;
+      }
+
+      const result = await getNextSalah(userLocations, userPreferences);
       if (!result) return;
       const {
         currentSalah,
@@ -192,7 +196,7 @@ const SalahTimesPage = ({
         {/* bg-[var(--card-bg-color)]  */}
 
         <section className="salah-times-page-components-wrap">
-          <section className="flex items-center justify-center mb-1">
+          <section className="flex items-center justify-center mb-1 text-2xl font-light">
             {userLocations?.map((location) => (
               <section key={location.id}>
                 <p>{location.isSelected === 1 ? location.locationName : ""}</p>
@@ -227,7 +231,7 @@ const SalahTimesPage = ({
                 <p className="text-center font-extralight">
                   {nextSalahNameAndTime.minsRemaining} minutes to go until
                 </p>
-                <p className="mt-2 mb-5 text-2xl text-center">
+                <p className="mt-2 mb-2 text-2xl text-center">
                   {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
                     nextSalahNameAndTime.nextSalah.slice(1)}
                 </p>
@@ -280,8 +284,18 @@ const SalahTimesPage = ({
 
                 console.log("dateToShow: ", dateToShow);
 
+                if (!userLocations) {
+                  console.error(
+                    "Unable to retrieve times for ",
+                    dateToShow,
+                    " as userLocations is undefined"
+                  );
+
+                  return;
+                }
+
                 await getSalahTimes(
-                  dbConnection,
+                  userLocations,
                   nextDate,
                   userPreferences,
                   setSalahtimes
@@ -313,8 +327,18 @@ const SalahTimesPage = ({
 
                 console.log("dateToShow: ", dateToShow);
 
+                if (!userLocations) {
+                  console.error(
+                    "Unable to retrieve times for ",
+                    dateToShow,
+                    " as userLocations is undefined"
+                  );
+
+                  return;
+                }
+
                 await getSalahTimes(
-                  dbConnection,
+                  userLocations,
                   nextDate,
                   userPreferences,
                   setSalahtimes
@@ -408,7 +432,7 @@ const SalahTimesPage = ({
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
-              <p className="mx-10 my-5 text-xs text-center text-gray-400">
+              <p className="mx-10 my-5 text-xs text-center text-gray-500">
                 {`Note: These times have been calculated using the
             ${
               prayerCalculationMethodLabels[
@@ -443,7 +467,7 @@ const SalahTimesPage = ({
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
-
+        userLocations={userLocations}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
       <BottomSheetSalahNotifications
@@ -453,6 +477,7 @@ const SalahTimesPage = ({
         selectedSalah={selectedSalah}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
+        userLocations={userLocations}
       />
       <Toast
         isOpen={showLocationFailureToast}
