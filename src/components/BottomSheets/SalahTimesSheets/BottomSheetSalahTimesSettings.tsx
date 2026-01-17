@@ -12,6 +12,7 @@ import {
   MODAL_BREAKPOINTS,
   prayerCalculationMethodLabels,
   updateUserPrefs,
+  upperCaseFirstLetter,
 } from "../../../utils/constants";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -451,10 +452,7 @@ BottomSheetSalahTimesSettingsProps) => {
               <div className="flex items-center justify-between w-full py-2 px-3 text-sm bg-[var(--card-bg-color)] rounded-lg font-light">
                 <p className="">Shafaq Rule:</p>
                 <div className="flex items-center gap-1">
-                  <p>
-                    {userPreferences.shafaqRule.charAt(0).toUpperCase() +
-                      userPreferences.shafaqRule.slice(1)}
-                  </p>
+                  <p>{upperCaseFirstLetter(userPreferences.shafaqRule)}</p>
                   <p>
                     <MdOutlineChevronRight />
                   </p>

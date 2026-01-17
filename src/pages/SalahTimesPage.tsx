@@ -35,6 +35,7 @@ import {
   getSalahTimes,
   prayerCalculationMethodLabels,
   promptToOpenDeviceSettings,
+  upperCaseFirstLetter,
 } from "../utils/constants";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
@@ -205,18 +206,17 @@ const SalahTimesPage = ({
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
-              <section className="p-4 mb-5 rounded-lg bg-[var(--card-bg-color)] ">
+              <section className="p-4 rounded-lg bg-[var(--card-bg-color)] ">
                 {nextSalahNameAndTime.currentSalah !== "sunrise" &&
                   nextSalahNameAndTime.currentSalah !== "none" && (
                     <>
                       <p className="mb-1 text-lg text-center font-extralight">
                         Current Salah
                       </p>
-                      <p className="mb-5 text-6xl font-bold text-center">
-                        {nextSalahNameAndTime.currentSalah
-                          .charAt(0)
-                          .toUpperCase() +
-                          nextSalahNameAndTime.currentSalah.slice(1)}
+                      <p className="text-6xl font-bold text-center">
+                        {upperCaseFirstLetter(
+                          nextSalahNameAndTime.currentSalah
+                        )}
                       </p>
                     </>
                   )}
@@ -232,8 +232,7 @@ const SalahTimesPage = ({
                   {nextSalahNameAndTime.minsRemaining} minutes to go until
                 </p>
                 <p className="mt-2 mb-2 text-2xl text-center">
-                  {nextSalahNameAndTime.nextSalah.charAt(0).toUpperCase() +
-                    nextSalahNameAndTime.nextSalah.slice(1)}
+                  {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
                 </p>
               </section>
             )}
@@ -367,14 +366,12 @@ const SalahTimesPage = ({
                 className={`bg-[var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg ${
                   name === nextSalahNameAndTime.currentSalah &&
                   name !== "sunrise"
-                    ? "my-2 rounded-lg shadow-md scale-102 border-[var(--app-border-color)] border-2 font-bold"
-                    : ""
+                    ? "my-2 rounded-lg shadow-md scale-102 border-[var(--ion-text-color)] border-2 font-bold"
+                    : "opacity-50"
                 }`}
                 key={name + time}
               >
-                <p className="ml-2">
-                  {name.charAt(0).toUpperCase() + name.slice(1)}
-                </p>
+                <p className="ml-2">{upperCaseFirstLetter(name)}</p>
                 <div className="flex items-center">
                   <p>{time === "Invalid Date" ? "--:--" : time}</p>
                   <IonButton
@@ -432,7 +429,7 @@ const SalahTimesPage = ({
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
-              <p className="mx-10 my-5 text-xs text-center text-gray-500">
+              <p className="mx-10 my-5 text-xs text-center opacity-50">
                 {`Note: These times have been calculated using the
             ${
               prayerCalculationMethodLabels[
@@ -442,7 +439,7 @@ const SalahTimesPage = ({
                   userPreferences.fajrAngle
                 }° and Isha Angle ${
                   userPreferences.ishaAngle
-                }°, your local mosque times may differ.`}
+                }°, your local mosque (beginning) times may differ.`}
               </p>
             )}
         </section>

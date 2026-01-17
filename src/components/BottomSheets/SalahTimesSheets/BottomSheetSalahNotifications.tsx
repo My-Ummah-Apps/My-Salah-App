@@ -19,6 +19,7 @@ import {
   promptToOpenDeviceSettings,
   scheduleSalahTimesNotifications,
   updateUserPrefs,
+  upperCaseFirstLetter,
 } from "../../../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
 import { Capacitor } from "@capacitor/core";
@@ -89,8 +90,7 @@ const BottomSheetSalahNotifications = ({
           }}
         >
           <IonTitle>
-            {selectedSalah.charAt(0).toUpperCase() + selectedSalah.slice(1)}{" "}
-            Notifications
+            {upperCaseFirstLetter(selectedSalah)} Notifications
           </IonTitle>
         </IonToolbar>
       </IonHeader>
