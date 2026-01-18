@@ -77,10 +77,10 @@ export const fetchAllLocations = async (
 ): Promise<{
   allLocations: LocationsDataObjTypeArr;
 }> => {
-  // console.log(
-  //   "RUNNING FETCH ALL LOCATIONS, DB CONNECTION IS:",
-  //   dbConnection.current
-  // );
+  console.log(
+    "RUNNING FETCH ALL LOCATIONS, DB CONNECTION IS:",
+    dbConnection.current
+  );
 
   try {
     if (!dbConnection || !dbConnection.current) {
@@ -96,6 +96,8 @@ export const fetchAllLocations = async (
     }
 
     const allLocations: LocationsDataObjTypeArr = res.values;
+
+    console.log("allLocations: ", allLocations);
 
     return { allLocations };
   } catch (error) {

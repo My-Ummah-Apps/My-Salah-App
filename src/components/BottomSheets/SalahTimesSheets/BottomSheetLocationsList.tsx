@@ -82,9 +82,14 @@ BottomSheetSalahTimesSettingsProps) => {
       throw new Error("dbConnection / dbconnection.current does not exist");
     }
 
+    console.log("UPDATING ALL TO 0");
+
     await dbConnection.current.run(
       `UPDATE userlocationsTable SET isSelected = 0`
     );
+
+    console.log("UPDATING ", id, " to 1");
+
     await dbConnection.current.run(
       `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
       [id]
@@ -227,7 +232,8 @@ BottomSheetSalahTimesSettingsProps) => {
 
                 const { allLocations } = await fetchAllLocations(dbConnection);
                 console.log(
-                  "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET 2"
+                  "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET 2: ",
+                  allLocations
                 );
                 // if (!allLocations || allLocations.length === 0) {
                 //   throw new Error("Error obtaining all locations");
@@ -242,11 +248,10 @@ BottomSheetSalahTimesSettingsProps) => {
                     ...item,
                     isSelected: i === 0 ? 1 : 0,
                   }));
-
                   setUserLocations(amendedLocations);
+                } else {
+                  setUserLocations(allLocations);
                 }
-
-                // setUserLocations(allLocations);
               } catch (error) {
                 console.error(error);
               } finally {

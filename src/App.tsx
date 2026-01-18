@@ -340,6 +340,8 @@ const App = () => {
         `SELECT * FROM userLocationsTable`
       );
 
+      console.log("DBResultLocations: ", DBResultLocations);
+
       if (!DBResultPreferences || !DBResultPreferences.values) {
         throw new Error(
           "DBResultPreferences or DBResultPreferences.values do not exist"

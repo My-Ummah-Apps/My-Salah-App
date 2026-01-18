@@ -210,7 +210,7 @@ const SalahTimesPage = ({
                 {nextSalahNameAndTime.currentSalah !== "sunrise" &&
                   nextSalahNameAndTime.currentSalah !== "none" && (
                     <>
-                      <p className="mb-1 text-lg text-center font-extralight">
+                      <p className="mb-1 text-lg text-center font-extralight ">
                         Current Salah
                       </p>
                       <p className="text-6xl font-bold text-center">
@@ -231,7 +231,7 @@ const SalahTimesPage = ({
                 <p className="text-center font-extralight">
                   {nextSalahNameAndTime.minsRemaining} minutes to go until
                 </p>
-                <p className="mt-2 mb-2 text-2xl text-center">
+                <p className="mt-2 mb-2 text-2xl font-light text-center">
                   {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
                 </p>
               </section>
@@ -367,7 +367,7 @@ const SalahTimesPage = ({
                   name === nextSalahNameAndTime.currentSalah &&
                   name !== "sunrise"
                     ? "my-2 rounded-lg shadow-md scale-102 border-[var(--ion-text-color)] border-2 font-bold"
-                    : "opacity-50"
+                    : "opacity-80"
                 }`}
                 key={name + time}
               >
