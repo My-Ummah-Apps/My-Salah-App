@@ -24,6 +24,7 @@
   --table-row-border-color: rgb(227, 227, 227);
   --nav-tab-color: #373737;
   --nav-active-tab-color: #3880ff;
+  --ios-action-sheet-background: #f9f9f9;
   /* --nav-selected-tab-color: #2e004d; */
   --segment-bg-color: rgb(223, 223, 223);
   --segment-active-color: rgb(255, 255, 255);
@@ -56,6 +57,7 @@ body.dark {
   --app-border-color: rgba(54, 49, 49, 1);
   --table-row-border-color: rgb(38, 38, 38);
   --nav-tab-color: grey;
+  --ios-action-sheet-background: rgb(36, 36, 36);
   --segment-bg-color: rgb(52, 53, 56);
   --segment-active-color: rgb(100, 103, 112);
   --nav-active-tab-color: white;
@@ -245,6 +247,25 @@ ion-checkbox::part(container) {
 
 ion-content {
   /* --background: transparent; */
+}
+
+.action-sheet-title.sc-ion-action-sheet-md,
+.sc-ion-action-sheet-md {
+  --color: var(--ion-text-color);
+}
+
+.action-sheet-custom .action-sheet-button.sc-ion-action-sheet-md {
+  --color: var(--ion-text-color);
+  color: var(--ion-text-color);
+}
+
+.action-sheet-group.sc-ion-action-sheet-ios {
+  --background: var(--ios-action-sheet-background);
+  background: var(--ios-action-sheet-background) !important;
+}
+
+.action-sheet-title.sc-ion-action-sheet-md {
+  opacity: 0.6;
 }
 
 .modal-fit-content {

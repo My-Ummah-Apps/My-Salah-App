@@ -82,13 +82,13 @@ BottomSheetSalahTimesSettingsProps) => {
       throw new Error("dbConnection / dbconnection.current does not exist");
     }
 
-    console.log("UPDATING ALL TO 0");
-
-    await dbConnection.current.run(
-      `UPDATE userlocationsTable SET isSelected = 0`
+    const res = await dbConnection.current.query(
+      `SELECT * FROM userlocationsTable`
     );
 
-    console.log("UPDATING ", id, " to 1");
+    await dbConnection.current.run(
+      `UPDATE userLocationsTable SET isSelected = 0`
+    );
 
     await dbConnection.current.run(
       `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
@@ -109,10 +109,6 @@ BottomSheetSalahTimesSettingsProps) => {
 
     await dbConnection.current.run(stmnt, params);
   };
-
-  useEffect(() => {
-    console.log("userLocations in useEffect: ", userLocations);
-  }, [userLocations]);
 
   return (
     <IonModal
@@ -144,6 +140,7 @@ BottomSheetSalahTimesSettingsProps) => {
               onClick={async () => {
                 try {
                   await toggleDBConnection(dbConnection, "open");
+
                   await updateActiveLocation(location.id);
 
                   const { allLocations } = await fetchAllLocations(
@@ -231,10 +228,10 @@ BottomSheetSalahTimesSettingsProps) => {
                 setLocationToDeleteId(null);
 
                 const { allLocations } = await fetchAllLocations(dbConnection);
-                console.log(
-                  "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET 2: ",
-                  allLocations
-                );
+                // console.log(
+                //   "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET 2: ",
+                //   allLocations
+                // );
                 // if (!allLocations || allLocations.length === 0) {
                 //   throw new Error("Error obtaining all locations");
                 // }
