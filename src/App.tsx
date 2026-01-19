@@ -33,6 +33,7 @@ import {
   setStatusAndNavBarBGColor,
   getSalahTimes,
   scheduleSalahTimesNotifications,
+  getNextSalah,
 } from "./utils/constants";
 import {
   DBResultDataObjType,
@@ -47,6 +48,7 @@ import {
   themeType,
   LocationsDataObjTypeArr,
   SalahNamesTypeAdhanLibrary,
+  nextSalahTimeType,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
@@ -104,9 +106,53 @@ const App = () => {
     isha: "",
   });
 
-  // useEffect(() => {
-  //   console.log("Salah times: ", salahTimes);
-  // }, [salahTimes]);
+  const [nextSalahNameAndTime, setNextSalahNameAndTime] =
+    useState<nextSalahTimeType>({
+      currentSalah: "",
+      nextSalah: "",
+      nextSalahTime: null as Date | null,
+      hoursRemaining: 0,
+      minsRemaining: 0,
+    });
+
+  const getNextSalahDetails = async () => {
+    if (!userLocations) {
+      console.error("userLocations is undefined");
+      return;
+    }
+
+    const result = await getNextSalah(userLocations, userPreferences);
+    if (!result) return;
+    const {
+      currentSalah,
+      nextSalah,
+      nextSalahTime,
+      hoursRemaining,
+      minsRemaining,
+    } = result;
+    setNextSalahNameAndTime({
+      currentSalah: currentSalah,
+      nextSalah: nextSalah,
+      nextSalahTime: nextSalahTime,
+      hoursRemaining: hoursRemaining,
+      minsRemaining: minsRemaining,
+    });
+  };
+
+  useEffect(() => {
+    if (!isDatabaseInitialised) return;
+    getNextSalahDetails();
+
+    const interval = setInterval(() => {
+      getNextSalahDetails();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [userLocations]);
+
+  useEffect(() => {
+    console.log("nextSalahNameAndTime: ", nextSalahNameAndTime);
+  }, [nextSalahNameAndTime]);
 
   const [theme, setTheme] = useState<themeType>("dark");
 
@@ -818,6 +864,7 @@ const App = () => {
                   userLocations={userLocations}
                   setSalahtimes={setSalahtimes}
                   salahTimes={salahTimes}
+                  nextSalahNameAndTime={nextSalahNameAndTime}
                   // calculateActiveLocationSalahTimes={
                   //   calculateActiveLocationSalahTimes
                   // }

@@ -142,6 +142,14 @@ export type SalahNamesTypeAdhanLibrary =
 //   | "maghrib"
 //   | "isha";
 
+export type nextSalahTimeType = {
+  currentSalah: string;
+  nextSalah: string;
+  nextSalahTime: Date | null;
+  hoursRemaining: number;
+  minsRemaining: number;
+};
+
 export type salahTimesObjType = {
   fajr: string;
   sunrise: string;

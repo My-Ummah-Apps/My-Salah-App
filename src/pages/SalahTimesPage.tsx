@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import {
   LocationsDataObjTypeArr,
+  nextSalahTimeType,
   SalahNamesTypeAdhanLibrary,
   salahTimesObjType,
   userPreferencesType,
@@ -27,11 +28,10 @@ import {
   settingsOutline,
 } from "ionicons/icons";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Toast from "../components/Toast";
 import {
   checkNotificationPermissions,
-  getNextSalah,
   getSalahTimes,
   prayerCalculationMethodLabels,
   promptToOpenDeviceSettings,
@@ -54,6 +54,7 @@ interface SalahTimesPageProps {
   userLocations: LocationsDataObjTypeArr | undefined;
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
   salahTimes: salahTimesObjType;
+  nextSalahNameAndTime: nextSalahTimeType;
 }
 
 const SalahTimesPage = ({
@@ -64,6 +65,8 @@ const SalahTimesPage = ({
   userLocations,
   setSalahtimes,
   salahTimes,
+
+  nextSalahNameAndTime,
 }: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
@@ -74,14 +77,6 @@ const SalahTimesPage = ({
   const [showLocationAddedToast, setShowLocationAddedToast] =
     useState<boolean>(false);
 
-  const [nextSalahNameAndTime, setNextSalahNameAndTime] = useState({
-    currentSalah: "",
-    nextSalah: "",
-    nextSalahTime: null as Date | null,
-    hoursRemaining: 0,
-    minsRemaining: 0,
-  });
-
   const [selectedSalah, setSelectedSalah] =
     useState<SalahNamesTypeAdhanLibrary>("fajr");
   const [showSalahNotificationsSheet, setShowSalahNotificationsSheet] =
@@ -91,42 +86,6 @@ const SalahTimesPage = ({
   useIonViewWillLeave(() => {
     setDateToShow(new Date());
   });
-
-  useEffect(() => {
-    const getNextSalahDetails = async () => {
-      // const { currentSalah, nextSalah, hoursRemaining, minsRemaining } =
-      //   await calculateActiveLocationSalahTimes();
-      if (!userLocations) {
-        console.error("userLocations is undefined");
-        return;
-      }
-
-      const result = await getNextSalah(userLocations, userPreferences);
-      if (!result) return;
-      const {
-        currentSalah,
-        nextSalah,
-        nextSalahTime,
-        hoursRemaining,
-        minsRemaining,
-      } = result;
-      setNextSalahNameAndTime({
-        currentSalah: currentSalah,
-        nextSalah: nextSalah,
-        nextSalahTime: nextSalahTime,
-        hoursRemaining: hoursRemaining,
-        minsRemaining: minsRemaining,
-      });
-    };
-
-    getNextSalahDetails();
-
-    const interval = setInterval(() => {
-      getNextSalahDetails();
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, [userLocations]);
 
   const handleNotificationPermissions = async () => {
     const userNotificationPermission = await checkNotificationPermissions();

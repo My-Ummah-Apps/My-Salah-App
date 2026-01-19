@@ -239,8 +239,8 @@ const BottomSheetAddLocation = ({
             animate={{ x: "-50%", opacity: 1 }}
             exit={{ x: "50%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="absolute top-1/4 left-1/2 w-4/5 max-w-[300px] z-10 rounded-lg
-             flex flex-col items-center justify-center -translate-y-1/2 bg-[var(--card-bg-color)]"
+            className="absolute top-[15%] left-1/2 w-4/5 max-w-[300px] z-10 rounded-lg
+             flex flex-col items-center justify-center -translate-y-[15%] bg-[var(--card-bg-color)]"
           >
             <div className="pt-3 text-center">
               {isGpsBtnClicked && <p className="text-xs">Name this location</p>}
@@ -270,13 +270,12 @@ const BottomSheetAddLocation = ({
                     .filter((obj) =>
                       obj.search.startsWith(locationName.toLowerCase())
                     )
-                    .slice(0, 10)
+                    .slice(0, 5)
                     .map((obj) => (
                       <li
                         key={obj.latitude + obj.longitude}
                         className="py-2 border-b border-stone-700"
                         onClick={() => {
-                          // setLocationName(obj.city + obj.country);
                           setLocationName(`${obj.city} - ${obj.country}`);
                           setLatitude(Number(obj.latitude));
                           setLongitude(Number(obj.longitude));
