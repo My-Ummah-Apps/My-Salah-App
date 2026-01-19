@@ -416,7 +416,6 @@ const BottomSheetAddLocation = ({
                         isDefaultLocationCheckBoxChecked
                           ? 1
                           : 0;
-                      // const isSelected = userLocations.length === 0 ? 1 : 0;
 
                       await toggleDBConnection(dbConnection, "open");
 

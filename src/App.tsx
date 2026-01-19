@@ -104,9 +104,9 @@ const App = () => {
     isha: "",
   });
 
-  useEffect(() => {
-    console.log("Salah times: ", salahTimes);
-  }, [salahTimes]);
+  // useEffect(() => {
+  //   console.log("Salah times: ", salahTimes);
+  // }, [salahTimes]);
 
   const [theme, setTheme] = useState<themeType>("dark");
 

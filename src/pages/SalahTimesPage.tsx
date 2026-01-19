@@ -154,10 +154,6 @@ const SalahTimesPage = ({
     }
   };
 
-  useEffect(() => {
-    console.log("dateToShow in useEffect: ", dateToShow);
-  }, [dateToShow]);
-
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -274,24 +270,17 @@ const SalahTimesPage = ({
             <IonButton
               fill="clear"
               onClick={async () => {
-                // setDateToShow((prev) => addDays(prev, -1));
-                let nextDate = new Date();
-                setDateToShow((prev) => {
-                  nextDate = addDays(prev, -1);
-                  return nextDate;
-                });
-
-                console.log("dateToShow: ", dateToShow);
-
                 if (!userLocations) {
                   console.error(
-                    "Unable to retrieve times for ",
-                    dateToShow,
-                    " as userLocations is undefined"
+                    "Unable to retrieve times as userLocations is undefined"
                   );
-
                   return;
                 }
+
+                const nextDate = addDays(dateToShow, -1);
+                setDateToShow(nextDate);
+
+                console.log("nextDate: ", nextDate);
 
                 await getSalahTimes(
                   userLocations,
@@ -318,23 +307,17 @@ const SalahTimesPage = ({
             <IonButton
               fill="clear"
               onClick={async () => {
-                let nextDate = new Date();
-                setDateToShow((prev) => {
-                  nextDate = addDays(prev, 1);
-                  return nextDate;
-                });
-
-                console.log("dateToShow: ", dateToShow);
-
                 if (!userLocations) {
                   console.error(
-                    "Unable to retrieve times for ",
-                    dateToShow,
-                    " as userLocations is undefined"
+                    "Unable to retrieve times as userLocations is undefined"
                   );
-
                   return;
                 }
+
+                const nextDate = addDays(dateToShow, 1);
+                setDateToShow(nextDate);
+
+                console.log("nextDate: ", nextDate);
 
                 await getSalahTimes(
                   userLocations,

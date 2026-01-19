@@ -298,7 +298,7 @@ export const updateUserPrefs = async (
       [preferenceName]: preferenceValue,
     }));
   } catch (error) {
-    console.log(`ERROR ENTERING ${preferenceName} into DB`);
+    console.error(`ERROR ENTERING ${preferenceName} into DB`);
     console.error(error);
   } finally {
     if (!dbConnection || !dbConnection.current) {
@@ -307,7 +307,7 @@ export const updateUserPrefs = async (
     let DBResultPreferences = await dbConnection.current.query(
       `SELECT * FROM userPreferencesTable`
     );
-    console.log("DBResultPreferences: ", DBResultPreferences?.values);
+    console.error("DBResultPreferences: ", DBResultPreferences?.values);
     await toggleDBConnection(dbConnection, "close");
   }
 };
@@ -460,7 +460,7 @@ export const generateActiveLocationParams = async (
   userLocations: LocationsDataObjTypeArr,
   userPreferences: userPreferencesType
 ) => {
-  console.log("USER. LOCATIONS IN GENERATE: ", userLocations);
+  // console.log("USER. LOCATIONS IN GENERATE: ", userLocations);
 
   const activeLocation = getActiveLocation(userLocations);
 
@@ -494,7 +494,7 @@ export const generateActiveLocationParams = async (
   params.shafaq = userPreferences.shafaqRule;
   params.polarCircleResolution = userPreferences.polarCircleResolution;
 
-  console.log("params after amendments:", params);
+  // console.log("params after amendments:", params);
 
   return { params, coordinates };
 };
@@ -523,7 +523,7 @@ export const getSalahTimes = async (
   userPreferences: userPreferencesType,
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>
 ) => {
-  console.log("GETTING SALAH TIMES FOR: ", date);
+  // console.log("GETTING SALAH TIMES FOR: ", date);
 
   const result = await generateActiveLocationParams(
     userLocations,
