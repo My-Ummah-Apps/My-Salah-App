@@ -14,7 +14,7 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { add, trashOutline } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { MdCheck } from "react-icons/md";
 import {
@@ -81,10 +81,6 @@ BottomSheetSalahTimesSettingsProps) => {
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");
     }
-
-    const res = await dbConnection.current.query(
-      `SELECT * FROM userlocationsTable`
-    );
 
     await dbConnection.current.run(
       `UPDATE userLocationsTable SET isSelected = 0`

@@ -96,6 +96,10 @@ const useSQLiteDB = () => {
 
       await toggleDBConnection(dbConnection, "open");
 
+      await dbConnection.current.execute(
+        `DROP INDEX IF EXISTS idx_single_selected_location`
+      );
+
       const createTablesSql: string[] = [
         `CREATE TABLE IF NOT EXISTS salahDataTable(
         id INTEGER PRIMARY KEY NOT NULL,
@@ -121,8 +125,6 @@ const useSQLiteDB = () => {
           longitude REAL NOT NULL,
           isSelected INTEGER DEFAULT 0
         ) STRICT`,
-
-        `CREATE UNIQUE INDEX IF NOT EXISTS idx_single_selected_location ON userLocationsTable (isSelected) WHERE isSelected = 1`,
       ];
 
       for (const sql of createTablesSql) {
