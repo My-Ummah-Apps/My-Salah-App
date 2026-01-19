@@ -19,7 +19,7 @@ import { useState } from "react";
 
 import { locate, locationOutline, searchOutline } from "ionicons/icons";
 
-import cities from "../../../assets/city_list.json";
+import cities from "../../../assets/cities.json";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -29,12 +29,12 @@ import { LocationsDataObjTypeArr } from "../../../types/types";
 import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 
 const allCities = cities.map(
-  (obj: { country: string; name: string; lat: number; lon: number }) => {
+  (obj: { country: string; name: string; lat: string; lng: string }) => {
     return {
       country: obj.country,
       city: obj.name,
       latitude: obj.lat,
-      longitude: obj.lon,
+      longitude: obj.lng,
       search: obj.name.toLowerCase(),
     };
   }
@@ -277,8 +277,8 @@ const BottomSheetAddLocation = ({
                         className="py-2 border-b border-stone-700"
                         onClick={() => {
                           setLocationName(obj.city);
-                          setLatitude(obj.latitude);
-                          setLongitude(obj.longitude);
+                          setLatitude(Number(obj.latitude));
+                          setLongitude(Number(obj.longitude));
                           setCitySearchMode(false);
                         }}
                       >
@@ -436,10 +436,10 @@ const BottomSheetAddLocation = ({
                       const { allLocations } = await fetchAllLocations(
                         dbConnection
                       );
-                      console.log(
-                        "FETCH ALL LOCATIONS CALLE FROM ADD LOCATION SHEET: ",
-                        allLocations
-                      );
+                      // console.log(
+                      //   "FETCH ALL LOCATIONS CALLE FROM ADD LOCATION SHEET: ",
+                      //   allLocations
+                      // );
 
                       if (allLocations) {
                         if (allLocations.length === 1) {

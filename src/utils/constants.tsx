@@ -307,7 +307,7 @@ export const updateUserPrefs = async (
     let DBResultPreferences = await dbConnection.current.query(
       `SELECT * FROM userPreferencesTable`
     );
-    console.error("DBResultPreferences: ", DBResultPreferences?.values);
+    console.log("DBResultPreferences: ", DBResultPreferences?.values);
     await toggleDBConnection(dbConnection, "close");
   }
 };
