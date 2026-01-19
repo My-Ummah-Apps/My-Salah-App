@@ -276,7 +276,8 @@ const BottomSheetAddLocation = ({
                         key={obj.latitude + obj.longitude}
                         className="py-2 border-b border-stone-700"
                         onClick={() => {
-                          setLocationName(obj.city);
+                          // setLocationName(obj.city + obj.country);
+                          setLocationName(`${obj.city} - ${obj.country}`);
                           setLatitude(Number(obj.latitude));
                           setLongitude(Number(obj.longitude));
                           setCitySearchMode(false);
@@ -398,7 +399,6 @@ const BottomSheetAddLocation = ({
                     loc.locationName.toLowerCase()
                   );
 
-                  // ! Need to tighten this further, make it so that duplication is detected when name + lat + long are all the same
                   if (
                     locationNames.includes(locationNameTrimmed.toLowerCase())
                   ) {
