@@ -17,7 +17,12 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { useState } from "react";
 
-import { locate, locationOutline, searchOutline } from "ionicons/icons";
+import {
+  closeCircle,
+  locate,
+  locationOutline,
+  searchOutline,
+} from "ionicons/icons";
 
 import cities from "../../../assets/cities.json";
 import {
@@ -37,7 +42,7 @@ const allCities = cities.map(
       longitude: obj.lng,
       search: obj.name.toLowerCase(),
     };
-  }
+  },
 );
 
 interface BottomSheetAddLocationProps {
@@ -80,6 +85,11 @@ const BottomSheetAddLocation = ({
   const [longitude, setLongitude] = useState<number | null>(null);
   const [citySearchMode, setCitySearchMode] = useState(false);
   const [isGpsBtnClicked, setIsGpsBtnClicked] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<
+    "gps" | "latlon" | "coords" | ""
+  >("");
+  const [isCityNameClicked, setIsCityNameClicked] = useState(false);
+
   const [
     isDefaultLocationCheckBoxChecked,
     setIsDefaultLocationCheckBoxChecked,
@@ -90,7 +100,7 @@ const BottomSheetAddLocation = ({
     locationName: string,
     latitude: number,
     longitude: number,
-    isSelected: number
+    isSelected: number,
   ) => {
     const stmnt = `INSERT INTO userLocationsTable (locationName, latitude, longitude, isSelected) 
         VALUES (?, ?, ?, ?);
@@ -104,12 +114,12 @@ const BottomSheetAddLocation = ({
       "isDefaultLocationCheckBoxChecked: ",
       isDefaultLocationCheckBoxChecked,
       "isSelected: ",
-      isSelected
+      isSelected,
     );
 
     if (isDefaultLocationCheckBoxChecked && isSelected === 1) {
       await dbConnection.current.run(
-        `UPDATE userLocationsTable SET isSelected = 0`
+        `UPDATE userLocationsTable SET isSelected = 0`,
       );
     }
 
@@ -135,6 +145,7 @@ const BottomSheetAddLocation = ({
     setCitySearchMode(false);
     setIsGpsBtnClicked(false);
     setIsDefaultLocationCheckBoxChecked(false);
+    setIsCityNameClicked(false);
   };
 
   const handleGrantedPermission = async () => {
@@ -200,7 +211,7 @@ const BottomSheetAddLocation = ({
       await promptToOpenDeviceSettings(
         `Location permission off`,
         "You currently have location turned off for this application, you can open Settings to re-enable it",
-        AndroidSettings.Location
+        AndroidSettings.Location,
       );
 
       return;
@@ -245,31 +256,45 @@ const BottomSheetAddLocation = ({
           >
             <div className="pt-3 text-center">
               {isGpsBtnClicked && <p className="text-xs">Name this location</p>}
-              <IonInput
-                className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
-                aria-label="Location name"
-                type="text"
-                placeholder={
-                  isGpsBtnClicked
-                    ? "e.g. Home, Work, London"
-                    : "Enter Location Name"
-                }
-                onIonInput={(e) => {
-                  setLocationName(e.detail.value || "");
-                  // ! Below is causing search mode to be turned on for all button clicks
-                  if (citySearchMode === false) {
-                    setCitySearchMode(true);
+              <div className="flex items-center">
+                <IonInput
+                  className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
+                  aria-label="Location name"
+                  type="text"
+                  disabled={isCityNameClicked ? true : false}
+                  placeholder={
+                    isGpsBtnClicked
+                      ? "e.g. Home, Work, City Name"
+                      : "Enter Location Name"
                   }
-                  setShowDuplicateLocationError(false);
-                  setShowEmptyLocationError(false);
-                }}
-                value={locationName}
-              ></IonInput>
+                  onIonInput={(e) => {
+                    setLocationName(e.detail.value || "");
+                    setShowDuplicateLocationError(false);
+                    setShowEmptyLocationError(false);
+                  }}
+                  value={locationName}
+                ></IonInput>
+
+                {isCityNameClicked && (
+                  <IonButton
+                    onClick={() => {
+                      setLocationName("");
+                      setIsCityNameClicked(false);
+                      setCitySearchMode(true);
+                    }}
+                    size="small"
+                    fill="clear"
+                    color="danger"
+                  >
+                    <IonIcon icon={closeCircle} />{" "}
+                  </IonButton>
+                )}
+              </div>
               {citySearchMode && locationName && (
                 <ul>
                   {allCities
                     .filter((obj) =>
-                      obj.search.startsWith(locationName.toLowerCase())
+                      obj.search.startsWith(locationName.toLowerCase()),
                     )
                     .slice(0, 5)
                     .map((obj) => (
@@ -281,6 +306,7 @@ const BottomSheetAddLocation = ({
                           setLatitude(Number(obj.latitude));
                           setLongitude(Number(obj.longitude));
                           setCitySearchMode(false);
+                          setIsCityNameClicked(true);
                         }}
                       >
                         {obj.city}, {obj.country}
@@ -299,7 +325,6 @@ const BottomSheetAddLocation = ({
                   ? "Please enter a location name"
                   : "Location already exists"}
               </p>
-
               {useManualCoordinates && (
                 <>
                   <IonInput
@@ -312,7 +337,6 @@ const BottomSheetAddLocation = ({
                       setLatitude(Number(e.detail.value) || null)
                     }
                   ></IonInput>
-
                   <p
                     className={`mb-1 text-xs text-red-500 ${
                       showEmptyLatitudeError ? "visible" : "invisible"
@@ -330,7 +354,6 @@ const BottomSheetAddLocation = ({
                       setLongitude(Number(e.detail.value) || null);
                     }}
                   ></IonInput>
-
                   <p
                     className={`mb-1 text-xs text-red-500 ${
                       showEmptyLongitudeError ? "visible" : "invisible"
@@ -396,7 +419,7 @@ const BottomSheetAddLocation = ({
                   }
 
                   const locationNames = userLocations.map((loc) =>
-                    loc.locationName.toLowerCase()
+                    loc.locationName.toLowerCase(),
                   );
 
                   if (
@@ -424,18 +447,17 @@ const BottomSheetAddLocation = ({
                         locationName,
                         latitude,
                         longitude,
-                        isSelected
+                        isSelected,
                       );
 
                       if (!result?.changes?.lastId) {
                         throw new Error(
-                          "Failed to insert location: no ID returned"
+                          "Failed to insert location: no ID returned",
                         );
                       }
 
-                      const { allLocations } = await fetchAllLocations(
-                        dbConnection
-                      );
+                      const { allLocations } =
+                        await fetchAllLocations(dbConnection);
                       // console.log(
                       //   "FETCH ALL LOCATIONS CALLE FROM ADD LOCATION SHEET: ",
                       //   allLocations
@@ -500,6 +522,7 @@ const BottomSheetAddLocation = ({
             onClick={async () => {
               if (showLocationDetailsInput) return;
               setIsGpsBtnClicked(true);
+              setSelectedOption("gps");
               presentLocationSpinner({
                 message: "Detecting location...",
                 backdropDismiss: false,
