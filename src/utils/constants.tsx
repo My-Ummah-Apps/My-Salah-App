@@ -138,7 +138,7 @@ export const checkNotificationPermissions = async () => {
 
 export const scheduleDailyNotification = async (
   hour: number,
-  minute: number
+  minute: number,
 ) => {
   // if (device === "android") {
   //   await createNotificationChannel();
@@ -224,7 +224,7 @@ export const showAlert = async (title: string, msg: string) => {
 
 export const showConfirmMsg = async (
   title: string,
-  msg: string
+  msg: string,
 ): Promise<boolean> => {
   const { value } = await Dialog.confirm({
     title: title,
@@ -236,7 +236,7 @@ export const showConfirmMsg = async (
 
 export const setStatusAndNavBarBGColor = async (
   backgroundColor: string,
-  textColor: Style
+  textColor: Style,
 ) => {
   if (device === "android") {
     await EdgeToEdge.setBackgroundColor({ color: backgroundColor });
@@ -247,7 +247,7 @@ export const setStatusAndNavBarBGColor = async (
 export const promptToOpenDeviceSettings = async (
   title: string,
   message: string,
-  androidOption: AndroidSettings
+  androidOption: AndroidSettings,
 ) => {
   const { value } = await Dialog.confirm({
     title: title,
@@ -273,7 +273,7 @@ export const updateUserPrefs = async (
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
   preferenceName: PreferenceType,
   preferenceValue: string | string[],
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>,
 ) => {
   try {
     if (!dbConnection || !dbConnection.current) {
@@ -305,7 +305,7 @@ export const updateUserPrefs = async (
       throw new Error("dbConnection / dbconnection.current does not exist");
     }
     let DBResultPreferences = await dbConnection.current.query(
-      `SELECT * FROM userPreferencesTable`
+      `SELECT * FROM userPreferencesTable`,
     );
     console.log("DBResultPreferences: ", DBResultPreferences?.values);
     await toggleDBConnection(dbConnection, "close");
@@ -314,15 +314,15 @@ export const updateUserPrefs = async (
 
 export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
   const activeLocation = userLocations.find((loc) => loc.isSelected === 1);
-  if (!activeLocation) {
-    console.error("No active location exists");
-  }
+  // if (!activeLocation) {
+  //   console.error("No active location exists");
+  // }
 
   return activeLocation;
 };
 
 export const cancelSalahReminderNotifications = async (
-  salahName: SalahNamesTypeAdhanLibrary
+  salahName: SalahNamesTypeAdhanLibrary,
 ) => {
   console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
 
@@ -340,10 +340,7 @@ export const cancelSalahReminderNotifications = async (
 
   await LocalNotifications.cancel({ notifications: notificationsToCancel });
 
-  console.log(
-    "pending notifications after cancelling: ",
-    await LocalNotifications.getPending()
-  );
+  // console.log("pending notifications after cancelling: ", (await LocalNotifications.getPending()).notifications);
 };
 
 const salahIdMap = {
@@ -356,7 +353,7 @@ const salahIdMap = {
 
 const generateNotificationId = (
   salahName: SalahNamesTypeAdhanLibrary,
-  date: Date
+  date: Date,
 ) => {
   const dateFormatted = format(date, "ddMMyyyy");
 
@@ -370,7 +367,7 @@ export const toLocalDateFromUTCClock = (utcDate: Date) => {
     utcDate.getUTCDate(),
     utcDate.getUTCHours(),
     utcDate.getUTCMinutes(),
-    utcDate.getUTCSeconds()
+    utcDate.getUTCSeconds(),
   );
 };
 
@@ -382,12 +379,14 @@ export const scheduleSalahTimesNotifications = async (
   userLocations: LocationsDataObjTypeArr,
   salahName: SalahNamesTypeAdhanLibrary,
   userPreferences: userPreferencesType,
-  setting: SalahNotificationSettings
+  setting: SalahNotificationSettings,
 ) => {
+  cancelSalahReminderNotifications(salahName);
+
   const today = new Date();
 
   const customAdjustment = Number(
-    userPreferences[`${salahName}Adjustment` as keyof userPreferencesType]
+    userPreferences[`${salahName}Adjustment` as keyof userPreferencesType],
   );
 
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
@@ -406,7 +405,7 @@ export const scheduleSalahTimesNotifications = async (
   if (setting === "on" || setting === "adhan") {
     const result = await generateActiveLocationParams(
       userLocations,
-      userPreferences
+      userPreferences,
     );
 
     if (!result) return;
@@ -453,18 +452,24 @@ export const scheduleSalahTimesNotifications = async (
     }
   }
 
-  console.log("PENDING NOTIFICATIONS: ", await LocalNotifications.getPending());
+  console.log(
+    "PENDING NOTIFICATIONS: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 export const generateActiveLocationParams = async (
   userLocations: LocationsDataObjTypeArr,
-  userPreferences: userPreferencesType
+  userPreferences: userPreferencesType,
 ) => {
   // console.log("USER. LOCATIONS IN GENERATE: ", userLocations);
 
   const activeLocation = getActiveLocation(userLocations);
 
   if (userLocations.length === 0 || !activeLocation) {
+    console.log(
+      "No active location exists, generateActiveLocationParams function discontinouing",
+    );
     return;
   }
 
@@ -476,7 +481,7 @@ export const generateActiveLocationParams = async (
 
   const coordinates = new Coordinates(
     activeLocation.latitude,
-    activeLocation.longitude
+    activeLocation.longitude,
   );
 
   const params =
@@ -506,7 +511,7 @@ export const extractSalahTime = (
   coordinates: Coordinates,
   date: Date,
   params: CalculationParameters,
-  userPreferences: userPreferencesType
+  userPreferences: userPreferencesType,
 ) => {
   const salahTime = new PrayerTimes(coordinates, date, params)[salah];
 
@@ -523,13 +528,13 @@ export const getSalahTimes = async (
   userLocations: LocationsDataObjTypeArr,
   date: Date,
   userPreferences: userPreferencesType,
-  setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>
+  setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>,
 ) => {
   // console.log("GETTING SALAH TIMES FOR: ", date);
 
   const result = await generateActiveLocationParams(
     userLocations,
-    userPreferences
+    userPreferences,
   );
 
   if (!result) return;
@@ -545,14 +550,14 @@ export const getSalahTimes = async (
       coordinates,
       date,
       params,
-      userPreferences
+      userPreferences,
     ),
     dhuhr: extractSalahTime(
       "dhuhr",
       coordinates,
       date,
       params,
-      userPreferences
+      userPreferences,
     ),
     asr: extractSalahTime("asr", coordinates, date, params, userPreferences),
     maghrib: extractSalahTime(
@@ -560,7 +565,7 @@ export const getSalahTimes = async (
       coordinates,
       date,
       params,
-      userPreferences
+      userPreferences,
     ),
     isha: extractSalahTime("isha", coordinates, date, params, userPreferences),
   });
@@ -568,11 +573,11 @@ export const getSalahTimes = async (
 
 export const getNextSalah = async (
   userLocations: LocationsDataObjTypeArr,
-  userPreferences: userPreferencesType
+  userPreferences: userPreferencesType,
 ) => {
   const result = await generateActiveLocationParams(
     userLocations,
-    userPreferences
+    userPreferences,
   );
 
   if (!result) return;

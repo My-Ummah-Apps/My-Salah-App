@@ -48,9 +48,9 @@ const allCities = cities.map(
 interface BottomSheetAddLocationProps {
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showAddLocationSheet?: boolean;
-  setShowSalahTimesSettingsSheet?: React.Dispatch<
-    React.SetStateAction<boolean>
-  >;
+  // setShowSalahTimesSettingsSheet?: React.Dispatch<
+  //   React.SetStateAction<boolean>
+  // >;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
@@ -63,7 +63,7 @@ interface BottomSheetAddLocationProps {
 const BottomSheetAddLocation = ({
   setShowAddLocationSheet,
   showAddLocationSheet,
-  setShowSalahTimesSettingsSheet,
+  // setShowSalahTimesSettingsSheet,
   dbConnection,
   setUserLocations,
   userLocations,
@@ -85,9 +85,6 @@ const BottomSheetAddLocation = ({
   const [longitude, setLongitude] = useState<number | null>(null);
   const [citySearchMode, setCitySearchMode] = useState(false);
   const [isGpsBtnClicked, setIsGpsBtnClicked] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<
-    "gps" | "latlon" | "coords" | ""
-  >("");
   const [isCityNameClicked, setIsCityNameClicked] = useState(false);
 
   const [
@@ -522,7 +519,6 @@ const BottomSheetAddLocation = ({
             onClick={async () => {
               if (showLocationDetailsInput) return;
               setIsGpsBtnClicked(true);
-              setSelectedOption("gps");
               presentLocationSpinner({
                 message: "Detecting location...",
                 backdropDismiss: false,

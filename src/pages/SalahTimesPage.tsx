@@ -95,7 +95,7 @@ const SalahTimesPage = ({
       await promptToOpenDeviceSettings(
         `Notifications are turned off`,
         `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
-        AndroidSettings.AppNotification
+        AndroidSettings.AppNotification,
       );
       return "denied";
     } else if (userNotificationPermission === "granted") {
@@ -152,18 +152,24 @@ const SalahTimesPage = ({
       <IonContent>
         {/* bg-[var(--card-bg-color)]  */}
         <section className="salah-times-page-components-wrap">
-          <section className="flex items-center justify-center mb-1 font-light">
-            {userLocations?.map((location) => (
-              <section className="flex items-center" key={location.id}>
-                <IonIcon
-                  className="text-[var(--ion-text-color)] mr-1"
-                  icon={navigate}
-                />
-
-                <p>{location.isSelected === 1 ? location.locationName : ""}</p>
-              </section>
-            ))}{" "}
-          </section>
+          {userLocations?.map((location) => (
+            <section className="" key={location.id}>
+              {location.isSelected === 1 ? (
+                <div
+                  key={location.id}
+                  className="flex items-center justify-center mb-1 text-lg font-light"
+                >
+                  <IonIcon
+                    className="text-[var(--ion-text-color)] mr-1"
+                    icon={navigate}
+                  />
+                  <p>{location.locationName}</p>
+                </div>
+              ) : (
+                ""
+              )}
+            </section>
+          ))}{" "}
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
               <section className="p-4 rounded-lg bg-[var(--card-bg-color)] ">
@@ -175,7 +181,7 @@ const SalahTimesPage = ({
                       </p>
                       <p className="text-6xl font-bold text-center">
                         {upperCaseFirstLetter(
-                          nextSalahNameAndTime.currentSalah
+                          nextSalahNameAndTime.currentSalah,
                         )}
                       </p>
                     </>
@@ -217,9 +223,9 @@ const SalahTimesPage = ({
                 <BottomSheetAddLocation
                   setShowAddLocationSheet={setShowAddLocationSheet}
                   showAddLocationSheet={showAddLocationSheet}
-                  setShowSalahTimesSettingsSheet={
-                    setShowSalahTimesSettingsSheet
-                  }
+                  // setShowSalahTimesSettingsSheet={
+                  //   setShowSalahTimesSettingsSheet
+                  // }
                   dbConnection={dbConnection}
                   setUserLocations={setUserLocations}
                   userLocations={userLocations}
@@ -230,7 +236,6 @@ const SalahTimesPage = ({
               </section>
             </>
           )}
-
           <section
             className={` ${
               userLocations?.length === 0 ||
@@ -256,7 +261,7 @@ const SalahTimesPage = ({
                   userLocations,
                   nextDate,
                   userPreferences,
-                  setSalahtimes
+                  setSalahtimes,
                 );
               }}
             >
@@ -269,10 +274,10 @@ const SalahTimesPage = ({
               {isSameDay(dateToShow, new Date())
                 ? "Today"
                 : isSameDay(addDays(new Date(), -1), dateToShow)
-                ? "Yesterday"
-                : isSameDay(addDays(new Date(), 1), dateToShow)
-                ? "Tomorrow"
-                : dateToShow.toLocaleDateString()}
+                  ? "Yesterday"
+                  : isSameDay(addDays(new Date(), 1), dateToShow)
+                    ? "Tomorrow"
+                    : dateToShow.toLocaleDateString()}
             </p>
             <IonButton
               fill="clear"
@@ -290,7 +295,7 @@ const SalahTimesPage = ({
                   userLocations,
                   nextDate,
                   userPreferences,
-                  setSalahtimes
+                  setSalahtimes,
                 );
               }}
             >
@@ -361,18 +366,18 @@ const SalahTimesPage = ({
                         ] === "off"
                           ? notificationsOff
                           : userPreferences[
-                              `${
-                                name as Exclude<typeof name, "sunrise">
-                              }Notification`
-                            ] === "on"
-                          ? notifications
-                          : userPreferences[
-                              `${
-                                name as Exclude<typeof name, "sunrise">
-                              }Notification`
-                            ] === "adhan"
-                          ? megaphone
-                          : ""
+                                `${
+                                  name as Exclude<typeof name, "sunrise">
+                                }Notification`
+                              ] === "on"
+                            ? notifications
+                            : userPreferences[
+                                  `${
+                                    name as Exclude<typeof name, "sunrise">
+                                  }Notification`
+                                ] === "adhan"
+                              ? megaphone
+                              : ""
                       }
                     />
                   </IonButton>
@@ -390,10 +395,10 @@ const SalahTimesPage = ({
                 userPreferences.prayerCalculationMethod
               ]
             } method with Fajr Angle ${
-                  userPreferences.fajrAngle
-                }° and Isha Angle ${
-                  userPreferences.ishaAngle
-                }°, your local mosque (beginning) times may differ.`}
+              userPreferences.fajrAngle
+            }° and Isha Angle ${
+              userPreferences.ishaAngle
+            }°, your local mosque (beginning) times may differ.`}
               </p>
             )}
         </section>

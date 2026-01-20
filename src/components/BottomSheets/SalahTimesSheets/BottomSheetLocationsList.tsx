@@ -14,7 +14,7 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { add, trashOutline } from "ionicons/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { MdCheck } from "react-icons/md";
 import {
@@ -23,6 +23,7 @@ import {
   userPreferencesType,
 } from "../../../types/types";
 import {
+  cancelSalahReminderNotifications,
   getActiveLocation,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -73,7 +74,7 @@ BottomSheetSalahTimesSettingsProps) => {
   //   useState(false);
 
   const [locationToDeleteId, setLocationToDeleteId] = useState<null | number>(
-    null
+    null,
   );
   const [showDeleteLocationToast, setShowDeleteLocationToast] = useState(false);
 
@@ -83,18 +84,18 @@ BottomSheetSalahTimesSettingsProps) => {
     }
 
     await dbConnection.current.run(
-      `UPDATE userLocationsTable SET isSelected = 0`
+      `UPDATE userLocationsTable SET isSelected = 0`,
     );
 
     await dbConnection.current.run(
       `UPDATE userlocationsTable SET isSelected = 1 WHERE id = ?`,
-      [id]
+      [id],
     );
   };
 
   const deleteUserLocation = async (
     dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-    id: number
+    id: number,
   ) => {
     const stmnt = `DELETE FROM userLocationsTable WHERE id = ?`;
     const params = [id];
@@ -105,6 +106,20 @@ BottomSheetSalahTimesSettingsProps) => {
 
     await dbConnection.current.run(stmnt, params);
   };
+
+  useEffect(() => {
+    const cancelAllSalahNotifications = async () => {
+      if (userLocations?.length === 0) {
+        await cancelSalahReminderNotifications("fajr");
+        await cancelSalahReminderNotifications("dhuhr");
+        await cancelSalahReminderNotifications("asr");
+        await cancelSalahReminderNotifications("maghrib");
+        await cancelSalahReminderNotifications("isha");
+      }
+    };
+
+    cancelAllSalahNotifications();
+  }, [userLocations]);
 
   return (
     <IonModal
@@ -139,9 +154,8 @@ BottomSheetSalahTimesSettingsProps) => {
 
                   await updateActiveLocation(location.id);
 
-                  const { allLocations } = await fetchAllLocations(
-                    dbConnection
-                  );
+                  const { allLocations } =
+                    await fetchAllLocations(dbConnection);
 
                   setUserLocations(allLocations);
                 } catch (error) {
@@ -211,7 +225,7 @@ BottomSheetSalahTimesSettingsProps) => {
             handler: async () => {
               if (locationToDeleteId === null) {
                 console.error(
-                  "locationToDeleteId does not exist within delete location ActionSheet handler"
+                  "locationToDeleteId does not exist within delete location ActionSheet handler",
                 );
                 return;
               }

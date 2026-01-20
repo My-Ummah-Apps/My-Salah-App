@@ -79,10 +79,10 @@ const App = () => {
   const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(false);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
-    {}
+    {},
   );
   const [userLocations, setUserLocations] = useState<LocationsDataObjTypeArr>(
-    []
+    [],
   );
   const [isMultiEditMode, setIsMultiEditMode] = useState<boolean>(false);
   const [showJoyRideEditIcon, setShowJoyRideEditIcon] =
@@ -95,7 +95,7 @@ const App = () => {
     useState<SalahRecordsArrayType>([]);
 
   const [userPreferences, setUserPreferences] = useState<userPreferencesType>(
-    dictPreferencesDefaultValues
+    dictPreferencesDefaultValues,
   );
   const [salahTimes, setSalahtimes] = useState({
     fajr: "",
@@ -289,7 +289,7 @@ const App = () => {
         userLocations,
         todaysDate,
         userPreferences,
-        setSalahtimes
+        setSalahtimes,
       );
     };
 
@@ -318,7 +318,7 @@ const App = () => {
             userLocations,
             salahs[i],
             userPreferences,
-            salahNotificationSetting
+            salahNotificationSetting,
           );
         }
       }
@@ -368,39 +368,39 @@ const App = () => {
           dbConnection,
           "isExistingUser",
           "1",
-          setUserPreferences
+          setUserPreferences,
         );
       }
 
       await toggleDBConnection(dbConnection, "open");
 
       let DBResultPreferences = await dbConnection.current.query(
-        `SELECT * FROM userPreferencesTable`
+        `SELECT * FROM userPreferencesTable`,
       );
 
       const DBResultAllSalahData = await dbConnection.current.query(
-        `SELECT * FROM salahDataTable`
+        `SELECT * FROM salahDataTable`,
       );
 
       const DBResultLocations = await dbConnection.current.query(
-        `SELECT * FROM userLocationsTable`
+        `SELECT * FROM userLocationsTable`,
       );
 
       console.log("DBResultLocations: ", DBResultLocations);
 
       if (!DBResultPreferences || !DBResultPreferences.values) {
         throw new Error(
-          "DBResultPreferences or DBResultPreferences.values do not exist"
+          "DBResultPreferences or DBResultPreferences.values do not exist",
         );
       }
       if (!DBResultAllSalahData || !DBResultAllSalahData.values) {
         throw new Error(
-          "DBResultAllSalahData or !DBResultAllSalahData.values do not exist"
+          "DBResultAllSalahData or !DBResultAllSalahData.values do not exist",
         );
       }
       if (!DBResultLocations || !DBResultLocations.values) {
         throw new Error(
-          "DBResultLocations or !DBResultLocations.values do not exist"
+          "DBResultLocations or !DBResultLocations.values do not exist",
         );
       }
 
@@ -412,12 +412,12 @@ const App = () => {
       const userNotificationPermission = await checkNotificationPermissions();
 
       const notificationValue = DBResultPreferences.values.find(
-        (row) => row.preferenceName === "dailyNotification"
+        (row) => row.preferenceName === "dailyNotification",
       );
 
       const isExistingUser =
         DBResultPreferences.values.find(
-          (row) => row.preferenceName === "isExistingUser"
+          (row) => row.preferenceName === "isExistingUser",
         ) || "";
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
@@ -434,7 +434,7 @@ const App = () => {
             dbConnection,
             "dailyNotification",
             "0",
-            setUserPreferences
+            setUserPreferences,
           );
           await toggleDBConnection(dbConnection, "open");
 
@@ -445,12 +445,12 @@ const App = () => {
           // );
 
           DBResultPreferences = await dbConnection.current.query(
-            `SELECT * FROM userPreferencesTable`
+            `SELECT * FROM userPreferencesTable`,
           );
         } catch (error) {
           console.error(
             "Error modifying dailyNotification value in database:",
-            error
+            error,
           );
         } finally {
           await toggleDBConnection(dbConnection, "close");
@@ -459,11 +459,11 @@ const App = () => {
       try {
         if (!DBResultPreferences || !DBResultPreferences.values) {
           throw new Error(
-            "DBResultPreferences or DBResultPreferences.values do not exist"
+            "DBResultPreferences or DBResultPreferences.values do not exist",
           );
         }
         await handleUserPreferencesDataFromDB(
-          DBResultPreferences.values as PreferenceObjType[]
+          DBResultPreferences.values as PreferenceObjType[],
         );
 
         await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
@@ -478,7 +478,7 @@ const App = () => {
   };
 
   const handleUserPreferencesDataFromDB = async (
-    DBResultPreferences: PreferenceObjType[]
+    DBResultPreferences: PreferenceObjType[],
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
 
@@ -507,24 +507,24 @@ const App = () => {
 
         await dbConnection.current.run(insertQuery, params);
         const DBResultPreferencesQuery = await dbConnection.current.query(
-          `SELECT * FROM userPreferencesTable`
+          `SELECT * FROM userPreferencesTable`,
         );
 
         if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
           throw new Error(
-            "No values returned from the DBResultPreferencesQuery."
+            "No values returned from the DBResultPreferencesQuery.",
           );
         }
         DBResultPreferencesValues =
           DBResultPreferencesQuery.values as PreferenceObjType[];
       } else if (DBResultPreferencesValues.length > 0) {
         const DBResultPreferencesQuery = await dbConnection.current.query(
-          `SELECT * FROM userPreferencesTable`
+          `SELECT * FROM userPreferencesTable`,
         );
 
         if (!DBResultPreferencesQuery || !DBResultPreferencesQuery.values) {
           throw new Error(
-            "No values returned from the DBResultPreferencesQuery."
+            "No values returned from the DBResultPreferencesQuery.",
           );
         }
 
@@ -536,10 +536,10 @@ const App = () => {
     }
 
     const assignPreference = async (
-      preference: PreferenceType
+      preference: PreferenceType,
     ): Promise<void> => {
       const preferenceQuery = DBResultPreferencesValues.find(
-        (row) => row.preferenceName === preference
+        (row) => row.preferenceName === preference,
       );
 
       if (preferenceQuery) {
@@ -563,7 +563,7 @@ const App = () => {
           dbConnection,
           preference,
           dictPreferencesDefaultValues[preference],
-          setUserPreferences
+          setUserPreferences,
         );
 
         // await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
@@ -594,7 +594,7 @@ const App = () => {
   }, [userPreferences.userStartDate]);
 
   const handleSalahTrackingDataFromDB = async (
-    DBResultAllSalahData: DBResultDataObjType[]
+    DBResultAllSalahData: DBResultDataObjType[],
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
     const missedSalahObj: SalahByDateObjType = {};
@@ -602,7 +602,7 @@ const App = () => {
     const userStartDateFormattedToDateObject: Date = parse(
       userStartDateForSalahTrackingFunc,
       "yyyy-MM-dd",
-      new Date()
+      new Date(),
     );
 
     const datesFromStartToToday: string[] = eachDayOfInterval({
@@ -678,12 +678,12 @@ const App = () => {
       i++
     ) {
       const salahStatuses = Object.values(
-        reversedFetchedSalahDataArr[i].salahs
+        reversedFetchedSalahDataArr[i].salahs,
       );
 
       if (reversedFetchedSalahDataArr.length === 1) {
         const salahStatuses = Object.values(
-          reversedFetchedSalahDataArr[0].salahs
+          reversedFetchedSalahDataArr[0].salahs,
         );
 
         if (!isStreakBreakingStatus(salahStatuses)) {
@@ -697,7 +697,7 @@ const App = () => {
             streakDatesArr,
             isActiveStreak,
             excusedDays,
-            streakDatesObjectsArray
+            streakDatesObjectsArray,
           );
           excusedDays = 0;
         }
@@ -707,7 +707,7 @@ const App = () => {
       const previousDate = parseISO(reversedFetchedSalahDataArr[i - 1].date);
       const currentDate = parseISO(reversedFetchedSalahDataArr[i].date);
       const firstDateSalahStatuses = Object.values(
-        reversedFetchedSalahDataArr[0].salahs
+        reversedFetchedSalahDataArr[0].salahs,
       );
 
       if (
@@ -734,7 +734,7 @@ const App = () => {
             streakDatesArr,
             isActiveStreak,
             excusedDays,
-            streakDatesObjectsArray
+            streakDatesObjectsArray,
           );
           excusedDays = 0;
         }
@@ -743,7 +743,7 @@ const App = () => {
           streakDatesArr,
           isActiveStreak,
           excusedDays,
-          streakDatesObjectsArray
+          streakDatesObjectsArray,
         );
         excusedDays = 0;
       }
@@ -754,7 +754,7 @@ const App = () => {
     streakDatesArr: Date[],
     isActiveStreak: boolean,
     excusedDays: number,
-    streakDatesObjectsArray: streakDatesObjType[]
+    streakDatesObjectsArray: streakDatesObjType[],
   ) => {
     // console.log("excusedDays: ", excusedDays);
     // console.log("streakDatesArr: ", streakDatesArr.length);
@@ -766,7 +766,7 @@ const App = () => {
           ? 1
           : differenceInDays(
               streakDatesArr[streakDatesArr.length - 1],
-              subDays(streakDatesArr[0], 1)
+              subDays(streakDatesArr[0], 1),
             );
       if (isActiveStreak) {
         setActiveStreakCount(streakDaysAmount - excusedDays);
@@ -787,7 +787,7 @@ const App = () => {
       setStreakDatesObjectsArr(
         streakDatesObjectsArray
           .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-          .reverse()
+          .reverse(),
       );
       excusedDays = 0;
       streakDatesArr.length = 0;
