@@ -23,6 +23,7 @@ import {
   chevronForwardOutline,
   listOutline,
   megaphone,
+  navigate,
   notifications,
   notificationsOff,
   settingsOutline,
@@ -150,11 +151,15 @@ const SalahTimesPage = ({
       </IonHeader>
       <IonContent>
         {/* bg-[var(--card-bg-color)]  */}
-
         <section className="salah-times-page-components-wrap">
-          <section className="flex items-center justify-center mb-1 text-2xl font-light">
+          <section className="flex items-center justify-center mb-1 font-light">
             {userLocations?.map((location) => (
-              <section key={location.id}>
+              <section className="flex items-center" key={location.id}>
+                <IonIcon
+                  className="text-[var(--ion-text-color)] mr-1"
+                  icon={navigate}
+                />
+
                 <p>{location.isSelected === 1 ? location.locationName : ""}</p>
               </section>
             ))}{" "}
@@ -205,7 +210,9 @@ const SalahTimesPage = ({
                   }}
                   className="w-1/2"
                 >
-                  Set Up Salah Times
+                  {userPreferences.prayerCalculationMethod === ""
+                    ? "Set Up Salah Times"
+                    : "Add Location"}
                 </IonButton>
                 <BottomSheetAddLocation
                   setShowAddLocationSheet={setShowAddLocationSheet}
@@ -224,15 +231,19 @@ const SalahTimesPage = ({
             </>
           )}
 
-          <section className="flex items-center justify-between w-5/6 mx-auto">
+          <section
+            className={` ${
+              userLocations?.length === 0 ||
+              userPreferences.prayerCalculationMethod === ""
+                ? "opacity-50"
+                : "opacity-100"
+            } flex items-center justify-between w-5/6 mx-auto mt-5`}
+          >
             {" "}
             <IonButton
               fill="clear"
               onClick={async () => {
-                if (!userLocations) {
-                  console.error(
-                    "Unable to retrieve times as userLocations is undefined"
-                  );
+                if (!userLocations || userLocations.length === 0) {
                   return;
                 }
 
@@ -266,10 +277,7 @@ const SalahTimesPage = ({
             <IonButton
               fill="clear"
               onClick={async () => {
-                if (!userLocations) {
-                  console.error(
-                    "Unable to retrieve times as userLocations is undefined"
-                  );
+                if (!userLocations || userLocations.length === 0) {
                   return;
                 }
 
@@ -315,7 +323,11 @@ const SalahTimesPage = ({
               >
                 <p className="ml-2">{upperCaseFirstLetter(name)}</p>
                 <div className="flex items-center">
-                  <p>{time === "Invalid Date" ? "--:--" : time}</p>
+                  <p>
+                    {time === "Invalid Date" || userLocations?.length === 0
+                      ? "--:--"
+                      : time}
+                  </p>
                   <IonButton
                     className={name === "sunrise" ? "opacity-0" : "opacity-100"}
                     onClick={async () => {

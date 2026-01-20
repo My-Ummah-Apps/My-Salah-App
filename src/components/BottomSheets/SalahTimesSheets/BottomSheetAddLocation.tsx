@@ -225,6 +225,7 @@ const BottomSheetAddLocation = ({
     >
       <IonHeader className="ion-no-border">
         <IonToolbar
+          className="mt-1"
           style={{
             "--background": "transparent",
           }}
@@ -441,9 +442,9 @@ const BottomSheetAddLocation = ({
                       // );
 
                       if (allLocations) {
-                        if (allLocations.length === 1) {
-                          setShowSalahTimesSettingsSheet?.(true);
-                        }
+                        // if (allLocations.length === 1) {
+                        //   setShowSalahTimesSettingsSheet?.(true);
+                        // }
                         setShowAddLocationSheet(false);
                         setUserLocations(allLocations);
                         setShowLocationAddedToast(true);

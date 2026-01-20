@@ -44,7 +44,6 @@ interface BottomSheetCalculationMethodsProps {
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   userLocations: LocationsDataObjTypeArr | undefined;
-
   // calculateActiveLocationSalahTimes: () => Promise<void>;
 }
 

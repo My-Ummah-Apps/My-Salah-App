@@ -469,7 +469,9 @@ export const generateActiveLocationParams = async (
   }
 
   if (!activeLocation) {
-    throw new Error("No active location found");
+    // throw new Error("No active location found");
+    console.error("Active location does not exist");
+    return;
   }
 
   const coordinates = new Coordinates(
