@@ -255,7 +255,7 @@ const BottomSheetAddLocation = ({
               {isGpsBtnClicked && <p className="text-xs">Name this location</p>}
               <div className="flex items-center">
                 <IonInput
-                  className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
+                  className="w-full min-w-0 px-2 py-2 rounded-lg"
                   aria-label="Location name"
                   type="text"
                   disabled={isCityNameClicked ? true : false}
@@ -274,12 +274,13 @@ const BottomSheetAddLocation = ({
 
                 {isCityNameClicked && (
                   <IonButton
+                    className=""
                     onClick={() => {
                       setLocationName("");
                       setIsCityNameClicked(false);
                       setCitySearchMode(true);
                     }}
-                    size="small"
+                    // size="small"
                     fill="clear"
                     color="danger"
                   >
