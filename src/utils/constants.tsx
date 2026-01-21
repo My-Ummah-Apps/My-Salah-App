@@ -381,19 +381,19 @@ export const scheduleSalahTimesNotifications = async (
   userPreferences: userPreferencesType,
   setting: SalahNotificationSettings,
 ) => {
-  cancelSalahReminderNotifications(salahName);
+  await cancelSalahReminderNotifications(salahName);
 
-  const today = new Date();
+  const now = new Date();
 
   const customAdjustment = Number(
     userPreferences[`${salahName}Adjustment` as keyof userPreferencesType],
   );
 
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
-    return addDays(today, i);
+    return addDays(now, i);
   });
 
-  // console.log("nextSevenDays: ", nextSevenDays);
+  console.log("nextSevenDays: ", nextSevenDays);
 
   const sound =
     setting === "adhan"
@@ -418,11 +418,9 @@ export const scheduleSalahTimesNotifications = async (
         salahName
       ];
 
-      // console.log("SALAH NAME: ", salahName, "salahTime: ", salahTime);
-
       const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
 
-      if (today < localisedSalahTime) {
+      if (now < localisedSalahTime) {
         arr.push(addMinutes(localisedSalahTime, customAdjustment));
       }
     }
@@ -435,7 +433,7 @@ export const scheduleSalahTimesNotifications = async (
           {
             id: uniqueId,
             title: `${salahName}`,
-            body: `It's time to pray ${salahName}`,
+            body: `It's time to pray ${upperCaseFirstLetter(salahName)}`,
             schedule: {
               at: arr[i],
               allowWhileIdle: true,
