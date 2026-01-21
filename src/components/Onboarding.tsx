@@ -9,6 +9,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import appLogo from "/src/assets/images/icon-512.png";
+import { IonButton, IonIcon } from "@ionic/react";
+import { chevronBackOutline } from "ionicons/icons";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -25,8 +28,11 @@ const Onboarding = ({
 }: OnboardingProps) => {
   const swiperRef = useRef<SwiperInstance | null>(null);
 
-  const handleGenderSelect = () => {
+  const switchToNextPage = () => {
     swiperRef.current?.slideNext();
+  };
+  const switchToPreviousPage = () => {
+    swiperRef.current?.slidePrev();
   };
 
   return (
@@ -39,7 +45,7 @@ const Onboarding = ({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgb(36, 36, 36)",
+        backgroundColor: "rgb(20, 20, 20)",
         color: "#fff",
         zIndex: 9999,
         padding: 20,
@@ -50,6 +56,15 @@ const Onboarding = ({
         paddingRight: "calc(env(safe-area-inset-right) + 20px)",
       }}
     >
+      <IonButton
+        fill="clear"
+        color="light"
+        size="small"
+        className="absolute text-lg z-10 left-[-5px] top-0"
+        onClick={switchToPreviousPage}
+      >
+        <IonIcon icon={chevronBackOutline} />
+      </IonButton>
       <Swiper
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         style={{ margin: 0 }}
@@ -64,40 +79,62 @@ const Onboarding = ({
         // pagination={{ clickable: true }}
       >
         <SwiperSlide>
-          <section className="p-5">
+          <section className="">
+            <h1 className="text-2xl text-center">Welcome to My Salah App</h1>
+            <div className="text-center">
+              <img
+                className="block mx-auto mb-2"
+                src={appLogo}
+                height="70"
+                width="60%"
+                alt=""
+              />
+              <p className="p-4 text-sm leading-5">
+                Open-source, ad-free, privacy friendly. This app collects zero
+                data from you and everything works completely offline.
+              </p>
+            </div>
+            <IonButton className="w-full" onClick={switchToNextPage}>
+              Lets Go, Bismillah!
+            </IonButton>
+          </section>
+        </SwiperSlide>
+        <SwiperSlide>
+          <section className="">
             <h1 className="text-4xl">I am a...</h1>
-            <p
-              className="py-2 my-4 text-2xl text-center text-white bg-blue-800 rounded-2xl"
+            <IonButton
+              className="block my-4"
               onClick={async () => {
-                handleGenderSelect();
+                switchToNextPage();
                 await updateUserPrefs(
                   dbConnection,
                   "userGender",
                   "male",
-                  setUserPreferences
+                  setUserPreferences,
                 );
 
                 localStorage.setItem("appVersion", LATEST_APP_VERSION);
               }}
             >
               Brother
-            </p>
-            <p
-              className="py-2 text-2xl text-center text-white bg-purple-900 rounded-2xl"
+            </IonButton>
+            <IonButton
+              className="block"
+              color="tertiary"
               onClick={async () => {
-                handleGenderSelect();
+                switchToNextPage();
                 await updateUserPrefs(
                   dbConnection,
                   "userGender",
                   "female",
-                  setUserPreferences
+                  setUserPreferences,
                 );
 
                 localStorage.setItem("appVersion", LATEST_APP_VERSION);
               }}
             >
               Sister
-            </p>
+            </IonButton>
           </section>
         </SwiperSlide>
         <SwiperSlide>
@@ -110,8 +147,8 @@ const Onboarding = ({
               change the notification time later in Settings.
             </p>
           </section>
-          <section className="flex flex-col p-5">
-            <button
+          <section className="flex flex-col ">
+            <IonButton
               onClick={async () => {
                 const permission =
                   await LocalNotifications.requestPermissions();
@@ -124,13 +161,13 @@ const Onboarding = ({
                     dbConnection,
                     "dailyNotification",
                     "1",
-                    setUserPreferences
+                    setUserPreferences,
                   );
                   await updateUserPrefs(
                     dbConnection,
                     "dailyNotificationTime",
                     "21:00",
-                    setUserPreferences
+                    setUserPreferences,
                   );
                 } else {
                   //   setShowIntroModal(false);
@@ -138,20 +175,21 @@ const Onboarding = ({
                   setShowJoyRideEditIcon(true);
                 }
               }}
-              className="py-3 m-2 text-center text-white bg-blue-600 rounded-2xl"
+              className="mb-4"
             >
               Allow Daily Notification
-            </button>
-            <button
+            </IonButton>
+            <IonButton
+              fill="clear"
               onClick={() => {
                 // setShowIntroModal(false);
                 setShowOnboarding(false);
                 setShowJoyRideEditIcon(true);
               }}
-              className="py-3 m-2 text-center text-white rounded-2xl"
+              className="text-white mb-2text-center rounded-2xl"
             >
               Maybe Later
-            </button>
+            </IonButton>
           </section>
         </SwiperSlide>
       </Swiper>
