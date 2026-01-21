@@ -307,7 +307,7 @@ export const updateUserPrefs = async (
     let DBResultPreferences = await dbConnection.current.query(
       `SELECT * FROM userPreferencesTable`,
     );
-    console.log("DBResultPreferences: ", DBResultPreferences?.values);
+    console.log("DBResultPreferences: ", DBResultPreferences.values);
     await toggleDBConnection(dbConnection, "close");
   }
 };
@@ -324,7 +324,7 @@ export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
 export const cancelSalahReminderNotifications = async (
   salahName: SalahNamesTypeAdhanLibrary,
 ) => {
-  console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
+  // console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
 
   const pendingNotifications = await LocalNotifications.getPending();
 
@@ -334,7 +334,7 @@ export const cancelSalahReminderNotifications = async (
       id: n.id,
     }));
 
-  console.log("notificationsToCancel: ", notificationsToCancel);
+  // console.log("notificationsToCancel: ", notificationsToCancel);
 
   if (notificationsToCancel.length === 0) return;
 
@@ -393,8 +393,6 @@ export const scheduleSalahTimesNotifications = async (
     return addDays(now, i);
   });
 
-  console.log("nextSevenDays: ", nextSevenDays);
-
   const sound =
     setting === "adhan"
       ? device === "android"
@@ -450,10 +448,10 @@ export const scheduleSalahTimesNotifications = async (
     }
   }
 
-  console.log(
-    "PENDING NOTIFICATIONS: ",
-    (await LocalNotifications.getPending()).notifications,
-  );
+  // console.log(
+  //   "PENDING NOTIFICATIONS: ",
+  //   (await LocalNotifications.getPending()).notifications,
+  // );
 };
 
 export const generateActiveLocationParams = async (

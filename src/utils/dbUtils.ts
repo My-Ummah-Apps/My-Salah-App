@@ -15,14 +15,14 @@ import { DBConnectionStateType, LocationsDataObjTypeArr } from "../types/types";
 // export async function queuedToggleDBConnection(
 export async function toggleDBConnection(
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  action: DBConnectionStateType
+  action: DBConnectionStateType,
 ) {
   // console.log("toggleDBConnection is being run...");
 
   try {
     if (!dbConnection || !dbConnection.current) {
       throw new Error(
-        `Database connection not initialised within toggleDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`
+        `Database connection not initialised within toggleDBConnection, dbConnection is ${dbConnection} and dbConnection.current is ${dbConnection.current}`,
       );
     }
 
@@ -33,23 +33,16 @@ export async function toggleDBConnection(
       (action === "open" && isDatabaseOpen.result === true) ||
       (action === "close" && isDatabaseOpen.result === false)
     ) {
-      console.log(
-        "action is: ",
-        action,
-        "and isDatabaseOpen.result is: ",
-        isDatabaseOpen,
-        "therefore returning"
-      );
       return;
     }
 
     if (isDatabaseOpen.result === undefined) {
       console.log(
-        "isDatabaseOpen.result === undefined therefore throwing error"
+        "isDatabaseOpen.result === undefined therefore throwing error",
       );
 
       throw new Error(
-        "isDatabaseOpen.result is undefined within toggleDBConnection"
+        "isDatabaseOpen.result is undefined within toggleDBConnection",
       );
     } else if (action === "open" && isDatabaseOpen.result === false) {
       await dbConnection.current.open();
@@ -58,28 +51,23 @@ export async function toggleDBConnection(
       await dbConnection.current.close();
       console.log("DB CONNECTION CLOSED");
     } else {
-      console.log("THROWING ERROR IN ELSE STATEMENT");
       throw new Error(
-        `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`
+        `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`,
       );
     }
   } catch (error) {
-    console.log(
-      "THROWING ERROR IN CATCH STATEMENT, isDatabaseOpen is: ",
-      await dbConnection.current?.isDBOpen()
-    );
     throw new Error(`toggleDBConnection(${action}) failed: ${error}`);
   }
 }
 
 export const fetchAllLocations = async (
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
 ): Promise<{
   allLocations: LocationsDataObjTypeArr;
 }> => {
   console.log(
     "RUNNING FETCH ALL LOCATIONS, DB CONNECTION IS:",
-    dbConnection.current
+    dbConnection.current,
   );
 
   try {
@@ -88,7 +76,7 @@ export const fetchAllLocations = async (
     }
 
     const res = await dbConnection.current.query(
-      "SELECT * from userLocationsTable"
+      "SELECT * from userLocationsTable",
     );
 
     if (!res || !res.values) {

@@ -56,6 +56,8 @@ interface SalahTimesPageProps {
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
   salahTimes: salahTimesObjType;
   nextSalahNameAndTime: nextSalahTimeType;
+  setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showSalahTimesSettingsSheet: boolean;
 }
 
 const SalahTimesPage = ({
@@ -66,12 +68,11 @@ const SalahTimesPage = ({
   userLocations,
   setSalahtimes,
   salahTimes,
-
   nextSalahNameAndTime,
+  setShowSalahTimesSettingsSheet,
+  showSalahTimesSettingsSheet,
 }: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
-  const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
-    useState(false);
   const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
   const [showLocationFailureToast, setShowLocationFailureToast] =
     useState<boolean>(false);
@@ -119,7 +120,7 @@ const SalahTimesPage = ({
       <IonHeader className="ion-no-border">
         <IonToolbar className="header-toolbar">
           <IonTitle>Salah Times</IonTitle>
-          <IonButtons slot="primary">
+          {/* <IonButtons slot="primary">
             <IonButton
               onClick={() => setShowSalahTimesSettingsSheet(true)}
               style={{
@@ -132,7 +133,7 @@ const SalahTimesPage = ({
                 icon={settingsOutline}
               />
             </IonButton>
-          </IonButtons>
+          </IonButtons> */}
           <IonButtons slot="primary">
             <IonButton
               onClick={() => setShowLocationsListSheet(true)}
@@ -417,15 +418,7 @@ const SalahTimesPage = ({
         userPreferences={userPreferences}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
-      <BottomSheetSalahTimesSettings
-        setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
-        showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
-        dbConnection={dbConnection}
-        setUserPreferences={setUserPreferences}
-        userPreferences={userPreferences}
-        userLocations={userLocations}
-        // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
-      />
+
       <BottomSheetSalahNotifications
         setShowSalahNotificationsSheet={setShowSalahNotificationsSheet}
         showSalahNotificationsSheet={showSalahNotificationsSheet}

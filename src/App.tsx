@@ -78,6 +78,8 @@ const App = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(false);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
+  const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
+    useState(false);
   const [missedSalahList, setMissedSalahList] = useState<SalahByDateObjType>(
     {},
   );
@@ -150,9 +152,9 @@ const App = () => {
     return () => clearInterval(interval);
   }, [userLocations]);
 
-  useEffect(() => {
-    console.log("nextSalahNameAndTime: ", nextSalahNameAndTime);
-  }, [nextSalahNameAndTime]);
+  // useEffect(() => {
+  //   console.log("nextSalahNameAndTime: ", nextSalahNameAndTime);
+  // }, [nextSalahNameAndTime]);
 
   const [theme, setTheme] = useState<themeType>("dark");
 
@@ -836,6 +838,11 @@ const App = () => {
                   handleTheme={handleTheme}
                   fetchDataFromDB={fetchDataFromDB}
                   userPreferences={userPreferences}
+                  setShowSalahTimesSettingsSheet={
+                    setShowSalahTimesSettingsSheet
+                  }
+                  showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
+                  userLocations={userLocations}
                 />
               )}
             />
@@ -865,6 +872,10 @@ const App = () => {
                   setSalahtimes={setSalahtimes}
                   salahTimes={salahTimes}
                   nextSalahNameAndTime={nextSalahNameAndTime}
+                  setShowSalahTimesSettingsSheet={
+                    setShowSalahTimesSettingsSheet
+                  }
+                  showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
                   // calculateActiveLocationSalahTimes={
                   //   calculateActiveLocationSalahTimes
                   // }

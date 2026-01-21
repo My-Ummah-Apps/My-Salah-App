@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
-import { themeType, userPreferencesType } from "../types/types";
+import {
+  LocationsDataObjTypeArr,
+  themeType,
+  userPreferencesType,
+} from "../types/types";
 import { Filesystem, Encoding, Directory } from "@capacitor/filesystem";
 import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetNotifications from "../components/BottomSheets/BottomSheetNotifications";
@@ -31,6 +35,7 @@ import {
 } from "@ionic/react";
 import BottomSheetThemeOptions from "../components/BottomSheets/BottomSheetThemeOptions";
 import { toggleDBConnection } from "../utils/dbUtils";
+import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -39,7 +44,10 @@ interface SettingsPageProps {
   handleTheme: (theme?: themeType) => string;
   fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showSalahTimesSettingsSheet: boolean;
   userPreferences: userPreferencesType;
+  userLocations: LocationsDataObjTypeArr | undefined;
 }
 
 const SettingsPage = ({
@@ -49,7 +57,10 @@ const SettingsPage = ({
   handleTheme,
   fetchDataFromDB,
   setUserPreferences,
+  setShowSalahTimesSettingsSheet,
+  showSalahTimesSettingsSheet,
   userPreferences,
+  userLocations,
 }: SettingsPageProps) => {
   const shareThisAppLink = async (link: string) => {
     await Share.share({
@@ -68,7 +79,7 @@ const SettingsPage = ({
     isMissedSalahCounterOptionChecked,
     setIsMissedSalahCounterOptionChecked,
   ] = useState<boolean>(
-    userPreferences.showMissedSalahCount === "0" ? false : true
+    userPreferences.showMissedSalahCount === "0" ? false : true,
   );
 
   // const page = useRef(null);
@@ -218,14 +229,14 @@ const SettingsPage = ({
           dbConnection,
           "showMissedSalahCount",
           "1",
-          setUserPreferences
+          setUserPreferences,
         );
       } else {
         await updateUserPrefs(
           dbConnection,
           "showMissedSalahCount",
           "0",
-          setUserPreferences
+          setUserPreferences,
         );
       }
     };
@@ -273,6 +284,23 @@ const SettingsPage = ({
                 id="open-theme-options-sheet"
                 headingText={"Theme"}
                 subText={`Change theme`}
+              />
+            </div>
+            <div className="my-5 rounded-md">
+              <SettingIndividual
+                onClick={() => {
+                  setShowSalahTimesSettingsSheet(true);
+                }}
+                headingText={"Salah Times Settings"}
+                subText={`Adjust how Salah times are calculated for your location`}
+              />
+              <BottomSheetSalahTimesSettings
+                setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
+                showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
+                dbConnection={dbConnection}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+                userLocations={userLocations}
               />
             </div>
             <BottomSheetThemeOptions
@@ -369,7 +397,7 @@ const SettingsPage = ({
                 subText={"Rate us on the Google Play Store"}
                 onClick={() => {
                   link(
-                    "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
+                    "https://play.google.com/store/apps/details?id=com.mysalahapp.app",
                   );
                 }}
               />
@@ -381,7 +409,7 @@ const SettingsPage = ({
                 subText={"Rate us on the App Store"}
                 onClick={() => {
                   link(
-                    "https://apps.apple.com/gb/app/my-salah-app/id6478277078"
+                    "https://apps.apple.com/gb/app/my-salah-app/id6478277078",
                   );
                 }}
               />
@@ -394,11 +422,11 @@ const SettingsPage = ({
                 onClick={() => {
                   if (Capacitor.getPlatform() === "android") {
                     shareThisAppLink(
-                      "https://play.google.com/store/apps/details?id=com.mysalahapp.app"
+                      "https://play.google.com/store/apps/details?id=com.mysalahapp.app",
                     );
                   } else if (Capacitor.getPlatform() === "ios") {
                     shareThisAppLink(
-                      "https://apps.apple.com/gb/app/my-salah-app/id6478277078"
+                      "https://apps.apple.com/gb/app/my-salah-app/id6478277078",
                     );
                   }
                 }}
@@ -419,7 +447,7 @@ const SettingsPage = ({
               subText={"Report Bugs / Request Features"}
               onClick={() => {
                 link(
-                  "mailto: contact@myummahapps.com?subject=My Salah App Feedback"
+                  "mailto: contact@myummahapps.com?subject=My Salah App Feedback",
                 );
               }}
             />
@@ -437,7 +465,7 @@ const SettingsPage = ({
               subText={"View Privacy Policy"}
               onClick={() => {
                 link(
-                  "https://sites.google.com/view/my-salah-app-privacy-policy/home"
+                  "https://sites.google.com/view/my-salah-app-privacy-policy/home",
                 );
               }}
             />

@@ -27,7 +27,6 @@ import BottomSheetLatitudeRules from "./BottomSheetLatitudeRules";
 import BottomSheetCustomAngles from "./BottomSheetCustomAngles";
 import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomAdjustments";
 import BottomSheetShafaqRules from "./BottomSheetShafaqRule";
-import { MdOutlineChevronRight } from "react-icons/md";
 import BottomSheetMadhabOptions from "./BottomSheetMadhabOptions";
 import BottomSheetPolarCircleSetting from "./BottomSheetPolarCircleSetting";
 
@@ -200,7 +199,7 @@ BottomSheetSalahTimesSettingsProps) => {
                   dbConnection,
                   "timeFormat",
                   selectedTimeFormat,
-                  setUserPreferences
+                  setUserPreferences,
                 );
               }}
             ></IonToggle>
@@ -453,9 +452,9 @@ BottomSheetSalahTimesSettingsProps) => {
                 <p className="">Shafaq Rule:</p>
                 <div className="flex items-center gap-1">
                   <p>{upperCaseFirstLetter(userPreferences.shafaqRule)}</p>
-                  <p>
+                  {/* <p>
                     <MdOutlineChevronRight />
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </IonButton>

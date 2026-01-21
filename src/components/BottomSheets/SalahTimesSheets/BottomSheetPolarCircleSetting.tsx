@@ -30,6 +30,8 @@ const BottomSheetPolarCircleSetting = ({
   setUserPreferences,
   userPreferences,
 }: BottomSheetPolarCircleSettingProps) => {
+  console.log("triggerId: ", triggerId);
+
   return (
     <IonModal
       className="modal-fit-content"
@@ -63,8 +65,8 @@ const BottomSheetPolarCircleSetting = ({
             await updateUserPrefs(
               dbConnection,
               "polarCircleResolution",
-              "unresolved",
-              setUserPreferences
+              "Unresolved",
+              setUserPreferences,
             );
           }}
           className={`options-wrap   ${
@@ -99,8 +101,8 @@ const BottomSheetPolarCircleSetting = ({
             await updateUserPrefs(
               dbConnection,
               "polarCircleResolution",
-              "aqrabBalad",
-              setUserPreferences
+              "AqrabBalad",
+              setUserPreferences,
             );
           }}
           className={`p-2 mb-5 border rounded-lg bg-[var(--sheet-option-bg)] flex ${
@@ -133,8 +135,8 @@ const BottomSheetPolarCircleSetting = ({
             await updateUserPrefs(
               dbConnection,
               "polarCircleResolution",
-              "aqrabYaum",
-              setUserPreferences
+              "AqrabYaum",
+              setUserPreferences,
             );
           }}
           className={`options-wrap  ${
