@@ -328,7 +328,9 @@ td {
   width: 8px;
   height: 8px;
   margin: 0 5px;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .swiper-pagination-bullet-active {
