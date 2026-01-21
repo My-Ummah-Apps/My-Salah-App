@@ -872,10 +872,6 @@ const App = () => {
                   setSalahtimes={setSalahtimes}
                   salahTimes={salahTimes}
                   nextSalahNameAndTime={nextSalahNameAndTime}
-                  setShowSalahTimesSettingsSheet={
-                    setShowSalahTimesSettingsSheet
-                  }
-                  showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
                   // calculateActiveLocationSalahTimes={
                   //   calculateActiveLocationSalahTimes
                   // }

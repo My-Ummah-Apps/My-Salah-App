@@ -16,7 +16,7 @@ import {
   salahTimesObjType,
   userPreferencesType,
 } from "../types/types";
-import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
+
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   chevronBackOutline,
@@ -26,7 +26,6 @@ import {
   navigate,
   notifications,
   notificationsOff,
-  settingsOutline,
 } from "ionicons/icons";
 
 import { useState } from "react";
@@ -56,8 +55,6 @@ interface SalahTimesPageProps {
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
   salahTimes: salahTimesObjType;
   nextSalahNameAndTime: nextSalahTimeType;
-  setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showSalahTimesSettingsSheet: boolean;
 }
 
 const SalahTimesPage = ({
@@ -69,8 +66,6 @@ const SalahTimesPage = ({
   setSalahtimes,
   salahTimes,
   nextSalahNameAndTime,
-  setShowSalahTimesSettingsSheet,
-  showSalahTimesSettingsSheet,
 }: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
