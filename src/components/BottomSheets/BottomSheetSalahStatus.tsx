@@ -17,12 +17,9 @@ import {
 } from "../../types/types";
 
 import {
-  createLocalisedDate,
-  isValidDate,
   salahStatusColorsHexCodes,
   reasonsStyles,
   salahNamesArr,
-  showConfirmMsg,
   validSalahStatuses,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -32,6 +29,11 @@ import { isToday, isYesterday, parse } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { IonModal, IonTextarea } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
+import {
+  createLocalisedDate,
+  isValidDate,
+  showConfirmMsg,
+} from "../../utils/helpers";
 
 interface SalahStatusBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -116,7 +118,7 @@ const BottomSheetSalahStatus = ({
       const res = await dbConnection.current!.query(
         `SELECT * FROM salahDataTable 
       WHERE date = ? AND salahName = ?;`,
-        [selectedDate, selectedSalah]
+        [selectedDate, selectedSalah],
       );
 
       if (res && res.values && res.values.length === 0) {
@@ -165,27 +167,27 @@ const BottomSheetSalahStatus = ({
       for (let [date, salahArr] of Object.entries(selectedSalahAndDate)) {
         if (!isValidDate(date)) {
           console.error(
-            `Date is not valid: ${date},  skipping this iteration...`
+            `Date is not valid: ${date},  skipping this iteration...`,
           );
           continue;
         }
 
         if (
           !salahArr.every((salahName) =>
-            salahNamesArr.includes(salahName as SalahNamesType)
+            salahNamesArr.includes(salahName as SalahNamesType),
           )
         ) {
           console.error(
             `Salah name is not valid: ${salahArr.join(
-              ", "
-            )}, skipping this iteration......`
+              ", ",
+            )}, skipping this iteration......`,
           );
           continue;
         }
 
         if (!validSalahStatuses.includes(salahStatus)) {
           console.error(
-            `salahStatus is not valid: ${salahStatus}, skipping this iteration...`
+            `salahStatus is not valid: ${salahStatus}, skipping this iteration...`,
           );
           continue;
         }
@@ -225,7 +227,7 @@ const BottomSheetSalahStatus = ({
 
       const saveButtonTapCountQuery = await dbConnection.current!.query(
         `SELECT * FROM userPreferencesTable WHERE preferenceName = ?;`,
-        ["saveButtonTapCount"]
+        ["saveButtonTapCount"],
       );
 
       const incrementedSaveButtonTapCount =
@@ -244,7 +246,7 @@ const BottomSheetSalahStatus = ({
 
       await dbConnection.current!.run(
         `UPDATE userPreferencesTable SET preferenceValue = ? WHERE preferenceName = ?`,
-        [incrementedSaveButtonTapCount.toString(), "saveButtonTapCount"]
+        [incrementedSaveButtonTapCount.toString(), "saveButtonTapCount"],
       );
 
       generateStreaks(fetchedSalahData);
@@ -266,7 +268,7 @@ const BottomSheetSalahStatus = ({
         sheetRef.current.style.setProperty(
           "margin-bottom",
           height + "px",
-          "important"
+          "important",
         );
       }
     });
@@ -276,7 +278,7 @@ const BottomSheetSalahStatus = ({
           "margin-bottom",
           "env(safe-area-inset-bottom)",
           // 0 + "px",
-          "important"
+          "important",
         );
       }
     });
@@ -350,7 +352,7 @@ const BottomSheetSalahStatus = ({
             {Object.keys(selectedSalahAndDate).length === 1 &&
             Object.values(selectedSalahAndDate)[0].length === 1
               ? `${Object.values(selectedSalahAndDate)} ${determineDateRecency(
-                  Object.keys(selectedSalahAndDate)[0]
+                  Object.keys(selectedSalahAndDate)[0],
                 )}?`
               : `these Salah?`}
           </h1>
@@ -521,12 +523,12 @@ const BottomSheetSalahStatus = ({
                             if (!userPreferences.reasons.includes(item)) {
                               const confirmMsgRes = await showConfirmMsg(
                                 "Confirm",
-                                "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                                "This reason has been deleted from the reasons list, deselecting it will cause it to be removed permanently from this Salah entry, proceed?",
                               );
                               if (!confirmMsgRes) return;
                             }
                             setSelectedReasons((prev) =>
-                              prev.filter((reason) => reason !== item)
+                              prev.filter((reason) => reason !== item),
                             );
                           }
                         }}
@@ -609,12 +611,12 @@ const BottomSheetSalahStatus = ({
                       if (!userPreferences.reasons.includes(item)) {
                         const confirmMsgRes = await showConfirmMsg(
                           "Confirm",
-                          "This reason has been deleted from the reasons list in the settings page, deselecting it will cause it to be removed permanently from this Salah entry, proceed?"
+                          "This reason has been deleted from the reasons list in the settings page, deselecting it will cause it to be removed permanently from this Salah entry, proceed?",
                         );
                         if (!confirmMsgRes) return;
                       }
                       setSelectedReasons((prev) =>
-                        prev.filter((reason) => reason !== item)
+                        prev.filter((reason) => reason !== item),
                       );
                     }
                   }}

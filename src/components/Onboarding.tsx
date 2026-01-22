@@ -3,7 +3,7 @@ import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { LATEST_APP_VERSION } from "../utils/changelog";
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
-import { updateUserPrefs, scheduleDailyNotification } from "../utils/constants";
+import { updateUserPrefs, scheduleDailyNotification } from "../utils/helpers";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";

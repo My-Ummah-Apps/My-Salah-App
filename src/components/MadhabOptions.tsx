@@ -1,6 +1,6 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../types/types";
-import { updateUserPrefs } from "../utils/constants";
+import { updateUserPrefs } from "../utils/helpers";
 import { checkmarkCircle } from "ionicons/icons";
 import { IonIcon } from "@ionic/react";
 

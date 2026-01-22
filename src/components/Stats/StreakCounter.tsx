@@ -1,4 +1,4 @@
-import { createLocalisedDate } from "../../utils/constants";
+import { createLocalisedDate } from "../../utils/helpers";
 import { streakDatesObjType } from "../../types/types";
 import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
@@ -19,7 +19,7 @@ const StreakCounter = ({
 }: StreakCounterProps) => {
   const [showStreakHistorySheet, setShowStreakHistorySheet] = useState(false);
   const activeStreakObj = streakDatesObjectsArr.filter(
-    (obj) => obj.isActive === true
+    (obj) => obj.isActive === true,
   )[0];
 
   const showStreakInfo = async () => {
@@ -41,7 +41,7 @@ const StreakCounter = ({
   const hasStreakDays = streakDatesObjectsArr.some((obj) => obj.days > 0);
 
   const filteredStreakDatesObjectsArr = streakDatesObjectsArr.filter(
-    (obj) => obj.startDate.getTime() !== obj.endDate.getTime()
+    (obj) => obj.startDate.getTime() !== obj.endDate.getTime(),
   );
 
   return (
@@ -53,13 +53,13 @@ const StreakCounter = ({
               <p className="">
                 {`${
                   createLocalisedDate(
-                    format(activeStreakObj.startDate, "yyyy-MM-dd")
+                    format(activeStreakObj.startDate, "yyyy-MM-dd"),
                   )[1]
                 } ${
                   !isSameDay(activeStreakObj.startDate, activeStreakObj.endDate)
                     ? `- ${
                         createLocalisedDate(
-                          format(activeStreakObj.endDate, "yyyy-MM-dd")
+                          format(activeStreakObj.endDate, "yyyy-MM-dd"),
                         )[1]
                       }`
                     : ""

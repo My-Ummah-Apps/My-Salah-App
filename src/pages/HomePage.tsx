@@ -10,10 +10,7 @@ import {
   SalahByDateObjType,
 } from "../types/types";
 import { useEffect, useRef, useState } from "react";
-import {
-  getMissedSalahCount,
-  // pageTransitionStyles
-} from "../utils/constants";
+import { getMissedSalahCount } from "../utils/helpers";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   IonButton,

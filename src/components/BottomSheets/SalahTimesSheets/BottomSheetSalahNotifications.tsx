@@ -14,13 +14,11 @@ import {
 } from "../../../types/types";
 import {
   cancelSalahReminderNotifications,
-  INITIAL_MODAL_BREAKPOINT,
-  MODAL_BREAKPOINTS,
   promptToOpenDeviceSettings,
   scheduleSalahTimesNotifications,
   updateUserPrefs,
   upperCaseFirstLetter,
-} from "../../../utils/constants";
+} from "../../../utils/helpers";
 import { AndroidSettings } from "capacitor-native-settings";
 import { Capacitor } from "@capacitor/core";
 import {
@@ -29,6 +27,10 @@ import {
   notifications,
   notificationsOff,
 } from "ionicons/icons";
+import {
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
+} from "../../../utils/constants";
 
 interface BottomSheetSalahNotificationsProps {
   setShowSalahNotificationsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -59,14 +61,14 @@ const BottomSheetSalahNotifications = ({
       await promptToOpenDeviceSettings(
         "Ensure prayer notifications arrive on time",
         "Some Android phones delay notifications to save battery. Disabling battery optimisation helps prayer notifications arrive on time.",
-        AndroidSettings.BatteryOptimization
+        AndroidSettings.BatteryOptimization,
       );
 
       await updateUserPrefs(
         dbConnection,
         "hasSeenBatteryPrompt",
         "1",
-        setUserPreferences
+        setUserPreferences,
       );
     }
   };
@@ -146,7 +148,7 @@ const BottomSheetSalahNotifications = ({
               userLocations,
               selectedSalah,
               userPreferences,
-              "on"
+              "on",
             );
 
             await handleBatteryOptimisation();
@@ -196,14 +198,14 @@ const BottomSheetSalahNotifications = ({
               dbConnection,
               key,
               "adhan",
-              setUserPreferences
+              setUserPreferences,
             );
 
             await scheduleSalahTimesNotifications(
               userLocations,
               selectedSalah,
               userPreferences,
-              "adhan"
+              "adhan",
             );
 
             await handleBatteryOptimisation();

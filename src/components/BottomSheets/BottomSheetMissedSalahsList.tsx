@@ -8,9 +8,7 @@ import {
   SalahRecordsArrayType,
 } from "../../types/types";
 import {
-  createLocalisedDate,
   //   createLocalisedDate,
-  getMissedSalahCount,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   salahStatusColorsHexCodes,
@@ -20,6 +18,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { IonButton, IonContent, IonModal } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
+import { createLocalisedDate, getMissedSalahCount } from "../../utils/helpers";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -70,7 +69,7 @@ const MissedSalahsListBottomSheet = ({
 
   const modifySalahStatusInDB = async (
     date: string,
-    salahName: SalahNamesType
+    salahName: SalahNamesType,
   ) => {
     const query = `UPDATE salahDataTable SET salahStatus = ? WHERE date = ? AND salahName = ?`;
     const values = ["late", date, salahName];

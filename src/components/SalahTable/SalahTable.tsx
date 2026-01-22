@@ -13,16 +13,18 @@ import BottomSheetSalahStatus from "../BottomSheets/BottomSheetSalahStatus";
 import { LuDot } from "react-icons/lu";
 import { SalahRecordsArrayType } from "../../types/types";
 import {
-  createLocalisedDate,
   salahStatusColorsHexCodes,
-  salahTableIndividualSquareStyles,
   salahNamesArr,
-  showAlert,
-  updateUserPrefs,
 } from "../../utils/constants";
 import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { useEffect, useRef, useState } from "react";
+import {
+  createLocalisedDate,
+  salahTableIndividualSquareStyles,
+  showAlert,
+  updateUserPrefs,
+} from "../../utils/helpers";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -74,14 +76,14 @@ const SalahTable = ({
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
-    rowDataDate: string
+    rowDataDate: string,
   ) => {
     setSelectedSalahAndDate((prev) => {
       let newArr = { ...prev };
 
       if (prev[rowDataDate]?.includes(salahName)) {
         newArr[rowDataDate] = prev[rowDataDate].filter(
-          (item) => item !== salahName
+          (item) => item !== salahName,
         );
 
         if (newArr[rowDataDate].length === 0) {
@@ -133,7 +135,7 @@ const SalahTable = ({
         dbConnection,
         "isExistingUser",
         "1",
-        setUserPreferences
+        setUserPreferences,
       );
     }
   };
@@ -201,7 +203,7 @@ const SalahTable = ({
                   ? setShowUpdateStatusModal(true)
                   : showAlert(
                       "No Salah Selected",
-                      "Please select atleast one Salah"
+                      "Please select atleast one Salah",
                     );
               }}
             >
@@ -251,7 +253,7 @@ const SalahTable = ({
                 )}
                 cellRenderer={({ rowData }) => {
                   const [day, formattedParsedDate] = createLocalisedDate(
-                    rowData.date
+                    rowData.date,
                   );
 
                   return (
@@ -365,7 +367,7 @@ const SalahTable = ({
                                   onChange={() => {
                                     handleTableCellClick(
                                       salahName,
-                                      rowData.date
+                                      rowData.date,
                                     );
                                   }}
                                 ></input>

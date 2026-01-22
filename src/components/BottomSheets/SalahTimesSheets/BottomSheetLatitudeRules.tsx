@@ -11,9 +11,9 @@ import { userPreferencesType } from "../../../types/types";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPrefs,
 } from "../../../utils/constants";
 import { checkmarkCircle } from "ionicons/icons";
+import { updateUserPrefs } from "../../../utils/helpers";
 
 // import { CalculationMethod } from "adhan";
 
@@ -58,7 +58,7 @@ const BottomSheetLatitudeRules = ({
               dbConnection,
               "highLatitudeRule",
               "middleofthenight",
-              setUserPreferences
+              setUserPreferences,
             );
           }}
           className={`options-wrap ${
@@ -93,7 +93,7 @@ const BottomSheetLatitudeRules = ({
               dbConnection,
               "highLatitudeRule",
               "seventhofthenight",
-              setUserPreferences
+              setUserPreferences,
             );
           }}
           className={`options-wrap  ${
@@ -130,7 +130,7 @@ const BottomSheetLatitudeRules = ({
               dbConnection,
               "highLatitudeRule",
               "twilightangle",
-              setUserPreferences
+              setUserPreferences,
             );
           }}
           className={`options-wrap ${

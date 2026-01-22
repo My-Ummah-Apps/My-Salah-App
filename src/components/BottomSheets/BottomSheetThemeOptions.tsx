@@ -2,11 +2,11 @@ import { IonModal } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPrefs,
 } from "../../utils/constants";
 import { themeType, userPreferencesType } from "../../types/types";
 import { MdCheck } from "react-icons/md";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { updateUserPrefs } from "../../utils/helpers";
 
 interface BottomSheetAboutUsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -44,7 +44,7 @@ const BottomSheetThemeOptions = ({
                   dbConnection,
                   "theme",
                   "light",
-                  setUserPreferences
+                  setUserPreferences,
                 );
               }}
             >
@@ -60,7 +60,7 @@ const BottomSheetThemeOptions = ({
                   dbConnection,
                   "theme",
                   "dark",
-                  setUserPreferences
+                  setUserPreferences,
                 );
               }}
               className="w-full text-left"
@@ -77,7 +77,7 @@ const BottomSheetThemeOptions = ({
                   dbConnection,
                   "theme",
                   "system",
-                  setUserPreferences
+                  setUserPreferences,
                 );
               }}
               className="w-full text-left"

@@ -1,12 +1,9 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { SalahByDateObjType, userPreferencesType } from "../../types/types";
 
-import {
-  getMissedSalahCount,
-  updateUserPrefs,
-  salahStatusColorsHexCodes,
-} from "../../utils/constants";
+import { salahStatusColorsHexCodes } from "../../utils/constants";
 import Joyride, { CallBackProps } from "react-joyride";
+import { getMissedSalahCount, updateUserPrefs } from "../../utils/helpers";
 
 interface MissedSalahCounterProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -39,7 +36,7 @@ const MissedSalahCounter = ({
         dbConnection,
         "isMissedSalahToolTipShown",
         "1",
-        setUserPreferences
+        setUserPreferences,
       );
     }
   };

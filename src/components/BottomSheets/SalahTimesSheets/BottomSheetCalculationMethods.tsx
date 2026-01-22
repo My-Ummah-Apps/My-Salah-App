@@ -1,13 +1,7 @@
 import {
   IonContent,
   IonHeader,
-  IonIcon,
-  IonLabel,
   IonModal,
-  IonSegment,
-  IonSegmentButton,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
   isPlatform,
@@ -16,23 +10,16 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import {
-  countryOptionsType,
   LocationsDataObjTypeArr,
   userPreferencesType,
 } from "../../../types/types";
 import {
-  calculationMethodsDetails,
-  countryOptions,
-  countryToMethod,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  prayerCalculationMethodLabels,
-  setAdhanLibraryDefaults,
-  updateUserPrefs,
 } from "../../../utils/constants";
 
 import { useState } from "react";
-import { checkmarkCircle } from "ionicons/icons";
+
 import CalculationMethodOptions from "../../CalculationMethodOptions";
 
 interface BottomSheetCalculationMethodsProps {

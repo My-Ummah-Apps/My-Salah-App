@@ -28,10 +28,10 @@ import cities from "../../../assets/cities.json";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  promptToOpenDeviceSettings,
 } from "../../../utils/constants";
 import { LocationsDataObjTypeArr } from "../../../types/types";
 import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
+import { promptToOpenDeviceSettings } from "../../../utils/helpers";
 
 const allCities = cities.map(
   (obj: { country: string; name: string; lat: string; lng: string }) => {

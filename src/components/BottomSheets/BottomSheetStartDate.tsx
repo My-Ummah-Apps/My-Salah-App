@@ -1,17 +1,19 @@
 import {
   createLocalisedDate,
-  INITIAL_MODAL_BREAKPOINT,
   isValidDate,
-  MODAL_BREAKPOINTS,
   updateUserPrefs,
   showAlert,
   showToast,
-} from "../../utils/constants";
+} from "../../utils/helpers";
 import { userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
 import { isAfter, startOfDay } from "date-fns";
 import { IonModal } from "@ionic/react";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import {
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
+} from "../../utils/constants";
 
 interface BottomSheetStartDateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -30,7 +32,7 @@ const BottomSheetStartDate = ({
 }: BottomSheetStartDateProps) => {
   const datePickerRef = useRef<HTMLInputElement | null>(null);
   const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
-    null
+    null,
   );
   const modal = useRef<HTMLIonModalElement>(null);
   const currentStartDate = userPreferences.userStartDate;
@@ -42,7 +44,7 @@ const BottomSheetStartDate = ({
           dbConnection,
           "userStartDate",
           datePickerRef.current.value,
-          setUserPreferences
+          setUserPreferences,
         );
       } else {
         showAlert("Invalid Date", "Please enter a valid date");
@@ -52,7 +54,7 @@ const BottomSheetStartDate = ({
     }
     showToast(
       `Start date changed to ${createLocalisedDate(selectedStartDate!)[1]}`,
-      "short"
+      "short",
     );
     await fetchDataFromDB();
   };
@@ -106,7 +108,7 @@ const BottomSheetStartDate = ({
             if (isAfter(selectedDate, todaysDate)) {
               showAlert(
                 "Invalid Date",
-                "Please select a date that is not in the future"
+                "Please select a date that is not in the future",
               );
               return;
             }

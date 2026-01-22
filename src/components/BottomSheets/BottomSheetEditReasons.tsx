@@ -3,10 +3,6 @@ import {
   defaultReasons,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPrefs,
-  showAlert,
-  showConfirmMsg,
-  showToast,
 } from "../../utils/constants";
 
 import { TiDelete } from "react-icons/ti";
@@ -23,6 +19,12 @@ import {
 import { Keyboard, KeyboardResize } from "@capacitor/keyboard";
 import { Capacitor } from "@capacitor/core";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import {
+  showAlert,
+  showConfirmMsg,
+  showToast,
+  updateUserPrefs,
+} from "../../utils/helpers";
 
 interface BottomSheetStartDateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -105,7 +107,7 @@ BottomSheetStartDateProps) => {
                     userPreferences.reasons.some(
                       (item) =>
                         item.toLocaleLowerCase() ===
-                        newReasonInput.toLocaleLowerCase()
+                        newReasonInput.toLocaleLowerCase(),
                     )
                   ) {
                     showAlert("Duplicate Reason", "This reason already exists");
@@ -119,7 +121,7 @@ BottomSheetStartDateProps) => {
                     dbConnection,
                     "reasons",
                     updatedReasons,
-                    setUserPreferences
+                    setUserPreferences,
                   );
                   setNewReasonInput("");
                   setCharCount(CHAR_LIMIT);
@@ -133,14 +135,14 @@ BottomSheetStartDateProps) => {
               onClick={async () => {
                 const reasonConfirmMsgRes = await showConfirmMsg(
                   "Reset Reasons?",
-                  "This will reset all reasons to the app’s default reasons. Are you sure you want to proceed?"
+                  "This will reset all reasons to the app’s default reasons. Are you sure you want to proceed?",
                 );
                 if (!reasonConfirmMsgRes) return;
                 await updateUserPrefs(
                   dbConnection,
                   "reasons",
                   defaultReasons.split(","),
-                  setUserPreferences
+                  setUserPreferences,
                 );
                 showToast("Default Reasons Restored", "short");
               }}
@@ -188,13 +190,13 @@ BottomSheetStartDateProps) => {
                   <p
                     onClick={async () => {
                       const modifiedReasons = userPreferences.reasons.filter(
-                        (item) => item !== reason
+                        (item) => item !== reason,
                       );
                       await updateUserPrefs(
                         dbConnection,
                         "reasons",
                         modifiedReasons,
-                        setUserPreferences
+                        setUserPreferences,
                       );
                     }}
                   >

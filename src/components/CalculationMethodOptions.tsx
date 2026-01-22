@@ -17,10 +17,9 @@ import {
   countryOptions,
   countryToMethod,
   prayerCalculationMethodLabels,
-  setAdhanLibraryDefaults,
-  updateUserPrefs,
 } from "../utils/constants";
 import { checkmarkCircle } from "ionicons/icons";
+import { setAdhanLibraryDefaults, updateUserPrefs } from "../utils/helpers";
 
 interface CalculationMethodOptionsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -66,7 +65,6 @@ const CalculationMethodOptions = ({
             value={userPreferences.country || undefined}
             label="Select Country"
             onIonChange={async (e) => {
-              console.log(e.detail.value);
               const selectedCountry: countryOptionsType = e.detail.value;
               await updateUserPrefs(
                 dbConnection,

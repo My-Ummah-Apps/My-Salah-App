@@ -6,14 +6,16 @@ import { AndroidSettings } from "capacitor-native-settings";
 import { userPreferencesType } from "../../types/types";
 import {
   checkNotificationPermissions,
-  INITIAL_MODAL_BREAKPOINT,
-  MODAL_BREAKPOINTS,
   updateUserPrefs,
   promptToOpenDeviceSettings,
   scheduleDailyNotification,
-} from "../../utils/constants";
+} from "../../utils/helpers";
 import { IonModal, IonToggle, isPlatform } from "@ionic/react";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import {
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
+} from "../../utils/constants";
 
 const BottomSheetNotifications = ({
   dbConnection,
@@ -40,7 +42,7 @@ const BottomSheetNotifications = ({
       await promptToOpenDeviceSettings(
         `open settings`,
         `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
-        AndroidSettings.AppNotification
+        AndroidSettings.AppNotification,
       );
     } else if (userNotificationPermission === "granted") {
       if (dailyNotificationToggle === true) {
@@ -80,7 +82,7 @@ const BottomSheetNotifications = ({
         dbConnection,
         "dailyNotification",
         "0",
-        setUserPreferences
+        setUserPreferences,
       );
     }
   };
@@ -97,7 +99,7 @@ const BottomSheetNotifications = ({
       dbConnection,
       "dailyNotificationTime",
       e.target.value,
-      setUserPreferences
+      setUserPreferences,
     );
   };
 
@@ -114,7 +116,7 @@ const BottomSheetNotifications = ({
         dbConnection,
         "dailyNotification",
         notificationValue,
-        setUserPreferences
+        setUserPreferences,
       );
     };
 

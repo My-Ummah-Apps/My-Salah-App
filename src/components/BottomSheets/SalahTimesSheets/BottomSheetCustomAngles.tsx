@@ -14,9 +14,9 @@ import { useState } from "react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPrefs,
 } from "../../../utils/constants";
 import { userPreferencesType } from "../../../types/types";
+import { updateUserPrefs } from "../../../utils/helpers";
 
 interface BottomSheetCustomAnglesProps {
   setShowCustomAnglesSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,7 +38,7 @@ const BottomSheetCustomAngles = ({
   const [increment, setIncrement] = useState(userPreferences[customAngleSalah]);
 
   const angleOptions = Array.from({ length: 181 }, (_, i) =>
-    (7 + i / 10).toString()
+    (7 + i / 10).toString(),
   );
 
   return (
@@ -58,7 +58,7 @@ const BottomSheetCustomAngles = ({
           dbConnection,
           customAngleSalah,
           String(increment),
-          setUserPreferences
+          setUserPreferences,
         );
         setIncrement("0");
       }}

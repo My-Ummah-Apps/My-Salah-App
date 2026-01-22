@@ -11,8 +11,6 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   prayerCalculationMethodLabels,
-  updateUserPrefs,
-  upperCaseFirstLetter,
 } from "../../../utils/constants";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -29,6 +27,7 @@ import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomA
 import BottomSheetShafaqRules from "./BottomSheetShafaqRule";
 import BottomSheetMadhabOptions from "./BottomSheetMadhabOptions";
 import BottomSheetPolarCircleSetting from "./BottomSheetPolarCircleSetting";
+import { updateUserPrefs, upperCaseFirstLetter } from "../../../utils/helpers";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;

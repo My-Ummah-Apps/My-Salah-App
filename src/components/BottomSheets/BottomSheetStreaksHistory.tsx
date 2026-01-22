@@ -1,5 +1,4 @@
 import {
-  createLocalisedDate,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   salahStatusColorsHexCodes,
@@ -7,6 +6,7 @@ import {
 import { streakDatesObjType } from "../../types/types";
 import { format } from "date-fns";
 import { IonContent, IonModal } from "@ionic/react";
+import { createLocalisedDate } from "../../utils/helpers";
 
 interface BottomSheetStreaksHistoryProps {
   setShowStreakHistorySheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,12 +46,12 @@ const BottomSheetStreaksHistory = ({
                       <p>
                         {`${
                           createLocalisedDate(
-                            format(item.startDate, "yyyy-MM-dd")
+                            format(item.startDate, "yyyy-MM-dd"),
                           )[1]
                         } -
                              ${
                                createLocalisedDate(
-                                 format(item.endDate, "yyyy-MM-dd")
+                                 format(item.endDate, "yyyy-MM-dd"),
                                )[1]
                              }`}
                       </p>

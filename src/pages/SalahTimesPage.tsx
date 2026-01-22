@@ -33,16 +33,16 @@ import Toast from "../components/Toast";
 import {
   checkNotificationPermissions,
   getSalahTimes,
-  prayerCalculationMethodLabels,
   promptToOpenDeviceSettings,
   upperCaseFirstLetter,
-} from "../utils/constants";
+} from "../utils/helpers";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
 import { AndroidSettings } from "capacitor-native-settings";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { addDays, isSameDay } from "date-fns";
+import { prayerCalculationMethodLabels } from "../utils/constants";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;

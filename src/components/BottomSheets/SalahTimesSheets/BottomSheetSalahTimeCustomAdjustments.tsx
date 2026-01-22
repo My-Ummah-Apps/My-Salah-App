@@ -14,8 +14,8 @@ import { userPreferencesType } from "../../../types/types";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPrefs,
 } from "../../../utils/constants";
+import { updateUserPrefs } from "../../../utils/helpers";
 
 interface BottomSheetSalahTimeCustomAdjustmentsProps {
   setShowCustomAdjustmentsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,7 @@ const BottomSheetSalahTimeCustomAdjustments = ({
   customAdjustmentSalah,
 }: BottomSheetSalahTimeCustomAdjustmentsProps) => {
   const [increment, setIncrement] = useState(
-    userPreferences[customAdjustmentSalah]
+    userPreferences[customAdjustmentSalah],
   );
 
   const salahMap = {
@@ -73,7 +73,7 @@ const BottomSheetSalahTimeCustomAdjustments = ({
           dbConnection,
           customAdjustmentSalah,
           String(increment),
-          setUserPreferences
+          setUserPreferences,
         );
         setIncrement("0");
       }}

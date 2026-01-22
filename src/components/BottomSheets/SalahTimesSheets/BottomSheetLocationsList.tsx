@@ -23,8 +23,6 @@ import {
   userPreferencesType,
 } from "../../../types/types";
 import {
-  cancelSalahReminderNotifications,
-  getActiveLocation,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
@@ -32,6 +30,10 @@ import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 import ActionSheet from "../../ActionSheet";
 import Toast from "../../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
+import {
+  cancelSalahReminderNotifications,
+  getActiveLocation,
+} from "../../../utils/helpers";
 
 interface BottomSheetSalahTimesSettingsProps {
   // triggerId: string;

@@ -11,9 +11,9 @@ import { userPreferencesType } from "../../../types/types";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPrefs,
 } from "../../../utils/constants";
 import { checkmarkCircle } from "ionicons/icons";
+import { updateUserPrefs } from "../../../utils/helpers";
 
 // import { CalculationMethod } from "adhan";
 

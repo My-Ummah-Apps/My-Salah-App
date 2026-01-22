@@ -11,9 +11,9 @@ import { userPreferencesType } from "../../../types/types";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
-  updateUserPrefs,
 } from "../../../utils/constants";
 import { checkmarkCircle } from "ionicons/icons";
+import { updateUserPrefs } from "../../../utils/helpers";
 
 // import { CalculationMethod } from "adhan";
 
@@ -69,7 +69,7 @@ const BottomSheetShafaqRules = ({
               dbConnection,
               "shafaqRule",
               "general",
-              setUserPreferences
+              setUserPreferences,
             );
           }}
           className={`options-wrap ${
@@ -104,7 +104,7 @@ const BottomSheetShafaqRules = ({
               dbConnection,
               "shafaqRule",
               "ahmer",
-              setUserPreferences
+              setUserPreferences,
             );
           }}
           className={`options-wrap ${
@@ -139,7 +139,7 @@ const BottomSheetShafaqRules = ({
               dbConnection,
               "shafaqRule",
               "abyad",
-              setUserPreferences
+              setUserPreferences,
             );
           }}
           className={`p-2 mb-5 border rounded-lg flex bg-[var(--sheet-option-bg)] ${

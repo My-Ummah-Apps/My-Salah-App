@@ -28,13 +28,12 @@ import StatsPage from "./pages/StatsPage";
 import { LATEST_APP_VERSION } from "./utils/changelog";
 import {
   checkNotificationPermissions,
-  dictPreferencesDefaultValues,
   updateUserPrefs,
   setStatusAndNavBarBGColor,
   getSalahTimes,
   scheduleSalahTimesNotifications,
   getNextSalah,
-} from "./utils/constants";
+} from "./utils/helpers";
 import {
   DBResultDataObjType,
   PreferenceObjType,
@@ -72,6 +71,7 @@ import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 import SalahTimesPage from "./pages/SalahTimesPage";
 import { toggleDBConnection as toggleDBConnection } from "./utils/dbUtils";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import { dictPreferencesDefaultValues } from "./utils/constants";
 
 const App = () => {
   const justLaunched = useRef(true);
