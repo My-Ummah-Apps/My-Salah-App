@@ -17,12 +17,15 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { CalculationMethod, Coordinates, HighLatitudeRule } from "adhan";
 import {
-  CalculationMethodsType,
+  calculationMethod,
   countryOptionsType,
   LocationsDataObjTypeArr,
   userPreferencesType,
 } from "../../../types/types";
 import {
+  calculationMethodsDetails,
+  countryOptions,
+  countryToMethod,
   getActiveLocation,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -57,128 +60,15 @@ const BottomSheetCalculationMethods = ({
 }: // calculateActiveLocationSalahTimes,
 BottomSheetCalculationMethodsProps) => {
   const [segmentOption, setSegmentOption] = useState<"manual" | "country">(
-    "country"
+    "country",
   );
-
-  const countryOptions: countryOptionsType[] = [
-    "Egypt",
-    "Pakistan",
-    "Saudi Arabia",
-    "UAE",
-    "Qatar",
-    "Kuwait",
-    "Turkey",
-    "Iran",
-    "US",
-    "Canada",
-    "Singapore",
-    "Malaysia",
-    "Indonesia",
-    "Other",
-  ];
-
-  const calculationMethods = [
-    "Dubai",
-    "Egyptian",
-    "MuslimWorldLeague",
-    "Karachi",
-    "Kuwait",
-    "MoonsightingCommittee",
-    "Singapore",
-    "Qatar",
-    "Tehran",
-    "Turkey",
-    "NorthAmerica",
-    "UmmAlQura",
-  ] as const;
-
-  type calculationMethod = (typeof calculationMethods)[number];
-
-  const countryToMethod: Record<countryOptionsType, CalculationMethodsType> = {
-    Egypt: "Egyptian",
-    Pakistan: "Karachi",
-    "Saudi Arabia": "UmmAlQura",
-    UAE: "Dubai",
-    Qatar: "Qatar",
-    Kuwait: "Kuwait",
-    Turkey: "Turkey",
-    Iran: "Tehran",
-    US: "NorthAmerica",
-    Canada: "NorthAmerica",
-    Singapore: "Singapore",
-    Malaysia: "Singapore",
-    Indonesia: "Singapore",
-    Other: "MoonsightingCommittee",
-  };
-
-  const calculationMethodsDetails: {
-    calculationMethod: calculationMethod;
-    description: string;
-  }[] = [
-    {
-      calculationMethod: "Dubai",
-      description:
-        "Used in the UAE. Slightly earlier Fajr time and slightly later sha time with angles of 18.2° for Fajr and Isha in addition to 3 minute offsets for sunrise, Dhuhr, Asr, and Maghrib.",
-    },
-    {
-      calculationMethod: "Egyptian",
-      description:
-        "Early Fajr time using an angle 19.5° and a slightly earlier Isha time using an angle of 17.5°.",
-    },
-    {
-      calculationMethod: "MuslimWorldLeague",
-      description:
-        "Standard Fajr time with an angle of 18°. Earlier Isha time with an angle of 17°.",
-    },
-    {
-      calculationMethod: "Karachi",
-      description:
-        "University of Islamic Sciences, Karachi. A generally applicable method that uses standard Fajr and Isha angles of 18°.",
-    },
-    {
-      calculationMethod: "Kuwait",
-      description:
-        "Standard Fajr time with an angle of 18°. Slightly earlier Isha time with an angle of 17.5°.",
-    },
-    {
-      calculationMethod: "MoonsightingCommittee",
-      description:
-        "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude. Recommended for North America and the UK.",
-    },
-    {
-      calculationMethod: "Singapore",
-      description:
-        "Early Fajr time with an angle of 20° and standard Isha time with an angle of 18°.",
-    },
-
-    {
-      calculationMethod: "Tehran",
-      description:
-        "Institute of Geophysics, University of Tehran. Early Isha time with an angle of 14°. Slightly later Fajr time with an angle of 17.7°. Calculates Maghrib based on the sun reaching an angle of 4.5° below the horizon.",
-    },
-    {
-      calculationMethod: "Turkey",
-      description:
-        "An approximation of the Diyanet method used in Turkey. This approximation is less accurate outside the region of Turkey.",
-    },
-    {
-      calculationMethod: "NorthAmerica",
-      description:
-        "Islamic Society of North America. Can be used for North America, but the Moonsighting Committee method is preferable. Gives later Fajr times and early Isha times with angles of 15°.",
-    },
-    {
-      calculationMethod: "UmmAlQura",
-      description:
-        "Uses a fixed interval of 90 minutes from maghrib to calculate Isha. And a slightly earlier Fajr time with an angle of 18.5°. Note: you should add a +30 minute custom adjustment for Isha during Ramadan.",
-    },
-  ];
 
   const setAdhanLibraryDefaults = async (calcMethod: calculationMethod) => {
     // if (!userPreferences.prayerCalculationMethod) return;
 
     if (!userLocations) {
       console.error(
-        "Unable to set calculation method as no user locations exist"
+        "Unable to set calculation method as no user locations exist",
       );
       return;
     }
@@ -197,7 +87,7 @@ BottomSheetCalculationMethodsProps) => {
 
       const coordinates = new Coordinates(
         activeLocation.latitude,
-        activeLocation.longitude
+        activeLocation.longitude,
       );
 
       const defaultCalcMethodValues = {
@@ -287,13 +177,13 @@ BottomSheetCalculationMethodsProps) => {
                   dbConnection,
                   "prayerCalculationMethod",
                   countryToMethod[selectedCountry],
-                  setUserPreferences
+                  setUserPreferences,
                 );
                 await updateUserPrefs(
                   dbConnection,
                   "country",
                   selectedCountry,
-                  setUserPreferences
+                  setUserPreferences,
                 );
               }}
             >
@@ -324,10 +214,6 @@ BottomSheetCalculationMethodsProps) => {
         )}
         {segmentOption === "manual" && (
           <section className="px-4">
-            {/* <p className="mb-5">
-            Prayer times can vary depending on the calculation method used.
-            Select the method that’s commonly followed in your region.
-          </p> */}
             {calculationMethodsDetails.map((item, i) => {
               return (
                 <div
@@ -340,12 +226,11 @@ BottomSheetCalculationMethodsProps) => {
                       return;
                     }
                     await setAdhanLibraryDefaults(item.calculationMethod);
-                    // setSelectedCalculationMethod(item.calculationMethod);
                     await updateUserPrefs(
                       dbConnection,
                       "country",
                       "",
-                      setUserPreferences
+                      setUserPreferences,
                     );
                   }}
                   className={`options-wrap  ${

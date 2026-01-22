@@ -11,11 +11,13 @@ import "swiper/css/pagination";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import appLogo from "/src/assets/images/icon-512.png";
 import { IonButton, IonIcon } from "@ionic/react";
-import { chevronBackOutline } from "ionicons/icons";
+import { arrowForwardOutline, chevronBackOutline } from "ionicons/icons";
+import MadhabOptions from "./MadhabOptions";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  userPreferences: userPreferencesType;
   setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -23,6 +25,7 @@ interface OnboardingProps {
 const Onboarding = ({
   dbConnection,
   setUserPreferences,
+  userPreferences,
   setShowOnboarding,
   setShowJoyRideEditIcon,
 }: OnboardingProps) => {
@@ -45,7 +48,7 @@ const Onboarding = ({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgb(20, 20, 20)",
+        backgroundColor: "rgb(27, 27, 28)",
         color: "#fff",
         zIndex: 9999,
         padding: 20,
@@ -95,7 +98,8 @@ const Onboarding = ({
               </p>
             </div>
             <IonButton className="w-full" onClick={switchToNextPage}>
-              Lets Go, Bismillah!
+              <IonIcon slot="end" icon={arrowForwardOutline} />
+              Bismillah, Lets Go!
             </IonButton>
           </section>
         </SwiperSlide>
@@ -140,6 +144,107 @@ const Onboarding = ({
         <SwiperSlide>
           <section className="m-4 text-center">
             <h1 className="mb-2 text-2xl font-bold">
+              Do you want to turn on prayer times?
+            </h1>
+            <p>Turn on prayer times</p>
+          </section>
+          <section className="flex flex-col ">
+            <IonButton
+              onClick={async () => {
+                switchToNextPage();
+              }}
+              className="mb-4"
+            >
+              Yes
+            </IonButton>
+            <IonButton
+              fill="clear"
+              onClick={() => {
+                swiperRef.current?.slideTo(6, 0);
+              }}
+              className="text-white mb-2text-center rounded-2xl"
+            >
+              No
+            </IonButton>
+          </section>
+        </SwiperSlide>
+        {/* {showPrayerTimesOnboarding && ( */}
+        <SwiperSlide>
+          <section className="m-4 text-center">
+            <h1 className="mb-2 text-2xl font-bold">Calculation Method</h1>
+            <p>Select your calculation method</p>
+          </section>
+          <section className="flex flex-col ">
+            <IonButton
+              onClick={async () => {
+                switchToNextPage();
+              }}
+              className="mb-4"
+            >
+              Yes
+            </IonButton>
+            <IonButton
+              fill="clear"
+              onClick={() => {
+                switchToNextPage();
+              }}
+              className="text-white mb-2text-center rounded-2xl"
+            >
+              No
+            </IonButton>
+          </section>
+        </SwiperSlide>
+        <SwiperSlide>
+          <section className="m-4 text-center">
+            <h1 className="mb-2 text-2xl font-bold">Madhab</h1>
+            <p>Select Madhab</p>
+          </section>
+          <section className="flex flex-col">
+            <MadhabOptions
+              dbConnection={dbConnection}
+              setUserPreferences={setUserPreferences}
+              userPreferences={userPreferences}
+            />
+            <IonButton
+              onClick={async () => {
+                switchToNextPage();
+              }}
+              className="mb-4"
+            >
+              Next
+            </IonButton>
+          </section>
+        </SwiperSlide>
+        <SwiperSlide>
+          <section className="m-4 text-center">
+            <h1 className="mb-2 text-2xl font-bold">Notifications</h1>
+            <p>Per Salah Notifications</p>
+          </section>
+          <section className="flex flex-col ">
+            <IonButton
+              onClick={async () => {
+                switchToNextPage();
+              }}
+              className="mb-4"
+            >
+              Yes
+            </IonButton>
+            <IonButton
+              fill="clear"
+              onClick={() => {
+                switchToNextPage();
+              }}
+              className="text-white mb-2text-center rounded-2xl"
+            >
+              No
+            </IonButton>
+          </section>
+        </SwiperSlide>
+        {/* )} */}
+        {/* THIS SLIDE BELOW IS THE FINAL SLIDE */}
+        <SwiperSlide>
+          <section className="m-4 text-center">
+            <h1 className="mb-2 text-2xl font-bold">
               Stay Consistent with Your Salah
             </h1>
             <p>
@@ -153,7 +258,6 @@ const Onboarding = ({
                 const permission =
                   await LocalNotifications.requestPermissions();
                 if (permission.display === "granted") {
-                  //   setShowIntroModal(false);
                   setShowOnboarding(false);
                   setShowJoyRideEditIcon(true);
                   scheduleDailyNotification(21, 0);
@@ -170,7 +274,6 @@ const Onboarding = ({
                     setUserPreferences,
                   );
                 } else {
-                  //   setShowIntroModal(false);
                   setShowOnboarding(false);
                   setShowJoyRideEditIcon(true);
                 }
@@ -182,7 +285,6 @@ const Onboarding = ({
             <IonButton
               fill="clear"
               onClick={() => {
-                // setShowIntroModal(false);
                 setShowOnboarding(false);
                 setShowJoyRideEditIcon(true);
               }}

@@ -30,8 +30,6 @@ const BottomSheetPolarCircleSetting = ({
   setUserPreferences,
   userPreferences,
 }: BottomSheetPolarCircleSettingProps) => {
-  console.log("triggerId: ", triggerId);
-
   return (
     <IonModal
       className="modal-fit-content"

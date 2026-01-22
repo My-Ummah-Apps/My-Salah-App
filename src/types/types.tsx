@@ -1,3 +1,5 @@
+import { calculationMethods } from "../utils/constants";
+
 export type CalculationMethodsType =
   | "MuslimWorldLeague"
   | "Egyptian"
@@ -69,6 +71,8 @@ export interface userPreferencesType {
   polarCircleResolution: "AqrabBalad" | "AqrabYaum" | "Unresolved";
   country: countryOptionsType | "";
 }
+
+export type calculationMethod = (typeof calculationMethods)[number];
 
 export type PreferenceType = keyof userPreferencesType;
 

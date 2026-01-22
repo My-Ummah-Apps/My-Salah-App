@@ -907,6 +907,7 @@ const App = () => {
           setShowJoyRideEditIcon={setShowJoyRideEditIcon}
           dbConnection={dbConnection}
           setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
         />
       )}
       {showMajorUpdateOverlay && (

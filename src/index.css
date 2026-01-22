@@ -276,6 +276,10 @@ ion-content {
   --height: 95vh;
 }
 
+.modal-header-margin {
+  margin: 1rem 0;
+}
+
 .settings-page-wrap,
 .stats-page-wrap,
 .home-page-wrap {
