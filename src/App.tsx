@@ -908,6 +908,7 @@ const App = () => {
           dbConnection={dbConnection}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
+          userLocations={userLocations}
         />
       )}
       {showMajorUpdateOverlay && (

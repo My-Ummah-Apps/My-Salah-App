@@ -1,8 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { LATEST_APP_VERSION } from "../utils/changelog";
-import { userPreferencesType } from "../types/types";
+import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
 import { updateUserPrefs, scheduleDailyNotification } from "../utils/constants";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,6 +13,7 @@ import appLogo from "/src/assets/images/icon-512.png";
 import { IonButton, IonIcon } from "@ionic/react";
 import { arrowForwardOutline, chevronBackOutline } from "ionicons/icons";
 import MadhabOptions from "./MadhabOptions";
+import CalculationMethodOptions from "./CalculationMethodOptions";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -20,6 +21,7 @@ interface OnboardingProps {
   userPreferences: userPreferencesType;
   setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  userLocations: LocationsDataObjTypeArr | undefined;
 }
 
 const Onboarding = ({
@@ -28,6 +30,7 @@ const Onboarding = ({
   userPreferences,
   setShowOnboarding,
   setShowJoyRideEditIcon,
+  userLocations,
 }: OnboardingProps) => {
   const swiperRef = useRef<SwiperInstance | null>(null);
 
@@ -38,11 +41,15 @@ const Onboarding = ({
     swiperRef.current?.slidePrev();
   };
 
+  const [segmentOption, setSegmentOption] = useState<"manual" | "country">(
+    "country",
+  );
+
   return (
     <section
       style={{
         display: "flex",
-        alignItems: "center",
+        // alignItems: "center",
         position: "fixed",
         top: 0,
         left: 0,
@@ -174,6 +181,14 @@ const Onboarding = ({
             <h1 className="mb-2 text-2xl font-bold">Calculation Method</h1>
             <p>Select your calculation method</p>
           </section>
+          <CalculationMethodOptions
+            dbConnection={dbConnection}
+            setSegmentOption={setSegmentOption}
+            segmentOption={segmentOption}
+            userLocations={userLocations}
+            userPreferences={userPreferences}
+            setUserPreferences={setUserPreferences}
+          />
           <section className="flex flex-col ">
             <IonButton
               onClick={async () => {
@@ -181,16 +196,7 @@ const Onboarding = ({
               }}
               className="mb-4"
             >
-              Yes
-            </IonButton>
-            <IonButton
-              fill="clear"
-              onClick={() => {
-                switchToNextPage();
-              }}
-              className="text-white mb-2text-center rounded-2xl"
-            >
-              No
+              Next
             </IonButton>
           </section>
         </SwiperSlide>
