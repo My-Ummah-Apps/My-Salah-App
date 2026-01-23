@@ -1,6 +1,5 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
-  calculationMethod,
   LocationsDataObjTypeArr,
   PreferenceType,
   SalahByDateObjType,
@@ -14,7 +13,6 @@ import {
   CalculationMethod,
   CalculationParameters,
   Coordinates,
-  HighLatitudeRule,
   PrayerTimes,
 } from "adhan";
 import { LocalNotifications } from "@capacitor/local-notifications";
@@ -351,7 +349,7 @@ export const scheduleSalahTimesNotifications = async (
   // );
 };
 
-export const generateActiveLocationParams = async (
+const generateActiveLocationParams = async (
   userLocations: LocationsDataObjTypeArr,
   userPreferences: userPreferencesType,
 ) => {
@@ -531,71 +529,4 @@ export const getNextSalah = async (
     hoursRemaining: hours,
     minsRemaining: minutes,
   };
-};
-
-export const setAdhanLibraryDefaults = async (
-  calcMethod: calculationMethod,
-  userLocations: LocationsDataObjTypeArr | undefined,
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>,
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>,
-) => {
-  // if (!userPreferences.prayerCalculationMethod) return;
-
-  if (!userLocations) {
-    console.error(
-      "Unable to set calculation method as no user locations exist",
-    );
-    return;
-  }
-
-  try {
-    await toggleDBConnection(dbConnection, "open");
-
-    const activeLocation = getActiveLocation(userLocations);
-
-    const params = CalculationMethod[calcMethod]();
-
-    if (!activeLocation) {
-      console.error("Active location does not exist");
-      return;
-    }
-
-    const coordinates = new Coordinates(
-      activeLocation.latitude,
-      activeLocation.longitude,
-    );
-
-    const defaultCalcMethodValues = {
-      prayerCalculationMethod: calcMethod,
-      madhab: params.madhab,
-      highLatitudeRule: HighLatitudeRule.recommended(coordinates),
-      fajrAngle: String(params.fajrAngle),
-      ishaAngle: String(params.ishaAngle),
-      fajrAdjustment: String(params.methodAdjustments.fajr),
-      dhuhrAdjustment: String(params.methodAdjustments.dhuhr),
-      asrAdjustment: String(params.methodAdjustments.asr),
-      maghribAdjustment: String(params.methodAdjustments.maghrib),
-      ishaAdjustment: String(params.methodAdjustments.isha),
-    };
-
-    const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
-
-    if (!dbConnection || !dbConnection.current) {
-      throw new Error("dbConnection / dbconnection.current does not exist");
-    }
-
-    for (const [key, value] of Object.entries(defaultCalcMethodValues)) {
-      console.log(key, value);
-      await dbConnection.current.run(query, [key, value]);
-    }
-
-    setUserPreferences((userPreferences: userPreferencesType) => ({
-      ...userPreferences,
-      ...defaultCalcMethodValues,
-    }));
-  } catch (error) {
-    console.error(error);
-  } finally {
-    await toggleDBConnection(dbConnection, "close");
-  }
 };

@@ -1,11 +1,5 @@
 import { format } from "date-fns";
-import {
-  SalahNamesType,
-  userPreferencesType,
-  countryOptionsType,
-  CalculationMethodsType,
-  calculationMethod,
-} from "../types/types";
+import { SalahNamesType, userPreferencesType } from "../types/types";
 
 export const MODAL_BREAKPOINTS = [0, 1];
 export const INITIAL_MODAL_BREAKPOINT = 1;
@@ -33,93 +27,6 @@ export const prayerCalculationMethodLabels: Record<string, string> = {
   Tehran: "University of Tehran",
   NorthAmerica: "North America (ISNA)",
 };
-
-export const countryToMethod: Record<
-  countryOptionsType,
-  CalculationMethodsType
-> = {
-  Egypt: "Egyptian",
-  Pakistan: "Karachi",
-  "Saudi Arabia": "UmmAlQura",
-  UAE: "Dubai",
-  Qatar: "Qatar",
-  Kuwait: "Kuwait",
-  Turkey: "Turkey",
-  Iran: "Tehran",
-  US: "NorthAmerica",
-  Canada: "NorthAmerica",
-  Singapore: "Singapore",
-  Malaysia: "Singapore",
-  Indonesia: "Singapore",
-  Other: "MoonsightingCommittee",
-};
-
-export const calculationMethodsDetails: {
-  calculationMethod: calculationMethod;
-  description: string;
-}[] = [
-  {
-    calculationMethod: "Dubai",
-    description:
-      "Used in the UAE. Slightly earlier Fajr time and slightly later sha time with angles of 18.2° for Fajr and Isha in addition to 3 minute offsets for sunrise, Dhuhr, Asr, and Maghrib.",
-  },
-  {
-    calculationMethod: "Egyptian",
-    description:
-      "Early Fajr time using an angle 19.5° and a slightly earlier Isha time using an angle of 17.5°.",
-  },
-  {
-    calculationMethod: "MuslimWorldLeague",
-    description:
-      "Standard Fajr time with an angle of 18°. Earlier Isha time with an angle of 17°.",
-  },
-  {
-    calculationMethod: "Karachi",
-    description:
-      "University of Islamic Sciences, Karachi. A generally applicable method that uses standard Fajr and Isha angles of 18°.",
-  },
-  {
-    calculationMethod: "Kuwait",
-    description:
-      "Standard Fajr time with an angle of 18°. Slightly earlier Isha time with an angle of 17.5°.",
-  },
-  {
-    calculationMethod: "MoonsightingCommittee",
-    description:
-      "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude. Recommended for North America and the UK.",
-  },
-  {
-    calculationMethod: "Singapore",
-    description:
-      "Early Fajr time with an angle of 20° and standard Isha time with an angle of 18°.",
-  },
-
-  {
-    calculationMethod: "Tehran",
-    description:
-      "Institute of Geophysics, University of Tehran. Early Isha time with an angle of 14°. Slightly later Fajr time with an angle of 17.7°. Calculates Maghrib based on the sun reaching an angle of 4.5° below the horizon.",
-  },
-  {
-    calculationMethod: "Turkey",
-    description:
-      "An approximation of the Diyanet method used in Turkey. This approximation is less accurate outside the region of Turkey.",
-  },
-  {
-    calculationMethod: "NorthAmerica",
-    description:
-      "Islamic Society of North America. Can be used for North America, but the Moonsighting Committee method is preferable. Gives later Fajr times and early Isha times with angles of 15°.",
-  },
-  {
-    calculationMethod: "Qatar",
-    description:
-      "Same Isha interval as ummAlQura but with the standard Fajr time using an angle of 18°.",
-  },
-  {
-    calculationMethod: "UmmAlQura",
-    description:
-      "Uses a fixed interval of 90 minutes from maghrib to calculate Isha. And a slightly earlier Fajr time with an angle of 18.5°. Note: you should add a +30 minute custom adjustment for Isha during Ramadan.",
-  },
-];
 
 export const dictPreferencesDefaultValues: userPreferencesType = {
   userGender: "male",
@@ -156,23 +63,6 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   polarCircleResolution: "Unresolved",
   country: "",
 };
-
-export const countryOptions: countryOptionsType[] = [
-  "Egypt",
-  "Pakistan",
-  "Saudi Arabia",
-  "UAE",
-  "Qatar",
-  "Kuwait",
-  "Turkey",
-  "Iran",
-  "US",
-  "Canada",
-  "Singapore",
-  "Malaysia",
-  "Indonesia",
-  "Other",
-];
 
 export const calculationMethods = [
   "Dubai",

@@ -8,18 +8,17 @@ import {
   IonSelectOption,
 } from "@ionic/react";
 import {
+  calculationMethod,
+  CalculationMethodsType,
   countryOptionsType,
   LocationsDataObjTypeArr,
   userPreferencesType,
 } from "../types/types";
-import {
-  calculationMethodsDetails,
-  countryOptions,
-  countryToMethod,
-  prayerCalculationMethodLabels,
-} from "../utils/constants";
+import { prayerCalculationMethodLabels } from "../utils/constants";
 import { checkmarkCircle } from "ionicons/icons";
-import { setAdhanLibraryDefaults, updateUserPrefs } from "../utils/helpers";
+import { getActiveLocation, updateUserPrefs } from "../utils/helpers";
+import { CalculationMethod, Coordinates, HighLatitudeRule } from "adhan";
+import { toggleDBConnection } from "../utils/dbUtils";
 
 interface CalculationMethodOptionsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -38,6 +37,169 @@ const CalculationMethodOptions = ({
   userPreferences,
   setUserPreferences,
 }: CalculationMethodOptionsProps) => {
+  const countryOptions: countryOptionsType[] = [
+    "Egypt",
+    "Pakistan",
+    "Saudi Arabia",
+    "UAE",
+    "Qatar",
+    "Kuwait",
+    "Turkey",
+    "Iran",
+    "US",
+    "Canada",
+    "Singapore",
+    "Malaysia",
+    "Indonesia",
+    "Other",
+  ];
+
+  const calculationMethodsDetails: {
+    calculationMethod: calculationMethod;
+    description: string;
+  }[] = [
+    {
+      calculationMethod: "Dubai",
+      description:
+        "Used in the UAE. Slightly earlier Fajr time and slightly later sha time with angles of 18.2° for Fajr and Isha in addition to 3 minute offsets for sunrise, Dhuhr, Asr, and Maghrib.",
+    },
+    {
+      calculationMethod: "Egyptian",
+      description:
+        "Early Fajr time using an angle 19.5° and a slightly earlier Isha time using an angle of 17.5°.",
+    },
+    {
+      calculationMethod: "MuslimWorldLeague",
+      description:
+        "Standard Fajr time with an angle of 18°. Earlier Isha time with an angle of 17°.",
+    },
+    {
+      calculationMethod: "Karachi",
+      description:
+        "University of Islamic Sciences, Karachi. A generally applicable method that uses standard Fajr and Isha angles of 18°.",
+    },
+    {
+      calculationMethod: "Kuwait",
+      description:
+        "Standard Fajr time with an angle of 18°. Slightly earlier Isha time with an angle of 17.5°.",
+    },
+    {
+      calculationMethod: "MoonsightingCommittee",
+      description:
+        "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude. Recommended for North America and the UK.",
+    },
+    {
+      calculationMethod: "Singapore",
+      description:
+        "Early Fajr time with an angle of 20° and standard Isha time with an angle of 18°.",
+    },
+
+    {
+      calculationMethod: "Tehran",
+      description:
+        "Institute of Geophysics, University of Tehran. Early Isha time with an angle of 14°. Slightly later Fajr time with an angle of 17.7°. Calculates Maghrib based on the sun reaching an angle of 4.5° below the horizon.",
+    },
+    {
+      calculationMethod: "Turkey",
+      description:
+        "An approximation of the Diyanet method used in Turkey. This approximation is less accurate outside the region of Turkey.",
+    },
+    {
+      calculationMethod: "NorthAmerica",
+      description:
+        "Islamic Society of North America. Can be used for North America, but the Moonsighting Committee method is preferable. Gives later Fajr times and early Isha times with angles of 15°.",
+    },
+    {
+      calculationMethod: "Qatar",
+      description:
+        "Same Isha interval as ummAlQura but with the standard Fajr time using an angle of 18°.",
+    },
+    {
+      calculationMethod: "UmmAlQura",
+      description:
+        "Uses a fixed interval of 90 minutes from maghrib to calculate Isha. And a slightly earlier Fajr time with an angle of 18.5°. Note: you should add a +30 minute custom adjustment for Isha during Ramadan.",
+    },
+  ];
+
+  const countryToMethod: Record<countryOptionsType, CalculationMethodsType> = {
+    Egypt: "Egyptian",
+    Pakistan: "Karachi",
+    "Saudi Arabia": "UmmAlQura",
+    UAE: "Dubai",
+    Qatar: "Qatar",
+    Kuwait: "Kuwait",
+    Turkey: "Turkey",
+    Iran: "Tehran",
+    US: "NorthAmerica",
+    Canada: "NorthAmerica",
+    Singapore: "Singapore",
+    Malaysia: "Singapore",
+    Indonesia: "Singapore",
+    Other: "MoonsightingCommittee",
+  };
+
+  const setAdhanLibraryDefaults = async (calcMethod: calculationMethod) => {
+    // if (!userPreferences.prayerCalculationMethod) return;
+
+    if (!userLocations) {
+      console.error(
+        "Unable to set calculation method as no user locations exist",
+      );
+      return;
+    }
+
+    try {
+      await toggleDBConnection(dbConnection, "open");
+
+      const activeLocation = getActiveLocation(userLocations);
+
+      const params = CalculationMethod[calcMethod]();
+
+      if (!activeLocation) {
+        console.error("Active location does not exist");
+        return;
+      }
+
+      const coordinates = new Coordinates(
+        activeLocation.latitude,
+        activeLocation.longitude,
+      );
+
+      const defaultCalcMethodValues = {
+        prayerCalculationMethod: calcMethod,
+        madhab: params.madhab,
+        highLatitudeRule: HighLatitudeRule.recommended(coordinates),
+        fajrAngle: String(params.fajrAngle),
+        ishaAngle: String(params.ishaAngle),
+        fajrAdjustment: String(params.methodAdjustments.fajr),
+        dhuhrAdjustment: String(params.methodAdjustments.dhuhr),
+        asrAdjustment: String(params.methodAdjustments.asr),
+        maghribAdjustment: String(params.methodAdjustments.maghrib),
+        ishaAdjustment: String(params.methodAdjustments.isha),
+      };
+
+      const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
+
+      if (!dbConnection || !dbConnection.current) {
+        throw new Error("dbConnection / dbconnection.current does not exist");
+      }
+
+      for (const [key, value] of Object.entries(defaultCalcMethodValues)) {
+        console.log(key, value);
+        await dbConnection.current.run(query, [key, value]);
+      }
+
+      setUserPreferences((userPreferences: userPreferencesType) => ({
+        ...userPreferences,
+        ...defaultCalcMethodValues,
+      }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      await toggleDBConnection(dbConnection, "close");
+    }
+  };
+
   return (
     <>
       <div className="mb-10">
@@ -118,12 +280,7 @@ const CalculationMethodOptions = ({
                   ) {
                     return;
                   }
-                  await setAdhanLibraryDefaults(
-                    item.calculationMethod,
-                    userLocations,
-                    dbConnection,
-                    setUserPreferences,
-                  );
+                  await setAdhanLibraryDefaults(item.calculationMethod);
                   await updateUserPrefs(
                     dbConnection,
                     "country",

@@ -70,23 +70,29 @@ const BottomSheetAddLocation = ({
   setShowLocationFailureToast,
   setShowLocationAddedToast,
 }: BottomSheetAddLocationProps) => {
+  type CoordsObjType = {
+    latitude: null | number;
+    longitude: null | number;
+  };
+
+  type modeType = "gps" | "manualCitySearch" | "manualCoords" | null;
+
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
   const [showLocationDetailsInput, setShowLocationDetailsInput] =
     useState<boolean>(false);
   const [locationName, setLocationName] = useState("");
-  const [showEmptyLocationError, setShowEmptyLocationError] =
-    useState<boolean>(false);
-  const [showDuplicateLocationError, setShowDuplicateLocationError] =
-    useState<boolean>(false);
-  const [showEmptyLatitudeError, setShowEmptyLatitudeError] = useState(false);
-  const [showEmptyLongitudeError, setShowEmptyLongitudeError] = useState(false);
-  const [useManualCoordinates, setUseManualCoordinates] = useState(false);
-  const [latitude, setLatitude] = useState<number | null>(null);
-  const [longitude, setLongitude] = useState<number | null>(null);
-  const [citySearchMode, setCitySearchMode] = useState(false);
-  const [isGpsBtnClicked, setIsGpsBtnClicked] = useState(false);
+  const [showError, setShowError] = useState({
+    emptyLocationError: false,
+    duplicateLocationError: false,
+    emptyLatitudeError: false,
+    emptyLongitudeError: false,
+  });
+  const [coords, setCoords] = useState<CoordsObjType>({
+    latitude: null,
+    longitude: null,
+  });
   const [isCityNameClicked, setIsCityNameClicked] = useState(false);
-
+  const [mode, setMode] = useState<modeType>(null);
   const [
     isDefaultLocationCheckBoxChecked,
     setIsDefaultLocationCheckBoxChecked,
@@ -125,22 +131,17 @@ const BottomSheetAddLocation = ({
     return lastId;
   };
 
-  const clearLatLong = () => {
-    setLatitude(null);
-    setLongitude(null);
-  };
-
   const handleInputPromptDismissed = () => {
     setShowLocationDetailsInput(false);
     setLocationName("");
-    clearLatLong();
-    setShowEmptyLocationError(false);
-    setShowDuplicateLocationError(false);
-    setUseManualCoordinates(false);
-    setShowEmptyLatitudeError(false);
-    setShowEmptyLongitudeError(false);
-    setCitySearchMode(false);
-    setIsGpsBtnClicked(false);
+    setCoords({ latitude: null, longitude: null });
+    setShowError({
+      emptyLocationError: false,
+      duplicateLocationError: false,
+      emptyLatitudeError: false,
+      emptyLongitudeError: false,
+    });
+    setMode(null);
     setIsDefaultLocationCheckBoxChecked(false);
     setIsCityNameClicked(false);
   };
@@ -150,9 +151,10 @@ const BottomSheetAddLocation = ({
       // throw new Error("ERROR THROWN");
       const location = await Geolocation.getCurrentPosition();
 
-      setLatitude(location.coords.latitude);
-      setLongitude(location.coords.longitude);
-      console.log(latitude, longitude);
+      setCoords({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
 
       dismissLocationSpinner();
       setShowLocationDetailsInput(true);
@@ -252,7 +254,7 @@ const BottomSheetAddLocation = ({
              flex flex-col items-center justify-center -translate-y-[15%] bg-[var(--card-bg-color)]"
           >
             <div className="pt-3 text-center">
-              {isGpsBtnClicked && <p className="text-xs">Name this location</p>}
+              {mode === "gps" && <p className="text-xs">Name this location</p>}
               <div className="flex items-center">
                 <IonInput
                   className="w-full min-w-0 px-2 py-2 rounded-lg"
@@ -260,14 +262,17 @@ const BottomSheetAddLocation = ({
                   type="text"
                   disabled={isCityNameClicked ? true : false}
                   placeholder={
-                    isGpsBtnClicked
+                    mode === "gps"
                       ? "e.g. Home, Work, City Name"
                       : "Enter Location Name"
                   }
                   onIonInput={(e) => {
                     setLocationName(e.detail.value || "");
-                    setShowDuplicateLocationError(false);
-                    setShowEmptyLocationError(false);
+                    setShowError((prev) => ({
+                      ...prev,
+                      duplicateLocationError: false,
+                      emptyLocationError: false,
+                    }));
                   }}
                   value={locationName}
                 ></IonInput>
@@ -278,7 +283,7 @@ const BottomSheetAddLocation = ({
                     onClick={() => {
                       setLocationName("");
                       setIsCityNameClicked(false);
-                      setCitySearchMode(true);
+                      setMode("manualCitySearch");
                     }}
                     // size="small"
                     fill="clear"
@@ -288,7 +293,7 @@ const BottomSheetAddLocation = ({
                   </IonButton>
                 )}
               </div>
-              {citySearchMode && locationName && (
+              {mode === "manualCitySearch" && locationName && (
                 <ul>
                   {allCities
                     .filter((obj) =>
@@ -301,9 +306,11 @@ const BottomSheetAddLocation = ({
                         className="py-2 border-b border-stone-700"
                         onClick={() => {
                           setLocationName(`${obj.city} - ${obj.country}`);
-                          setLatitude(Number(obj.latitude));
-                          setLongitude(Number(obj.longitude));
-                          setCitySearchMode(false);
+                          setCoords({
+                            latitude: Number(obj.latitude),
+                            longitude: Number(obj.longitude),
+                          });
+                          setMode(null);
                           setIsCityNameClicked(true);
                         }}
                       >
@@ -314,30 +321,34 @@ const BottomSheetAddLocation = ({
               )}
               <p
                 className={`mb-1 text-xs text-red-500 ${
-                  showEmptyLocationError || showDuplicateLocationError
+                  showError.emptyLocationError ||
+                  showError.duplicateLocationError
                     ? "visible"
                     : "invisible"
                 }`}
               >
-                {showEmptyLocationError
+                {showError.emptyLocationError
                   ? "Please enter a location name"
                   : "Location already exists"}
               </p>
-              {useManualCoordinates && (
+              {mode === "manualCoords" && (
                 <>
                   <IonInput
                     className="w-full min-w-0 px-2 py-2 mt-2 rounded-lg"
                     aria-label="Latitude"
                     type="text"
                     placeholder="Latitude"
-                    value={latitude}
-                    onIonInput={(e) =>
-                      setLatitude(Number(e.detail.value) || null)
-                    }
+                    value={coords.latitude}
+                    onIonInput={(e) => {
+                      setCoords((prev) => ({
+                        ...prev,
+                        latitude: Number(e.detail.value) || null,
+                      }));
+                    }}
                   ></IonInput>
                   <p
                     className={`mb-1 text-xs text-red-500 ${
-                      showEmptyLatitudeError ? "visible" : "invisible"
+                      showError.emptyLatitudeError ? "visible" : "invisible"
                     }`}
                   >
                     {"Please enter latitude"}
@@ -347,14 +358,17 @@ const BottomSheetAddLocation = ({
                     aria-label="Longitude"
                     type="text"
                     placeholder="Longitude"
-                    value={longitude}
+                    value={coords.longitude}
                     onIonInput={(e) => {
-                      setLongitude(Number(e.detail.value) || null);
+                      setCoords((prev) => ({
+                        ...prev,
+                        longitude: Number(e.detail.value) || null,
+                      }));
                     }}
                   ></IonInput>
                   <p
                     className={`mb-1 text-xs text-red-500 ${
-                      showEmptyLongitudeError ? "visible" : "invisible"
+                      showError.emptyLongitudeError ? "visible" : "invisible"
                     }`}
                   >
                     {"Please enter longitude"}
@@ -391,25 +405,42 @@ const BottomSheetAddLocation = ({
                 size="small"
                 // fill="clear"
                 onClick={async () => {
-                  setShowDuplicateLocationError(false);
-                  setShowEmptyLocationError(false);
-                  setShowEmptyLatitudeError(false);
-                  setShowEmptyLongitudeError(false);
+                  setShowError({
+                    emptyLocationError: false,
+                    duplicateLocationError: false,
+                    emptyLatitudeError: false,
+                    emptyLongitudeError: false,
+                  });
                   const locationNameTrimmed = locationName.trim();
 
                   console.log("locationNameTrimmed:", locationNameTrimmed);
                   if (locationNameTrimmed === "") {
-                    setShowEmptyLocationError(true);
-                    // return;
+                    setShowError((prev) => ({
+                      ...prev,
+                      emptyLocationError: true,
+                    }));
                   }
 
-                  if (latitude === null) {
-                    setShowEmptyLatitudeError(true);
+                  if (coords.latitude === null) {
+                    setShowError((prev) => ({
+                      ...prev,
+                      emptyLatitudeError: true,
+                    }));
                   }
 
-                  if (longitude === null) {
-                    setShowEmptyLongitudeError(true);
+                  if (coords.longitude === null) {
+                    setShowError((prev) => ({
+                      ...prev,
+                      emptyLongitudeError: true,
+                    }));
                   }
+
+                  if (
+                    locationNameTrimmed === "" ||
+                    coords.latitude === null ||
+                    coords.longitude === null
+                  )
+                    return;
 
                   if (!userLocations) {
                     console.error("LocationNames state is undefined");
@@ -425,12 +456,19 @@ const BottomSheetAddLocation = ({
                   ) {
                     console.log("DUPLICATE LOCATION");
 
-                    setShowEmptyLocationError(false);
-                    setShowDuplicateLocationError(true);
+                    setShowError((prev) => ({
+                      ...prev,
+                      emptyLocationError: false,
+                      duplicateLocationError: true,
+                    }));
                     return;
                   }
 
-                  if (latitude && longitude && locationName) {
+                  if (
+                    coords.latitude !== null &&
+                    coords.longitude !== null &&
+                    locationName
+                  ) {
                     try {
                       const isSelected =
                         userLocations.length === 0 ||
@@ -443,8 +481,8 @@ const BottomSheetAddLocation = ({
                       const result = await addUserLocation(
                         dbConnection,
                         locationName,
-                        latitude,
-                        longitude,
+                        coords.latitude,
+                        coords.longitude,
                         isSelected,
                       );
 
@@ -519,7 +557,8 @@ const BottomSheetAddLocation = ({
             className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
             onClick={async () => {
               if (showLocationDetailsInput) return;
-              setIsGpsBtnClicked(true);
+
+              setMode("gps");
               presentLocationSpinner({
                 message: "Detecting location...",
                 backdropDismiss: false,
@@ -548,7 +587,7 @@ const BottomSheetAddLocation = ({
             className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
             onClick={() => {
               if (showLocationDetailsInput) return;
-              setUseManualCoordinates(true);
+              setMode("manualCoords");
               setShowLocationDetailsInput(true);
             }}
           >
@@ -569,7 +608,7 @@ const BottomSheetAddLocation = ({
             onClick={() => {
               if (showLocationDetailsInput) return;
               setShowLocationDetailsInput(true);
-              setCitySearchMode(true);
+              setMode(null);
             }}
           >
             <div className="mr-2">

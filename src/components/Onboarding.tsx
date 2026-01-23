@@ -175,7 +175,28 @@ const Onboarding = ({
             </IonButton>
           </section>
         </SwiperSlide>
+
         {/* {showPrayerTimesOnboarding && ( */}
+        <SwiperSlide>
+          <section className="m-4 text-center">
+            <h1 className="mb-2 text-2xl font-bold">Location</h1>
+            <p>Select your Location</p>
+          </section>
+          test
+          <section className="flex flex-col">
+            <IonButton
+              // disabled={
+              //   userPreferences.prayerCalculationMethod === "" ? true : false
+              // }
+              onClick={async () => {
+                switchToNextPage();
+              }}
+              className="mb-4"
+            >
+              Next
+            </IonButton>
+          </section>
+        </SwiperSlide>
         <SwiperSlide>
           <section className="m-4 text-center">
             <h1 className="mb-2 text-2xl font-bold">Calculation Method</h1>
@@ -189,8 +210,11 @@ const Onboarding = ({
             userPreferences={userPreferences}
             setUserPreferences={setUserPreferences}
           />
-          <section className="flex flex-col ">
+          <section className="flex flex-col">
             <IonButton
+              disabled={
+                userPreferences.prayerCalculationMethod === "" ? true : false
+              }
               onClick={async () => {
                 switchToNextPage();
               }}
