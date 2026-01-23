@@ -55,6 +55,10 @@ interface SalahTimesPageProps {
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
   salahTimes: salahTimesObjType;
   nextSalahNameAndTime: nextSalahTimeType;
+  setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
+  showLocationFailureToast: boolean;
+  setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
+  showLocationAddedToast: boolean;
 }
 
 const SalahTimesPage = ({
@@ -66,13 +70,13 @@ const SalahTimesPage = ({
   setSalahtimes,
   salahTimes,
   nextSalahNameAndTime,
+  setShowLocationFailureToast,
+  showLocationFailureToast,
+  setShowLocationAddedToast,
+  showLocationAddedToast,
 }: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
-  const [showLocationFailureToast, setShowLocationFailureToast] =
-    useState<boolean>(false);
-  const [showLocationAddedToast, setShowLocationAddedToast] =
-    useState<boolean>(false);
 
   const [selectedSalah, setSelectedSalah] =
     useState<SalahNamesTypeAdhanLibrary>("fajr");

@@ -36,8 +36,6 @@ const allCities = cities.map(
   },
 );
 interface AddLocationOptionsProps {
-  setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showAddLocationSheet?: boolean;
   // setShowSalahTimesSettingsSheet?: React.Dispatch<
   //   React.SetStateAction<boolean>
   // >;
@@ -51,15 +49,12 @@ interface AddLocationOptionsProps {
 }
 
 const AddLocationOptions = ({
-  setShowAddLocationSheet,
-  showAddLocationSheet,
-  // setShowSalahTimesSettingsSheet,
   dbConnection,
   setUserLocations,
   userLocations,
   setShowLocationFailureToast,
   setShowLocationAddedToast,
-}: LocationOptionsProps) => {
+}: AddLocationOptionsProps) => {
   type CoordsObjType = {
     latitude: null | number;
     longitude: null | number;
@@ -468,7 +463,7 @@ const AddLocationOptions = ({
                         // if (allLocations.length === 1) {
                         //   setShowSalahTimesSettingsSheet?.(true);
                         // }
-                        setShowAddLocationSheet(false);
+                        // setShowAddLocationSheet(false);
                         setUserLocations(allLocations);
                         setShowLocationAddedToast(true);
                         // setUserLocations([

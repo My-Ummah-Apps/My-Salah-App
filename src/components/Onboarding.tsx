@@ -14,6 +14,7 @@ import { IonButton, IonIcon } from "@ionic/react";
 import { arrowForwardOutline, chevronBackOutline } from "ionicons/icons";
 import MadhabOptions from "./MadhabOptions";
 import CalculationMethodOptions from "./CalculationMethodOptions";
+import AddLocationOptions from "./AddLocationOptions";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -21,7 +22,12 @@ interface OnboardingProps {
   userPreferences: userPreferencesType;
   setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserLocations: React.Dispatch<
+    React.SetStateAction<LocationsDataObjTypeArr>
+  >;
   userLocations: LocationsDataObjTypeArr | undefined;
+  setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Onboarding = ({
@@ -30,7 +36,10 @@ const Onboarding = ({
   userPreferences,
   setShowOnboarding,
   setShowJoyRideEditIcon,
+  setUserLocations,
   userLocations,
+  setShowLocationFailureToast,
+  setShowLocationAddedToast,
 }: OnboardingProps) => {
   const swiperRef = useRef<SwiperInstance | null>(null);
 
@@ -182,7 +191,13 @@ const Onboarding = ({
             <h1 className="mb-2 text-2xl font-bold">Location</h1>
             <p>Select your Location</p>
           </section>
-          test
+          <AddLocationOptions
+            dbConnection={dbConnection}
+            setUserLocations={setUserLocations}
+            userLocations={userLocations}
+            setShowLocationFailureToast={setShowLocationFailureToast}
+            setShowLocationAddedToast={setShowLocationAddedToast}
+          />
           <section className="flex flex-col">
             <IonButton
               // disabled={

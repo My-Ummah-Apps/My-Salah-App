@@ -11,9 +11,9 @@ import { LocationsDataObjTypeArr } from "../../../types/types";
 import AddLocationOptions from "../../AddLocationOptions";
 
 interface BottomSheetAddLocationProps {
+  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showAddLocationSheet?: boolean;
-  dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
   >;
@@ -23,8 +23,13 @@ interface BottomSheetAddLocationProps {
 }
 
 const BottomSheetAddLocation = ({
+  dbConnection,
   setShowAddLocationSheet,
   showAddLocationSheet,
+  setUserLocations,
+  userLocations,
+  setShowLocationFailureToast,
+  setShowLocationAddedToast,
 }: BottomSheetAddLocationProps) => {
   return (
     <IonModal
@@ -52,7 +57,15 @@ const BottomSheetAddLocation = ({
           <IonTitle>Add Location</IonTitle>
         </IonToolbar>
       </IonHeader>
-      {showAddLocationSheet && <AddLocationOptions />}
+      {showAddLocationSheet && (
+        <AddLocationOptions
+          dbConnection={dbConnection}
+          setUserLocations={setUserLocations}
+          userLocations={userLocations}
+          setShowLocationFailureToast={setShowLocationFailureToast}
+          setShowLocationAddedToast={setShowLocationAddedToast}
+        />
+      )}
     </IonModal>
   );
 };

@@ -99,6 +99,11 @@ const App = () => {
   const [userPreferences, setUserPreferences] = useState<userPreferencesType>(
     dictPreferencesDefaultValues,
   );
+  const [showLocationFailureToast, setShowLocationFailureToast] =
+    useState<boolean>(false);
+  const [showLocationAddedToast, setShowLocationAddedToast] =
+    useState<boolean>(false);
+
   const [salahTimes, setSalahtimes] = useState({
     fajr: "",
     sunrise: "",
@@ -872,9 +877,10 @@ const App = () => {
                   setSalahtimes={setSalahtimes}
                   salahTimes={salahTimes}
                   nextSalahNameAndTime={nextSalahNameAndTime}
-                  // calculateActiveLocationSalahTimes={
-                  //   calculateActiveLocationSalahTimes
-                  // }
+                  setShowLocationFailureToast={setShowLocationFailureToast}
+                  showLocationFailureToast={showLocationFailureToast}
+                  setShowLocationAddedToast={setShowLocationAddedToast}
+                  showLocationAddedToast={showLocationAddedToast}
                 />
               )}
             />
@@ -908,7 +914,10 @@ const App = () => {
           dbConnection={dbConnection}
           setUserPreferences={setUserPreferences}
           userPreferences={userPreferences}
+          setUserLocations={setUserLocations}
           userLocations={userLocations}
+          setShowLocationFailureToast={setShowLocationFailureToast}
+          setShowLocationAddedToast={setShowLocationAddedToast}
         />
       )}
       {showMajorUpdateOverlay && (
