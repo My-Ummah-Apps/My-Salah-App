@@ -87,9 +87,12 @@ const Onboarding = ({
       <Swiper
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         style={{ margin: 0 }}
+        className="swiper"
         spaceBetween={50}
         slidesPerView={1}
         allowTouchMove={false}
+        pagination
+        navigation
         // navigation={{
         //   nextEl: ".swiper-button-next",
         //   prevEl: ".swiper-button-prev",
@@ -113,7 +116,10 @@ const Onboarding = ({
                 data from you and everything works completely offline.
               </p>
             </div>
-            <IonButton className="w-full" onClick={switchToNextPage}>
+            <IonButton
+              className="absolute bottom-0 w-full"
+              onClick={switchToNextPage}
+            >
               <IonIcon slot="end" icon={arrowForwardOutline} />
               Bismillah, Lets Go!
             </IonButton>
@@ -206,7 +212,7 @@ const Onboarding = ({
               onClick={async () => {
                 switchToNextPage();
               }}
-              className="mb-4"
+              className="absolute bottom-0 w-full mb-4"
             >
               Next
             </IonButton>
@@ -233,7 +239,7 @@ const Onboarding = ({
               onClick={async () => {
                 switchToNextPage();
               }}
-              className="mb-4"
+              className="absolute bottom-0 w-full mb-4"
             >
               Next
             </IonButton>
@@ -254,7 +260,7 @@ const Onboarding = ({
               onClick={async () => {
                 switchToNextPage();
               }}
-              className="mb-4"
+              className="absolute bottom-0 w-full mb-4"
             >
               Next
             </IonButton>

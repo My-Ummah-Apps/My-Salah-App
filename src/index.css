@@ -132,6 +132,14 @@ body:-webkit-scrollbar {
   transform: translate(-50%, -50%) !important;
 }
 
+.swiper .swiper-pagination {
+  top: 0;
+  bottom: auto;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+}
+
 input:focus,
 button:focus {
   outline: none;
