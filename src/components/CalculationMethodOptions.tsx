@@ -1,5 +1,6 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
+  IonContent,
   IonIcon,
   IonLabel,
   IonSegment,
@@ -24,7 +25,7 @@ interface CalculationMethodOptionsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
   setSegmentOption: React.Dispatch<React.SetStateAction<"manual" | "country">>;
   segmentOption: "manual" | "country";
 }
@@ -201,7 +202,7 @@ const CalculationMethodOptions = ({
   };
 
   return (
-    <>
+    <IonContent>
       <div className="mb-10">
         {" "}
         <IonSegment
@@ -268,7 +269,7 @@ const CalculationMethodOptions = ({
         </section>
       )}
       {segmentOption === "manual" && (
-        <section className="px-4">
+        <section className="px-4 mb-[15rem]">
           {calculationMethodsDetails.map((item, i) => {
             return (
               <div
@@ -318,7 +319,7 @@ const CalculationMethodOptions = ({
           })}
         </section>
       )}
-    </>
+    </IonContent>
   );
 };
 

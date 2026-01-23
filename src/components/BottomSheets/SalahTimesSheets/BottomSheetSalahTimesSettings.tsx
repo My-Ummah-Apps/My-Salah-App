@@ -35,7 +35,7 @@ interface BottomSheetSalahTimesSettingsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
 
   // calculateActiveLocationSalahTimes: () => Promise<void>;
 }

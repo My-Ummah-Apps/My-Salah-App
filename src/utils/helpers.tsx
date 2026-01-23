@@ -278,6 +278,8 @@ export const scheduleSalahTimesNotifications = async (
 ) => {
   await cancelSalahReminderNotifications(salahName);
 
+  console.log("Scheduling notifications for: ", salahName);
+
   const now = new Date();
 
   const customAdjustment = Number(
@@ -343,10 +345,10 @@ export const scheduleSalahTimesNotifications = async (
     }
   }
 
-  // console.log(
-  //   "PENDING NOTIFICATIONS: ",
-  //   (await LocalNotifications.getPending()).notifications,
-  // );
+  console.log(
+    "PENDING NOTIFICATIONS: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 const generateActiveLocationParams = async (
@@ -529,4 +531,30 @@ export const getNextSalah = async (
     hoursRemaining: hours,
     minsRemaining: minutes,
   };
+};
+
+export const handleNotificationPermissions = async () => {
+  const userNotificationPermission = await checkNotificationPermissions();
+
+  if (userNotificationPermission === "denied") {
+    await promptToOpenDeviceSettings(
+      `Notifications are turned off`,
+      `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
+      AndroidSettings.AppNotification,
+    );
+    return "denied";
+  } else if (userNotificationPermission === "granted") {
+    return "granted";
+  } else if (
+    userNotificationPermission === "prompt" ||
+    userNotificationPermission === "prompt-with-rationale"
+  ) {
+    const requestPermission = await LocalNotifications.requestPermissions();
+
+    if (requestPermission.display === "granted") {
+      return "granted";
+    } else if (requestPermission.display === "denied") {
+      return "denied";
+    }
+  }
 };

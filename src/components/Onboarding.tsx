@@ -3,7 +3,12 @@ import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { LATEST_APP_VERSION } from "../utils/changelog";
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
-import { updateUserPrefs, scheduleDailyNotification } from "../utils/helpers";
+import {
+  updateUserPrefs,
+  scheduleDailyNotification,
+  handleNotificationPermissions,
+  scheduleSalahTimesNotifications,
+} from "../utils/helpers";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -25,7 +30,7 @@ interface OnboardingProps {
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
   >;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -67,7 +72,7 @@ const Onboarding = ({
         backgroundColor: "rgb(27, 27, 28)",
         color: "#fff",
         zIndex: 9999,
-        padding: 20,
+        // padding: 20,
         overflowY: "auto",
         paddingTop: "calc(env(safe-area-inset-top) + 20px)",
         paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)",
@@ -268,17 +273,56 @@ const Onboarding = ({
         </SwiperSlide>
         <SwiperSlide>
           <section className="m-4 text-center">
-            <h1 className="mb-2 text-2xl font-bold">Notifications</h1>
-            <p>Per Salah Notifications</p>
+            <h1 className="mb-2 text-2xl font-bold">Salah time reminders</h1>
+            <p>
+              Get a notification when each prayer time begins. Sound will be
+              silent by default, you can enable adhan later.
+            </p>
           </section>
           <section className="flex flex-col ">
             <IonButton
               onClick={async () => {
+                const res = await handleNotificationPermissions();
+                if (res === "granted") {
+                  const notifications = [
+                    "fajrNotification",
+                    "dhuhrNotification",
+                    "asrNotification",
+                    "maghribNotification",
+                    "ishaNotification",
+                  ] as const;
+
+                  for (const notification of notifications) {
+                    await updateUserPrefs(
+                      dbConnection,
+                      notification,
+                      "on",
+                      setUserPreferences,
+                    );
+                  }
+
+                  const salahs = [
+                    "fajr",
+                    "dhuhr",
+                    "asr",
+                    "maghrib",
+                    "isha",
+                  ] as const;
+
+                  for (const salah of salahs) {
+                    await scheduleSalahTimesNotifications(
+                      userLocations,
+                      salah,
+                      userPreferences,
+                      "on",
+                    );
+                  }
+                }
                 switchToNextPage();
               }}
               className="mb-4"
             >
-              Yes
+              Allow
             </IonButton>
             <IonButton
               fill="clear"
@@ -287,7 +331,7 @@ const Onboarding = ({
               }}
               className="text-white mb-2text-center rounded-2xl"
             >
-              No
+              Skip
             </IonButton>
           </section>
         </SwiperSlide>

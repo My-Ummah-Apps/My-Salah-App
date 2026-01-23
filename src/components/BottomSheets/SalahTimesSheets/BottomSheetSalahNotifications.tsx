@@ -39,7 +39,7 @@ interface BottomSheetSalahNotificationsProps {
   selectedSalah: SalahNamesTypeAdhanLibrary;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
 }
 
 const BottomSheetSalahNotifications = ({

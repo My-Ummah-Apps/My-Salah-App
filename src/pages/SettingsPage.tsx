@@ -47,7 +47,7 @@ interface SettingsPageProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showSalahTimesSettingsSheet: boolean;
   userPreferences: userPreferencesType;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
 }
 
 const SettingsPage = ({

@@ -31,16 +31,13 @@ import {
 import { useState } from "react";
 import Toast from "../components/Toast";
 import {
-  checkNotificationPermissions,
   getSalahTimes,
-  promptToOpenDeviceSettings,
+  handleNotificationPermissions,
   upperCaseFirstLetter,
 } from "../utils/helpers";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
-import { AndroidSettings } from "capacitor-native-settings";
-import { LocalNotifications } from "@capacitor/local-notifications";
 import { addDays, isSameDay } from "date-fns";
 import { prayerCalculationMethodLabels } from "../utils/constants";
 
@@ -51,7 +48,7 @@ interface SalahTimesPageProps {
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
   >;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
   salahTimes: salahTimesObjType;
   nextSalahNameAndTime: nextSalahTimeType;
@@ -87,32 +84,6 @@ const SalahTimesPage = ({
   useIonViewWillLeave(() => {
     setDateToShow(new Date());
   });
-
-  const handleNotificationPermissions = async () => {
-    const userNotificationPermission = await checkNotificationPermissions();
-
-    if (userNotificationPermission === "denied") {
-      await promptToOpenDeviceSettings(
-        `Notifications are turned off`,
-        `You currently have notifications turned off for this application, you can open Settings to re-enable them`,
-        AndroidSettings.AppNotification,
-      );
-      return "denied";
-    } else if (userNotificationPermission === "granted") {
-      return "granted";
-    } else if (
-      userNotificationPermission === "prompt" ||
-      userNotificationPermission === "prompt-with-rationale"
-    ) {
-      const requestPermission = await LocalNotifications.requestPermissions();
-
-      if (requestPermission.display === "granted") {
-        return "granted";
-      } else if (requestPermission.display === "denied") {
-        return "denied";
-      }
-    }
-  };
 
   return (
     <IonPage>

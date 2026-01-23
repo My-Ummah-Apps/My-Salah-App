@@ -17,7 +17,7 @@ interface BottomSheetAddLocationProps {
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
   >;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
 }

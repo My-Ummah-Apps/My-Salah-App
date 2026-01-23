@@ -44,7 +44,7 @@ interface BottomSheetSalahTimesSettingsProps {
   >;
   setShowLocationsListSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showLocationsListSheet: boolean;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showAddLocationSheet: boolean;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;

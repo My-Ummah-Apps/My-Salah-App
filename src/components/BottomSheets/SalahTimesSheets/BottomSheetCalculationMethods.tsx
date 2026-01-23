@@ -1,5 +1,4 @@
 import {
-  IonContent,
   IonHeader,
   IonModal,
   IonTitle,
@@ -27,7 +26,7 @@ interface BottomSheetCalculationMethodsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  userLocations: LocationsDataObjTypeArr | undefined;
+  userLocations: LocationsDataObjTypeArr;
 }
 
 const BottomSheetCalculationMethods = ({
@@ -60,16 +59,15 @@ const BottomSheetCalculationMethods = ({
           <IonTitle className="">Calculation Methods</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <CalculationMethodOptions
-          dbConnection={dbConnection}
-          setSegmentOption={setSegmentOption}
-          segmentOption={segmentOption}
-          setUserPreferences={setUserPreferences}
-          userPreferences={userPreferences}
-          userLocations={userLocations}
-        />
-      </IonContent>
+
+      <CalculationMethodOptions
+        dbConnection={dbConnection}
+        setSegmentOption={setSegmentOption}
+        segmentOption={segmentOption}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
+        userLocations={userLocations}
+      />
     </IonModal>
   );
 };
