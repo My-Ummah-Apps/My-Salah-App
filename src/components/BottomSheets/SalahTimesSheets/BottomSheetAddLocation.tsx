@@ -78,7 +78,7 @@ const BottomSheetAddLocation = ({
   type modeType = "gps" | "manualCitySearch" | "manualCoords" | null;
 
   const [presentLocationSpinner, dismissLocationSpinner] = useIonLoading();
-  const [showLocationDetailsInput, setShowLocationDetailsInput] =
+  const [showAddLocationForm, setShowAddLocationForm] =
     useState<boolean>(false);
   const [locationName, setLocationName] = useState("");
   const [showError, setShowError] = useState({
@@ -132,7 +132,7 @@ const BottomSheetAddLocation = ({
   };
 
   const handleInputPromptDismissed = () => {
-    setShowLocationDetailsInput(false);
+    setShowAddLocationForm(false);
     setLocationName("");
     setCoords({ latitude: null, longitude: null });
     setShowError({
@@ -148,7 +148,6 @@ const BottomSheetAddLocation = ({
 
   const handleGrantedPermission = async () => {
     try {
-      // throw new Error("ERROR THROWN");
       const location = await Geolocation.getCurrentPosition();
 
       setCoords({
@@ -157,7 +156,7 @@ const BottomSheetAddLocation = ({
       });
 
       dismissLocationSpinner();
-      setShowLocationDetailsInput(true);
+      setShowAddLocationForm(true);
     } catch (error) {
       console.log("Failed to obtain location");
       setShowLocationFailureToast(true);
@@ -244,7 +243,7 @@ const BottomSheetAddLocation = ({
         </IonToolbar>
       </IonHeader>
       <AnimatePresence>
-        {showLocationDetailsInput && (
+        {showAddLocationForm && (
           <motion.section
             initial={{ x: "50%", opacity: 0 }}
             animate={{ x: "-50%", opacity: 1 }}
@@ -539,9 +538,9 @@ const BottomSheetAddLocation = ({
         )}
       </AnimatePresence>
       <motion.section
-        animate={{ opacity: showLocationDetailsInput ? 0 : 1 }}
+        animate={{ opacity: showAddLocationForm ? 0 : 1 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        // className={`${showLocationDetailsInput ? "opacity-0" : "opacity-100"}`}
+        // className={`${showAddLocationForm ? "opacity-0" : "opacity-100"}`}
       >
         <div className="px-2 mx-5 mb-4 text-sm text-center">
           <p>
@@ -556,7 +555,7 @@ const BottomSheetAddLocation = ({
           <div
             className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
             onClick={async () => {
-              if (showLocationDetailsInput) return;
+              if (showAddLocationForm) return;
 
               setMode("gps");
               presentLocationSpinner({
@@ -586,9 +585,9 @@ const BottomSheetAddLocation = ({
           <div
             className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
             onClick={() => {
-              if (showLocationDetailsInput) return;
+              if (showAddLocationForm) return;
               setMode("manualCoords");
-              setShowLocationDetailsInput(true);
+              setShowAddLocationForm(true);
             }}
           >
             <div className="mr-2">
@@ -606,9 +605,9 @@ const BottomSheetAddLocation = ({
           <div
             className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
             onClick={() => {
-              if (showLocationDetailsInput) return;
-              setShowLocationDetailsInput(true);
-              setMode(null);
+              if (showAddLocationForm) return;
+              setShowAddLocationForm(true);
+              setMode("manualCitySearch");
             }}
           >
             <div className="mr-2">
