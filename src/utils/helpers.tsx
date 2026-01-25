@@ -232,10 +232,6 @@ export const scheduleDailyNotification = async (
   hour: number,
   minute: number,
 ) => {
-  // if (device === "android") {
-  //   await createNotificationChannel();
-  // }
-
   await LocalNotifications.schedule({
     notifications: [
       {
@@ -278,13 +274,13 @@ export const scheduleSalahTimesNotifications = async (
 ) => {
   await cancelSalahReminderNotifications(salahName);
 
-  console.log("Scheduling notifications for: ", salahName);
+  // console.log("Scheduling notifications for: ", salahName);
 
   const now = new Date();
 
-  const customAdjustment = Number(
-    userPreferences[`${salahName}Adjustment` as keyof userPreferencesType],
-  );
+  // const customAdjustment = Number(
+  //   userPreferences[`${salahName}Adjustment` as keyof userPreferencesType],
+  // );
 
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
     return addDays(now, i);
@@ -308,19 +304,41 @@ export const scheduleSalahTimesNotifications = async (
 
     const arr = [];
 
+    console.log("params: ", params);
+
     for (let i = 0; i < nextSevenDays.length; i++) {
       const salahTime = new PrayerTimes(coordinates, nextSevenDays[i], params)[
         salahName
       ];
 
+      // console.log(
+      //   "new PrayerTimes(): ",
+      //   new PrayerTimes(coordinates, nextSevenDays[i], params),
+      // );
+
+      // if (salahName === "maghrib") {
+      //   console.log("salahName: ", salahName, "scheduling for: ", salahTime);
+      // }
+      // if (salahName === "dhuhr") {
+      //   console.log("salahName: ", salahName, "scheduling for: ", salahTime);
+      // }
+
       const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
 
       if (now < localisedSalahTime) {
-        arr.push(addMinutes(localisedSalahTime, customAdjustment));
+        // arr.push(addMinutes(localisedSalahTime, customAdjustment));
+        arr.push(localisedSalahTime);
       }
     }
 
     for (let i = 0; i < arr.length; i++) {
+      if (salahName === "maghrib") {
+        console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
+      }
+      if (salahName === "dhuhr") {
+        console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
+      }
+
       const uniqueId = generateNotificationId(salahName, arr[i]);
 
       await LocalNotifications.schedule({
@@ -382,15 +400,17 @@ const generateActiveLocationParams = async (
       userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
     ]();
 
+  // console.log("params before amendments:", params);
+
   params.madhab = userPreferences.madhab;
   params.highLatitudeRule = userPreferences.highLatitudeRule;
   params.fajrAngle = Number(userPreferences.fajrAngle);
   params.ishaAngle = Number(userPreferences.ishaAngle);
-  params.methodAdjustments.fajr = Number(userPreferences.fajrAdjustment);
-  params.methodAdjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
-  params.methodAdjustments.asr = Number(userPreferences.asrAdjustment);
-  params.methodAdjustments.maghrib = Number(userPreferences.maghribAdjustment);
-  params.methodAdjustments.isha = Number(userPreferences.ishaAdjustment);
+  params.adjustments.fajr = Number(userPreferences.fajrAdjustment);
+  params.adjustments.dhuhr = Number(userPreferences.dhuhrAdjustment);
+  params.adjustments.asr = Number(userPreferences.asrAdjustment);
+  params.adjustments.maghrib = Number(userPreferences.maghribAdjustment);
+  params.adjustments.isha = Number(userPreferences.ishaAdjustment);
   params.shafaq = userPreferences.shafaqRule;
   params.polarCircleResolution = userPreferences.polarCircleResolution;
 
@@ -407,6 +427,10 @@ export const extractSalahTime = (
   userPreferences: userPreferencesType,
 ) => {
   const salahTime = new PrayerTimes(coordinates, date, params)[salah];
+
+  // if (salah === "maghrib") {
+  //   console.log("Salah name: ", salah, "Salah Time: ", salahTime);
+  // }
 
   const locale = navigator.language;
 
@@ -430,11 +454,15 @@ export const getSalahTimes = async (
     userPreferences,
   );
 
+  // console.log("RESULT IN GETSALAHTIMES: ", result);
+
   if (!result) return;
 
   const { params, coordinates } = result;
 
   if (!params || !coordinates || !date) return;
+
+  // console.log("PARAMS IN GET: ", params);
 
   setSalahtimes({
     fajr: extractSalahTime("fajr", coordinates, date, params, userPreferences),
