@@ -242,20 +242,30 @@ const App = () => {
       if (isPlatform("android")) {
         await LocalNotifications.createChannel({
           id: "daily-reminder",
-          name: "Reminders",
+          name: "Daily Reminder",
           importance: 4,
-          description: "General reminders",
+          description: "Daily reminder to log prayers",
           sound: "default",
           visibility: 1,
           vibration: true,
         });
 
         await LocalNotifications.createChannel({
-          id: "salah-reminders-with-adhan",
-          name: "Salah reminders with adhan",
+          id: "dhuhr-asr-maghrib-isha-reminders-with-adhan",
+          name: "Salah reminders (Adhan)",
           importance: 4,
-          description: "Salah reminders",
+          description: "Adhan for Dhuhr, Asr, Maghrib and Isha",
           sound: "adhan.mp3",
+          visibility: 1,
+          vibration: true,
+        });
+
+        await LocalNotifications.createChannel({
+          id: "fajr-reminder-with-adhan",
+          name: "Fajr Adhan",
+          importance: 4,
+          description: "Fajr adhan reminder",
+          sound: "adhan_fajr.mp3",
           visibility: 1,
           vibration: true,
         });

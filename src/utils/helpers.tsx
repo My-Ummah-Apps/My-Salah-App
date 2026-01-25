@@ -289,9 +289,11 @@ export const scheduleSalahTimesNotifications = async (
 
   const sound =
     setting === "adhan"
-      ? device === "android"
-        ? "adhan.mp3"
-        : "adhan.wav"
+      ? device === "android" && salahName === "fajr"
+        ? "adhan_fajr.mp3"
+        : device === "android" && salahName !== "fajr"
+          ? "adhan.mp3"
+          : "adhan.wav"
       : "default";
 
   if (setting === "on" || setting === "adhan") {
@@ -347,6 +349,18 @@ export const scheduleSalahTimesNotifications = async (
           ? "The sun is rising"
           : `It's time to pray ${upperCaseFirstLetter(salahName)}`;
 
+      // const channelId =
+      //   setting === "adhan" && salahName == "fajr"
+      //     ? "salah-reminders-with-adhan"
+      //     : "salah-reminders-without-adhan";
+
+      const channelId =
+        setting === "adhan" && salahName === "fajr"
+          ? "fajr-reminder-with-adhan"
+          : setting === "adhan" && salahName !== "fajr"
+            ? "dhuhr-asr-maghrib-isha-reminders-with-adhan"
+            : "salah-reminders-without-adhan";
+
       await LocalNotifications.schedule({
         notifications: [
           {
@@ -359,10 +373,7 @@ export const scheduleSalahTimesNotifications = async (
               repeats: false,
             },
             sound: sound,
-            channelId:
-              setting === "adhan"
-                ? "salah-reminders-with-adhan"
-                : "salah-reminders-without-adhan",
+            channelId: channelId,
           },
         ],
       });
