@@ -54,6 +54,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   maghribAdjustment: "0",
   ishaAdjustment: "0",
   fajrNotification: "off",
+  sunriseNotification: "off",
   dhuhrNotification: "off",
   asrNotification: "off",
   maghribNotification: "off",

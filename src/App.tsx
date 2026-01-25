@@ -305,6 +305,7 @@ const App = () => {
     const scheduleSalahNotifications = async () => {
       const salahs: SalahNamesTypeAdhanLibrary[] = [
         "fajr",
+        "sunrise",
         "dhuhr",
         "asr",
         "maghrib",

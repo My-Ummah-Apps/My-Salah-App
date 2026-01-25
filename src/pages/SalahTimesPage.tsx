@@ -288,7 +288,6 @@ const SalahTimesPage = ({
               Object.entries(salahTimes) as [keyof typeof salahTimes, string][]
             ).map(([name, time]) => (
               <div
-                // && name !== "sunrise"
                 className={`bg-[var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg ${
                   name === nextSalahNameAndTime.currentSalah &&
                   name !== "sunrise"
@@ -305,10 +304,8 @@ const SalahTimesPage = ({
                       : time}
                   </p>
                   <IonButton
-                    className={name === "sunrise" ? "opacity-0" : "opacity-100"}
                     onClick={async () => {
                       if (
-                        name === "sunrise" ||
                         userPreferences.prayerCalculationMethod === null ||
                         userPreferences.prayerCalculationMethod === "" ||
                         userLocations?.length === 0
@@ -330,23 +327,11 @@ const SalahTimesPage = ({
                     <IonIcon
                       className="text-[var(--ion-text-color)]"
                       icon={
-                        userPreferences[
-                          `${
-                            name as Exclude<typeof name, "sunrise">
-                          }Notification`
-                        ] === "off"
+                        userPreferences[`${name}Notification`] === "off"
                           ? notificationsOff
-                          : userPreferences[
-                                `${
-                                  name as Exclude<typeof name, "sunrise">
-                                }Notification`
-                              ] === "on"
+                          : userPreferences[`${name}Notification`] === "on"
                             ? notifications
-                            : userPreferences[
-                                  `${
-                                    name as Exclude<typeof name, "sunrise">
-                                  }Notification`
-                                ] === "adhan"
+                            : userPreferences[`${name}Notification`] === "adhan"
                               ? megaphone
                               : ""
                       }

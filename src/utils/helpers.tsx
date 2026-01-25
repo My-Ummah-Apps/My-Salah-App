@@ -16,7 +16,7 @@ import {
   PrayerTimes,
 } from "adhan";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { addDays, addMinutes, format, isValid, parse } from "date-fns";
+import { addDays, format, isValid, parse } from "date-fns";
 import { Toast } from "@capacitor/toast";
 import { Dialog } from "@capacitor/dialog";
 import { Capacitor } from "@capacitor/core";
@@ -180,10 +180,11 @@ export const cancelSalahReminderNotifications = async (
 
 const salahIdMap = {
   fajr: 1,
-  dhuhr: 2,
-  asr: 3,
-  maghrib: 4,
-  isha: 5,
+  sunrise: 2,
+  dhuhr: 3,
+  asr: 4,
+  maghrib: 5,
+  isha: 6,
 };
 
 const generateNotificationId = (
@@ -304,7 +305,7 @@ export const scheduleSalahTimesNotifications = async (
 
     const arr = [];
 
-    console.log("params: ", params);
+    // console.log("params: ", params);
 
     for (let i = 0; i < nextSevenDays.length; i++) {
       const salahTime = new PrayerTimes(coordinates, nextSevenDays[i], params)[
@@ -332,21 +333,26 @@ export const scheduleSalahTimesNotifications = async (
     }
 
     for (let i = 0; i < arr.length; i++) {
-      if (salahName === "maghrib") {
-        console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
-      }
-      if (salahName === "dhuhr") {
-        console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
-      }
+      // if (salahName === "maghrib") {
+      //   console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
+      // }
+      // if (salahName === "dhuhr") {
+      //   console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
+      // }
 
       const uniqueId = generateNotificationId(salahName, arr[i]);
+
+      const notificationMsg =
+        salahName === "sunrise"
+          ? "The sun is rising"
+          : `It's time to pray ${upperCaseFirstLetter(salahName)}`;
 
       await LocalNotifications.schedule({
         notifications: [
           {
             id: uniqueId,
-            title: `${salahName}`,
-            body: `It's time to pray ${upperCaseFirstLetter(salahName)}`,
+            title: `${upperCaseFirstLetter(salahName)}`,
+            body: notificationMsg,
             schedule: {
               at: arr[i],
               allowWhileIdle: true,

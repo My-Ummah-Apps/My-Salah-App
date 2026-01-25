@@ -185,63 +185,66 @@ const BottomSheetSalahNotifications = ({
             <IonIcon icon={notifications} />
           </div>
         </div>
-        <div
-          onClick={async () => {
-            if (!userLocations) {
-              console.error("userLocations is undefined");
-              return;
-            }
-
-            await cancelSalahReminderNotifications(selectedSalah);
-
-            await updateUserPrefs(
-              dbConnection,
-              key,
-              "adhan",
-              setUserPreferences,
-            );
-
-            await scheduleSalahTimesNotifications(
-              userLocations,
-              selectedSalah,
-              userPreferences,
-              "adhan",
-            );
-
-            await handleBatteryOptimisation();
-          }}
-          className={`options-wrap justify-between ${
-            userPreferences[key as keyof userPreferencesType] === "adhan"
-              ? "border-blue-500"
-              : "border-transparent"
-          }`}
-        >
-          <div className="flex">
-            <div className="mr-2">
-              <IonIcon
-                color="primary"
-                className={` ${
-                  userPreferences[key as keyof userPreferencesType] === "adhan"
-                    ? "opacity-100"
-                    : "opacity-0"
-                }`}
-                icon={checkmarkCircle}
-              />
-            </div>
-            <div>
-              <p className="mt-0">Athan</p>
-              <p className="text-xs">
-                Athan by Mishary Rashid Al-Afasy + banner notification
-              </p>
-            </div>
-          </div>
+        {selectedSalah !== "sunrise" && (
           <div
-            // className="flex items-center mr-4"
-            className="flex items-center "
+            onClick={async () => {
+              if (!userLocations) {
+                console.error("userLocations is undefined");
+                return;
+              }
+
+              await cancelSalahReminderNotifications(selectedSalah);
+
+              await updateUserPrefs(
+                dbConnection,
+                key,
+                "adhan",
+                setUserPreferences,
+              );
+
+              await scheduleSalahTimesNotifications(
+                userLocations,
+                selectedSalah,
+                userPreferences,
+                "adhan",
+              );
+
+              await handleBatteryOptimisation();
+            }}
+            className={`options-wrap justify-between ${
+              userPreferences[key as keyof userPreferencesType] === "adhan"
+                ? "border-blue-500"
+                : "border-transparent"
+            }`}
           >
-            <IonIcon icon={megaphone} />
+            <div className="flex">
+              <div className="mr-2">
+                <IonIcon
+                  color="primary"
+                  className={` ${
+                    userPreferences[key as keyof userPreferencesType] ===
+                    "adhan"
+                      ? "opacity-100"
+                      : "opacity-0"
+                  }`}
+                  icon={checkmarkCircle}
+                />
+              </div>
+              <div>
+                <p className="mt-0">Athan</p>
+                <p className="text-xs">
+                  Athan by Mishary Rashid Al-Afasy + banner notification
+                </p>
+              </div>
+            </div>
+            <div
+              // className="flex items-center mr-4"
+              className="flex items-center "
+            >
+              <IonIcon icon={megaphone} />
+            </div>
           </div>
-        </div>
+        )}
       </section>
       {/* </IonContent> */}
     </IonModal>

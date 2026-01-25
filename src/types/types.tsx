@@ -63,6 +63,7 @@ export interface userPreferencesType {
   ishaAdjustment: string;
   shafaqRule: "general" | "ahmer" | "abyad";
   fajrNotification: SalahNotificationSettings;
+  sunriseNotification: SalahNotificationSettings;
   dhuhrNotification: SalahNotificationSettings;
   asrNotification: SalahNotificationSettings;
   maghribNotification: SalahNotificationSettings;
@@ -132,6 +133,7 @@ export type SalahNamesType =
 
 export type SalahNamesTypeAdhanLibrary =
   | "fajr"
+  | "sunrise"
   | "dhuhr"
   | "asr"
   | "maghrib"
