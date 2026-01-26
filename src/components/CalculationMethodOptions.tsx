@@ -172,11 +172,11 @@ const CalculationMethodOptions = ({
         highLatitudeRule: HighLatitudeRule.recommended(coordinates),
         fajrAngle: String(params.fajrAngle),
         ishaAngle: String(params.ishaAngle),
-        fajrAdjustment: String(params.methodAdjustments.fajr),
-        dhuhrAdjustment: String(params.methodAdjustments.dhuhr),
-        asrAdjustment: String(params.methodAdjustments.asr),
-        maghribAdjustment: String(params.methodAdjustments.maghrib),
-        ishaAdjustment: String(params.methodAdjustments.isha),
+        fajrAdjustment: "0",
+        dhuhrAdjustment: "0",
+        asrAdjustment: "0",
+        maghribAdjustment: "0",
+        ishaAdjustment: "0",
       };
 
       const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;

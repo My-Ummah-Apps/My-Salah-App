@@ -291,13 +291,12 @@ const App = () => {
 
   useEffect(() => {
     if (
-      !isDatabaseInitialised
+      !isDatabaseInitialised ||
+      userLocations.length === 0
       // ||  userPreferences.prayerCalculationMethod === ""
     ) {
       return;
     }
-
-    if (userLocations.length === 0) return;
 
     const todaysDate = new Date();
 
@@ -321,6 +320,13 @@ const App = () => {
         "maghrib",
         "isha",
       ];
+
+      // await cancelSalahReminderNotifications("fajr");
+      // await cancelSalahReminderNotifications("sunrise");
+      // await cancelSalahReminderNotifications("dhuhr");
+      // await cancelSalahReminderNotifications("asr");
+      // await cancelSalahReminderNotifications("maghrib");
+      // await cancelSalahReminderNotifications("isha");
 
       for (let i = 0; i < salahs.length; i++) {
         const salahAdjustmentKey = `${salahs[i]}Notification`;

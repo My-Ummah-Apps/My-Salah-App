@@ -380,10 +380,10 @@ export const scheduleSalahTimesNotifications = async (
     }
   }
 
-  console.log(
-    "PENDING NOTIFICATIONS: ",
-    (await LocalNotifications.getPending()).notifications,
-  );
+  // console.log(
+  //   "PENDING NOTIFICATIONS: ",
+  //   (await LocalNotifications.getPending()).notifications,
+  // );
 };
 
 const generateActiveLocationParams = async (
@@ -602,4 +602,10 @@ export const handleNotificationPermissions = async () => {
       return "denied";
     }
   }
+};
+
+export const formatNumberWithSign = (number: number) => {
+  if (number > 0) return `+${number}`;
+  if (number < 0) return `${number}`;
+  return 0;
 };

@@ -27,7 +27,12 @@ import BottomSheetSalahTimeCustomAdjustments from "./BottomSheetSalahTimeCustomA
 import BottomSheetShafaqRules from "./BottomSheetShafaqRule";
 import BottomSheetMadhabOptions from "./BottomSheetMadhabOptions";
 import BottomSheetPolarCircleSetting from "./BottomSheetPolarCircleSetting";
-import { updateUserPrefs, upperCaseFirstLetter } from "../../../utils/helpers";
+import {
+  formatNumberWithSign,
+  updateUserPrefs,
+  upperCaseFirstLetter,
+} from "../../../utils/helpers";
+import { CalculationMethod } from "adhan";
 
 interface BottomSheetSalahTimesSettingsProps {
   setShowSalahTimesSettingsSheet: React.Dispatch<React.SetStateAction<boolean>>;
@@ -107,6 +112,28 @@ BottomSheetSalahTimesSettingsProps) => {
     minHeight: "0",
   };
 
+  const getDefaultAdjustments = () => {
+    // if (userPreferences.prayerCalculationMethod === "") return;
+
+    const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
+
+    const obj: {
+      fajrAdjustment: number;
+      dhuhrAdjustment: number;
+      asrAdjustment: number;
+      maghribAdjustment: number;
+      ishaAdjustment: number;
+    } = {
+      fajrAdjustment: params.methodAdjustments.fajr,
+      dhuhrAdjustment: params.methodAdjustments.dhuhr,
+      asrAdjustment: params.methodAdjustments.asr,
+      maghribAdjustment: params.methodAdjustments.maghrib,
+      ishaAdjustment: params.methodAdjustments.isha,
+    };
+
+    return obj;
+  };
+
   return (
     <IonModal
       mode="ios"
@@ -155,9 +182,6 @@ BottomSheetSalahTimesSettingsProps) => {
                         userPreferences.prayerCalculationMethod
                       ]}
                 </p>
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -178,9 +202,6 @@ BottomSheetSalahTimesSettingsProps) => {
                     ? "Earlier Asr"
                     : "Later Asr"}
                 </p>
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -209,7 +230,7 @@ BottomSheetSalahTimesSettingsProps) => {
         <p className="text-[var(--ion-text-color)] mx-4 mt-7 font-light text-center">
           Advanced Settings
         </p>
-        <p className="text-[var(--ion-text-color)] text-xs mx-4 mb-1 font-thin text-center ">
+        <p className="text-[var(--ion-text-color)] text-xs mx-4 mb-1 opacity-50 text-center ">
           Overrides for experienced users. Changing these values replaces the
           calculation method’s defaults.
         </p>
@@ -228,18 +249,10 @@ BottomSheetSalahTimesSettingsProps) => {
               <p className="">High Latitude Rule:</p>
               <div className="flex items-center gap-1">
                 <p>{latitudeRuleValues[userPreferences.highLatitudeRule]}</p>
-                {/* <p>
-                  {CalculationMethod[
-                    selectedCalculationMethod || "MuslimWorldLeague"
-                  ]().highLatitudeRule.toString()}
-                </p> */}
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
-          <p className="text-[var(--ion-text-color)] ml-1 mt-5 font-thin text-sm text-left">
+          <p className="text-[var(--ion-text-color)] ml-1 mt-5  opacity-50 text-sm text-left">
             Fajr / Isha Angles
           </p>
           <IonButton
@@ -258,9 +271,6 @@ BottomSheetSalahTimesSettingsProps) => {
               <p className="">Fajr Angle:</p>
               <div className="flex items-center gap-1">
                 <p>{userPreferences.fajrAngle}</p>
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -281,14 +291,11 @@ BottomSheetSalahTimesSettingsProps) => {
               <p className="">Isha Angle:</p>
               <div className="flex items-center gap-1">
                 <p>{userPreferences.ishaAngle}</p>
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
         </section>
-        <p className="text-[var(--ion-text-color)] ml-3 mt-5 font-thin text-sm text-left">
+        <p className="text-[var(--ion-text-color)] ml-3 mt-5 opacity-50 text-sm text-left">
           Custom Adjustments
         </p>
         <section className="mx-2 mt-2">
@@ -309,19 +316,14 @@ BottomSheetSalahTimesSettingsProps) => {
               <div className="flex items-center gap-1">
                 <p>
                   {" "}
-                  {userPreferences.fajrAdjustment}{" "}
+                  {formatNumberWithSign(
+                    Number(userPreferences.fajrAdjustment) +
+                      getDefaultAdjustments().fajrAdjustment,
+                  )}{" "}
                   {userPreferences.fajrAdjustment === "1"
                     ? "minute"
                     : "minutes"}
                 </p>
-                {/* <p>
-                  {CalculationMethod[
-                    selectedCalculationMethod || "MuslimWorldLeague"
-                  ]().highLatitudeRule.toString()}
-                </p> */}
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -342,7 +344,10 @@ BottomSheetSalahTimesSettingsProps) => {
               <div className="flex items-center gap-1">
                 <p>
                   {" "}
-                  {userPreferences.dhuhrAdjustment}{" "}
+                  {formatNumberWithSign(
+                    Number(userPreferences.dhuhrAdjustment) +
+                      getDefaultAdjustments().dhuhrAdjustment,
+                  )}{" "}
                   {userPreferences.dhuhrAdjustment === "1"
                     ? "minute"
                     : "minutes"}
@@ -370,12 +375,12 @@ BottomSheetSalahTimesSettingsProps) => {
               <div className="flex items-center gap-1">
                 <p>
                   {" "}
-                  {userPreferences.asrAdjustment}{" "}
+                  {formatNumberWithSign(
+                    Number(userPreferences.asrAdjustment) +
+                      getDefaultAdjustments().asrAdjustment,
+                  )}{" "}
                   {userPreferences.asrAdjustment === "1" ? "minute" : "minutes"}
                 </p>
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -396,14 +401,14 @@ BottomSheetSalahTimesSettingsProps) => {
               <div className="flex items-center gap-1">
                 <p>
                   {" "}
-                  {userPreferences.maghribAdjustment}{" "}
+                  {formatNumberWithSign(
+                    Number(userPreferences.maghribAdjustment) +
+                      getDefaultAdjustments().maghribAdjustment,
+                  )}{" "}
                   {userPreferences.maghribAdjustment === "1"
                     ? "minute"
                     : "minutes"}
                 </p>
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -425,14 +430,14 @@ BottomSheetSalahTimesSettingsProps) => {
               <p className="">Isha Adjustment:</p>
               <div className="flex items-center gap-1">
                 <p>
-                  {userPreferences.ishaAdjustment}{" "}
+                  {formatNumberWithSign(
+                    Number(userPreferences.ishaAdjustment) +
+                      getDefaultAdjustments().ishaAdjustment,
+                  )}{" "}
                   {userPreferences.ishaAdjustment === "1"
                     ? "minute"
                     : "minutes"}
                 </p>
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -440,7 +445,7 @@ BottomSheetSalahTimesSettingsProps) => {
         {userPreferences.prayerCalculationMethod ===
           "MoonsightingCommittee" && (
           <>
-            <p className="text-[var(--ion-text-color)] ml-3 mt-5 font-thin text-sm text-left">
+            <p className="text-[var(--ion-text-color)] ml-3 mt-5 opacity-50 text-sm text-left">
               Shafaq
             </p>
             <section className="mx-2">
@@ -460,16 +465,13 @@ BottomSheetSalahTimesSettingsProps) => {
                   <p className="">Shafaq Rule:</p>
                   <div className="flex items-center gap-1">
                     <p>{upperCaseFirstLetter(userPreferences.shafaqRule)}</p>
-                    {/* <p>
-                    <MdOutlineChevronRight />
-                  </p> */}
                   </div>
                 </div>
               </IonButton>
             </section>
           </>
         )}
-        <p className="text-[var(--ion-text-color)] ml-3 mt-5 font-thin text-sm text-left">
+        <p className="text-[var(--ion-text-color)] ml-3 mt-5 opacity-50 text-sm text-left">
           Polar
         </p>
         <section className="mx-2">
@@ -493,10 +495,6 @@ BottomSheetSalahTimesSettingsProps) => {
                     ]
                   }
                 </p>
-
-                {/* <p>
-                  <MdOutlineChevronRight />
-                </p> */}
               </div>
             </div>
           </IonButton>
@@ -532,6 +530,7 @@ BottomSheetSalahTimesSettingsProps) => {
         userPreferences={userPreferences}
       />
       <BottomSheetSalahTimeCustomAdjustments
+        getDefaultAdjustments={getDefaultAdjustments}
         setShowCustomAdjustmentsSheet={setShowCustomAdjustmentsSheet}
         showCustomAdjustmentsSheet={showCustomAdjustmentsSheet}
         customAdjustmentSalah={customAdjustmentSalah}

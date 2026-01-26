@@ -9,15 +9,22 @@ import {
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userPreferencesType } from "../../../types/types";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
-import { updateUserPrefs } from "../../../utils/helpers";
+import { formatNumberWithSign, updateUserPrefs } from "../../../utils/helpers";
 
 interface BottomSheetSalahTimeCustomAdjustmentsProps {
+  getDefaultAdjustments: () => {
+    fajrAdjustment: number;
+    dhuhrAdjustment: number;
+    asrAdjustment: number;
+    maghribAdjustment: number;
+    ishaAdjustment: number;
+  };
   setShowCustomAdjustmentsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showCustomAdjustmentsSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -32,6 +39,7 @@ interface BottomSheetSalahTimeCustomAdjustmentsProps {
 }
 
 const BottomSheetSalahTimeCustomAdjustments = ({
+  getDefaultAdjustments,
   showCustomAdjustmentsSheet,
   dbConnection,
   setUserPreferences,
@@ -39,9 +47,30 @@ const BottomSheetSalahTimeCustomAdjustments = ({
   setShowCustomAdjustmentsSheet,
   customAdjustmentSalah,
 }: BottomSheetSalahTimeCustomAdjustmentsProps) => {
-  const [increment, setIncrement] = useState(
-    userPreferences[customAdjustmentSalah],
+  const adjustmentValue = String(
+    Number(userPreferences[customAdjustmentSalah]) +
+      getDefaultAdjustments()[customAdjustmentSalah],
   );
+
+  const [increment, setIncrement] = useState(adjustmentValue);
+
+  useEffect(() => {
+    console.log(
+      "value: ",
+      String(
+        Number(userPreferences[customAdjustmentSalah]) +
+          getDefaultAdjustments()[customAdjustmentSalah],
+      ),
+    );
+
+    console.log("increment: ", increment);
+    setIncrement(
+      String(
+        Number(userPreferences[customAdjustmentSalah]) +
+          getDefaultAdjustments()[customAdjustmentSalah],
+      ),
+    );
+  }, [userPreferences, customAdjustmentSalah]);
 
   const salahMap = {
     fajrAdjustment: "Fajr Adjustment",
@@ -51,9 +80,9 @@ const BottomSheetSalahTimeCustomAdjustments = ({
     ishaAdjustment: "Isha Adjustment",
   };
 
-  const arr = [];
+  const customAdjustmentsArr = [];
   for (let i = -60; i <= 60; i++) {
-    arr.push(String(i));
+    customAdjustmentsArr.push(String(i));
   }
 
   return (
@@ -67,7 +96,7 @@ const BottomSheetSalahTimeCustomAdjustments = ({
         setIncrement(userPreferences[customAdjustmentSalah]);
       }}
       onWillDismiss={async () => {
-        console.log("customAdjustmentSalah: ", customAdjustmentSalah);
+        // console.log("customAdjustmentSalah: ", customAdjustmentSalah);
         // if (!customAdjustmentSalah) return;
         await updateUserPrefs(
           dbConnection,
@@ -95,13 +124,13 @@ const BottomSheetSalahTimeCustomAdjustments = ({
           value={increment}
           onIonChange={({ detail }) => {
             setIncrement(String(detail.value));
-            console.log("CHANGED");
+            // console.log("CHANGED");
           }}
         >
-          {arr.map((item) => {
+          {customAdjustmentsArr.map((item) => {
             return (
               <IonPickerColumnOption key={item} value={item}>
-                {item}
+                {formatNumberWithSign(Number(item))}
               </IonPickerColumnOption>
             );
           })}
