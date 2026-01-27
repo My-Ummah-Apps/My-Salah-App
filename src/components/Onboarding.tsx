@@ -16,7 +16,11 @@ import "swiper/css/pagination";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import appLogo from "/src/assets/images/icon-512.png";
 import { IonButton, IonIcon } from "@ionic/react";
-import { arrowForwardOutline, chevronBackOutline } from "ionicons/icons";
+import {
+  arrowForwardOutline,
+  checkmarkCircle,
+  chevronBackOutline,
+} from "ionicons/icons";
 import MadhabOptions from "./MadhabOptions";
 import CalculationMethodOptions from "./CalculationMethodOptions";
 import AddLocationOptions from "./AddLocationOptions";
@@ -26,6 +30,7 @@ interface OnboardingProps {
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
+  showOnboarding: boolean;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
@@ -40,6 +45,7 @@ const Onboarding = ({
   setUserPreferences,
   userPreferences,
   setShowOnboarding,
+  showOnboarding,
   setShowJoyRideEditIcon,
   setUserLocations,
   userLocations,
@@ -59,11 +65,13 @@ const Onboarding = ({
     "country",
   );
 
+  // const [isOnboarding, setIsOnboarding] = useState(false);
+
   return (
     <section
       style={{
         display: "flex",
-        // alignItems: "center",
+        alignItems: "center",
         position: "fixed",
         top: 0,
         left: 0,
@@ -123,7 +131,10 @@ const Onboarding = ({
             </div>
             <IonButton
               className="absolute bottom-0 w-full"
-              onClick={switchToNextPage}
+              onClick={() => {
+                switchToNextPage();
+                // setIsOnboarding(true);
+              }}
             >
               <IonIcon slot="end" icon={arrowForwardOutline} />
               Bismillah, Lets Go!
@@ -133,38 +144,78 @@ const Onboarding = ({
         <SwiperSlide>
           <section className="">
             <h1 className="text-4xl">I am a...</h1>
+            <section className="mx-4">
+              <div
+                onClick={async () => {
+                  await updateUserPrefs(
+                    dbConnection,
+                    "userGender",
+                    "male",
+                    setUserPreferences,
+                  );
+                }}
+                className={`options-wrap ${
+                  userPreferences.userGender === "male"
+                    ? "border-blue-500"
+                    : "border-transparent"
+                }`}
+              >
+                <div className="mr-2">
+                  <IonIcon
+                    color="primary"
+                    className={` ${
+                      userPreferences.userGender === "male"
+                        ? "opacity-100"
+                        : "opacity-0"
+                    }`}
+                    icon={checkmarkCircle}
+                  />
+                </div>
+
+                <div>
+                  <p className="mt-0">Male</p>
+                </div>
+              </div>
+
+              <div
+                onClick={async () => {
+                  await updateUserPrefs(
+                    dbConnection,
+                    "userGender",
+                    "female",
+                    setUserPreferences,
+                  );
+                }}
+                className={`options-wrap   ${
+                  userPreferences.userGender === "female"
+                    ? "border-blue-500"
+                    : "border-transparent"
+                }`}
+              >
+                <div className="mr-2">
+                  <IonIcon
+                    color="primary"
+                    className={` ${
+                      userPreferences.userGender === "female"
+                        ? "opacity-100"
+                        : "opacity-0"
+                    }`}
+                    icon={checkmarkCircle}
+                  />{" "}
+                </div>
+                <div>
+                  <p className="mt-0">Female</p>
+                </div>
+              </div>
+            </section>
             <IonButton
-              className="block my-4"
+              disabled={userPreferences.userGender === "" ? true : false}
               onClick={async () => {
                 switchToNextPage();
-                await updateUserPrefs(
-                  dbConnection,
-                  "userGender",
-                  "male",
-                  setUserPreferences,
-                );
-
-                localStorage.setItem("appVersion", LATEST_APP_VERSION);
               }}
+              className="absolute bottom-0 w-full mb-4"
             >
-              Brother
-            </IonButton>
-            <IonButton
-              className="block"
-              color="tertiary"
-              onClick={async () => {
-                switchToNextPage();
-                await updateUserPrefs(
-                  dbConnection,
-                  "userGender",
-                  "female",
-                  setUserPreferences,
-                );
-
-                localStorage.setItem("appVersion", LATEST_APP_VERSION);
-              }}
-            >
-              Sister
+              Next
             </IonButton>
           </section>
         </SwiperSlide>
@@ -208,20 +259,10 @@ const Onboarding = ({
             userLocations={userLocations}
             setShowLocationFailureToast={setShowLocationFailureToast}
             setShowLocationAddedToast={setShowLocationAddedToast}
+            showOnboarding={showOnboarding}
+            switchToNextPage={switchToNextPage}
           />
-          <section className="flex flex-col">
-            <IonButton
-              // disabled={
-              //   userPreferences.prayerCalculationMethod === "" ? true : false
-              // }
-              onClick={async () => {
-                switchToNextPage();
-              }}
-              className="absolute bottom-0 w-full mb-4"
-            >
-              Next
-            </IonButton>
-          </section>
+          <section className="flex flex-col"></section>
         </SwiperSlide>
         <SwiperSlide>
           <section className="m-4 text-center">
@@ -372,6 +413,8 @@ const Onboarding = ({
                   setShowOnboarding(false);
                   setShowJoyRideEditIcon(true);
                 }
+
+                // setIsOnboarding(false);
               }}
               className="mb-4"
             >
@@ -380,6 +423,7 @@ const Onboarding = ({
             <IonButton
               fill="clear"
               onClick={() => {
+                // setIsOnboarding(false);
                 setShowOnboarding(false);
                 setShowJoyRideEditIcon(true);
               }}

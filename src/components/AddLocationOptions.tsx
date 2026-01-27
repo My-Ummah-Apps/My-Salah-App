@@ -46,6 +46,8 @@ interface AddLocationOptionsProps {
   userLocations: LocationsDataObjTypeArr;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
+  showOnboarding?: boolean;
+  switchToNextPage?: () => void;
 }
 
 const AddLocationOptions = ({
@@ -54,6 +56,8 @@ const AddLocationOptions = ({
   userLocations,
   setShowLocationFailureToast,
   setShowLocationAddedToast,
+  showOnboarding,
+  switchToNextPage,
 }: AddLocationOptionsProps) => {
   type CoordsObjType = {
     latitude: null | number;
@@ -208,7 +212,7 @@ const AddLocationOptions = ({
           <motion.section
             initial={{ x: "50%", opacity: 0 }}
             animate={{ x: "-50%", opacity: 1 }}
-            exit={{ x: "50%", opacity: 0 }}
+            exit={showOnboarding ? "" : { x: "50%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="absolute top-[15%] left-1/2 w-4/5 max-w-[300px] z-10 rounded-lg
              flex flex-col items-center justify-center -translate-y-[15%] bg-[var(--card-bg-color)]"
@@ -489,6 +493,10 @@ const AddLocationOptions = ({
                   } else {
                     console.error("lat / long undefined");
                     return;
+                  }
+
+                  if (showOnboarding && switchToNextPage) {
+                    switchToNextPage();
                   }
                 }}
               >

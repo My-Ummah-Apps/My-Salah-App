@@ -927,6 +927,7 @@ const App = () => {
       {showOnboarding && (
         <Onboarding
           setShowOnboarding={setShowOnboarding}
+          showOnboarding={showOnboarding}
           setShowJoyRideEditIcon={setShowJoyRideEditIcon}
           dbConnection={dbConnection}
           setUserPreferences={setUserPreferences}
