@@ -346,7 +346,7 @@ export const scheduleSalahTimesNotifications = async (
 
       const notificationMsg =
         salahName === "sunrise"
-          ? "The sun is rising"
+          ? "The sun is rising!"
           : `It's time to pray ${upperCaseFirstLetter(salahName)}`;
 
       // const channelId =

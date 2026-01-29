@@ -516,8 +516,7 @@ const AddLocationOptions = ({
             To calculate Salah times, the app requires your location, you can
             use one of the three methods below. <br></br>
             <br></br>For the most accurate results, the first two options are
-            recommended. The third method (City search) is less precise and may
-            provide less accurate Salah times.
+            recommended.
           </p>
         </div>
         <section className="mx-4">
