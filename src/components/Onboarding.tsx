@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
@@ -7,6 +7,8 @@ import {
   scheduleDailyNotification,
   handleNotificationPermissions,
   scheduleSalahTimesNotifications,
+  isBatteryOptimizationEnabled,
+  requestIgnoreBatteryOptimization,
 } from "../utils/helpers";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -61,6 +63,22 @@ const Onboarding = ({
   );
 
   const [isSalahTimesOnboarding, setIsSalahTimesOnboarding] = useState(false);
+
+  const [isBatteryOptEnabled, setIsBatteryOptEnabled] = useState<
+    boolean | null
+  >(null);
+
+  useEffect(() => {
+    if (Capacitor.getPlatform() !== "android" || !Capacitor.isNativePlatform())
+      return;
+
+    const getBatteryOptimizationStatus = async () => {
+      const res = await isBatteryOptimizationEnabled();
+      setIsBatteryOptEnabled(res);
+    };
+
+    getBatteryOptimizationStatus();
+  }, []);
 
   return (
     <section
@@ -380,77 +398,43 @@ const Onboarding = ({
           </section>
         </SwiperSlide>
 
-        {Capacitor.getPlatform() === "android" && (
-          <SwiperSlide>
-            <section className="flex flex-col justify-center h-full">
-              <section className="m-4 text-center">
-                <h1 className="mb-2 text-2xl font-bold">
-                  Make sure reminders arrive on time
-                </h1>
-                <p>
-                  Some phones delay notifications to save battery. Turning off
-                  battery optimisation helps ensure Salah reminders are
-                  delivered on time.
-                </p>
+        {Capacitor.getPlatform() === "android" &&
+          isBatteryOptEnabled === false && (
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <section className="m-4 text-center">
+                  <h1 className="mb-2 text-2xl font-bold">
+                    Make sure reminders arrive on time
+                  </h1>
+                  <p>
+                    Some phones delay notifications to save battery. Turning off
+                    battery optimisation helps ensure Salah reminders are
+                    delivered on time.
+                  </p>
+                </section>
+                <section className="flex flex-col">
+                  <IonButton
+                    onClick={async () => {
+                      await requestIgnoreBatteryOptimization();
+                      switchToNextPage();
+                    }}
+                    className="mb-4"
+                  >
+                    Improve notification reliability
+                  </IonButton>
+                  <IonButton
+                    fill="clear"
+                    onClick={() => {
+                      switchToNextPage();
+                    }}
+                    className="text-white mb-2text-center rounded-2xl"
+                  >
+                    Skip for now
+                  </IonButton>
+                </section>
               </section>
-              <section className="flex flex-col">
-                <IonButton
-                  onClick={async () => {
-                    const res = await handleNotificationPermissions();
-                    if (res === "granted") {
-                      const notifications = [
-                        "fajrNotification",
-                        "dhuhrNotification",
-                        "asrNotification",
-                        "maghribNotification",
-                        "ishaNotification",
-                      ] as const;
-
-                      for (const notification of notifications) {
-                        await updateUserPrefs(
-                          dbConnection,
-                          notification,
-                          "on",
-                          setUserPreferences,
-                        );
-                      }
-
-                      const salahs = [
-                        "fajr",
-                        "dhuhr",
-                        "asr",
-                        "maghrib",
-                        "isha",
-                      ] as const;
-
-                      for (const salah of salahs) {
-                        await scheduleSalahTimesNotifications(
-                          userLocations,
-                          salah,
-                          userPreferences,
-                          "on",
-                        );
-                      }
-                    }
-                    switchToNextPage();
-                  }}
-                  className="mb-4"
-                >
-                  Improve notification reliability
-                </IonButton>
-                <IonButton
-                  fill="clear"
-                  onClick={() => {
-                    switchToNextPage();
-                  }}
-                  className="text-white mb-2text-center rounded-2xl"
-                >
-                  Skip for now
-                </IonButton>
-              </section>
-            </section>
-          </SwiperSlide>
-        )}
+            </SwiperSlide>
+          )}
         {/* )} */}
         {/* THIS SLIDE BELOW IS THE FINAL SLIDE */}
         <SwiperSlide>

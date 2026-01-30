@@ -265,10 +265,10 @@ const SettingsPage = ({
             >
               <div className="mx-2">
                 <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
-                  {"Notifications"}
+                  Daily Notifications
                 </p>
                 <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-                  {"Toggle Notifications"}
+                  {"Toggle Daily Notifications"}
                 </p>
               </div>
               <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />

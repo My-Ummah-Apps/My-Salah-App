@@ -28,6 +28,8 @@ import {
   NativeSettings,
 } from "capacitor-native-settings";
 
+import { BatteryOptimization } from "@capawesome-team/capacitor-android-battery-optimization";
+
 const device = Capacitor.getPlatform();
 
 export const showToast = async (text: string, duration: "short" | "long") => {
@@ -608,4 +610,19 @@ export const formatNumberWithSign = (number: number) => {
   if (number > 0) return `+${number}`;
   if (number < 0) return `${number}`;
   return 0;
+};
+
+export const isBatteryOptimizationEnabled = async () => {
+  if (Capacitor.getPlatform() !== "android") {
+    return false;
+  }
+  const { enabled } = await BatteryOptimization.isBatteryOptimizationEnabled();
+  return enabled;
+};
+
+export const requestIgnoreBatteryOptimization = async () => {
+  if (Capacitor.getPlatform() !== "android") {
+    return;
+  }
+  await BatteryOptimization.requestIgnoreBatteryOptimization();
 };
