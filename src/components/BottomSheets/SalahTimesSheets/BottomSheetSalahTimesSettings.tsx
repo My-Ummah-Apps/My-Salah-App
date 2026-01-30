@@ -115,7 +115,10 @@ BottomSheetSalahTimesSettingsProps) => {
   const getDefaultAdjustments = () => {
     // if (userPreferences.prayerCalculationMethod === "") return;
 
-    const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
+    const params =
+      CalculationMethod[
+        userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
+      ]();
 
     const obj: {
       fajrAdjustment: number;
@@ -159,7 +162,7 @@ BottomSheetSalahTimesSettingsProps) => {
           <IonTitle>Salah Times Settings</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent style={{ "--background": "var(--card-bg-color)" }}>
         <section className="px-2 mt-10">
           <IonButton
             // size="small"

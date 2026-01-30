@@ -161,9 +161,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border-radius: 0.5rem;
 }
 
-.options-individual {
-}
-
 ion-title {
   /* color: #fff; */
 }

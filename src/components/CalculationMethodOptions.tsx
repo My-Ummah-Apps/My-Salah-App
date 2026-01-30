@@ -202,7 +202,7 @@ const CalculationMethodOptions = ({
   };
 
   return (
-    <IonContent>
+    <IonContent style={{ "--background": "var(--card-bg-color)" }}>
       <div className="mb-10">
         {" "}
         <IonSegment

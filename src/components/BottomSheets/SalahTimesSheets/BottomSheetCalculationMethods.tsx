@@ -55,8 +55,12 @@ const BottomSheetCalculationMethods = ({
       // expandToScroll={false}
     >
       <IonHeader>
-        <IonToolbar>
-          <IonTitle className="">Calculation Methods</IonTitle>
+        <IonToolbar
+          style={{
+            "--background": "transparent",
+          }}
+        >
+          <IonTitle>Calculation Methods</IonTitle>
         </IonToolbar>
       </IonHeader>
 

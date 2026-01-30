@@ -140,7 +140,11 @@ BottomSheetSalahTimesSettingsProps) => {
     >
       {/* <IonPage> */}
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar
+        // style={{
+        //   "--background": "transparent",
+        // }}
+        >
           <IonTitle>Locations</IonTitle>
         </IonToolbar>
       </IonHeader>
