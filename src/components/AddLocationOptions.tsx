@@ -46,8 +46,8 @@ interface AddLocationOptionsProps {
   userLocations: LocationsDataObjTypeArr;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
-  showOnboarding?: boolean;
-  switchToNextPage?: () => void;
+  showOnboarding: boolean;
+  switchToNextPage: () => void;
 }
 
 const AddLocationOptions = ({
@@ -495,7 +495,10 @@ const AddLocationOptions = ({
                     return;
                   }
 
+                  console.log("showOnboarding: ", showOnboarding);
+
                   if (showOnboarding && switchToNextPage) {
+                    console.log("SWITCHING TO NEXT PAGE");
                     switchToNextPage();
                   }
                 }}

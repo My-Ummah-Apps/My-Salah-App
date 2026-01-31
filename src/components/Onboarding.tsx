@@ -28,6 +28,8 @@ interface OnboardingProps {
   userPreferences: userPreferencesType;
   setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   showOnboarding: boolean;
+  showSalahTimesOnboarding: boolean;
+  // startingSlide?: number;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
@@ -43,6 +45,8 @@ const Onboarding = ({
   userPreferences,
   setShowOnboarding,
   showOnboarding,
+  showSalahTimesOnboarding,
+  // startingSlide,
   setShowJoyRideEditIcon,
   setUserLocations,
   userLocations,
@@ -55,6 +59,13 @@ const Onboarding = ({
     swiperRef.current?.slideNext();
   };
   const switchToPreviousPage = () => {
+    const activeIndex = swiperRef.current?.activeIndex;
+    console.log("activeIndex: ", activeIndex);
+
+    if (activeIndex === 7) {
+      swiperRef.current?.slideTo(3, 0);
+    }
+
     swiperRef.current?.slidePrev();
   };
 
@@ -62,11 +73,25 @@ const Onboarding = ({
     "country",
   );
 
-  const [isSalahTimesOnboarding, setIsSalahTimesOnboarding] = useState(false);
+  // const [isSalahTimesOnboarding, setIsSalahTimesOnboarding] = useState(false);
 
   const [isBatteryOptEnabled, setIsBatteryOptEnabled] = useState<
     boolean | null
   >(null);
+
+  // <IonButton
+  //         style={{
+  //           "--padding-start": "0",
+  //           "--padding-end": "0",
+  //         }}
+  //         fill="clear"
+  //         color="light"
+  //         size="small"
+  //         className="absolute top-[-10px] left-0 z-10 text-lg"
+  //         onClick={switchToPreviousPage}
+  //       >
+  //         <IonIcon icon={chevronBackOutline} />
+  //       </IonButton>
 
   useEffect(() => {
     if (Capacitor.getPlatform() !== "android" || !Capacitor.isNativePlatform())
@@ -79,6 +104,8 @@ const Onboarding = ({
 
     getBatteryOptimizationStatus();
   }, []);
+
+  // console.log("startingSlide: ", startingSlide);
 
   return (
     <section
@@ -117,6 +144,8 @@ const Onboarding = ({
         spaceBetween={50}
         slidesPerView={1}
         allowTouchMove={false}
+        // initialSlide={startingSlide ? startingSlide : 0}
+        initialSlide={showSalahTimesOnboarding ? 3 : 0}
         pagination
         navigation
         // navigation={{
@@ -156,7 +185,7 @@ const Onboarding = ({
         </SwiperSlide>
         <SwiperSlide>
           <section className="flex flex-col justify-center h-full">
-            <h1 className="text-4xl">I am a...</h1>
+            <h1 className="text-3xl">I am a...</h1>
             <section>
               <IonButton
                 expand="block"
@@ -208,7 +237,7 @@ const Onboarding = ({
               <IonButton
                 onClick={async () => {
                   switchToNextPage();
-                  setIsSalahTimesOnboarding(true);
+                  // setIsSalahTimesOnboarding(true);
                 }}
                 className="mb-4"
               >
@@ -218,7 +247,7 @@ const Onboarding = ({
                 fill="clear"
                 onClick={() => {
                   swiperRef.current?.slideTo(8, 0);
-                  setIsSalahTimesOnboarding(false);
+                  // setIsSalahTimesOnboarding(false);
                 }}
                 className="text-white mb-2text-center rounded-2xl"
               >
@@ -244,7 +273,7 @@ const Onboarding = ({
               showOnboarding={showOnboarding}
               switchToNextPage={switchToNextPage}
             />
-            <section className="flex flex-col"></section>
+            {/* <section className="flex flex-col"></section> */}
           </section>
         </SwiperSlide>
         <SwiperSlide>
@@ -282,14 +311,6 @@ const Onboarding = ({
               <h1 className="mb-2 text-2xl font-bold">Madhab</h1>
               <p>Select Madhab</p>
             </section>
-
-            {/* <MadhabOptions
-              dbConnection={dbConnection}
-              setUserPreferences={setUserPreferences}
-              userPreferences={userPreferences}
-              showOnboarding={showOnboarding}
-              switchToNextPage={switchToNextPage}
-            /> */}
             <section className="mx-4">
               <IonButton
                 expand="block"
@@ -379,7 +400,9 @@ const Onboarding = ({
                       );
                     }
                   }
-                  switchToNextPage();
+                  // switchToNextPage();
+                  setShowOnboarding(false);
+                  setShowJoyRideEditIcon(true);
                 }}
                 className="mb-4"
               >
@@ -388,7 +411,9 @@ const Onboarding = ({
               <IonButton
                 fill="clear"
                 onClick={() => {
-                  switchToNextPage();
+                  // switchToNextPage();
+                  setShowOnboarding(false);
+                  setShowJoyRideEditIcon(true);
                 }}
                 className="text-white mb-2text-center rounded-2xl"
               >
@@ -436,7 +461,6 @@ const Onboarding = ({
             </SwiperSlide>
           )}
         {/* )} */}
-        {/* THIS SLIDE BELOW IS THE FINAL SLIDE */}
         <SwiperSlide>
           <section className="flex flex-col justify-center h-full">
             <section className="m-4 text-center">

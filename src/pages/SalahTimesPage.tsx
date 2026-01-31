@@ -40,9 +40,13 @@ import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
 import { addDays, isSameDay } from "date-fns";
 import { prayerCalculationMethodLabels } from "../utils/constants";
+import Onboarding from "../components/Onboarding";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
+  showOnboarding: boolean;
+  setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   setUserLocations: React.Dispatch<
@@ -60,6 +64,9 @@ interface SalahTimesPageProps {
 
 const SalahTimesPage = ({
   dbConnection,
+  setShowOnboarding,
+  showOnboarding,
+  setShowJoyRideEditIcon,
   setUserPreferences,
   userPreferences,
   setUserLocations,
@@ -74,6 +81,8 @@ const SalahTimesPage = ({
 }: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
+  const [showSalahTimesOnboarding, setShowSalahTimesOnboarding] =
+    useState(false);
 
   const [selectedSalah, setSelectedSalah] =
     useState<SalahNamesTypeAdhanLibrary>("fajr");
@@ -183,7 +192,12 @@ const SalahTimesPage = ({
                 <h4>Salah Times Not Set</h4>
                 <IonButton
                   onClick={() => {
-                    setShowAddLocationSheet(true);
+                    if (userPreferences.prayerCalculationMethod === "") {
+                      setShowSalahTimesOnboarding(true);
+                      setShowOnboarding(true);
+                    } else {
+                      setShowAddLocationSheet(true);
+                    }
                   }}
                   className="w-1/2"
                 >
@@ -194,16 +208,28 @@ const SalahTimesPage = ({
                 <BottomSheetAddLocation
                   setShowAddLocationSheet={setShowAddLocationSheet}
                   showAddLocationSheet={showAddLocationSheet}
-                  // setShowSalahTimesSettingsSheet={
-                  //   setShowSalahTimesSettingsSheet
-                  // }
                   dbConnection={dbConnection}
                   setUserLocations={setUserLocations}
                   userLocations={userLocations}
                   setShowLocationFailureToast={setShowLocationFailureToast}
                   setShowLocationAddedToast={setShowLocationAddedToast}
-                  // setUserPreferences={setUserPreferences}
                 />
+                {showSalahTimesOnboarding && (
+                  <Onboarding
+                    setShowOnboarding={setShowOnboarding}
+                    showOnboarding={true}
+                    // startingSlide={3}
+                    showSalahTimesOnboarding={showSalahTimesOnboarding}
+                    setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+                    dbConnection={dbConnection}
+                    setUserPreferences={setUserPreferences}
+                    userPreferences={userPreferences}
+                    setUserLocations={setUserLocations}
+                    userLocations={userLocations}
+                    setShowLocationFailureToast={setShowLocationFailureToast}
+                    setShowLocationAddedToast={setShowLocationAddedToast}
+                  />
+                )}
               </section>
             </>
           )}

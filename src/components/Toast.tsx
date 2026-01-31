@@ -2,7 +2,6 @@ import { IonToast } from "@ionic/react";
 
 interface IonToastProps {
   isOpen: boolean;
-  setIsNextCounterLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   message: string;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   duration?: number;
@@ -11,7 +10,7 @@ interface IonToastProps {
 
 const Toast = ({
   isOpen,
-  setIsNextCounterLoading,
+
   message,
   setShow,
   duration,
@@ -21,9 +20,6 @@ const Toast = ({
     <IonToast
       data-testid={testId}
       isOpen={isOpen}
-      onWillDismiss={() => {
-        if (setIsNextCounterLoading) setIsNextCounterLoading(false);
-      }}
       positionAnchor="nav-bar"
       message={message}
       duration={duration || 2000}

@@ -887,6 +887,9 @@ const App = () => {
               render={() => (
                 <SalahTimesPage
                   dbConnection={dbConnection}
+                  setShowOnboarding={setShowOnboarding}
+                  showOnboarding={showOnboarding}
+                  setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                   setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
                   setUserLocations={setUserLocations}
