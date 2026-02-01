@@ -218,6 +218,21 @@ BottomSheetSalahTimesSettingsProps) => {
       </IonContent>
       {/* </IonPage> */}
 
+      <Toast
+        isOpen={showDeleteLocationToast}
+        message="Location deleted"
+        setShow={setShowDeleteLocationToast}
+        testId={"location-deletion-toast"}
+      />
+      <BottomSheetAddLocation
+        setShowAddLocationSheet={setShowAddLocationSheet}
+        showAddLocationSheet={showAddLocationSheet}
+        dbConnection={dbConnection}
+        setUserLocations={setUserLocations}
+        userLocations={userLocations}
+        setShowLocationFailureToast={setShowLocationFailureToast}
+        setShowLocationAddedToast={setShowLocationAddedToast}
+      />
       <ActionSheet
         // trigger="open-delete-location-action-sheet"
         setState={setShowDeleteLocationActionSheet}
@@ -226,7 +241,7 @@ BottomSheetSalahTimesSettingsProps) => {
         header="Are you sure you want to delete this location?"
         buttons={[
           {
-            text: "Delete location?",
+            text: "Delete location",
             role: "destructive",
             handler: async () => {
               if (locationToDeleteId === null) {
@@ -281,21 +296,6 @@ BottomSheetSalahTimesSettingsProps) => {
             },
           },
         ]}
-      />
-      <Toast
-        isOpen={showDeleteLocationToast}
-        message="Location deleted"
-        setShow={setShowDeleteLocationToast}
-        testId={"location-deletion-toast"}
-      />
-      <BottomSheetAddLocation
-        setShowAddLocationSheet={setShowAddLocationSheet}
-        showAddLocationSheet={showAddLocationSheet}
-        dbConnection={dbConnection}
-        setUserLocations={setUserLocations}
-        userLocations={userLocations}
-        setShowLocationFailureToast={setShowLocationFailureToast}
-        setShowLocationAddedToast={setShowLocationAddedToast}
       />
     </IonModal>
   );

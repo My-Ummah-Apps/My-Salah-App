@@ -4,9 +4,11 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonModal,
   IonPage,
   IonTitle,
   IonToolbar,
+  isPlatform,
   useIonViewWillLeave,
 } from "@ionic/react";
 import {
@@ -39,8 +41,13 @@ import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheet
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
 import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
 import { addDays, isSameDay } from "date-fns";
-import { prayerCalculationMethodLabels } from "../utils/constants";
+import {
+  INITIAL_MODAL_BREAKPOINT,
+  MODAL_BREAKPOINTS,
+  prayerCalculationMethodLabels,
+} from "../utils/constants";
 import Onboarding from "../components/Onboarding";
+import CalculationMethodOptions from "../components/CalculationMethodOptions";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -89,6 +96,10 @@ const SalahTimesPage = ({
   const [showSalahNotificationsSheet, setShowSalahNotificationsSheet] =
     useState(false);
   const [dateToShow, setDateToShow] = useState(new Date());
+  const [showCalcMethodsSheet, setShowCalcMethodsSheet] = useState(false);
+  const [segmentOption, setSegmentOption] = useState<"manual" | "country">(
+    "country",
+  );
 
   useIonViewWillLeave(() => {
     setDateToShow(new Date());
@@ -113,20 +124,22 @@ const SalahTimesPage = ({
               />
             </IonButton>
           </IonButtons> */}
-          <IonButtons slot="primary">
-            <IonButton
-              onClick={() => setShowLocationsListSheet(true)}
-              style={{
-                "--padding-end": "12px",
-                "--ripple-color": "transparent",
-              }}
-            >
-              <IonIcon
-                className="text-[var(--ion-text-color)] text-lg"
-                icon={listOutline}
-              />
-            </IonButton>
-          </IonButtons>
+          {userPreferences.prayerCalculationMethod !== "" && (
+            <IonButtons slot="primary">
+              <IonButton
+                onClick={() => setShowLocationsListSheet(true)}
+                style={{
+                  "--padding-end": "12px",
+                  "--ripple-color": "transparent",
+                }}
+              >
+                <IonIcon
+                  className="text-[var(--ion-text-color)] text-lg"
+                  icon={listOutline}
+                />
+              </IonButton>
+            </IonButtons>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -183,56 +196,105 @@ const SalahTimesPage = ({
               </section>
             )}
           {/* {userLocations?.length === 0 ? ( */}
-          {userLocations?.length === 0 && (
-            <>
-              <section
-                className="text-center"
-                // className="flex flex-col items-center justify-center h-full text-center"
-              >
-                <h4>Salah Times Not Set</h4>
-                <IonButton
-                  onClick={() => {
-                    if (userPreferences.prayerCalculationMethod === "") {
-                      setShowSalahTimesOnboarding(true);
-                      setShowOnboarding(true);
-                    } else {
-                      setShowAddLocationSheet(true);
-                    }
-                  }}
-                  className="w-1/2"
+          {userLocations?.length === 0 ||
+            (userPreferences.prayerCalculationMethod === "" && (
+              <>
+                <section
+                  className="text-center"
+                  // className="flex flex-col items-center justify-center h-full text-center"
                 >
-                  {userPreferences.prayerCalculationMethod === ""
-                    ? "Set Up Salah Times"
-                    : "Add Location"}
-                </IonButton>
-                <BottomSheetAddLocation
-                  setShowAddLocationSheet={setShowAddLocationSheet}
-                  showAddLocationSheet={showAddLocationSheet}
-                  dbConnection={dbConnection}
-                  setUserLocations={setUserLocations}
-                  userLocations={userLocations}
-                  setShowLocationFailureToast={setShowLocationFailureToast}
-                  setShowLocationAddedToast={setShowLocationAddedToast}
-                />
-                {showSalahTimesOnboarding && (
-                  <Onboarding
-                    setShowOnboarding={setShowOnboarding}
-                    showOnboarding={true}
-                    // startingSlide={3}
-                    showSalahTimesOnboarding={showSalahTimesOnboarding}
-                    setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+                  <h4>Salah Times Not Set</h4>
+                  <IonButton
+                    onClick={() => {
+                      if (
+                        userPreferences.prayerCalculationMethod === "" &&
+                        userLocations.length === 0
+                      ) {
+                        setShowSalahTimesOnboarding(true);
+                        setShowOnboarding(true);
+                      } else if (
+                        userPreferences.prayerCalculationMethod === "" &&
+                        userLocations.length > 0
+                      ) {
+                        setShowCalcMethodsSheet(true);
+                      } else if (
+                        userPreferences.prayerCalculationMethod !== "" &&
+                        userLocations.length === 0
+                      ) {
+                        setShowAddLocationSheet(true);
+                      }
+                    }}
+                    className="w-1/2"
+                  >
+                    {userPreferences.prayerCalculationMethod === "" &&
+                    userLocations.length === 0
+                      ? "Set Up Salah Times"
+                      : userPreferences.prayerCalculationMethod === "" &&
+                          userLocations.length > 0
+                        ? "Select Calculation Method"
+                        : userPreferences.prayerCalculationMethod !== "" &&
+                            userLocations.length === 0
+                          ? "Add Location"
+                          : ""}
+                  </IonButton>
+                  <BottomSheetAddLocation
+                    setShowAddLocationSheet={setShowAddLocationSheet}
+                    showAddLocationSheet={showAddLocationSheet}
                     dbConnection={dbConnection}
-                    setUserPreferences={setUserPreferences}
-                    userPreferences={userPreferences}
                     setUserLocations={setUserLocations}
                     userLocations={userLocations}
                     setShowLocationFailureToast={setShowLocationFailureToast}
                     setShowLocationAddedToast={setShowLocationAddedToast}
                   />
-                )}
-              </section>
-            </>
-          )}
+                  <IonModal
+                    style={{ "--height": "80vh" }}
+                    isOpen={showCalcMethodsSheet}
+                    onDidDismiss={() => {
+                      setShowCalcMethodsSheet(false);
+                    }}
+                    className={`${isPlatform("ios") ? "" : "modal-height"}`}
+                    mode="ios"
+                    initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+                    breakpoints={MODAL_BREAKPOINTS}
+                  >
+                    <IonHeader>
+                      <IonToolbar
+                        style={{
+                          "--background": "transparent",
+                        }}
+                      >
+                        <IonTitle>Calculation Methods</IonTitle>
+                      </IonToolbar>
+                    </IonHeader>
+
+                    <CalculationMethodOptions
+                      dbConnection={dbConnection}
+                      setSegmentOption={setSegmentOption}
+                      segmentOption={segmentOption}
+                      setUserPreferences={setUserPreferences}
+                      userPreferences={userPreferences}
+                      userLocations={userLocations}
+                    />
+                  </IonModal>
+                  {showSalahTimesOnboarding && (
+                    <Onboarding
+                      setShowOnboarding={setShowOnboarding}
+                      showOnboarding={showOnboarding}
+                      // startingSlide={3}
+                      showSalahTimesOnboarding={showSalahTimesOnboarding}
+                      setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+                      dbConnection={dbConnection}
+                      setUserPreferences={setUserPreferences}
+                      userPreferences={userPreferences}
+                      setUserLocations={setUserLocations}
+                      userLocations={userLocations}
+                      setShowLocationFailureToast={setShowLocationFailureToast}
+                      setShowLocationAddedToast={setShowLocationAddedToast}
+                    />
+                  )}
+                </section>
+              </>
+            ))}
           <section
             className={` ${
               userLocations?.length === 0 ||
@@ -286,8 +348,6 @@ const SalahTimesPage = ({
                 const nextDate = addDays(dateToShow, 1);
                 setDateToShow(nextDate);
 
-                console.log("nextDate: ", nextDate);
-
                 await getSalahTimes(
                   userLocations,
                   nextDate,
@@ -325,7 +385,9 @@ const SalahTimesPage = ({
                 <p className="ml-2">{upperCaseFirstLetter(name)}</p>
                 <div className="flex items-center">
                   <p>
-                    {time === "Invalid Date" || userLocations?.length === 0
+                    {time === "Invalid Date" ||
+                    userLocations?.length === 0 ||
+                    userPreferences.prayerCalculationMethod === ""
                       ? "--:--"
                       : time}
                   </p>

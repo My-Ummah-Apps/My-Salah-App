@@ -28,7 +28,7 @@ interface OnboardingProps {
   userPreferences: userPreferencesType;
   setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   showOnboarding: boolean;
-  showSalahTimesOnboarding: boolean;
+  showSalahTimesOnboarding?: boolean;
   // startingSlide?: number;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setUserLocations: React.Dispatch<

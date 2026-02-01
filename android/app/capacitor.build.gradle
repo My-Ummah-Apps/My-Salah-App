@@ -11,12 +11,10 @@ apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-in-app-review')
     implementation project(':capacitor-community-sqlite')
-    implementation project(':capacitor-action-sheet')
     implementation project(':capacitor-app')
     implementation project(':capacitor-dialog')
     implementation project(':capacitor-filesystem')
     implementation project(':capacitor-geolocation')
-    implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-local-notifications')
     implementation project(':capacitor-share')
