@@ -29,6 +29,7 @@ import {
 } from "capacitor-native-settings";
 
 import { BatteryOptimization } from "@capawesome-team/capacitor-android-battery-optimization";
+import { adhanLibrarySalahs } from "./constants";
 
 const device = Capacitor.getPlatform();
 
@@ -161,23 +162,28 @@ export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
 export const cancelSalahReminderNotifications = async (
   salahName: SalahNamesTypeAdhanLibrary,
 ) => {
-  // console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
+  console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
 
   const pendingNotifications = await LocalNotifications.getPending();
 
+  console.log("pendingNotifications: ", pendingNotifications.notifications);
+
   const notificationsToCancel = pendingNotifications.notifications
-    .filter((item) => item.title === salahName)
+    .filter((item) => item.title === upperCaseFirstLetter(salahName))
     .map((n) => ({
       id: n.id,
     }));
 
-  // console.log("notificationsToCancel: ", notificationsToCancel);
+  console.log("notificationsToCancel: ", notificationsToCancel);
 
   if (notificationsToCancel.length === 0) return;
 
   await LocalNotifications.cancel({ notifications: notificationsToCancel });
 
-  // console.log("pending notifications after cancelling: ", (await LocalNotifications.getPending()).notifications);
+  console.log(
+    "pending notifications after cancelling: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 const salahIdMap = {
@@ -277,7 +283,7 @@ export const scheduleSalahTimesNotifications = async (
 ) => {
   await cancelSalahReminderNotifications(salahName);
 
-  // console.log("Scheduling notifications for: ", salahName);
+  console.log("Scheduling notifications for: ", salahName);
 
   const now = new Date();
 
@@ -382,10 +388,10 @@ export const scheduleSalahTimesNotifications = async (
     }
   }
 
-  // console.log(
-  //   "PENDING NOTIFICATIONS: ",
-  //   (await LocalNotifications.getPending()).notifications,
-  // );
+  console.log(
+    "PENDING NOTIFICATIONS: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 const generateActiveLocationParams = async (

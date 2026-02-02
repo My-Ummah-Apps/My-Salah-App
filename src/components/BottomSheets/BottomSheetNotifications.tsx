@@ -3,16 +3,23 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 
 import { AndroidSettings } from "capacitor-native-settings";
 
-import { userPreferencesType } from "../../types/types";
+import {
+  LocationsDataObjTypeArr,
+  userPreferencesType,
+} from "../../types/types";
 import {
   checkNotificationPermissions,
   updateUserPrefs,
   promptToOpenDeviceSettings,
   scheduleDailyNotification,
+  activateAllSalahNotifications,
+  cancelSalahReminderNotifications,
+  scheduleSalahTimesNotifications,
 } from "../../utils/helpers";
 import { IonModal, IonToggle, isPlatform } from "@ionic/react";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
+  adhanLibrarySalahs,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
@@ -22,14 +29,18 @@ const BottomSheetNotifications = ({
   triggerId,
   setUserPreferences,
   userPreferences,
+  userLocations,
 }: {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   triggerId: string;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
+  userLocations: LocationsDataObjTypeArr;
 }) => {
   const [dailyNotificationToggle, setDailyNotificationToggle] =
     useState<boolean>(userPreferences.dailyNotification === "1" ? true : false);
+
+  const [notificationToggle, setNotificationToggle] = useState(false);
 
   const cancelNotification = async (id: number) => {
     await LocalNotifications.cancel({ notifications: [{ id: id }] });
@@ -130,8 +141,27 @@ const BottomSheetNotifications = ({
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
+      onWillPresent={() => {
+        const notifications = [
+          "fajrNotification",
+          "sunriseNotification",
+          "dhuhrNotification",
+          "asrNotification",
+          "maghribNotification",
+          "ishaNotification",
+        ];
+
+        for (const [key, value] of Object.entries(userPreferences)) {
+          if (notifications.includes(key)) {
+            if (value === "on" || value === "adhan") {
+              console.log("key, value: ", key, value);
+              setNotificationToggle(true);
+            }
+          }
+        }
+      }}
     >
-      <div className="h-[50vh]">
+      <section className="h-[50vh]">
         <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
           <p>Turn on Daily Notification</p>{" "}
           <IonToggle
@@ -166,7 +196,56 @@ const BottomSheetNotifications = ({
             />
           </div>
         )}
-      </div>
+        <section>
+          <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
+            <p>Turn on Salah Notifications</p>{" "}
+            <IonToggle
+              mode={isPlatform("android") ? "md" : "ios"}
+              style={{ "--track-background": "#555" }}
+              checked={notificationToggle}
+              onIonChange={async () => {
+                if (!notificationToggle) {
+                  setNotificationToggle(true);
+
+                  const salahs = adhanLibrarySalahs;
+
+                  for (const salah of salahs) {
+                    await scheduleSalahTimesNotifications(
+                      userLocations,
+                      salah,
+                      userPreferences,
+                      "on",
+                    );
+                  }
+
+                  for (const salah of adhanLibrarySalahs) {
+                    await updateUserPrefs(
+                      dbConnection,
+                      `${salah}Notification`,
+                      "on",
+                      setUserPreferences,
+                    );
+                  }
+                } else {
+                  setNotificationToggle(false);
+
+                  for (const salah of adhanLibrarySalahs) {
+                    await cancelSalahReminderNotifications(salah);
+                  }
+                  for (const salah of adhanLibrarySalahs) {
+                    await updateUserPrefs(
+                      dbConnection,
+                      `${salah}Notification`,
+                      "off",
+                      setUserPreferences,
+                    );
+                  }
+                }
+              }}
+            ></IonToggle>
+          </div>
+        </section>
+      </section>
     </IonModal>
   );
 };

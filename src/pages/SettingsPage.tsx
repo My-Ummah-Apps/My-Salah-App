@@ -264,11 +264,9 @@ const SettingsPage = ({
               id="open-notification-options-sheet"
             >
               <div className="mx-2">
-                <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
-                  Daily Notifications
-                </p>
+                <p className="pt-[0.3rem] pb-[0.1rem] text-lg">Notifications</p>
                 <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-                  {"Toggle Daily Notifications"}
+                  Toggle Notifications
                 </p>
               </div>
               <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
@@ -277,6 +275,7 @@ const SettingsPage = ({
                 triggerId="open-notification-options-sheet"
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
+                userLocations={userLocations}
               />
             </div>{" "}
             <div className="my-5 rounded-md">

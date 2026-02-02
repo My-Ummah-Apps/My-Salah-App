@@ -1,5 +1,9 @@
 import { format } from "date-fns";
-import { SalahNamesType, userPreferencesType } from "../types/types";
+import {
+  SalahNamesType,
+  SalahNamesTypeAdhanLibrary,
+  userPreferencesType,
+} from "../types/types";
 
 export const MODAL_BREAKPOINTS = [0, 1];
 export const INITIAL_MODAL_BREAKPOINT = 1;
@@ -109,6 +113,15 @@ export const salahNamesArr: SalahNamesType[] = [
   "Asar",
   "Maghrib",
   "Isha",
+];
+
+export const adhanLibrarySalahs: SalahNamesTypeAdhanLibrary[] = [
+  "fajr",
+  "sunrise",
+  "dhuhr",
+  "asr",
+  "maghrib",
+  "isha",
 ];
 
 export const validSalahStatuses = [

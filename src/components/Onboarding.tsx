@@ -9,6 +9,7 @@ import {
   scheduleSalahTimesNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
+  activateAllSalahNotifications,
 } from "../utils/helpers";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -21,6 +22,7 @@ import { arrowForwardOutline, chevronBackOutline } from "ionicons/icons";
 import CalculationMethodOptions from "./CalculationMethodOptions";
 import AddLocationOptions from "./AddLocationOptions";
 import { Capacitor } from "@capacitor/core";
+import { adhanLibrarySalahs } from "../utils/constants";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -383,13 +385,7 @@ const Onboarding = ({
                       );
                     }
 
-                    const salahs = [
-                      "fajr",
-                      "dhuhr",
-                      "asr",
-                      "maghrib",
-                      "isha",
-                    ] as const;
+                    const salahs = adhanLibrarySalahs;
 
                     for (const salah of salahs) {
                       await scheduleSalahTimesNotifications(

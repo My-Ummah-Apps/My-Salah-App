@@ -71,7 +71,10 @@ import MajorUpdateOverlay from "./components/MajorUpdateOverlay";
 import SalahTimesPage from "./pages/SalahTimesPage";
 import { toggleDBConnection as toggleDBConnection } from "./utils/dbUtils";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { dictPreferencesDefaultValues } from "./utils/constants";
+import {
+  adhanLibrarySalahs,
+  dictPreferencesDefaultValues,
+} from "./utils/constants";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -312,14 +315,15 @@ const App = () => {
     generateSalahTimes();
 
     const scheduleSalahNotifications = async () => {
-      const salahs: SalahNamesTypeAdhanLibrary[] = [
-        "fajr",
-        "sunrise",
-        "dhuhr",
-        "asr",
-        "maghrib",
-        "isha",
-      ];
+      // const salahs: SalahNamesTypeAdhanLibrary[] = [
+      //   "fajr",
+      //   "sunrise",
+      //   "dhuhr",
+      //   "asr",
+      //   "maghrib",
+      //   "isha",
+      // ];
+      const salahs = adhanLibrarySalahs;
 
       // await cancelSalahReminderNotifications("fajr");
       // await cancelSalahReminderNotifications("sunrise");
@@ -901,10 +905,10 @@ const App = () => {
                   showLocationFailureToast={showLocationFailureToast}
                   setShowLocationAddedToast={setShowLocationAddedToast}
                   showLocationAddedToast={showLocationAddedToast}
-                  setShowSalahTimesSettingsSheet={
-                    setShowSalahTimesSettingsSheet
-                  }
-                  showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
+                  // setShowSalahTimesSettingsSheet={
+                  //   setShowSalahTimesSettingsSheet
+                  // }
+                  // showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
                 />
               )}
             />

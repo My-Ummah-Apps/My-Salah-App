@@ -55,7 +55,7 @@ const BottomSheetSalahNotifications = ({
 
   const handleBatteryOptimisation = async () => {
     if (
-      userPreferences.hasSeenBatteryPrompt === "0" &&
+      // userPreferences.hasSeenBatteryPrompt === "0" &&
       Capacitor.getPlatform() === "android"
     ) {
       await promptToOpenDeviceSettings(
@@ -64,12 +64,12 @@ const BottomSheetSalahNotifications = ({
         AndroidSettings.BatteryOptimization,
       );
 
-      await updateUserPrefs(
-        dbConnection,
-        "hasSeenBatteryPrompt",
-        "1",
-        setUserPreferences,
-      );
+      // await updateUserPrefs(
+      //   dbConnection,
+      //   "hasSeenBatteryPrompt",
+      //   "1",
+      //   setUserPreferences,
+      // );
     }
   };
 
