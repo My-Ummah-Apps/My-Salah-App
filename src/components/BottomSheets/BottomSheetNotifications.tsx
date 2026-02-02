@@ -12,9 +12,10 @@ import {
   updateUserPrefs,
   promptToOpenDeviceSettings,
   scheduleDailyNotification,
-  activateAllSalahNotifications,
   cancelSalahReminderNotifications,
   scheduleSalahTimesNotifications,
+  isBatteryOptimizationEnabled,
+  requestIgnoreBatteryOptimization,
 } from "../../utils/helpers";
 import { IonModal, IonToggle, isPlatform } from "@ionic/react";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -23,6 +24,7 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
+import { Capacitor } from "@capacitor/core";
 
 const BottomSheetNotifications = ({
   dbConnection,
@@ -44,6 +46,41 @@ const BottomSheetNotifications = ({
 
   const cancelNotification = async (id: number) => {
     await LocalNotifications.cancel({ notifications: [{ id: id }] });
+  };
+
+  const [isBatteryOptEnabled, setIsBatteryOptEnabled] =
+    useState<boolean>(false);
+
+  const getBatteryOptimisationStatus = async () => {
+    if (Capacitor.getPlatform() !== "android" || !Capacitor.isNativePlatform())
+      return;
+
+    const getBatteryOptimizationStatus = async () => {
+      const res = await isBatteryOptimizationEnabled();
+      setIsBatteryOptEnabled(res);
+    };
+
+    getBatteryOptimizationStatus();
+  };
+
+  const getNotificationStatuses = () => {
+    const notifications = [
+      "fajrNotification",
+      "sunriseNotification",
+      "dhuhrNotification",
+      "asrNotification",
+      "maghribNotification",
+      "ishaNotification",
+    ];
+
+    for (const [key, value] of Object.entries(userPreferences)) {
+      if (notifications.includes(key)) {
+        if (value === "on" || value === "adhan") {
+          console.log("key, value: ", key, value);
+          setNotificationToggle(true);
+        }
+      }
+    }
   };
 
   async function handleNotificationPermissions() {
@@ -141,27 +178,14 @@ const BottomSheetNotifications = ({
       trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
-      onWillPresent={() => {
-        const notifications = [
-          "fajrNotification",
-          "sunriseNotification",
-          "dhuhrNotification",
-          "asrNotification",
-          "maghribNotification",
-          "ishaNotification",
-        ];
-
-        for (const [key, value] of Object.entries(userPreferences)) {
-          if (notifications.includes(key)) {
-            if (value === "on" || value === "adhan") {
-              console.log("key, value: ", key, value);
-              setNotificationToggle(true);
-            }
-          }
-        }
+      onWillPresent={async () => {
+        getNotificationStatuses();
+        await getBatteryOptimisationStatus();
       }}
     >
-      <section className="h-[50vh]">
+      <section
+      //  className="h-[50vh]"
+      >
         <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
           <p>Turn on Daily Notification</p>{" "}
           <IonToggle
@@ -196,8 +220,8 @@ const BottomSheetNotifications = ({
             />
           </div>
         )}
-        <section>
-          <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
+        <section className="p-3 mt-10 ">
+          <div className="flex items-center justify-between notification-text-and-toggle-wrap">
             <p>Turn on Salah Notifications</p>{" "}
             <IonToggle
               mode={isPlatform("android") ? "md" : "ios"}
@@ -244,7 +268,31 @@ const BottomSheetNotifications = ({
               }}
             ></IonToggle>
           </div>
+          <p className="mt-5 opacity-50">
+            Turn this on to receive all prayer and sunrise reminders. You can
+            also manage individual reminders on the Salah Times page.
+          </p>
         </section>
+        {/* {Capacitor.getPlatform() === "android" && ( */}
+        <section className="p-3 mt-10 mb-10">
+          <div className="flex items-center justify-between notification-text-and-toggle-wrap">
+            <p>Battery Optimisation Disabled</p>{" "}
+            <IonToggle
+              mode={isPlatform("android") ? "md" : "ios"}
+              style={{ "--track-background": "#555" }}
+              checked={isBatteryOptEnabled}
+              onIonChange={async () => {
+                await requestIgnoreBatteryOptimization();
+                getBatteryOptimisationStatus();
+                console.log("HELLO");
+              }}
+            ></IonToggle>
+          </div>
+          <p className="mt-5 opacity-50">
+            Disable battery optimisation to ensure notifications arrive on time.
+          </p>
+        </section>
+        {/* // )} */}
       </section>
     </IonModal>
   );

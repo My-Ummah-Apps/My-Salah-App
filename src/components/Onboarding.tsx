@@ -9,7 +9,6 @@ import {
   scheduleSalahTimesNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
-  activateAllSalahNotifications,
 } from "../utils/helpers";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";

@@ -46,7 +46,6 @@ import {
   streakDatesObjType,
   themeType,
   LocationsDataObjTypeArr,
-  SalahNamesTypeAdhanLibrary,
   nextSalahTimeType,
 } from "./types/types";
 

@@ -29,9 +29,6 @@ import {
 } from "capacitor-native-settings";
 
 import { BatteryOptimization } from "@capawesome-team/capacitor-android-battery-optimization";
-import { adhanLibrarySalahs } from "./constants";
-
-const device = Capacitor.getPlatform();
 
 export const showToast = async (text: string, duration: "short" | "long") => {
   await Toast.show({
@@ -76,7 +73,7 @@ export const setStatusAndNavBarBGColor = async (
   backgroundColor: string,
   textColor: Style,
 ) => {
-  if (device === "android") {
+  if (Capacitor.getPlatform() === "android") {
     await EdgeToEdge.setBackgroundColor({ color: backgroundColor });
   }
   await StatusBar.setStyle({ style: textColor });
@@ -95,11 +92,11 @@ export const promptToOpenDeviceSettings = async (
   });
 
   if (value) {
-    if (device === "ios") {
+    if (Capacitor.getPlatform() === "ios") {
       NativeSettings.openIOS({
         option: IOSSettings.App,
       });
-    } else if (device === "android") {
+    } else if (Capacitor.getPlatform() === "android") {
       NativeSettings.openAndroid({
         option: androidOption,
       });
@@ -297,9 +294,9 @@ export const scheduleSalahTimesNotifications = async (
 
   const sound =
     setting === "adhan"
-      ? device === "android" && salahName === "fajr"
+      ? Capacitor.getPlatform() === "android" && salahName === "fajr"
         ? "adhan_fajr.mp3"
-        : device === "android" && salahName !== "fajr"
+        : Capacitor.getPlatform() === "android" && salahName !== "fajr"
           ? "adhan.mp3"
           : "adhan.wav"
       : "default";
@@ -619,7 +616,7 @@ export const formatNumberWithSign = (number: number) => {
 };
 
 export const isBatteryOptimizationEnabled = async () => {
-  if (Capacitor.getPlatform() !== "android") {
+  if (Capacitor.getPlatform() !== "anroid") {
     return false;
   }
   const { enabled } = await BatteryOptimization.isBatteryOptimizationEnabled();
