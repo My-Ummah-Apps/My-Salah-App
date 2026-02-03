@@ -14,13 +14,11 @@ import {
 } from "../../../types/types";
 import {
   cancelSalahReminderNotifications,
-  promptToOpenDeviceSettings,
-  scheduleSalahTimesNotifications,
+  scheduleSalahNotifications,
   updateUserPrefs,
   upperCaseFirstLetter,
 } from "../../../utils/helpers";
-import { AndroidSettings } from "capacitor-native-settings";
-import { Capacitor } from "@capacitor/core";
+
 import {
   checkmarkCircle,
   megaphone,
@@ -144,7 +142,7 @@ const BottomSheetSalahNotifications = ({
 
             await updateUserPrefs(dbConnection, key, "on", setUserPreferences);
 
-            await scheduleSalahTimesNotifications(
+            await scheduleSalahNotifications(
               userLocations,
               selectedSalah,
               userPreferences,
@@ -202,7 +200,7 @@ const BottomSheetSalahNotifications = ({
                 setUserPreferences,
               );
 
-              await scheduleSalahTimesNotifications(
+              await scheduleSalahNotifications(
                 userLocations,
                 selectedSalah,
                 userPreferences,

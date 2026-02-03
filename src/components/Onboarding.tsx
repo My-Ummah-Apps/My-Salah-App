@@ -6,7 +6,7 @@ import {
   updateUserPrefs,
   scheduleDailyNotification,
   handleNotificationPermissions,
-  scheduleSalahTimesNotifications,
+  scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
 } from "../utils/helpers";
@@ -387,7 +387,7 @@ const Onboarding = ({
                     const salahs = adhanLibrarySalahs;
 
                     for (const salah of salahs) {
-                      await scheduleSalahTimesNotifications(
+                      await scheduleSalahNotifications(
                         userLocations,
                         salah,
                         userPreferences,

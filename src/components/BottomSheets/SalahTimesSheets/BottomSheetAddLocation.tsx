@@ -64,6 +64,7 @@ const BottomSheetAddLocation = ({
           userLocations={userLocations}
           setShowLocationFailureToast={setShowLocationFailureToast}
           setShowLocationAddedToast={setShowLocationAddedToast}
+          setShowAddLocationSheet={setShowAddLocationSheet}
         />
       )}
     </IonModal>

@@ -48,6 +48,7 @@ interface AddLocationOptionsProps {
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
   showOnboarding?: boolean;
   switchToNextPage?: () => void;
+  setShowAddLocationSheet?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AddLocationOptions = ({
@@ -58,6 +59,7 @@ const AddLocationOptions = ({
   setShowLocationAddedToast,
   showOnboarding,
   switchToNextPage,
+  setShowAddLocationSheet,
 }: AddLocationOptionsProps) => {
   type CoordsObjType = {
     latitude: null | number;
@@ -137,6 +139,10 @@ const AddLocationOptions = ({
 
   const handleGrantedPermission = async () => {
     try {
+      presentLocationSpinner({
+        message: "Detecting location...",
+        backdropDismiss: false,
+      });
       const location = await Geolocation.getCurrentPosition();
 
       setCoords({
@@ -158,50 +164,45 @@ const AddLocationOptions = ({
   const handleLocationPermissions = async () => {
     const device = Capacitor.getPlatform();
 
-    const { location: locationPermission } =
-      await Geolocation.checkPermissions();
-    console.log("Permission: ", locationPermission);
+    try {
+      const { location: locationPermission } =
+        await Geolocation.checkPermissions();
 
-    if (locationPermission === "granted") {
-      await handleGrantedPermission();
-      return;
-    }
+      if (locationPermission === "granted") {
+        await handleGrantedPermission();
+      } else if (
+        locationPermission === "prompt" ||
+        locationPermission === "prompt-with-rationale"
+      ) {
+        try {
+          if (device === "ios" || device === "android") {
+            const permission = await Geolocation.requestPermissions();
 
-    if (
-      locationPermission === "prompt" ||
-      locationPermission === "prompt-with-rationale"
-    ) {
-      try {
-        if (device === "ios" || device === "android") {
-          const permission = await Geolocation.requestPermissions();
-          if (permission.location === "granted") {
-            await handleGrantedPermission();
+            if (permission.location === "granted") {
+              await handleGrantedPermission();
+            }
+          } else if (device === "web") {
+            const pos = await Geolocation.getCurrentPosition();
+            if (pos.coords) {
+              await handleGrantedPermission();
+            }
           }
-          return;
+        } catch (error) {
+          console.error(error);
         }
-
-        if (device === "web") {
-          const pos = await Geolocation.getCurrentPosition();
-          if (pos.coords) {
-            await handleGrantedPermission();
-          }
-        }
-      } catch (error) {
-        console.error(error);
+      } else if (locationPermission === "denied") {
+        await promptToOpenDeviceSettings(
+          `Location permission off`,
+          "You currently have location turned off for this application, you can open Settings to re-enable it",
+          AndroidSettings.Location,
+        );
       }
-      return;
-    }
-
-    if (locationPermission === "denied") {
-      console.log("SYSTEM LOCATION PERMISSIONS DENIED");
-
+    } catch (error) {
       await promptToOpenDeviceSettings(
-        `Location permission off`,
-        "You currently have location turned off for this application, you can open Settings to re-enable it",
+        "Turn On Location Services",
+        "You currently have location services turned off on your device, please enable them to use this feature",
         AndroidSettings.Location,
       );
-
-      return;
     }
   };
 
@@ -470,6 +471,7 @@ const AddLocationOptions = ({
                         // setShowAddLocationSheet(false);
                         setUserLocations(allLocations);
                         setShowLocationAddedToast(true);
+                        setShowAddLocationSheet?.(false);
                         // setUserLocations([
                         //   ...userLocations,
                         //   {
@@ -529,10 +531,10 @@ const AddLocationOptions = ({
               if (showAddLocationForm) return;
 
               setMode("gps");
-              presentLocationSpinner({
-                message: "Detecting location...",
-                backdropDismiss: false,
-              });
+              // presentLocationSpinner({
+              //   message: "Detecting location...",
+              //   backdropDismiss: false,
+              // });
               try {
                 await handleLocationPermissions();
               } catch (error) {

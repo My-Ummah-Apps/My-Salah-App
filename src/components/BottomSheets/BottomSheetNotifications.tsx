@@ -13,7 +13,7 @@ import {
   promptToOpenDeviceSettings,
   scheduleDailyNotification,
   cancelSalahReminderNotifications,
-  scheduleSalahTimesNotifications,
+  scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
 } from "../../utils/helpers";
@@ -232,7 +232,7 @@ const BottomSheetNotifications = ({
                   const salahs = adhanLibrarySalahs;
 
                   for (const salah of salahs) {
-                    await scheduleSalahTimesNotifications(
+                    await scheduleSalahNotifications(
                       userLocations,
                       salah,
                       userPreferences,

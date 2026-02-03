@@ -272,7 +272,7 @@ export const createLocalisedDate = (date: string) => {
   return [format(parsedDate, "EEEE"), formattedParsedDate];
 };
 
-export const scheduleSalahTimesNotifications = async (
+export const scheduleSalahNotifications = async (
   userLocations: LocationsDataObjTypeArr,
   salahName: SalahNamesTypeAdhanLibrary,
   userPreferences: userPreferencesType,
@@ -291,6 +291,8 @@ export const scheduleSalahTimesNotifications = async (
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
     return addDays(now, i);
   });
+
+  console.log("nextSevenDays: ", nextSevenDays);
 
   const sound =
     setting === "adhan"

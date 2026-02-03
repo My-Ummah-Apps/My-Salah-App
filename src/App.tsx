@@ -31,7 +31,7 @@ import {
   updateUserPrefs,
   setStatusAndNavBarBGColor,
   getSalahTimes,
-  scheduleSalahTimesNotifications,
+  scheduleSalahNotifications,
   getNextSalah,
 } from "./utils/helpers";
 import {
@@ -313,15 +313,7 @@ const App = () => {
 
     generateSalahTimes();
 
-    const scheduleSalahNotifications = async () => {
-      // const salahs: SalahNamesTypeAdhanLibrary[] = [
-      //   "fajr",
-      //   "sunrise",
-      //   "dhuhr",
-      //   "asr",
-      //   "maghrib",
-      //   "isha",
-      // ];
+    const scheduleAllSalahNotifications = async () => {
       const salahs = adhanLibrarySalahs;
 
       // await cancelSalahReminderNotifications("fajr");
@@ -341,7 +333,7 @@ const App = () => {
           salahNotificationSetting === "on" ||
           salahNotificationSetting === "adhan"
         ) {
-          await scheduleSalahTimesNotifications(
+          await scheduleSalahNotifications(
             userLocations,
             salahs[i],
             userPreferences,
@@ -351,7 +343,7 @@ const App = () => {
       }
     };
 
-    scheduleSalahNotifications();
+    scheduleAllSalahNotifications();
   }, [
     userPreferences.prayerCalculationMethod,
     userPreferences.madhab,
