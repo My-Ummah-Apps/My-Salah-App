@@ -39,19 +39,19 @@ const CalculationMethodOptions = ({
   setUserPreferences,
 }: CalculationMethodOptionsProps) => {
   const countryOptions: countryOptionsType[] = [
-    "Egypt",
-    "Pakistan",
-    "Saudi Arabia",
-    "UAE",
-    "Qatar",
-    "Kuwait",
-    "Turkey",
-    "Iran",
-    "US",
     "Canada",
-    "Singapore",
-    "Malaysia",
+    "Egypt",
     "Indonesia",
+    "Iran",
+    "Kuwait",
+    "Malaysia",
+    "Pakistan",
+    "Qatar",
+    "Saudi Arabia",
+    "Singapore",
+    "Turkey",
+    "UAE",
+    "US",
     "Other",
   ];
 
@@ -70,11 +70,6 @@ const CalculationMethodOptions = ({
         "Early Fajr time using an angle 19.5° and a slightly earlier Isha time using an angle of 17.5°.",
     },
     {
-      calculationMethod: "MuslimWorldLeague",
-      description:
-        "Standard Fajr time with an angle of 18°. Earlier Isha time with an angle of 17°.",
-    },
-    {
       calculationMethod: "Karachi",
       description:
         "University of Islamic Sciences, Karachi. A generally applicable method that uses standard Fajr and Isha angles of 18°.",
@@ -90,20 +85,9 @@ const CalculationMethodOptions = ({
         "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude. Recommended for North America and the UK.",
     },
     {
-      calculationMethod: "Singapore",
+      calculationMethod: "MuslimWorldLeague",
       description:
-        "Early Fajr time with an angle of 20° and standard Isha time with an angle of 18°.",
-    },
-
-    {
-      calculationMethod: "Tehran",
-      description:
-        "Institute of Geophysics, University of Tehran. Early Isha time with an angle of 14°. Slightly later Fajr time with an angle of 17.7°. Calculates Maghrib based on the sun reaching an angle of 4.5° below the horizon.",
-    },
-    {
-      calculationMethod: "Turkey",
-      description:
-        "An approximation of the Diyanet method used in Turkey. This approximation is less accurate outside the region of Turkey.",
+        "Standard Fajr time with an angle of 18°. Earlier Isha time with an angle of 17°.",
     },
     {
       calculationMethod: "NorthAmerica",
@@ -116,6 +100,21 @@ const CalculationMethodOptions = ({
         "Same Isha interval as ummAlQura but with the standard Fajr time using an angle of 18°.",
     },
     {
+      calculationMethod: "Singapore",
+      description:
+        "Early Fajr time with an angle of 20° and standard Isha time with an angle of 18°.",
+    },
+    {
+      calculationMethod: "Tehran",
+      description:
+        "Institute of Geophysics, University of Tehran. Early Isha time with an angle of 14°. Slightly later Fajr time with an angle of 17.7°. Calculates Maghrib based on the sun reaching an angle of 4.5° below the horizon.",
+    },
+    {
+      calculationMethod: "Turkey",
+      description:
+        "An approximation of the Diyanet method used in Turkey. This approximation is less accurate outside the region of Turkey.",
+    },
+    {
       calculationMethod: "UmmAlQura",
       description:
         "Uses a fixed interval of 90 minutes from maghrib to calculate Isha. And a slightly earlier Fajr time with an angle of 18.5°. Note: you should add a +30 minute custom adjustment for Isha during Ramadan.",
@@ -123,19 +122,19 @@ const CalculationMethodOptions = ({
   ];
 
   const countryToMethod: Record<countryOptionsType, CalculationMethodsType> = {
-    Egypt: "Egyptian",
-    Pakistan: "Karachi",
-    "Saudi Arabia": "UmmAlQura",
-    UAE: "Dubai",
-    Qatar: "Qatar",
-    Kuwait: "Kuwait",
-    Turkey: "Turkey",
-    Iran: "Tehran",
-    US: "NorthAmerica",
     Canada: "NorthAmerica",
-    Singapore: "Singapore",
-    Malaysia: "Singapore",
+    Egypt: "Egyptian",
     Indonesia: "Singapore",
+    Iran: "Tehran",
+    Kuwait: "Kuwait",
+    Malaysia: "Singapore",
+    Pakistan: "Karachi",
+    Qatar: "Qatar",
+    "Saudi Arabia": "UmmAlQura",
+    Singapore: "Singapore",
+    Turkey: "Turkey",
+    UAE: "Dubai",
+    US: "NorthAmerica",
     Other: "MoonsightingCommittee",
   };
 
