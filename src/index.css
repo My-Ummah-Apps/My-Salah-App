@@ -264,6 +264,10 @@ ion-content {
   color: var(--ion-text-color);
 }
 
+.detecting-location-spinner {
+  color: var(--ion-text-color);
+}
+
 .action-sheet-group.sc-ion-action-sheet-ios {
   --background: var(--ios-action-sheet-background);
   background: var(--ios-action-sheet-background) !important;

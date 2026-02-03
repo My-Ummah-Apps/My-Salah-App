@@ -265,16 +265,17 @@ const Onboarding = ({
               <h1 className="mb-2 text-2xl font-bold">Location</h1>
               <p>Select your Location</p>
             </section>
-            <AddLocationOptions
-              dbConnection={dbConnection}
-              setUserLocations={setUserLocations}
-              userLocations={userLocations}
-              setShowLocationFailureToast={setShowLocationFailureToast}
-              setShowLocationAddedToast={setShowLocationAddedToast}
-              showOnboarding={showOnboarding}
-              switchToNextPage={switchToNextPage}
-            />
-            {/* <section className="flex flex-col"></section> */}
+            <section className="relative">
+              <AddLocationOptions
+                dbConnection={dbConnection}
+                setUserLocations={setUserLocations}
+                userLocations={userLocations}
+                setShowLocationFailureToast={setShowLocationFailureToast}
+                setShowLocationAddedToast={setShowLocationAddedToast}
+                showOnboarding={showOnboarding}
+                switchToNextPage={switchToNextPage}
+              />
+            </section>
           </section>
         </SwiperSlide>
         <SwiperSlide>

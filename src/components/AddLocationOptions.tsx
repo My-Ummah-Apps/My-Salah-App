@@ -142,6 +142,7 @@ const AddLocationOptions = ({
       presentLocationSpinner({
         message: "Detecting location...",
         backdropDismiss: false,
+        cssClass: "detecting-location-spinner",
       });
       const location = await Geolocation.getCurrentPosition();
 
@@ -193,14 +194,14 @@ const AddLocationOptions = ({
       } else if (locationPermission === "denied") {
         await promptToOpenDeviceSettings(
           `Location permission off`,
-          "You currently have location turned off for this application, you can open Settings to re-enable it",
+          "You currently have location turned off for this application, you can open Settings to re-enable it.",
           AndroidSettings.Location,
         );
       }
     } catch (error) {
       await promptToOpenDeviceSettings(
         "Turn On Location Services",
-        "You currently have location services turned off on your device, please enable them to use this feature",
+        "You currently have location services turned off for your device, please enable them to use this feature.",
         AndroidSettings.Location,
       );
     }
@@ -268,7 +269,7 @@ const AddLocationOptions = ({
                     .map((obj) => (
                       <li
                         key={obj.latitude + obj.longitude}
-                        className="py-2 border-b border-stone-700"
+                        className="block py-5 border-b border-stone-700"
                         onClick={() => {
                           setLocationName(`${obj.city} - ${obj.country}`);
                           setCoords({
@@ -357,7 +358,7 @@ const AddLocationOptions = ({
               <IonButton
                 className="p-0 text-base text-[var(--ion-text-color)]"
                 size="small"
-                color="dark"
+                color="medium"
                 fill="solid"
                 onClick={() => {
                   handleInputPromptDismissed();
@@ -366,7 +367,7 @@ const AddLocationOptions = ({
                 Cancel
               </IonButton>
               <IonButton
-                className="text-base text-[var(--ion-text-color)]"
+                className="text-base"
                 size="small"
                 // fill="clear"
                 onClick={async () => {
