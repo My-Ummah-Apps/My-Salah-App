@@ -47,30 +47,10 @@ const BottomSheetSalahTimeCustomAdjustments = ({
   setShowCustomAdjustmentsSheet,
   customAdjustmentSalah,
 }: BottomSheetSalahTimeCustomAdjustmentsProps) => {
-  const adjustmentValue = String(
-    Number(userPreferences[customAdjustmentSalah]) +
-      getDefaultAdjustments()[customAdjustmentSalah],
+  const [totalAdjustedValue, setTotalAdjustedValue] = useState("0");
+  const [userAdjustedValue, setUserAdjustedValue] = useState<null | number>(
+    null,
   );
-
-  const [increment, setIncrement] = useState(adjustmentValue);
-
-  useEffect(() => {
-    console.log(
-      "value: ",
-      String(
-        Number(userPreferences[customAdjustmentSalah]) +
-          getDefaultAdjustments()[customAdjustmentSalah],
-      ),
-    );
-
-    console.log("increment: ", increment);
-    setIncrement(
-      String(
-        Number(userPreferences[customAdjustmentSalah]) +
-          getDefaultAdjustments()[customAdjustmentSalah],
-      ),
-    );
-  }, [userPreferences, customAdjustmentSalah]);
 
   const salahMap = {
     fajrAdjustment: "Fajr Adjustment",
@@ -85,6 +65,10 @@ const BottomSheetSalahTimeCustomAdjustments = ({
     customAdjustmentsArr.push(String(i));
   }
 
+  useEffect(() => {
+    console.log("Default + User adjustment is equal to: ", totalAdjustedValue);
+  });
+
   return (
     <IonModal
       className="modal-fit-content"
@@ -93,18 +77,37 @@ const BottomSheetSalahTimeCustomAdjustments = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
       onWillPresent={() => {
-        setIncrement(userPreferences[customAdjustmentSalah]);
+        console.log(
+          "default adjustment: ",
+          getDefaultAdjustments()[customAdjustmentSalah],
+        );
+
+        console.log(
+          "user adjustment: ",
+          userPreferences[customAdjustmentSalah],
+        );
+
+        setTotalAdjustedValue(
+          String(
+            Number(userPreferences[customAdjustmentSalah]) +
+              getDefaultAdjustments()[customAdjustmentSalah],
+          ),
+        );
       }}
       onWillDismiss={async () => {
         // console.log("customAdjustmentSalah: ", customAdjustmentSalah);
         // if (!customAdjustmentSalah) return;
-        await updateUserPrefs(
-          dbConnection,
-          customAdjustmentSalah,
-          String(increment),
-          setUserPreferences,
-        );
-        setIncrement("0");
+
+        if (userAdjustedValue !== null) {
+          await updateUserPrefs(
+            dbConnection,
+            customAdjustmentSalah,
+            String(userAdjustedValue),
+            setUserPreferences,
+          );
+        }
+        setTotalAdjustedValue("0");
+        setUserAdjustedValue(null);
       }}
       onDidDismiss={() => {
         setShowCustomAdjustmentsSheet(false);
@@ -121,10 +124,22 @@ const BottomSheetSalahTimeCustomAdjustments = ({
       </IonHeader>
       <IonPicker className="">
         <IonPickerColumn
-          value={increment}
+          value={totalAdjustedValue}
           onIonChange={({ detail }) => {
-            setIncrement(String(detail.value));
-            // console.log("CHANGED");
+            const userAdjustedValue =
+              Number(detail.value) -
+              getDefaultAdjustments()[customAdjustmentSalah];
+
+            console.log("USER ADJUSTED VALUE: ", userAdjustedValue);
+
+            setTotalAdjustedValue(
+              String(
+                userAdjustedValue +
+                  getDefaultAdjustments()[customAdjustmentSalah],
+              ),
+            );
+
+            setUserAdjustedValue(userAdjustedValue);
           }}
         >
           {customAdjustmentsArr.map((item) => {

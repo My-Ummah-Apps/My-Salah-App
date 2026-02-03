@@ -53,25 +53,25 @@ const BottomSheetSalahNotifications = ({
 }: BottomSheetSalahNotificationsProps) => {
   const key: keyof userPreferencesType = `${selectedSalah}Notification`;
 
-  const handleBatteryOptimisation = async () => {
-    if (
-      // userPreferences.hasSeenBatteryPrompt === "0" &&
-      Capacitor.getPlatform() === "android"
-    ) {
-      await promptToOpenDeviceSettings(
-        "Ensure prayer notifications arrive on time",
-        "Some Android phones delay notifications to save battery. Disabling battery optimisation helps prayer notifications arrive on time.",
-        AndroidSettings.BatteryOptimization,
-      );
+  // const handleBatteryOptimisation = async () => {
+  //   if (
+  //     // userPreferences.hasSeenBatteryPrompt === "0" &&
+  //     Capacitor.getPlatform() === "android"
+  //   ) {
+  //     await promptToOpenDeviceSettings(
+  //       "Ensure prayer notifications arrive on time",
+  //       "Some Android phones delay notifications to save battery. Disabling battery optimisation helps prayer notifications arrive on time.",
+  //       AndroidSettings.BatteryOptimization,
+  //     );
 
-      // await updateUserPrefs(
-      //   dbConnection,
-      //   "hasSeenBatteryPrompt",
-      //   "1",
-      //   setUserPreferences,
-      // );
-    }
-  };
+  //     // await updateUserPrefs(
+  //     //   dbConnection,
+  //     //   "hasSeenBatteryPrompt",
+  //     //   "1",
+  //     //   setUserPreferences,
+  //     // );
+  //   }
+  // };
 
   return (
     <IonModal
@@ -151,7 +151,7 @@ const BottomSheetSalahNotifications = ({
               "on",
             );
 
-            await handleBatteryOptimisation();
+            // await handleBatteryOptimisation();
           }}
           className={`options-wrap justify-between  ${
             userPreferences[key as keyof userPreferencesType] === "on"
@@ -209,7 +209,7 @@ const BottomSheetSalahNotifications = ({
                 "adhan",
               );
 
-              await handleBatteryOptimisation();
+              // await handleBatteryOptimisation();
             }}
             className={`options-wrap justify-between ${
               userPreferences[key as keyof userPreferencesType] === "adhan"

@@ -183,9 +183,7 @@ const BottomSheetNotifications = ({
         await getBatteryOptimisationStatus();
       }}
     >
-      <section
-      //  className="h-[50vh]"
-      >
+      <section className="mb-10">
         <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
           <p>Turn on Daily Notification</p>{" "}
           <IonToggle
@@ -268,31 +266,32 @@ const BottomSheetNotifications = ({
               }}
             ></IonToggle>
           </div>
-          <p className="mt-5 opacity-50">
+          <p className="mt-3 text-sm opacity-50">
             Turn this on to receive all prayer and sunrise reminders. You can
             also manage individual reminders on the Salah Times page.
           </p>
         </section>
-        {/* {Capacitor.getPlatform() === "android" && ( */}
-        <section className="p-3 mt-10 mb-10">
-          <div className="flex items-center justify-between notification-text-and-toggle-wrap">
-            <p>Battery Optimisation Disabled</p>{" "}
-            <IonToggle
-              mode={isPlatform("android") ? "md" : "ios"}
-              style={{ "--track-background": "#555" }}
-              checked={isBatteryOptEnabled}
-              onIonChange={async () => {
-                await requestIgnoreBatteryOptimization();
-                getBatteryOptimisationStatus();
-                console.log("HELLO");
-              }}
-            ></IonToggle>
-          </div>
-          <p className="mt-5 opacity-50">
-            Disable battery optimisation to ensure notifications arrive on time.
-          </p>
-        </section>
-        {/* // )} */}
+        {Capacitor.getPlatform() === "android" && (
+          <section className="p-3 mt-10 mb-10">
+            <div className="flex items-center justify-between notification-text-and-toggle-wrap">
+              <p>Battery Optimisation Disabled</p>{" "}
+              <IonToggle
+                mode={isPlatform("android") ? "md" : "ios"}
+                style={{ "--track-background": "#555" }}
+                checked={isBatteryOptEnabled}
+                onIonChange={async () => {
+                  await requestIgnoreBatteryOptimization();
+                  getBatteryOptimisationStatus();
+                  console.log("HELLO");
+                }}
+              ></IonToggle>
+            </div>
+            <p className="mt-3 text-sm opacity-50">
+              Disable battery optimisation to ensure notifications arrive on
+              time.
+            </p>
+          </section>
+        )}
       </section>
     </IonModal>
   );
