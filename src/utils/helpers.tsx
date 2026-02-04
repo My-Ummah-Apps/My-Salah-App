@@ -292,7 +292,7 @@ export const scheduleSalahNotifications = async (
     return addDays(now, i);
   });
 
-  console.log("nextSevenDays: ", nextSevenDays);
+  // console.log("nextSevenDays: ", nextSevenDays);
 
   const sound =
     setting === "adhan"
@@ -534,6 +534,7 @@ export const getNextSalah = async (
   let allSalahTimes = new PrayerTimes(coordinates, todaysDate, params);
 
   let next = allSalahTimes.nextPrayer();
+
   let nextSalahTime: Date | null = null;
   let currentSalah:
     | "none"

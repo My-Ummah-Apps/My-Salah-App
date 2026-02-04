@@ -124,6 +124,13 @@ const App = () => {
       minsRemaining: 0,
     });
 
+  const {
+    isDatabaseInitialised,
+    sqliteConnection,
+    dbConnection,
+    initialiseTables,
+  } = useSQLiteDB();
+
   const getNextSalahDetails = async () => {
     if (!userLocations) {
       console.error("userLocations is undefined");
@@ -157,7 +164,7 @@ const App = () => {
     }, 60000);
 
     return () => clearInterval(interval);
-  }, [userLocations]);
+  }, [userLocations, isDatabaseInitialised]);
 
   // useEffect(() => {
   //   console.log("nextSalahNameAndTime: ", nextSalahNameAndTime);
@@ -210,13 +217,6 @@ const App = () => {
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
   }, []);
-
-  const {
-    isDatabaseInitialised,
-    sqliteConnection,
-    dbConnection,
-    initialiseTables,
-  } = useSQLiteDB();
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -344,6 +344,8 @@ const App = () => {
     };
 
     scheduleAllSalahNotifications();
+
+    getNextSalahDetails();
   }, [
     userPreferences.prayerCalculationMethod,
     userPreferences.madhab,

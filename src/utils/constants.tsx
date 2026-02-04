@@ -67,6 +67,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   shafaqRule: "general",
   polarCircleResolution: "Unresolved",
   country: "",
+  dailyNotificationOption: "afterIsha",
 };
 
 export const calculationMethods = [

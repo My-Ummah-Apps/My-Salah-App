@@ -71,6 +71,7 @@ export interface userPreferencesType {
   hasSeenBatteryPrompt: binaryValue;
   polarCircleResolution: "AqrabBalad" | "AqrabYaum" | "Unresolved";
   country: countryOptionsType | "";
+  dailyNotificationOption: "afterIsha" | "fixedTime";
 }
 
 export type calculationMethod = (typeof calculationMethods)[number];

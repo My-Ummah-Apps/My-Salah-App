@@ -314,7 +314,7 @@ const SalahTimesPage = ({
                 const nextDate = addDays(dateToShow, -1);
                 setDateToShow(nextDate);
 
-                console.log("nextDate: ", nextDate);
+                // console.log("nextDate: ", nextDate);
 
                 await getSalahTimes(
                   userLocations,
@@ -442,7 +442,7 @@ const SalahTimesPage = ({
               userPreferences.fajrAngle
             }° and Isha Angle ${
               userPreferences.ishaAngle
-            }°, your local mosque (beginning) times may differ.`}
+            }°, your local mosque times may differ.`}
               </p>
             )}
         </section>

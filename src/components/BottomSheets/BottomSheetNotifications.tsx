@@ -17,7 +17,17 @@ import {
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
 } from "../../utils/helpers";
-import { IonModal, IonToggle, isPlatform } from "@ionic/react";
+import {
+  IonItem,
+  IonList,
+  IonModal,
+  IonRadio,
+  IonRadioGroup,
+  IonSelect,
+  IonSelectOption,
+  IonToggle,
+  isPlatform,
+} from "@ionic/react";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   adhanLibrarySalahs,
@@ -50,6 +60,8 @@ const BottomSheetNotifications = ({
 
   const [isBatteryOptEnabled, setIsBatteryOptEnabled] =
     useState<boolean>(false);
+  const [selectedDailyNotificationOption, setSelectedDailyNotificationOption] =
+    useState(userPreferences.dailyNotificationOption);
 
   const getBatteryOptimisationStatus = async () => {
     if (Capacitor.getPlatform() !== "android" || !Capacitor.isNativePlatform())
@@ -62,6 +74,8 @@ const BottomSheetNotifications = ({
 
     getBatteryOptimizationStatus();
   };
+
+  const minuteIntervals = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
 
   const getNotificationStatuses = () => {
     const notifications = [
@@ -197,28 +211,102 @@ const BottomSheetNotifications = ({
         </div>
 
         {dailyNotificationToggle && (
-          <div className="flex items-center justify-between p-3">
-            <p>Set Time</p>
-            <input
-              onChange={(e) => {
-                handleTimeChange(e);
-              }}
-              style={{ backgroundColor: "transparent" }}
-              className={`${
-                dailyNotificationToggle === true ? "slideUp" : ""
-              } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
-              type="time"
-              dir="auto"
-              id="appt"
-              name="appt"
-              min="09:00"
-              max="18:00"
-              value={userPreferences.dailyNotificationTime}
-              required
-            />
+          <div className="flex flex-col p-3 border-b border-[var(--app-border-color)]">
+            {userPreferences.prayerCalculationMethod !== "" &&
+              userLocations.length > 0 && (
+                <div
+                  className=""
+                  // "flex items-center justify-between mb-4"
+                >
+                  <IonRadioGroup slot="" value="After Isha">
+                    <IonItem>
+                      <IonRadio
+                        slot="start"
+                        labelPlacement="end"
+                        value="After Isha"
+                      >
+                        After Isha
+                      </IonRadio>
+                      <IonSelect
+                        slot="end"
+                        label=""
+                        placeholder="10 minutes"
+                        onIonChange={() => {}}
+                      >
+                        {minuteIntervals.map((min) => {
+                          return (
+                            <IonSelectOption
+                              key={min}
+                              value="apple"
+                            >{`${min} minutes`}</IonSelectOption>
+                          );
+                        })}
+                      </IonSelect>
+                    </IonItem>
+                  </IonRadioGroup>
+                  {/* <input
+                onChange={(e) => {
+                  handleTimeChange(e);
+                }}
+                style={{ backgroundColor: "transparent" }}
+                className={`${
+                  dailyNotificationToggle === true ? "slideUp" : ""
+                } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
+                type="time"
+                dir="auto"
+                id="appt"
+                name="appt"
+                min="09:00"
+                max="18:00"
+                value={userPreferences.dailyNotificationTime}
+                required
+              /> */}
+                  {/* <IonItem> */}
+                  {/* <IonSelect
+                    label=""
+                    placeholder="10 minutes"
+                    onIonChange={() => {}}
+                  >
+                    {minuteIntervals.map((min) => {
+                      return (
+                        <IonSelectOption
+                          key={min}
+                          value="apple"
+                        >{`${min} minutes`}</IonSelectOption>
+                      );
+                    })}
+                  </IonSelect> */}
+                  {/* </IonItem> */}
+                </div>
+              )}
+
+            <div className="flex items-center justify-between">
+              <IonRadioGroup value="At fixed time">
+                <IonRadio value="At fixed time" labelPlacement="end">
+                  At fixed time
+                </IonRadio>
+              </IonRadioGroup>
+              <input
+                onChange={(e) => {
+                  handleTimeChange(e);
+                }}
+                style={{ backgroundColor: "transparent" }}
+                className={`${
+                  dailyNotificationToggle === true ? "slideUp" : ""
+                } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
+                type="time"
+                dir="auto"
+                id="appt"
+                name="appt"
+                min="09:00"
+                max="18:00"
+                value={userPreferences.dailyNotificationTime}
+                required
+              />
+            </div>
           </div>
         )}
-        <section className="p-3 mt-10 ">
+        <section className="px-3 mt-5">
           <div className="flex items-center justify-between notification-text-and-toggle-wrap">
             <p>Turn on Salah Notifications</p>{" "}
             <IonToggle
@@ -282,7 +370,6 @@ const BottomSheetNotifications = ({
                 onIonChange={async () => {
                   await requestIgnoreBatteryOptimization();
                   getBatteryOptimisationStatus();
-                  console.log("HELLO");
                 }}
               ></IonToggle>
             </div>
