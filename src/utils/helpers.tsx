@@ -1,5 +1,6 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
+  dailyNotificationOption,
   LocationsDataObjTypeArr,
   PreferenceType,
   SalahByDateObjType,
@@ -237,26 +238,49 @@ export const checkNotificationPermissions = async () => {
 export const scheduleDailyNotification = async (
   hour: number,
   minute: number,
+  setting: dailyNotificationOption,
+  arr?: Date[],
 ) => {
-  await LocalNotifications.schedule({
-    notifications: [
-      {
-        id: 1,
-        title: "Daily Reminder",
-        body: `Did you log your prayers today?`,
-        schedule: {
-          on: {
-            hour: hour,
-            minute: minute,
+  if (setting === "fixedTime") {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: 1,
+          title: "Daily Reminder",
+          body: `Did you log your prayers today?`,
+          schedule: {
+            on: {
+              hour: hour,
+              minute: minute,
+            },
+            // allowWhileIdle: true,
+            repeats: true,
           },
-          // allowWhileIdle: true,
-          repeats: true,
+          sound: "default",
+          channelId: "daily-reminder",
+          // foreground: true, // iOS only
         },
-        channelId: "daily-reminder",
-        // foreground: true, // iOS only
-      },
-    ],
-  });
+      ],
+    });
+  } else if (setting === "afterIsha") {
+    // for (let i = 0; i < arr.length; i++) {}
+    // await LocalNotifications.schedule({
+    //   notifications: [
+    //     {
+    //       id: uniqueId,
+    //       title: `${upperCaseFirstLetter(salahName)}`,
+    //       body: notificationMsg,
+    //       schedule: {
+    //         at: arr[i],
+    //         allowWhileIdle: true,
+    //         repeats: false,
+    //       },
+    //       sound: sound,
+    //       channelId: channelId,
+    //     },
+    //   ],
+    // });
+  }
 };
 
 export const createLocalisedDate = (date: string) => {
@@ -284,15 +308,9 @@ export const scheduleSalahNotifications = async (
 
   const now = new Date();
 
-  // const customAdjustment = Number(
-  //   userPreferences[`${salahName}Adjustment` as keyof userPreferencesType],
-  // );
-
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
     return addDays(now, i);
   });
-
-  // console.log("nextSevenDays: ", nextSevenDays);
 
   const sound =
     setting === "adhan"
@@ -321,45 +339,20 @@ export const scheduleSalahNotifications = async (
         salahName
       ];
 
-      // console.log(
-      //   "new PrayerTimes(): ",
-      //   new PrayerTimes(coordinates, nextSevenDays[i], params),
-      // );
-
-      // if (salahName === "maghrib") {
-      //   console.log("salahName: ", salahName, "scheduling for: ", salahTime);
-      // }
-      // if (salahName === "dhuhr") {
-      //   console.log("salahName: ", salahName, "scheduling for: ", salahTime);
-      // }
-
       const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
 
       if (now < localisedSalahTime) {
-        // arr.push(addMinutes(localisedSalahTime, customAdjustment));
         arr.push(localisedSalahTime);
       }
     }
 
     for (let i = 0; i < arr.length; i++) {
-      // if (salahName === "maghrib") {
-      //   console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
-      // }
-      // if (salahName === "dhuhr") {
-      //   console.log("salahName: ", salahName, "scheduling for: ", arr[i]);
-      // }
-
       const uniqueId = generateNotificationId(salahName, arr[i]);
 
       const notificationMsg =
         salahName === "sunrise"
           ? "The sun is rising!"
           : `It's time to pray ${upperCaseFirstLetter(salahName)}`;
-
-      // const channelId =
-      //   setting === "adhan" && salahName == "fajr"
-      //     ? "salah-reminders-with-adhan"
-      //     : "salah-reminders-without-adhan";
 
       const channelId =
         setting === "adhan" && salahName === "fajr"
@@ -393,7 +386,7 @@ export const scheduleSalahNotifications = async (
   // );
 };
 
-const generateActiveLocationParams = async (
+export const generateActiveLocationParams = async (
   userLocations: LocationsDataObjTypeArr,
   userPreferences: userPreferencesType,
 ) => {

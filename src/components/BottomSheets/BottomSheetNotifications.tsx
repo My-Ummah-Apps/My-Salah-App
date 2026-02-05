@@ -16,6 +16,8 @@ import {
   scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
+  generateActiveLocationParams,
+  toLocalDateFromUTCClock,
 } from "../../utils/helpers";
 import {
   IonItem,
@@ -35,6 +37,8 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 import { Capacitor } from "@capacitor/core";
+import { addDays, addMinutes } from "date-fns";
+import { PrayerTimes } from "adhan";
 
 const BottomSheetNotifications = ({
   dbConnection,
@@ -90,10 +94,71 @@ const BottomSheetNotifications = ({
     for (const [key, value] of Object.entries(userPreferences)) {
       if (notifications.includes(key)) {
         if (value === "on" || value === "adhan") {
-          console.log("key, value: ", key, value);
           setNotificationToggle(true);
         }
       }
+    }
+  };
+
+  const scheduleAfterIshaDailyNotification = async (delay: number) => {
+    const now = new Date();
+
+    const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
+      return addDays(now, i);
+    });
+
+    const result = await generateActiveLocationParams(
+      userLocations,
+      userPreferences,
+    );
+
+    if (!result) return;
+    const { params, coordinates } = result;
+
+    const arr = [];
+
+    for (let i = 0; i < nextSevenDays.length; i++) {
+      const salahTime = new PrayerTimes(coordinates, nextSevenDays[i], params)[
+        "isha"
+      ];
+
+      const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
+
+      if (now < localisedSalahTime) {
+        arr.push(addMinutes(localisedSalahTime, delay));
+      }
+
+      console.log("arr: ", arr);
+
+      // Extract hour and minutes from each item in arr, and call schedule function for each one
+      // for (const date of arr) {
+
+      //   scheduleDailyNotification();
+      // }
+
+      for (let i = 0; i < arr.length; i++) {
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              id: Date.now() + i,
+              title: "Daily Reminder",
+              body: `Did you log your prayers today?`,
+              schedule: {
+                at: arr[i],
+                allowWhileIdle: true,
+                repeats: false,
+              },
+              sound: "default",
+              channelId: "daily-reminder",
+            },
+          ],
+        });
+      }
+
+      console.log(
+        "PENDING NOTIFICATIONS: ",
+        (await LocalNotifications.getPending()).notifications,
+      );
     }
   };
 
@@ -113,7 +178,7 @@ const BottomSheetNotifications = ({
         const [hour, minute] = userPreferences.dailyNotificationTime
           .split(":")
           .map(Number);
-        scheduleDailyNotification(hour, minute);
+        scheduleDailyNotification(hour, minute, "fixedTime");
       }
       setDailyNotificationToggle(!dailyNotificationToggle);
     } else if (
@@ -133,7 +198,7 @@ const BottomSheetNotifications = ({
       const [hour, minute] = userPreferences.dailyNotificationTime
         .split(":")
         .map(Number);
-      scheduleDailyNotification(hour, minute);
+      scheduleDailyNotification(hour, minute, "fixedTime");
       // modifyDataInUserPreferencesTable("1", "dailyNotification");
     } else if (
       requestPermission.display === "prompt" ||
@@ -156,7 +221,7 @@ const BottomSheetNotifications = ({
     }));
     const [hour, minute] = e.target.value.split(":").map(Number);
 
-    scheduleDailyNotification(hour, minute);
+    scheduleDailyNotification(hour, minute, "fixedTime");
     await updateUserPrefs(
       dbConnection,
       "dailyNotificationTime",
@@ -211,99 +276,112 @@ const BottomSheetNotifications = ({
         </div>
 
         {dailyNotificationToggle && (
-          <div className="flex flex-col p-3 border-b border-[var(--app-border-color)]">
+          <div
+          // className="flex flex-col py-3 border-b border-[var(--app-border-color)]"
+          >
             {userPreferences.prayerCalculationMethod !== "" &&
               userLocations.length > 0 && (
-                <div
-                  className=""
-                  // "flex items-center justify-between mb-4"
+                <IonList
+                  style={{
+                    "--background": "transparent",
+                    background: "transparent",
+                  }}
                 >
-                  <IonRadioGroup slot="" value="After Isha">
-                    <IonItem>
+                  <IonRadioGroup
+                    value={selectedDailyNotificationOption}
+                    onIonChange={async (e) => {
+                      const eventValue = e.detail.value;
+                      console.log("YO : ", eventValue);
+
+                      setSelectedDailyNotificationOption(eventValue);
+                      await updateUserPrefs(
+                        dbConnection,
+                        "dailyNotificationOption",
+                        eventValue,
+                        setUserPreferences,
+                      );
+                    }}
+                  >
+                    <IonItem
+                      style={{
+                        "--background": "transparent",
+                        background: "transparent",
+                      }}
+                      lines="none"
+                    >
                       <IonRadio
                         slot="start"
                         labelPlacement="end"
-                        value="After Isha"
+                        value="fixedTime"
+                        color="light"
+                      >
+                        At fixed time
+                      </IonRadio>
+                      <input
+                        slot="end"
+                        onChange={(e) => {
+                          handleTimeChange(e);
+                        }}
+                        style={{ backgroundColor: "transparent" }}
+                        className={`${
+                          dailyNotificationToggle === true ? "slideUp" : ""
+                        } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
+                        type="time"
+                        dir="auto"
+                        id="appt"
+                        name="appt"
+                        min="09:00"
+                        max="18:00"
+                        value={userPreferences.dailyNotificationTime}
+                        required
+                      />
+                    </IonItem>
+                    <IonItem
+                      style={{
+                        "--background": "transparent",
+                        background: "transparent",
+                      }}
+                      lines="none"
+                    >
+                      <IonRadio
+                        slot="start"
+                        labelPlacement="end"
+                        value="afterIsha"
+                        color="light"
                       >
                         After Isha
                       </IonRadio>
                       <IonSelect
                         slot="end"
                         label=""
-                        placeholder="10 minutes"
-                        onIonChange={() => {}}
+                        placeholder={`${userPreferences.dailyNotificationAfterIshaDelay} minutes`}
+                        onIonChange={async (e) => {
+                          e.stopPropagation();
+                          const delay = e.detail.value;
+                          console.log("delay: ", delay);
+                          await scheduleAfterIshaDailyNotification(delay);
+
+                          await updateUserPrefs(
+                            dbConnection,
+                            "dailyNotificationAfterIshaDelay",
+                            String(delay),
+                            setUserPreferences,
+                          );
+                        }}
                       >
                         {minuteIntervals.map((min) => {
                           return (
                             <IonSelectOption
                               key={min}
-                              value="apple"
+                              value={min}
                             >{`${min} minutes`}</IonSelectOption>
                           );
                         })}
                       </IonSelect>
                     </IonItem>
                   </IonRadioGroup>
-                  {/* <input
-                onChange={(e) => {
-                  handleTimeChange(e);
-                }}
-                style={{ backgroundColor: "transparent" }}
-                className={`${
-                  dailyNotificationToggle === true ? "slideUp" : ""
-                } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
-                type="time"
-                dir="auto"
-                id="appt"
-                name="appt"
-                min="09:00"
-                max="18:00"
-                value={userPreferences.dailyNotificationTime}
-                required
-              /> */}
-                  {/* <IonItem> */}
-                  {/* <IonSelect
-                    label=""
-                    placeholder="10 minutes"
-                    onIonChange={() => {}}
-                  >
-                    {minuteIntervals.map((min) => {
-                      return (
-                        <IonSelectOption
-                          key={min}
-                          value="apple"
-                        >{`${min} minutes`}</IonSelectOption>
-                      );
-                    })}
-                  </IonSelect> */}
-                  {/* </IonItem> */}
-                </div>
+                </IonList>
               )}
-
-            <div className="flex items-center justify-between">
-              <IonRadioGroup value="At fixed time">
-                <IonRadio value="At fixed time" labelPlacement="end">
-                  At fixed time
-                </IonRadio>
-              </IonRadioGroup>
-              <input
-                onChange={(e) => {
-                  handleTimeChange(e);
-                }}
-                style={{ backgroundColor: "transparent" }}
-                className={`${
-                  dailyNotificationToggle === true ? "slideUp" : ""
-                } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
-                type="time"
-                dir="auto"
-                id="appt"
-                name="appt"
-                min="09:00"
-                max="18:00"
-                value={userPreferences.dailyNotificationTime}
-                required
-              />
-            </div>
           </div>
         )}
         <section className="px-3 mt-5">

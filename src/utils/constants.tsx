@@ -68,6 +68,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   polarCircleResolution: "Unresolved",
   country: "",
   dailyNotificationOption: "afterIsha",
+  dailyNotificationAfterIshaDelay: "10",
 };
 
 export const calculationMethods = [

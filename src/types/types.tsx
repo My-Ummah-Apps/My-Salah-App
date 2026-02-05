@@ -36,6 +36,8 @@ export type SalahNotificationSettings = "off" | "on" | "adhan";
 
 type binaryValue = "0" | "1";
 
+export type dailyNotificationOption = "afterIsha" | "fixedTime";
+
 export interface userPreferencesType {
   userStartDate: string;
   userGender: string;
@@ -71,7 +73,8 @@ export interface userPreferencesType {
   hasSeenBatteryPrompt: binaryValue;
   polarCircleResolution: "AqrabBalad" | "AqrabYaum" | "Unresolved";
   country: countryOptionsType | "";
-  dailyNotificationOption: "afterIsha" | "fixedTime";
+  dailyNotificationOption: dailyNotificationOption;
+  dailyNotificationAfterIshaDelay: string;
 }
 
 export type calculationMethod = (typeof calculationMethods)[number];
