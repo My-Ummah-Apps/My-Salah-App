@@ -316,12 +316,12 @@ const App = () => {
     const scheduleAllSalahNotifications = async () => {
       const salahs = adhanLibrarySalahs;
 
-      // await cancelSalahReminderNotifications("fajr");
-      // await cancelSalahReminderNotifications("sunrise");
-      // await cancelSalahReminderNotifications("dhuhr");
-      // await cancelSalahReminderNotifications("asr");
-      // await cancelSalahReminderNotifications("maghrib");
-      // await cancelSalahReminderNotifications("isha");
+      // await cancelNotifications("fajr");
+      // await cancelNotifications("sunrise");
+      // await cancelNotifications("dhuhr");
+      // await cancelNotifications("asr");
+      // await cancelNotifications("maghrib");
+      // await cancelNotifications("isha");
 
       for (let i = 0; i < salahs.length; i++) {
         const salahAdjustmentKey = `${salahs[i]}Notification`;

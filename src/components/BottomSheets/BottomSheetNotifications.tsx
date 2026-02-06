@@ -4,6 +4,7 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 import { AndroidSettings } from "capacitor-native-settings";
 
 import {
+  dailyNotificationOption,
   LocationsDataObjTypeArr,
   userPreferencesType,
 } from "../../types/types";
@@ -11,8 +12,8 @@ import {
   checkNotificationPermissions,
   updateUserPrefs,
   promptToOpenDeviceSettings,
-  scheduleDailyNotification,
-  cancelSalahReminderNotifications,
+  scheduleFixedTimeDailyNotification,
+  cancelNotifications,
   scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
@@ -58,10 +59,6 @@ const BottomSheetNotifications = ({
 
   const [notificationToggle, setNotificationToggle] = useState(false);
 
-  const cancelNotification = async (id: number) => {
-    await LocalNotifications.cancel({ notifications: [{ id: id }] });
-  };
-
   const [isBatteryOptEnabled, setIsBatteryOptEnabled] =
     useState<boolean>(false);
   const [selectedDailyNotificationOption, setSelectedDailyNotificationOption] =
@@ -100,6 +97,26 @@ const BottomSheetNotifications = ({
     }
   };
 
+  const scheduleFixedOrAfterIshaDailyNotifications = async (
+    setting: dailyNotificationOption,
+  ) => {
+    await cancelNotifications("Daily Reminder");
+
+    if (setting === "fixedTime") {
+      console.log("TURNING ON FIXED TIME NOTIFICATION");
+
+      const [hour, minute] = userPreferences.dailyNotificationTime
+        .split(":")
+        .map(Number);
+      await scheduleFixedTimeDailyNotification(hour, minute);
+    } else if (setting === "afterIsha") {
+      console.log("TURNING ON AFTER ISHA TIME NOTIFICATION");
+      await scheduleAfterIshaDailyNotification(
+        Number(userPreferences.dailyNotificationAfterIshaDelay),
+      );
+    }
+  };
+
   const scheduleAfterIshaDailyNotification = async (delay: number) => {
     const now = new Date();
 
@@ -128,13 +145,7 @@ const BottomSheetNotifications = ({
         arr.push(addMinutes(localisedSalahTime, delay));
       }
 
-      console.log("arr: ", arr);
-
-      // Extract hour and minutes from each item in arr, and call schedule function for each one
-      // for (const date of arr) {
-
-      //   scheduleDailyNotification();
-      // }
+      // console.log("arr: ", arr);
 
       for (let i = 0; i < arr.length; i++) {
         await LocalNotifications.schedule({
@@ -173,12 +184,11 @@ const BottomSheetNotifications = ({
       );
     } else if (userNotificationPermission === "granted") {
       if (dailyNotificationToggle === true) {
-        cancelNotification(1);
+        await cancelNotifications("Daily Reminder");
       } else if (dailyNotificationToggle === false) {
-        const [hour, minute] = userPreferences.dailyNotificationTime
-          .split(":")
-          .map(Number);
-        scheduleDailyNotification(hour, minute, "fixedTime");
+        await scheduleFixedOrAfterIshaDailyNotifications(
+          userPreferences.dailyNotificationOption,
+        );
       }
       setDailyNotificationToggle(!dailyNotificationToggle);
     } else if (
@@ -198,8 +208,14 @@ const BottomSheetNotifications = ({
       const [hour, minute] = userPreferences.dailyNotificationTime
         .split(":")
         .map(Number);
-      scheduleDailyNotification(hour, minute, "fixedTime");
-      // modifyDataInUserPreferencesTable("1", "dailyNotification");
+      await scheduleFixedTimeDailyNotification(hour, minute);
+
+      // await updateUserPrefs(
+      //   dbConnection,
+      //   "dailyNotification",
+      //   "1",
+      //   setUserPreferences,
+      // );
     } else if (
       requestPermission.display === "prompt" ||
       requestPermission.display === "prompt-with-rationale" ||
@@ -221,7 +237,7 @@ const BottomSheetNotifications = ({
     }));
     const [hour, minute] = e.target.value.split(":").map(Number);
 
-    scheduleDailyNotification(hour, minute, "fixedTime");
+    await scheduleFixedTimeDailyNotification(hour, minute);
     await updateUserPrefs(
       dbConnection,
       "dailyNotificationTime",
@@ -270,7 +286,11 @@ const BottomSheetNotifications = ({
             style={{ "--track-background": "#555" }}
             checked={dailyNotificationToggle}
             onIonChange={async () => {
-              handleNotificationPermissions();
+              await handleNotificationPermissions();
+              console.log(
+                "PENDING NOTIFICATIONS: ",
+                (await LocalNotifications.getPending()).notifications,
+              );
             }}
           ></IonToggle>
         </div>
@@ -291,7 +311,7 @@ const BottomSheetNotifications = ({
                     value={selectedDailyNotificationOption}
                     onIonChange={async (e) => {
                       const eventValue = e.detail.value;
-                      console.log("YO : ", eventValue);
+                      console.log("EVENT VALUE: ", eventValue);
 
                       setSelectedDailyNotificationOption(eventValue);
                       await updateUserPrefs(
@@ -299,6 +319,10 @@ const BottomSheetNotifications = ({
                         "dailyNotificationOption",
                         eventValue,
                         setUserPreferences,
+                      );
+
+                      await scheduleFixedOrAfterIshaDailyNotifications(
+                        eventValue,
                       );
                     }}
                   >
@@ -319,8 +343,8 @@ const BottomSheetNotifications = ({
                       </IonRadio>
                       <input
                         slot="end"
-                        onChange={(e) => {
-                          handleTimeChange(e);
+                        onChange={async (e) => {
+                          await handleTimeChange(e);
                         }}
                         style={{ backgroundColor: "transparent" }}
                         className={`${
@@ -359,7 +383,9 @@ const BottomSheetNotifications = ({
                           e.stopPropagation();
                           const delay = e.detail.value;
                           console.log("delay: ", delay);
-                          await scheduleAfterIshaDailyNotification(delay);
+                          if (selectedDailyNotificationOption === "afterIsha") {
+                            await scheduleAfterIshaDailyNotification(delay);
+                          }
 
                           await updateUserPrefs(
                             dbConnection,
@@ -418,7 +444,7 @@ const BottomSheetNotifications = ({
                   setNotificationToggle(false);
 
                   for (const salah of adhanLibrarySalahs) {
-                    await cancelSalahReminderNotifications(salah);
+                    await cancelNotifications(salah);
                   }
                   for (const salah of adhanLibrarySalahs) {
                     await updateUserPrefs(
@@ -447,7 +473,7 @@ const BottomSheetNotifications = ({
                 checked={isBatteryOptEnabled}
                 onIonChange={async () => {
                   await requestIgnoreBatteryOptimization();
-                  getBatteryOptimisationStatus();
+                  await getBatteryOptimisationStatus();
                 }}
               ></IonToggle>
             </div>

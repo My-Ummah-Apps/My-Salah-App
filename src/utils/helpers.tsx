@@ -1,6 +1,5 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
-  dailyNotificationOption,
   LocationsDataObjTypeArr,
   PreferenceType,
   SalahByDateObjType,
@@ -157,17 +156,28 @@ export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
   return activeLocation;
 };
 
-export const cancelSalahReminderNotifications = async (
-  salahName: SalahNamesTypeAdhanLibrary,
+export const cancelNotifications = async (
+  notificationName: SalahNamesTypeAdhanLibrary | "Daily Reminder",
 ) => {
-  // console.log("CANCELLING NOTIFICATIONS FOR THE FOLLOWING SALAH: ", salahName);
+  console.log(
+    "CANCELLING NOTIFICATIONS FOR THE FOLLOWING REMINDERS: ",
+    notificationName,
+  );
 
   const pendingNotifications = await LocalNotifications.getPending();
 
-  // console.log("pendingNotifications: ", pendingNotifications.notifications);
+  console.log(
+    "pendingNotifications before cancellation: ",
+    pendingNotifications.notifications,
+  );
+
+  const notificationNameToCancel =
+    notificationName !== "Daily Reminder"
+      ? upperCaseFirstLetter(notificationName)
+      : notificationName;
 
   const notificationsToCancel = pendingNotifications.notifications
-    .filter((item) => item.title === upperCaseFirstLetter(salahName))
+    .filter((item) => item.title === notificationNameToCancel)
     .map((n) => ({
       id: n.id,
     }));
@@ -178,10 +188,10 @@ export const cancelSalahReminderNotifications = async (
 
   await LocalNotifications.cancel({ notifications: notificationsToCancel });
 
-  // console.log(
-  //   "pending notifications after cancelling: ",
-  //   (await LocalNotifications.getPending()).notifications,
-  // );
+  console.log(
+    "pending notifications after cancelling: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 const salahIdMap = {
@@ -223,64 +233,49 @@ export const checkNotificationPermissions = async () => {
   return userNotificationPermission.display;
 };
 
-// const createNotificationChannel = async () => {
-//   await LocalNotifications.createChannel({
-//     id: "daily-reminder",
-//     name: "Reminders",
-//     importance: 4,
-//     description: "General reminders",
-//     sound: "default",
-//     visibility: 1,
-//     vibration: true,
-//   });
-// };
-
-export const scheduleDailyNotification = async (
+export const scheduleFixedTimeDailyNotification = async (
   hour: number,
   minute: number,
-  setting: dailyNotificationOption,
-  arr?: Date[],
 ) => {
-  if (setting === "fixedTime") {
-    await LocalNotifications.schedule({
-      notifications: [
-        {
-          id: 1,
-          title: "Daily Reminder",
-          body: `Did you log your prayers today?`,
-          schedule: {
-            on: {
-              hour: hour,
-              minute: minute,
-            },
-            // allowWhileIdle: true,
-            repeats: true,
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: 1,
+        title: "Daily Reminder",
+        body: `Did you log your prayers today?`,
+        schedule: {
+          on: {
+            hour: hour,
+            minute: minute,
           },
-          sound: "default",
-          channelId: "daily-reminder",
-          // foreground: true, // iOS only
+          allowWhileIdle: true,
+          repeats: true,
         },
-      ],
-    });
-  } else if (setting === "afterIsha") {
-    // for (let i = 0; i < arr.length; i++) {}
-    // await LocalNotifications.schedule({
-    //   notifications: [
-    //     {
-    //       id: uniqueId,
-    //       title: `${upperCaseFirstLetter(salahName)}`,
-    //       body: notificationMsg,
-    //       schedule: {
-    //         at: arr[i],
-    //         allowWhileIdle: true,
-    //         repeats: false,
-    //       },
-    //       sound: sound,
-    //       channelId: channelId,
-    //     },
-    //   ],
-    // });
-  }
+        sound: "default",
+        channelId: "daily-reminder",
+      },
+    ],
+  });
+
+  // await LocalNotifications.schedule({
+  //   notifications: [
+  //     {
+  //       id: Date.now(),
+  //       title: "Daily Reminder",
+  //       body: `Did you log your prayers today?`,
+  //       schedule: {
+  //         at: new Date(),
+  //         allowWhileIdle: true,
+  //         repeats: false,
+  //       },
+  //       sound: "default",
+  //       channelId: "daily-reminder",
+  //     },
+  //   ],
+  // });
+
+  const pending = (await LocalNotifications.getPending()).notifications;
+  console.log("FIXED DAILY NOTIFICATIONS AFTER BEING TURNED ON: ", pending);
 };
 
 export const createLocalisedDate = (date: string) => {
@@ -302,7 +297,7 @@ export const scheduleSalahNotifications = async (
   userPreferences: userPreferencesType,
   setting: SalahNotificationSettings,
 ) => {
-  await cancelSalahReminderNotifications(salahName);
+  await cancelNotifications(salahName);
 
   // console.log("Scheduling notifications for: ", salahName);
 

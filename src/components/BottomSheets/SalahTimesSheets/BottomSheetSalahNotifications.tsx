@@ -13,7 +13,7 @@ import {
   userPreferencesType,
 } from "../../../types/types";
 import {
-  cancelSalahReminderNotifications,
+  cancelNotifications,
   scheduleSalahNotifications,
   updateUserPrefs,
   upperCaseFirstLetter,
@@ -99,7 +99,7 @@ const BottomSheetSalahNotifications = ({
         <div
           onClick={async () => {
             await updateUserPrefs(dbConnection, key, "off", setUserPreferences);
-            await cancelSalahReminderNotifications(selectedSalah);
+            await cancelNotifications(selectedSalah);
           }}
           className={`options-wrap justify-between ${
             userPreferences[key as keyof userPreferencesType] === "off"
@@ -138,7 +138,7 @@ const BottomSheetSalahNotifications = ({
               return;
             }
 
-            await cancelSalahReminderNotifications(selectedSalah);
+            await cancelNotifications(selectedSalah);
 
             await updateUserPrefs(dbConnection, key, "on", setUserPreferences);
 
@@ -191,7 +191,7 @@ const BottomSheetSalahNotifications = ({
                 return;
               }
 
-              await cancelSalahReminderNotifications(selectedSalah);
+              await cancelNotifications(selectedSalah);
 
               await updateUserPrefs(
                 dbConnection,

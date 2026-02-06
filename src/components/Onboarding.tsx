@@ -4,7 +4,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
 import {
   updateUserPrefs,
-  scheduleDailyNotification,
+  scheduleFixedTimeDailyNotification,
   handleNotificationPermissions,
   scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
@@ -477,7 +477,7 @@ const Onboarding = ({
                   if (permission.display === "granted") {
                     setShowOnboarding(false);
                     setShowJoyRideEditIcon(true);
-                    scheduleDailyNotification(21, 0);
+                    await scheduleFixedTimeDailyNotification(21, 0);
                     await updateUserPrefs(
                       dbConnection,
                       "dailyNotification",

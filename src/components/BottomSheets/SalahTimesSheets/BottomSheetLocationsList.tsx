@@ -30,10 +30,7 @@ import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 import ActionSheet from "../../ActionSheet";
 import Toast from "../../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
-import {
-  cancelSalahReminderNotifications,
-  getActiveLocation,
-} from "../../../utils/helpers";
+import { cancelNotifications, getActiveLocation } from "../../../utils/helpers";
 
 interface BottomSheetSalahTimesSettingsProps {
   // triggerId: string;
@@ -112,11 +109,11 @@ BottomSheetSalahTimesSettingsProps) => {
   useEffect(() => {
     const cancelAllSalahNotifications = async () => {
       if (userLocations?.length === 0) {
-        await cancelSalahReminderNotifications("fajr");
-        await cancelSalahReminderNotifications("dhuhr");
-        await cancelSalahReminderNotifications("asr");
-        await cancelSalahReminderNotifications("maghrib");
-        await cancelSalahReminderNotifications("isha");
+        await cancelNotifications("fajr");
+        await cancelNotifications("dhuhr");
+        await cancelNotifications("asr");
+        await cancelNotifications("maghrib");
+        await cancelNotifications("isha");
       }
     };
 
