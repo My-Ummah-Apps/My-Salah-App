@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
 import { AndroidSettings } from "capacitor-native-settings";
@@ -8,6 +8,9 @@ import {
   LocationsDataObjTypeArr,
   userPreferencesType,
 } from "../../types/types";
+
+import type { InputCustomEvent, InputChangeEventDetail } from "@ionic/react";
+
 import {
   checkNotificationPermissions,
   updateUserPrefs,
@@ -21,6 +24,7 @@ import {
   toLocalDateFromUTCClock,
 } from "../../utils/helpers";
 import {
+  IonInput,
   IonItem,
   IonList,
   IonModal,
@@ -230,18 +234,24 @@ const BottomSheetNotifications = ({
     }
   };
 
-  const handleTimeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTimeChange = async (
+    e: InputCustomEvent<InputChangeEventDetail>,
+  ) => {
+    if (!e.detail.value) return;
+
+    const userSelectedTime = e.detail.value;
+
     setUserPreferences((userPreferences) => ({
       ...userPreferences,
-      dailyNotificationTime: e.target.value,
+      dailyNotificationTime: userSelectedTime,
     }));
-    const [hour, minute] = e.target.value.split(":").map(Number);
+    const [hour, minute] = userSelectedTime.split(":").map(Number);
 
     await scheduleFixedTimeDailyNotification(hour, minute);
     await updateUserPrefs(
       dbConnection,
       "dailyNotificationTime",
-      e.target.value,
+      userSelectedTime,
       setUserPreferences,
     );
   };
@@ -350,13 +360,15 @@ const BottomSheetNotifications = ({
                       >
                         At fixed time
                       </IonRadio>
-                      <input
+                      <IonInput
                         slot="end"
-                        onChange={async (e) => {
+                        onIonChange={async (e) => {
                           e.stopPropagation();
                           await handleTimeChange(e);
                         }}
-                        style={{ backgroundColor: "transparent" }}
+                        style={{
+                          "--background": "var(--card-bg-color)",
+                        }}
                         className={`${
                           dailyNotificationToggle === true ? "slideUp" : ""
                         } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
@@ -367,7 +379,6 @@ const BottomSheetNotifications = ({
                         min="09:00"
                         max="18:00"
                         value={userPreferences.dailyNotificationTime}
-                        // value={"22:00"}
                         required
                       />
                     </IonItem>
