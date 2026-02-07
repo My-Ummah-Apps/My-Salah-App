@@ -246,25 +246,22 @@ const BottomSheetNotifications = ({
     );
   };
 
-  useEffect(() => {
-    const notificationValue = dailyNotificationToggle === true ? "1" : "0";
-
-    setUserPreferences((userPreferences) => ({
-      ...userPreferences,
-      dailyNotification: notificationValue,
-    }));
-
-    const modifyDBAndState = async () => {
-      await updateUserPrefs(
-        dbConnection,
-        "dailyNotification",
-        notificationValue,
-        setUserPreferences,
-      );
-    };
-
-    modifyDBAndState();
-  }, [dailyNotificationToggle]);
+  // useEffect(() => {
+  //   const notificationValue = dailyNotificationToggle === true ? "1" : "0";
+  //   setUserPreferences((userPreferences) => ({
+  //     ...userPreferences,
+  //     dailyNotification: notificationValue,
+  //   }));
+  //   const modifyDBAndState = async () => {
+  //     await updateUserPrefs(
+  //       dbConnection,
+  //       "dailyNotification",
+  //       notificationValue,
+  //       setUserPreferences,
+  //     );
+  //   };
+  //   modifyDBAndState();
+  // }, [dailyNotificationToggle]);
 
   return (
     <IonModal
@@ -285,7 +282,19 @@ const BottomSheetNotifications = ({
             mode={isPlatform("android") ? "md" : "ios"}
             style={{ "--track-background": "#555" }}
             checked={dailyNotificationToggle}
-            onIonChange={async () => {
+            onIonChange={async (e) => {
+              console.log("E: ", e.detail.checked);
+              const toggleStatus = e.detail.checked;
+
+              const notificationValue = toggleStatus === true ? "1" : "0";
+
+              await updateUserPrefs(
+                dbConnection,
+                "dailyNotification",
+                notificationValue,
+                setUserPreferences,
+              );
+
               await handleNotificationPermissions();
               console.log(
                 "PENDING NOTIFICATIONS: ",
@@ -344,6 +353,7 @@ const BottomSheetNotifications = ({
                       <input
                         slot="end"
                         onChange={async (e) => {
+                          e.stopPropagation();
                           await handleTimeChange(e);
                         }}
                         style={{ backgroundColor: "transparent" }}
@@ -357,6 +367,7 @@ const BottomSheetNotifications = ({
                         min="09:00"
                         max="18:00"
                         value={userPreferences.dailyNotificationTime}
+                        // value={"22:00"}
                         required
                       />
                     </IonItem>

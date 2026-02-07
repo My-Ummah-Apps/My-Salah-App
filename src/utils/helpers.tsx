@@ -257,23 +257,6 @@ export const scheduleFixedTimeDailyNotification = async (
     ],
   });
 
-  // await LocalNotifications.schedule({
-  //   notifications: [
-  //     {
-  //       id: Date.now(),
-  //       title: "Daily Reminder",
-  //       body: `Did you log your prayers today?`,
-  //       schedule: {
-  //         at: new Date(),
-  //         allowWhileIdle: true,
-  //         repeats: false,
-  //       },
-  //       sound: "default",
-  //       channelId: "daily-reminder",
-  //     },
-  //   ],
-  // });
-
   const pending = (await LocalNotifications.getPending()).notifications;
   console.log("FIXED DAILY NOTIFICATIONS AFTER BEING TURNED ON: ", pending);
 };
