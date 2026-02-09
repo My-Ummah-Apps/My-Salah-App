@@ -905,10 +905,6 @@ const App = () => {
                   showLocationFailureToast={showLocationFailureToast}
                   setShowLocationAddedToast={setShowLocationAddedToast}
                   showLocationAddedToast={showLocationAddedToast}
-                  // setShowSalahTimesSettingsSheet={
-                  //   setShowSalahTimesSettingsSheet
-                  // }
-                  // showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
                 />
               )}
             />

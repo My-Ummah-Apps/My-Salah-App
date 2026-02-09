@@ -280,6 +280,8 @@ const SalahTimesPage = ({
               {showSalahTimesOnboarding && (
                 <Onboarding
                   startingSlide={3}
+                  setShowSalahTimesOnboarding={setShowSalahTimesOnboarding}
+                  showSalahTimesOnboarding={showSalahTimesOnboarding}
                   setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                   dbConnection={dbConnection}
                   setUserPreferences={setUserPreferences}

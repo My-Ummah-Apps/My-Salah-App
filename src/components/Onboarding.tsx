@@ -18,7 +18,11 @@ import "swiper/css/pagination";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import appLogo from "/src/assets/images/icon-512.png";
 import { IonButton, IonIcon } from "@ionic/react";
-import { arrowForwardOutline, chevronBackOutline } from "ionicons/icons";
+import {
+  arrowForwardOutline,
+  chevronBackOutline,
+  closeOutline,
+} from "ionicons/icons";
 import CalculationMethodOptions from "./CalculationMethodOptions";
 import AddLocationOptions from "./AddLocationOptions";
 import { Capacitor } from "@capacitor/core";
@@ -26,6 +30,8 @@ import { adhanLibrarySalahs } from "../utils/constants";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  setShowSalahTimesOnboarding?: React.Dispatch<React.SetStateAction<boolean>>;
+  showSalahTimesOnboarding?: boolean;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   setShowOnboarding?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,6 +48,8 @@ interface OnboardingProps {
 
 const Onboarding = ({
   dbConnection,
+  setShowSalahTimesOnboarding,
+  showSalahTimesOnboarding,
   setUserPreferences,
   userPreferences,
   setShowOnboarding,
@@ -54,8 +62,6 @@ const Onboarding = ({
   setShowLocationAddedToast,
 }: OnboardingProps) => {
   const swiperRef = useRef<SwiperInstance | null>(null);
-
-  console.log("RENDERED");
 
   const switchToNextPage = () => {
     swiperRef.current?.slideNext();
@@ -107,8 +113,6 @@ const Onboarding = ({
     getBatteryOptimizationStatus();
   }, []);
 
-  console.log("startingSlide: ", startingSlide);
-
   return (
     <section
       style={{
@@ -122,7 +126,6 @@ const Onboarding = ({
         backgroundColor: "rgb(27, 27, 28)",
         color: "#fff",
         zIndex: 9999,
-        // padding: 20,
         overflowY: "auto",
         paddingTop: "calc(env(safe-area-inset-top) + 20px)",
         paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)",
@@ -130,15 +133,36 @@ const Onboarding = ({
         paddingRight: "calc(env(safe-area-inset-right) + 20px)",
       }}
     >
-      <IonButton
-        fill="clear"
-        color="light"
-        size="small"
-        className="absolute text-lg z-10 left-[-5px] top-2"
-        onClick={switchToPreviousPage}
-      >
-        <IonIcon icon={chevronBackOutline} />
-      </IonButton>
+      {showOnboarding && (
+        <>
+          <IonButton
+            fill="clear"
+            color="light"
+            size="small"
+            className="absolute text-lg z-10 left-[-5px] top-2"
+            onClick={switchToPreviousPage}
+          >
+            <IonIcon icon={chevronBackOutline} />
+          </IonButton>
+        </>
+      )}
+
+      {showSalahTimesOnboarding && (
+        <>
+          <IonButton
+            fill="clear"
+            color="light"
+            size="small"
+            className="absolute text-lg z-10 right-[-5px] top-10"
+            onClick={() => {
+              setShowSalahTimesOnboarding?.(false);
+            }}
+          >
+            <IonIcon icon={closeOutline} />
+          </IonButton>
+        </>
+      )}
+
       <Swiper
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         style={{ margin: 0 }}
@@ -154,7 +178,6 @@ const Onboarding = ({
         //   prevEl: ".swiper-button-prev",
         // }}
         modules={[Pagination, Navigation]}
-        // pagination={{ clickable: true }}
       >
         <SwiperSlide>
           <section className="flex flex-col justify-center h-full">
@@ -274,6 +297,7 @@ const Onboarding = ({
                 setShowLocationAddedToast={setShowLocationAddedToast}
                 showOnboarding={showOnboarding}
                 switchToNextPage={switchToNextPage}
+                showSalahTimesOnboarding={showSalahTimesOnboarding}
               />
             </section>
           </section>
@@ -292,20 +316,20 @@ const Onboarding = ({
               userPreferences={userPreferences}
               setUserPreferences={setUserPreferences}
             />
-            <section className="">
-              <IonButton
-                disabled={
-                  userPreferences.prayerCalculationMethod === "" ? true : false
-                }
-                onClick={async () => {
-                  switchToNextPage();
-                }}
-                className={`absolute bottom-0 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
-              >
-                Next
-              </IonButton>
-            </section>
+            {/* <section className=""> */}
+            <IonButton
+              disabled={
+                userPreferences.prayerCalculationMethod === "" ? true : false
+              }
+              onClick={async () => {
+                switchToNextPage();
+              }}
+              className={`absolute bottom-0 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
+            >
+              Next
+            </IonButton>
           </section>
+          {/* </section> */}
         </SwiperSlide>
         <SwiperSlide>
           <section className="flex flex-col justify-center h-full">
@@ -317,7 +341,11 @@ const Onboarding = ({
               <IonButton
                 expand="block"
                 onClick={async () => {
-                  if (switchToNextPage && showOnboarding) switchToNextPage();
+                  if (
+                    (switchToNextPage && showOnboarding) ||
+                    (switchToNextPage && showSalahTimesOnboarding)
+                  )
+                    switchToNextPage();
                   await updateUserPrefs(
                     dbConnection,
                     "madhab",
@@ -336,7 +364,11 @@ const Onboarding = ({
                 className="mt-5"
                 expand="block"
                 onClick={async () => {
-                  if (switchToNextPage && showOnboarding) switchToNextPage();
+                  if (
+                    (switchToNextPage && showOnboarding) ||
+                    (switchToNextPage && showSalahTimesOnboarding)
+                  )
+                    switchToNextPage();
                   await updateUserPrefs(
                     dbConnection,
                     "madhab",
@@ -368,8 +400,11 @@ const Onboarding = ({
                 onClick={async () => {
                   const res = await handleNotificationPermissions();
 
-                  setShowJoyRideEditIcon(true);
+                  if (showOnboarding) {
+                    setShowJoyRideEditIcon(true);
+                  }
                   setShowOnboarding?.(false);
+                  setShowSalahTimesOnboarding?.(false);
 
                   if (res === "granted") {
                     const notifications = [
@@ -416,8 +451,11 @@ const Onboarding = ({
                 fill="clear"
                 onClick={() => {
                   // switchToNextPage();
-                  setShowJoyRideEditIcon(true);
+                  if (showOnboarding) {
+                    setShowJoyRideEditIcon(true);
+                  }
                   setShowOnboarding?.(false);
+                  setShowSalahTimesOnboarding?.(false);
                 }}
                 className="text-white mb-2text-center rounded-2xl"
               >
@@ -483,7 +521,9 @@ const Onboarding = ({
                   const permission =
                     await LocalNotifications.requestPermissions();
 
-                  setShowJoyRideEditIcon(true);
+                  if (showOnboarding) {
+                    setShowJoyRideEditIcon(true);
+                  }
                   setShowOnboarding?.(false);
 
                   if (permission.display === "granted") {
@@ -517,7 +557,9 @@ const Onboarding = ({
                 fill="clear"
                 onClick={() => {
                   // setIsOnboarding(false);
-                  setShowJoyRideEditIcon(true);
+                  if (showOnboarding) {
+                    setShowJoyRideEditIcon(true);
+                  }
                   setShowOnboarding?.(false);
                 }}
                 className="text-white mb-2text-center rounded-2xl"

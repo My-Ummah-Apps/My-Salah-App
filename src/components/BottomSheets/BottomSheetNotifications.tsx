@@ -236,7 +236,6 @@ const BottomSheetNotifications = ({
             style={{ "--track-background": "#555" }}
             checked={dailyNotificationToggle}
             onIonChange={async (e) => {
-              console.log("E: ", e.detail.checked);
               const toggleStatus = e.detail.checked;
 
               const notificationValue = toggleStatus === true ? "1" : "0";
@@ -261,70 +260,68 @@ const BottomSheetNotifications = ({
           <div
           // className="flex flex-col py-3 border-b border-[var(--app-border-color)]"
           >
-            {userPreferences.prayerCalculationMethod !== "" &&
-              userLocations.length > 0 && (
-                <IonList
+            <IonList
+              style={{
+                "--background": "transparent",
+                background: "transparent",
+              }}
+            >
+              <IonRadioGroup
+                value={selectedDailyNotificationOption}
+                onIonChange={async (e) => {
+                  const eventValue = e.detail.value;
+                  console.log("EVENT VALUE: ", eventValue);
+
+                  setSelectedDailyNotificationOption(eventValue);
+                  await updateUserPrefs(
+                    dbConnection,
+                    "dailyNotificationOption",
+                    eventValue,
+                    setUserPreferences,
+                  );
+
+                  await scheduleFixedOrAfterIshaDailyNotifications(eventValue);
+                }}
+              >
+                <IonItem
                   style={{
                     "--background": "transparent",
                     background: "transparent",
                   }}
+                  lines="none"
                 >
-                  <IonRadioGroup
-                    value={selectedDailyNotificationOption}
-                    onIonChange={async (e) => {
-                      const eventValue = e.detail.value;
-                      console.log("EVENT VALUE: ", eventValue);
-
-                      setSelectedDailyNotificationOption(eventValue);
-                      await updateUserPrefs(
-                        dbConnection,
-                        "dailyNotificationOption",
-                        eventValue,
-                        setUserPreferences,
-                      );
-
-                      await scheduleFixedOrAfterIshaDailyNotifications(
-                        eventValue,
-                      );
-                    }}
+                  <IonRadio
+                    slot="start"
+                    labelPlacement="end"
+                    value="fixedTime"
+                    color="light"
                   >
-                    <IonItem
-                      style={{
-                        "--background": "transparent",
-                        background: "transparent",
-                      }}
-                      lines="none"
-                    >
-                      <IonRadio
-                        slot="start"
-                        labelPlacement="end"
-                        value="fixedTime"
-                        color="light"
-                      >
-                        At fixed time
-                      </IonRadio>
-                      <IonInput
-                        slot="end"
-                        onIonChange={async (e) => {
-                          e.stopPropagation();
-                          await handleTimeChange(e);
-                        }}
-                        style={{
-                          "--background": "var(--card-bg-color)",
-                        }}
-                        className={`${
-                          dailyNotificationToggle === true ? "slideUp" : ""
-                        } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
-                        type="time"
-                        dir="auto"
-                        id="appt"
-                        name="appt"
-                        min="09:00"
-                        max="18:00"
-                        value={userPreferences.dailyNotificationTime}
-                        required
-                      />
-                    </IonItem>
+                    At fixed time
+                  </IonRadio>
+                  <IonInput
+                    slot="end"
+                    onIonChange={async (e) => {
+                      e.stopPropagation();
+                      await handleTimeChange(e);
+                    }}
+                    style={{
+                      "--background": "var(--card-bg-color)",
+                    }}
+                    className={`${
+                      dailyNotificationToggle === true ? "slideUp" : ""
+                    } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
+                    type="time"
+                    dir="auto"
+                    id="appt"
+                    name="appt"
+                    min="09:00"
+                    max="18:00"
+                    value={userPreferences.dailyNotificationTime}
+                    required
+                  />
+                </IonItem>
+                {userPreferences.prayerCalculationMethod !== "" &&
+                  userLocations.length > 0 && (
                     <IonItem
                       style={{
                         "--background": "transparent",
@@ -355,7 +352,6 @@ const BottomSheetNotifications = ({
                               userPreferences,
                             );
                           }
-
                           await updateUserPrefs(
                             dbConnection,
                             "dailyNotificationAfterIshaDelay",
@@ -374,9 +370,9 @@ const BottomSheetNotifications = ({
                         })}
                       </IonSelect>
                     </IonItem>
-                  </IonRadioGroup>
-                </IonList>
-              )}
+                  )}
+              </IonRadioGroup>
+            </IonList>
           </div>
         )}
         <section className="px-3 mt-5">
