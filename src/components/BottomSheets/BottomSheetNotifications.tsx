@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
 import { AndroidSettings } from "capacitor-native-settings";
@@ -19,10 +19,11 @@ import {
   cancelNotifications,
   scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
-  requestIgnoreBatteryOptimization,
+  // requestIgnoreBatteryOptimization,
   scheduleAfterIshaDailyNotifications,
 } from "../../utils/helpers";
 import {
+  IonButton,
   IonInput,
   IonItem,
   IonList,
@@ -45,12 +46,14 @@ import { Capacitor } from "@capacitor/core";
 const BottomSheetNotifications = ({
   dbConnection,
   triggerId,
+  isAppActive,
   setUserPreferences,
   userPreferences,
   userLocations,
 }: {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   triggerId: string;
+  isAppActive: boolean;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   userLocations: LocationsDataObjTypeArr;
@@ -65,17 +68,21 @@ const BottomSheetNotifications = ({
   const [selectedDailyNotificationOption, setSelectedDailyNotificationOption] =
     useState(userPreferences.dailyNotificationOption);
 
-  const getBatteryOptimisationStatus = async () => {
-    if (Capacitor.getPlatform() !== "android" || !Capacitor.isNativePlatform())
-      return;
+  const getBatteryOptimizationStatus = async () => {
+    if (Capacitor.getPlatform() !== "android") return;
+    const res = await isBatteryOptimizationEnabled();
+    setIsBatteryOptEnabled(res);
+  };
 
-    const getBatteryOptimizationStatus = async () => {
-      const res = await isBatteryOptimizationEnabled();
-      setIsBatteryOptEnabled(res);
+  useEffect(() => {
+    const battOptStatus = async () => {
+      await getBatteryOptimizationStatus();
     };
 
-    getBatteryOptimizationStatus();
-  };
+    if (!isAppActive) return;
+
+    battOptStatus();
+  }, [isAppActive]);
 
   const minuteIntervals = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
 
@@ -225,7 +232,7 @@ const BottomSheetNotifications = ({
       breakpoints={MODAL_BREAKPOINTS}
       onWillPresent={async () => {
         getNotificationStatuses();
-        await getBatteryOptimisationStatus();
+        await getBatteryOptimizationStatus();
       }}
     >
       <section className="mb-10">
@@ -375,77 +382,97 @@ const BottomSheetNotifications = ({
             </IonList>
           </div>
         )}
-        <section className="px-3 mt-5">
-          <div className="flex items-center justify-between notification-text-and-toggle-wrap">
-            <p>Turn on Salah Notifications</p>{" "}
-            <IonToggle
-              mode={isPlatform("android") ? "md" : "ios"}
-              style={{ "--track-background": "#555" }}
-              checked={notificationToggle}
-              onIonChange={async () => {
-                if (!notificationToggle) {
-                  setNotificationToggle(true);
+        {userPreferences.prayerCalculationMethod !== "" &&
+          userLocations.length > 0 && (
+            <section className="px-3 mt-5">
+              <div className="flex items-center justify-between notification-text-and-toggle-wrap">
+                <p>Turn on Salah Notifications</p>{" "}
+                <IonToggle
+                  mode={isPlatform("android") ? "md" : "ios"}
+                  style={{ "--track-background": "#555" }}
+                  checked={notificationToggle}
+                  onIonChange={async () => {
+                    if (!notificationToggle) {
+                      setNotificationToggle(true);
 
-                  const salahs = adhanLibrarySalahs;
+                      const salahs = adhanLibrarySalahs;
 
-                  for (const salah of salahs) {
-                    await scheduleSalahNotifications(
-                      userLocations,
-                      salah,
-                      userPreferences,
-                      "on",
-                    );
-                  }
+                      for (const salah of salahs) {
+                        await scheduleSalahNotifications(
+                          userLocations,
+                          salah,
+                          userPreferences,
+                          "on",
+                        );
+                      }
 
-                  for (const salah of adhanLibrarySalahs) {
-                    await updateUserPrefs(
-                      dbConnection,
-                      `${salah}Notification`,
-                      "on",
-                      setUserPreferences,
-                    );
-                  }
-                } else {
-                  setNotificationToggle(false);
+                      for (const salah of adhanLibrarySalahs) {
+                        await updateUserPrefs(
+                          dbConnection,
+                          `${salah}Notification`,
+                          "on",
+                          setUserPreferences,
+                        );
+                      }
+                    } else {
+                      setNotificationToggle(false);
 
-                  for (const salah of adhanLibrarySalahs) {
-                    await cancelNotifications(salah);
-                  }
-                  for (const salah of adhanLibrarySalahs) {
-                    await updateUserPrefs(
-                      dbConnection,
-                      `${salah}Notification`,
-                      "off",
-                      setUserPreferences,
-                    );
-                  }
-                }
-              }}
-            ></IonToggle>
-          </div>
-          <p className="mt-3 text-sm opacity-50">
-            Turn this on to receive all prayer and sunrise reminders. You can
-            also manage individual reminders on the Salah Times page.
-          </p>
-        </section>
+                      for (const salah of adhanLibrarySalahs) {
+                        await cancelNotifications(salah);
+                      }
+                      for (const salah of adhanLibrarySalahs) {
+                        await updateUserPrefs(
+                          dbConnection,
+                          `${salah}Notification`,
+                          "off",
+                          setUserPreferences,
+                        );
+                      }
+                    }
+                  }}
+                ></IonToggle>
+              </div>
+              <p className="mt-3 text-sm opacity-50">
+                Turn this on to receive all prayer and sunrise reminders. You
+                can also manage individual reminders on the Salah Times page.
+              </p>
+            </section>
+          )}
         {Capacitor.getPlatform() === "android" && (
           <section className="p-3 mt-10 mb-10">
             <div className="flex items-center justify-between notification-text-and-toggle-wrap">
-              <p>Battery Optimisation Disabled</p>{" "}
-              <IonToggle
-                mode={isPlatform("android") ? "md" : "ios"}
-                style={{ "--track-background": "#555" }}
-                checked={isBatteryOptEnabled}
-                onIonChange={async () => {
-                  await requestIgnoreBatteryOptimization();
-                  await getBatteryOptimisationStatus();
-                }}
-              ></IonToggle>
+              <p>
+                Battery Optimisation Is Currently:{" "}
+                <span
+                  className={`${isBatteryOptEnabled ? "text-red-500" : "text-green-500"}`}
+                >{`${isBatteryOptEnabled ? "Enabled" : "Disabled"}`}</span>
+              </p>{" "}
             </div>
-            <p className="mt-3 text-sm opacity-50">
-              Disable battery optimisation to ensure notifications arrive on
-              time.
-            </p>
+
+            {isBatteryOptEnabled && (
+              <>
+                <p className="mt-3 mb-5 text-sm opacity-50">
+                  {`Battery optimization for this app is currently on, which may delay notifications. To ensure timely alerts, you can turn it off in Settings:`}
+                </p>{" "}
+                <IonButton
+                  className="text-xs"
+                  onClick={() => {
+                    promptToOpenDeviceSettings(
+                      "Disable Battery Optimization",
+                      "To ensure notifications arrive on time, please turn off battery optimization for this app.",
+                      AndroidSettings.BatteryOptimization,
+                    );
+                  }}
+                >
+                  Turn off battery optimisation
+                </IonButton>
+              </>
+            )}
+            {!isBatteryOptEnabled && (
+              <p className="mt-3 text-sm opacity-50">
+                {`Battery optimization is off, so notifications should arrive promptly.`}
+              </p>
+            )}
           </section>
         )}
       </section>

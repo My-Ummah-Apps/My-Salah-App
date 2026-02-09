@@ -127,6 +127,8 @@ const App = () => {
       minsRemaining: 0,
     });
 
+  const [isAppActive, setIsAppActive] = useState(true);
+
   useEffect(() => {
     let appState: PluginListenerHandle;
 
@@ -145,7 +147,7 @@ const App = () => {
                   setSalahtimes,
                 );
                 await getNextSalahDetails();
-                // If new date then do this:
+                // If new date then do the follwoing:
                 // ! Show the latest date on home page (if its a new day)
                 await scheduleAllSalahNotifications();
               } catch (error) {
@@ -155,6 +157,7 @@ const App = () => {
               }
             })();
           }
+          setIsAppActive(isActive);
         },
       );
     })();
@@ -912,6 +915,7 @@ const App = () => {
                   sqliteConnection={sqliteConnection}
                   dbConnection={dbConnection}
                   setUserPreferences={setUserPreferences}
+                  isAppActive={isAppActive}
                   theme={theme}
                   handleTheme={handleTheme}
                   fetchDataFromDB={fetchDataFromDB}

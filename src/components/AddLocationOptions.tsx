@@ -532,7 +532,7 @@ const AddLocationOptions = ({
         </div>
         <section className="mx-4">
           <div
-            className="border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
+            className="text-center border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
             onClick={async () => {
               if (showAddLocationForm) return;
 
@@ -555,14 +555,14 @@ const AddLocationOptions = ({
             </div>
             <div>
               <p className="mt-0">Use Device GPS</p>
-              <p className="text-xs font-light">
+              <p className="text-xs opacity-80">
                 Determine Location Automatically
               </p>
             </div>
           </div>
 
           <div
-            className="border-transparent p-2 mb-5 rounded-lg  bg-[var(--sheet-option-bg)]"
+            className=" text-center border-transparent p-2 mb-5 rounded-lg  bg-[var(--sheet-option-bg)]"
             onClick={() => {
               if (showAddLocationForm) return;
               setMode("manualCoords");
@@ -574,7 +574,7 @@ const AddLocationOptions = ({
             </div>
             <div>
               <p className="mt-0">Enter Coordinates</p>
-              <p className="text-xs font-light">
+              <p className="text-xs opacity-80">
                 {" "}
                 Manually enter a latitude and longitude if you already know the
                 exact location
@@ -582,7 +582,7 @@ const AddLocationOptions = ({
             </div>
           </div>
           <div
-            className="border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
+            className="text-center border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
             onClick={() => {
               if (showAddLocationForm) return;
               setShowAddLocationForm(true);
@@ -594,7 +594,7 @@ const AddLocationOptions = ({
             </div>
             <div>
               <p className="mt-0">Search Manually</p>
-              <p className="text-xs font-light">
+              <p className="text-xs opacity-80">
                 {" "}
                 Search for a city by name and select it from the results
               </p>

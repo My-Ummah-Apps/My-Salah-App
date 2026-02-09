@@ -652,7 +652,7 @@ export const formatNumberWithSign = (number: number) => {
 };
 
 export const isBatteryOptimizationEnabled = async () => {
-  if (Capacitor.getPlatform() !== "anroid") {
+  if (Capacitor.getPlatform() !== "android") {
     return false;
   }
   const { enabled } = await BatteryOptimization.isBatteryOptimizationEnabled();

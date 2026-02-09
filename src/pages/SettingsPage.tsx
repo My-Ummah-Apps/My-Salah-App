@@ -40,6 +40,7 @@ import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimes
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  isAppActive: boolean;
   theme: themeType;
   handleTheme: (theme?: themeType) => string;
   fetchDataFromDB: (isDBImported?: boolean) => Promise<void>;
@@ -53,6 +54,7 @@ interface SettingsPageProps {
 const SettingsPage = ({
   sqliteConnection,
   dbConnection,
+  isAppActive,
   theme,
   handleTheme,
   fetchDataFromDB,
@@ -273,6 +275,7 @@ const SettingsPage = ({
               <BottomSheetNotifications
                 dbConnection={dbConnection}
                 triggerId="open-notification-options-sheet"
+                isAppActive={isAppActive}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 userLocations={userLocations}
