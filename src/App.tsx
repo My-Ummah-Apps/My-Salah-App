@@ -33,6 +33,7 @@ import {
   getSalahTimes,
   scheduleSalahNotifications,
   getNextSalah,
+  scheduleAfterIshaDailyNotifications,
 } from "./utils/helpers";
 import {
   DBResultDataObjType,
@@ -294,8 +295,8 @@ const App = () => {
   useEffect(() => {
     if (
       !isDatabaseInitialised ||
-      userLocations.length === 0
-      // ||  userPreferences.prayerCalculationMethod === ""
+      userLocations.length === 0 ||
+      userPreferences.prayerCalculationMethod === ""
     ) {
       return;
     }
@@ -315,13 +316,6 @@ const App = () => {
 
     const scheduleAllSalahNotifications = async () => {
       const salahs = adhanLibrarySalahs;
-
-      // await cancelNotifications("fajr");
-      // await cancelNotifications("sunrise");
-      // await cancelNotifications("dhuhr");
-      // await cancelNotifications("asr");
-      // await cancelNotifications("maghrib");
-      // await cancelNotifications("isha");
 
       for (let i = 0; i < salahs.length; i++) {
         const salahAdjustmentKey = `${salahs[i]}Notification`;
@@ -344,6 +338,21 @@ const App = () => {
     };
 
     scheduleAllSalahNotifications();
+
+    const scheduleDailyNotifications = async () => {
+      await scheduleAfterIshaDailyNotifications(
+        Number(userPreferences.dailyNotificationAfterIshaDelay),
+        userLocations,
+        userPreferences,
+      );
+    };
+
+    if (
+      userPreferences.dailyNotification === "1" &&
+      userPreferences.dailyNotificationOption === "afterIsha"
+    ) {
+      scheduleDailyNotifications();
+    }
 
     getNextSalahDetails();
   }, [
@@ -884,8 +893,6 @@ const App = () => {
               render={() => (
                 <SalahTimesPage
                   dbConnection={dbConnection}
-                  setShowOnboarding={setShowOnboarding}
-                  showOnboarding={showOnboarding}
                   setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                   setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}

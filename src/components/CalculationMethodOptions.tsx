@@ -82,7 +82,7 @@ const CalculationMethodOptions = ({
     {
       calculationMethod: "MoonsightingCommittee",
       description:
-        "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude. Recommended for North America and the UK.",
+        "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude.",
     },
     {
       calculationMethod: "MuslimWorldLeague",
@@ -167,7 +167,8 @@ const CalculationMethodOptions = ({
 
       const defaultCalcMethodValues = {
         prayerCalculationMethod: calcMethod,
-        madhab: params.madhab,
+        // madhab: params.madhab,
+        madhab: userPreferences.madhab,
         highLatitudeRule: HighLatitudeRule.recommended(coordinates),
         fajrAngle: String(params.fajrAngle),
         ishaAngle: String(params.ishaAngle),

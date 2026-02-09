@@ -13,8 +13,8 @@ export type CalculationMethodsType =
   | "Singapore"
   | "Turkey"
   | "Tehran"
-  // | "Other"
   | "";
+// | "Other"
 
 export type countryOptionsType =
   | "Egypt"

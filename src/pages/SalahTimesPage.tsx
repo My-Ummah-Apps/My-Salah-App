@@ -51,8 +51,6 @@ import CalculationMethodOptions from "../components/CalculationMethodOptions";
 
 interface SalahTimesPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
-  showOnboarding: boolean;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
@@ -71,8 +69,6 @@ interface SalahTimesPageProps {
 
 const SalahTimesPage = ({
   dbConnection,
-  setShowOnboarding,
-  showOnboarding,
   setShowJoyRideEditIcon,
   setUserPreferences,
   userPreferences,
@@ -150,7 +146,7 @@ const SalahTimesPage = ({
               {location.isSelected === 1 ? (
                 <div
                   key={location.id}
-                  className="flex items-center justify-center mb-1 text-lg font-light"
+                  className="flex items-center justify-center mb-1 text-lg "
                 >
                   <IonIcon
                     className="text-[var(--ion-text-color)] mr-1"
@@ -169,9 +165,7 @@ const SalahTimesPage = ({
                 {nextSalahNameAndTime.currentSalah !== "sunrise" &&
                   nextSalahNameAndTime.currentSalah !== "none" && (
                     <>
-                      <p className="mb-1 text-lg text-center font-extralight ">
-                        Current Salah
-                      </p>
+                      <p className="mb-1 text-lg text-center">Current Salah</p>
                       <p className="text-6xl font-bold text-center">
                         {upperCaseFirstLetter(
                           nextSalahNameAndTime.currentSalah,
@@ -182,119 +176,123 @@ const SalahTimesPage = ({
                 <p className="text-4xl text-center">
                   {/* {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")} */}
                 </p>
-                {nextSalahNameAndTime.hoursRemaining > 0 && (
-                  <p className="mt-2 font-light text-center">
-                    {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+                <div
+                  className={`${nextSalahNameAndTime.currentSalah === "fajr" || nextSalahNameAndTime.currentSalah === "maghrib" ? "mt-3" : ""}`}
+                >
+                  {nextSalahNameAndTime.hoursRemaining > 0 && (
+                    <p className="mt-2 text-center">
+                      {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+                    </p>
+                  )}
+                  <p className="text-center">
+                    {nextSalahNameAndTime.minsRemaining} minutes to go until
                   </p>
-                )}
-                <p className="text-center font-extralight">
-                  {nextSalahNameAndTime.minsRemaining} minutes to go until
-                </p>
-                <p className="mt-2 mb-2 text-2xl font-light text-center">
-                  {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
-                </p>
+                  <p className="mt-2 mb-2 text-2xl text-center">
+                    {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
+                  </p>
+                </div>
               </section>
             )}
           {/* {userLocations?.length === 0 ? ( */}
-          {userLocations?.length === 0 ||
-            (userPreferences.prayerCalculationMethod === "" && (
-              <>
-                <section
-                  className="text-center"
-                  // className="flex flex-col items-center justify-center h-full text-center"
-                >
-                  <h4>Salah Times Not Set</h4>
+          {/* {userLocations?.length === 0 ||
+            (userPreferences.prayerCalculationMethod === "" && ( */}
+          <>
+            <section
+              className="text-center"
+              // className="flex flex-col items-center justify-center h-full text-center"
+            >
+              {userPreferences.prayerCalculationMethod === "" && (
+                <h4>Salah Times Not Set</h4>
+              )}
+              {userPreferences.prayerCalculationMethod === "" &&
+                userLocations.length === 0 && (
                   <IonButton
                     onClick={() => {
-                      if (
-                        userPreferences.prayerCalculationMethod === "" &&
-                        userLocations.length === 0
-                      ) {
-                        setShowSalahTimesOnboarding(true);
-                        setShowOnboarding(true);
-                      } else if (
-                        userPreferences.prayerCalculationMethod === "" &&
-                        userLocations.length > 0
-                      ) {
-                        setShowCalcMethodsSheet(true);
-                      } else if (
-                        userPreferences.prayerCalculationMethod !== "" &&
-                        userLocations.length === 0
-                      ) {
-                        setShowAddLocationSheet(true);
-                      }
+                      setShowSalahTimesOnboarding(true);
                     }}
                     className="w-1/2"
                   >
-                    {userPreferences.prayerCalculationMethod === "" &&
-                    userLocations.length === 0
-                      ? "Set Up Salah Times"
-                      : userPreferences.prayerCalculationMethod === "" &&
-                          userLocations.length > 0
-                        ? "Select Calculation Method"
-                        : userPreferences.prayerCalculationMethod !== "" &&
-                            userLocations.length === 0
-                          ? "Add Location"
-                          : ""}
+                    Set Up Salah Times
                   </IonButton>
-                  <BottomSheetAddLocation
-                    setShowAddLocationSheet={setShowAddLocationSheet}
-                    showAddLocationSheet={showAddLocationSheet}
-                    dbConnection={dbConnection}
-                    setUserLocations={setUserLocations}
-                    userLocations={userLocations}
-                    setShowLocationFailureToast={setShowLocationFailureToast}
-                    setShowLocationAddedToast={setShowLocationAddedToast}
-                  />
-                  <IonModal
-                    style={{ "--height": "80vh" }}
-                    isOpen={showCalcMethodsSheet}
-                    onDidDismiss={() => {
-                      setShowCalcMethodsSheet(false);
+                )}
+              {userPreferences.prayerCalculationMethod === "" &&
+                userLocations.length > 0 && (
+                  <IonButton
+                    onClick={() => {
+                      setShowCalcMethodsSheet(true);
                     }}
-                    className={`${isPlatform("ios") ? "" : "modal-height"}`}
-                    mode="ios"
-                    initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
-                    breakpoints={MODAL_BREAKPOINTS}
+                    className="w-1/2"
                   >
-                    <IonHeader>
-                      <IonToolbar
-                        style={{
-                          "--background": "transparent",
-                        }}
-                      >
-                        <IonTitle>Calculation Methods</IonTitle>
-                      </IonToolbar>
-                    </IonHeader>
+                    Select Calculation Method
+                  </IonButton>
+                )}
+              {userPreferences.prayerCalculationMethod !== "" &&
+                userLocations.length === 0 && (
+                  <IonButton
+                    onClick={() => {
+                      setShowAddLocationSheet(true);
+                    }}
+                    className="w-1/2"
+                  >
+                    Add Location
+                  </IonButton>
+                )}
 
-                    <CalculationMethodOptions
-                      dbConnection={dbConnection}
-                      setSegmentOption={setSegmentOption}
-                      segmentOption={segmentOption}
-                      setUserPreferences={setUserPreferences}
-                      userPreferences={userPreferences}
-                      userLocations={userLocations}
-                    />
-                  </IonModal>
-                  {showSalahTimesOnboarding && (
-                    <Onboarding
-                      setShowOnboarding={setShowOnboarding}
-                      showOnboarding={showOnboarding}
-                      // startingSlide={3}
-                      showSalahTimesOnboarding={showSalahTimesOnboarding}
-                      setShowJoyRideEditIcon={setShowJoyRideEditIcon}
-                      dbConnection={dbConnection}
-                      setUserPreferences={setUserPreferences}
-                      userPreferences={userPreferences}
-                      setUserLocations={setUserLocations}
-                      userLocations={userLocations}
-                      setShowLocationFailureToast={setShowLocationFailureToast}
-                      setShowLocationAddedToast={setShowLocationAddedToast}
-                    />
-                  )}
-                </section>
-              </>
-            ))}
+              <BottomSheetAddLocation
+                setShowAddLocationSheet={setShowAddLocationSheet}
+                showAddLocationSheet={showAddLocationSheet}
+                dbConnection={dbConnection}
+                setUserLocations={setUserLocations}
+                userLocations={userLocations}
+                setShowLocationFailureToast={setShowLocationFailureToast}
+                setShowLocationAddedToast={setShowLocationAddedToast}
+              />
+              <IonModal
+                style={{ "--height": "80vh" }}
+                isOpen={showCalcMethodsSheet}
+                onDidDismiss={() => {
+                  setShowCalcMethodsSheet(false);
+                }}
+                className={`${isPlatform("ios") ? "" : "modal-height"}`}
+                mode="ios"
+                initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+                breakpoints={MODAL_BREAKPOINTS}
+              >
+                <IonHeader>
+                  <IonToolbar
+                    style={{
+                      "--background": "transparent",
+                    }}
+                  >
+                    <IonTitle>Calculation Methods</IonTitle>
+                  </IonToolbar>
+                </IonHeader>
+
+                <CalculationMethodOptions
+                  dbConnection={dbConnection}
+                  setSegmentOption={setSegmentOption}
+                  segmentOption={segmentOption}
+                  setUserPreferences={setUserPreferences}
+                  userPreferences={userPreferences}
+                  userLocations={userLocations}
+                />
+              </IonModal>
+              {showSalahTimesOnboarding && (
+                <Onboarding
+                  startingSlide={3}
+                  setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+                  dbConnection={dbConnection}
+                  setUserPreferences={setUserPreferences}
+                  userPreferences={userPreferences}
+                  setUserLocations={setUserLocations}
+                  userLocations={userLocations}
+                  setShowLocationFailureToast={setShowLocationFailureToast}
+                  setShowLocationAddedToast={setShowLocationAddedToast}
+                />
+              )}
+            </section>
+          </>
+          {/* ))} */}
           <section
             className={` ${
               userLocations?.length === 0 ||

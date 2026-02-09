@@ -16,7 +16,7 @@ import {
   PrayerTimes,
 } from "adhan";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { addDays, format, isValid, parse } from "date-fns";
+import { addDays, addMinutes, format, isValid, parse } from "date-fns";
 import { Toast } from "@capacitor/toast";
 import { Dialog } from "@capacitor/dialog";
 import { Capacitor } from "@capacitor/core";
@@ -358,10 +358,10 @@ export const scheduleSalahNotifications = async (
     }
   }
 
-  // console.log(
-  //   "PENDING NOTIFICATIONS: ",
-  //   (await LocalNotifications.getPending()).notifications,
-  // );
+  console.log(
+    "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 export const generateActiveLocationParams = async (
@@ -412,6 +412,68 @@ export const generateActiveLocationParams = async (
   // console.log("params after amendments:", params);
 
   return { params, coordinates };
+};
+
+export const scheduleAfterIshaDailyNotifications = async (
+  delay: number,
+  userLocations: LocationsDataObjTypeArr,
+  userPreferences: userPreferencesType,
+) => {
+  await cancelNotifications("Daily Reminder");
+
+  const now = new Date();
+
+  const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
+    return addDays(now, i);
+  });
+
+  const result = await generateActiveLocationParams(
+    userLocations,
+    userPreferences,
+  );
+
+  if (!result) return;
+  const { params, coordinates } = result;
+
+  const arr = [];
+
+  for (let i = 0; i < nextSevenDays.length; i++) {
+    const salahTime = new PrayerTimes(coordinates, nextSevenDays[i], params)[
+      "isha"
+    ];
+
+    const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
+
+    if (now < localisedSalahTime) {
+      arr.push(addMinutes(localisedSalahTime, delay));
+    }
+
+    // console.log("arr: ", arr);
+
+    for (let i = 0; i < arr.length; i++) {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id: 1000 + i,
+            title: "Daily Reminder",
+            body: `Did you log your prayers today?`,
+            schedule: {
+              at: arr[i],
+              allowWhileIdle: true,
+              repeats: false,
+            },
+            sound: "default",
+            channelId: "daily-reminder",
+          },
+        ],
+      });
+    }
+
+    console.log(
+      "PENDING NOTIFICATIONS AFTER THE AFTER ISHA FUNCTION HAS RUN: ",
+      (await LocalNotifications.getPending()).notifications,
+    );
+  }
 };
 
 export const extractSalahTime = (

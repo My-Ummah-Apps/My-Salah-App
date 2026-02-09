@@ -527,7 +527,7 @@ const AddLocationOptions = ({
         </div>
         <section className="mx-4">
           <div
-            className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
+            className="border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
             onClick={async () => {
               if (showAddLocationForm) return;
 
@@ -557,7 +557,7 @@ const AddLocationOptions = ({
           </div>
 
           <div
-            className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
+            className="border-transparent p-2 mb-5 rounded-lg  bg-[var(--sheet-option-bg)]"
             onClick={() => {
               if (showAddLocationForm) return;
               setMode("manualCoords");
@@ -577,7 +577,7 @@ const AddLocationOptions = ({
             </div>
           </div>
           <div
-            className="border-transparent p-2 mb-5 items-center rounded-lg flex bg-[var(--sheet-option-bg)]"
+            className="border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
             onClick={() => {
               if (showAddLocationForm) return;
               setShowAddLocationForm(true);

@@ -20,8 +20,7 @@ import {
   scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
-  generateActiveLocationParams,
-  toLocalDateFromUTCClock,
+  scheduleAfterIshaDailyNotifications,
 } from "../../utils/helpers";
 import {
   IonInput,
@@ -42,8 +41,6 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 import { Capacitor } from "@capacitor/core";
-import { addDays, addMinutes } from "date-fns";
-import { PrayerTimes } from "adhan";
 
 const BottomSheetNotifications = ({
   dbConnection,
@@ -115,64 +112,10 @@ const BottomSheetNotifications = ({
       await scheduleFixedTimeDailyNotification(hour, minute);
     } else if (setting === "afterIsha") {
       console.log("TURNING ON AFTER ISHA TIME NOTIFICATION");
-      await scheduleAfterIshaDailyNotification(
+      await scheduleAfterIshaDailyNotifications(
         Number(userPreferences.dailyNotificationAfterIshaDelay),
-      );
-    }
-  };
-
-  const scheduleAfterIshaDailyNotification = async (delay: number) => {
-    const now = new Date();
-
-    const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
-      return addDays(now, i);
-    });
-
-    const result = await generateActiveLocationParams(
-      userLocations,
-      userPreferences,
-    );
-
-    if (!result) return;
-    const { params, coordinates } = result;
-
-    const arr = [];
-
-    for (let i = 0; i < nextSevenDays.length; i++) {
-      const salahTime = new PrayerTimes(coordinates, nextSevenDays[i], params)[
-        "isha"
-      ];
-
-      const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
-
-      if (now < localisedSalahTime) {
-        arr.push(addMinutes(localisedSalahTime, delay));
-      }
-
-      // console.log("arr: ", arr);
-
-      for (let i = 0; i < arr.length; i++) {
-        await LocalNotifications.schedule({
-          notifications: [
-            {
-              id: Date.now() + i,
-              title: "Daily Reminder",
-              body: `Did you log your prayers today?`,
-              schedule: {
-                at: arr[i],
-                allowWhileIdle: true,
-                repeats: false,
-              },
-              sound: "default",
-              channelId: "daily-reminder",
-            },
-          ],
-        });
-      }
-
-      console.log(
-        "PENDING NOTIFICATIONS: ",
-        (await LocalNotifications.getPending()).notifications,
+        userLocations,
+        userPreferences,
       );
     }
   };
@@ -406,7 +349,11 @@ const BottomSheetNotifications = ({
                           const delay = e.detail.value;
                           console.log("delay: ", delay);
                           if (selectedDailyNotificationOption === "afterIsha") {
-                            await scheduleAfterIshaDailyNotification(delay);
+                            await scheduleAfterIshaDailyNotifications(
+                              delay,
+                              userLocations,
+                              userPreferences,
+                            );
                           }
 
                           await updateUserPrefs(

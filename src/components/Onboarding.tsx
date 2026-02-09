@@ -9,6 +9,7 @@ import {
   scheduleSalahNotifications,
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
+  scheduleAfterIshaDailyNotifications,
 } from "../utils/helpers";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -27,10 +28,9 @@ interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
-  showOnboarding: boolean;
-  showSalahTimesOnboarding?: boolean;
-  // startingSlide?: number;
+  setShowOnboarding?: React.Dispatch<React.SetStateAction<boolean>>;
+  showOnboarding?: boolean;
+  startingSlide?: number;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
@@ -46,8 +46,7 @@ const Onboarding = ({
   userPreferences,
   setShowOnboarding,
   showOnboarding,
-  showSalahTimesOnboarding,
-  // startingSlide,
+  startingSlide,
   setShowJoyRideEditIcon,
   setUserLocations,
   userLocations,
@@ -55,6 +54,8 @@ const Onboarding = ({
   setShowLocationAddedToast,
 }: OnboardingProps) => {
   const swiperRef = useRef<SwiperInstance | null>(null);
+
+  console.log("RENDERED");
 
   const switchToNextPage = () => {
     swiperRef.current?.slideNext();
@@ -106,7 +107,7 @@ const Onboarding = ({
     getBatteryOptimizationStatus();
   }, []);
 
-  // console.log("startingSlide: ", startingSlide);
+  console.log("startingSlide: ", startingSlide);
 
   return (
     <section
@@ -145,8 +146,7 @@ const Onboarding = ({
         spaceBetween={50}
         slidesPerView={1}
         allowTouchMove={false}
-        // initialSlide={startingSlide ? startingSlide : 0}
-        initialSlide={showSalahTimesOnboarding ? 3 : 0}
+        initialSlide={startingSlide ? startingSlide : 0}
         pagination
         navigation
         // navigation={{
@@ -367,6 +367,10 @@ const Onboarding = ({
               <IonButton
                 onClick={async () => {
                   const res = await handleNotificationPermissions();
+
+                  setShowJoyRideEditIcon(true);
+                  setShowOnboarding?.(false);
+
                   if (res === "granted") {
                     const notifications = [
                       "fajrNotification",
@@ -395,10 +399,14 @@ const Onboarding = ({
                         "on",
                       );
                     }
+
+                    await scheduleAfterIshaDailyNotifications(
+                      Number(userPreferences.dailyNotificationAfterIshaDelay),
+                      userLocations,
+                      userPreferences,
+                    );
                   }
                   // switchToNextPage();
-                  setShowOnboarding(false);
-                  setShowJoyRideEditIcon(true);
                 }}
                 className="mb-4"
               >
@@ -408,8 +416,8 @@ const Onboarding = ({
                 fill="clear"
                 onClick={() => {
                   // switchToNextPage();
-                  setShowOnboarding(false);
                   setShowJoyRideEditIcon(true);
+                  setShowOnboarding?.(false);
                 }}
                 className="text-white mb-2text-center rounded-2xl"
               >
@@ -474,9 +482,13 @@ const Onboarding = ({
                 onClick={async () => {
                   const permission =
                     await LocalNotifications.requestPermissions();
+
+                  setShowJoyRideEditIcon(true);
+                  setShowOnboarding?.(false);
+
                   if (permission.display === "granted") {
-                    setShowOnboarding(false);
-                    setShowJoyRideEditIcon(true);
+                    // setShowJoyRideEditIcon(true);
+                    // setShowOnboarding(false);
                     await scheduleFixedTimeDailyNotification(21, 0);
                     await updateUserPrefs(
                       dbConnection,
@@ -491,8 +503,8 @@ const Onboarding = ({
                       setUserPreferences,
                     );
                   } else {
-                    setShowOnboarding(false);
-                    setShowJoyRideEditIcon(true);
+                    // setShowJoyRideEditIcon(true);
+                    // setShowOnboarding(false);
                   }
 
                   // setIsOnboarding(false);
@@ -505,8 +517,8 @@ const Onboarding = ({
                 fill="clear"
                 onClick={() => {
                   // setIsOnboarding(false);
-                  setShowOnboarding(false);
                   setShowJoyRideEditIcon(true);
+                  setShowOnboarding?.(false);
                 }}
                 className="text-white mb-2text-center rounded-2xl"
               >
