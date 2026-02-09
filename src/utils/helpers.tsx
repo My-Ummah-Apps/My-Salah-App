@@ -159,17 +159,17 @@ export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
 export const cancelNotifications = async (
   notificationName: SalahNamesTypeAdhanLibrary | "Daily Reminder",
 ) => {
-  console.log(
-    "CANCELLING NOTIFICATIONS FOR THE FOLLOWING REMINDERS: ",
-    notificationName,
-  );
+  // console.log(
+  //   "CANCELLING NOTIFICATIONS FOR THE FOLLOWING REMINDERS: ",
+  //   notificationName,
+  // );
 
   const pendingNotifications = await LocalNotifications.getPending();
 
-  console.log(
-    "pendingNotifications before cancellation: ",
-    pendingNotifications.notifications,
-  );
+  // console.log(
+  //   "pendingNotifications before cancellation: ",
+  //   pendingNotifications.notifications,
+  // );
 
   const notificationNameToCancel =
     notificationName !== "Daily Reminder"

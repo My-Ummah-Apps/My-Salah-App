@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { IonReactRouter } from "@ionic/react-router";
+import { App as capacitorApp } from "@capacitor/app";
 
 import {
   IonApp,
@@ -48,11 +49,12 @@ import {
   themeType,
   LocationsDataObjTypeArr,
   nextSalahTimeType,
+  salahTimesObjType,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
 import { SplashScreen } from "@capacitor/splash-screen";
-import { Capacitor } from "@capacitor/core";
+import { Capacitor, PluginListenerHandle } from "@capacitor/core";
 import {
   format,
   parse,
@@ -124,6 +126,43 @@ const App = () => {
       hoursRemaining: 0,
       minsRemaining: 0,
     });
+
+  useEffect(() => {
+    let appState: PluginListenerHandle;
+
+    (async () => {
+      appState = await capacitorApp.addListener(
+        "appStateChange",
+        ({ isActive }) => {
+          console.log("App state changed. Is active?", isActive);
+
+          if (isActive) {
+            (async () => {
+              try {
+                await generateSalahTimes(
+                  userLocations,
+                  userPreferences,
+                  setSalahtimes,
+                );
+                await getNextSalahDetails();
+                // If new date then do this:
+                // ! Show the latest date on home page (if its a new day)
+                await scheduleAllSalahNotifications();
+              } catch (error) {
+                console.error(
+                  "Unable to generate salah times / schedule notifications",
+                );
+              }
+            })();
+          }
+        },
+      );
+    })();
+
+    return () => {
+      appState?.remove();
+    };
+  }, [userLocations, userPreferences]);
 
   const {
     isDatabaseInitialised,
@@ -292,6 +331,42 @@ const App = () => {
     handleTheme(userPreferences.theme);
   }, [userPreferences.theme]);
 
+  const scheduleAllSalahNotifications = async () => {
+    const salahs = adhanLibrarySalahs;
+
+    for (let i = 0; i < salahs.length; i++) {
+      const salahAdjustmentKey = `${salahs[i]}Notification`;
+
+      const salahNotificationSetting =
+        userPreferences[salahAdjustmentKey as keyof userPreferencesType];
+
+      if (
+        salahNotificationSetting === "on" ||
+        salahNotificationSetting === "adhan"
+      ) {
+        await scheduleSalahNotifications(
+          userLocations,
+          salahs[i],
+          userPreferences,
+          salahNotificationSetting,
+        );
+      }
+    }
+  };
+
+  const generateSalahTimes = async (
+    userLocations: LocationsDataObjTypeArr,
+    userPreferences: userPreferencesType,
+    setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>,
+  ) => {
+    await getSalahTimes(
+      userLocations,
+      new Date(),
+      userPreferences,
+      setSalahtimes,
+    );
+  };
+
   useEffect(() => {
     if (
       !isDatabaseInitialised ||
@@ -301,43 +376,18 @@ const App = () => {
       return;
     }
 
-    const todaysDate = new Date();
+    // const todaysDate = new Date();
 
-    const generateSalahTimes = async () => {
-      await getSalahTimes(
-        userLocations,
-        todaysDate,
-        userPreferences,
-        setSalahtimes,
-      );
-    };
-
-    generateSalahTimes();
-
-    const scheduleAllSalahNotifications = async () => {
-      const salahs = adhanLibrarySalahs;
-
-      for (let i = 0; i < salahs.length; i++) {
-        const salahAdjustmentKey = `${salahs[i]}Notification`;
-
-        const salahNotificationSetting =
-          userPreferences[salahAdjustmentKey as keyof userPreferencesType];
-
-        if (
-          salahNotificationSetting === "on" ||
-          salahNotificationSetting === "adhan"
-        ) {
-          await scheduleSalahNotifications(
-            userLocations,
-            salahs[i],
-            userPreferences,
-            salahNotificationSetting,
-          );
-        }
+    (async () => {
+      try {
+        await generateSalahTimes(userLocations, userPreferences, setSalahtimes);
+        await scheduleAllSalahNotifications();
+      } catch (error) {
+        console.error(
+          "Unable to generate salah times / schedule notifications",
+        );
       }
-    };
-
-    scheduleAllSalahNotifications();
+    })();
 
     const scheduleDailyNotifications = async () => {
       await scheduleAfterIshaDailyNotifications(
