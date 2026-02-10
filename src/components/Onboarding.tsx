@@ -394,7 +394,7 @@ const Onboarding = ({
               <p>
                 We’ll notify you at each Salah time and once daily to log your
                 Salahs. You can change sounds and customise individual reminders
-                anytime in settings.
+                later.
               </p>
             </section>
             <section className="flex flex-col ">
@@ -442,6 +442,19 @@ const Onboarding = ({
                       Number(userPreferences.dailyNotificationAfterIshaDelay),
                       userLocations,
                       userPreferences,
+                    );
+
+                    await updateUserPrefs(
+                      dbConnection,
+                      "dailyNotificationOption",
+                      "afterIsha",
+                      setUserPreferences,
+                    );
+                    await updateUserPrefs(
+                      dbConnection,
+                      "dailyNotification",
+                      "1",
+                      setUserPreferences,
                     );
                   }
                   // switchToNextPage();

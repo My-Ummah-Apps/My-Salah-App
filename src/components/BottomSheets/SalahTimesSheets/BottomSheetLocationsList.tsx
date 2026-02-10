@@ -115,6 +115,7 @@ BottomSheetSalahTimesSettingsProps) => {
     const cancelAllSalahNotifications = async () => {
       if (userLocations?.length === 0) {
         await cancelNotifications("fajr");
+        await cancelNotifications("sunrise");
         await cancelNotifications("dhuhr");
         await cancelNotifications("asr");
         await cancelNotifications("maghrib");
@@ -290,21 +291,46 @@ BottomSheetSalahTimesSettingsProps) => {
                     isSelected: i === 0 ? 1 : 0,
                   }));
                   setUserLocations(amendedLocations);
+
+                  await setAdhanLibraryDefaults(
+                    dbConnection,
+                    userPreferences.prayerCalculationMethod ||
+                      "MuslimWorldLeague",
+                    setUserPreferences,
+                    userPreferences,
+                    amendedLocations,
+                  );
                 } else {
                   setUserLocations(allLocations);
+                }
+
+                if (
+                  allLocations.length === 0 &&
+                  userPreferences.dailyNotificationOption === "afterIsha"
+                ) {
+                  await cancelNotifications("Daily Reminder");
                 }
               } catch (error) {
                 console.error(error);
               } finally {
-                // await toggleDBConnection(dbConnection, "close");
-                await setAdhanLibraryDefaults(
-                  dbConnection,
-                  userPreferences.prayerCalculationMethod ||
-                    "MuslimWorldLeague",
-                  setUserPreferences,
-                  userPreferences,
-                  userLocations,
-                );
+                // if (
+                //   allLocations.length === 0 &&
+                //   userPreferences.dailyNotificationOption === "afterIsha"
+                // ) {
+                // await updateUserPrefs(
+                //   dbConnection,
+                //   "dailyNotificationOption",
+                //   "fixedTime",
+                //   setUserPreferences,
+                // );
+                // const [hour, minute] = userPreferences.dailyNotificationTime
+                //   .split(":")
+                //   .map(Number);
+                // await cancelNotifications("Daily Reminder");
+                // await scheduleFixedTimeDailyNotification(hour, minute);
+                // }
+
+                await toggleDBConnection(dbConnection, "close");
               }
             },
           },

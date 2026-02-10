@@ -298,10 +298,11 @@ const BottomSheetNotifications = ({
                   lines="none"
                 >
                   <IonRadio
+                    mode="ios"
                     slot="start"
                     labelPlacement="end"
                     value="fixedTime"
-                    color="light"
+                    color="primary"
                   >
                     At fixed time
                   </IonRadio>
@@ -337,10 +338,11 @@ const BottomSheetNotifications = ({
                       lines="none"
                     >
                       <IonRadio
+                        mode="ios"
                         slot="start"
                         labelPlacement="end"
                         value="afterIsha"
-                        color="light"
+                        color="primary"
                       >
                         After Isha
                       </IonRadio>
@@ -398,6 +400,7 @@ const BottomSheetNotifications = ({
                       const salahs = adhanLibrarySalahs;
 
                       for (const salah of salahs) {
+                        if (salah === "sunrise") continue;
                         await scheduleSalahNotifications(
                           userLocations,
                           salah,
@@ -407,7 +410,6 @@ const BottomSheetNotifications = ({
                       }
 
                       for (const salah of adhanLibrarySalahs) {
-                        if (salah === "sunrise") continue;
                         await updateUserPrefs(
                           dbConnection,
                           `${salah}Notification`,
