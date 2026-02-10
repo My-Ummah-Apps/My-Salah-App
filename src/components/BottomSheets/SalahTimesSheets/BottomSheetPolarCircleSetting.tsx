@@ -87,8 +87,8 @@ const BottomSheetPolarCircleSetting = ({
           <div>
             <p className="mt-0">Unresolved (default)</p>
             <p className="text-xs">
-              Leaves sunrise and sunset prayer times undefined when they can't
-              be computed
+              Leaves sunrise and sunset Salah times undefined when they can't be
+              computed
             </p>
           </div>
         </div>
@@ -123,7 +123,7 @@ const BottomSheetPolarCircleSetting = ({
           <div>
             <p className="mt-0">Closest City</p>
             <p className="text-xs">
-              Finds the closest location for which sunrise and sunset prayer
+              Finds the closest location for which sunrise and sunset Salah
               times can be computed
             </p>
           </div>
@@ -158,7 +158,7 @@ const BottomSheetPolarCircleSetting = ({
             <p className="mt-0">Closest Date</p>
             <p className="text-xs">
               Finds the closest date (forward or backward) for which sunrise and
-              sunset prayer times can be computed
+              sunset Salah times can be computed
             </p>
           </div>
         </div>

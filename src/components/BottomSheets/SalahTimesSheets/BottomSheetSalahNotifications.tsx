@@ -51,26 +51,6 @@ const BottomSheetSalahNotifications = ({
 }: BottomSheetSalahNotificationsProps) => {
   const key: keyof userPreferencesType = `${selectedSalah}Notification`;
 
-  // const handleBatteryOptimisation = async () => {
-  //   if (
-  //     // userPreferences.hasSeenBatteryPrompt === "0" &&
-  //     Capacitor.getPlatform() === "android"
-  //   ) {
-  //     await promptToOpenDeviceSettings(
-  //       "Ensure prayer notifications arrive on time",
-  //       "Some Android phones delay notifications to save battery. Disabling battery optimisation helps prayer notifications arrive on time.",
-  //       AndroidSettings.BatteryOptimization,
-  //     );
-
-  //     // await updateUserPrefs(
-  //     //   dbConnection,
-  //     //   "hasSeenBatteryPrompt",
-  //     //   "1",
-  //     //   setUserPreferences,
-  //     // );
-  //   }
-  // };
-
   return (
     <IonModal
       className="modal-fit-content"

@@ -119,7 +119,7 @@ const BottomSheetLatitudeRules = ({
               Fajr will never be earlier than the beginning of the last seventh
               of the night and Isha will never be later than the end of the
               first seventh of the night. This is recommended to use for
-              locations above 48° latitude to prevent prayer times that would be
+              locations above 48° latitude to prevent Salah times that would be
               difficult to perform.
             </p>
           </div>

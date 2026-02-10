@@ -407,6 +407,7 @@ const BottomSheetNotifications = ({
                       }
 
                       for (const salah of adhanLibrarySalahs) {
+                        if (salah === "sunrise") continue;
                         await updateUserPrefs(
                           dbConnection,
                           `${salah}Notification`,
@@ -433,8 +434,8 @@ const BottomSheetNotifications = ({
                 ></IonToggle>
               </div>
               <p className="mt-3 text-sm opacity-50">
-                Turn this on to receive all prayer and sunrise reminders. You
-                can also manage individual reminders on the Salah Times page.
+                Turn this on to receive all Salah reminders. You can also manage
+                individual reminders on the Salah Times page.
               </p>
             </section>
           )}

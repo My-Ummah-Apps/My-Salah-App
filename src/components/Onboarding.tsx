@@ -255,9 +255,9 @@ const Onboarding = ({
           <section className="flex flex-col justify-center h-full">
             <section className="m-4 text-center">
               <h1 className="mb-2 text-2xl font-bold">
-                Do you want to turn on prayer times?
+                Do you want to turn on Salah times?
               </h1>
-              <p>Turn on prayer times</p>
+              <p>Turn on Salah times</p>
             </section>
             <section className="flex flex-col ">
               <IonButton
@@ -392,9 +392,9 @@ const Onboarding = ({
             <section className="m-4 text-center">
               <h1 className="mb-2 text-2xl font-bold">Enable Notifications</h1>
               <p>
-                We’ll notify you at each prayer time and once daily to log your
-                prayers. You can change sounds and customise individual
-                reminders anytime in settings.
+                We’ll notify you at each Salah time and once daily to log your
+                Salahs. You can change sounds and customise individual reminders
+                anytime in settings.
               </p>
             </section>
             <section className="flex flex-col ">
@@ -429,6 +429,7 @@ const Onboarding = ({
                     const salahs = adhanLibrarySalahs;
 
                     for (const salah of salahs) {
+                      if (salah === "sunrise") continue;
                       await scheduleSalahNotifications(
                         userLocations,
                         salah,
@@ -526,7 +527,7 @@ const Onboarding = ({
                 Stay Consistent with Your Salah
               </h1>
               <p>
-                We’ll send you a gentle reminder each day to log which prayers
+                We’ll send you a gentle reminder each day to log which Salahs
                 you prayed or missed. You can adjust the time or turn this off
                 anytime in settings.
               </p>
