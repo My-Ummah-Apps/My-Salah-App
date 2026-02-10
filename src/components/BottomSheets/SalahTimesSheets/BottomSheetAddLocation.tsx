@@ -42,6 +42,9 @@ const BottomSheetAddLocation = ({
       breakpoints={MODAL_BREAKPOINTS}
       // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // expandToScroll={false}
+      onDidPresent={() => {
+        console.log("SHEET OPENED");
+      }}
       onDidDismiss={() => {
         setShowAddLocationSheet(false);
         // setShowAddLocationForm(false);
@@ -57,16 +60,16 @@ const BottomSheetAddLocation = ({
           <IonTitle>Add Location</IonTitle>
         </IonToolbar>
       </IonHeader>
-      {showAddLocationSheet && (
-        <AddLocationOptions
-          dbConnection={dbConnection}
-          setUserLocations={setUserLocations}
-          userLocations={userLocations}
-          setShowLocationFailureToast={setShowLocationFailureToast}
-          setShowLocationAddedToast={setShowLocationAddedToast}
-          setShowAddLocationSheet={setShowAddLocationSheet}
-        />
-      )}
+      {/* {showAddLocationSheet && ( */}
+      <AddLocationOptions
+        dbConnection={dbConnection}
+        setUserLocations={setUserLocations}
+        userLocations={userLocations}
+        setShowLocationFailureToast={setShowLocationFailureToast}
+        setShowLocationAddedToast={setShowLocationAddedToast}
+        setShowAddLocationSheet={setShowAddLocationSheet}
+      />
+      {/* // )}  */}
     </IonModal>
   );
 };

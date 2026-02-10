@@ -237,7 +237,7 @@ BottomSheetSalahTimesSettingsProps) => {
         setShow={setShowDeleteLocationToast}
         testId={"location-deletion-toast"}
       />
-      <BottomSheetAddLocation
+      {/* <BottomSheetAddLocation
         setShowAddLocationSheet={setShowAddLocationSheet}
         showAddLocationSheet={showAddLocationSheet}
         dbConnection={dbConnection}
@@ -245,7 +245,7 @@ BottomSheetSalahTimesSettingsProps) => {
         userLocations={userLocations}
         setShowLocationFailureToast={setShowLocationFailureToast}
         setShowLocationAddedToast={setShowLocationAddedToast}
-      />
+      /> */}
       <ActionSheet
         // trigger="open-delete-location-action-sheet"
         setState={setShowDeleteLocationActionSheet}
