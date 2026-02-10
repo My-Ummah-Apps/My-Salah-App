@@ -275,7 +275,7 @@ const Onboarding = ({
                   swiperRef.current?.slideTo(8, 0);
                   // setIsSalahTimesOnboarding(false);
                 }}
-                className="text-white mb-2text-center rounded-2xl"
+                className="text-center text-white mb- rounded-2xl"
               >
                 No
               </IonButton>
@@ -460,7 +460,7 @@ const Onboarding = ({
                   setShowOnboarding?.(false);
                   setShowSalahTimesOnboarding?.(false);
                 }}
-                className="text-white mb-2text-center rounded-2xl"
+                className="mb-2 text-center text-white rounded-2xl"
               >
                 Skip for now
               </IonButton>
@@ -511,7 +511,7 @@ const Onboarding = ({
                     onClick={() => {
                       switchToNextPage();
                     }}
-                    className="text-white mb-2text-center rounded-2xl"
+                    className="mb-2 text-center text-white rounded-2xl"
                   >
                     Skip for now
                   </IonButton>

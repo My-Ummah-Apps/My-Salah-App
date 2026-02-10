@@ -71,6 +71,8 @@ body.dark {
   --reasons-bar-bg: #282828;
   --scrollbar-track: rgb(103, 103, 103);
   --scrollbar-thumb: #bebebe;
+  --ion-color-step-850: #fff; /* force white in dark mode */
+  --ion-text-color-step-150: #fff; /* optional fallback */
 }
 
 * {

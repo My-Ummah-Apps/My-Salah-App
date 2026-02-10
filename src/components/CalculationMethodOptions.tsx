@@ -137,7 +137,11 @@ const CalculationMethodOptions = ({
   };
 
   return (
-    <IonContent style={{ "--background": "var(--card-bg-color)" }}>
+    <IonContent
+      style={{
+        "--background": "var(--card-bg-color)",
+      }}
+    >
       <div className="mb-10">
         {" "}
         <IonSegment
@@ -159,6 +163,7 @@ const CalculationMethodOptions = ({
       {segmentOption === "country" && (
         <section className="mx-4">
           <IonSelect
+            style={{ "--ion-text-color": "white" }}
             placeholder="Select Country"
             value={userPreferences.country || undefined}
             label="Select Country"
@@ -179,7 +184,11 @@ const CalculationMethodOptions = ({
             }}
           >
             {countryOptions.map((country) => (
-              <IonSelectOption key={country} value={country}>
+              <IonSelectOption
+                // style={{ color: "red" }}
+                key={country}
+                value={country}
+              >
                 {country}
               </IonSelectOption>
             ))}

@@ -29,7 +29,7 @@ import {
 import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 import ActionSheet from "../../ActionSheet";
 import Toast from "../../Toast";
-import BottomSheetAddLocation from "./BottomSheetAddLocation";
+
 import {
   cancelNotifications,
   getActiveLocation,
@@ -47,9 +47,9 @@ interface BottomSheetSalahTimesSettingsProps {
   showLocationsListSheet: boolean;
   userLocations: LocationsDataObjTypeArr;
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showAddLocationSheet: boolean;
-  setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
+  // showAddLocationSheet: boolean;
+  // setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
+  // setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
   // calculateActiveLocationSalahTimes: () => Promise<void>;
   userPreferences: userPreferencesType;
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
@@ -65,9 +65,9 @@ const BottomSheetLocationsList = ({
   showLocationsListSheet,
   userLocations,
   setShowAddLocationSheet,
-  showAddLocationSheet,
-  setShowLocationFailureToast,
-  setShowLocationAddedToast,
+  // showAddLocationSheet,
+  // setShowLocationFailureToast,
+  // setShowLocationAddedToast,
 }: // calculateActiveLocationSalahTimes,
 // userPreferences,
 // setSalahtimes,

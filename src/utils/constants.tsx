@@ -67,7 +67,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   shafaqRule: "general",
   polarCircleResolution: "Unresolved",
   country: "",
-  dailyNotificationOption: "afterIsha",
+  dailyNotificationOption: "fixedTime",
   dailyNotificationAfterIshaDelay: "60",
   lastLaunchDate: new Date().toISOString(),
 };
