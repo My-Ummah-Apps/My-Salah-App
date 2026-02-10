@@ -33,9 +33,8 @@ import BottomSheetAddLocation from "./BottomSheetAddLocation";
 import {
   cancelNotifications,
   getActiveLocation,
-  updateUserPrefs,
+  setAdhanLibraryDefaults,
 } from "../../../utils/helpers";
-import { Coordinates, HighLatitudeRule } from "adhan";
 
 interface BottomSheetSalahTimesSettingsProps {
   // triggerId: string;
@@ -60,6 +59,7 @@ const BottomSheetLocationsList = ({
   // triggerId,
   dbConnection,
   setUserPreferences,
+  userPreferences,
   setUserLocations,
   setShowLocationsListSheet,
   showLocationsListSheet,
@@ -172,18 +172,14 @@ BottomSheetSalahTimesSettingsProps) => {
                   console.error(error);
                 } finally {
                   // await toggleDBConnection(dbConnection, "close");
-                  const coordinates = new Coordinates(
-                    location.latitude,
-                    location.longitude,
-                  );
 
-                  const recommendedLatitudeRule =
-                    HighLatitudeRule.recommended(coordinates);
-                  await updateUserPrefs(
+                  await setAdhanLibraryDefaults(
                     dbConnection,
-                    "highLatitudeRule",
-                    recommendedLatitudeRule,
+                    userPreferences.prayerCalculationMethod ||
+                      "MuslimWorldLeague",
                     setUserPreferences,
+                    userPreferences,
+                    userLocations,
                   );
                 }
               }}

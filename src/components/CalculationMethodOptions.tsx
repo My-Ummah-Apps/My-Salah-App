@@ -17,9 +17,7 @@ import {
 } from "../types/types";
 import { prayerCalculationMethodLabels } from "../utils/constants";
 import { checkmarkCircle } from "ionicons/icons";
-import { getActiveLocation, updateUserPrefs } from "../utils/helpers";
-import { CalculationMethod, Coordinates, HighLatitudeRule } from "adhan";
-import { toggleDBConnection } from "../utils/dbUtils";
+import { setAdhanLibraryDefaults, updateUserPrefs } from "../utils/helpers";
 
 interface CalculationMethodOptionsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -138,69 +136,6 @@ const CalculationMethodOptions = ({
     Other: "MoonsightingCommittee",
   };
 
-  const setAdhanLibraryDefaults = async (calcMethod: calculationMethod) => {
-    // if (!userPreferences.prayerCalculationMethod) return;
-
-    if (!userLocations) {
-      console.error(
-        "Unable to set calculation method as no user locations exist",
-      );
-      return;
-    }
-
-    try {
-      await toggleDBConnection(dbConnection, "open");
-
-      const activeLocation = getActiveLocation(userLocations);
-
-      const params = CalculationMethod[calcMethod]();
-
-      if (!activeLocation) {
-        console.error("Active location does not exist");
-        return;
-      }
-
-      const coordinates = new Coordinates(
-        activeLocation.latitude,
-        activeLocation.longitude,
-      );
-
-      const defaultCalcMethodValues = {
-        prayerCalculationMethod: calcMethod,
-        // madhab: params.madhab,
-        madhab: userPreferences.madhab,
-        highLatitudeRule: HighLatitudeRule.recommended(coordinates),
-        fajrAngle: String(params.fajrAngle),
-        ishaAngle: String(params.ishaAngle),
-        fajrAdjustment: "0",
-        dhuhrAdjustment: "0",
-        asrAdjustment: "0",
-        maghribAdjustment: "0",
-        ishaAdjustment: "0",
-      };
-
-      const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
-
-      if (!dbConnection || !dbConnection.current) {
-        throw new Error("dbConnection / dbconnection.current does not exist");
-      }
-
-      for (const [key, value] of Object.entries(defaultCalcMethodValues)) {
-        console.log(key, value);
-        await dbConnection.current.run(query, [key, value]);
-      }
-
-      setUserPreferences((userPreferences: userPreferencesType) => ({
-        ...userPreferences,
-        ...defaultCalcMethodValues,
-      }));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      await toggleDBConnection(dbConnection, "close");
-    }
-  };
-
   return (
     <IonContent style={{ "--background": "var(--card-bg-color)" }}>
       <div className="mb-10">
@@ -281,7 +216,13 @@ const CalculationMethodOptions = ({
                   ) {
                     return;
                   }
-                  await setAdhanLibraryDefaults(item.calculationMethod);
+                  await setAdhanLibraryDefaults(
+                    dbConnection,
+                    item.calculationMethod,
+                    setUserPreferences,
+                    userPreferences,
+                    userLocations,
+                  );
                   await updateUserPrefs(
                     dbConnection,
                     "country",
