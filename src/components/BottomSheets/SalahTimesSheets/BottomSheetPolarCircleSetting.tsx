@@ -54,10 +54,12 @@ const BottomSheetPolarCircleSetting = ({
       </IonHeader>
       {/* <IonContent> */}
       <section className="px-4">
-        {/* <p className="mb-5">
-          Shafaq is used to determine what type of twilight to use in order to
-          determine the time for Isha.
-        </p> */}
+        <p className="mb-5 text-sm text-center opacity-80">
+          This setting is intended for users in polar regions or with advanced
+          knowledge of prayer calculation methods. For most users, it will not
+          have any effect. Only change this if you understand how it works, as
+          incorrect settings can affect your prayer times.
+        </p>
         <div
           onClick={async () => {
             await updateUserPrefs(

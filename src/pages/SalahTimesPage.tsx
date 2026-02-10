@@ -458,6 +458,7 @@ const SalahTimesPage = ({
         setShowLocationFailureToast={setShowLocationFailureToast}
         setShowLocationAddedToast={setShowLocationAddedToast}
         setSalahtimes={setSalahtimes}
+        setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />

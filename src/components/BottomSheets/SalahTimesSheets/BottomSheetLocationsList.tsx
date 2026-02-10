@@ -30,12 +30,17 @@ import { fetchAllLocations, toggleDBConnection } from "../../../utils/dbUtils";
 import ActionSheet from "../../ActionSheet";
 import Toast from "../../Toast";
 import BottomSheetAddLocation from "./BottomSheetAddLocation";
-import { cancelNotifications, getActiveLocation } from "../../../utils/helpers";
+import {
+  cancelNotifications,
+  getActiveLocation,
+  updateUserPrefs,
+} from "../../../utils/helpers";
+import { Coordinates, HighLatitudeRule } from "adhan";
 
 interface BottomSheetSalahTimesSettingsProps {
   // triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  //   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
   >;
@@ -54,7 +59,7 @@ interface BottomSheetSalahTimesSettingsProps {
 const BottomSheetLocationsList = ({
   // triggerId,
   dbConnection,
-  //   setUserPreferences,
+  setUserPreferences,
   setUserLocations,
   setShowLocationsListSheet,
   showLocationsListSheet,
@@ -155,6 +160,8 @@ BottomSheetSalahTimesSettingsProps) => {
                 try {
                   await toggleDBConnection(dbConnection, "open");
 
+                  console.log("COORDS: ", location.locationName);
+
                   await updateActiveLocation(location.id);
 
                   const { allLocations } =
@@ -164,7 +171,20 @@ BottomSheetSalahTimesSettingsProps) => {
                 } catch (error) {
                   console.error(error);
                 } finally {
-                  await toggleDBConnection(dbConnection, "close");
+                  // await toggleDBConnection(dbConnection, "close");
+                  const coordinates = new Coordinates(
+                    location.latitude,
+                    location.longitude,
+                  );
+
+                  const recommendedLatitudeRule =
+                    HighLatitudeRule.recommended(coordinates);
+                  await updateUserPrefs(
+                    dbConnection,
+                    "highLatitudeRule",
+                    recommendedLatitudeRule,
+                    setUserPreferences,
+                  );
                 }
               }}
             >
