@@ -296,7 +296,15 @@ BottomSheetSalahTimesSettingsProps) => {
               } catch (error) {
                 console.error(error);
               } finally {
-                await toggleDBConnection(dbConnection, "close");
+                // await toggleDBConnection(dbConnection, "close");
+                await setAdhanLibraryDefaults(
+                  dbConnection,
+                  userPreferences.prayerCalculationMethod ||
+                    "MuslimWorldLeague",
+                  setUserPreferences,
+                  userPreferences,
+                  userLocations,
+                );
               }
             },
           },
