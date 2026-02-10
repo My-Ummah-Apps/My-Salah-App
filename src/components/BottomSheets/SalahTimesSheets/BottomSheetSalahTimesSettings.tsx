@@ -6,6 +6,7 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
+  isPlatform,
 } from "@ionic/react";
 import {
   INITIAL_MODAL_BREAKPOINT,
@@ -141,7 +142,7 @@ BottomSheetSalahTimesSettingsProps) => {
     <IonModal
       mode="ios"
       isOpen={showSalahTimesSettingsSheet}
-      // className={`${isPlatform("ios") ? "" : "modal-height"}`}
+      className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // presentingElement={presentingElement!}
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}

@@ -10,6 +10,7 @@ import {
   isBatteryOptimizationEnabled,
   requestIgnoreBatteryOptimization,
   scheduleAfterIshaDailyNotifications,
+  promptToOpenDeviceSettings,
 } from "../utils/helpers";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -27,6 +28,7 @@ import CalculationMethodOptions from "./CalculationMethodOptions";
 import AddLocationOptions from "./AddLocationOptions";
 import { Capacitor } from "@capacitor/core";
 import { adhanLibrarySalahs } from "../utils/constants";
+import { AndroidSettings } from "capacitor-native-settings";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -482,7 +484,21 @@ const Onboarding = ({
                 <section className="flex flex-col">
                   <IonButton
                     onClick={async () => {
-                      await requestIgnoreBatteryOptimization();
+                      if (userPreferences.hasSeenBatteryPrompt === "1") {
+                        await requestIgnoreBatteryOptimization();
+                        await updateUserPrefs(
+                          dbConnection,
+                          "hasSeenBatteryPrompt",
+                          "1",
+                          setUserPreferences,
+                        );
+                      } else {
+                        await promptToOpenDeviceSettings(
+                          "Disable Battery Optimization",
+                          "To ensure notifications arrive on time, please turn off battery optimization for this app.",
+                          AndroidSettings.BatteryOptimization,
+                        );
+                      }
                       switchToNextPage();
                     }}
                     className="mb-4"

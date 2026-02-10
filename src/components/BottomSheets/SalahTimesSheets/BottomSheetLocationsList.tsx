@@ -138,14 +138,14 @@ BottomSheetSalahTimesSettingsProps) => {
       {/* <IonPage> */}
       <IonHeader>
         <IonToolbar
-        // style={{
-        //   "--background": "transparent",
-        // }}
+          style={{
+            "--background": "transparent",
+          }}
         >
           <IonTitle>Locations</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent style={{ "--background": "var(--card-bg-color)" }}>
         <ul>
           {userLocations?.map((location) => (
             <li

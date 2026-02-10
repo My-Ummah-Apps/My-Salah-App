@@ -62,6 +62,8 @@ import {
   differenceInDays,
   subDays,
   parseISO,
+  isAfter,
+  startOfDay,
 } from "date-fns";
 import { PreferenceType } from "./types/types";
 
@@ -80,6 +82,14 @@ import {
 
 const App = () => {
   const justLaunched = useRef(true);
+
+  const {
+    isDatabaseInitialised,
+    sqliteConnection,
+    dbConnection,
+    initialiseTables,
+  } = useSQLiteDB();
+
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(false);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
@@ -130,7 +140,9 @@ const App = () => {
   const [isAppActive, setIsAppActive] = useState(true);
 
   useEffect(() => {
+    // if (!isDatabaseInitialised) return;
     let appState: PluginListenerHandle;
+    console.log("ATTACHING APP STATE CHANGE HANDLER");
 
     (async () => {
       appState = await capacitorApp.addListener(
@@ -141,18 +153,33 @@ const App = () => {
           if (isActive) {
             (async () => {
               try {
+                const todaysDate = startOfDay(new Date());
+                const lastLaunchDate = startOfDay(
+                  new Date(userPreferences.lastLaunchDate),
+                );
+
+                if (isAfter(todaysDate, lastLaunchDate)) {
+                  await scheduleAllSalahNotifications();
+                  await fetchDataFromDB();
+                }
+
                 await generateSalahTimes(
                   userLocations,
                   userPreferences,
                   setSalahtimes,
                 );
                 await getNextSalahDetails();
-                // If new date then do the follwoing:
-                // ! Show the latest date on home page (if its a new day)
-                await scheduleAllSalahNotifications();
+
+                await updateUserPrefs(
+                  dbConnection,
+                  "lastLaunchDate",
+                  new Date().toISOString(),
+                  setUserPreferences,
+                );
               } catch (error) {
                 console.error(
                   "Unable to generate salah times / schedule notifications",
+                  error,
                 );
               }
             })();
@@ -166,13 +193,6 @@ const App = () => {
       appState?.remove();
     };
   }, [userLocations, userPreferences]);
-
-  const {
-    isDatabaseInitialised,
-    sqliteConnection,
-    dbConnection,
-    initialiseTables,
-  } = useSQLiteDB();
 
   const getNextSalahDetails = async () => {
     if (!userLocations) {
@@ -262,20 +282,25 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    console.log("INITIALISING APP");
+
     const initializeApp = async () => {
       if (isDatabaseInitialised === true) {
-        const initialiseAndLoadData = async () => {
-          await fetchDataFromDB();
-        };
-        initialiseAndLoadData();
-
-        // handleTheme(userPreferences.theme);
+        await fetchDataFromDB();
 
         if (Capacitor.isNativePlatform()) {
           setTimeout(async () => {
             await SplashScreen.hide({ fadeOutDuration: 250 });
           }, 500);
         }
+
+        await updateUserPrefs(
+          dbConnection,
+          "lastLaunchDate",
+          // new Date().toISOString(),
+          new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+          setUserPreferences,
+        );
       }
     };
 
@@ -637,8 +662,6 @@ const App = () => {
           ...userPreferences,
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
-
-        // await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
       } else {
         console.log("preference: ", preference);
 
@@ -648,8 +671,6 @@ const App = () => {
           dictPreferencesDefaultValues[preference],
           setUserPreferences,
         );
-
-        // await getSalahTimes(dbConnection, userPreferences, setSalahtimes);
       }
     };
 
@@ -661,14 +682,6 @@ const App = () => {
 
     await batchAssignPreferences();
   };
-
-  // useEffect(() => {
-  //   const calculateTimes = async () => {
-  //     await calculateActiveLocationSalahTimes();
-  //   };
-
-  //   calculateTimes();
-  // }, [userLocations]);
 
   // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
   let userStartDateForSalahTrackingFunc: string;

@@ -69,6 +69,7 @@ export const dictPreferencesDefaultValues: userPreferencesType = {
   country: "",
   dailyNotificationOption: "afterIsha",
   dailyNotificationAfterIshaDelay: "60",
+  lastLaunchDate: new Date().toISOString(),
 };
 
 export const calculationMethods = [

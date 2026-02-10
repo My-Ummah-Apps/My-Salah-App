@@ -291,6 +291,10 @@ const SettingsPage = ({
             <div className="my-5 rounded-md">
               <SettingIndividual
                 onClick={() => {
+                  if (userLocations.length === 0) {
+                    alert("Please add a location first");
+                    return;
+                  }
                   setShowSalahTimesSettingsSheet(true);
                 }}
                 headingText={"Salah Times Settings"}

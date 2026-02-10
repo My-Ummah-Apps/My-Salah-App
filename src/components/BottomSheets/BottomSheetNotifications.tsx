@@ -456,8 +456,8 @@ const BottomSheetNotifications = ({
                 </p>{" "}
                 <IonButton
                   className="text-xs"
-                  onClick={() => {
-                    promptToOpenDeviceSettings(
+                  onClick={async () => {
+                    await promptToOpenDeviceSettings(
                       "Disable Battery Optimization",
                       "To ensure notifications arrive on time, please turn off battery optimization for this app.",
                       AndroidSettings.BatteryOptimization,

@@ -75,6 +75,7 @@ export interface userPreferencesType {
   country: countryOptionsType | "";
   dailyNotificationOption: dailyNotificationOption;
   dailyNotificationAfterIshaDelay: string;
+  lastLaunchDate: string;
 }
 
 export type calculationMethod = (typeof calculationMethods)[number];

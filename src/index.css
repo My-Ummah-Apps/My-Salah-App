@@ -192,6 +192,10 @@ ion-alert {
   color: var(--text-color);
 }
 
+ion-select-option {
+  --color: blue; /* changes option text color */
+}
+
 ion-textarea {
   max-height: 50px !important;
   overflow-y: auto;
