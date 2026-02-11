@@ -23,6 +23,7 @@ import {
 import { LocationsDataObjTypeArr } from "../types/types";
 import { promptToOpenDeviceSettings } from "../utils/helpers";
 import { fetchAllLocations, toggleDBConnection } from "../utils/dbUtils";
+import { Dialog } from "@capacitor/dialog";
 
 const allCities = cities.map(
   (obj: { country: string; name: string; lat: string; lng: string }) => {
@@ -140,13 +141,29 @@ const AddLocationOptions = ({
   };
 
   const handleGrantedPermission = async () => {
+    console.log("handleGrantedPermission has run");
+
     try {
       presentLocationSpinner({
         message: "Detecting location...",
         backdropDismiss: false,
         cssClass: "detecting-location-spinner",
       });
-      const location = await Geolocation.getCurrentPosition();
+
+      const perms = await Geolocation.checkPermissions();
+      console.log("PERMISSIONS: ", perms.location, perms.coarseLocation);
+
+      const location = await Geolocation.getCurrentPosition({
+        // enableHighAccuracy: true, <-- Unsure if required
+        timeout: 60000,
+        maximumAge: 0,
+      });
+
+      console.log(
+        "LOCATION IS: ",
+        location.coords.latitude,
+        location.coords.longitude,
+      );
 
       setCoords({
         latitude: location.coords.latitude,
@@ -156,35 +173,50 @@ const AddLocationOptions = ({
       dismissLocationSpinner();
       setShowAddLocationForm(true);
     } catch (error) {
-      console.log("Failed to obtain location");
       setShowLocationFailureToast(true);
+      console.log("Failed to obtain location");
       console.error(error);
+      await Dialog.alert({
+        title: "Location request timed out",
+        message:
+          "The app couldn’t get your location. Make sure your device has a good GPS or network signal and try again.",
+      });
     } finally {
       dismissLocationSpinner();
     }
   };
 
   const handleLocationPermissions = async () => {
-    const device = Capacitor.getPlatform();
-
     try {
-      const { location: locationPermission } =
-        await Geolocation.checkPermissions();
+      const permissions = await Geolocation.checkPermissions();
 
-      if (locationPermission === "granted") {
+      const preciseLocation = permissions.location;
+      const coarseLocation = permissions.coarseLocation;
+
+      if (preciseLocation === "granted" || coarseLocation === "granted") {
+        console.log("PERMISSION GRANTED");
+
         await handleGrantedPermission();
       } else if (
-        locationPermission === "prompt" ||
-        locationPermission === "prompt-with-rationale"
+        preciseLocation === "prompt" ||
+        preciseLocation === "prompt-with-rationale" ||
+        coarseLocation === "prompt" ||
+        coarseLocation === "prompt-with-rationale"
       ) {
         try {
-          if (device === "ios" || device === "android") {
-            const permission = await Geolocation.requestPermissions();
+          if (
+            Capacitor.getPlatform() === "ios" ||
+            Capacitor.getPlatform() === "android"
+          ) {
+            const permissionRequest = await Geolocation.requestPermissions();
 
-            if (permission.location === "granted") {
+            if (
+              permissionRequest.location === "granted" ||
+              permissionRequest.coarseLocation === "granted"
+            ) {
               await handleGrantedPermission();
             }
-          } else if (device === "web") {
+          } else if (Capacitor.getPlatform() === "web") {
             const pos = await Geolocation.getCurrentPosition();
             if (pos.coords) {
               await handleGrantedPermission();
@@ -193,7 +225,7 @@ const AddLocationOptions = ({
         } catch (error) {
           console.error(error);
         }
-      } else if (locationPermission === "denied") {
+      } else if (preciseLocation === "denied" || coarseLocation === "denied") {
         await promptToOpenDeviceSettings(
           `Location permission off`,
           "You currently have location turned off for this application, you can open Settings to re-enable it.",
@@ -201,11 +233,23 @@ const AddLocationOptions = ({
         );
       }
     } catch (error) {
-      await promptToOpenDeviceSettings(
-        "Turn On Location Services",
-        "You currently have location services turned off for your device, please enable them to use this feature.",
-        AndroidSettings.Location,
-      );
+      console.error("handleLocationPermissions error", error);
+      if (
+        error instanceof Error &&
+        error.message.includes("Location services are not enabled")
+      ) {
+        await promptToOpenDeviceSettings(
+          "Turn On Location Services",
+          "You currently have location services turned off for your device, please enable them to use this feature.",
+          AndroidSettings.Location,
+        );
+      } else {
+        await Dialog.alert({
+          title: "Location unavailable",
+          message:
+            "Your device’s location couldn’t be determined. Check that location services are on and permissions are granted, then try again.",
+        });
+      }
     }
   };
 
