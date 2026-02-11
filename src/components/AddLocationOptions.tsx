@@ -8,7 +8,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { Geolocation } from "@capacitor/geolocation";
 
-import { AndroidSettings } from "capacitor-native-settings";
+import { AndroidSettings, IOSSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { useState } from "react";
@@ -170,7 +170,7 @@ const AddLocationOptions = ({
         longitude: location.coords.longitude,
       });
 
-      dismissLocationSpinner();
+      await dismissLocationSpinner();
       setShowAddLocationForm(true);
     } catch (error) {
       setShowLocationFailureToast(true);
@@ -186,10 +186,25 @@ const AddLocationOptions = ({
     }
   };
 
+  const showLocationServicesPrompt = async () => {
+    if (Capacitor.getPlatform() === "android") {
+      await promptToOpenDeviceSettings(
+        "Turn On Location Services",
+        "You currently have location services turned off for your device, please enable them to use this feature.",
+        AndroidSettings.Location,
+      );
+    } else {
+      await Dialog.alert({
+        title: "Turn On Location Services",
+        message:
+          "You currently have location services turned off for your device, please enable them to use this feature.",
+      });
+    }
+  };
+
   const handleLocationPermissions = async () => {
     try {
       const permissions = await Geolocation.checkPermissions();
-
       const preciseLocation = permissions.location;
       const coarseLocation = permissions.coarseLocation;
 
@@ -224,6 +239,12 @@ const AddLocationOptions = ({
           }
         } catch (error) {
           console.error(error);
+          if (
+            error instanceof Error &&
+            error.message.includes("Location services are not enabled")
+          ) {
+            await showLocationServicesPrompt();
+          }
         }
       } else if (preciseLocation === "denied" || coarseLocation === "denied") {
         await promptToOpenDeviceSettings(
@@ -238,12 +259,9 @@ const AddLocationOptions = ({
         error instanceof Error &&
         error.message.includes("Location services are not enabled")
       ) {
-        await promptToOpenDeviceSettings(
-          "Turn On Location Services",
-          "You currently have location services turned off for your device, please enable them to use this feature.",
-          AndroidSettings.Location,
-        );
+        await showLocationServicesPrompt();
       } else {
+        await dismissLocationSpinner();
         await Dialog.alert({
           title: "Location unavailable",
           message:
@@ -590,7 +608,7 @@ const AddLocationOptions = ({
               } catch (error) {
                 console.error(error);
               } finally {
-                await dismissLocationSpinner();
+                dismissLocationSpinner();
               }
             }}
           >
