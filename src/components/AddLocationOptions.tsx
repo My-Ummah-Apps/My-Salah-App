@@ -8,7 +8,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { Geolocation } from "@capacitor/geolocation";
 
-import { AndroidSettings, IOSSettings } from "capacitor-native-settings";
+import { AndroidSettings } from "capacitor-native-settings";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 import { useState } from "react";

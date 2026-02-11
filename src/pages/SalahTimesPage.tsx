@@ -39,7 +39,7 @@ import {
 } from "../utils/helpers";
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
-import BottomSheetSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahNotifications";
+import BottomSheetPerSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetPerSalahNotifications";
 import { addDays, isSameDay } from "date-fns";
 import {
   INITIAL_MODAL_BREAKPOINT,
@@ -463,7 +463,7 @@ const SalahTimesPage = ({
         // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
 
-      <BottomSheetSalahNotifications
+      <BottomSheetPerSalahNotifications
         setShowSalahNotificationsSheet={setShowSalahNotificationsSheet}
         showSalahNotificationsSheet={showSalahNotificationsSheet}
         dbConnection={dbConnection}

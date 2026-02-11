@@ -29,8 +29,9 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
+import { Capacitor } from "@capacitor/core";
 
-interface BottomSheetSalahNotificationsProps {
+interface BottomSheetPerSalahNotificationsProps {
   setShowSalahNotificationsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showSalahNotificationsSheet: boolean;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -40,7 +41,7 @@ interface BottomSheetSalahNotificationsProps {
   userLocations: LocationsDataObjTypeArr;
 }
 
-const BottomSheetSalahNotifications = ({
+const BottomSheetPerSalahNotifications = ({
   setShowSalahNotificationsSheet,
   showSalahNotificationsSheet,
   dbConnection,
@@ -48,7 +49,7 @@ const BottomSheetSalahNotifications = ({
   setUserPreferences,
   userPreferences,
   userLocations,
-}: BottomSheetSalahNotificationsProps) => {
+}: BottomSheetPerSalahNotificationsProps) => {
   const key: keyof userPreferencesType = `${selectedSalah}Notification`;
 
   return (
@@ -223,10 +224,17 @@ const BottomSheetSalahNotifications = ({
             </div>
           </div>
         )}
+        {Capacitor.getPlatform() === "ios" && (
+          <p className="mb-10 text-xs text-center opacity-80">
+            Please note: Due to iOS limitations, adhan will only play for 30
+            seconds
+          </p>
+        )}
       </section>
+
       {/* </IonContent> */}
     </IonModal>
   );
 };
 
-export default BottomSheetSalahNotifications;
+export default BottomSheetPerSalahNotifications;
