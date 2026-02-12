@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { userPreferencesType } from "../../../types/types";
 import {
   INITIAL_MODAL_BREAKPOINT,

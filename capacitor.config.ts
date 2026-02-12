@@ -28,6 +28,9 @@ const config: CapacitorConfig = {
       smallIcon: "res:///ic_stat_name",
       iconColor: "#26a1d5",
     },
+    SystemBars: {
+      insetsHandling: "disable",
+    },
     keyboard: {
       resize: "none",
       resizeOnFullScreen: false,

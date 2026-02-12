@@ -139,8 +139,6 @@ const AddLocationOptions = ({
         cssClass: "detecting-location-spinner",
       });
 
-      const perms = await Geolocation.checkPermissions();
-
       const location = await Geolocation.getCurrentPosition({
         // enableHighAccuracy: true, <-- Unsure if required
         timeout: 60000,
