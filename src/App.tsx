@@ -120,6 +120,8 @@ const App = () => {
     useState<boolean>(false);
   const [showLocationAddedToast, setShowLocationAddedToast] =
     useState<boolean>(false);
+  const [showLocationDeletedToast, setShowLocationDeletedToast] =
+    useState<boolean>(false);
 
   const [salahTimes, setSalahtimes] = useState({
     fajr: "",
@@ -969,6 +971,8 @@ const App = () => {
                   showLocationFailureToast={showLocationFailureToast}
                   setShowLocationAddedToast={setShowLocationAddedToast}
                   showLocationAddedToast={showLocationAddedToast}
+                  setShowLocationDeletedToast={setShowLocationDeletedToast}
+                  showLocationDeletedToast={showLocationDeletedToast}
                   setOnboardingMode={setOnboardingMode}
                   onboardingMode={onboardingMode}
                 />

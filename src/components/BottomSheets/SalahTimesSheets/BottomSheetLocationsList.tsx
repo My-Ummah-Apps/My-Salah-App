@@ -48,6 +48,7 @@ interface BottomSheetSalahTimesSettingsProps {
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
   userPreferences: userPreferencesType;
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
+  setShowLocationDeletedToast: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BottomSheetLocationsList = ({
@@ -60,6 +61,7 @@ const BottomSheetLocationsList = ({
   showLocationsListSheet,
   userLocations,
   setShowAddLocationSheet,
+  setShowLocationDeletedToast,
 }: BottomSheetSalahTimesSettingsProps) => {
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
@@ -98,6 +100,7 @@ const BottomSheetLocationsList = ({
     }
 
     await dbConnection.current.run(stmnt, params);
+    setShowLocationDeletedToast(true);
   };
 
   useEffect(() => {

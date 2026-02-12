@@ -65,6 +65,8 @@ interface SalahTimesPageProps {
   showLocationFailureToast: boolean;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
   showLocationAddedToast: boolean;
+  setShowLocationDeletedToast: React.Dispatch<React.SetStateAction<boolean>>;
+  showLocationDeletedToast: boolean;
   setOnboardingMode: React.Dispatch<React.SetStateAction<OnboardingMode>>;
   onboardingMode?: OnboardingMode;
 }
@@ -83,6 +85,8 @@ const SalahTimesPage = ({
   showLocationFailureToast,
   setShowLocationAddedToast,
   showLocationAddedToast,
+  setShowLocationDeletedToast,
+  showLocationDeletedToast,
   setOnboardingMode,
   onboardingMode,
 }: SalahTimesPageProps) => {
@@ -474,6 +478,7 @@ const SalahTimesPage = ({
         setUserLocations={setUserLocations}
         userLocations={userLocations}
         setShowAddLocationSheet={setShowAddLocationSheet}
+        setShowLocationDeletedToast={setShowLocationDeletedToast}
         setSalahtimes={setSalahtimes}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
@@ -499,6 +504,12 @@ const SalahTimesPage = ({
         message="Location added successfully"
         setShow={setShowLocationAddedToast}
         testId={"location-successfully-added-toast"}
+      />
+      <Toast
+        isOpen={showLocationDeletedToast}
+        message="Location deleted successfully"
+        setShow={setShowLocationAddedToast}
+        testId={"location-successfully-deleted-toast"}
       />
     </IonPage>
   );

@@ -220,7 +220,6 @@ const HomePage = ({
             <MissedSalahsListBottomSheet
               dbConnection={dbConnection}
               setFetchedSalahData={setFetchedSalahData}
-              // presentingElement={presentingElement}
               setShowMissedSalahsSheet={setShowMissedSalahsSheet}
               showMissedSalahsSheet={showMissedSalahsSheet}
               missedSalahList={missedSalahList}
