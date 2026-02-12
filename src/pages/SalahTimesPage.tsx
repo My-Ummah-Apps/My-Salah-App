@@ -161,12 +161,18 @@ const SalahTimesPage = ({
                     >
                       {nextSalahNameAndTime.hoursRemaining > 0 && (
                         <p className="mt-2 text-center opacity-90">
-                          {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+                          {nextSalahNameAndTime.hoursRemaining === 1
+                            ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`
+                            : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`}{" "}
                         </p>
                       )}
-                      <p className="text-center opacity-90">
-                        {nextSalahNameAndTime.minsRemaining} minutes to go until
-                      </p>
+                      {nextSalahNameAndTime.minsRemaining > 0 && (
+                        <p className="text-center opacity-90">
+                          {nextSalahNameAndTime.minsRemaining === 1
+                            ? `${nextSalahNameAndTime.minsRemaining} minute to go until`
+                            : `${nextSalahNameAndTime.minsRemaining} minutes to go until`}
+                        </p>
+                      )}
                       <p className="mt-1 mb-2 text-2xl text-center">
                         {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
                       </p>
@@ -188,12 +194,18 @@ const SalahTimesPage = ({
                     >
                       {nextSalahNameAndTime.hoursRemaining > 0 && (
                         <p className="mt-2 text-center opacity-90">
-                          {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+                          {nextSalahNameAndTime.hoursRemaining === 1
+                            ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`
+                            : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`}{" "}
                         </p>
                       )}
-                      <p className="text-center opacity-90">
-                        {nextSalahNameAndTime.minsRemaining} minutes remaining
-                      </p>
+                      {nextSalahNameAndTime.minsRemaining > 0 && (
+                        <p className="text-center opacity-90">
+                          {nextSalahNameAndTime.minsRemaining === 1
+                            ? `${nextSalahNameAndTime.minsRemaining} minute to go until`
+                            : `${nextSalahNameAndTime.minsRemaining} minutes to go until`}
+                        </p>
+                      )}
                     </div>
                   </section>
                 )}

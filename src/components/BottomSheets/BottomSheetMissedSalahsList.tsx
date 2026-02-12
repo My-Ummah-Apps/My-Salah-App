@@ -104,7 +104,6 @@ const MissedSalahsListBottomSheet = ({
 
   return (
     <IonModal
-      // presentingElement={presentingElement}
       mode="ios"
       className="modal-height"
       isOpen={showMissedSalahsSheet}
