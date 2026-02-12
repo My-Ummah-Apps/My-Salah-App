@@ -21,6 +21,8 @@
   --sheet-option-bg: rgb(240, 240, 240);
   --card-shadow-color: rgb(234, 234, 234);
   --app-border-color: rgba(233, 233, 233, 1);
+  --toast-bg-color: #262626;
+  --toast-text-color: #fff;
   --table-row-border-color: rgb(227, 227, 227);
   --nav-tab-color: #373737;
   --nav-active-tab-color: #3880ff;
@@ -55,6 +57,8 @@ body.dark {
   --sheet-option-bg: rgb(37, 37, 37);
   --card-shadow-color: rgb(31, 35, 36);
   --app-border-color: rgba(54, 49, 49, 1);
+  --toast-bg-color: #d4d4d4;
+  --toast-text-color: #000000;
   --table-row-border-color: rgb(38, 38, 38);
   --nav-tab-color: grey;
   --ios-action-sheet-background: rgb(36, 36, 36);
@@ -224,6 +228,11 @@ ion-loading {
 ion-toolbar {
   --background: var(--ion-background-color);
   --color: var(--ion-text-color);
+}
+
+ion-toast {
+  --background: var(--toast-bg-color);
+  --color: var(--toast-text-color);
 }
 
 ion-tab-bar {

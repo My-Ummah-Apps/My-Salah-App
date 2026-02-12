@@ -10,7 +10,6 @@ interface IonToastProps {
 
 const Toast = ({
   isOpen,
-
   message,
   setShow,
   duration,

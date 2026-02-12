@@ -37,7 +37,6 @@ import {
 } from "../../../utils/helpers";
 
 interface BottomSheetSalahTimesSettingsProps {
-  // triggerId: string;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setUserLocations: React.Dispatch<
@@ -47,10 +46,6 @@ interface BottomSheetSalahTimesSettingsProps {
   showLocationsListSheet: boolean;
   userLocations: LocationsDataObjTypeArr;
   setShowAddLocationSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  // showAddLocationSheet: boolean;
-  // setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
-  // setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
-  // calculateActiveLocationSalahTimes: () => Promise<void>;
   userPreferences: userPreferencesType;
   setSalahtimes: React.Dispatch<React.SetStateAction<salahTimesObjType>>;
 }
@@ -65,13 +60,7 @@ const BottomSheetLocationsList = ({
   showLocationsListSheet,
   userLocations,
   setShowAddLocationSheet,
-  // showAddLocationSheet,
-  // setShowLocationFailureToast,
-  // setShowLocationAddedToast,
-}: // calculateActiveLocationSalahTimes,
-// userPreferences,
-// setSalahtimes,
-BottomSheetSalahTimesSettingsProps) => {
+}: BottomSheetSalahTimesSettingsProps) => {
   const [showDeleteLocationActionSheet, setShowDeleteLocationActionSheet] =
     useState(false);
   // const [showEditLocationActionSheet, setShowEditLocationActionSheet] =
@@ -234,15 +223,7 @@ BottomSheetSalahTimesSettingsProps) => {
         setShow={setShowDeleteLocationToast}
         testId={"location-deletion-toast"}
       />
-      {/* <BottomSheetAddLocation
-        setShowAddLocationSheet={setShowAddLocationSheet}
-        showAddLocationSheet={showAddLocationSheet}
-        dbConnection={dbConnection}
-        setUserLocations={setUserLocations}
-        userLocations={userLocations}
-        setShowLocationFailureToast={setShowLocationFailureToast}
-        setShowLocationAddedToast={setShowLocationAddedToast}
-      /> */}
+
       <ActionSheet
         // trigger="open-delete-location-action-sheet"
         setState={setShowDeleteLocationActionSheet}
@@ -269,10 +250,7 @@ BottomSheetSalahTimesSettingsProps) => {
                 setLocationToDeleteId(null);
 
                 const { allLocations } = await fetchAllLocations(dbConnection);
-                // console.log(
-                //   "FETCH ALL LOCATIONS CALLE FROM LOCATIONS LIST SHEET 2: ",
-                //   allLocations
-                // );
+
                 // if (!allLocations || allLocations.length === 0) {
                 //   throw new Error("Error obtaining all locations");
                 // }
