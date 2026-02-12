@@ -96,8 +96,6 @@ const BottomSheetPolarCircleSetting = ({
         </div>
         <div
           onClick={async () => {
-            console.log("LOGGED");
-
             await updateUserPrefs(
               dbConnection,
               "polarCircleResolution",

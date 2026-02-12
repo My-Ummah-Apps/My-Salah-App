@@ -37,10 +37,6 @@ export async function toggleDBConnection(
     }
 
     if (isDatabaseOpen.result === undefined) {
-      console.log(
-        "isDatabaseOpen.result === undefined therefore throwing error",
-      );
-
       throw new Error(
         "isDatabaseOpen.result is undefined within toggleDBConnection",
       );
@@ -65,11 +61,6 @@ export const fetchAllLocations = async (
 ): Promise<{
   allLocations: LocationsDataObjTypeArr;
 }> => {
-  console.log(
-    "RUNNING FETCH ALL LOCATIONS, DB CONNECTION IS:",
-    dbConnection.current,
-  );
-
   try {
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");
@@ -84,8 +75,6 @@ export const fetchAllLocations = async (
     }
 
     const allLocations: LocationsDataObjTypeArr = res.values;
-
-    console.log("allLocations: ", allLocations);
 
     return { allLocations };
   } catch (error) {

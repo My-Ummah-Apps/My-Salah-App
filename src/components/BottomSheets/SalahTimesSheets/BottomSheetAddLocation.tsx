@@ -42,9 +42,6 @@ const BottomSheetAddLocation = ({
       breakpoints={MODAL_BREAKPOINTS}
       // className={`${isPlatform("ios") ? "" : "modal-height"}`}
       // expandToScroll={false}
-      onDidPresent={() => {
-        console.log("SHEET OPENED");
-      }}
       onDidDismiss={() => {
         setShowAddLocationSheet(false);
         // setShowAddLocationForm(false);

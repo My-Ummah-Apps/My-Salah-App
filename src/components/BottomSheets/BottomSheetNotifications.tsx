@@ -111,14 +111,11 @@ const BottomSheetNotifications = ({
     await cancelNotifications("Daily Reminder");
 
     if (setting === "fixedTime") {
-      console.log("TURNING ON FIXED TIME NOTIFICATION");
-
       const [hour, minute] = userPreferences.dailyNotificationTime
         .split(":")
         .map(Number);
       await scheduleFixedTimeDailyNotification(hour, minute);
     } else if (setting === "afterIsha") {
-      console.log("TURNING ON AFTER ISHA TIME NOTIFICATION");
       await scheduleAfterIshaDailyNotifications(
         Number(userPreferences.dailyNotificationAfterIshaDelay),
         userLocations,
@@ -255,10 +252,10 @@ const BottomSheetNotifications = ({
               );
 
               await handleNotificationPermissions();
-              console.log(
-                "PENDING NOTIFICATIONS: ",
-                (await LocalNotifications.getPending()).notifications,
-              );
+              // console.log(
+              //   "PENDING NOTIFICATIONS: ",
+              //   (await LocalNotifications.getPending()).notifications,
+              // );
             }}
           ></IonToggle>
         </div>
@@ -277,7 +274,6 @@ const BottomSheetNotifications = ({
                 value={selectedDailyNotificationOption}
                 onIonChange={async (e) => {
                   const eventValue = e.detail.value;
-                  console.log("EVENT VALUE: ", eventValue);
 
                   setSelectedDailyNotificationOption(eventValue);
                   await updateUserPrefs(
@@ -353,7 +349,6 @@ const BottomSheetNotifications = ({
                         onIonChange={async (e) => {
                           e.stopPropagation();
                           const delay = e.detail.value;
-                          console.log("delay: ", delay);
                           if (selectedDailyNotificationOption === "afterIsha") {
                             await scheduleAfterIshaDailyNotifications(
                               delay,

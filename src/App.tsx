@@ -144,14 +144,11 @@ const App = () => {
   useEffect(() => {
     // if (!isDatabaseInitialised) return;
     let appState: PluginListenerHandle;
-    console.log("ATTACHING APP STATE CHANGE HANDLER");
 
     (async () => {
       appState = await capacitorApp.addListener(
         "appStateChange",
         ({ isActive }) => {
-          console.log("App state changed. Is active?", isActive);
-
           if (isActive) {
             (async () => {
               try {
@@ -197,8 +194,6 @@ const App = () => {
   }, [userLocations, userPreferences]);
 
   const getNextSalahDetails = async () => {
-    console.log("getNextSalahDetails Interval has run");
-
     if (!userLocations) {
       console.error("userLocations is undefined");
       return;
@@ -286,8 +281,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log("INITIALISING APP");
-
     const initializeApp = async () => {
       if (isDatabaseInitialised === true) {
         await fetchDataFromDB();
@@ -498,7 +491,7 @@ const App = () => {
         `SELECT * FROM userLocationsTable`,
       );
 
-      console.log("DBResultLocations: ", DBResultLocations);
+      // console.log("DBResultLocations: ", DBResultLocations);
 
       if (!DBResultPreferences || !DBResultPreferences.values) {
         throw new Error(
@@ -516,8 +509,8 @@ const App = () => {
         );
       }
 
-      console.log("DBResultAllSalahData: ", DBResultAllSalahData);
-      console.log("DBResultPreferences: ", DBResultPreferences);
+      // console.log("DBResultAllSalahData: ", DBResultAllSalahData);
+      // console.log("DBResultPreferences: ", DBResultPreferences);
 
       setUserLocations(DBResultLocations.values);
 
@@ -667,7 +660,7 @@ const App = () => {
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
         }));
       } else {
-        console.log("preference: ", preference);
+        // console.log("preference: ", preference);
 
         await updateUserPrefs(
           dbConnection,

@@ -52,7 +52,6 @@ const BottomSheetCustomAngles = ({
         setIncrement(userPreferences[customAngleSalah]);
       }}
       onWillDismiss={async () => {
-        console.log("customAdjustmentSalah: ", customAngleSalah);
         // if (!customAdjustmentSalah) return;
         await updateUserPrefs(
           dbConnection,

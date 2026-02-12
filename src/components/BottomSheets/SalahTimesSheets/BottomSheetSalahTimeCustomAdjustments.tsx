@@ -65,10 +65,6 @@ const BottomSheetSalahTimeCustomAdjustments = ({
     customAdjustmentsArr.push(String(i));
   }
 
-  useEffect(() => {
-    console.log("Default + User adjustment is equal to: ", totalAdjustedValue);
-  });
-
   return (
     <IonModal
       className="modal-fit-content"
@@ -77,16 +73,6 @@ const BottomSheetSalahTimeCustomAdjustments = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
       onWillPresent={() => {
-        console.log(
-          "default adjustment: ",
-          getDefaultAdjustments()[customAdjustmentSalah],
-        );
-
-        console.log(
-          "user adjustment: ",
-          userPreferences[customAdjustmentSalah],
-        );
-
         setTotalAdjustedValue(
           String(
             Number(userPreferences[customAdjustmentSalah]) +
@@ -129,8 +115,6 @@ const BottomSheetSalahTimeCustomAdjustments = ({
             const userAdjustedValue =
               Number(detail.value) -
               getDefaultAdjustments()[customAdjustmentSalah];
-
-            console.log("USER ADJUSTED VALUE: ", userAdjustedValue);
 
             setTotalAdjustedValue(
               String(

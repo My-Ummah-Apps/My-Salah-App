@@ -68,7 +68,6 @@ const Onboarding = ({
   };
   const switchToPreviousPage = () => {
     const activeIndex = swiperRef.current?.activeIndex;
-    console.log("activeIndex: ", activeIndex);
 
     if (activeIndex === 7) {
       swiperRef.current?.slideTo(3, 0);
@@ -101,7 +100,6 @@ const Onboarding = ({
     <IonModal
       isOpen={onboardingMode !== null ? true : false}
       onDidDismiss={() => {
-        console.log("MODAL DISMISSED");
         setOnboardingMode(null);
       }}
       mode="ios"
@@ -137,7 +135,6 @@ const Onboarding = ({
                 className="absolute text-lg z-10 right-[-5px] top-0"
                 onClick={() => {
                   setOnboardingMode(null);
-                  console.log("CLOSING MODAL");
                 }}
               >
                 <IonIcon icon={closeOutline} />

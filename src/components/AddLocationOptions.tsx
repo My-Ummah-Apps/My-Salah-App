@@ -105,13 +105,6 @@ const AddLocationOptions = ({
       throw new Error("dbConnection / dbconnection.current does not exist");
     }
 
-    console.log(
-      "isDefaultLocationCheckBoxChecked: ",
-      isDefaultLocationCheckBoxChecked,
-      "isSelected: ",
-      isSelected,
-    );
-
     if (isDefaultLocationCheckBoxChecked && isSelected === 1) {
       await dbConnection.current.run(
         `UPDATE userLocationsTable SET isSelected = 0`,
@@ -139,8 +132,6 @@ const AddLocationOptions = ({
   };
 
   const handleGrantedPermission = async () => {
-    console.log("handleGrantedPermission has run");
-
     try {
       presentLocationSpinner({
         message: "Detecting location...",
@@ -149,19 +140,12 @@ const AddLocationOptions = ({
       });
 
       const perms = await Geolocation.checkPermissions();
-      console.log("PERMISSIONS: ", perms.location, perms.coarseLocation);
 
       const location = await Geolocation.getCurrentPosition({
         // enableHighAccuracy: true, <-- Unsure if required
         timeout: 60000,
         maximumAge: 0,
       });
-
-      console.log(
-        "LOCATION IS: ",
-        location.coords.latitude,
-        location.coords.longitude,
-      );
 
       setCoords({
         latitude: location.coords.latitude,
@@ -207,8 +191,6 @@ const AddLocationOptions = ({
       const coarseLocation = permissions.coarseLocation;
 
       if (preciseLocation === "granted" || coarseLocation === "granted") {
-        console.log("PERMISSION GRANTED");
-
         await handleGrantedPermission();
       } else if (
         preciseLocation === "prompt" ||
@@ -441,7 +423,6 @@ const AddLocationOptions = ({
                   });
                   const locationNameTrimmed = locationName.trim();
 
-                  console.log("locationNameTrimmed:", locationNameTrimmed);
                   if (locationNameTrimmed === "") {
                     setShowError((prev) => ({
                       ...prev,
@@ -482,8 +463,6 @@ const AddLocationOptions = ({
                   if (
                     locationNames.includes(locationNameTrimmed.toLowerCase())
                   ) {
-                    console.log("DUPLICATE LOCATION");
-
                     setShowError((prev) => ({
                       ...prev,
                       emptyLocationError: false,
@@ -560,10 +539,7 @@ const AddLocationOptions = ({
                     return;
                   }
 
-                  console.log("onboardingMode: ", onboardingMode);
-
                   if (onboardingMode !== null && switchToNextPage) {
-                    console.log("SWITCHING");
                     switchToNextPage();
                   }
                 }}

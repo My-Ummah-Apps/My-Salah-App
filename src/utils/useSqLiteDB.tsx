@@ -39,7 +39,7 @@ const useSQLiteDB = () => {
 
         await sqliteConnection.current.addUpgradeStatement(
           "mysalahappdatabase",
-          upgradeStatements
+          upgradeStatements,
         );
 
         const connectionConsistency =
@@ -48,7 +48,7 @@ const useSQLiteDB = () => {
         const isConn = (
           await sqliteConnection.current.isConnection(
             "mysalahappdatabase",
-            false
+            false,
           )
         ).result; // The isConnection method checks if there is an existing connection
 
@@ -58,7 +58,7 @@ const useSQLiteDB = () => {
           dbConnection.current =
             await sqliteConnection.current.retrieveConnection(
               "mysalahappdatabase",
-              false
+              false,
             );
         } else {
           // If the dbConnection does not exist then create a new connection (additionally, if the "mysalahappdatabase" database does not exist, create it at the same time as establishing the new connection)
@@ -69,7 +69,7 @@ const useSQLiteDB = () => {
               false,
               "no-encryption",
               2,
-              false
+              false,
             );
         }
 
@@ -85,19 +85,19 @@ const useSQLiteDB = () => {
 
   // Check and update table structure here
   const initialiseTables = async () => {
-    console.log("Initialising tables...");
+    // console.log("Initialising tables...");
 
     try {
       if (!dbConnection.current) {
         throw new Error(
-          `Table not created/initialised within initialiseTables, dbConnection.current is ${dbConnection.current}`
+          `Table not created/initialised within initialiseTables, dbConnection.current is ${dbConnection.current}`,
         );
       }
 
       await toggleDBConnection(dbConnection, "open");
 
       await dbConnection.current.execute(
-        `DROP INDEX IF EXISTS idx_single_selected_location`
+        `DROP INDEX IF EXISTS idx_single_selected_location`,
       );
 
       const createTablesSql: string[] = [
@@ -136,7 +136,7 @@ const useSQLiteDB = () => {
       try {
         if (!dbConnection.current) {
           throw new Error(
-            `Unable to close cnnection within initialiseTables, dbConnection.current is ${dbConnection.current}`
+            `Unable to close cnnection within initialiseTables, dbConnection.current is ${dbConnection.current}`,
           );
         }
 
@@ -144,7 +144,7 @@ const useSQLiteDB = () => {
         if (isDatabaseOpen.result) {
           await toggleDBConnection(dbConnection, "close");
         }
-        console.log("Table initialisation complete");
+        // console.log("Table initialisation complete");
       } catch (error) {
         console.error(error);
       }

@@ -146,8 +146,6 @@ const BottomSheetLocationsList = ({
                 try {
                   await toggleDBConnection(dbConnection, "open");
 
-                  console.log("COORDS: ", location.locationName);
-
                   await updateActiveLocation(location.id);
 
                   const { allLocations } =
