@@ -155,7 +155,7 @@ export type SalahNamesTypeAdhanLibrary =
 
 export type nextSalahTimeType = {
   currentSalah: string;
-  nextSalah: string;
+  nextSalah: SalahNamesTypeAdhanLibrary | "";
   nextSalahTime: Date | null;
   hoursRemaining: number;
   minsRemaining: number;

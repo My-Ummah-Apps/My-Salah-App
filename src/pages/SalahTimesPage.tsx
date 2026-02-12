@@ -1,6 +1,5 @@
 import {
   IonButton,
-  IonButtons,
   IonContent,
   IonHeader,
   IonIcon,
@@ -22,8 +21,8 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   chevronBackOutline,
+  chevronDown,
   chevronForwardOutline,
-  listOutline,
   megaphone,
   navigate,
   notifications,
@@ -65,6 +64,8 @@ interface SalahTimesPageProps {
   showLocationFailureToast: boolean;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
   showLocationAddedToast: boolean;
+  setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
+  showOnboarding?: boolean;
 }
 
 const SalahTimesPage = ({
@@ -81,11 +82,12 @@ const SalahTimesPage = ({
   showLocationFailureToast,
   setShowLocationAddedToast,
   showLocationAddedToast,
+  setShowOnboarding,
+  showOnboarding,
 }: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
-  const [showSalahTimesOnboarding, setShowSalahTimesOnboarding] =
-    useState(false);
+  const [isSalahTimesOnboarding, setIsSalahTimesOnboarding] = useState(false);
 
   const [selectedSalah, setSelectedSalah] =
     useState<SalahNamesTypeAdhanLibrary>("fajr");
@@ -106,53 +108,30 @@ const SalahTimesPage = ({
       <IonHeader className="ion-no-border">
         <IonToolbar className="header-toolbar">
           <IonTitle>Salah Times</IonTitle>
-          {/* <IonButtons slot="primary">
-            <IonButton
-              onClick={() => setShowSalahTimesSettingsSheet(true)}
-              style={{
-                "--padding-end": "12px",
-                "--ripple-color": "transparent",
-              }}
-            >
-              <IonIcon
-                className="text-[var(--ion-text-color)] text-lg"
-                icon={settingsOutline}
-              />
-            </IonButton>
-          </IonButtons> */}
-          {userPreferences.prayerCalculationMethod !== "" && (
-            <IonButtons slot="primary">
-              <IonButton
-                onClick={() => setShowLocationsListSheet(true)}
-                style={{
-                  "--padding-end": "12px",
-                  "--ripple-color": "transparent",
-                }}
-              >
-                <IonIcon
-                  className="text-[var(--ion-text-color)] text-lg"
-                  icon={listOutline}
-                />
-              </IonButton>
-            </IonButtons>
-          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
         {/* bg-[var(--card-bg-color)]  */}
         <section className="salah-times-page-components-wrap">
           {userLocations?.map((location) => (
-            <section className="" key={location.id}>
+            <section className="w-full text-center" key={location.id}>
               {location.isSelected === 1 ? (
                 <div
                   key={location.id}
-                  className="flex items-center justify-center mb-1 text-lg "
+                  className="p-2 text-sm inline-flex items-center justify-center py-2 mb-4 border-[var(--ion-text-color)] border rounded-2xl"
+                  onClick={() => {
+                    setShowLocationsListSheet(true);
+                  }}
                 >
                   <IonIcon
                     className="text-[var(--ion-text-color)] mr-1"
                     icon={navigate}
                   />
                   <p>{location.locationName}</p>
+                  <IonIcon
+                    className="text-[var(--ion-text-color)] mr-1 ml-2"
+                    icon={chevronDown}
+                  />
                 </div>
               ) : (
                 ""
@@ -161,41 +140,65 @@ const SalahTimesPage = ({
           ))}{" "}
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
-              <section className="p-4 rounded-lg bg-[var(--card-bg-color)] ">
-                {nextSalahNameAndTime.currentSalah !== "sunrise" &&
-                  nextSalahNameAndTime.currentSalah !== "none" && (
-                    <>
-                      <p className="mb-1 text-lg text-center">Current Salah</p>
-                      <p className="text-6xl font-bold text-center">
-                        {upperCaseFirstLetter(
-                          nextSalahNameAndTime.currentSalah,
-                        )}
+              <>
+                {nextSalahNameAndTime.nextSalah !== "dhuhr" && (
+                  <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
+                    {nextSalahNameAndTime.currentSalah !== "sunrise" &&
+                      nextSalahNameAndTime.currentSalah !== "none" && (
+                        <div>
+                          <p className="mb-1 text-lg text-center opacity-70">
+                            Current Salah
+                          </p>
+                          <p className="text-6xl font-bold text-center text-blue-500">
+                            {upperCaseFirstLetter(
+                              nextSalahNameAndTime.currentSalah,
+                            )}
+                          </p>
+                        </div>
+                      )}
+                    <div
+                      className={`${nextSalahNameAndTime.currentSalah === "fajr" || nextSalahNameAndTime.currentSalah === "maghrib" ? "mt-3" : "mt-1"}`}
+                    >
+                      {nextSalahNameAndTime.hoursRemaining > 0 && (
+                        <p className="mt-2 text-center opacity-90">
+                          {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+                        </p>
+                      )}
+                      <p className="text-center opacity-90">
+                        {nextSalahNameAndTime.minsRemaining} minutes to go until
                       </p>
-                    </>
-                  )}
-                <p className="text-4xl text-center">
-                  {/* {format(nextSalahNameAndTime.nextSalahTime, "HH:mm")} */}
-                </p>
-                <div
-                  className={`${nextSalahNameAndTime.currentSalah === "fajr" || nextSalahNameAndTime.currentSalah === "maghrib" ? "mt-3" : ""}`}
-                >
-                  {nextSalahNameAndTime.hoursRemaining > 0 && (
-                    <p className="mt-2 text-center">
-                      {nextSalahNameAndTime.hoursRemaining} hours and{" "}
-                    </p>
-                  )}
-                  <p className="text-center">
-                    {nextSalahNameAndTime.minsRemaining} minutes to go until
-                  </p>
-                  <p className="mt-2 mb-2 text-2xl text-center">
-                    {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
-                  </p>
-                </div>
-              </section>
+                      <p className="mt-1 mb-2 text-2xl text-center">
+                        {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
+                      </p>
+                    </div>
+                  </section>
+                )}
+                {nextSalahNameAndTime.nextSalah === "dhuhr" && (
+                  <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
+                    <div>
+                      <p className="mb-1 text-lg text-center opacity-70">
+                        Upcoming Salah
+                      </p>
+                      <p className="text-6xl font-bold text-center text-blue-500">
+                        Dhuhr
+                      </p>
+                    </div>
+                    <div
+                      className={`${nextSalahNameAndTime.currentSalah === "fajr" || nextSalahNameAndTime.currentSalah === "maghrib" ? "mt-3" : "mt-1"}`}
+                    >
+                      {nextSalahNameAndTime.hoursRemaining > 0 && (
+                        <p className="mt-2 text-center opacity-90">
+                          {nextSalahNameAndTime.hoursRemaining} hours and{" "}
+                        </p>
+                      )}
+                      <p className="text-center opacity-90">
+                        {nextSalahNameAndTime.minsRemaining} minutes remaining
+                      </p>
+                    </div>
+                  </section>
+                )}
+              </>
             )}
-          {/* {userLocations?.length === 0 ? ( */}
-          {/* {userLocations?.length === 0 ||
-            (userPreferences.prayerCalculationMethod === "" && ( */}
           <>
             <section
               className="text-center"
@@ -208,7 +211,8 @@ const SalahTimesPage = ({
                 userLocations.length === 0 && (
                   <IonButton
                     onClick={() => {
-                      setShowSalahTimesOnboarding(true);
+                      setIsSalahTimesOnboarding(true);
+                      setShowOnboarding(true);
                     }}
                     className="w-1/2"
                   >
@@ -277,21 +281,23 @@ const SalahTimesPage = ({
                   userLocations={userLocations}
                 />
               </IonModal>
-              {showSalahTimesOnboarding && (
-                <Onboarding
-                  startingSlide={3}
-                  setShowSalahTimesOnboarding={setShowSalahTimesOnboarding}
-                  showSalahTimesOnboarding={showSalahTimesOnboarding}
-                  setShowJoyRideEditIcon={setShowJoyRideEditIcon}
-                  dbConnection={dbConnection}
-                  setUserPreferences={setUserPreferences}
-                  userPreferences={userPreferences}
-                  setUserLocations={setUserLocations}
-                  userLocations={userLocations}
-                  setShowLocationFailureToast={setShowLocationFailureToast}
-                  setShowLocationAddedToast={setShowLocationAddedToast}
-                />
-              )}
+              {/* {isSalahTimesOnboarding && ( */}
+              <Onboarding
+                startingSlide={3}
+                setIsSalahTimesOnboarding={setIsSalahTimesOnboarding}
+                isSalahTimesOnboarding={isSalahTimesOnboarding}
+                setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+                dbConnection={dbConnection}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+                setUserLocations={setUserLocations}
+                userLocations={userLocations}
+                setShowLocationFailureToast={setShowLocationFailureToast}
+                setShowLocationAddedToast={setShowLocationAddedToast}
+                setShowOnboarding={setShowOnboarding}
+                showOnboarding={showOnboarding}
+              />
+              {/* // )} */}
             </section>
           </>
           {/* ))} */}
@@ -374,10 +380,11 @@ const SalahTimesPage = ({
               Object.entries(salahTimes) as [keyof typeof salahTimes, string][]
             ).map(([name, time]) => (
               <div
-                className={`bg-[var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg ${
+                // border-[var(--ion-text-color)]
+                className={`bg-[var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg mb-2 ${
                   name === nextSalahNameAndTime.currentSalah &&
                   name !== "sunrise"
-                    ? "my-2 rounded-lg shadow-md scale-102 border-[var(--ion-text-color)] border-2 font-bold"
+                    ? "my-2 rounded-lg shadow-md scale-102 border-blue-500 border-2 font-bold text-blue-500"
                     : "opacity-80"
                 }`}
                 key={name + time}
@@ -413,7 +420,12 @@ const SalahTimesPage = ({
                     size="small"
                   >
                     <IonIcon
-                      className="text-[var(--ion-text-color)]"
+                      className={`text-[var(--ion-text-color)] ${
+                        name === nextSalahNameAndTime.currentSalah &&
+                        name !== "sunrise"
+                          ? "rounded-lg shadow-md scale-102 font-bold text-blue-500"
+                          : "opacity-80"
+                      }`}
                       icon={
                         userPreferences[`${name}Notification`] === "off"
                           ? notificationsOff
@@ -432,7 +444,7 @@ const SalahTimesPage = ({
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length !== 0 && (
-              <p className="mx-10 my-5 text-xs text-center opacity-50">
+              <p className="mx-5 my-5 text-xs text-center opacity-50">
                 {`Note: These times have been calculated using the
             ${
               prayerCalculationMethodLabels[

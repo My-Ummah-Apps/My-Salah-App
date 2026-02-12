@@ -48,7 +48,7 @@ interface AddLocationOptionsProps {
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
   showOnboarding?: boolean;
-  showSalahTimesOnboarding?: boolean;
+  isSalahTimesOnboarding?: boolean;
   switchToNextPage?: () => void;
   setShowAddLocationSheet?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -60,7 +60,7 @@ const AddLocationOptions = ({
   setShowLocationFailureToast,
   setShowLocationAddedToast,
   showOnboarding,
-  showSalahTimesOnboarding,
+  isSalahTimesOnboarding,
   switchToNextPage,
   setShowAddLocationSheet,
 }: AddLocationOptionsProps) => {
@@ -566,9 +566,8 @@ const AddLocationOptions = ({
 
                   if (
                     (showOnboarding && switchToNextPage) ||
-                    (showSalahTimesOnboarding && switchToNextPage)
+                    (isSalahTimesOnboarding && switchToNextPage)
                   ) {
-                    console.log("SWITCHING TO NEXT PAGE");
                     switchToNextPage();
                   }
                 }}

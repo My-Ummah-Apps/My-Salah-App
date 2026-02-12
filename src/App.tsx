@@ -195,6 +195,8 @@ const App = () => {
   }, [userLocations, userPreferences]);
 
   const getNextSalahDetails = async () => {
+    console.log("getNextSalahDetails Interval has run");
+
     if (!userLocations) {
       console.error("userLocations is undefined");
       return;
@@ -972,6 +974,8 @@ const App = () => {
                   showLocationFailureToast={showLocationFailureToast}
                   setShowLocationAddedToast={setShowLocationAddedToast}
                   showLocationAddedToast={showLocationAddedToast}
+                  setShowOnboarding={setShowOnboarding}
+                  showOnboarding={showOnboarding}
                 />
               )}
             />
@@ -998,20 +1002,20 @@ const App = () => {
         </IonTabs>
         <Route exact path="/" render={() => <Redirect to="/HomePage" />} />
       </IonReactRouter>
-      {showOnboarding && (
-        <Onboarding
-          setShowOnboarding={setShowOnboarding}
-          showOnboarding={showOnboarding}
-          setShowJoyRideEditIcon={setShowJoyRideEditIcon}
-          dbConnection={dbConnection}
-          setUserPreferences={setUserPreferences}
-          userPreferences={userPreferences}
-          setUserLocations={setUserLocations}
-          userLocations={userLocations}
-          setShowLocationFailureToast={setShowLocationFailureToast}
-          setShowLocationAddedToast={setShowLocationAddedToast}
-        />
-      )}
+      {/* {showOnboarding && ( */}
+      <Onboarding
+        setShowOnboarding={setShowOnboarding}
+        showOnboarding={showOnboarding}
+        setShowJoyRideEditIcon={setShowJoyRideEditIcon}
+        dbConnection={dbConnection}
+        setUserPreferences={setUserPreferences}
+        userPreferences={userPreferences}
+        setUserLocations={setUserLocations}
+        userLocations={userLocations}
+        setShowLocationFailureToast={setShowLocationFailureToast}
+        setShowLocationAddedToast={setShowLocationAddedToast}
+      />
+      {/* // )} */}
       {showMajorUpdateOverlay && (
         <MajorUpdateOverlay
           setShowMajorUpdateOverlay={setShowMajorUpdateOverlay}

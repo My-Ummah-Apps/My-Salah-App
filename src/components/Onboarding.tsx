@@ -18,7 +18,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import appLogo from "/src/assets/images/icon-512.png";
-import { IonButton, IonIcon } from "@ionic/react";
+import { IonButton, IonContent, IonIcon, IonModal } from "@ionic/react";
 import {
   arrowForwardOutline,
   chevronBackOutline,
@@ -32,11 +32,11 @@ import { AndroidSettings } from "capacitor-native-settings";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  setShowSalahTimesOnboarding?: React.Dispatch<React.SetStateAction<boolean>>;
-  showSalahTimesOnboarding?: boolean;
+  setIsSalahTimesOnboarding?: React.Dispatch<React.SetStateAction<boolean>>;
+  isSalahTimesOnboarding?: boolean;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  setShowOnboarding?: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   showOnboarding?: boolean;
   startingSlide?: number;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,8 +50,8 @@ interface OnboardingProps {
 
 const Onboarding = ({
   dbConnection,
-  setShowSalahTimesOnboarding,
-  showSalahTimesOnboarding,
+  setIsSalahTimesOnboarding,
+  isSalahTimesOnboarding,
   setUserPreferences,
   userPreferences,
   setShowOnboarding,
@@ -83,25 +83,9 @@ const Onboarding = ({
     "country",
   );
 
-  // const [isSalahTimesOnboarding, setIsSalahTimesOnboarding] = useState(false);
-
   const [isBatteryOptEnabled, setIsBatteryOptEnabled] = useState<
     boolean | null
   >(null);
-
-  // <IonButton
-  //         style={{
-  //           "--padding-start": "0",
-  //           "--padding-end": "0",
-  //         }}
-  //         fill="clear"
-  //         color="light"
-  //         size="small"
-  //         className="absolute top-[-10px] left-0 z-10 text-lg"
-  //         onClick={switchToPreviousPage}
-  //       >
-  //         <IonIcon icon={chevronBackOutline} />
-  //       </IonButton>
 
   useEffect(() => {
     if (Capacitor.getPlatform() !== "android" || !Capacitor.isNativePlatform())
@@ -116,491 +100,499 @@ const Onboarding = ({
   }, []);
 
   return (
-    <section
-      style={{
-        display: "flex",
-        // alignItems: "center",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgb(27, 27, 28)",
-        color: "#fff",
-        zIndex: 9999,
-        overflowY: "auto",
-        paddingTop: "calc(env(safe-area-inset-top) + 20px)",
-        paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)",
-        paddingLeft: "calc(env(safe-area-inset-left) + 20px)",
-        paddingRight: "calc(env(safe-area-inset-right) + 20px)",
+    <IonModal
+      isOpen={showOnboarding}
+      onDidDismiss={() => {
+        setShowOnboarding(false);
+        setIsSalahTimesOnboarding?.(false);
       }}
+      mode="ios"
+      backdropDismiss={false}
+      canDismiss={false}
+      handle={false}
     >
-      {showOnboarding && (
-        <>
-          <IonButton
-            fill="clear"
-            color="light"
-            size="small"
-            className="absolute text-lg z-10 left-[-5px] top-2"
-            onClick={switchToPreviousPage}
-          >
-            <IonIcon icon={chevronBackOutline} />
-          </IonButton>
-        </>
-      )}
-
-      {showSalahTimesOnboarding && (
-        <>
-          <IonButton
-            fill="clear"
-            color="light"
-            size="small"
-            className="absolute text-lg z-10 right-[-5px] top-10"
-            onClick={() => {
-              setShowSalahTimesOnboarding?.(false);
-            }}
-          >
-            <IonIcon icon={closeOutline} />
-          </IonButton>
-        </>
-      )}
-
-      <Swiper
-        onSwiper={(swiper) => (swiperRef.current = swiper)}
-        style={{ margin: 0 }}
-        className="swiper"
-        spaceBetween={50}
-        slidesPerView={1}
-        allowTouchMove={false}
-        initialSlide={startingSlide ? startingSlide : 0}
-        pagination
-        navigation
-        // navigation={{
-        //   nextEl: ".swiper-button-next",
-        //   prevEl: ".swiper-button-prev",
-        // }}
-        modules={[Pagination, Navigation]}
-      >
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <h1 className="text-2xl text-center">Welcome to My Salah App</h1>
-            <div className="text-center">
-              <img
-                className="block mx-auto mb-2"
-                src={appLogo}
-                height="70"
-                width="60%"
-                alt=""
-              />
-              <p className="p-4 text-sm leading-5">
-                Open-source, ad-free, privacy friendly. This app collects zero
-                data from you and everything works completely offline.
-              </p>
-            </div>
-            <IonButton
-              className="absolute bottom-0 w-full"
-              onClick={() => {
-                switchToNextPage();
-                // setIsOnboarding(true);
-              }}
-            >
-              <IonIcon slot="end" icon={arrowForwardOutline} />
-              Bismillah, Lets Go!
-            </IonButton>
-          </section>
-        </SwiperSlide>
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <h1 className="text-3xl">I am a...</h1>
-            <section>
-              <IonButton
-                expand="block"
-                onClick={async () => {
-                  switchToNextPage();
-                  await updateUserPrefs(
-                    dbConnection,
-                    "userGender",
-                    "male",
-                    setUserPreferences,
-                  );
-                }}
-              >
-                <div>
-                  <p>Brother</p>
-                </div>
-              </IonButton>
-
-              <IonButton
-                color="tertiary"
-                className="mt-5"
-                expand="block"
-                onClick={async () => {
-                  switchToNextPage();
-                  await updateUserPrefs(
-                    dbConnection,
-                    "userGender",
-                    "female",
-                    setUserPreferences,
-                  );
-                }}
-              >
-                <div>
-                  <p>Sister</p>
-                </div>
-              </IonButton>
-            </section>
-          </section>
-        </SwiperSlide>
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <section className="m-4 text-center">
-              <h1 className="mb-2 text-2xl font-bold">
-                Do you want to turn on Salah times?
-              </h1>
-              <p>Turn on Salah times</p>
-            </section>
-            <section className="flex flex-col ">
-              <IonButton
-                onClick={async () => {
-                  switchToNextPage();
-                  // setIsSalahTimesOnboarding(true);
-                }}
-                className="mb-4"
-              >
-                Yes
-              </IonButton>
+      <IonContent>
+        <section className="flex items-center mx-5 mt-2">
+          {showOnboarding && (
+            <>
               <IonButton
                 fill="clear"
+                color="light"
+                size="small"
+                className="absolute text-lg z-10 left-[-5px] top-0"
+                onClick={switchToPreviousPage}
+              >
+                <IonIcon icon={chevronBackOutline} />
+              </IonButton>
+            </>
+          )}
+
+          {isSalahTimesOnboarding && (
+            <>
+              <IonButton
+                fill="clear"
+                color="light"
+                size="small"
+                className="absolute text-lg z-10 right-[-5px] top-10"
                 onClick={() => {
-                  swiperRef.current?.slideTo(8, 0);
-                  // setIsSalahTimesOnboarding(false);
+                  setIsSalahTimesOnboarding?.(false);
                 }}
-                className="text-center text-white mb- rounded-2xl"
               >
-                No
+                <IonIcon icon={closeOutline} />
               </IonButton>
-            </section>
-          </section>
-        </SwiperSlide>
+            </>
+          )}
 
-        {/* {showPrayerTimesOnboarding && ( */}
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <section className="m-4 text-center">
-              <h1 className="mb-2 text-2xl font-bold">Location</h1>
-              <p>Select your Location</p>
-            </section>
-            <section className="relative">
-              <AddLocationOptions
-                dbConnection={dbConnection}
-                setUserLocations={setUserLocations}
-                userLocations={userLocations}
-                setShowLocationFailureToast={setShowLocationFailureToast}
-                setShowLocationAddedToast={setShowLocationAddedToast}
-                showOnboarding={showOnboarding}
-                switchToNextPage={switchToNextPage}
-                showSalahTimesOnboarding={showSalahTimesOnboarding}
-              />
-            </section>
-          </section>
-        </SwiperSlide>
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <section className="m-4 text-center">
-              <h1 className="mb-2 text-2xl font-bold">Calculation Method</h1>
-              <p>Select your calculation method</p>
-            </section>
-            <CalculationMethodOptions
-              dbConnection={dbConnection}
-              setSegmentOption={setSegmentOption}
-              segmentOption={segmentOption}
-              userLocations={userLocations}
-              userPreferences={userPreferences}
-              setUserPreferences={setUserPreferences}
-            />
-            {/* <section className=""> */}
-            <IonButton
-              disabled={
-                userPreferences.prayerCalculationMethod === "" ? true : false
-              }
-              onClick={async () => {
-                switchToNextPage();
-              }}
-              className={`absolute bottom-0 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
-            >
-              Next
-            </IonButton>
-          </section>
-          {/* </section> */}
-        </SwiperSlide>
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <section className="m-4 text-center">
-              <h1 className="mb-2 text-2xl font-bold">Madhab</h1>
-              <p>Select Madhab</p>
-            </section>
-            <section className="mx-4">
-              <IonButton
-                expand="block"
-                onClick={async () => {
-                  if (
-                    (switchToNextPage && showOnboarding) ||
-                    (switchToNextPage && showSalahTimesOnboarding)
-                  )
-                    switchToNextPage();
-                  await updateUserPrefs(
-                    dbConnection,
-                    "madhab",
-                    "shafi",
-                    setUserPreferences,
-                  );
-                }}
-              >
-                <div>
-                  <p className="mt-0">Shafi'i, Maliki & Hanbali</p>
-                  <p className="mt-2 text-xs">Earlier Asr time</p>
+          <Swiper
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            style={{ margin: 0 }}
+            className="swiper"
+            spaceBetween={50}
+            slidesPerView={1}
+            allowTouchMove={false}
+            initialSlide={startingSlide ? startingSlide : 0}
+            pagination={showOnboarding ? true : false}
+            navigation
+            // navigation={{
+            //   nextEl: ".swiper-button-next",
+            //   prevEl: ".swiper-button-prev",
+            // }}
+            modules={[Pagination, Navigation]}
+          >
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <h1 className="text-2xl text-center">
+                  Welcome to My Salah App
+                </h1>
+                <div className="text-center">
+                  <img
+                    className="block mx-auto mb-2"
+                    src={appLogo}
+                    height="70"
+                    width="60%"
+                    alt=""
+                  />
+                  <p className="p-4 text-sm leading-5">
+                    Open-source, ad-free, privacy friendly. This app collects
+                    zero data from you and everything works completely offline.
+                  </p>
                 </div>
-              </IonButton>
-              <IonButton
-                color="secondary"
-                className="mt-5"
-                expand="block"
-                onClick={async () => {
-                  if (
-                    (switchToNextPage && showOnboarding) ||
-                    (switchToNextPage && showSalahTimesOnboarding)
-                  )
+                <IonButton
+                  className="absolute bottom-0 w-full"
+                  onClick={() => {
                     switchToNextPage();
-                  await updateUserPrefs(
-                    dbConnection,
-                    "madhab",
-                    "hanafi",
-                    setUserPreferences,
-                  );
-                }}
-              >
-                <div>
-                  <p className="mt-0">Hanafi</p>
-                  <p className="mt-2 text-xs">Later Asr time</p>
-                </div>
-              </IonButton>
-            </section>
-          </section>
-        </SwiperSlide>
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <section className="m-4 text-center">
-              <h1 className="mb-2 text-2xl font-bold">Enable Notifications</h1>
-              <p>
-                We’ll notify you at each Salah time and once daily to log your
-                Salahs. You can change sounds and customise individual reminders
-                later.
-              </p>
-            </section>
-            <section className="flex flex-col ">
-              <IonButton
-                onClick={async () => {
-                  const res = await handleNotificationPermissions();
-
-                  if (showOnboarding) {
-                    setShowJoyRideEditIcon(true);
-                  }
-                  setShowOnboarding?.(false);
-                  setShowSalahTimesOnboarding?.(false);
-
-                  if (res === "granted") {
-                    const notifications = [
-                      "fajrNotification",
-                      "dhuhrNotification",
-                      "asrNotification",
-                      "maghribNotification",
-                      "ishaNotification",
-                    ] as const;
-
-                    for (const notification of notifications) {
+                    // setIsOnboarding(true);
+                  }}
+                >
+                  <IonIcon slot="end" icon={arrowForwardOutline} />
+                  Bismillah, Lets Go!
+                </IonButton>
+              </section>
+            </SwiperSlide>
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <h1 className="text-3xl">I am a...</h1>
+                <section>
+                  <IonButton
+                    expand="block"
+                    onClick={async () => {
+                      switchToNextPage();
                       await updateUserPrefs(
                         dbConnection,
-                        notification,
-                        "on",
+                        "userGender",
+                        "male",
                         setUserPreferences,
                       );
-                    }
+                    }}
+                  >
+                    <div>
+                      <p>Brother</p>
+                    </div>
+                  </IonButton>
 
-                    const salahs = adhanLibrarySalahs;
-
-                    for (const salah of salahs) {
-                      if (salah === "sunrise") continue;
-                      await scheduleSalahNotifications(
-                        userLocations,
-                        salah,
-                        userPreferences,
-                        "on",
+                  <IonButton
+                    color="tertiary"
+                    className="mt-5"
+                    expand="block"
+                    onClick={async () => {
+                      switchToNextPage();
+                      await updateUserPrefs(
+                        dbConnection,
+                        "userGender",
+                        "female",
+                        setUserPreferences,
                       );
-                    }
-
-                    await scheduleAfterIshaDailyNotifications(
-                      Number(userPreferences.dailyNotificationAfterIshaDelay),
-                      userLocations,
-                      userPreferences,
-                    );
-
-                    await updateUserPrefs(
-                      dbConnection,
-                      "dailyNotificationOption",
-                      "afterIsha",
-                      setUserPreferences,
-                    );
-                    await updateUserPrefs(
-                      dbConnection,
-                      "dailyNotification",
-                      "1",
-                      setUserPreferences,
-                    );
-                  }
-                  // switchToNextPage();
-                }}
-                className="mb-4"
-              >
-                Allow notifications
-              </IonButton>
-              <IonButton
-                fill="clear"
-                onClick={() => {
-                  // switchToNextPage();
-                  if (showOnboarding) {
-                    setShowJoyRideEditIcon(true);
-                  }
-                  setShowOnboarding?.(false);
-                  setShowSalahTimesOnboarding?.(false);
-                }}
-                className="mb-2 text-center text-white rounded-2xl"
-              >
-                Skip for now
-              </IonButton>
-            </section>
-          </section>
-        </SwiperSlide>
-
-        {Capacitor.getPlatform() === "android" &&
-          isBatteryOptEnabled === false && (
+                    }}
+                  >
+                    <div>
+                      <p>Sister</p>
+                    </div>
+                  </IonButton>
+                </section>
+              </section>
+            </SwiperSlide>
             <SwiperSlide>
               <section className="flex flex-col justify-center h-full">
                 <section className="m-4 text-center">
                   <h1 className="mb-2 text-2xl font-bold">
-                    Make sure reminders arrive on time
+                    Do you want to turn on Salah times?
                   </h1>
-                  <p>
-                    Some phones delay notifications to save battery. Turning off
-                    battery optimisation helps ensure Salah reminders are
-                    delivered on time.
-                  </p>
+                  <p>Turn on Salah times</p>
                 </section>
-                <section className="flex flex-col">
+                <section className="flex flex-col ">
                   <IonButton
                     onClick={async () => {
-                      if (userPreferences.hasSeenBatteryPrompt === "1") {
-                        await requestIgnoreBatteryOptimization();
-                        await updateUserPrefs(
-                          dbConnection,
-                          "hasSeenBatteryPrompt",
-                          "1",
-                          setUserPreferences,
-                        );
-                      } else {
-                        await promptToOpenDeviceSettings(
-                          "Disable Battery Optimization",
-                          "To ensure notifications arrive on time, please turn off battery optimization for this app.",
-                          AndroidSettings.BatteryOptimization,
-                        );
-                      }
                       switchToNextPage();
+                      // setIsSalahTimesOnboarding(true);
                     }}
                     className="mb-4"
                   >
-                    Improve notification reliability
+                    Yes
                   </IonButton>
                   <IonButton
                     fill="clear"
                     onClick={() => {
-                      switchToNextPage();
+                      swiperRef.current?.slideTo(8, 0);
+                      // setIsSalahTimesOnboarding(false);
                     }}
-                    className="mb-2 text-center text-white rounded-2xl"
+                    className="text-center text-white mb- rounded-2xl"
+                  >
+                    No
+                  </IonButton>
+                </section>
+              </section>
+            </SwiperSlide>
+
+            {/* {showPrayerTimesOnboarding && ( */}
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <section className="m-4 text-center">
+                  <h1 className="mb-2 text-2xl font-bold">Location</h1>
+                  <p>Select your Location</p>
+                </section>
+                <section className="relative">
+                  <AddLocationOptions
+                    dbConnection={dbConnection}
+                    setUserLocations={setUserLocations}
+                    userLocations={userLocations}
+                    setShowLocationFailureToast={setShowLocationFailureToast}
+                    setShowLocationAddedToast={setShowLocationAddedToast}
+                    showOnboarding={showOnboarding}
+                    switchToNextPage={switchToNextPage}
+                    isSalahTimesOnboarding={isSalahTimesOnboarding}
+                  />
+                </section>
+              </section>
+            </SwiperSlide>
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <section className="m-4 text-center">
+                  <h1 className="mb-2 text-2xl font-bold">
+                    Calculation Method
+                  </h1>
+                  <p>Select your calculation method</p>
+                </section>
+                <CalculationMethodOptions
+                  dbConnection={dbConnection}
+                  setSegmentOption={setSegmentOption}
+                  segmentOption={segmentOption}
+                  userLocations={userLocations}
+                  userPreferences={userPreferences}
+                  setUserPreferences={setUserPreferences}
+                />
+                {/* <section className=""> */}
+                <IonButton
+                  disabled={
+                    userPreferences.prayerCalculationMethod === ""
+                      ? true
+                      : false
+                  }
+                  onClick={async () => {
+                    switchToNextPage();
+                  }}
+                  className={`absolute bottom-0 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
+                >
+                  Next
+                </IonButton>
+              </section>
+              {/* </section> */}
+            </SwiperSlide>
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <section className="m-4 text-center">
+                  <h1 className="mb-2 text-2xl font-bold">Madhab</h1>
+                  <p>Select Madhab</p>
+                </section>
+                <section className="mx-4">
+                  <IonButton
+                    expand="block"
+                    onClick={async () => {
+                      if (
+                        (switchToNextPage && showOnboarding) ||
+                        (switchToNextPage && isSalahTimesOnboarding)
+                      ) {
+                        switchToNextPage();
+                        await updateUserPrefs(
+                          dbConnection,
+                          "madhab",
+                          "shafi",
+                          setUserPreferences,
+                        );
+                      }
+                    }}
+                  >
+                    <div>
+                      <p className="mt-0">Shafi'i, Maliki & Hanbali</p>
+                      <p className="mt-2 text-xs">Earlier Asr time</p>
+                    </div>
+                  </IonButton>
+                  <IonButton
+                    color="secondary"
+                    className="mt-5"
+                    expand="block"
+                    onClick={async () => {
+                      if (
+                        (switchToNextPage && showOnboarding) ||
+                        (switchToNextPage && isSalahTimesOnboarding)
+                      ) {
+                        switchToNextPage();
+                        await updateUserPrefs(
+                          dbConnection,
+                          "madhab",
+                          "hanafi",
+                          setUserPreferences,
+                        );
+                      }
+                    }}
+                  >
+                    <div>
+                      <p className="mt-0">Hanafi</p>
+                      <p className="mt-2 text-xs">Later Asr time</p>
+                    </div>
+                  </IonButton>
+                </section>
+              </section>
+            </SwiperSlide>
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <section className="m-4 text-center">
+                  <h1 className="mb-2 text-2xl font-bold">
+                    Enable Notifications
+                  </h1>
+                  <p>
+                    We’ll notify you at each Salah time and once daily to log
+                    your Salahs. You can change sounds and customise individual
+                    reminders later.
+                  </p>
+                </section>
+                <section className="flex flex-col ">
+                  <IonButton
+                    onClick={async () => {
+                      const res = await handleNotificationPermissions();
+
+                      if (showOnboarding) {
+                        setShowJoyRideEditIcon(true);
+                      }
+                      setShowOnboarding?.(false);
+                      setIsSalahTimesOnboarding?.(false);
+
+                      if (res === "granted") {
+                        const notifications = [
+                          "fajrNotification",
+                          "dhuhrNotification",
+                          "asrNotification",
+                          "maghribNotification",
+                          "ishaNotification",
+                        ] as const;
+
+                        for (const notification of notifications) {
+                          await updateUserPrefs(
+                            dbConnection,
+                            notification,
+                            "on",
+                            setUserPreferences,
+                          );
+                        }
+
+                        const salahs = adhanLibrarySalahs;
+
+                        for (const salah of salahs) {
+                          if (salah === "sunrise") continue;
+                          await scheduleSalahNotifications(
+                            userLocations,
+                            salah,
+                            userPreferences,
+                            "on",
+                          );
+                        }
+
+                        await scheduleAfterIshaDailyNotifications(
+                          Number(
+                            userPreferences.dailyNotificationAfterIshaDelay,
+                          ),
+                          userLocations,
+                          userPreferences,
+                        );
+
+                        await updateUserPrefs(
+                          dbConnection,
+                          "dailyNotificationOption",
+                          "afterIsha",
+                          setUserPreferences,
+                        );
+                        await updateUserPrefs(
+                          dbConnection,
+                          "dailyNotification",
+                          "1",
+                          setUserPreferences,
+                        );
+                      }
+                      // switchToNextPage();
+                    }}
+                    className="mb-4"
+                  >
+                    Allow notifications
+                  </IonButton>
+                  <IonButton
+                    fill="clear"
+                    onClick={() => {
+                      // switchToNextPage();
+                      if (showOnboarding) {
+                        setShowJoyRideEditIcon(true);
+                      }
+                      setShowOnboarding?.(false);
+                      setIsSalahTimesOnboarding?.(false);
+                    }}
+                    className="mb-2 text-center rounded-2xl text-[var(--ion-text-color)]"
                   >
                     Skip for now
                   </IonButton>
                 </section>
               </section>
             </SwiperSlide>
-          )}
-        {/* )} */}
-        <SwiperSlide>
-          <section className="flex flex-col justify-center h-full">
-            <section className="m-4 text-center">
-              <h1 className="mb-2 text-2xl font-bold">
-                Stay Consistent with Your Salah
-              </h1>
-              <p>
-                We’ll send you a gentle reminder each day to log which Salahs
-                you prayed or missed. You can adjust the time or turn this off
-                anytime in settings.
-              </p>
-            </section>
-            <section className="flex flex-col ">
-              <IonButton
-                onClick={async () => {
-                  const permission =
-                    await LocalNotifications.requestPermissions();
 
-                  if (showOnboarding) {
-                    setShowJoyRideEditIcon(true);
-                  }
-                  setShowOnboarding?.(false);
+            {Capacitor.getPlatform() === "android" &&
+              isBatteryOptEnabled === false && (
+                <SwiperSlide>
+                  <section className="flex flex-col justify-center h-full">
+                    <section className="m-4 text-center">
+                      <h1 className="mb-2 text-2xl font-bold">
+                        Make sure reminders arrive on time
+                      </h1>
+                      <p>
+                        Some phones delay notifications to save battery. Turning
+                        off battery optimisation helps ensure Salah reminders
+                        are delivered on time.
+                      </p>
+                    </section>
+                    <section className="flex flex-col">
+                      <IonButton
+                        onClick={async () => {
+                          if (userPreferences.hasSeenBatteryPrompt === "1") {
+                            await requestIgnoreBatteryOptimization();
+                            await updateUserPrefs(
+                              dbConnection,
+                              "hasSeenBatteryPrompt",
+                              "1",
+                              setUserPreferences,
+                            );
+                          } else {
+                            await promptToOpenDeviceSettings(
+                              "Disable Battery Optimization",
+                              "To ensure notifications arrive on time, please turn off battery optimization for this app.",
+                              AndroidSettings.BatteryOptimization,
+                            );
+                          }
+                          switchToNextPage();
+                        }}
+                        className="mb-4"
+                      >
+                        Improve notification reliability
+                      </IonButton>
+                      <IonButton
+                        fill="clear"
+                        onClick={() => {
+                          switchToNextPage();
+                        }}
+                        className="mb-2 text-center text-[var(--ion-text-color)] rounded-2xl"
+                      >
+                        Skip for now
+                      </IonButton>
+                    </section>
+                  </section>
+                </SwiperSlide>
+              )}
+            {/* )} */}
+            <SwiperSlide>
+              <section className="flex flex-col justify-center h-full">
+                <section className="m-4 text-center">
+                  <h1 className="mb-2 text-2xl font-bold">
+                    Stay Consistent with Your Salah
+                  </h1>
+                  <p>
+                    We’ll send you a gentle reminder each day to log which
+                    Salahs you prayed or missed. You can adjust the time or turn
+                    this off anytime in settings.
+                  </p>
+                </section>
+                <section className="flex flex-col">
+                  <IonButton
+                    onClick={async () => {
+                      const permission =
+                        await LocalNotifications.requestPermissions();
 
-                  if (permission.display === "granted") {
-                    // setShowJoyRideEditIcon(true);
-                    // setShowOnboarding(false);
-                    await scheduleFixedTimeDailyNotification(21, 0);
-                    await updateUserPrefs(
-                      dbConnection,
-                      "dailyNotification",
-                      "1",
-                      setUserPreferences,
-                    );
-                    await updateUserPrefs(
-                      dbConnection,
-                      "dailyNotificationTime",
-                      "21:00",
-                      setUserPreferences,
-                    );
-                  } else {
-                    // setShowJoyRideEditIcon(true);
-                    // setShowOnboarding(false);
-                  }
+                      if (showOnboarding) {
+                        setShowJoyRideEditIcon(true);
+                      }
+                      setShowOnboarding?.(false);
 
-                  // setIsOnboarding(false);
-                }}
-                className="mb-4"
-              >
-                Remind me each day
-              </IonButton>
-              <IonButton
-                fill="clear"
-                onClick={() => {
-                  // setIsOnboarding(false);
-                  if (showOnboarding) {
-                    setShowJoyRideEditIcon(true);
-                  }
-                  setShowOnboarding?.(false);
-                }}
-                className="text-white mb-2text-center rounded-2xl"
-              >
-                Skip for now
-              </IonButton>
-            </section>
-          </section>
-        </SwiperSlide>
-      </Swiper>
-    </section>
+                      if (permission.display === "granted") {
+                        // setShowJoyRideEditIcon(true);
+                        // setShowOnboarding(false);
+                        await scheduleFixedTimeDailyNotification(21, 0);
+                        await updateUserPrefs(
+                          dbConnection,
+                          "dailyNotification",
+                          "1",
+                          setUserPreferences,
+                        );
+                        await updateUserPrefs(
+                          dbConnection,
+                          "dailyNotificationTime",
+                          "21:00",
+                          setUserPreferences,
+                        );
+                      } else {
+                        // setShowJoyRideEditIcon(true);
+                        // setShowOnboarding(false);
+                      }
+
+                      // setIsOnboarding(false);
+                    }}
+                    className="mb-4"
+                  >
+                    Remind me each day
+                  </IonButton>
+                  <IonButton
+                    fill="clear"
+                    onClick={() => {
+                      // setIsOnboarding(false);
+                      if (showOnboarding) {
+                        setShowJoyRideEditIcon(true);
+                      }
+                      setShowOnboarding?.(false);
+                    }}
+                    className="text-[var(--ion-text-color)] mb-2text-center rounded-2xl"
+                  >
+                    Skip for now
+                  </IonButton>
+                </section>
+              </section>
+            </SwiperSlide>
+          </Swiper>
+        </section>
+      </IonContent>
+    </IonModal>
   );
 };
 
