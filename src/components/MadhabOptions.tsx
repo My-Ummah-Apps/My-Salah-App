@@ -8,7 +8,7 @@ interface MadhabOptionsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  // showOnboarding?: boolean;
+  // onboardingMode?: boolean;
   // switchToNextPage?: () => void;
 }
 
@@ -16,14 +16,14 @@ const MadhabOptions = ({
   dbConnection,
   setUserPreferences,
   userPreferences,
-  // showOnboarding,
+  // onboardingMode,
   // switchToNextPage,
 }: MadhabOptionsProps) => {
   return (
     <section className="mx-4">
       <div
         onClick={async () => {
-          // if (switchToNextPage && showOnboarding) switchToNextPage();
+          // if (switchToNextPage && onboardingMode) switchToNextPage();
           await updateUserPrefs(
             dbConnection,
             "madhab",
@@ -55,7 +55,7 @@ const MadhabOptions = ({
 
       <div
         onClick={async () => {
-          // if (switchToNextPage && showOnboarding) switchToNextPage();
+          // if (switchToNextPage && onboardingMode) switchToNextPage();
           await updateUserPrefs(
             dbConnection,
             "madhab",

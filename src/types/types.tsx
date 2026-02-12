@@ -1,5 +1,7 @@
 import { calculationMethods } from "../utils/constants";
 
+export type OnboardingMode = "newUser" | "salahTimes" | null;
+
 export type CalculationMethodsType =
   | "MuslimWorldLeague"
   | "Egyptian"

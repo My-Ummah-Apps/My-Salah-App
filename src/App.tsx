@@ -50,6 +50,8 @@ import {
   LocationsDataObjTypeArr,
   nextSalahTimeType,
   salahTimesObjType,
+  OnboardingMode,
+  SalahNamesTypeAdhanLibrary,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
@@ -90,7 +92,7 @@ const App = () => {
     initialiseTables,
   } = useSQLiteDB();
 
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingMode, setOnboardingMode] = useState<OnboardingMode>(null);
   const [showMajorUpdateOverlay, setShowMajorUpdateOverlay] = useState(false);
   const [showMissedSalahsSheet, setShowMissedSalahsSheet] = useState(false);
   const [showSalahTimesSettingsSheet, setShowSalahTimesSettingsSheet] =
@@ -213,7 +215,7 @@ const App = () => {
     } = result;
     setNextSalahNameAndTime({
       currentSalah: currentSalah,
-      nextSalah: nextSalah,
+      nextSalah: nextSalah as SalahNamesTypeAdhanLibrary | "",
       nextSalahTime: nextSalahTime,
       hoursRemaining: hoursRemaining,
       minsRemaining: minsRemaining,
@@ -532,7 +534,7 @@ const App = () => {
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
         // setShowIntroModal(true);
-        setShowOnboarding(true);
+        setOnboardingMode("newUser");
       }
 
       if (
@@ -974,8 +976,8 @@ const App = () => {
                   showLocationFailureToast={showLocationFailureToast}
                   setShowLocationAddedToast={setShowLocationAddedToast}
                   showLocationAddedToast={showLocationAddedToast}
-                  setShowOnboarding={setShowOnboarding}
-                  showOnboarding={showOnboarding}
+                  setOnboardingMode={setOnboardingMode}
+                  onboardingMode={onboardingMode}
                 />
               )}
             />
@@ -1002,10 +1004,10 @@ const App = () => {
         </IonTabs>
         <Route exact path="/" render={() => <Redirect to="/HomePage" />} />
       </IonReactRouter>
-      {/* {showOnboarding && ( */}
+      {/* {onboardingMode && ( */}
       <Onboarding
-        setShowOnboarding={setShowOnboarding}
-        showOnboarding={showOnboarding}
+        setOnboardingMode={setOnboardingMode}
+        onboardingMode={onboardingMode}
         setShowJoyRideEditIcon={setShowJoyRideEditIcon}
         dbConnection={dbConnection}
         setUserPreferences={setUserPreferences}

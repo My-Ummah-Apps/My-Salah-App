@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
-import { LocationsDataObjTypeArr, userPreferencesType } from "../types/types";
+import {
+  LocationsDataObjTypeArr,
+  OnboardingMode,
+  userPreferencesType,
+} from "../types/types";
 import {
   updateUserPrefs,
   scheduleFixedTimeDailyNotification,
@@ -32,13 +36,10 @@ import { AndroidSettings } from "capacitor-native-settings";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  setIsSalahTimesOnboarding?: React.Dispatch<React.SetStateAction<boolean>>;
-  isSalahTimesOnboarding?: boolean;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
-  showOnboarding?: boolean;
-  startingSlide?: number;
+  setOnboardingMode: React.Dispatch<React.SetStateAction<OnboardingMode>>;
+  onboardingMode?: OnboardingMode;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setUserLocations: React.Dispatch<
     React.SetStateAction<LocationsDataObjTypeArr>
@@ -50,13 +51,10 @@ interface OnboardingProps {
 
 const Onboarding = ({
   dbConnection,
-  setIsSalahTimesOnboarding,
-  isSalahTimesOnboarding,
   setUserPreferences,
   userPreferences,
-  setShowOnboarding,
-  showOnboarding,
-  startingSlide,
+  setOnboardingMode,
+  onboardingMode,
   setShowJoyRideEditIcon,
   setUserLocations,
   userLocations,
@@ -101,19 +99,19 @@ const Onboarding = ({
 
   return (
     <IonModal
-      isOpen={showOnboarding}
+      isOpen={onboardingMode !== null ? true : false}
       onDidDismiss={() => {
-        setShowOnboarding(false);
-        setIsSalahTimesOnboarding?.(false);
+        console.log("MODAL DISMISSED");
+        setOnboardingMode(null);
       }}
       mode="ios"
       backdropDismiss={false}
-      canDismiss={false}
+      // canDismiss={onboardingMode === null ? true : false}
       handle={false}
     >
       <IonContent>
         <section className="flex items-center mx-5 mt-2">
-          {showOnboarding && (
+          {onboardingMode === "newUser" && (
             <>
               <IonButton
                 fill="clear"
@@ -127,15 +125,16 @@ const Onboarding = ({
             </>
           )}
 
-          {isSalahTimesOnboarding && (
+          {onboardingMode === "salahTimes" && (
             <>
               <IonButton
                 fill="clear"
                 color="light"
                 size="small"
-                className="absolute text-lg z-10 right-[-5px] top-10"
+                className="absolute text-lg z-10 right-[-5px] top-0"
                 onClick={() => {
-                  setIsSalahTimesOnboarding?.(false);
+                  setOnboardingMode(null);
+                  console.log("CLOSING MODAL");
                 }}
               >
                 <IonIcon icon={closeOutline} />
@@ -150,8 +149,8 @@ const Onboarding = ({
             spaceBetween={50}
             slidesPerView={1}
             allowTouchMove={false}
-            initialSlide={startingSlide ? startingSlide : 0}
-            pagination={showOnboarding ? true : false}
+            initialSlide={onboardingMode === "newUser" ? 0 : 3}
+            pagination={onboardingMode ? true : false}
             navigation
             // navigation={{
             //   nextEl: ".swiper-button-next",
@@ -277,9 +276,8 @@ const Onboarding = ({
                     userLocations={userLocations}
                     setShowLocationFailureToast={setShowLocationFailureToast}
                     setShowLocationAddedToast={setShowLocationAddedToast}
-                    showOnboarding={showOnboarding}
+                    onboardingMode={onboardingMode}
                     switchToNextPage={switchToNextPage}
-                    isSalahTimesOnboarding={isSalahTimesOnboarding}
                   />
                 </section>
               </section>
@@ -327,10 +325,7 @@ const Onboarding = ({
                   <IonButton
                     expand="block"
                     onClick={async () => {
-                      if (
-                        (switchToNextPage && showOnboarding) ||
-                        (switchToNextPage && isSalahTimesOnboarding)
-                      ) {
+                      if (switchToNextPage && onboardingMode !== null) {
                         switchToNextPage();
                         await updateUserPrefs(
                           dbConnection,
@@ -351,10 +346,7 @@ const Onboarding = ({
                     className="mt-5"
                     expand="block"
                     onClick={async () => {
-                      if (
-                        (switchToNextPage && showOnboarding) ||
-                        (switchToNextPage && isSalahTimesOnboarding)
-                      ) {
+                      if (switchToNextPage && onboardingMode !== null) {
                         switchToNextPage();
                         await updateUserPrefs(
                           dbConnection,
@@ -390,11 +382,10 @@ const Onboarding = ({
                     onClick={async () => {
                       const res = await handleNotificationPermissions();
 
-                      if (showOnboarding) {
+                      if (onboardingMode === "newUser") {
                         setShowJoyRideEditIcon(true);
                       }
-                      setShowOnboarding?.(false);
-                      setIsSalahTimesOnboarding?.(false);
+                      setOnboardingMode(null);
 
                       if (res === "granted") {
                         const notifications = [
@@ -457,11 +448,10 @@ const Onboarding = ({
                     fill="clear"
                     onClick={() => {
                       // switchToNextPage();
-                      if (showOnboarding) {
+                      if (onboardingMode === "newUser") {
                         setShowJoyRideEditIcon(true);
                       }
-                      setShowOnboarding?.(false);
-                      setIsSalahTimesOnboarding?.(false);
+                      setOnboardingMode(null);
                     }}
                     className="mb-2 text-center rounded-2xl text-[var(--ion-text-color)]"
                   >
@@ -541,14 +531,14 @@ const Onboarding = ({
                       const permission =
                         await LocalNotifications.requestPermissions();
 
-                      if (showOnboarding) {
+                      if (onboardingMode === "newUser") {
                         setShowJoyRideEditIcon(true);
                       }
-                      setShowOnboarding?.(false);
+                      setOnboardingMode(null);
 
                       if (permission.display === "granted") {
                         // setShowJoyRideEditIcon(true);
-                        // setShowOnboarding(false);
+                        // setOnboardingMode(false);
                         await scheduleFixedTimeDailyNotification(21, 0);
                         await updateUserPrefs(
                           dbConnection,
@@ -562,12 +552,7 @@ const Onboarding = ({
                           "21:00",
                           setUserPreferences,
                         );
-                      } else {
-                        // setShowJoyRideEditIcon(true);
-                        // setShowOnboarding(false);
                       }
-
-                      // setIsOnboarding(false);
                     }}
                     className="mb-4"
                   >
@@ -577,10 +562,10 @@ const Onboarding = ({
                     fill="clear"
                     onClick={() => {
                       // setIsOnboarding(false);
-                      if (showOnboarding) {
+                      if (onboardingMode === "newUser") {
                         setShowJoyRideEditIcon(true);
                       }
-                      setShowOnboarding?.(false);
+                      setOnboardingMode(null);
                     }}
                     className="text-[var(--ion-text-color)] mb-2text-center rounded-2xl"
                   >

@@ -13,6 +13,7 @@ import {
 import {
   LocationsDataObjTypeArr,
   nextSalahTimeType,
+  OnboardingMode,
   SalahNamesTypeAdhanLibrary,
   salahTimesObjType,
   userPreferencesType,
@@ -64,8 +65,8 @@ interface SalahTimesPageProps {
   showLocationFailureToast: boolean;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
   showLocationAddedToast: boolean;
-  setShowOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
-  showOnboarding?: boolean;
+  setOnboardingMode: React.Dispatch<React.SetStateAction<OnboardingMode>>;
+  onboardingMode?: OnboardingMode;
 }
 
 const SalahTimesPage = ({
@@ -82,12 +83,11 @@ const SalahTimesPage = ({
   showLocationFailureToast,
   setShowLocationAddedToast,
   showLocationAddedToast,
-  setShowOnboarding,
-  showOnboarding,
+  setOnboardingMode,
+  onboardingMode,
 }: SalahTimesPageProps) => {
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
   const [showLocationsListSheet, setShowLocationsListSheet] = useState(false);
-  const [isSalahTimesOnboarding, setIsSalahTimesOnboarding] = useState(false);
 
   const [selectedSalah, setSelectedSalah] =
     useState<SalahNamesTypeAdhanLibrary>("fajr");
@@ -211,8 +211,8 @@ const SalahTimesPage = ({
                 userLocations.length === 0 && (
                   <IonButton
                     onClick={() => {
-                      setIsSalahTimesOnboarding(true);
-                      setShowOnboarding(true);
+                      setOnboardingMode("salahTimes");
+                      // setOnboardingMode(true);
                     }}
                     className="w-1/2"
                   >
@@ -281,11 +281,8 @@ const SalahTimesPage = ({
                   userLocations={userLocations}
                 />
               </IonModal>
-              {/* {isSalahTimesOnboarding && ( */}
+
               <Onboarding
-                startingSlide={3}
-                setIsSalahTimesOnboarding={setIsSalahTimesOnboarding}
-                isSalahTimesOnboarding={isSalahTimesOnboarding}
                 setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                 dbConnection={dbConnection}
                 setUserPreferences={setUserPreferences}
@@ -294,10 +291,9 @@ const SalahTimesPage = ({
                 userLocations={userLocations}
                 setShowLocationFailureToast={setShowLocationFailureToast}
                 setShowLocationAddedToast={setShowLocationAddedToast}
-                setShowOnboarding={setShowOnboarding}
-                showOnboarding={showOnboarding}
+                setOnboardingMode={setOnboardingMode}
+                onboardingMode={onboardingMode}
               />
-              {/* // )} */}
             </section>
           </>
           {/* ))} */}
@@ -466,13 +462,9 @@ const SalahTimesPage = ({
         setUserLocations={setUserLocations}
         userLocations={userLocations}
         setShowAddLocationSheet={setShowAddLocationSheet}
-        // showAddLocationSheet={showAddLocationSheet}
-        // setShowLocationFailureToast={setShowLocationFailureToast}
-        // setShowLocationAddedToast={setShowLocationAddedToast}
         setSalahtimes={setSalahtimes}
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
-        // calculateActiveLocationSalahTimes={calculateActiveLocationSalahTimes}
       />
 
       <BottomSheetPerSalahNotifications

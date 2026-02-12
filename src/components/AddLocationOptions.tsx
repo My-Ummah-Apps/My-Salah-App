@@ -20,7 +20,7 @@ import {
   locationOutline,
   searchOutline,
 } from "ionicons/icons";
-import { LocationsDataObjTypeArr } from "../types/types";
+import { LocationsDataObjTypeArr, OnboardingMode } from "../types/types";
 import { promptToOpenDeviceSettings } from "../utils/helpers";
 import { fetchAllLocations, toggleDBConnection } from "../utils/dbUtils";
 import { Dialog } from "@capacitor/dialog";
@@ -47,8 +47,7 @@ interface AddLocationOptionsProps {
   userLocations: LocationsDataObjTypeArr;
   setShowLocationFailureToast: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLocationAddedToast: React.Dispatch<React.SetStateAction<boolean>>;
-  showOnboarding?: boolean;
-  isSalahTimesOnboarding?: boolean;
+  onboardingMode?: OnboardingMode;
   switchToNextPage?: () => void;
   setShowAddLocationSheet?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -59,8 +58,7 @@ const AddLocationOptions = ({
   userLocations,
   setShowLocationFailureToast,
   setShowLocationAddedToast,
-  showOnboarding,
-  isSalahTimesOnboarding,
+  onboardingMode,
   switchToNextPage,
   setShowAddLocationSheet,
 }: AddLocationOptionsProps) => {
@@ -278,7 +276,7 @@ const AddLocationOptions = ({
           <motion.section
             initial={{ x: "50%", opacity: 0 }}
             animate={{ x: "-50%", opacity: 1 }}
-            exit={showOnboarding ? "" : { x: "50%", opacity: 0 }}
+            exit={onboardingMode ? "" : { x: "50%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="absolute top-[15%] left-1/2 w-4/5 max-w-[300px] z-10 rounded-lg
              flex flex-col items-center justify-center -translate-y-[15%] bg-[var(--card-bg-color)]"
@@ -562,12 +560,10 @@ const AddLocationOptions = ({
                     return;
                   }
 
-                  console.log("showOnboarding: ", showOnboarding);
+                  console.log("onboardingMode: ", onboardingMode);
 
-                  if (
-                    (showOnboarding && switchToNextPage) ||
-                    (isSalahTimesOnboarding && switchToNextPage)
-                  ) {
+                  if (onboardingMode !== null && switchToNextPage) {
+                    console.log("SWITCHING");
                     switchToNextPage();
                   }
                 }}
