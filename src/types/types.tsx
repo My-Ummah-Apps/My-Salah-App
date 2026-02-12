@@ -16,7 +16,7 @@ export type CalculationMethodsType =
   | "Turkey"
   | "Tehran"
   | "";
-// | "Other"
+// | "Not listed"
 
 export type countryOptionsType =
   | "Egypt"
@@ -27,12 +27,13 @@ export type countryOptionsType =
   | "Kuwait"
   | "Turkey"
   | "Iran"
+  | "UK"
   | "US"
   | "Canada"
   | "Singapore"
   | "Malaysia"
   | "Indonesia"
-  | "Other";
+  | "Not listed";
 
 export type SalahNotificationSettings = "off" | "on" | "adhan";
 

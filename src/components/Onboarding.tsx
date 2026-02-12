@@ -110,7 +110,10 @@ const Onboarding = ({
       handle={false}
     >
       <IonContent>
-        <section className="flex items-center mx-5 mt-2">
+        <section
+          // className="flex items-center mx-5 mt-2"
+          className="flex h-full mx-5"
+        >
           {onboardingMode === "newUser" && (
             <>
               <IonButton
@@ -177,7 +180,7 @@ const Onboarding = ({
                   </p>
                 </div>
                 <IonButton
-                  className="absolute bottom-0 w-full"
+                  className="absolute w-full bottom-10"
                   onClick={() => {
                     switchToNextPage();
                     // setIsOnboarding(true);
@@ -308,7 +311,7 @@ const Onboarding = ({
                   onClick={async () => {
                     switchToNextPage();
                   }}
-                  className={`absolute bottom-0 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
+                  className={`absolute bottom-10 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
                 >
                   Next
                 </IonButton>

@@ -131,10 +131,6 @@ BottomSheetSalahTimesSettingsProps) => {
       isOpen={showLocationsListSheet}
       mode="ios"
       className={`${isPlatform("ios") ? "" : "modal-height"}`}
-      // presentingElement={presentingElement!}
-      // style={{ "--height": "95vh" }}
-      // expandToScroll={false}
-      // className="modal-fit-content"
       onDidDismiss={() => {
         setShowLocationsListSheet(false);
       }}

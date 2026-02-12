@@ -49,8 +49,9 @@ const CalculationMethodOptions = ({
     "Singapore",
     "Turkey",
     "UAE",
+    "UK",
     "US",
-    "Other",
+    "Not listed",
   ];
 
   const calculationMethodsDetails: {
@@ -132,8 +133,9 @@ const CalculationMethodOptions = ({
     Singapore: "Singapore",
     Turkey: "Turkey",
     UAE: "Dubai",
+    UK: "MoonsightingCommittee",
     US: "NorthAmerica",
-    Other: "MoonsightingCommittee",
+    "Not listed": "MuslimWorldLeague",
   };
 
   return (
@@ -205,8 +207,8 @@ const CalculationMethodOptions = ({
                   }
                 </span>
               </p>
-              <p className="text-sm text-gray-400">
-                The most common calculation method used in your location
+              <p className="mt-2 text-sm text-gray-400">
+                This is the calculation method in use for your selection
               </p>
             </div>
           )}
