@@ -347,11 +347,11 @@ const BottomSheetSalahStatus = ({
           ref={sheetWrapper}
           className="w-[90%] mx-auto mb-5 rounded-lg text-white pb-env-safe-area-inset-bottom transition-all duration-300 ease-in-out"
         >
-          <h1 className="text-[var(--ion-text-color)] mb-10 text-3xl font-light text-center">
+          <h1 className="text-[var(--ion-text-color)] mb-10 text-3xl font-light text-center leading-10">
             How did you pray{" "}
             {Object.keys(selectedSalahAndDate).length === 1 &&
             Object.values(selectedSalahAndDate)[0].length === 1
-              ? `${Object.values(selectedSalahAndDate)} ${determineDateRecency(
+              ? `${Object.values(selectedSalahAndDate)[0][0] === "Asar" ? "Asr" : Object.values(selectedSalahAndDate)[0][0]} ${determineDateRecency(
                   Object.keys(selectedSalahAndDate)[0],
                 )}?`
               : `these Salah?`}

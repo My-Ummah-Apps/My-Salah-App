@@ -31,7 +31,7 @@ const BottomSheetSingleDateView = ({
   statsToShow,
 }: BottomSheetSingleDateViewProps) => {
   const [clickedDateData, setClickedDateData] = useState<clickedDateDataObj[]>(
-    []
+    [],
   );
 
   const salahNamesOrder: SalahNamesType[] = [
@@ -57,7 +57,7 @@ const BottomSheetSingleDateView = ({
       const sortedData: clickedDateDataObj[] = data.values!.sort(
         (a: clickedDateDataObj, b: clickedDateDataObj) =>
           salahNamesOrder.indexOf(a.salahName) -
-          salahNamesOrder.indexOf(b.salahName)
+          salahNamesOrder.indexOf(b.salahName),
       );
 
       const placeholderData: clickedDateDataObj[] = salahNamesOrder.map(
@@ -85,13 +85,13 @@ const BottomSheetSingleDateView = ({
               notes: "",
             };
           }
-        }
+        },
       );
 
       setClickedDateData(
         statsToShow === "All"
           ? placeholderData
-          : placeholderData.filter((item) => item.salahName === statsToShow)
+          : placeholderData.filter((item) => item.salahName === statsToShow),
       );
     } catch (error) {
       console.error(error);
@@ -139,7 +139,7 @@ const BottomSheetSingleDateView = ({
                     }}
                     className="w-1/2 px-2 py-1 text-lg text-[var(--ion-text-color)]"
                   >
-                    {item.salahName}
+                    {item.salahName === "Asar" ? "Asr" : item.salahName}
                   </div>
                   <div
                     style={{
@@ -153,10 +153,10 @@ const BottomSheetSingleDateView = ({
                     {item.salahStatus === "group"
                       ? "In Jamaah"
                       : item.salahStatus === "male-alone"
-                      ? "On Time"
-                      : item.salahStatus === "female-alone"
-                      ? "prayed"
-                      : item.salahStatus || "No Data"}
+                        ? "On Time"
+                        : item.salahStatus === "female-alone"
+                          ? "prayed"
+                          : item.salahStatus || "No Data"}
                   </div>
                 </div>
                 {item.reasons.length > 0 && (

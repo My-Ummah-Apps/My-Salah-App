@@ -35,10 +35,10 @@ const ReasonsCard = ({
                   statsToShow !== "All" ? statsToShow : ""
                 } Salah Alone`
               : status === "late"
-              ? `Praying ${statsToShow !== "All" ? statsToShow : ""} Salah Late`
-              : status === "missed"
-              ? `Missing ${statsToShow !== "All" ? statsToShow : ""} Salah`
-              : ""
+                ? `Praying ${statsToShow !== "All" ? statsToShow : ""} Salah Late`
+                : status === "missed"
+                  ? `Missing ${statsToShow !== "All" ? statsToShow : ""} Salah`
+                  : ""
           }`}
         </h1>
         {Object.entries(salahReasonsOverallNumbers[status]).length > 0 ? (
@@ -56,10 +56,10 @@ const ReasonsCard = ({
                   {status === "male-alone"
                     ? "prayed alone"
                     : status === "late"
-                    ? "performed late"
-                    : status === "missed"
-                    ? "missed"
-                    : null}
+                      ? "performed late"
+                      : status === "missed"
+                        ? "missed"
+                        : null}
                 </p>
               </section>
             </h1>

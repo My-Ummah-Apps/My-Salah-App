@@ -63,7 +63,9 @@ const StatsPage = ({
     });
   const [showReasonsSheet, setShowReasonsSheet] = useState(false);
   const [reasonsToShow, setReasonsToShow] = useState<reasonsToShowType>();
-  const [statsToShow, setStatsToShow] = useState<SalahNamesType | "All">("All");
+  const [statsToShow, setStatsToShow] = useState<
+    Exclude<SalahNamesType, "Asar"> | "All"
+  >("All");
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
 
@@ -83,7 +85,7 @@ const StatsPage = ({
         if (fetchedSalahData[i].salahs.Dhuhr) {
           salahStatusesOverallArr.push(fetchedSalahData[i].salahs.Dhuhr);
         }
-      } else if (statsToShow === "Asar") {
+      } else if (statsToShow === "Asr") {
         if (fetchedSalahData[i].salahs.Asar) {
           salahStatusesOverallArr.push(fetchedSalahData[i].salahs.Asar);
         }
@@ -106,7 +108,7 @@ const StatsPage = ({
       return salahStatusesOverallArr.filter((status) => status === salahStatus);
     } else if (statsToShow === "Dhuhr") {
       return salahStatusesOverallArr.filter((status) => status === salahStatus);
-    } else if (statsToShow === "Asar") {
+    } else if (statsToShow === "Asr") {
       return salahStatusesOverallArr.filter((status) => status === salahStatus);
     } else if (statsToShow === "Maghrib") {
       return salahStatusesOverallArr.filter((status) => status === salahStatus);
@@ -165,7 +167,7 @@ const StatsPage = ({
     try {
       await toggleDBConnection(dbConnection, "open");
       let DBResultAllSalahData = await dbConnection.current!.query(
-        `SELECT * FROM salahDataTable`
+        `SELECT * FROM salahDataTable`,
       );
 
       if (!DBResultAllSalahData.values) {
@@ -196,11 +198,12 @@ const StatsPage = ({
       for (let i = 0; i < DBResultAllSalahDataValues.length; i++) {
         if (
           !salahStatusesWithoutReasons.includes(
-            DBResultAllSalahDataValues[i].salahStatus
+            DBResultAllSalahDataValues[i].salahStatus,
           ) &&
           DBResultAllSalahDataValues[i].reasons !== ""
         ) {
-          const salahName = DBResultAllSalahDataValues[i].salahName;
+          const salahName: SalahNamesType =
+            DBResultAllSalahDataValues[i].salahName;
 
           if (statsToShow === "All") {
             populateReasonsArrays(i);
@@ -208,7 +211,7 @@ const StatsPage = ({
             populateReasonsArrays(i);
           } else if (statsToShow === "Dhuhr" && salahName === "Dhuhr") {
             populateReasonsArrays(i);
-          } else if (statsToShow === "Asar" && salahName === "Asar") {
+          } else if (statsToShow === "Asr" && salahName === "Asar") {
             populateReasonsArrays(i);
           } else if (statsToShow === "Maghrib" && salahName === "Maghrib") {
             populateReasonsArrays(i);
@@ -226,7 +229,7 @@ const StatsPage = ({
 
       const calculateReasonAmounts = (
         arr: string[],
-        status: keyof salahReasonsOverallNumbersType
+        status: keyof salahReasonsOverallNumbersType,
       ) => {
         arr.forEach((reason: string) => {
           if (reason === "") return;

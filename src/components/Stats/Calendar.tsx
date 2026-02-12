@@ -60,7 +60,7 @@ const Calendar = ({
   });
 
   const formattedMonths = monthsBetween.map((month) =>
-    format(month, "MMMM yyyy")
+    format(month, "MMMM yyyy"),
   );
   formattedMonths.reverse();
 
@@ -98,7 +98,7 @@ const Calendar = ({
 
         for (const [salah, salahStatus] of Object.entries(matchedData) as [
           keyof SalahsType,
-          SalahStatusType
+          SalahStatusType,
         ][]) {
           if (statsToShow === "All") {
             if (salah === "Fajr") {
@@ -119,7 +119,7 @@ const Calendar = ({
             } else if (statsToShow === "Dhuhr" && salah === "Dhuhr") {
               colors.individualRadialColor =
                 salahStatusColorsHexCodes[salahStatus];
-            } else if (statsToShow === "Asar" && salah === "Asar") {
+            } else if (statsToShow === "Asr" && salah === "Asar") {
               colors.individualRadialColor =
                 salahStatusColorsHexCodes[salahStatus];
             } else if (statsToShow === "Maghrib" && salah === "Maghrib") {

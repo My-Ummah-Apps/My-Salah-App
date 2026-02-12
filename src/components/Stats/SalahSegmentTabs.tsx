@@ -2,7 +2,7 @@ import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/react";
 import { SalahNamesType } from "../../types/types";
 
 interface SalahSegmentTabsProps {
-  setStatsToShow: React.Dispatch<React.SetStateAction<SalahNamesType | "All">>;
+  setStatsToShow: React.Dispatch<Exclude<SalahNamesType, "Asar"> | "All">;
   statsToShow: SalahNamesType | "All";
 }
 
@@ -15,7 +15,9 @@ const SalahSegmentTabs = ({
       mode="ios"
       value={statsToShow}
       onIonChange={(e) => {
-        setStatsToShow(e.detail.value as SalahNamesType | "All");
+        // setStatsToShow(e.detail.value as SalahNamesType | "All");
+        const value = e.detail.value === "Asar" ? "Asr" : e.detail.value;
+        setStatsToShow(value as Exclude<SalahNamesType, "Asar"> | "All");
       }}
     >
       <IonSegmentButton value="All">
@@ -27,7 +29,7 @@ const SalahSegmentTabs = ({
       <IonSegmentButton value="Dhuhr">
         <IonLabel>Dhuhr</IonLabel>
       </IonSegmentButton>
-      <IonSegmentButton value="Asar">
+      <IonSegmentButton value="Asr">
         <IonLabel>Asr</IonLabel>
       </IonSegmentButton>
       <IonSegmentButton value="Maghrib">
