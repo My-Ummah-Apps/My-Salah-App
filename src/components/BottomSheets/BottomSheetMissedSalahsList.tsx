@@ -43,6 +43,14 @@ const MissedSalahsListBottomSheet = ({
   const [showCompletedMsg, setShowCompletedMsg] = useState(false);
 
   useEffect(() => {
+    console.log("[PAGE DEBUG] Page mounted");
+
+    return () => {
+      console.log("[PAGE DEBUG] Page unmounted");
+    };
+  }, []);
+
+  useEffect(() => {
     if (!showMissedSalahsSheet) return;
 
     const openDBConnection = async () => {

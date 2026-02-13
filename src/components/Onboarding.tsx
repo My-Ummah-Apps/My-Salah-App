@@ -85,16 +85,26 @@ const Onboarding = ({
   >(null);
 
   useEffect(() => {
-    if (Capacitor.getPlatform() !== "android" || !Capacitor.isNativePlatform())
-      return;
+    console.log("BATT OPT USEEFFECT HAS RUN");
+
+    if (Capacitor.getPlatform() !== "android") return;
 
     const getBatteryOptimizationStatus = async () => {
       const res = await isBatteryOptimizationEnabled();
       setIsBatteryOptEnabled(res);
+
+      console.log("BATTERY OPTIMISATION: ", res);
     };
 
     getBatteryOptimizationStatus();
   }, []);
+
+  const dismissOnboardingSlides = () => {
+    if (onboardingMode === "newUser") {
+      setShowJoyRideEditIcon(true);
+    }
+    setOnboardingMode(null);
+  };
 
   return (
     <IonModal
@@ -112,19 +122,21 @@ const Onboarding = ({
           // className="flex items-center mx-5 mt-2"
           className="flex h-full mx-5"
         >
-          {onboardingMode === "newUser" && (
-            <>
-              <IonButton
-                fill="clear"
-                color="light"
-                size="small"
-                className="absolute text-lg z-10 left-[-5px] top-0"
-                onClick={switchToPreviousPage}
-              >
-                <IonIcon icon={chevronBackOutline} />
-              </IonButton>
-            </>
-          )}
+          {onboardingMode === "newUser" &&
+            swiperRef.current?.activeIndex !== 0 && (
+              <>
+                <IonButton
+                  style={{ top: "calc(env(safe-area-inset-top, 0px) - 10px)" }}
+                  fill="clear"
+                  color="light"
+                  size="small"
+                  className="absolute text-lg z-10 left-[-5px] top-0"
+                  onClick={switchToPreviousPage}
+                >
+                  <IonIcon icon={chevronBackOutline} />
+                </IonButton>
+              </>
+            )}
 
           {onboardingMode === "salahTimes" && (
             <>
@@ -382,10 +394,24 @@ const Onboarding = ({
                     onClick={async () => {
                       const res = await handleNotificationPermissions();
 
-                      if (onboardingMode === "newUser") {
-                        setShowJoyRideEditIcon(true);
+                      // Case 1: User is on android device + batt opt is enabled > show batt opt slide
+                      if (
+                        Capacitor.getPlatform() === "android" &&
+                        isBatteryOptEnabled &&
+                        res !== "denied" &&
+                        res !== undefined
+                      ) {
+                        switchToNextPage();
+                        // Case 2: User is on android device + batt opt is disabled > close onboarding and trigger joyride
+                      } else if (
+                        Capacitor.getPlatform() === "android" &&
+                        !isBatteryOptEnabled
+                      ) {
+                        dismissOnboardingSlides();
+                        // Case 3: User is on non-android device > close onboarding and trigger joyride
+                      } else {
+                        dismissOnboardingSlides();
                       }
-                      setOnboardingMode(null);
 
                       if (res === "granted") {
                         const notifications = [
@@ -437,8 +463,9 @@ const Onboarding = ({
                           "1",
                           setUserPreferences,
                         );
+                      } else {
+                        dismissOnboardingSlides();
                       }
-                      // switchToNextPage();
                     }}
                     className="mb-4"
                   >
@@ -447,11 +474,14 @@ const Onboarding = ({
                   <IonButton
                     fill="clear"
                     onClick={() => {
-                      // switchToNextPage();
                       if (onboardingMode === "newUser") {
-                        setShowJoyRideEditIcon(true);
+                        // switchToNextPage();
+                        // setShowJoyRideEditIcon(true);
+                        swiperRef.current?.slideTo(8, 0);
+                      } else {
+                        dismissOnboardingSlides();
                       }
-                      setOnboardingMode(null);
+                      // setOnboardingMode(null);
                     }}
                     className="mb-2 text-center rounded-2xl text-[var(--ion-text-color)]"
                   >
@@ -461,58 +491,60 @@ const Onboarding = ({
               </section>
             </SwiperSlide>
 
-            {Capacitor.getPlatform() === "android" &&
-              isBatteryOptEnabled === false && (
-                <SwiperSlide>
-                  <section className="flex flex-col justify-center h-full">
-                    <section className="m-4 text-center">
-                      <h1 className="mb-2 text-2xl font-bold">
-                        Make sure reminders arrive on time
-                      </h1>
-                      <p>
-                        Some phones delay notifications to save battery. Turning
-                        off battery optimisation helps ensure Salah reminders
-                        are delivered on time.
-                      </p>
-                    </section>
-                    <section className="flex flex-col">
-                      <IonButton
-                        onClick={async () => {
-                          if (userPreferences.hasSeenBatteryPrompt === "1") {
-                            await requestIgnoreBatteryOptimization();
-                            await updateUserPrefs(
-                              dbConnection,
-                              "hasSeenBatteryPrompt",
-                              "1",
-                              setUserPreferences,
-                            );
-                          } else {
-                            await promptToOpenDeviceSettings(
-                              "Disable Battery Optimization",
-                              "To ensure notifications arrive on time, please turn off battery optimization for this app.",
-                              AndroidSettings.BatteryOptimization,
-                            );
-                          }
-                          switchToNextPage();
-                        }}
-                        className="mb-4"
-                      >
-                        Improve notification reliability
-                      </IonButton>
-                      <IonButton
-                        fill="clear"
-                        onClick={() => {
-                          switchToNextPage();
-                        }}
-                        className="mb-2 text-center text-[var(--ion-text-color)] rounded-2xl"
-                      >
-                        Skip for now
-                      </IonButton>
-                    </section>
+            {isBatteryOptEnabled && (
+              <SwiperSlide>
+                <section className="flex flex-col justify-center h-full">
+                  <section className="m-4 text-center">
+                    <h1 className="mb-2 text-2xl font-bold">
+                      Make sure reminders arrive on time
+                    </h1>
+                    <p>
+                      Some phones delay notifications to save battery. Turning
+                      off battery optimisation helps ensure Salah reminders are
+                      delivered on time.
+                    </p>
                   </section>
-                </SwiperSlide>
-              )}
-            {/* )} */}
+                  <section className="flex flex-col">
+                    <IonButton
+                      onClick={async () => {
+                        if (userPreferences.hasSeenBatteryPrompt === "0") {
+                          await requestIgnoreBatteryOptimization();
+                          dismissOnboardingSlides();
+                          await updateUserPrefs(
+                            dbConnection,
+                            "hasSeenBatteryPrompt",
+                            "1",
+                            setUserPreferences,
+                          );
+                        } else {
+                          await promptToOpenDeviceSettings(
+                            "Disable Battery Optimization",
+                            "To ensure notifications arrive on time, please turn off battery optimization for this app.",
+                            AndroidSettings.BatteryOptimization,
+                          );
+                          dismissOnboardingSlides();
+                        }
+                        // switchToNextPage();
+                      }}
+                      className="mb-4"
+                    >
+                      Improve notification reliability
+                    </IonButton>
+                    <IonButton
+                      fill="clear"
+                      onClick={() => {
+                        // switchToNextPage();
+                        dismissOnboardingSlides();
+                      }}
+                      className="mb-2 text-center text-[var(--ion-text-color)] rounded-2xl"
+                    >
+                      Skip for now
+                    </IonButton>
+                  </section>
+                </section>
+              </SwiperSlide>
+            )}
+
             <SwiperSlide>
               <section className="flex flex-col justify-center h-full">
                 <section className="m-4 text-center">
@@ -531,14 +563,9 @@ const Onboarding = ({
                       const permission =
                         await LocalNotifications.requestPermissions();
 
-                      if (onboardingMode === "newUser") {
-                        setShowJoyRideEditIcon(true);
-                      }
-                      setOnboardingMode(null);
+                      dismissOnboardingSlides();
 
                       if (permission.display === "granted") {
-                        // setShowJoyRideEditIcon(true);
-                        // setOnboardingMode(false);
                         await scheduleFixedTimeDailyNotification(21, 0);
                         await updateUserPrefs(
                           dbConnection,
@@ -561,11 +588,7 @@ const Onboarding = ({
                   <IonButton
                     fill="clear"
                     onClick={() => {
-                      // setIsOnboarding(false);
-                      if (onboardingMode === "newUser") {
-                        setShowJoyRideEditIcon(true);
-                      }
-                      setOnboardingMode(null);
+                      dismissOnboardingSlides();
                     }}
                     className="text-[var(--ion-text-color)] mb-2text-center rounded-2xl"
                   >

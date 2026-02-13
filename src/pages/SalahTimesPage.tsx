@@ -164,7 +164,7 @@ const SalahTimesPage = ({
                       className={`${nextSalahNameAndTime.currentSalah === "fajr" || nextSalahNameAndTime.currentSalah === "maghrib" ? "mt-3" : "mt-1"}`}
                     >
                       {nextSalahNameAndTime.hoursRemaining > 0 && (
-                        <p className="mt-2 text-center opacity-90">
+                        <p className="text-center opacity-90">
                           {nextSalahNameAndTime.hoursRemaining === 1
                             ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`
                             : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`}{" "}
@@ -183,31 +183,32 @@ const SalahTimesPage = ({
                     </div>
                   </section>
                 )}
-                {nextSalahNameAndTime.nextSalah === "dhuhr" && (
+                {(nextSalahNameAndTime.nextSalah === "fajr" ||
+                  nextSalahNameAndTime.nextSalah === "dhuhr") && (
                   <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
                     <div>
                       <p className="mb-1 text-lg text-center opacity-70">
                         Upcoming Salah
                       </p>
                       <p className="text-6xl font-bold text-center text-blue-500">
-                        Dhuhr
+                        {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
                       </p>
                     </div>
                     <div
-                      className={`${nextSalahNameAndTime.currentSalah === "fajr" || nextSalahNameAndTime.currentSalah === "maghrib" ? "mt-3" : "mt-1"}`}
+                      className={`${nextSalahNameAndTime.currentSalah === "fajr" ? "mt-3" : "mt-1"}`}
                     >
                       {nextSalahNameAndTime.hoursRemaining > 0 && (
-                        <p className="mt-2 text-center opacity-90">
+                        <p className="text-center opacity-90">
                           {nextSalahNameAndTime.hoursRemaining === 1
-                            ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`
-                            : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`}{" "}
+                            ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : ""}`
+                            : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : "and"}`}{" "}
                         </p>
                       )}
                       {nextSalahNameAndTime.minsRemaining > 0 && (
                         <p className="text-center opacity-90">
                           {nextSalahNameAndTime.minsRemaining === 1
-                            ? `${nextSalahNameAndTime.minsRemaining} minute to go until`
-                            : `${nextSalahNameAndTime.minsRemaining} minutes to go until`}
+                            ? `${nextSalahNameAndTime.minsRemaining} minute to go`
+                            : `${nextSalahNameAndTime.minsRemaining} minutes to go`}
                         </p>
                       )}
                     </div>
