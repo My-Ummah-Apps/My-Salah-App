@@ -272,7 +272,7 @@ BottomSheetSalahTimesSettingsProps) => {
             <div className="flex items-center justify-between w-full py-3 px-3 text-sm bg-[var(--sheet-option-bg)] rounded-lg">
               <p className="">Fajr Angle:</p>
               <div className="flex items-center gap-1">
-                <p>{userPreferences.fajrAngle}</p>
+                <p>{userPreferences.fajrAngle}°</p>
               </div>
             </div>
           </IonButton>
@@ -292,7 +292,7 @@ BottomSheetSalahTimesSettingsProps) => {
             <div className="flex items-center justify-between w-full py-3 px-3 text-sm bg-[var(--sheet-option-bg)] rounded-lg">
               <p className="">Isha Angle:</p>
               <div className="flex items-center gap-1">
-                <p>{userPreferences.ishaAngle}</p>
+                <p>{userPreferences.ishaAngle}°</p>
               </div>
             </div>
           </IonButton>

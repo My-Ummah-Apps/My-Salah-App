@@ -70,7 +70,8 @@ const BottomSheetSingleDateView = ({
             return {
               id: null,
               date: clickedDate,
-              salahName: salahData.salahName,
+              salahName:
+                salahData.salahName === "Asar" ? "Asr" : salahData.salahName,
               salahStatus: salahData.salahStatus,
               reasons: salahData.reasons,
               notes: salahData.notes,
@@ -79,7 +80,7 @@ const BottomSheetSingleDateView = ({
             return {
               id: null,
               date: clickedDate,
-              salahName: salah,
+              salahName: salah === "Asar" ? "Asr" : salah,
               salahStatus: "",
               reasons: "",
               notes: "",

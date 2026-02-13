@@ -120,7 +120,7 @@ const Onboarding = ({
       <IonContent>
         <section
           // className="flex items-center mx-5 mt-2"
-          className="flex h-full mx-5"
+          className="flex mx-5"
         >
           {onboardingMode === "newUser" &&
             swiperRef.current?.activeIndex !== 0 && (
@@ -295,7 +295,10 @@ const Onboarding = ({
               </section>
             </SwiperSlide>
             <SwiperSlide>
-              <section className="flex flex-col justify-center h-full">
+              <section
+                style={{ marginTop: "calc(env(safe-area-inset-top, 0px)" }}
+                className="flex flex-col justify-center h-full"
+              >
                 <section className="m-4 text-center">
                   <h1 className="mb-2 text-2xl font-bold">
                     Calculation Method
@@ -320,12 +323,11 @@ const Onboarding = ({
                   onClick={async () => {
                     switchToNextPage();
                   }}
-                  className={`absolute bottom-10 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
+                  className={`absolute bottom-5 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
                 >
                   Next
                 </IonButton>
               </section>
-              {/* </section> */}
             </SwiperSlide>
             <SwiperSlide>
               <section className="flex flex-col justify-center h-full">

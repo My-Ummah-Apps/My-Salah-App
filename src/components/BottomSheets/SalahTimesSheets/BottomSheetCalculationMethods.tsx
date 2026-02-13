@@ -53,6 +53,7 @@ const BottomSheetCalculationMethods = ({
         <IonToolbar
           style={{
             "--background": "transparent",
+            "--border-width": "0",
           }}
         >
           <IonTitle>Calculation Methods</IonTitle>

@@ -133,7 +133,7 @@ const AddLocationOptions = ({
 
   const handleGrantedPermission = async () => {
     try {
-      presentLocationSpinner({
+      await presentLocationSpinner({
         message: "Detecting location...",
         backdropDismiss: false,
         cssClass: "detecting-location-spinner",
@@ -162,7 +162,7 @@ const AddLocationOptions = ({
           "The app couldn’t get your location. Make sure your device has a good GPS or network signal and try again.",
       });
     } finally {
-      dismissLocationSpinner();
+      await dismissLocationSpinner();
     }
   };
 
@@ -268,7 +268,8 @@ const AddLocationOptions = ({
                   className="w-full min-w-0 px-2 py-2 rounded-lg"
                   aria-label="Location name"
                   type="text"
-                  disabled={isCityNameClicked ? true : false}
+                  // disabled={isCityNameClicked ? true : false}
+                  readonly={isCityNameClicked ? true : false}
                   placeholder={
                     mode === "gps"
                       ? "e.g. Home, Work, City Name"
@@ -577,7 +578,7 @@ const AddLocationOptions = ({
               } catch (error) {
                 console.error(error);
               } finally {
-                dismissLocationSpinner();
+                await dismissLocationSpinner();
               }
             }}
           >

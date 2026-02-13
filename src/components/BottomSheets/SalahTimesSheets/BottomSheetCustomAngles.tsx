@@ -86,7 +86,7 @@ const BottomSheetCustomAngles = ({
           {angleOptions.map((item) => {
             return (
               <IonPickerColumnOption key={item} value={item}>
-                {item}
+                {item}°
               </IonPickerColumnOption>
             );
           })}

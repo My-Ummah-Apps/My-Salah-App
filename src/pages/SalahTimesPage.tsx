@@ -107,6 +107,11 @@ const SalahTimesPage = ({
     setDateToShow(new Date());
   });
 
+  console.log(
+    "nextSalahNameAndTime.nextSalah: ",
+    nextSalahNameAndTime.currentSalah,
+  );
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -150,7 +155,7 @@ const SalahTimesPage = ({
                     {nextSalahNameAndTime.currentSalah !== "sunrise" &&
                       nextSalahNameAndTime.currentSalah !== "none" && (
                         <div>
-                          <p className="mb-1 text-lg text-center opacity-70">
+                          <p className="mb-1 text-lg text-center opacity-80">
                             Current Salah
                           </p>
                           <p className="text-6xl font-bold text-center text-blue-500">
@@ -183,37 +188,42 @@ const SalahTimesPage = ({
                     </div>
                   </section>
                 )}
-                {(nextSalahNameAndTime.nextSalah === "fajr" ||
-                  nextSalahNameAndTime.nextSalah === "dhuhr") && (
-                  <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
-                    <div>
-                      <p className="mb-1 text-lg text-center opacity-70">
-                        Upcoming Salah
-                      </p>
-                      <p className="text-6xl font-bold text-center text-blue-500">
-                        {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
-                      </p>
-                    </div>
-                    <div
-                      className={`${nextSalahNameAndTime.currentSalah === "fajr" ? "mt-3" : "mt-1"}`}
-                    >
-                      {nextSalahNameAndTime.hoursRemaining > 0 && (
-                        <p className="text-center opacity-90">
-                          {nextSalahNameAndTime.hoursRemaining === 1
-                            ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : ""}`
-                            : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : "and"}`}{" "}
-                        </p>
-                      )}
-                      {nextSalahNameAndTime.minsRemaining > 0 && (
-                        <p className="text-center opacity-90">
-                          {nextSalahNameAndTime.minsRemaining === 1
-                            ? `${nextSalahNameAndTime.minsRemaining} minute to go`
-                            : `${nextSalahNameAndTime.minsRemaining} minutes to go`}
-                        </p>
-                      )}
-                    </div>
-                  </section>
-                )}
+                {
+                  // nextSalahNameAndTime.nextSalah === "fajr" ||
+                  nextSalahNameAndTime.nextSalah === "dhuhr" &&
+                    nextSalahNameAndTime.currentSalah === "fajr" && (
+                      <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
+                        <div>
+                          <p className="mb-1 text-lg text-center opacity-80">
+                            Upcoming Salah
+                          </p>
+                          <p className="text-6xl font-bold text-center text-blue-500">
+                            {upperCaseFirstLetter(
+                              nextSalahNameAndTime.nextSalah,
+                            )}
+                          </p>
+                        </div>
+                        <div
+                          className={`${nextSalahNameAndTime.currentSalah === "fajr" ? "mt-3" : "mt-1"}`}
+                        >
+                          {nextSalahNameAndTime.hoursRemaining > 0 && (
+                            <p className="text-center opacity-90">
+                              {nextSalahNameAndTime.hoursRemaining === 1
+                                ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : ""}`
+                                : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : "and"}`}{" "}
+                            </p>
+                          )}
+                          {nextSalahNameAndTime.minsRemaining > 0 && (
+                            <p className="text-center opacity-90">
+                              {nextSalahNameAndTime.minsRemaining === 1
+                                ? `${nextSalahNameAndTime.minsRemaining} minute to go`
+                                : `${nextSalahNameAndTime.minsRemaining} minutes to go`}
+                            </p>
+                          )}
+                        </div>
+                      </section>
+                    )
+                }
               </>
             )}
           <>

@@ -134,6 +134,7 @@ const BottomSheetLocationsList = ({
         <IonToolbar
           style={{
             "--background": "transparent",
+            "--border-width": "0",
           }}
         >
           <IonTitle>Locations</IonTitle>

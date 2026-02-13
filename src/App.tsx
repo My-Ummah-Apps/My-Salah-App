@@ -212,7 +212,7 @@ const App = () => {
     } = result;
     setNextSalahNameAndTime({
       currentSalah: currentSalah,
-      nextSalah: nextSalah as SalahNamesTypeAdhanLibrary | "",
+      nextSalah: nextSalah,
       nextSalahTime: nextSalahTime,
       hoursRemaining: hoursRemaining,
       minsRemaining: minsRemaining,

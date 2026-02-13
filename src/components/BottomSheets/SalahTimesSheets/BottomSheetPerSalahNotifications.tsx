@@ -210,9 +210,9 @@ const BottomSheetPerSalahNotifications = ({
                 />
               </div>
               <div>
-                <p className="mt-0">Athan</p>
+                <p className="mt-0">Adhan</p>
                 <p className="text-xs">
-                  Athan by Mishary Rashid Al-Afasy + banner notification
+                  Adhan by Mishary Rashid Al-Afasy + banner notification
                 </p>
               </div>
             </div>
