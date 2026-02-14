@@ -120,7 +120,16 @@ const SalahTable = ({
   ];
 
   const handleJoyRideCompletion = async (data: CallBackProps) => {
-    // console.log(data);
+    // console.log("handleJoyRideCompletion HAS RUN");
+
+    // DB is being updated here instead of within if (data.status === "ready") { as that was causing issues with new user onboarding re-triggering
+    await updateUserPrefs(
+      dbConnection,
+      "isExistingUser",
+      "1",
+      setUserPreferences,
+    );
+
     if (data.action === "next") {
       setMultiEditIconAnimation(false);
     }
@@ -130,13 +139,11 @@ const SalahTable = ({
     // }
 
     if (data.status === "ready") {
+      // console.log("JOYRIDE COMPLETE");
+
       setShowJoyRideEditIcon(false);
-      await updateUserPrefs(
-        dbConnection,
-        "isExistingUser",
-        "1",
-        setUserPreferences,
-      );
+
+      // console.log("EXISTING USER FLAG CHANGED TO 1 IN DB");
     }
   };
 

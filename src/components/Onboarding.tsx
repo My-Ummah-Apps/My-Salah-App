@@ -85,7 +85,7 @@ const Onboarding = ({
   >(null);
 
   useEffect(() => {
-    console.log("BATT OPT USEEFFECT HAS RUN");
+    // console.log("BATT OPT USEEFFECT HAS RUN");
 
     if (Capacitor.getPlatform() !== "android") return;
 
@@ -93,7 +93,7 @@ const Onboarding = ({
       const res = await isBatteryOptimizationEnabled();
       setIsBatteryOptEnabled(res);
 
-      console.log("BATTERY OPTIMISATION: ", res);
+      // console.log("BATTERY OPTIMISATION: ", res);
     };
 
     getBatteryOptimizationStatus();
@@ -105,6 +105,10 @@ const Onboarding = ({
     }
     setOnboardingMode(null);
   };
+
+  useEffect(() => {
+    console.log("onboarding mode is: ", onboardingMode);
+  }, [onboardingMode]);
 
   return (
     <IonModal
@@ -122,21 +126,27 @@ const Onboarding = ({
           // className="flex items-center mx-5 mt-2"
           className="flex mx-5"
         >
-          {onboardingMode === "newUser" &&
-            swiperRef.current?.activeIndex !== 0 && (
-              <>
-                <IonButton
-                  style={{ top: "calc(env(safe-area-inset-top, 0px) - 10px)" }}
-                  fill="clear"
-                  color="light"
-                  size="small"
-                  className="absolute text-lg z-10 left-[-5px] top-0"
-                  onClick={switchToPreviousPage}
-                >
-                  <IonIcon icon={chevronBackOutline} />
-                </IonButton>
-              </>
-            )}
+          {onboardingMode === "newUser" && (
+            // (swiperRef.current?.activeIndex ?? 3) > 2 &&
+            <>
+              <IonButton
+                style={{ top: "calc(env(safe-area-inset-top, 0px) - 10px)" }}
+                fill="clear"
+                color="light"
+                size="small"
+                className="absolute text-lg z-10 left-[-5px] top-0"
+                onClick={switchToPreviousPage}
+                // disabled={
+
+                //   // swiperRef?.current?.activeIndex === 0 ||
+                //   // swiperRef?.current?.activeIndex ===
+                //   //   (swiperRef?.current?.slides?.length ?? 0) - 2
+                // }
+              >
+                <IonIcon icon={chevronBackOutline} />
+              </IonButton>
+            </>
+          )}
 
           {onboardingMode === "salahTimes" && (
             <>
@@ -476,14 +486,7 @@ const Onboarding = ({
                   <IonButton
                     fill="clear"
                     onClick={() => {
-                      if (onboardingMode === "newUser") {
-                        // switchToNextPage();
-                        // setShowJoyRideEditIcon(true);
-                        swiperRef.current?.slideTo(8, 0);
-                      } else {
-                        dismissOnboardingSlides();
-                      }
-                      // setOnboardingMode(null);
+                      dismissOnboardingSlides();
                     }}
                     className="mb-2 text-center rounded-2xl text-[var(--ion-text-color)]"
                   >

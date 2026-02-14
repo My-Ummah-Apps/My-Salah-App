@@ -51,7 +51,6 @@ import {
   nextSalahTimeType,
   salahTimesObjType,
   OnboardingMode,
-  SalahNamesTypeAdhanLibrary,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
@@ -512,7 +511,7 @@ const App = () => {
       }
 
       // console.log("DBResultAllSalahData: ", DBResultAllSalahData);
-      // console.log("DBResultPreferences: ", DBResultPreferences);
+      console.log("DBResultPreferences: ", DBResultPreferences);
 
       setUserLocations(DBResultLocations.values);
 
@@ -527,8 +526,10 @@ const App = () => {
           (row) => row.preferenceName === "isExistingUser",
         ) || "";
 
+      console.log("isExistingUser: ", isExistingUser);
+
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
-        // setShowIntroModal(true);
+        console.log("SETTING ONBOARDING MODE TO NEW USER");
         setOnboardingMode("newUser");
       }
 
