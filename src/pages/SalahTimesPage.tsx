@@ -189,15 +189,16 @@ const SalahTimesPage = ({
                   </section>
                 )}
                 {
-                  // nextSalahNameAndTime.nextSalah === "fajr" ||
+                  // (nextSalahNameAndTime.nextSalah === "fajr" &&
+                  //   nextSalahNameAndTime.currentSalah === "none") ||
                   nextSalahNameAndTime.nextSalah === "dhuhr" &&
-                    nextSalahNameAndTime.currentSalah === "fajr" && (
+                    nextSalahNameAndTime.currentSalah === "sunrise" && (
                       <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
                         <div>
                           <p className="mb-1 text-lg text-center opacity-80">
                             Upcoming Salah
                           </p>
-                          <p className="text-6xl font-bold text-center text-blue-500">
+                          <p className="text-6xl font-bold text-center">
                             {upperCaseFirstLetter(
                               nextSalahNameAndTime.nextSalah,
                             )}

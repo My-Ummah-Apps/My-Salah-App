@@ -475,7 +475,9 @@ const Onboarding = ({
                           "1",
                           setUserPreferences,
                         );
-                      } else {
+                      } else if (res === "denied") {
+                        console.log("DENIED");
+
                         dismissOnboardingSlides();
                       }
                     }}
@@ -568,9 +570,8 @@ const Onboarding = ({
                       const permission =
                         await LocalNotifications.requestPermissions();
 
-                      dismissOnboardingSlides();
-
                       if (permission.display === "granted") {
+                        dismissOnboardingSlides();
                         await scheduleFixedTimeDailyNotification(21, 0);
                         await updateUserPrefs(
                           dbConnection,
@@ -584,6 +585,8 @@ const Onboarding = ({
                           "21:00",
                           setUserPreferences,
                         );
+                      } else if (permission.display === "denied") {
+                        dismissOnboardingSlides();
                       }
                     }}
                     className="mb-4"
