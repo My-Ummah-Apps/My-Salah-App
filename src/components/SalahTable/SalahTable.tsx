@@ -25,6 +25,8 @@ import {
   showAlert,
   updateUserPrefs,
 } from "../../utils/helpers";
+import { IonButton, IonIcon } from "@ionic/react";
+import { createOutline, homeOutline } from "ionicons/icons";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -129,12 +131,12 @@ const SalahTable = ({
       setMultiEditIconAnimation(false);
     }
 
-    await updateUserPrefs(
-      dbConnection,
-      "isExistingUser",
-      "1",
-      setUserPreferences,
-    );
+    // await updateUserPrefs(
+    //   dbConnection,
+    //   "isExistingUser",
+    //   "1",
+    //   setUserPreferences,
+    // );
 
     // if (data.action === "prev") {
     //   setMultiEditIconAnimation(true);
@@ -244,21 +246,34 @@ const SalahTable = ({
                 label=""
                 dataKey="date"
                 headerRenderer={() => (
-                  <div
+                  <IonButton
+                    fill="clear"
+                    // size="large"
                     onClick={() => {
                       if (isMultiEditMode) return;
                       setIsMultiEditMode(true);
                     }}
-                    className={`flex items-center justify-center text-lg text-[var(--ion-text-color)] p-3`}
+                    // text-[var(--ion-text-color)]
+                    // className={`flex items-center justify-center`}
                   >
-                    <TbEdit
-                      className={`multi-edit-icon ${
+                    <IonIcon
+                      className={`multi-edit-icon text-[#0054e9] ${
                         showJoyRideEditIcon && multiEditIconAnimation
                           ? "animate-bounce"
                           : ""
                       }`}
+                      size="small"
+                      icon={createOutline}
                     />
-                  </div>
+                    {/* 
+                    <TbEdit
+                      className={`multi-edit-icon text-[#0054e9] ${
+                        showJoyRideEditIcon && multiEditIconAnimation
+                          ? "animate-bounce"
+                          : ""
+                      }`}
+                    /> */}
+                  </IonButton>
                 )}
                 cellRenderer={({ rowData }) => {
                   const [day, formattedParsedDate] = createLocalisedDate(

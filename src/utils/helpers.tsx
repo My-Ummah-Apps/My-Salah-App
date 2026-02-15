@@ -112,6 +112,8 @@ export const updateUserPrefs = async (
   preferenceValue: string | string[],
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>,
 ) => {
+  console.log("updateUserPrefs has run");
+
   try {
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");
