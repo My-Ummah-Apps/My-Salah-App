@@ -99,16 +99,20 @@ const Onboarding = ({
     getBatteryOptimizationStatus();
   }, []);
 
-  const dismissOnboardingSlides = () => {
+  const dismissOnboardingSlides = async () => {
     if (onboardingMode === "newUser") {
+      console.log("TURNING JOYRIDE ON");
+      await updateUserPrefs(
+        dbConnection,
+        "isExistingUser",
+        "1",
+        setUserPreferences,
+      );
+
       setShowJoyRideEditIcon(true);
     }
     setOnboardingMode(null);
   };
-
-  useEffect(() => {
-    console.log("onboarding mode is: ", onboardingMode);
-  }, [onboardingMode]);
 
   return (
     <IonModal
@@ -127,21 +131,21 @@ const Onboarding = ({
           className="flex mx-5"
         >
           {onboardingMode === "newUser" && (
-            // (swiperRef.current?.activeIndex ?? 3) > 2 &&
             <>
               <IonButton
-                style={{ top: "calc(env(safe-area-inset-top, 0px) - 10px)" }}
+                style={{
+                  top: "calc(env(safe-area-inset-top, 0px) - 10px)",
+                  display:
+                    Capacitor.getPlatform() === "android" &&
+                    swiperRef.current?.activeIndex === 7
+                      ? "none"
+                      : undefined,
+                }}
                 fill="clear"
                 color="light"
                 size="small"
                 className="absolute text-lg z-10 left-[-5px] top-0"
                 onClick={switchToPreviousPage}
-                // disabled={
-
-                //   // swiperRef?.current?.activeIndex === 0 ||
-                //   // swiperRef?.current?.activeIndex ===
-                //   //   (swiperRef?.current?.slides?.length ?? 0) - 2
-                // }
               >
                 <IonIcon icon={chevronBackOutline} />
               </IonButton>
@@ -284,9 +288,8 @@ const Onboarding = ({
               </section>
             </SwiperSlide>
 
-            {/* {showPrayerTimesOnboarding && ( */}
             <SwiperSlide>
-              <section className="flex flex-col justify-center h-full">
+              <section className="flex flex-col justify-center h-full ">
                 <section className="m-4 text-center">
                   <h1 className="mb-2 text-2xl font-bold">Location</h1>
                   <p>Select your Location</p>
@@ -302,6 +305,15 @@ const Onboarding = ({
                     switchToNextPage={switchToNextPage}
                   />
                 </section>
+
+                <IonButton
+                  onClick={async () => {
+                    switchToNextPage();
+                  }}
+                  className={`absolute bottom-0 w-full ${userLocations.length === 0 ? "hidden" : "visible"}`}
+                >
+                  Next
+                </IonButton>
               </section>
             </SwiperSlide>
             <SwiperSlide>

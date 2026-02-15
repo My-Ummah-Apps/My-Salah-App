@@ -205,7 +205,8 @@ const SalahTimesPage = ({
                           </p>
                         </div>
                         <div
-                          className={`${nextSalahNameAndTime.currentSalah === "fajr" ? "mt-3" : "mt-1"}`}
+
+                        // className={`${nextSalahNameAndTime.currentSalah === "fajr" ? "mt-3" : "mt-1"}`}
                         >
                           {nextSalahNameAndTime.hoursRemaining > 0 && (
                             <p className="text-center opacity-90">

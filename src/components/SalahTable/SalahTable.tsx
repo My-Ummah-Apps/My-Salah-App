@@ -119,8 +119,8 @@ const SalahTable = ({
     },
   ];
 
-  const handleJoyRideCompletion = async (data: CallBackProps) => {
-    // console.log("handleJoyRideCompletion HAS RUN");
+  const handleJoyRide = async (data: CallBackProps) => {
+    // console.log("handleJoyRide HAS RUN");
 
     // DB is being updated here instead of within if (data.status === "ready") { as that was causing issues with new user onboarding re-triggering
     await updateUserPrefs(
@@ -131,6 +131,7 @@ const SalahTable = ({
     );
 
     if (data.action === "next") {
+      console.log("TURNING OFF ANIMATION");
       setMultiEditIconAnimation(false);
     }
 
@@ -162,7 +163,7 @@ const SalahTable = ({
         continuous
         disableScrolling={true}
         hideCloseButton={true}
-        callback={handleJoyRideCompletion}
+        callback={handleJoyRide}
         styles={{
           options: {
             backgroundColor: "#27272a",

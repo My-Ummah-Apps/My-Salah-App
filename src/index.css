@@ -193,6 +193,14 @@ ion-modal::part(backdrop) {
   /* background-color: rgba(0, 0, 0, 1) !important; */
 }
 
+ion-header {
+  margin-top: 5px;
+}
+
+/* ion-header {
+  padding-top: 5px;
+} */
+
 ion-alert {
   --background: var(--card-bg-color) !important;
   color: var(--text-color);
@@ -267,6 +275,10 @@ ion-checkbox::part(container) {
 
 ion-content {
   /* --background: transparent; */
+}
+
+ion-fab {
+  margin-bottom: var(--ion-safe-area-bottom, 0);
 }
 
 .action-sheet-title.sc-ion-action-sheet-md,
