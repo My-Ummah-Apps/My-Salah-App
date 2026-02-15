@@ -16,21 +16,21 @@ import {
   salahStatusColorsHexCodes,
   salahNamesArr,
 } from "../../utils/constants";
-import { TbEdit } from "react-icons/tb";
+// import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { useEffect, useRef, useState } from "react";
 import {
   createLocalisedDate,
   salahTableIndividualSquareStyles,
   showAlert,
-  updateUserPrefs,
+  // updateUserPrefs,
 } from "../../utils/helpers";
 import { IonButton, IonIcon } from "@ionic/react";
-import { createOutline, homeOutline } from "ionicons/icons";
+import { createOutline } from "ionicons/icons";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  // setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   setShowJoyRideEditIcon: React.Dispatch<React.SetStateAction<boolean>>;
   showJoyRideEditIcon: boolean;
   setFetchedSalahData: React.Dispatch<
@@ -51,7 +51,7 @@ interface SalahTableProps {
 
 const SalahTable = ({
   dbConnection,
-  setUserPreferences,
+  // setUserPreferences,
   setShowJoyRideEditIcon,
   showJoyRideEditIcon,
   setFetchedSalahData,
@@ -248,16 +248,15 @@ const SalahTable = ({
                 headerRenderer={() => (
                   <IonButton
                     fill="clear"
-                    // size="large"
+                    size="large"
                     onClick={() => {
                       if (isMultiEditMode) return;
                       setIsMultiEditMode(true);
                     }}
-                    // text-[var(--ion-text-color)]
                     // className={`flex items-center justify-center`}
                   >
                     <IonIcon
-                      className={`multi-edit-icon text-[#0054e9] ${
+                      className={`multi-edit-icon text-[var(--ion-text-color)] ${
                         showJoyRideEditIcon && multiEditIconAnimation
                           ? "animate-bounce"
                           : ""

@@ -203,7 +203,7 @@ const HomePage = ({
           <section className="h-full home-page-components-wrap">
             <SalahTable
               dbConnection={dbConnection}
-              setUserPreferences={setUserPreferences}
+              // setUserPreferences={setUserPreferences}
               setShowJoyRideEditIcon={setShowJoyRideEditIcon}
               showJoyRideEditIcon={showJoyRideEditIcon}
               userPreferences={userPreferences}
