@@ -269,7 +269,7 @@ const StatsPage = ({
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
-        <IonToolbar className="header-toolbar">
+        <IonToolbar className="page-header-toolbar">
           <IonTitle>Stats</IonTitle>
         </IonToolbar>
       </IonHeader>

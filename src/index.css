@@ -323,7 +323,7 @@ ion-fab {
   overflow-x: hidden;
 }
 
-.header-toolbar {
+.page-header-toolbar {
   --background: var(--primary-color);
 }
 

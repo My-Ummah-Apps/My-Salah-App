@@ -161,17 +161,17 @@ export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
 export const cancelNotifications = async (
   notificationName: SalahNamesTypeAdhanLibrary | "Daily Reminder",
 ) => {
-  // console.log(
-  //   "CANCELLING NOTIFICATIONS FOR THE FOLLOWING REMINDERS: ",
-  //   notificationName,
-  // );
+  console.log(
+    "CANCELLING NOTIFICATIONS FOR THE FOLLOWING REMINDERS: ",
+    notificationName,
+  );
 
   const pendingNotifications = await LocalNotifications.getPending();
 
-  // console.log(
-  //   "pendingNotifications before cancellation: ",
-  //   pendingNotifications.notifications,
-  // );
+  console.log(
+    "pendingNotifications before cancellation: ",
+    pendingNotifications.notifications,
+  );
 
   const notificationNameToCancel =
     notificationName !== "Daily Reminder"
@@ -190,10 +190,10 @@ export const cancelNotifications = async (
 
   await LocalNotifications.cancel({ notifications: notificationsToCancel });
 
-  // console.log(
-  //   "pending notifications after cancelling: ",
-  //   (await LocalNotifications.getPending()).notifications,
-  // );
+  console.log(
+    "pending notifications after cancelling: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 const salahIdMap = {
@@ -259,8 +259,8 @@ export const scheduleFixedTimeDailyNotification = async (
     ],
   });
 
-  // const pending = (await LocalNotifications.getPending()).notifications;
-  // console.log("FIXED DAILY NOTIFICATIONS AFTER BEING TURNED ON: ", pending);
+  const pending = (await LocalNotifications.getPending()).notifications;
+  console.log("FIXED DAILY NOTIFICATIONS AFTER BEING TURNED ON: ", pending);
 };
 
 export const createLocalisedDate = (date: string) => {
@@ -284,7 +284,7 @@ export const scheduleSalahNotifications = async (
 ) => {
   await cancelNotifications(salahName);
 
-  // console.log("Scheduling notifications for: ", salahName);
+  console.log("Scheduling notifications for: ", salahName);
 
   const now = new Date();
 
@@ -360,10 +360,10 @@ export const scheduleSalahNotifications = async (
     }
   }
 
-  // console.log(
-  //   "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
-  //   (await LocalNotifications.getPending()).notifications,
-  // );
+  console.log(
+    "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 export const generateActiveLocationParams = async (

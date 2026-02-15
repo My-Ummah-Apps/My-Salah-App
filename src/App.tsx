@@ -10,7 +10,6 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  isPlatform,
 } from "@ionic/react";
 
 import {
@@ -216,6 +215,15 @@ const App = () => {
       hoursRemaining: hoursRemaining,
       minsRemaining: minsRemaining,
     });
+    // setNextSalahNameAndTime({
+    //   currentSalah: "none",
+    //   nextSalah: "fajr",
+    //   nextSalahTime: nextSalahTime,
+    //   hoursRemaining: hoursRemaining,
+    //   minsRemaining: minsRemaining,
+    // });
+
+    // console.log("nextSalahNameAndTime:", nextSalahNameAndTime);
   };
 
   useEffect(() => {
@@ -306,48 +314,48 @@ const App = () => {
   }, [isDatabaseInitialised]);
 
   useEffect(() => {
+    if (Capacitor.getPlatform() !== "android") return;
+
     const createAndroidNotificationChannels = async () => {
-      if (isPlatform("android")) {
-        await LocalNotifications.createChannel({
-          id: "daily-reminder",
-          name: "Daily Reminder",
-          importance: 4,
-          description: "Daily reminder to log prayers",
-          sound: "default",
-          visibility: 1,
-          vibration: true,
-        });
+      await LocalNotifications.createChannel({
+        id: "daily-reminder",
+        name: "Daily Reminder",
+        importance: 4,
+        description: "Daily reminder to log prayers",
+        sound: "default",
+        visibility: 1,
+        vibration: true,
+      });
 
-        await LocalNotifications.createChannel({
-          id: "dhuhr-asr-maghrib-isha-reminders-with-adhan",
-          name: "Salah reminders (Adhan)",
-          importance: 4,
-          description: "Adhan for Dhuhr, Asr, Maghrib and Isha",
-          sound: "adhan.mp3",
-          visibility: 1,
-          vibration: true,
-        });
+      await LocalNotifications.createChannel({
+        id: "dhuhr-asr-maghrib-isha-reminders-with-adhan",
+        name: "Salah reminders (Adhan)",
+        importance: 4,
+        description: "Adhan for Dhuhr, Asr, Maghrib and Isha",
+        sound: "adhan.mp3",
+        visibility: 1,
+        vibration: true,
+      });
 
-        await LocalNotifications.createChannel({
-          id: "fajr-reminder-with-adhan",
-          name: "Fajr Adhan",
-          importance: 4,
-          description: "Fajr adhan reminder",
-          sound: "adhan_fajr.mp3",
-          visibility: 1,
-          vibration: true,
-        });
+      await LocalNotifications.createChannel({
+        id: "fajr-reminder-with-adhan",
+        name: "Fajr Adhan",
+        importance: 4,
+        description: "Fajr adhan reminder",
+        sound: "adhan_fajr.mp3",
+        visibility: 1,
+        vibration: true,
+      });
 
-        await LocalNotifications.createChannel({
-          id: "salah-reminders-without-adhan",
-          name: "Salah reminders without adhan",
-          importance: 4,
-          description: "Salah reminders",
-          sound: "default",
-          visibility: 1,
-          vibration: true,
-        });
-      }
+      await LocalNotifications.createChannel({
+        id: "salah-reminders-without-adhan",
+        name: "Salah reminders without adhan",
+        importance: 4,
+        description: "Salah reminders",
+        sound: "default",
+        visibility: 1,
+        vibration: true,
+      });
     };
 
     createAndroidNotificationChannels();
@@ -526,10 +534,14 @@ const App = () => {
           (row) => row.preferenceName === "isExistingUser",
         ) || "";
 
-      console.log("isExistingUser: ", isExistingUser);
+      console.log("isExistingUser is: ", isExistingUser);
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
-        console.log("SETTING ONBOARDING MODE TO NEW USER");
+        console.log(
+          "SETTING ONBOARDING MODE TO NEW USER, ONBOARDING MODE IS: ",
+          onboardingMode,
+        );
+
         setOnboardingMode("newUser");
       }
 

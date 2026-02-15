@@ -97,7 +97,7 @@ const HomePage = ({
     // ref={page}
     >
       <IonHeader className="ion-no-border">
-        <IonToolbar className="header-toolbar">
+        <IonToolbar className="page-header-toolbar">
           <IonTitle>Home</IonTitle>
           <IonButtons slot="secondary">
             <IonButton

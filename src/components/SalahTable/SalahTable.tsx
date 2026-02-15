@@ -120,20 +120,21 @@ const SalahTable = ({
   ];
 
   const handleJoyRide = async (data: CallBackProps) => {
-    // console.log("handleJoyRide HAS RUN");
+    console.log("handleJoyRide HAS RUN");
 
-    // DB is being updated here instead of within if (data.status === "ready") { as that was causing issues with new user onboarding re-triggering
+    console.log("IS EXISTING USER SET TO 1");
+
+    if (data.action === "next") {
+      console.log("TURNING OFF ANIMATION");
+      setMultiEditIconAnimation(false);
+    }
+
     await updateUserPrefs(
       dbConnection,
       "isExistingUser",
       "1",
       setUserPreferences,
     );
-
-    if (data.action === "next") {
-      console.log("TURNING OFF ANIMATION");
-      setMultiEditIconAnimation(false);
-    }
 
     // if (data.action === "prev") {
     //   setMultiEditIconAnimation(true);

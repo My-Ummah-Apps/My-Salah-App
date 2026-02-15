@@ -251,7 +251,7 @@ const SettingsPage = ({
     // ref={page}
     >
       <IonHeader className="ion-no-border">
-        <IonToolbar className="header-toolbar">
+        <IonToolbar className="page-header-toolbar">
           <IonTitle>Settings</IonTitle>
         </IonToolbar>
       </IonHeader>
