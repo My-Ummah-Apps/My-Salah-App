@@ -84,6 +84,9 @@ const BottomSheetNotifications = ({
     battOptStatus();
   }, [isAppActive]);
 
+  const isAfterIshaOptionEnabled =
+    userPreferences.prayerCalculationMethod !== "" && userLocations.length > 0;
+
   const minuteIntervals = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
 
   const getNotificationStatuses = () => {
@@ -324,57 +327,72 @@ const BottomSheetNotifications = ({
                     required
                   />
                 </IonItem>
-                {userPreferences.prayerCalculationMethod !== "" &&
-                  userLocations.length > 0 && (
-                    <IonItem
-                      style={{
-                        "--background": "transparent",
-                        background: "transparent",
-                      }}
-                      lines="none"
-                    >
-                      <IonRadio
-                        mode="ios"
-                        slot="start"
-                        labelPlacement="end"
-                        value="afterIsha"
-                        color="primary"
-                      >
-                        After Isha
-                      </IonRadio>
-                      <IonSelect
-                        slot="end"
-                        label=""
-                        placeholder={`${userPreferences.dailyNotificationAfterIshaDelay} minutes`}
-                        onIonChange={async (e) => {
-                          e.stopPropagation();
-                          const delay = e.detail.value;
-                          if (selectedDailyNotificationOption === "afterIsha") {
-                            await scheduleAfterIshaDailyNotifications(
-                              delay,
-                              userLocations,
-                              userPreferences,
-                            );
-                          }
-                          await updateUserPrefs(
-                            dbConnection,
-                            "dailyNotificationAfterIshaDelay",
-                            String(delay),
-                            setUserPreferences,
-                          );
-                        }}
-                      >
-                        {minuteIntervals.map((min) => {
-                          return (
-                            <IonSelectOption
-                              key={min}
-                              value={min}
-                            >{`${min} minutes`}</IonSelectOption>
-                          );
-                        })}
-                      </IonSelect>
-                    </IonItem>
-                  )}
+                {/* {userPreferences.prayerCalculationMethod !== "" &&
+                  userLocations.length > 0 && ( */}
+                <IonItem
+                  style={{
+                    "--background": "transparent",
+                    background: "transparent",
+                  }}
+                  lines="none"
+                >
+                  <IonRadio
+                    mode="ios"
+                    slot="start"
+                    labelPlacement="end"
+                    value="afterIsha"
+                    color="primary"
+                    disabled={
+                      // userPreferences.prayerCalculationMethod === "" ||
+                      // userLocations.length === 0
+                      !isAfterIshaOptionEnabled
+                    }
+                  >
+                    After Isha
+                  </IonRadio>
+                  <IonSelect
+                    slot="end"
+                    label=""
+                    disabled={
+                      !isAfterIshaOptionEnabled
+                      // userPreferences.prayerCalculationMethod === "" ||
+                      // userLocations.length === 0
+                    }
+                    placeholder={`${userPreferences.dailyNotificationAfterIshaDelay} minutes`}
+                    onIonChange={async (e) => {
+                      e.stopPropagation();
+                      const delay = e.detail.value;
+                      if (selectedDailyNotificationOption === "afterIsha") {
+                        await scheduleAfterIshaDailyNotifications(
+                          delay,
+                          userLocations,
+                          userPreferences,
+                        );
+                      }
+                      await updateUserPrefs(
+                        dbConnection,
+                        "dailyNotificationAfterIshaDelay",
+                        String(delay),
+                        setUserPreferences,
+                      );
+                    }}
+                  >
+                    {minuteIntervals.map((min) => {
+                      return (
+                        <IonSelectOption
+                          key={min}
+                          value={min}
+                        >{`${min} minutes`}</IonSelectOption>
+                      );
+                    })}
+                  </IonSelect>
+                </IonItem>
+                {!isAfterIshaOptionEnabled && (
+                  <p className="mx-4 mt-2 text-xs text-center opacity-70">
+                    Please set up salah times to use the 'After Isha' option
+                  </p>
+                )}
+                {/* )} */}
               </IonRadioGroup>
             </IonList>
           </div>

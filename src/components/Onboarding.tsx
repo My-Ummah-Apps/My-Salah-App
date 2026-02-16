@@ -127,8 +127,9 @@ const Onboarding = ({
     >
       <IonContent>
         <section
+          // style={{ marginTop: "calc(env(safe-area-inset-top, 0px))" }}
           // className="flex items-center mx-5 mt-2"
-          className="flex mx-5"
+          className="flex min-h-screen mx-5"
         >
           {onboardingMode === "newUser" && (
             <>
@@ -228,12 +229,12 @@ const Onboarding = ({
                         "male",
                         setUserPreferences,
                       );
-                      await updateUserPrefs(
-                        dbConnection,
-                        "isExistingUser",
-                        "1",
-                        setUserPreferences,
-                      );
+                      // await updateUserPrefs(
+                      //   dbConnection,
+                      //   "isExistingUser",
+                      //   "1",
+                      //   setUserPreferences,
+                      // );
                     }}
                   >
                     <div>
@@ -253,12 +254,12 @@ const Onboarding = ({
                         "female",
                         setUserPreferences,
                       );
-                      await updateUserPrefs(
-                        dbConnection,
-                        "isExistingUser",
-                        "1",
-                        setUserPreferences,
-                      );
+                      // await updateUserPrefs(
+                      //   dbConnection,
+                      //   "isExistingUser",
+                      //   "1",
+                      //   setUserPreferences,
+                      // );
                     }}
                   >
                     <div>
@@ -299,9 +300,11 @@ const Onboarding = ({
                 </section>
               </section>
             </SwiperSlide>
-
             <SwiperSlide>
-              <section className="flex flex-col justify-center h-full ">
+              <section
+                style={{ marginTop: "calc(env(safe-area-inset-top, 0px))" }}
+                className="flex flex-col items-center justify-center"
+              >
                 <section className="m-4 text-center">
                   <h1 className="mb-2 text-2xl font-bold">Location</h1>
                   <p>Select your Location</p>
@@ -317,12 +320,11 @@ const Onboarding = ({
                     switchToNextPage={switchToNextPage}
                   />
                 </section>
-
                 <IonButton
                   onClick={async () => {
                     switchToNextPage();
                   }}
-                  className={`absolute bottom-0 w-full ${userLocations.length === 0 ? "hidden" : "visible"}`}
+                  className={`absolute bottom-5 w-full ${userLocations.length === 0 ? "hidden" : "visible"}`}
                 >
                   Next
                 </IonButton>
@@ -330,7 +332,7 @@ const Onboarding = ({
             </SwiperSlide>
             <SwiperSlide>
               <section
-                style={{ marginTop: "calc(env(safe-area-inset-top, 0px)" }}
+                style={{ marginTop: "calc(env(safe-area-inset-top, 0px))" }}
                 className="flex flex-col justify-center h-full"
               >
                 <section className="m-4 text-center">
@@ -348,20 +350,18 @@ const Onboarding = ({
                   setUserPreferences={setUserPreferences}
                 />
                 {/* <section className=""> */}
-                <IonButton
-                  disabled={
-                    userPreferences.prayerCalculationMethod === ""
-                      ? true
-                      : false
-                  }
-                  onClick={async () => {
-                    switchToNextPage();
-                  }}
-                  className={`absolute bottom-5 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
-                >
-                  Next
-                </IonButton>
               </section>
+              <IonButton
+                disabled={
+                  userPreferences.prayerCalculationMethod === "" ? true : false
+                }
+                onClick={async () => {
+                  switchToNextPage();
+                }}
+                className={`absolute bottom-5 w-full ${userPreferences.prayerCalculationMethod === "" ? "hidden" : "visible"}`}
+              >
+                Next
+              </IonButton>
             </SwiperSlide>
             <SwiperSlide>
               <section className="flex flex-col justify-center h-full">

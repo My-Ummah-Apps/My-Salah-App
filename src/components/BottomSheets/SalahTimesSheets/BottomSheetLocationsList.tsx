@@ -14,7 +14,7 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { add, trashOutline } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { MdCheck } from "react-icons/md";
 import {
@@ -103,20 +103,20 @@ const BottomSheetLocationsList = ({
     setShowLocationDeletedToast(true);
   };
 
-  useEffect(() => {
-    const cancelAllSalahNotifications = async () => {
-      if (userLocations?.length === 0) {
-        await cancelNotifications("fajr");
-        await cancelNotifications("sunrise");
-        await cancelNotifications("dhuhr");
-        await cancelNotifications("asr");
-        await cancelNotifications("maghrib");
-        await cancelNotifications("isha");
-      }
-    };
+  // useEffect(() => {
+  //   const cancelAllSalahNotifications = async () => {
+  //     if (userLocations?.length === 0) {
+  //       await cancelNotifications("fajr");
+  //       await cancelNotifications("sunrise");
+  //       await cancelNotifications("dhuhr");
+  //       await cancelNotifications("asr");
+  //       await cancelNotifications("maghrib");
+  //       await cancelNotifications("isha");
+  //     }
+  //   };
 
-    cancelAllSalahNotifications();
-  }, [userLocations]);
+  //   cancelAllSalahNotifications();
+  // }, [userLocations]);
 
   return (
     <IonModal
@@ -278,6 +278,15 @@ const BottomSheetLocationsList = ({
                   );
                 } else {
                   setUserLocations(allLocations);
+                }
+
+                if (allLocations.length === 0) {
+                  await cancelNotifications("fajr");
+                  await cancelNotifications("sunrise");
+                  await cancelNotifications("dhuhr");
+                  await cancelNotifications("asr");
+                  await cancelNotifications("maghrib");
+                  await cancelNotifications("isha");
                 }
 
                 if (

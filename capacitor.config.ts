@@ -20,7 +20,7 @@ const config: CapacitorConfig = {
   webDir: "dist", // server: serverConfig,
   server: {
     // url: isDevelopment ? process.env.VITE_DEV_SERVER_IP : undefined,
-    // url: process.env.VITE_DEV_SERVER_IP,
+    url: process.env.VITE_DEV_SERVER_IP,
     cleartext: true,
   },
   plugins: {

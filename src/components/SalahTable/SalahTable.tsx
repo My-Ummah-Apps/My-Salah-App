@@ -11,6 +11,7 @@ import {
 import BottomSheetSalahStatus from "../BottomSheets/BottomSheetSalahStatus";
 
 import { LuDot } from "react-icons/lu";
+import { TbEdit } from "react-icons/tb";
 import { SalahRecordsArrayType } from "../../types/types";
 import {
   salahStatusColorsHexCodes,
@@ -25,8 +26,7 @@ import {
   showAlert,
   // updateUserPrefs,
 } from "../../utils/helpers";
-import { IonButton, IonIcon } from "@ionic/react";
-import { createOutline } from "ionicons/icons";
+import { IonButton } from "@ionic/react";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -255,7 +255,7 @@ const SalahTable = ({
                     }}
                     // className={`flex items-center justify-center`}
                   >
-                    <IonIcon
+                    {/* <IonIcon
                       className={`multi-edit-icon text-[var(--ion-text-color)] ${
                         showJoyRideEditIcon && multiEditIconAnimation
                           ? "animate-bounce"
@@ -263,15 +263,15 @@ const SalahTable = ({
                       }`}
                       size="small"
                       icon={createOutline}
-                    />
-                    {/* 
+                    /> */}
+
                     <TbEdit
-                      className={`multi-edit-icon text-[#0054e9] ${
+                      className={`multi-edit-icon text-[var(--ion-text-color)] text-lg ${
                         showJoyRideEditIcon && multiEditIconAnimation
                           ? "animate-bounce"
                           : ""
                       }`}
-                    /> */}
+                    />
                   </IonButton>
                 )}
                 cellRenderer={({ rowData }) => {
