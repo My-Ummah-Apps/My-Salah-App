@@ -2,11 +2,25 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.7";
+export const LATEST_APP_VERSION = "4.8";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "New Feature: Salah Times & bug fixes",
+        text: (
+          <>
+            <strong>Feature:</strong> Salah times functionality added, minor
+            bugs fixed.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.7",
     changes: [
       {
         heading: "Improved app restore and data handling",

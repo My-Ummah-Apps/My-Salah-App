@@ -229,12 +229,12 @@ const Onboarding = ({
                         "male",
                         setUserPreferences,
                       );
-                      // await updateUserPrefs(
-                      //   dbConnection,
-                      //   "isExistingUser",
-                      //   "1",
-                      //   setUserPreferences,
-                      // );
+                      await updateUserPrefs(
+                        dbConnection,
+                        "isExistingUser",
+                        "1",
+                        setUserPreferences,
+                      );
                     }}
                   >
                     <div>
@@ -254,12 +254,12 @@ const Onboarding = ({
                         "female",
                         setUserPreferences,
                       );
-                      // await updateUserPrefs(
-                      //   dbConnection,
-                      //   "isExistingUser",
-                      //   "1",
-                      //   setUserPreferences,
-                      // );
+                      await updateUserPrefs(
+                        dbConnection,
+                        "isExistingUser",
+                        "1",
+                        setUserPreferences,
+                      );
                     }}
                   >
                     <div>

@@ -21,6 +21,7 @@ import {
   isBatteryOptimizationEnabled,
   // requestIgnoreBatteryOptimization,
   scheduleAfterIshaDailyNotifications,
+  requestIgnoreBatteryOptimization,
 } from "../../utils/helpers";
 import {
   IonButton,
@@ -473,6 +474,10 @@ const BottomSheetNotifications = ({
                 <IonButton
                   className="text-xs"
                   onClick={async () => {
+                    // const res = await requestIgnoreBatteryOptimization();
+                    // console.log("res: ", res);
+                    // await getBatteryOptimizationStatus();
+
                     await promptToOpenDeviceSettings(
                       "Disable Battery Optimization",
                       "To ensure notifications arrive on time, please turn off battery optimization for this app.",

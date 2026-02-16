@@ -284,7 +284,7 @@ const App = () => {
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
     ) {
       // setShowChangelogModal(true);
-      // setShowMajorUpdateOverlay(true);
+      setShowMajorUpdateOverlay(true);
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
   }, []);
