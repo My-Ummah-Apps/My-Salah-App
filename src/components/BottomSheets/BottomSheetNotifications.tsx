@@ -21,7 +21,6 @@ import {
   isBatteryOptimizationEnabled,
   // requestIgnoreBatteryOptimization,
   scheduleAfterIshaDailyNotifications,
-  requestIgnoreBatteryOptimization,
 } from "../../utils/helpers";
 import {
   IonButton,

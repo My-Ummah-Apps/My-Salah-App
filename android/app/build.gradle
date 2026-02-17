@@ -7,7 +7,7 @@ android {
         applicationId "com.mysalahapp.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2036
+        versionCode 2037
         versionName '4.8'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {

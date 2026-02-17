@@ -460,18 +460,20 @@ const SalahTimesPage = ({
             {/* </IonList> */}
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
-            userLocations?.length !== 0 && (
+            userLocations?.length > 0 && (
               <p className="mx-5 my-5 text-xs text-center opacity-50">
-                {`Note: These times have been calculated using the
-            ${
-              prayerCalculationMethodLabels[
-                userPreferences.prayerCalculationMethod
-              ]
-            } method with Fajr Angle ${
-              userPreferences.fajrAngle
-            }° and Isha Angle ${
-              userPreferences.ishaAngle
-            }°, your local mosque times may differ.`}
+                Note: These times have been calculated using the
+                <span className="font-bold">
+                  {" "}
+                  {
+                    prayerCalculationMethodLabels[
+                      userPreferences.prayerCalculationMethod
+                    ]
+                  }{" "}
+                </span>
+                method with Fajr Angle {userPreferences.fajrAngle}° and Isha
+                Angle {userPreferences.ishaAngle}°, your local mosque times may
+                differ.
               </p>
             )}
         </section>

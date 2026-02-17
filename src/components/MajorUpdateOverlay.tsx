@@ -1,7 +1,5 @@
 import { GoBug, GoClock } from "react-icons/go";
 
-import image from "../assets/images/Screenshot_20260216_203304.png";
-
 interface MajorUpdateOverlayProps {
   setShowMajorUpdateOverlay: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -29,9 +27,9 @@ const MajorUpdateOverlay = ({
       }}
     >
       {/* <img height={100} width={80} src={image}></img> */}
-      <section className="">
-        <p className="mb-2">Version 4.8</p>
-        <p className="bg-[#9332ed] p-2 rounded-2xl inline-block">
+      <section className="flex flex-col justify-center h-full">
+        <p className="mb-2 opacity-70">Version 4.8</p>
+        <p className="bg-[#9332ed] py-2 px-4 rounded-2xl w-fit text-2xl">
           MAJOR UPDATE
         </p>
         <p className="mt-5 text-2xl">Salah times have now been added</p>

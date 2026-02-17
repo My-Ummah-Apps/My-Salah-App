@@ -150,7 +150,7 @@ const AddLocationOptions = ({
         longitude: location.coords.longitude,
       });
 
-      await dismissLocationSpinner();
+      // await dismissLocationSpinner();
       setShowAddLocationForm(true);
     } catch (error) {
       setShowLocationFailureToast(true);
@@ -239,7 +239,7 @@ const AddLocationOptions = ({
       ) {
         await showLocationServicesPrompt();
       } else {
-        await dismissLocationSpinner();
+        // await dismissLocationSpinner();
         await Dialog.alert({
           title: "Location unavailable",
           message:
@@ -564,7 +564,7 @@ const AddLocationOptions = ({
         </div>
         <section className="mx-4">
           <div
-            className="text-center border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
+            className=" text-center border-transparent p-2 mb-5 rounded-lg bg-[var(--sheet-option-bg)]"
             onClick={async () => {
               if (showAddLocationForm) return;
 
@@ -577,9 +577,10 @@ const AddLocationOptions = ({
                 await handleLocationPermissions();
               } catch (error) {
                 console.error(error);
-              } finally {
-                await dismissLocationSpinner();
               }
+              // finally {
+              //   await dismissLocationSpinner();
+              // }
             }}
           >
             <div className="mr-2">

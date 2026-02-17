@@ -292,7 +292,9 @@ const SettingsPage = ({
               <SettingIndividual
                 onClick={() => {
                   if (userLocations.length === 0) {
-                    alert("Please add a location first");
+                    alert(
+                      "Please add a location or set up Salah times on the Salah times page first.",
+                    );
                     return;
                   }
                   setShowSalahTimesSettingsSheet(true);

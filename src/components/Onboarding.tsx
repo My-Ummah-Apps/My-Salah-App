@@ -156,10 +156,10 @@ const Onboarding = ({
           {onboardingMode === "salahTimes" && (
             <>
               <IonButton
+                style={{ marginTop: "calc(env(safe-area-inset-top, 0px))" }}
                 fill="clear"
-                color="light"
                 size="small"
-                className="absolute text-lg z-10 right-[-5px] top-0"
+                className="absolute text-lg z-10 right-[-5px] top-0 text-[var(--ion-text-color)]"
                 onClick={() => {
                   setOnboardingMode(null);
                 }}
@@ -177,7 +177,7 @@ const Onboarding = ({
             slidesPerView={1}
             allowTouchMove={false}
             initialSlide={onboardingMode === "newUser" ? 0 : 3}
-            pagination={onboardingMode ? true : false}
+            pagination={onboardingMode === "newUser" ? true : false}
             navigation
             // navigation={{
             //   nextEl: ".swiper-button-next",
