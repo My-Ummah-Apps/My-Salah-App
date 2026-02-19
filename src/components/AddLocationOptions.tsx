@@ -154,7 +154,7 @@ const AddLocationOptions = ({
       setShowAddLocationForm(true);
     } catch (error) {
       setShowLocationFailureToast(true);
-      console.log("Failed to obtain location");
+      // console.log("Failed to obtain location");
       console.error(error);
       await Dialog.alert({
         title: "Location request timed out",

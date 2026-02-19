@@ -107,11 +107,6 @@ const SalahTimesPage = ({
     setDateToShow(new Date());
   });
 
-  console.log(
-    "nextSalahNameAndTime.nextSalah: ",
-    nextSalahNameAndTime.currentSalah,
-  );
-
   return (
     <IonPage>
       <IonHeader className="ion-no-border">

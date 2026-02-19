@@ -122,12 +122,7 @@ const SalahTable = ({
   ];
 
   const handleJoyRide = async (data: CallBackProps) => {
-    console.log("handleJoyRide HAS RUN");
-
-    console.log("IS EXISTING USER SET TO 1");
-
     if (data.action === "next") {
-      console.log("TURNING OFF ANIMATION");
       setMultiEditIconAnimation(false);
     }
 

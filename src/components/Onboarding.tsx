@@ -101,7 +101,6 @@ const Onboarding = ({
 
   const dismissOnboardingSlides = async () => {
     if (onboardingMode === "newUser") {
-      console.log("TURNING JOYRIDE ON");
       await updateUserPrefs(
         dbConnection,
         "isExistingUser",
@@ -500,8 +499,6 @@ const Onboarding = ({
                           setUserPreferences,
                         );
                       } else if (res === "denied") {
-                        console.log("DENIED");
-
                         dismissOnboardingSlides();
                       }
                     }}

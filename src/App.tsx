@@ -519,7 +519,7 @@ const App = () => {
       }
 
       // console.log("DBResultAllSalahData: ", DBResultAllSalahData);
-      console.log("DBResultPreferences: ", DBResultPreferences);
+      // console.log("DBResultPreferences: ", DBResultPreferences);
 
       setUserLocations(DBResultLocations.values);
 
@@ -534,7 +534,7 @@ const App = () => {
           (row) => row.preferenceName === "isExistingUser",
         ) || "";
 
-      console.log("isExistingUser is: ", isExistingUser);
+      // console.log("isExistingUser is: ", isExistingUser);
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
         console.log(

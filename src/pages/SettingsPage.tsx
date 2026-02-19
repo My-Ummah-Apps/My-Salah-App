@@ -339,6 +339,20 @@ const SettingsPage = ({
                 ></IonToggle>
               </section>
             </div>{" "}
+            <div>
+              <SettingIndividual
+                id="open-edit-reasons-sheet"
+                headingText={"Edit Reasons"}
+                subText={`Add or remove reasons`}
+              />
+              <BottomSheetEditReasons
+                dbConnection={dbConnection}
+                triggerId={"open-edit-reasons-sheet"}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+                // presentingElement={presentingElement}
+              />
+            </div>
             <div className="my-5">
               <SettingIndividual
                 indvidualStyles={"border-b border-[var(--app-border-color)]"}
@@ -352,18 +366,6 @@ const SettingsPage = ({
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 fetchDataFromDB={fetchDataFromDB}
-              />
-              <SettingIndividual
-                id="open-edit-reasons-sheet"
-                headingText={"Edit Reasons"}
-                subText={`Add or remove reasons`}
-              />
-              <BottomSheetEditReasons
-                dbConnection={dbConnection}
-                triggerId={"open-edit-reasons-sheet"}
-                setUserPreferences={setUserPreferences}
-                userPreferences={userPreferences}
-                // presentingElement={presentingElement}
               />
             </div>
             <div className="my-5">
