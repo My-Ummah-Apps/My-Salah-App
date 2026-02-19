@@ -36,6 +36,7 @@ import {
 import BottomSheetThemeOptions from "../components/BottomSheets/BottomSheetThemeOptions";
 import { toggleDBConnection } from "../utils/dbUtils";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
+import BottomSheetBatchUpdate from "../components/BottomSheets/BottomSheetBatchUpdate";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -363,6 +364,18 @@ const SettingsPage = ({
               <BottomSheetStartDate
                 dbConnection={dbConnection}
                 triggerId={"open-change-start-date-sheet"}
+                setUserPreferences={setUserPreferences}
+                userPreferences={userPreferences}
+                fetchDataFromDB={fetchDataFromDB}
+              />
+              <SettingIndividual
+                id="open-batch-update-sheet"
+                headingText={"Batch update Salah"}
+                subText={`Update Salah over multiple dates`}
+              />
+              <BottomSheetBatchUpdate
+                dbConnection={dbConnection}
+                triggerId={"open-batch-update-sheet"}
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 fetchDataFromDB={fetchDataFromDB}
