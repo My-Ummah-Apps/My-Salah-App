@@ -1,11 +1,12 @@
 import {
+  IonButton,
   IonCheckbox,
   IonContent,
   IonInput,
   IonModal,
   IonTextarea,
 } from "@ionic/react";
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+
 import {
   SalahNamesType,
   SalahStatusType,
@@ -17,21 +18,24 @@ import {
   MODAL_BREAKPOINTS,
   salahNamesArr,
 } from "../../utils/constants";
+import { eachDayOfInterval, format, parseISO } from "date-fns";
+import { SQLiteDBConnection } from "@capacitor-community/sqlite";
+import { toggleDBConnection } from "../../utils/dbUtils";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   triggerId: string;
-  setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  // setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
-  fetchDataFromDB: () => Promise<void>;
+  // fetchDataFromDB: () => Promise<void>;
 }
 
 const BottomSheetBatchUpdate = ({
   dbConnection,
   triggerId,
-  setUserPreferences,
+  // setUserPreferences,
   userPreferences,
-  fetchDataFromDB,
+  // fetchDataFromDB,
 }: BottomSheetBatchUpdateProps) => {
   type batchUpdateObj = {
     fromDate: string;
@@ -59,6 +63,55 @@ const BottomSheetBatchUpdate = ({
     userPreferences.userGender === "male"
       ? ["group", "male-alone", "late", "missed"]
       : ["female-alone", "excused", "late", "missed"];
+
+  const executeBatchUpdate = async () => {
+    const statement = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes) VALUES  (?, ?, ?, ?, ?)`;
+    const statements = [];
+    const values = [];
+    const salahsToUpdate = batchUpdateObj.salahs;
+    const salahStatus = batchUpdateObj.status;
+    const reasons = batchUpdateObj.reasons;
+
+    const reasonsToInsert =
+      reasons.length > 0 &&
+      salahStatus !== "group" &&
+      salahStatus !== "female-alone" &&
+      salahStatus !== "excused"
+        ? reasons.join(", ")
+        : "";
+
+    const dates = eachDayOfInterval({
+      start: parseISO(batchUpdateObj.fromDate),
+      end: parseISO(batchUpdateObj.toDate),
+    }).map((date) => format(date, "yyyy-MM-dd"));
+
+    for (let i = 0; i < salahsToUpdate.length; i++) {
+      for (let x = 0; x < dates.length; x++) {
+        statements.push({
+          statement: statement,
+          values: [
+            dates[x],
+            salahsToUpdate[i],
+            salahStatus,
+            reasonsToInsert,
+            batchUpdateObj.notes,
+          ],
+        });
+      }
+    }
+
+    console.log("DATES: ", dates);
+    console.log("statements: ", statements);
+
+    try {
+      await toggleDBConnection(dbConnection, "open");
+      await dbConnection.current?.executeSet(statements);
+    } catch (error) {
+      console.error("Batch update failed: ", error);
+    } finally {
+      await toggleDBConnection(dbConnection, "close");
+    }
+  };
 
   return (
     <IonModal
@@ -208,30 +261,32 @@ const BottomSheetBatchUpdate = ({
           ></IonTextarea>
         </div>
         {/*  ${selectedStartDate ? "opacity-100" : "opacity-20"} */}
-        <button
-          className={`text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-5
+        <div className="w-full mb-5 text-center">
+          <IonButton
+            className={`w-[90%]
          
           `}
-          // onClick={async () => {
-          //   if (selectedStartDate) {
-          //     const todaysDate = startOfDay(new Date());
-          //     const selectedDate = startOfDay(new Date(selectedStartDate));
-
-          //     if (isAfter(selectedDate, todaysDate)) {
-          //       showAlert(
-          //         "Invalid Date",
-          //         "Please select a date that is not in the future",
-          //       );
-          //       return;
-          //     }
-          //     modal.current?.dismiss();
-          //     setSelectedStartDate(null);
-          //     await handleStartDateChange();
-          //   }
-          // }}
-        >
-          Next
-        </button>
+            onClick={async () => {
+              await executeBatchUpdate();
+              // if (selectedStartDate) {
+              //   const todaysDate = startOfDay(new Date());
+              //   const selectedDate = startOfDay(new Date(selectedStartDate));
+              //   if (isAfter(selectedDate, todaysDate)) {
+              //     showAlert(
+              //       "Invalid Date",
+              //       "Please select a date that is not in the future",
+              //     );
+              //     return;
+              //   }
+              //   modal.current?.dismiss();
+              //   setSelectedStartDate(null);
+              //   await handleStartDateChange();
+              // }
+            }}
+          >
+            Update
+          </IonButton>
+        </div>
       </IonContent>
     </IonModal>
   );

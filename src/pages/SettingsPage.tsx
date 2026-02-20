@@ -376,9 +376,9 @@ const SettingsPage = ({
               <BottomSheetBatchUpdate
                 dbConnection={dbConnection}
                 triggerId={"open-batch-update-sheet"}
-                setUserPreferences={setUserPreferences}
+                // setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
-                fetchDataFromDB={fetchDataFromDB}
+                // fetchDataFromDB={fetchDataFromDB}
               />
             </div>
             <div className="my-5">

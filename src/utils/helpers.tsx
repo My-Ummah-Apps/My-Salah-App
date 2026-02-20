@@ -259,7 +259,7 @@ export const scheduleFixedTimeDailyNotification = async (
     ],
   });
 
-  const pending = (await LocalNotifications.getPending()).notifications;
+  // const pending = (await LocalNotifications.getPending()).notifications;
   // console.log("FIXED DAILY NOTIFICATIONS AFTER BEING TURNED ON: ", pending);
 };
 
