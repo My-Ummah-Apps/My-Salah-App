@@ -67,7 +67,7 @@ const BottomSheetBatchUpdate = ({
   const executeBatchUpdate = async () => {
     const statement = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes) VALUES  (?, ?, ?, ?, ?)`;
     const statements = [];
-    const values = [];
+
     const salahsToUpdate = batchUpdateObj.salahs;
     const salahStatus = batchUpdateObj.status;
     const reasons = batchUpdateObj.reasons;
@@ -263,10 +263,18 @@ const BottomSheetBatchUpdate = ({
         {/*  ${selectedStartDate ? "opacity-100" : "opacity-20"} */}
         <div className="w-full mb-5 text-center">
           <IonButton
-            className={`w-[90%]
-         
-          `}
+            disabled={
+              !batchUpdateObj.fromDate ||
+              !batchUpdateObj.toDate ||
+              !batchUpdateObj.salahs.length ||
+              !batchUpdateObj.status
+            }
+            className="w-[90%]"
             onClick={async () => {
+              if (!batchUpdateObj.fromDate || !batchUpdateObj.toDate) return;
+              if (!batchUpdateObj.salahs.length) return;
+              if (!batchUpdateObj.status) return;
+
               await executeBatchUpdate();
               // if (selectedStartDate) {
               //   const todaysDate = startOfDay(new Date());
