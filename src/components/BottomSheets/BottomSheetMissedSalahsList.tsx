@@ -18,6 +18,7 @@ import { IonButton, IonContent, IonModal } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
 import { createLocalisedDate, getMissedSalahCount } from "../../utils/helpers";
 import { AutoSizer } from "react-virtualized";
+import { motion } from "framer-motion";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -75,19 +76,22 @@ const MissedSalahsListBottomSheet = ({
       throw new Error("dbConnection.current does not exist");
     }
     await dbConnection.current.run(query, values);
-    setFetchedSalahData((prev) => {
-      const copy = [...prev];
-      for (let i = 0; i < prev.length; i++) {
-        if (copy[i].date === date) {
-          for (let salah in copy[i].salahs) {
-            if (salah === salahName) {
-              copy[i].salahs[salah] = "late";
+
+    setTimeout(() => {
+      setFetchedSalahData((prev) => {
+        const copy = [...prev];
+        for (let i = 0; i < prev.length; i++) {
+          if (copy[i].date === date) {
+            for (let salah in copy[i].salahs) {
+              if (salah === salahName) {
+                copy[i].salahs[salah] = "late";
+              }
             }
           }
         }
-      }
-      return copy;
-    });
+        return copy;
+      });
+    }, 500);
   };
 
   useEffect(() => {
@@ -116,9 +120,10 @@ const MissedSalahsListBottomSheet = ({
       <div
         key={key}
         style={style}
-        className="bg-[var(--card-bg-color)] px-4 py-4 mx-3 my-3 rounded-2xl"
+        // px-4 py-4 mx-3 my-3
+        className="bg-[var(--card-bg-color)] px-4 my-3 rounded-2xl border border-[var(--app-border-color)]"
       >
-        <section className="flex items-center justify-between text-[var(--ion-text-color)]">
+        <section className="flex items-center justify-between text-[var(--ion-text-color)] py-3">
           <p>{salah}</p>
           <div
             style={{
@@ -132,15 +137,14 @@ const MissedSalahsListBottomSheet = ({
           />
         </section>
         <section
-          style={{ borderTop: "1px solid var(--app-border-color)" }}
-          className="flex items-center justify-between pt-4 mt-4 text-[var(--ion-text-color)]"
+          // style={{ borderBottom: "1px solid var(--app-border-color)" }}
+          className="flex items-center justify-between text-[var(--ion-text-color)]"
         >
           <p className="text-sm opacity-80">{createLocalisedDate(date)[1]}</p>
           <button
             className="rounded-full bg-[var(--missed-salah-sheet-btn-color)]"
             onClick={async () => {
               setIsClickedItem(key);
-              // setTimeout(() => modifySalahStatusInDB(date, salah), 250);
               await modifySalahStatusInDB(date, salah);
             }}
           >
@@ -186,7 +190,7 @@ const MissedSalahsListBottomSheet = ({
                 height={800}
                 width={width}
                 itemCount={restructuredMissedSalahList.length}
-                itemSize={110}
+                itemSize={105}
               >
                 {Row}
               </List>
@@ -194,7 +198,16 @@ const MissedSalahsListBottomSheet = ({
           </AutoSizer>
 
           {showCompletedMsg && (
-            <div className="text-center center">
+            <motion.div
+              className="text-center center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.3,
+                // layout: { duration: 0.2 },
+              }}
+            >
               <h2 className="text-lg text-center">You're all caught up</h2>
               <IonButton
                 onClick={() => {
@@ -204,7 +217,7 @@ const MissedSalahsListBottomSheet = ({
               >
                 Close
               </IonButton>
-            </div>
+            </motion.div>
           )}
         </section>{" "}
       </IonContent>

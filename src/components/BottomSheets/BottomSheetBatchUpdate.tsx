@@ -271,10 +271,6 @@ const BottomSheetBatchUpdate = ({
             }
             className="w-[90%]"
             onClick={async () => {
-              if (!batchUpdateObj.fromDate || !batchUpdateObj.toDate) return;
-              if (!batchUpdateObj.salahs.length) return;
-              if (!batchUpdateObj.status) return;
-
               await executeBatchUpdate();
               // if (selectedStartDate) {
               //   const todaysDate = startOfDay(new Date());
