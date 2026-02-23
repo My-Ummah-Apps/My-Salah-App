@@ -9,11 +9,12 @@ import {
 } from "@ionic/react";
 
 import {
+  DBResultDataObjType,
   SalahNamesType,
   SalahStatusType,
   userPreferencesType,
 } from "../../types/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -26,6 +27,9 @@ import { showToast } from "../../utils/helpers";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  handleSalahTrackingDataFromDB: (
+    DBResultAllSalahData: DBResultDataObjType[],
+  ) => Promise<void>;
   setShowBatchUpdateModal: React.Dispatch<React.SetStateAction<boolean>>;
   showBatchUpdateModal: boolean;
   // setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
@@ -35,6 +39,7 @@ interface BottomSheetBatchUpdateProps {
 
 const BottomSheetBatchUpdate = ({
   dbConnection,
+  handleSalahTrackingDataFromDB,
   setShowBatchUpdateModal,
   showBatchUpdateModal,
   // setUserPreferences,
@@ -61,64 +66,76 @@ const BottomSheetBatchUpdate = ({
     notes: "",
   });
 
-  useEffect(() => {
-    console.log("batchUpdateObj: ", batchUpdateObj);
-  }, [batchUpdateObj]);
-
   const statusArr: SalahStatusType[] =
     userPreferences.userGender === "male"
       ? ["group", "male-alone", "late", "missed"]
       : ["female-alone", "excused", "late", "missed"];
 
   const executeBatchUpdate = async () => {
-    const statement = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes) VALUES  (?, ?, ?, ?, ?)`;
-    const statements = [];
-
-    const salahsToUpdate = batchUpdateObj.salahs;
-    const salahStatus = batchUpdateObj.status;
-    const reasons = batchUpdateObj.reasons;
-
-    const reasonsToInsert =
-      reasons.length > 0 &&
-      salahStatus !== "group" &&
-      salahStatus !== "female-alone" &&
-      salahStatus !== "excused"
-        ? reasons.join(", ")
-        : "";
-
-    const dates = eachDayOfInterval({
-      start: parseISO(batchUpdateObj.fromDate),
-      end: parseISO(batchUpdateObj.toDate),
-    }).map((date) => format(date, "yyyy-MM-dd"));
-
-    for (let i = 0; i < salahsToUpdate.length; i++) {
-      for (let x = 0; x < dates.length; x++) {
-        statements.push({
-          statement: statement,
-          values: [
-            dates[x],
-            salahsToUpdate[i],
-            salahStatus,
-            reasonsToInsert,
-            batchUpdateObj.notes,
-          ],
-        });
-      }
-    }
-
-    console.log("DATES: ", dates);
-    console.log("statements: ", statements);
-
     try {
+      const statement = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes) VALUES  (?, ?, ?, ?, ?)`;
+      const statements = [];
+
+      const salahsToUpdate = batchUpdateObj.salahs;
+      const salahStatus = batchUpdateObj.status;
+      const reasons = batchUpdateObj.reasons;
+
+      const reasonsToInsert =
+        reasons.length > 0 &&
+        salahStatus !== "group" &&
+        salahStatus !== "female-alone" &&
+        salahStatus !== "excused"
+          ? reasons.join(", ")
+          : "";
+
+      const dates = eachDayOfInterval({
+        start: parseISO(batchUpdateObj.fromDate),
+        end: parseISO(batchUpdateObj.toDate),
+      }).map((date) => format(date, "yyyy-MM-dd"));
+
+      console.log("DATES: ", dates);
+
+      for (let i = 0; i < salahsToUpdate.length; i++) {
+        for (let x = 0; x < dates.length; x++) {
+          statements.push({
+            statement: statement,
+            values: [
+              dates[x],
+              salahsToUpdate[i],
+              salahStatus,
+              reasonsToInsert,
+              batchUpdateObj.notes,
+            ],
+          });
+        }
+      }
+
+      console.log("DATES: ", dates);
+      console.log("statements: ", statements);
+
       await toggleDBConnection(dbConnection, "open");
-      await dbConnection.current?.executeSet(statements);
-      await dismissUpdatingSpinner();
+
+      if (!dbConnection.current) {
+        throw new Error("dbConnection / dbconnection.current does not exist");
+      }
+      await dbConnection.current.executeSet(statements);
+
+      const DBResultAllSalahData = await dbConnection.current.query(
+        `SELECT * FROM salahDataTable`,
+      );
+
+      await handleSalahTrackingDataFromDB(
+        DBResultAllSalahData.values ?? [],
+        userPreferences.userStartDate,
+      );
+
       setShowBatchUpdateModal(false);
       showToast(`Batch Update Successful`, "long");
     } catch (error) {
       console.error("Batch update failed: ", error);
-      showToast(`Batch Update Successful, please try again - ${error}`, "long");
+      showToast(`Batch Update Failed, please try again - ${error}`, "long");
     } finally {
+      await dismissUpdatingSpinner();
       await toggleDBConnection(dbConnection, "close");
     }
   };

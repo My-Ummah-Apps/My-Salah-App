@@ -214,7 +214,7 @@ const BottomSheetSalahStatus = ({
       const flattenedSalahDBValues = salahDataToInsertIntoDB.flat();
 
       await dbConnection.current!.run(query, flattenedSalahDBValues);
-
+      // TODO: Shouldn't be mutating here, this code works but needs improvement
       for (const obj of fetchedSalahData) {
         if (selectedSalahAndDate[obj.date]) {
           selectedSalahAndDate[obj.date].forEach((item) => {

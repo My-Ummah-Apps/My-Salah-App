@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import {
+  DBResultDataObjType,
   LocationsDataObjTypeArr,
   themeType,
   userPreferencesType,
@@ -41,6 +42,9 @@ import BottomSheetBatchUpdate from "../components/BottomSheets/BottomSheetBatchU
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
+  handleSalahTrackingDataFromDB: (
+    DBResultAllSalahData: DBResultDataObjType[],
+  ) => Promise<void>;
   isAppActive: boolean;
   theme: themeType;
   handleTheme: (theme?: themeType) => string;
@@ -55,6 +59,7 @@ interface SettingsPageProps {
 const SettingsPage = ({
   sqliteConnection,
   dbConnection,
+  handleSalahTrackingDataFromDB,
   isAppActive,
   theme,
   handleTheme,
@@ -376,6 +381,7 @@ const SettingsPage = ({
               />
               <BottomSheetBatchUpdate
                 dbConnection={dbConnection}
+                handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
                 setShowBatchUpdateModal={setShowBatchUpdateModal}
                 showBatchUpdateModal={showBatchUpdateModal}
                 userPreferences={userPreferences}

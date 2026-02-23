@@ -64,6 +64,7 @@ import {
   parseISO,
   isAfter,
   startOfDay,
+  isValid,
 } from "date-fns";
 import { PreferenceType } from "./types/types";
 
@@ -240,6 +241,10 @@ const App = () => {
   // useEffect(() => {
   //   console.log("nextSalahNameAndTime: ", nextSalahNameAndTime);
   // }, [nextSalahNameAndTime]);
+
+  useEffect(() => {
+    console.log("fetchedSalahData: ", fetchedSalahData);
+  }, [fetchedSalahData]);
 
   const [theme, setTheme] = useState<themeType>("dark");
 
@@ -584,14 +589,16 @@ const App = () => {
         }
         await handleUserPreferencesDataFromDB(
           DBResultPreferences.values as PreferenceObjType[],
+          DBResultAllSalahData.values,
         );
 
-        await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        // await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
       } catch (error) {
         console.error(error);
       }
     } catch (error) {
       console.error(error);
+      return;
     } finally {
       await toggleDBConnection(dbConnection, "close");
     }
@@ -599,6 +606,7 @@ const App = () => {
 
   const handleUserPreferencesDataFromDB = async (
     DBResultPreferences: PreferenceObjType[],
+    DBResultAllSalahData: DBResultDataObjType[],
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
 
@@ -666,10 +674,6 @@ const App = () => {
         const prefName = preferenceQuery.preferenceName;
         const prefValue = preferenceQuery.preferenceValue;
 
-        if (prefName === "userStartDate") {
-          userStartDateForSalahTrackingFunc = prefValue;
-        }
-
         setUserPreferences((userPreferences: userPreferencesType) => ({
           ...userPreferences,
           [prefName]: prefName === "reasons" ? prefValue.split(",") : prefValue,
@@ -693,24 +697,48 @@ const App = () => {
     };
 
     await batchAssignPreferences();
-  };
 
-  // ? Using userStartDateForSalahTrackingFunc like this is apparently bad practice, but for now its working
-  let userStartDateForSalahTrackingFunc: string;
-  useEffect(() => {
-    userStartDateForSalahTrackingFunc = userPreferences.userStartDate;
-  }, [userPreferences.userStartDate]);
+    const startDatePref = DBResultPreferencesValues.find(
+      (row) => row.preferenceName === "userStartDate",
+    )?.preferenceValue;
+
+    console.log("START DATE: ", startDatePref);
+
+    if (!startDatePref) {
+      throw new Error("userStartDate not found in preferences");
+    }
+
+    await handleSalahTrackingDataFromDB(DBResultAllSalahData, startDatePref);
+  };
 
   const handleSalahTrackingDataFromDB = async (
     DBResultAllSalahData: DBResultDataObjType[],
+    userStartDate,
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
     const missedSalahObj: SalahByDateObjType = {};
     const todaysDate = new Date();
+    // const userStartDateFormattedToDateObject: Date = parse(
+    //   userStartDate,
+    //   "yyyy-MM-dd",
+    //   new Date(),
+    // );
     const userStartDateFormattedToDateObject: Date = parse(
-      userStartDateForSalahTrackingFunc,
+      userStartDate,
       "yyyy-MM-dd",
       new Date(),
+    );
+
+    if (!isValid(userStartDateFormattedToDateObject)) {
+      console.error("Invalid start date, ", userStartDate);
+      return;
+    }
+
+    console.log("userStartDate:", userStartDate);
+    console.log("Parsed Start Date:", userStartDateFormattedToDateObject);
+    console.log(
+      "Is Valid:",
+      !isNaN(userStartDateFormattedToDateObject.getTime()),
     );
 
     const datesFromStartToToday: string[] = eachDayOfInterval({
@@ -727,7 +755,7 @@ const App = () => {
     // }
 
     // const dict: { [date: string]: Entry[] } = {};
-    const dict = {};
+    const dict: Record<string, DBResultDataObjType[]> = {};
 
     for (let i = 0; i < DBResultAllSalahData.length; i++) {
       const currentEntry = DBResultAllSalahData[i];
@@ -739,9 +767,9 @@ const App = () => {
       dict[currentEntry.date].push(currentEntry);
     }
 
-    for (let i = 0; i < datesFromStartToToday.length; i++) {
+    for (let j = 0; j < datesFromStartToToday.length; j++) {
       let singleSalahObj: SalahRecordType = {
-        date: datesFromStartToToday[i],
+        date: datesFromStartToToday[j],
         salahs: {
           Fajr: "",
           Dhuhr: "",
@@ -751,7 +779,7 @@ const App = () => {
         },
       };
 
-      const currentDate = datesFromStartToToday[i];
+      const currentDate = datesFromStartToToday[j];
 
       const dataForCurrentDate = dict[currentDate] || [];
 
@@ -930,11 +958,11 @@ const App = () => {
               render={() => (
                 <HomePage
                   dbConnection={dbConnection}
+                  setFetchedSalahData={setFetchedSalahData}
                   setUserPreferences={setUserPreferences}
                   setShowJoyRideEditIcon={setShowJoyRideEditIcon}
                   showJoyRideEditIcon={showJoyRideEditIcon}
                   userPreferences={userPreferences}
-                  setFetchedSalahData={setFetchedSalahData}
                   fetchedSalahData={fetchedSalahData}
                   setMissedSalahList={setMissedSalahList}
                   setShowMissedSalahsSheet={setShowMissedSalahsSheet}
@@ -955,6 +983,7 @@ const App = () => {
                   sqliteConnection={sqliteConnection}
                   dbConnection={dbConnection}
                   setUserPreferences={setUserPreferences}
+                  handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
                   isAppActive={isAppActive}
                   theme={theme}
                   handleTheme={handleTheme}
