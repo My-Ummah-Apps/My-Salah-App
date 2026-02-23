@@ -713,7 +713,7 @@ const App = () => {
 
   const handleSalahTrackingDataFromDB = async (
     DBResultAllSalahData: DBResultDataObjType[],
-    userStartDate,
+    userStartDate: string,
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
     const missedSalahObj: SalahByDateObjType = {};

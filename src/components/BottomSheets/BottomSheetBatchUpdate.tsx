@@ -29,6 +29,7 @@ interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   handleSalahTrackingDataFromDB: (
     DBResultAllSalahData: DBResultDataObjType[],
+    userStartDate: string,
   ) => Promise<void>;
   setShowBatchUpdateModal: React.Dispatch<React.SetStateAction<boolean>>;
   showBatchUpdateModal: boolean;

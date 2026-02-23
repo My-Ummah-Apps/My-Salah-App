@@ -172,7 +172,7 @@ const MissedSalahsListBottomSheet = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonContent className="relative">
+      <IonContent scrollY={false} className="relative">
         <section className="mt-10 mb-10 text-white">
           <h1
             className={`mx-2 my-4 text-lg text-center text-[var(--ion-text-color)] ${

@@ -44,6 +44,7 @@ interface SettingsPageProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   handleSalahTrackingDataFromDB: (
     DBResultAllSalahData: DBResultDataObjType[],
+    userStartDate: string,
   ) => Promise<void>;
   isAppActive: boolean;
   theme: themeType;
@@ -476,18 +477,18 @@ const SettingsPage = ({
               subText={"Report Bugs / Request Features"}
               onClick={() => {
                 link(
-                  "mailto: contact@myummahapps.com?subject=My Salah App Feedback",
+                  "mailto: mohammed@mohammedpatel.dev?subject=My Salah App Feedback",
                 );
               }}
             />
-            <SettingIndividual
+            {/* <SettingIndividual
               indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Website"}
-              subText={"Visit our website"}
+              subText={"Visit website"}
               onClick={() => {
-                link("https://myummahapps.com/");
+
               }}
-            />
+            /> */}
             <SettingIndividual
               indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Privacy Policy"}
