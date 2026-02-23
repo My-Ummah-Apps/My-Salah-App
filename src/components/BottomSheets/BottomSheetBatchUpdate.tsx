@@ -5,6 +5,7 @@ import {
   IonInput,
   IonModal,
   IonTextarea,
+  useIonLoading,
 } from "@ionic/react";
 
 import {
@@ -24,7 +25,8 @@ import { toggleDBConnection } from "../../utils/dbUtils";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  triggerId: string;
+  setShowBatchUpdateModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showBatchUpdateModal: boolean;
   // setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   // fetchDataFromDB: () => Promise<void>;
@@ -32,11 +34,14 @@ interface BottomSheetBatchUpdateProps {
 
 const BottomSheetBatchUpdate = ({
   dbConnection,
-  triggerId,
+  setShowBatchUpdateModal,
+  showBatchUpdateModal,
   // setUserPreferences,
   userPreferences,
   // fetchDataFromDB,
 }: BottomSheetBatchUpdateProps) => {
+  const [presentUpdatingSpinner, dismissUpdatingSpinner] = useIonLoading();
+
   type batchUpdateObj = {
     fromDate: string;
     toDate: string;
@@ -115,182 +120,188 @@ const BottomSheetBatchUpdate = ({
 
   return (
     <IonModal
-      //   ref={modal}
-      // style={{
-      //   "--width": "fit-content",
-      //   "--min-width": "250px",
-      //   "--height": "fit-content",
-      //   "--border-radius": "6px",
-      //   "--box-shadow": "0 28px 48px rgba(0, 0, 0, 0.4)",
-      // }}
       mode="ios"
       expandToScroll={false}
-      // className="modal-fit-content"
-      trigger={triggerId}
+      isOpen={showBatchUpdateModal}
+      onDidDismiss={() => setShowBatchUpdateModal(false)}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
       <IonContent>
-        <section className="p-10 pb-5">
-          <div className="text-center">
-            <p className="">From</p>
-            <IonInput
-              className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-              placeholder="&#x1F5D3;"
-              onKeyDown={(e) => {
-                // e.preventDefault();
-              }}
-              onIonChange={(e) => {
-                setBatchUpdateObj((prev) => ({
-                  ...prev,
-                  fromDate: e.detail.value ?? "",
-                }));
-              }}
-              type="date"
-              dir="auto"
-              name="start-date-picker"
-              min="1950-01-01"
-              max={new Date().toISOString().split("T")[0]}
-            ></IonInput>
+        <section
+        //  className="flex flex-col justify-center"
+        >
+          <div className="p-10 pb-5">
+            <div className="text-center">
+              <p className="">From</p>
+              <IonInput
+                className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                placeholder="&#x1F5D3;"
+                onKeyDown={(e) => {
+                  // e.preventDefault();
+                }}
+                onIonChange={(e) => {
+                  setBatchUpdateObj((prev) => ({
+                    ...prev,
+                    fromDate: e.detail.value ?? "",
+                  }));
+                }}
+                type="date"
+                dir="auto"
+                name="start-date-picker"
+                min="1950-01-01"
+                max={new Date().toISOString().split("T")[0]}
+              ></IonInput>
+            </div>
+            <div className="text-center">
+              <p className="mt-5">To</p>
+              <IonInput
+                className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                placeholder="&#x1F5D3;"
+                onKeyDown={(e) => {
+                  // e.preventDefault();
+                }}
+                onIonChange={(e) => {
+                  setBatchUpdateObj((prev) => ({
+                    ...prev,
+                    toDate: e.detail.value ?? "",
+                  }));
+                }}
+                // ref={datePickerRef}
+                type="date"
+                dir="auto"
+                name="start-date-picker"
+                min="1950-01-01"
+                max={new Date().toISOString().split("T")[0]}
+              ></IonInput>
+            </div>
           </div>
-          <div className="text-center">
-            <p className="mt-5">To</p>
-            <IonInput
-              className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-              placeholder="&#x1F5D3;"
-              onKeyDown={(e) => {
-                // e.preventDefault();
-              }}
-              onIonChange={(e) => {
+          <section className="mb-5 text-center">
+            <p className="mb-2">Status</p>
+            {statusArr.map((status) => (
+              <IonCheckbox
+                style={{
+                  "--size": "16px",
+                  "--border-color": "#888888",
+                }}
+                key={status}
+                checked={batchUpdateObj.status === status}
+                onIonChange={() => {
+                  setBatchUpdateObj((prev) => ({
+                    ...prev,
+                    status: status,
+                  }));
+                }}
+                labelPlacement="stacked"
+              >
+                {status}
+              </IonCheckbox>
+            ))}
+          </section>
+          <section className="mb-5 text-center">
+            <p className="mb-2">Which Salahs?</p>
+            {salahNamesArr.map((salahName) => (
+              <IonCheckbox
+                style={{
+                  "--size": "16px",
+                  "--border-color": "#888888",
+                }}
+                key={salahName}
+                checked={batchUpdateObj.salahs.includes(salahName)}
+                onIonChange={() => {
+                  setBatchUpdateObj((prev) => ({
+                    ...prev,
+                    salahs: prev.salahs.includes(salahName)
+                      ? prev.salahs.filter((s) => s !== salahName)
+                      : [...prev.salahs, salahName],
+                  }));
+                }}
+                labelPlacement="stacked"
+              >
+                {salahName}
+              </IonCheckbox>
+            ))}
+          </section>
+          <section className="">
+            <p className="mb-5 text-center">Reasons</p>
+            {userPreferences.reasons.map((reason) => (
+              <IonCheckbox
+                style={{
+                  "--size": "16px",
+                  "--border-color": "#888888",
+                }}
+                checked={batchUpdateObj.reasons.includes(reason)}
+                key={reason}
+                labelPlacement="stacked"
+                onIonChange={() => {
+                  setBatchUpdateObj((prev) => ({
+                    ...prev,
+                    reasons: prev.reasons.includes(reason)
+                      ? prev.reasons.filter((r) => r !== reason)
+                      : [...prev.reasons, reason],
+                  }));
+                }}
+              >
+                {reason}
+              </IonCheckbox>
+            ))}
+          </section>
+          <div className="m-4 text-sm notes-wrap">
+            <IonTextarea
+              aria-label="notes"
+              autoGrow={true}
+              rows={1}
+              className="pl-2 rounded-lg text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"
+              placeholder="Notes"
+              value={batchUpdateObj.notes}
+              onIonInput={(e) => {
                 setBatchUpdateObj((prev) => ({
                   ...prev,
-                  toDate: e.detail.value ?? "",
+                  notes: e.detail.value ?? "",
                 }));
               }}
-              // ref={datePickerRef}
-              type="date"
-              dir="auto"
-              name="start-date-picker"
-              min="1950-01-01"
-              max={new Date().toISOString().split("T")[0]}
-            ></IonInput>
+            ></IonTextarea>
+          </div>
+          {/*  ${selectedStartDate ? "opacity-100" : "opacity-20"} */}
+          <div className="w-full mb-5 text-center">
+            <IonButton
+              disabled={
+                !batchUpdateObj.fromDate ||
+                !batchUpdateObj.toDate ||
+                !batchUpdateObj.salahs.length ||
+                !batchUpdateObj.status
+              }
+              className="w-[90%]"
+              onClick={async () => {
+                await presentUpdatingSpinner({
+                  message: "Batch Updating...",
+                  backdropDismiss: false,
+                  cssClass: "ion-spinner",
+                });
+
+                await executeBatchUpdate();
+                await dismissUpdatingSpinner();
+                setShowBatchUpdateModal(false);
+                // if (selectedStartDate) {
+                //   const todaysDate = startOfDay(new Date());
+                //   const selectedDate = startOfDay(new Date(selectedStartDate));
+                //   if (isAfter(selectedDate, todaysDate)) {
+                //     showAlert(
+                //       "Invalid Date",
+                //       "Please select a date that is not in the future",
+                //     );
+                //     return;
+                //   }
+                //   modal.current?.dismiss();
+                //   setSelectedStartDate(null);
+                //   await handleStartDateChange();
+                // }
+              }}
+            >
+              Update
+            </IonButton>
           </div>
         </section>
-        <section>
-          {statusArr.map((status) => (
-            <IonCheckbox
-              style={{
-                "--size": "16px",
-                "--border-color": "#888888",
-              }}
-              key={status}
-              checked={batchUpdateObj.status === status}
-              onIonChange={() => {
-                setBatchUpdateObj((prev) => ({
-                  ...prev,
-                  status: status,
-                }));
-              }}
-              labelPlacement="stacked"
-            >
-              {status}
-            </IonCheckbox>
-          ))}
-        </section>
-        <section className="mb-5">
-          {salahNamesArr.map((salahName) => (
-            <IonCheckbox
-              style={{
-                "--size": "16px",
-                "--border-color": "#888888",
-              }}
-              key={salahName}
-              checked={batchUpdateObj.salahs.includes(salahName)}
-              onIonChange={() => {
-                setBatchUpdateObj((prev) => ({
-                  ...prev,
-                  salahs: prev.salahs.includes(salahName)
-                    ? prev.salahs.filter((s) => s !== salahName)
-                    : [...prev.salahs, salahName],
-                }));
-              }}
-              labelPlacement="stacked"
-            >
-              {salahName}
-            </IonCheckbox>
-          ))}
-        </section>
-        <section>
-          <p>Reasons</p>
-          {userPreferences.reasons.map((reason) => (
-            <IonCheckbox
-              style={{
-                "--size": "16px",
-                "--border-color": "#888888",
-              }}
-              checked={batchUpdateObj.reasons.includes(reason)}
-              key={reason}
-              labelPlacement="stacked"
-              onIonChange={() => {
-                setBatchUpdateObj((prev) => ({
-                  ...prev,
-                  reasons: prev.reasons.includes(reason)
-                    ? prev.reasons.filter((r) => r !== reason)
-                    : [...prev.reasons, reason],
-                }));
-              }}
-            >
-              {reason}
-            </IonCheckbox>
-          ))}
-        </section>
-        <div className="text-sm notes-wrap">
-          <IonTextarea
-            aria-label="notes"
-            autoGrow={true}
-            rows={1}
-            className="pl-2 rounded-lg text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"
-            placeholder="Notes"
-            value={batchUpdateObj.notes}
-            onIonInput={(e) => {
-              setBatchUpdateObj((prev) => ({
-                ...prev,
-                notes: e.detail.value ?? "",
-              }));
-            }}
-          ></IonTextarea>
-        </div>
-        {/*  ${selectedStartDate ? "opacity-100" : "opacity-20"} */}
-        <div className="w-full mb-5 text-center">
-          <IonButton
-            disabled={
-              !batchUpdateObj.fromDate ||
-              !batchUpdateObj.toDate ||
-              !batchUpdateObj.salahs.length ||
-              !batchUpdateObj.status
-            }
-            className="w-[90%]"
-            onClick={async () => {
-              await executeBatchUpdate();
-              // if (selectedStartDate) {
-              //   const todaysDate = startOfDay(new Date());
-              //   const selectedDate = startOfDay(new Date(selectedStartDate));
-              //   if (isAfter(selectedDate, todaysDate)) {
-              //     showAlert(
-              //       "Invalid Date",
-              //       "Please select a date that is not in the future",
-              //     );
-              //     return;
-              //   }
-              //   modal.current?.dismiss();
-              //   setSelectedStartDate(null);
-              //   await handleStartDateChange();
-              // }
-            }}
-          >
-            Update
-          </IonButton>
-        </div>
       </IonContent>
     </IonModal>
   );

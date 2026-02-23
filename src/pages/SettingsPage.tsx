@@ -84,6 +84,7 @@ const SettingsPage = ({
   ] = useState<boolean>(
     userPreferences.showMissedSalahCount === "0" ? false : true,
   );
+  const [showBatchUpdateModal, setShowBatchUpdateModal] = useState(false);
 
   // const page = useRef(null);
   // const [presentingElement, setPresentingElement] =
@@ -375,7 +376,8 @@ const SettingsPage = ({
               />
               <BottomSheetBatchUpdate
                 dbConnection={dbConnection}
-                triggerId={"open-batch-update-sheet"}
+                setShowBatchUpdateModal={setShowBatchUpdateModal}
+                showBatchUpdateModal={showBatchUpdateModal}
                 // setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 // fetchDataFromDB={fetchDataFromDB}

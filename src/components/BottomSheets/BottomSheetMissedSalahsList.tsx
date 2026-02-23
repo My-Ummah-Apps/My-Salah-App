@@ -120,7 +120,6 @@ const MissedSalahsListBottomSheet = ({
       <div
         key={key}
         style={style}
-        // px-4 py-4 mx-3 my-3
         className="bg-[var(--card-bg-color)] px-4 my-3 rounded-2xl border border-[var(--app-border-color)]"
       >
         <section className="flex items-center justify-between text-[var(--ion-text-color)] py-3">

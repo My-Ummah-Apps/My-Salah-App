@@ -291,7 +291,7 @@ ion-fab {
   color: var(--ion-text-color);
 }
 
-.detecting-location-spinner {
+.ion-spinner {
   color: var(--ion-text-color);
 }
 

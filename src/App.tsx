@@ -720,6 +720,25 @@ const App = () => {
       .map((date) => format(date, "yyyy-MM-dd"))
       .reverse();
 
+    //    if (!DBResultAllSalahData?.length) return
+
+    // type Entry = {
+    //   date:
+    // }
+
+    // const dict: { [date: string]: Entry[] } = {};
+    const dict = {};
+
+    for (let i = 0; i < DBResultAllSalahData.length; i++) {
+      const currentEntry = DBResultAllSalahData[i];
+
+      if (!dict[currentEntry.date]) {
+        dict[currentEntry.date] = [];
+      }
+
+      dict[currentEntry.date].push(currentEntry);
+    }
+
     for (let i = 0; i < datesFromStartToToday.length; i++) {
       let singleSalahObj: SalahRecordType = {
         date: datesFromStartToToday[i],
@@ -734,22 +753,18 @@ const App = () => {
 
       const currentDate = datesFromStartToToday[i];
 
-      // ? Below if statement potentially needs to be moved as it's currently being called on every loop, if does need to be left in, refactor to DBResultAllSalahData?.length
-      if (DBResultAllSalahData && DBResultAllSalahData.length > 0) {
-        for (let i = 0; i < DBResultAllSalahData.length; i++) {
-          if (DBResultAllSalahData[i].date === currentDate) {
-            let salahName: SalahNamesType = DBResultAllSalahData[i].salahName;
-            let salahStatus: SalahStatusType =
-              DBResultAllSalahData[i].salahStatus;
-            singleSalahObj.salahs[salahName] = salahStatus;
+      const dataForCurrentDate = dict[currentDate] || [];
 
-            if (salahStatus === "missed") {
-              if (DBResultAllSalahData[i].date in missedSalahObj) {
-                missedSalahObj[DBResultAllSalahData[i].date].push(salahName);
-              } else {
-                missedSalahObj[DBResultAllSalahData[i].date] = [salahName];
-              }
-            }
+      for (let i = 0; i < dataForCurrentDate.length; i++) {
+        let salahName: SalahNamesType = dataForCurrentDate[i].salahName;
+        let salahStatus: SalahStatusType = dataForCurrentDate[i].salahStatus;
+        singleSalahObj.salahs[salahName] = salahStatus;
+
+        if (salahStatus === "missed") {
+          if (dataForCurrentDate[i].date in missedSalahObj) {
+            missedSalahObj[dataForCurrentDate[i].date].push(salahName);
+          } else {
+            missedSalahObj[dataForCurrentDate[i].date] = [salahName];
           }
         }
       }

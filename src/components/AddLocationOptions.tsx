@@ -136,7 +136,7 @@ const AddLocationOptions = ({
       await presentLocationSpinner({
         message: "Detecting location...",
         backdropDismiss: false,
-        cssClass: "detecting-location-spinner",
+        cssClass: "ion-spinner",
       });
 
       const location = await Geolocation.getCurrentPosition({
