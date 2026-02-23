@@ -22,6 +22,7 @@ import {
 import { eachDayOfInterval, format, parseISO } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { toggleDBConnection } from "../../utils/dbUtils";
+import { showToast } from "../../utils/helpers";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -111,8 +112,12 @@ const BottomSheetBatchUpdate = ({
     try {
       await toggleDBConnection(dbConnection, "open");
       await dbConnection.current?.executeSet(statements);
+      await dismissUpdatingSpinner();
+      setShowBatchUpdateModal(false);
+      showToast(`Batch Update Successful`, "long");
     } catch (error) {
       console.error("Batch update failed: ", error);
+      showToast(`Batch Update Successful, please try again - ${error}`, "long");
     } finally {
       await toggleDBConnection(dbConnection, "close");
     }
@@ -123,7 +128,17 @@ const BottomSheetBatchUpdate = ({
       mode="ios"
       expandToScroll={false}
       isOpen={showBatchUpdateModal}
-      onDidDismiss={() => setShowBatchUpdateModal(false)}
+      onDidDismiss={() => {
+        setShowBatchUpdateModal(false);
+        setBatchUpdateObj({
+          fromDate: "",
+          toDate: "",
+          salahs: [],
+          status: "",
+          reasons: [],
+          notes: "",
+        });
+      }}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
@@ -280,8 +295,7 @@ const BottomSheetBatchUpdate = ({
                 });
 
                 await executeBatchUpdate();
-                await dismissUpdatingSpinner();
-                setShowBatchUpdateModal(false);
+
                 // if (selectedStartDate) {
                 //   const todaysDate = startOfDay(new Date());
                 //   const selectedDate = startOfDay(new Date(selectedStartDate));

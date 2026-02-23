@@ -370,7 +370,7 @@ const SettingsPage = ({
                 fetchDataFromDB={fetchDataFromDB}
               />
               <SettingIndividual
-                id="open-batch-update-sheet"
+                onClick={() => setShowBatchUpdateModal(true)}
                 headingText={"Batch update Salah"}
                 subText={`Update Salah over multiple dates`}
               />
@@ -378,9 +378,7 @@ const SettingsPage = ({
                 dbConnection={dbConnection}
                 setShowBatchUpdateModal={setShowBatchUpdateModal}
                 showBatchUpdateModal={showBatchUpdateModal}
-                // setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
-                // fetchDataFromDB={fetchDataFromDB}
               />
             </div>
             <div className="my-5">
