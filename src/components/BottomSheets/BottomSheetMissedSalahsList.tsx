@@ -119,10 +119,15 @@ const MissedSalahsListBottomSheet = ({
     return (
       <div
         key={key}
-        style={style}
-        className="bg-[var(--card-bg-color)] px-4 my-3 rounded-2xl border border-[var(--app-border-color)]"
+        // style={style}
+        style={{
+          ...style,
+          height: (style.height as number) - 12,
+          top: (style.top as number) + 6,
+        }}
+        className="bg-[var(--card-bg-color)] px-4 rounded-2xl"
       >
-        <section className="flex items-center justify-between text-[var(--ion-text-color)] py-3">
+        <div className="flex items-center justify-between text-[var(--ion-text-color)] py-3 border border-[var(--app-border-color)]">
           <p>{salah}</p>
           <div
             style={{
@@ -132,12 +137,12 @@ const MissedSalahsListBottomSheet = ({
                   : salahStatusColorsHexCodes["missed"],
               transition: "background-color 250ms ease",
             }}
-            className="w-[1.3rem] h-[1.3rem] rounded-md"
+            className="w-[1.3rem] h-[1.3rem] rounded-md "
           />
-        </section>
-        <section
+        </div>
+        <div
           // style={{ borderBottom: "1px solid var(--app-border-color)" }}
-          className="flex items-center justify-between text-[var(--ion-text-color)]"
+          className="flex items-center justify-between text-[var(--ixon-text-color)] py-3"
         >
           <p className="text-sm opacity-80">{createLocalisedDate(date)[1]}</p>
           <button
@@ -151,7 +156,7 @@ const MissedSalahsListBottomSheet = ({
               <p>Mark As Done</p>
             </section>
           </button>
-        </section>
+        </div>
       </div>
     );
   };
@@ -182,19 +187,20 @@ const MissedSalahsListBottomSheet = ({
             You have {getMissedSalahCount(missedSalahList)} missed Salah to make
             up
           </h1>
-
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <List
-                height={800}
-                width={width}
-                itemCount={restructuredMissedSalahList.length}
-                itemSize={105}
-              >
-                {Row}
-              </List>
-            )}
-          </AutoSizer>
+          <div className="px-4">
+            <AutoSizer disableHeight>
+              {({ width }) => (
+                <List
+                  height={800}
+                  width={width}
+                  itemCount={restructuredMissedSalahList.length}
+                  itemSize={125}
+                >
+                  {Row}
+                </List>
+              )}
+            </AutoSizer>
+          </div>
 
           {showCompletedMsg && (
             <motion.div
@@ -207,7 +213,9 @@ const MissedSalahsListBottomSheet = ({
                 // layout: { duration: 0.2 },
               }}
             >
-              <h2 className="text-lg text-center">You're all caught up</h2>
+              <h2 className="text-lg text-center text-[var(--ion-text-color)]">
+                You're all caught up
+              </h2>
               <IonButton
                 onClick={() => {
                   setShowMissedSalahsSheet(false);

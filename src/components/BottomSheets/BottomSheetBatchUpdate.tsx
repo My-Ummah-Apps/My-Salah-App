@@ -20,10 +20,21 @@ import {
   MODAL_BREAKPOINTS,
   salahNamesArr,
 } from "../../utils/constants";
-import { eachDayOfInterval, format, parseISO } from "date-fns";
+import {
+  eachDayOfInterval,
+  format,
+  isAfter,
+  isBefore,
+  parseISO,
+  startOfDay,
+} from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { toggleDBConnection } from "../../utils/dbUtils";
-import { showToast, upperCaseFirstLetter } from "../../utils/helpers";
+import {
+  showAlert,
+  showToast,
+  upperCaseFirstLetter,
+} from "../../utils/helpers";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -197,7 +208,7 @@ const BottomSheetBatchUpdate = ({
                 type="date"
                 dir="auto"
                 name="start-date-picker"
-                min="1950-01-01"
+                min={userPreferences.userStartDate}
                 max={new Date().toISOString().split("T")[0]}
               ></IonInput>
             </div>
@@ -219,7 +230,7 @@ const BottomSheetBatchUpdate = ({
                 type="date"
                 dir="auto"
                 name="start-date-picker"
-                min="1950-01-01"
+                min={userPreferences.userStartDate}
                 max={new Date().toISOString().split("T")[0]}
               ></IonInput>
             </div>
@@ -340,28 +351,53 @@ const BottomSheetBatchUpdate = ({
               }
               className="w-[90%]"
               onClick={async () => {
+                const fromDate = startOfDay(parseISO(batchUpdateObj.fromDate));
+                const toDate = startOfDay(parseISO(batchUpdateObj.toDate));
+                const minDate = startOfDay(
+                  parseISO(userPreferences.userStartDate),
+                );
+
+                if (!batchUpdateObj.fromDate || !batchUpdateObj.toDate) {
+                  showAlert("No Dates Selected", "Please select dates");
+                  return;
+                }
+
+                const todaysDate = startOfDay(new Date());
+                // const fromDate = startOfDay(
+                //   new Date(batchUpdateObj.fromDate),
+                // );
+                // const toDate = startOfDay(new Date(batchUpdateObj.toDate));
+
+                if (isBefore(fromDate, minDate) || isBefore(toDate, minDate)) {
+                  showAlert(
+                    "Invalid Date",
+                    `Date cannot be earlier than your start date: ${userPreferences.userStartDate}`,
+                  );
+                  return;
+                }
+
+                if (isAfter(fromDate, toDate)) {
+                  showAlert(
+                    "Invalid Date Range",
+                    "Please select a valid date range",
+                  );
+                  return;
+                }
+
+                if (
+                  isAfter(fromDate, todaysDate) ||
+                  isAfter(toDate, todaysDate)
+                ) {
+                  showAlert("Invalid Date", "Dates cannot be in the future");
+                  return;
+                }
+
                 await presentUpdatingSpinner({
                   message: "Batch Updating...",
                   backdropDismiss: false,
                   cssClass: "ion-spinner",
                 });
-
                 await executeBatchUpdate();
-
-                // if (selectedStartDate) {
-                //   const todaysDate = startOfDay(new Date());
-                //   const selectedDate = startOfDay(new Date(selectedStartDate));
-                //   if (isAfter(selectedDate, todaysDate)) {
-                //     showAlert(
-                //       "Invalid Date",
-                //       "Please select a date that is not in the future",
-                //     );
-                //     return;
-                //   }
-                //   modal.current?.dismiss();
-                //   setSelectedStartDate(null);
-                //   await handleStartDateChange();
-                // }
               }}
             >
               Update

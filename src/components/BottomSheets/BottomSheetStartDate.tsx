@@ -7,11 +7,12 @@ import {
 } from "../../utils/helpers";
 import { userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
-import { isAfter, startOfDay } from "date-fns";
+import { isAfter, isBefore, parseISO, startOfDay } from "date-fns";
 import { IonModal } from "@ionic/react";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   INITIAL_MODAL_BREAKPOINT,
+  MIN_START_DATE,
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 
@@ -48,9 +49,11 @@ const BottomSheetStartDate = ({
         );
       } else {
         showAlert("Invalid Date", "Please enter a valid date");
+        return;
       }
     } else {
       console.warn("datePickerRef.current null");
+      return;
     }
     showToast(
       `Start date changed to ${createLocalisedDate(selectedStartDate!)[1]}`,
@@ -91,19 +94,29 @@ const BottomSheetStartDate = ({
             type="date"
             dir="auto"
             name="start-date-picker"
-            min="1950-01-01"
+            min={MIN_START_DATE}
             max={new Date().toISOString().split("T")[0]}
           ></input>
         </section>
       </div>
       <button
-        className={`text-base border-none rounded-xl bg-[#5c6bc0] text-white w-[90%] p-3 mx-auto mb-[7%] ${
+        className={`text-base border-none rounded-xl bg-[#3880ff] text-white w-[90%] p-3 mx-auto mb-[7%] ${
           selectedStartDate ? "opacity-100" : "opacity-20"
         }`}
         onClick={async () => {
           if (selectedStartDate) {
             const todaysDate = startOfDay(new Date());
-            const selectedDate = startOfDay(new Date(selectedStartDate));
+            // const selectedDate = startOfDay(new Date(selectedStartDate));
+            const selectedDate = startOfDay(parseISO(selectedStartDate));
+            const minDate = startOfDay(parseISO(MIN_START_DATE));
+
+            if (isBefore(selectedDate, minDate)) {
+              showAlert(
+                "Invalid Date",
+                `Date cannot be earlier than ${createLocalisedDate(MIN_START_DATE)[1]}`,
+              );
+              return;
+            }
 
             if (isAfter(selectedDate, todaysDate)) {
               showAlert(

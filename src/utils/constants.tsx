@@ -8,6 +8,8 @@ import {
 export const MODAL_BREAKPOINTS = [0, 1];
 export const INITIAL_MODAL_BREAKPOINT = 1;
 
+export const MIN_START_DATE = "1980-01-01";
+
 export const defaultReasons =
   "Alarm,Appointment,Caregiving,Education,Emergency,Family/Friends,Gaming,Guests,Health,Leisure,Shopping,Sleep,Sports,Travel,TV,Other,Work";
 
