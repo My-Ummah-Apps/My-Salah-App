@@ -425,6 +425,8 @@ export const setAdhanLibraryDefaults = async (
 ) => {
   // if (!userPreferences.prayerCalculationMethod) return;
 
+  console.log("SETTING DEFAULTS");
+
   if (!userLocations) {
     console.error(
       "Unable to set calculation method as no user locations exist",
