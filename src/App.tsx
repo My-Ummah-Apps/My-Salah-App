@@ -242,10 +242,6 @@ const App = () => {
   //   console.log("nextSalahNameAndTime: ", nextSalahNameAndTime);
   // }, [nextSalahNameAndTime]);
 
-  useEffect(() => {
-    console.log("fetchedSalahData: ", fetchedSalahData);
-  }, [fetchedSalahData]);
-
   const [theme, setTheme] = useState<themeType>("dark");
 
   const handleTheme = (theme?: themeType) => {
@@ -734,12 +730,12 @@ const App = () => {
       return;
     }
 
-    console.log("userStartDate:", userStartDate);
-    console.log("Parsed Start Date:", userStartDateFormattedToDateObject);
-    console.log(
-      "Is Valid:",
-      !isNaN(userStartDateFormattedToDateObject.getTime()),
-    );
+    // console.log("userStartDate:", userStartDate);
+    // console.log("Parsed Start Date:", userStartDateFormattedToDateObject);
+    // console.log(
+    //   "Is Valid:",
+    //   !isNaN(userStartDateFormattedToDateObject.getTime()),
+    // );
 
     const datesFromStartToToday: string[] = eachDayOfInterval({
       start: userStartDateFormattedToDateObject,
