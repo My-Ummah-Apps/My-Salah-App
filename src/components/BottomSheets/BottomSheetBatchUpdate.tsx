@@ -86,7 +86,7 @@ const BottomSheetBatchUpdate = ({
   const executeBatchUpdate = async () => {
     try {
       const statement = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes) VALUES  (?, ?, ?, ?, ?)`;
-      // const statements = [];
+      const statements = [];
 
       const salahsToUpdate = batchUpdateObj.salahs;
       const salahStatus = batchUpdateObj.status;
@@ -105,8 +105,6 @@ const BottomSheetBatchUpdate = ({
         end: parseISO(batchUpdateObj.toDate),
       }).map((date) => format(date, "yyyy-MM-dd"));
 
-      await toggleDBConnection(dbConnection, "open");
-
       // console.log("DATES: ", dates);
 
       // for (let i = 0; i < salahsToUpdate.length; i++) {
@@ -123,29 +121,60 @@ const BottomSheetBatchUpdate = ({
       //     });
       //   }
       // }
-      // await dbConnection.current?.execute("BEGIN TRANSACTION");
+
+      const BATCH_SIZE = 500;
+
+      if (!dbConnection.current) {
+        throw new Error("dbConnection / dbconnection.current does not exist");
+      }
+
+      await toggleDBConnection(dbConnection, "open");
 
       for (let i = 0; i < salahsToUpdate.length; i++) {
         for (let x = 0; x < dates.length; x++) {
-          await dbConnection.current?.run(statement, [
-            dates[x],
-            salahsToUpdate[i],
-            salahStatus,
-            reasonsToInsert,
-            batchUpdateObj.notes,
-          ]);
+          statements.push({
+            statement: statement,
+            values: [
+              dates[x],
+              salahsToUpdate[i],
+              salahStatus,
+              reasonsToInsert,
+              batchUpdateObj.notes,
+            ],
+          });
+
+          if (statements.length === BATCH_SIZE) {
+            await dbConnection.current.executeSet(statements);
+            statements.length = 0; // clear array
+          }
         }
       }
+
+      // flush remaining
+      if (statements.length > 0) {
+        await dbConnection.current.executeSet(statements);
+      }
+
+      // await dbConnection.current?.execute("BEGIN TRANSACTION");
+
+      // for (let i = 0; i < salahsToUpdate.length; i++) {
+      //   for (let x = 0; x < dates.length; x++) {
+      //     await dbConnection.current?.run(statement, [
+      //       dates[x],
+      //       salahsToUpdate[i],
+      //       salahStatus,
+      //       reasonsToInsert,
+      //       batchUpdateObj.notes,
+      //     ]);
+      //   }
+      // }
 
       // await dbConnection.current?.execute("COMMIT");
 
       // console.log("DATES: ", dates);
       // console.log("statements: ", statements);
 
-      if (!dbConnection.current) {
-        throw new Error("dbConnection / dbconnection.current does not exist");
-      }
-      // await dbConnection.current.executeSet(statements);
+      await dbConnection.current.executeSet(statements);
 
       const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`,
