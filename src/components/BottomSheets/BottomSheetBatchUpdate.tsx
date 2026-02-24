@@ -23,7 +23,7 @@ import {
 import { eachDayOfInterval, format, parseISO } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { toggleDBConnection } from "../../utils/dbUtils";
-import { showToast } from "../../utils/helpers";
+import { showToast, upperCaseFirstLetter } from "../../utils/helpers";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -75,7 +75,7 @@ const BottomSheetBatchUpdate = ({
   const executeBatchUpdate = async () => {
     try {
       const statement = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes) VALUES  (?, ?, ?, ?, ?)`;
-      const statements = [];
+      // const statements = [];
 
       const salahsToUpdate = batchUpdateObj.salahs;
       const salahStatus = batchUpdateObj.status;
@@ -94,32 +94,47 @@ const BottomSheetBatchUpdate = ({
         end: parseISO(batchUpdateObj.toDate),
       }).map((date) => format(date, "yyyy-MM-dd"));
 
-      console.log("DATES: ", dates);
+      await toggleDBConnection(dbConnection, "open");
+
+      // console.log("DATES: ", dates);
+
+      // for (let i = 0; i < salahsToUpdate.length; i++) {
+      //   for (let x = 0; x < dates.length; x++) {
+      //     statements.push({
+      //       statement: statement,
+      //       values: [
+      //         dates[x],
+      //         salahsToUpdate[i],
+      //         salahStatus,
+      //         reasonsToInsert,
+      //         batchUpdateObj.notes,
+      //       ],
+      //     });
+      //   }
+      // }
+      // await dbConnection.current?.execute("BEGIN TRANSACTION");
 
       for (let i = 0; i < salahsToUpdate.length; i++) {
         for (let x = 0; x < dates.length; x++) {
-          statements.push({
-            statement: statement,
-            values: [
-              dates[x],
-              salahsToUpdate[i],
-              salahStatus,
-              reasonsToInsert,
-              batchUpdateObj.notes,
-            ],
-          });
+          await dbConnection.current?.run(statement, [
+            dates[x],
+            salahsToUpdate[i],
+            salahStatus,
+            reasonsToInsert,
+            batchUpdateObj.notes,
+          ]);
         }
       }
 
-      console.log("DATES: ", dates);
-      console.log("statements: ", statements);
+      // await dbConnection.current?.execute("COMMIT");
 
-      await toggleDBConnection(dbConnection, "open");
+      // console.log("DATES: ", dates);
+      // console.log("statements: ", statements);
 
       if (!dbConnection.current) {
         throw new Error("dbConnection / dbconnection.current does not exist");
       }
-      await dbConnection.current.executeSet(statements);
+      // await dbConnection.current.executeSet(statements);
 
       const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`,
@@ -209,76 +224,95 @@ const BottomSheetBatchUpdate = ({
               ></IonInput>
             </div>
           </div>
-          <section className="mb-5 text-center">
-            <p className="mb-2">Status</p>
-            {statusArr.map((status) => (
-              <IonCheckbox
-                style={{
-                  "--size": "16px",
-                  "--border-color": "#888888",
-                }}
-                key={status}
-                checked={batchUpdateObj.status === status}
-                onIonChange={() => {
-                  setBatchUpdateObj((prev) => ({
-                    ...prev,
-                    status: status,
-                  }));
-                }}
-                labelPlacement="stacked"
-              >
-                {status}
-              </IonCheckbox>
-            ))}
+          <section className="flex justify-center gap-2 mx-auto my-5 text-center">
+            <div className="border rounded-lg border-[var(--app-border-color)] py-2 text-center">
+              <p className="mb-2">Which Salahs?</p>
+              <div className="px-1">
+                {salahNamesArr.map((salahName) => (
+                  <IonCheckbox
+                    style={{
+                      "--size": "16px",
+                      "--border-color": "#888888",
+                      marginBottom: "1rem",
+                    }}
+                    key={salahName}
+                    checked={batchUpdateObj.salahs.includes(salahName)}
+                    onIonChange={() => {
+                      setBatchUpdateObj((prev) => ({
+                        ...prev,
+                        salahs: prev.salahs.includes(salahName)
+                          ? prev.salahs.filter((s) => s !== salahName)
+                          : [...prev.salahs, salahName],
+                      }));
+                    }}
+                    labelPlacement="stacked"
+                  >
+                    {salahName}
+                  </IonCheckbox>
+                ))}
+              </div>
+            </div>
+            <div className="border rounded-lg border-[var(--app-border-color)] py-2 text-center">
+              <p className="mb-2">Status</p>
+              <div className="px-1">
+                {statusArr.map((status) => (
+                  <IonCheckbox
+                    style={{
+                      "--size": "16px",
+                      "--border-color": "#888888",
+                      marginBottom: "1rem",
+                    }}
+                    key={status}
+                    checked={batchUpdateObj.status === status}
+                    onIonChange={() => {
+                      setBatchUpdateObj((prev) => ({
+                        ...prev,
+                        status: status,
+                      }));
+                    }}
+                    labelPlacement="stacked"
+                  >
+                    {status === "male-alone"
+                      ? "Alone"
+                      : status === "female-alone"
+                        ? "Prayed"
+                        : status === "group"
+                          ? "In Group"
+                          : upperCaseFirstLetter(status)}
+                  </IonCheckbox>
+                ))}
+              </div>
+            </div>
           </section>
-          <section className="mb-5 text-center">
-            <p className="mb-2">Which Salahs?</p>
-            {salahNamesArr.map((salahName) => (
-              <IonCheckbox
-                style={{
-                  "--size": "16px",
-                  "--border-color": "#888888",
-                }}
-                key={salahName}
-                checked={batchUpdateObj.salahs.includes(salahName)}
-                onIonChange={() => {
-                  setBatchUpdateObj((prev) => ({
-                    ...prev,
-                    salahs: prev.salahs.includes(salahName)
-                      ? prev.salahs.filter((s) => s !== salahName)
-                      : [...prev.salahs, salahName],
-                  }));
-                }}
-                labelPlacement="stacked"
-              >
-                {salahName}
-              </IonCheckbox>
-            ))}
-          </section>
-          <section className="">
-            <p className="mb-5 text-center">Reasons</p>
-            {userPreferences.reasons.map((reason) => (
-              <IonCheckbox
-                style={{
-                  "--size": "16px",
-                  "--border-color": "#888888",
-                }}
-                checked={batchUpdateObj.reasons.includes(reason)}
-                key={reason}
-                labelPlacement="stacked"
-                onIonChange={() => {
-                  setBatchUpdateObj((prev) => ({
-                    ...prev,
-                    reasons: prev.reasons.includes(reason)
-                      ? prev.reasons.filter((r) => r !== reason)
-                      : [...prev.reasons, reason],
-                  }));
-                }}
-              >
-                {reason}
-              </IonCheckbox>
-            ))}
-          </section>
+          {batchUpdateObj.status !== "group" &&
+            batchUpdateObj.status !== "excused" &&
+            batchUpdateObj.status !== "female-alone" &&
+            batchUpdateObj.status !== "" && (
+              <section className="border rounded-lg border-[var(--app-border-color)] mx-2 py-2 text-center">
+                <p className="mb-5 text-center">Reasons</p>
+                {userPreferences.reasons.map((reason) => (
+                  <IonCheckbox
+                    style={{
+                      "--size": "16px",
+                      "--border-color": "#888888",
+                    }}
+                    checked={batchUpdateObj.reasons.includes(reason)}
+                    key={reason}
+                    labelPlacement="stacked"
+                    onIonChange={() => {
+                      setBatchUpdateObj((prev) => ({
+                        ...prev,
+                        reasons: prev.reasons.includes(reason)
+                          ? prev.reasons.filter((r) => r !== reason)
+                          : [...prev.reasons, reason],
+                      }));
+                    }}
+                  >
+                    {reason}
+                  </IonCheckbox>
+                ))}
+              </section>
+            )}
           <div className="m-4 text-sm notes-wrap">
             <IonTextarea
               aria-label="notes"

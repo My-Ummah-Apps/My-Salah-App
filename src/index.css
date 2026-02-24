@@ -270,7 +270,7 @@ ion-picker {
 }
 
 ion-checkbox::part(container) {
-  border: 1px solid var(--app-border-color);
+  border: 1px solid var(--ion-text-color);
 }
 
 ion-content {

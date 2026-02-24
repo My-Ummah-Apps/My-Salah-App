@@ -23,7 +23,6 @@ import {
   showToast,
 } from "../utils/helpers";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
-import BottomSheetAboutUs from "../components/BottomSheets/BottomSheetAboutUs";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
 import BottomSheetChangelog from "../components/BottomSheets/BottomSheetChangeLog";
 import {
@@ -512,7 +511,7 @@ const SettingsPage = ({
               headingText={"About"}
               subText={"About Us"}
             />
-            <BottomSheetAboutUs triggerId="open-about-us-sheet" />
+            {/* <BottomSheetAboutUs triggerId="open-about-us-sheet" /> */}
           </div>
         </motion.section>
       </IonContent>
