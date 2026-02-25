@@ -14,7 +14,15 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { useEffect, useState } from "react";
-import { IonButton, IonContent, IonModal } from "@ionic/react";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonModal,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
 import { createLocalisedDate, getMissedSalahCount } from "../../utils/helpers";
 import { AutoSizer } from "react-virtualized";
@@ -142,7 +150,7 @@ const MissedSalahsListBottomSheet = ({
         </div>
         <div
           // style={{ borderBottom: "1px solid var(--app-border-color)" }}
-          className="flex items-center justify-between text-[var(--ixon-text-color)] py-3"
+          className="flex items-center justify-between text-[var(--ion-text-color)] py-3"
         >
           <p className="text-sm opacity-80">{createLocalisedDate(date)[1]}</p>
           <button
@@ -164,7 +172,7 @@ const MissedSalahsListBottomSheet = ({
   return (
     <IonModal
       mode="ios"
-      className="modal-height"
+      // className="modal-height"
       isOpen={showMissedSalahsSheet}
       onWillPresent={() => {
         setShowCompletedMsg(false);
@@ -174,9 +182,23 @@ const MissedSalahsListBottomSheet = ({
         setShowCompletedMsg(false);
         setIsClickedItem("");
       }}
-      initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
-      breakpoints={MODAL_BREAKPOINTS}
+      // initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
+      // breakpoints={MODAL_BREAKPOINTS}
     >
+      <IonHeader
+      // className="ion-no-border"
+      >
+        <IonToolbar>
+          <IonButtons slot="end">
+            <IonButton
+              // strong={true}
+              onClick={() => setShowMissedSalahsSheet(false)}
+            >
+              Close
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
       <IonContent scrollY={false} className="relative">
         <section className="mt-10 mb-10 text-white">
           <h1

@@ -174,7 +174,7 @@ const BottomSheetBatchUpdate = ({
       // console.log("DATES: ", dates);
       // console.log("statements: ", statements);
 
-      await dbConnection.current.executeSet(statements);
+      // await dbConnection.current.executeSet(statements);
 
       const DBResultAllSalahData = await dbConnection.current.query(
         `SELECT * FROM salahDataTable`,
