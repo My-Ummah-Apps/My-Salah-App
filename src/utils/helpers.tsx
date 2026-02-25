@@ -425,8 +425,6 @@ export const setAdhanLibraryDefaults = async (
 ) => {
   // if (!userPreferences.prayerCalculationMethod) return;
 
-  console.log("SETTING DEFAULTS");
-
   if (!userLocations) {
     console.error(
       "Unable to set calculation method as no user locations exist",
@@ -464,6 +462,8 @@ export const setAdhanLibraryDefaults = async (
       maghribAdjustment: "0",
       ishaAdjustment: "0",
     };
+
+    // console.log("SETTING DEFAULTS", defaultCalcMethodValues);
 
     const query = `INSERT OR REPLACE INTO userPreferencesTable (preferenceName, preferenceValue) VALUES (?, ?)`;
 

@@ -171,20 +171,27 @@ const CalculationMethodOptions = ({
             label="Select Country"
             onIonChange={async (e) => {
               const selectedCountry: countryOptionsType = e.detail.value;
+
+              const method = countryToMethod[selectedCountry];
+
+              if (!method) {
+                console.error("No option selected");
+                return;
+              }
+
               await setAdhanLibraryDefaults(
                 dbConnection,
-                // countryToMethod[userPreferences.country],
-                countryToMethod[selectedCountry],
+                method,
                 setUserPreferences,
                 userPreferences,
                 userLocations,
               );
-              await updateUserPrefs(
-                dbConnection,
-                "prayerCalculationMethod",
-                countryToMethod[selectedCountry],
-                setUserPreferences,
-              );
+              // await updateUserPrefs(
+              //   dbConnection,
+              //   "prayerCalculationMethod",
+              //   countryToMethod[selectedCountry],
+              //   setUserPreferences,
+              // );
               await updateUserPrefs(
                 dbConnection,
                 "country",
