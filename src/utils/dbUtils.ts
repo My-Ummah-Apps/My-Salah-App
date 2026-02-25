@@ -27,12 +27,14 @@ export async function toggleDBConnection(
     }
 
     const isDatabaseOpen = await dbConnection.current.isDBOpen();
-    // console.log("isDatabaseOpen: ", isDatabaseOpen);
+    // console.log("isDatabaseOpen: ", isDatabaseOpen.result);
 
     if (
       (action === "open" && isDatabaseOpen.result === true) ||
       (action === "close" && isDatabaseOpen.result === false)
     ) {
+      // console.log(action, isDatabaseOpen.result);
+
       return;
     }
 

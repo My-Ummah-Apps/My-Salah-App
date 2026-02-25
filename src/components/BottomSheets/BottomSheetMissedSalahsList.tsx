@@ -27,6 +27,8 @@ import { toggleDBConnection } from "../../utils/dbUtils";
 import { createLocalisedDate, getMissedSalahCount } from "../../utils/helpers";
 import { AutoSizer } from "react-virtualized";
 import { motion } from "framer-motion";
+import { App } from "@capacitor/app";
+import { PluginListenerHandle } from "@capacitor/core";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -48,6 +50,32 @@ const MissedSalahsListBottomSheet = ({
 }: MissedSalahsListBottomSheetProps) => {
   const [isClickedItem, setIsClickedItem] = useState<string>();
   const [showCompletedMsg, setShowCompletedMsg] = useState(false);
+
+  // TODO :Below useEffect was put in place to re-open the DB connection when app came back to the foreground after being put in the background however, while it re-opens the connection, something else is closing it, this will require further investigation
+  // useEffect(() => {
+  //   let appStateInMissedSalahListSheet: PluginListenerHandle;
+
+  //   (async () => {
+  //     appStateInMissedSalahListSheet = await App.addListener(
+  //       "appStateChange",
+  //       ({ isActive }) => {
+  //         if (isActive) {
+  //           (async () => {
+  //             if (showMissedSalahsSheet && isActive) {
+  //               console.log("HELLO");
+
+  //               await toggleDBConnection(dbConnection, "open");
+  //             }
+  //           })();
+  //         }
+  //       },
+  //     );
+  //   })();
+
+  //   return () => {
+  //     appStateInMissedSalahListSheet?.remove();
+  //   };
+  // }, [showMissedSalahsSheet]);
 
   useEffect(() => {
     if (!showMissedSalahsSheet) return;
@@ -157,6 +185,8 @@ const MissedSalahsListBottomSheet = ({
             className="rounded-full bg-[var(--missed-salah-sheet-btn-color)]"
             onClick={async () => {
               setIsClickedItem(key);
+              // TODO: Below toggle has been put in place as DB connection was being closed if app went to the background then came back to the foreground, this toggle ensures DB connection is opened before DB operations take place, a better solution is needed in the future
+              await toggleDBConnection(dbConnection, "open");
               await modifySalahStatusInDB(date, salah);
             }}
           >
