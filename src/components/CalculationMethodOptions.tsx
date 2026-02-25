@@ -223,7 +223,11 @@ const CalculationMethodOptions = ({
                 </span>
               </p>
               <p className="mt-2 text-sm text-[var(--ion-text-color)] opacity-50">
-                This is the calculation method in use for your selection
+                {userPreferences.country === "Not listed"
+                  ? "Muslim World League (MWL) has been set as the default method because your country is not listed."
+                  : "This calculation method has been applied based on your selected country."}
+                If times differ from your local mosque, please confirm the
+                correct settings with a local imam.
               </p>
             </div>
           )}

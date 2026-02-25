@@ -141,10 +141,10 @@ export const updateUserPrefs = async (
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");
     }
-    // let DBResultPreferences = await dbConnection.current.query(
-    //   `SELECT * FROM userPreferencesTable`,
-    // );
-    // console.log("DBResultPreferences: ", DBResultPreferences.values);
+    let DBResultPreferences = await dbConnection.current.query(
+      `SELECT * FROM userPreferencesTable`,
+    );
+    console.log("DBResultPreferences: ", DBResultPreferences.values);
     await toggleDBConnection(dbConnection, "close");
   }
 };
@@ -161,10 +161,10 @@ export const getActiveLocation = (userLocations: LocationsDataObjTypeArr) => {
 export const cancelNotifications = async (
   notificationName: SalahNamesTypeAdhanLibrary | "Daily Reminder",
 ) => {
-  console.log(
-    "CANCELLING NOTIFICATIONS FOR THE FOLLOWING REMINDERS: ",
-    notificationName,
-  );
+  // console.log(
+  //   "CANCELLING NOTIFICATIONS FOR THE FOLLOWING REMINDERS: ",
+  //   notificationName,
+  // );
 
   const pendingNotifications = await LocalNotifications.getPending();
 
@@ -190,10 +190,10 @@ export const cancelNotifications = async (
 
   await LocalNotifications.cancel({ notifications: notificationsToCancel });
 
-  console.log(
-    "pending notifications after cancelling: ",
-    (await LocalNotifications.getPending()).notifications,
-  );
+  // console.log(
+  //   "pending notifications after cancelling: ",
+  //   (await LocalNotifications.getPending()).notifications,
+  // );
 };
 
 const salahIdMap = {
@@ -284,7 +284,7 @@ export const scheduleSalahNotifications = async (
 ) => {
   await cancelNotifications(salahName);
 
-  console.log("Scheduling notifications for: ", salahName);
+  // console.log("Scheduling notifications for: ", salahName);
 
   const now = new Date();
 
@@ -360,10 +360,10 @@ export const scheduleSalahNotifications = async (
     }
   }
 
-  console.log(
-    "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
-    (await LocalNotifications.getPending()).notifications,
-  );
+  // console.log(
+  //   "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
+  //   (await LocalNotifications.getPending()).notifications,
+  // );
 };
 
 export const generateActiveLocationParams = async (
