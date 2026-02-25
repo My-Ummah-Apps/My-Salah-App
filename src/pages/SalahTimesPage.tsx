@@ -456,7 +456,7 @@ const SalahTimesPage = ({
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length > 0 && (
-              <p className="mx-5 my-5 text-xs text-center opacity-50">
+              <p className="mx-5 my-5 text-xs text-center opacity-50 text-[var(--ion-text-color)]">
                 Note: These times have been calculated using the
                 <span className="font-bold">
                   {" "}

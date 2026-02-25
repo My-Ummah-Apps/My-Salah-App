@@ -33,7 +33,11 @@ export async function toggleDBConnection(
       (action === "open" && isDatabaseOpen.result === true) ||
       (action === "close" && isDatabaseOpen.result === false)
     ) {
-      // console.log(action, isDatabaseOpen.result);
+      // console.log(
+      //   "NO FURTHER ACTION REQUIRED AS DB ALREADY: ",
+      //   action,
+      //   isDatabaseOpen.result,
+      // );
 
       return;
     }
@@ -44,10 +48,10 @@ export async function toggleDBConnection(
       );
     } else if (action === "open" && isDatabaseOpen.result === false) {
       await dbConnection.current.open();
-      console.log("DB CONNECTION OPENED");
+      // console.log("DB CONNECTION OPENED");
     } else if (action === "close" && isDatabaseOpen.result === true) {
       await dbConnection.current.close();
-      console.log("DB CONNECTION CLOSED");
+      // console.log("DB CONNECTION CLOSED");
     } else {
       throw new Error(
         `Database is: ${isDatabaseOpen.result}, unable to ${action} database connection`,

@@ -476,7 +476,7 @@ const SettingsPage = ({
               subText={"Report Bugs / Request Features"}
               onClick={() => {
                 link(
-                  "mailto: mohammed@mohammedpatel.dev?subject=My Salah App Feedback",
+                  "mailto: contact@myummahapps.com?subject=My Salah App Feedback",
                 );
               }}
             />

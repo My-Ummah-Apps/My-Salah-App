@@ -312,6 +312,7 @@ const StatsPage = ({
                   statsToShow={statsToShow}
                 />{" "}
                 <Swiper
+                  className="mt-5"
                   spaceBetween={50}
                   slidesPerView={1}
                   modules={[Pagination]}

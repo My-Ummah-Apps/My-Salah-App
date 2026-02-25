@@ -222,7 +222,7 @@ const CalculationMethodOptions = ({
                   }
                 </span>
               </p>
-              <p className="mt-2 text-sm text-gray-400">
+              <p className="mt-2 text-sm text-[var(--ion-text-color)] opacity-50">
                 This is the calculation method in use for your selection
               </p>
             </div>

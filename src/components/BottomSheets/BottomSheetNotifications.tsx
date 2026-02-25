@@ -24,6 +24,7 @@ import {
 } from "../../utils/helpers";
 import {
   IonButton,
+  IonIcon,
   IonInput,
   IonItem,
   IonList,
@@ -42,6 +43,7 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 import { Capacitor } from "@capacitor/core";
+import { chevronDownOutline } from "ionicons/icons";
 
 const BottomSheetNotifications = ({
   dbConnection,
@@ -311,9 +313,11 @@ const BottomSheetNotifications = ({
                       e.stopPropagation();
                       await handleTimeChange(e);
                     }}
-                    style={{
-                      "--background": "var(--card-bg-color)",
-                    }}
+                    style={
+                      {
+                        // "--background": "var(--card-bg-color)",
+                      }
+                    }
                     className={`${
                       dailyNotificationToggle === true ? "slideUp" : ""
                     } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
@@ -327,6 +331,8 @@ const BottomSheetNotifications = ({
                     required
                   />
                 </IonItem>
+                <IonIcon icon={chevronDownOutline} />
+
                 {/* {userPreferences.prayerCalculationMethod !== "" &&
                   userLocations.length > 0 && ( */}
                 <IonItem

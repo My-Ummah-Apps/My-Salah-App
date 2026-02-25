@@ -538,10 +538,10 @@ const App = () => {
       // console.log("isExistingUser is: ", isExistingUser);
 
       if (isExistingUser === "" || isExistingUser.preferenceValue === "0") {
-        console.log(
-          "SETTING ONBOARDING MODE TO NEW USER, ONBOARDING MODE IS: ",
-          onboardingMode,
-        );
+        // console.log(
+        //   "SETTING ONBOARDING MODE TO NEW USER, ONBOARDING MODE IS: ",
+        //   onboardingMode,
+        // );
 
         setOnboardingMode("newUser");
       }
@@ -698,7 +698,7 @@ const App = () => {
       (row) => row.preferenceName === "userStartDate",
     )?.preferenceValue;
 
-    console.log("START DATE: ", startDatePref);
+    // console.log("START DATE: ", startDatePref);
 
     if (!startDatePref) {
       throw new Error("userStartDate not found in preferences");

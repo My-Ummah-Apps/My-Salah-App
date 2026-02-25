@@ -62,7 +62,6 @@ const MissedSalahsListBottomSheet = ({
   //         if (isActive) {
   //           (async () => {
   //             if (showMissedSalahsSheet && isActive) {
-  //               console.log("HELLO");
 
   //               await toggleDBConnection(dbConnection, "open");
   //             }
@@ -163,7 +162,7 @@ const MissedSalahsListBottomSheet = ({
         }}
         className="bg-[var(--card-bg-color)] px-4 rounded-2xl"
       >
-        <div className="flex items-center justify-between text-[var(--ion-text-color)] py-3 border border-[var(--app-border-color)]">
+        <div className="flex items-center justify-between text-[var(--ion-text-color)] py-3 border-b border-[var(--app-border-color)]">
           <p>{salah}</p>
           <div
             style={{
@@ -185,7 +184,7 @@ const MissedSalahsListBottomSheet = ({
             className="rounded-full bg-[var(--missed-salah-sheet-btn-color)]"
             onClick={async () => {
               setIsClickedItem(key);
-              // TODO: Below toggle has been put in place as DB connection was being closed if app went to the background then came back to the foreground, this toggle ensures DB connection is opened before DB operations take place, a better solution is needed in the future
+              // TODO: Below toggle has been put in place as DB connection was being closed if app went to the background then came back to the foreground, this toggle ensures DB connection is opened before DB operations take place, a better solution is needed in the future, could just open and close DB connection each time users clicks on 'mark as done' as opposed to opening/closing connection when sheet is opened/closed
               await toggleDBConnection(dbConnection, "open");
               await modifySalahStatusInDB(date, salah);
             }}
