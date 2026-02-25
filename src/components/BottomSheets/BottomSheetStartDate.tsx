@@ -85,7 +85,7 @@ const BottomSheetStartDate = ({
             className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
             placeholder="&#x1F5D3;"
             onKeyDown={(e) => {
-              // e.preventDefault();
+              e.preventDefault();
             }}
             onChange={(e) => {
               setSelectedStartDate(e.target.value);

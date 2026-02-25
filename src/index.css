@@ -379,7 +379,7 @@ td {
 }
 
 .changelog-individual-log:first-of-type {
-  color: rgb(92 107 192);
+  /* color: rgb(92 107 192); */
 }
 
 .salah-status-modal-reasons-wrap {

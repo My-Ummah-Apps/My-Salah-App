@@ -8,10 +8,14 @@ import { IonContent, IonModal } from "@ionic/react";
 import { useRef } from "react";
 
 interface BottomSheetChangeLogProps {
-  triggerId: string;
+  setShowChangelogSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showChangelogSheet: boolean;
 }
 
-const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
+const BottomSheetChangelog = ({
+  setShowChangelogSheet,
+  showChangelogSheet,
+}: BottomSheetChangeLogProps) => {
   const modal = useRef<HTMLIonModalElement>(null);
 
   return (
@@ -19,7 +23,10 @@ const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
       ref={modal}
       mode="ios"
       className="modal-height"
-      trigger={triggerId}
+      isOpen={showChangelogSheet}
+      onDidDismiss={() => {
+        setShowChangelogSheet(false);
+      }}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
@@ -29,7 +36,7 @@ const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
           {changeLogs.map((item, i) => (
             <section
               key={i}
-              className="mx-6 mt-4 changelog-individual-log"
+              className="mx-6 mt-4 changelog-individual-log  border-b border-[var(--border-form)]"
               // style={{ borderColor: i === 0 ? "red" : "" }}
             >
               <p>
@@ -41,8 +48,7 @@ const BottomSheetChangelog = ({ triggerId }: BottomSheetChangeLogProps) => {
                 <section
                   key={item.heading}
                   // style={{ border: `1px solid ${activeBackgroundColor}` }}
-                  className="mt-4 mb-4 p-4 border border-[var(--border-form)] rounded-xl
-"
+                  className="p-4 mt-4 mb-5"
                 >
                   <h2 className="mt-0 mb-2 text-lg font-medium">
                     {item.heading}

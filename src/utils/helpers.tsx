@@ -472,7 +472,7 @@ export const setAdhanLibraryDefaults = async (
     }
 
     for (const [key, value] of Object.entries(defaultCalcMethodValues)) {
-      console.log(key, value);
+      // console.log(key, value);
       await dbConnection.current.run(query, [key, value]);
     }
 

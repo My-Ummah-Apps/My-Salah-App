@@ -37,6 +37,7 @@ import BottomSheetThemeOptions from "../components/BottomSheets/BottomSheetTheme
 import { toggleDBConnection } from "../utils/dbUtils";
 import BottomSheetSalahTimesSettings from "../components/BottomSheets/SalahTimesSheets/BottomSheetSalahTimesSettings";
 import BottomSheetBatchUpdate from "../components/BottomSheets/BottomSheetBatchUpdate";
+// import BottomSheetBatchUpdate from "../components/BottomSheets/BottomSheetBatchUpdate";
 
 interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
@@ -54,6 +55,8 @@ interface SettingsPageProps {
   showSalahTimesSettingsSheet: boolean;
   userPreferences: userPreferencesType;
   userLocations: LocationsDataObjTypeArr;
+  setShowChangelogSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showChangelogSheet: boolean;
 }
 
 const SettingsPage = ({
@@ -69,6 +72,8 @@ const SettingsPage = ({
   showSalahTimesSettingsSheet,
   userPreferences,
   userLocations,
+  setShowChangelogSheet,
+  showChangelogSheet,
 }: SettingsPageProps) => {
   const shareThisAppLink = async (link: string) => {
     await Share.share({
@@ -374,11 +379,11 @@ const SettingsPage = ({
                 userPreferences={userPreferences}
                 fetchDataFromDB={fetchDataFromDB}
               />
-              <SettingIndividual
+              {/* <SettingIndividual
                 onClick={() => setShowBatchUpdateModal(true)}
                 headingText={"Batch update Salah"}
                 subText={`Update Salah over multiple dates`}
-              />
+              /> */}
               <BottomSheetBatchUpdate
                 dbConnection={dbConnection}
                 handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
@@ -465,11 +470,16 @@ const SettingsPage = ({
               indvidualStyles={
                 "rounded-t-md border-b border-[var(--app-border-color)]"
               }
-              id="open-changelog-sheet"
+              onClick={() => {
+                setShowChangelogSheet(true);
+              }}
               headingText={"Changelog"}
               subText={"View Changelog"}
             />
-            <BottomSheetChangelog triggerId="open-changelog-sheet" />
+            <BottomSheetChangelog
+              setShowChangelogSheet={setShowChangelogSheet}
+              showChangelogSheet={showChangelogSheet}
+            />
             <SettingIndividual
               indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Feedback"}

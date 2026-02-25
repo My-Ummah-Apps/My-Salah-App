@@ -6,11 +6,7 @@ import {
   SalahNamesType,
   SalahRecordsArrayType,
 } from "../../types/types";
-import {
-  INITIAL_MODAL_BREAKPOINT,
-  MODAL_BREAKPOINTS,
-  salahStatusColorsHexCodes,
-} from "../../utils/constants";
+import { salahStatusColorsHexCodes } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import { useEffect, useState } from "react";
@@ -20,15 +16,12 @@ import {
   IonContent,
   IonHeader,
   IonModal,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
 import { createLocalisedDate, getMissedSalahCount } from "../../utils/helpers";
 import { AutoSizer } from "react-virtualized";
 import { motion } from "framer-motion";
-import { App } from "@capacitor/app";
-import { PluginListenerHandle } from "@capacitor/core";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;

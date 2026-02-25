@@ -2,11 +2,49 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.8";
+export const LATEST_APP_VERSION = "4.9";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Fix: Calculation Method Update for Country Selection",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved an issue where changing the
+            calculation method by selecting a country did not update the prayer
+            time angles correctly. This could cause Fajr and Isha angles to
+            remain unchanged from the previously selected method. If you have
+            selected a country in the settings, please re-select it to ensure
+            the correct calculation method and angles are applied.
+          </>
+        ),
+      },
+      {
+        heading: "Improvement: Missed Salah Sheet Performance",
+        text: (
+          <>
+            <strong>Improved:</strong> The Missed Salah sheet has been optimised
+            to ensure smooth performance, even when you have a large number of
+            missed prayers.
+          </>
+        ),
+      },
+      {
+        heading: "Fix: Missed Salah Sheet Issue",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved an issue where actions like "Mark
+            as Done" stopped working after returning to the app with the Missed
+            Salah sheet open.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.8",
     changes: [
       {
         heading: "New Feature: Salah Times & bug fixes",

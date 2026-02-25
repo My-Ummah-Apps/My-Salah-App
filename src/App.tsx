@@ -80,6 +80,7 @@ import {
   adhanLibrarySalahs,
   dictPreferencesDefaultValues,
 } from "./utils/constants";
+import BottomSheetChangelog from "./components/BottomSheets/BottomSheetChangeLog";
 
 const App = () => {
   const justLaunched = useRef(true);
@@ -121,6 +122,7 @@ const App = () => {
     useState<boolean>(false);
   const [showLocationDeletedToast, setShowLocationDeletedToast] =
     useState<boolean>(false);
+  const [showChangelogSheet, setShowChangelogSheet] = useState(false);
 
   const [salahTimes, setSalahtimes] = useState({
     fajr: "",
@@ -284,8 +286,8 @@ const App = () => {
       localStorage.getItem("appVersion") &&
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
     ) {
-      // setShowChangelogModal(true);
-      setShowMajorUpdateOverlay(true);
+      setShowChangelogSheet(true);
+      // setShowMajorUpdateOverlay(true);
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
   }, []);
@@ -990,6 +992,8 @@ const App = () => {
                   }
                   showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
                   userLocations={userLocations}
+                  setShowChangelogSheet={setShowChangelogSheet}
+                  showChangelogSheet={showChangelogSheet}
                 />
               )}
             />
@@ -1073,6 +1077,10 @@ const App = () => {
           setShowMajorUpdateOverlay={setShowMajorUpdateOverlay}
         />
       )}
+      <BottomSheetChangelog
+        setShowChangelogSheet={setShowChangelogSheet}
+        showChangelogSheet={showChangelogSheet}
+      />
     </IonApp>
   );
 };
