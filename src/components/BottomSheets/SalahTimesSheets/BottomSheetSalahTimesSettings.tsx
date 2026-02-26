@@ -115,14 +115,19 @@ BottomSheetSalahTimesSettingsProps) => {
 
   const getDefaultAdjustments = () => {
     if (!userPreferences.prayerCalculationMethod) {
-      console.error(
-        "Calculation method does not exist, discontinuing getDefaultAdjustments function",
-      );
-
-      return;
+      // console.error(
+      //   "Calculation method does not exist, discontinuing getDefaultAdjustments function",
+      // );
+      return {
+        fajrAdjustment: 0,
+        dhuhrAdjustment: 0,
+        asrAdjustment: 0,
+        maghribAdjustment: 0,
+        ishaAdjustment: 0,
+      };
     }
 
-    console.log("getDefaultAdjustments function has run");
+    // console.log("getDefaultAdjustments function has run");
 
     const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
 

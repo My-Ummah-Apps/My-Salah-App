@@ -21,9 +21,8 @@ import {
   searchOutline,
 } from "ionicons/icons";
 import { LocationsDataObjTypeArr, OnboardingMode } from "../types/types";
-import { promptToOpenDeviceSettings } from "../utils/helpers";
+import { promptToOpenDeviceSettings, showAlert } from "../utils/helpers";
 import { fetchAllLocations, toggleDBConnection } from "../utils/dbUtils";
-import { Dialog } from "@capacitor/dialog";
 
 const allCities = cities.map(
   (obj: { country: string; name: string; lat: string; lng: string }) => {
@@ -156,11 +155,11 @@ const AddLocationOptions = ({
       setShowLocationFailureToast(true);
       // console.log("Failed to obtain location");
       console.error(error);
-      await Dialog.alert({
-        title: "Location request timed out",
-        message:
-          "The app couldn’t get your location. Make sure your device has a good GPS or network signal and try again.",
-      });
+
+      showAlert(
+        "Location request timed out",
+        `"The app couldn’t get your location. Make sure your device has a good GPS or network signal and try again."`,
+      );
     } finally {
       await dismissLocationSpinner();
     }
@@ -174,11 +173,10 @@ const AddLocationOptions = ({
         AndroidSettings.Location,
       );
     } else {
-      await Dialog.alert({
-        title: "Turn On Location Services",
-        message:
-          "You currently have location services turned off for your device, please enable them to use this feature.",
-      });
+      showAlert(
+        "Turn On Location Services",
+        "You currently have location services turned off for your device, please enable them to use this feature.",
+      );
     }
   };
 
@@ -240,11 +238,10 @@ const AddLocationOptions = ({
         await showLocationServicesPrompt();
       } else {
         // await dismissLocationSpinner();
-        await Dialog.alert({
-          title: "Location unavailable",
-          message:
-            "Your device’s location couldn’t be determined. Check that location services are on and permissions are granted, then try again.",
-        });
+        showAlert(
+          "Location unavailable",
+          "Your device’s location couldn’t be determined. Check that location services are on and permissions are granted, then try again.",
+        );
       }
     }
   };

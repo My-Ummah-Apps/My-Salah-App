@@ -21,6 +21,7 @@ import {
   updateUserPrefs,
   //  pageTransitionStyles,
   showToast,
+  showAlert,
 } from "../utils/helpers";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
@@ -304,7 +305,8 @@ const SettingsPage = ({
               <SettingIndividual
                 onClick={() => {
                   if (userLocations.length === 0) {
-                    alert(
+                    showAlert(
+                      "Location / Salah times not set",
                       "Please add a location or set up Salah times on the Salah times page first.",
                     );
                     return;
