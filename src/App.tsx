@@ -163,14 +163,14 @@ const App = () => {
                 if (isAfter(todaysDate, lastLaunchDate)) {
                   await scheduleAllSalahNotifications();
                   await fetchDataFromDB();
+                  // await generateSalahTimes(
+                  //   userLocations,
+                  //   userPreferences,
+                  //   setSalahtimes,
+                  // );
                 }
 
-                await generateSalahTimes(
-                  userLocations,
-                  userPreferences,
-                  setSalahtimes,
-                );
-                await getNextSalahDetails();
+                // await getNextSalahDetails();
 
                 await updateUserPrefs(
                   dbConnection,
@@ -194,7 +194,8 @@ const App = () => {
     return () => {
       appState?.remove();
     };
-  }, [userLocations, userPreferences]);
+  }, []);
+  // }, [userLocations, userPreferences]);
 
   const getNextSalahDetails = async () => {
     if (!userLocations) {
@@ -204,6 +205,9 @@ const App = () => {
 
     const result = await getNextSalah(userLocations, userPreferences);
     if (!result) return;
+
+    // console.log("RESULT IN GET NEXT SALAH DETAILS: ", result);
+
     const {
       currentSalah,
       nextSalah,
@@ -235,14 +239,10 @@ const App = () => {
 
     const interval = setInterval(() => {
       getNextSalahDetails();
-    }, 60000);
+    }, 30000);
 
     return () => clearInterval(interval);
-  }, [userLocations, isDatabaseInitialised]);
-
-  // useEffect(() => {
-  //   console.log("nextSalahNameAndTime: ", nextSalahNameAndTime);
-  // }, [nextSalahNameAndTime]);
+  }, [userLocations, isDatabaseInitialised, userPreferences]);
 
   const [theme, setTheme] = useState<themeType>("dark");
 

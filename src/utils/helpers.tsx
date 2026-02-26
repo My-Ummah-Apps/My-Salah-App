@@ -141,10 +141,10 @@ export const updateUserPrefs = async (
     if (!dbConnection || !dbConnection.current) {
       throw new Error("dbConnection / dbconnection.current does not exist");
     }
-    let DBResultPreferences = await dbConnection.current.query(
-      `SELECT * FROM userPreferencesTable`,
-    );
-    console.log("DBResultPreferences: ", DBResultPreferences.values);
+    // let DBResultPreferences = await dbConnection.current.query(
+    //   `SELECT * FROM userPreferencesTable`,
+    // );
+    // console.log("DBResultPreferences: ", DBResultPreferences.values);
     await toggleDBConnection(dbConnection, "close");
   }
 };
@@ -370,20 +370,23 @@ export const generateActiveLocationParams = async (
   userLocations: LocationsDataObjTypeArr,
   userPreferences: userPreferencesType,
 ) => {
-  // console.log("USER. LOCATIONS IN GENERATE: ", userLocations);
+  // console.log(
+  //   "generateActiveLocationParams function beginning, calculation method is: ",
+  //   userPreferences.prayerCalculationMethod,
+  // );
 
   const activeLocation = getActiveLocation(userLocations);
 
   if (userLocations.length === 0 || !activeLocation) {
-    console.log(
-      "No active location exists, generateActiveLocationParams function discontinouing",
-    );
+    // console.error(
+    //   "No active location exists, generateActiveLocationParams function discontinouing",
+    // );
     return;
   }
 
   if (!activeLocation) {
     // throw new Error("No active location found");
-    console.error("Active location does not exist");
+    // console.error("Active location does not exist");
     return;
   }
 
@@ -392,10 +395,14 @@ export const generateActiveLocationParams = async (
     activeLocation.longitude,
   );
 
-  const params =
-    CalculationMethod[
-      userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
-    ]();
+  if (!userPreferences.prayerCalculationMethod) {
+    // console.error(
+    //   "Calculation method does not exist, discontinuing generateActiveLocationParams function",
+    // );
+    return;
+  }
+
+  const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
 
   // console.log("params before amendments:", params);
 
@@ -412,6 +419,11 @@ export const generateActiveLocationParams = async (
   params.polarCircleResolution = userPreferences.polarCircleResolution;
 
   // console.log("params after amendments:", params);
+
+  // console.log(
+  //   "generateActiveLocationParams has run, calculation method is: ",
+  //   userPreferences.prayerCalculationMethod,
+  // );
 
   return { params, coordinates };
 };
@@ -637,9 +649,15 @@ export const getNextSalah = async (
 
   const todaysDate = new Date();
 
+  // console.log("PARAMS: ", result.params);
+
   let allSalahTimes = new PrayerTimes(coordinates, todaysDate, params);
 
+  // console.log("ALL SALAH TIMES: ", allSalahTimes);
+
   let next = allSalahTimes.nextPrayer();
+
+  // console.log("NEXT SALAH TIME: ", allSalahTimes.timeForPrayer(next));
 
   let nextSalahTime: Date | null = null;
   let currentSalah:
@@ -682,6 +700,12 @@ export const getNextSalah = async (
   const diffMs = nextSalahTime.getTime() - now.getTime();
   const hours = Math.floor(diffMs / 1000 / 60 / 60);
   const minutes = Math.floor((diffMs / 1000 / 60) % 60);
+  // const hours = (diffMs / 1000 / 60 / 60).toFixed(0);
+  // const minutes = ((diffMs / 1000 / 60) % 60).toFixed(0);
+
+  // console.log("diffMs: ", diffMs);
+  // console.log("hours: ", hours);
+  // console.log("minutes: ", minutes);
 
   return {
     currentSalah: currentSalah,

@@ -114,12 +114,17 @@ BottomSheetSalahTimesSettingsProps) => {
   };
 
   const getDefaultAdjustments = () => {
-    // if (userPreferences.prayerCalculationMethod === "") return;
+    if (!userPreferences.prayerCalculationMethod) {
+      console.error(
+        "Calculation method does not exist, discontinuing getDefaultAdjustments function",
+      );
 
-    const params =
-      CalculationMethod[
-        userPreferences.prayerCalculationMethod || "MuslimWorldLeague"
-      ]();
+      return;
+    }
+
+    console.log("getDefaultAdjustments function has run");
+
+    const params = CalculationMethod[userPreferences.prayerCalculationMethod]();
 
     const obj: {
       fajrAdjustment: number;

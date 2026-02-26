@@ -141,7 +141,7 @@ const AddLocationOptions = ({
 
       const location = await Geolocation.getCurrentPosition({
         // enableHighAccuracy: true, <-- Unsure if required
-        timeout: 60000,
+        timeout: 10000,
         maximumAge: 0,
       });
 

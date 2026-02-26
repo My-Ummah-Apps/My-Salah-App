@@ -24,7 +24,6 @@ import {
 } from "../../utils/helpers";
 import {
   IonButton,
-  IonIcon,
   IonInput,
   IonItem,
   IonList,
@@ -43,7 +42,6 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 import { Capacitor } from "@capacitor/core";
-import { chevronDownOutline } from "ionicons/icons";
 
 const BottomSheetNotifications = ({
   dbConnection,
@@ -331,7 +329,6 @@ const BottomSheetNotifications = ({
                     required
                   />
                 </IonItem>
-                <IonIcon icon={chevronDownOutline} />
 
                 {/* {userPreferences.prayerCalculationMethod !== "" &&
                   userLocations.length > 0 && ( */}
