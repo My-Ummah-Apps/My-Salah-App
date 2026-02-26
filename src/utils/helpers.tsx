@@ -698,10 +698,12 @@ export const getNextSalah = async (
 
   const now = new Date();
   const diffMs = nextSalahTime.getTime() - now.getTime();
-  const hours = Math.floor(diffMs / 1000 / 60 / 60);
-  const minutes = Math.floor((diffMs / 1000 / 60) % 60);
-  // const hours = (diffMs / 1000 / 60 / 60).toFixed(0);
-  // const minutes = ((diffMs / 1000 / 60) % 60).toFixed(0);
+  // const hours = Math.floor(diffMs / 1000 / 60 / 60);
+  // const minutes = Math.ceil((diffMs / 1000 / 60) % 60);
+  const totalMinutes = Math.ceil(diffMs / 60000);
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
 
   // console.log("diffMs: ", diffMs);
   // console.log("hours: ", hours);
