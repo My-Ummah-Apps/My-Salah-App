@@ -40,9 +40,10 @@ const BottomSheetChangelog = ({
               // style={{ borderColor: i === 0 ? "red" : "" }}
             >
               <p>
-                {item.versionNum === LATEST_APP_VERSION
-                  ? `v${item.versionNum} - Latest Version`
-                  : `v${item.versionNum}`}
+                v{item.versionNum}
+                {item.versionNum === LATEST_APP_VERSION && (
+                  <span className="font-bold"> - Latest Version</span>
+                )}
               </p>
               {item.changes.map((item) => (
                 <section
@@ -60,7 +61,7 @@ const BottomSheetChangelog = ({
           ))}{" "}
           <button
             onClick={() => modal.current?.dismiss()}
-            className="w-[90%] rounded-xl text-white bg-[#5c6bc0] p-5 text-center fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2"
+            className="w-[90%] rounded-xl text-white bg-[#3880ff] p-5 text-center fixed bottom-[7%] left-1/2 transform -translate-x-1/2 translate-y-1/2"
           >
             Close
           </button>

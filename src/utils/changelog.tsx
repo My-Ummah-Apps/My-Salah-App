@@ -2,11 +2,37 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "4.9";
+export const LATEST_APP_VERSION = "5.0";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "Fix: Notification Timing Issues",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved an issue where per-Salah
+            notifications and after-Isha notifications could appear at incorrect
+            times in certain locales.
+          </>
+        ),
+      },
+      {
+        heading: "Fix: Prayer Time Countdown Improvements",
+        text: (
+          <>
+            <strong>Fixed:</strong> Resolved several issues affecting the prayer
+            time countdown, including custom per-Salah adjustments not applying
+            correctly, the countdown displaying inaccurate values when returning
+            to the app from the background, and minor timing inaccuracies.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "4.9",
     changes: [
       {
         heading: "Fix: Calculation Method Update for Country Selection",
