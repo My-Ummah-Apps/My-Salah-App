@@ -430,7 +430,7 @@ const SettingsPage = ({
                   "rounded-t-md, border-b border-[var(--app-border-color)]"
                 }
                 headingText={"Review"}
-                subText={"Rate us on the Google Play Store"}
+                subText={"Rate the app on the Google Play Store"}
                 onClick={() => {
                   link(
                     "https://play.google.com/store/apps/details?id=com.mysalahapp.app",
@@ -442,7 +442,7 @@ const SettingsPage = ({
               <SettingIndividual
                 indvidualStyles={"rounded-t-md"}
                 headingText={"Review"}
-                subText={"Rate us on the App Store"}
+                subText={"Rate the app on the App Store"}
                 onClick={() => {
                   link(
                     "https://apps.apple.com/gb/app/my-salah-app/id6478277078",
@@ -488,7 +488,7 @@ const SettingsPage = ({
               subText={"Report Bugs / Request Features"}
               onClick={() => {
                 link(
-                  "mailto: contact@myummahapps.com?subject=My Salah App Feedback",
+                  "mailto: mohammed@mohammedpatel.dev?subject=My Salah App Feedback",
                 );
               }}
             />
@@ -518,11 +518,11 @@ const SettingsPage = ({
                 link("https://github.com/My-Ummah-Apps/My-Salah-App");
               }}
             />
-            <SettingIndividual
+            {/* <SettingIndividual
               id="open-about-us-sheet"
               headingText={"About"}
               subText={"About Us"}
-            />
+            /> */}
             {/* <BottomSheetAboutUs triggerId="open-about-us-sheet" /> */}
           </div>
         </motion.section>

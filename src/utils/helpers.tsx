@@ -524,38 +524,35 @@ export const scheduleAfterIshaDailyNotifications = async (
       "isha"
     ];
 
-    const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
-
-    if (now < localisedSalahTime) {
-      arr.push(addMinutes(localisedSalahTime, delay));
+    if (now < salahTime) {
+      arr.push(addMinutes(salahTime, delay));
     }
-
-    // console.log("arr: ", arr);
-
-    for (let i = 0; i < arr.length; i++) {
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            id: 1000 + i,
-            title: "Daily Reminder",
-            body: `Did you log your prayers today?`,
-            schedule: {
-              at: arr[i],
-              allowWhileIdle: true,
-              repeats: false,
-            },
-            sound: "default",
-            channelId: "daily-reminder",
-          },
-        ],
-      });
-    }
-
-    // console.log(
-    //   "PENDING NOTIFICATIONS AFTER THE AFTER ISHA FUNCTION HAS RUN: ",
-    //   (await LocalNotifications.getPending()).notifications,
-    // );
   }
+  // console.log("arr: ", arr);
+
+  for (let i = 0; i < arr.length; i++) {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: 1000 + i,
+          title: "Daily Reminder",
+          body: `Did you log your prayers today?`,
+          schedule: {
+            at: arr[i],
+            allowWhileIdle: true,
+            repeats: false,
+          },
+          sound: "default",
+          channelId: "daily-reminder",
+        },
+      ],
+    });
+  }
+
+  // console.log(
+  //   "PENDING NOTIFICATIONS AFTER THE AFTER ISHA FUNCTION HAS RUN: ",
+  //   (await LocalNotifications.getPending()).notifications,
+  // );
 };
 
 export const extractSalahTime = (
