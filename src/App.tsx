@@ -456,6 +456,7 @@ const App = () => {
     userPreferences.shafaqRule,
     userPreferences.polarCircleResolution,
     userPreferences.timeFormat,
+    // userPreferences.country,
     userLocations,
   ]);
 

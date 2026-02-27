@@ -284,9 +284,10 @@ export const scheduleSalahNotifications = async (
 ) => {
   await cancelNotifications(salahName);
 
-  // console.log("Scheduling notifications for: ", salahName);
+  console.log("Scheduling notifications for: ", salahName);
 
   const now = new Date();
+  console.log("NOW: ", now);
 
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
     return addDays(now, i);
@@ -312,17 +313,13 @@ export const scheduleSalahNotifications = async (
 
     const arr = [];
 
-    // console.log("params: ", params);
-
     for (let i = 0; i < nextSevenDays.length; i++) {
       const salahTime = new PrayerTimes(coordinates, nextSevenDays[i], params)[
         salahName
       ];
 
-      const localisedSalahTime = toLocalDateFromUTCClock(salahTime);
-
-      if (now < localisedSalahTime) {
-        arr.push(localisedSalahTime);
+      if (now < salahTime) {
+        arr.push(salahTime);
       }
     }
 
@@ -360,10 +357,10 @@ export const scheduleSalahNotifications = async (
     }
   }
 
-  // console.log(
-  //   "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
-  //   (await LocalNotifications.getPending()).notifications,
-  // );
+  console.log(
+    "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
+    (await LocalNotifications.getPending()).notifications,
+  );
 };
 
 export const generateActiveLocationParams = async (
