@@ -25,7 +25,7 @@ import {
 } from "../utils/helpers";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
-import BottomSheetChangelog from "../components/BottomSheets/BottomSheetChangeLog";
+
 import {
   IonContent,
   IonHeader,
@@ -57,7 +57,6 @@ interface SettingsPageProps {
   userPreferences: userPreferencesType;
   userLocations: LocationsDataObjTypeArr;
   setShowChangelogSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  showChangelogSheet: boolean;
 }
 
 const SettingsPage = ({
@@ -74,7 +73,6 @@ const SettingsPage = ({
   userPreferences,
   userLocations,
   setShowChangelogSheet,
-  showChangelogSheet,
 }: SettingsPageProps) => {
   const shareThisAppLink = async (link: string) => {
     await Share.share({
@@ -477,10 +475,6 @@ const SettingsPage = ({
               }}
               headingText={"Changelog"}
               subText={"View Changelog"}
-            />
-            <BottomSheetChangelog
-              setShowChangelogSheet={setShowChangelogSheet}
-              showChangelogSheet={showChangelogSheet}
             />
             <SettingIndividual
               indvidualStyles={"border-b border-[var(--app-border-color)]"}

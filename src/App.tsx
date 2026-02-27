@@ -523,7 +523,7 @@ const App = () => {
       }
 
       // console.log("DBResultAllSalahData: ", DBResultAllSalahData);
-      console.log("DBResultPreferences: ", DBResultPreferences);
+      // console.log("DBResultPreferences: ", DBResultPreferences);
 
       setUserLocations(DBResultLocations.values);
 
@@ -994,7 +994,6 @@ const App = () => {
                   showSalahTimesSettingsSheet={showSalahTimesSettingsSheet}
                   userLocations={userLocations}
                   setShowChangelogSheet={setShowChangelogSheet}
-                  showChangelogSheet={showChangelogSheet}
                 />
               )}
             />

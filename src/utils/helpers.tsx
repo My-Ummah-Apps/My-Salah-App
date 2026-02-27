@@ -284,10 +284,9 @@ export const scheduleSalahNotifications = async (
 ) => {
   await cancelNotifications(salahName);
 
-  console.log("Scheduling notifications for: ", salahName);
+  // console.log("Scheduling notifications for: ", salahName);
 
   const now = new Date();
-  console.log("NOW: ", now);
 
   const nextSevenDays = Array.from({ length: 8 }, (_, i) => {
     return addDays(now, i);
@@ -357,10 +356,10 @@ export const scheduleSalahNotifications = async (
     }
   }
 
-  console.log(
-    "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
-    (await LocalNotifications.getPending()).notifications,
-  );
+  // console.log(
+  //   "PENDING NOTIFICATIONS AFTER scheduleSalahNotifications HAS RUN: ",
+  //   (await LocalNotifications.getPending()).notifications,
+  // );
 };
 
 export const generateActiveLocationParams = async (
