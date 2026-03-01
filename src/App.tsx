@@ -58,7 +58,6 @@ import { Capacitor, PluginListenerHandle } from "@capacitor/core";
 import {
   format,
   parse,
-  eachDayOfInterval,
   differenceInDays,
   subDays,
   parseISO,
@@ -294,6 +293,7 @@ const App = () => {
 
   useEffect(() => {
     const initializeApp = async () => {
+      // await SplashScreen.hide({ fadeOutDuration: 250 });
       if (isDatabaseInitialised === true) {
         await fetchDataFromDB();
 
@@ -710,6 +710,100 @@ const App = () => {
     await handleSalahTrackingDataFromDB(DBResultAllSalahData, startDatePref);
   };
 
+  // const handleSalahTrackingDataFromDB = async (
+  //   DBResultAllSalahData: DBResultDataObjType[],
+  //   userStartDate: string,
+  // ) => {
+  // const singleSalahObjArr: SalahRecordsArrayType = [];
+  // const missedSalahObj: SalahByDateObjType = {};
+  // const todaysDate = new Date();
+  // // const userStartDateFormattedToDateObject: Date = parse(
+  // //   userStartDate,
+  // //   "yyyy-MM-dd",
+  // //   new Date(),
+  // // );
+  // const userStartDateFormattedToDateObject: Date = parse(
+  //   userStartDate,
+  //   "yyyy-MM-dd",
+  //   new Date(),
+  // );
+
+  // if (!isValid(userStartDateFormattedToDateObject)) {
+  //   console.error("Invalid start date, ", userStartDate);
+  //   return;
+  // }
+
+  // // console.log("userStartDate:", userStartDate);
+  // // console.log("Parsed Start Date:", userStartDateFormattedToDateObject);
+  // // console.log(
+  // //   "Is Valid:",
+  // //   !isNaN(userStartDateFormattedToDateObject.getTime()),
+  // // );
+
+  // const datesFromStartToToday: string[] = eachDayOfInterval({
+  //   start: userStartDateFormattedToDateObject,
+  //   end: todaysDate,
+  // })
+  //   .map((date) => format(date, "yyyy-MM-dd"))
+  //   .reverse();
+
+  //    if (!DBResultAllSalahData?.length) return
+
+  // type Entry = {
+  //   date:
+  // }
+
+  // const dict: { [date: string]: Entry[] } = {};
+  // const dict: Record<string, DBResultDataObjType[]> = {};
+
+  // for (let i = 0; i < DBResultAllSalahData.length; i++) {
+  //   const currentEntry = DBResultAllSalahData[i];
+
+  //   if (!dict[currentEntry.date]) {
+  //     dict[currentEntry.date] = [];
+  //   }
+
+  //   dict[currentEntry.date].push(currentEntry);
+  // }
+
+  // for (let j = 0; j < datesFromStartToToday.length; j++) {
+  //   let singleSalahObj: SalahRecordType = {
+  //     date: datesFromStartToToday[j],
+  //     salahs: {
+  //       Fajr: "",
+  //       Dhuhr: "",
+  //       Asar: "",
+  //       Maghrib: "",
+  //       Isha: "",
+  //     },
+  //   };
+
+  //   const currentDate = datesFromStartToToday[j];
+
+  //   const dataForCurrentDate = dict[currentDate] || [];
+
+  //   for (let i = 0; i < dataForCurrentDate.length; i++) {
+  //     let salahName: SalahNamesType = dataForCurrentDate[i].salahName;
+  //     let salahStatus: SalahStatusType = dataForCurrentDate[i].salahStatus;
+  //     singleSalahObj.salahs[salahName] = salahStatus;
+
+  //     if (salahStatus === "missed") {
+  //       if (dataForCurrentDate[i].date in missedSalahObj) {
+  //         missedSalahObj[dataForCurrentDate[i].date].push(salahName);
+  //       } else {
+  //         missedSalahObj[dataForCurrentDate[i].date] = [salahName];
+  //       }
+  //     }
+  //   }
+
+  //   singleSalahObjArr.push(singleSalahObj);
+  // }
+
+  //   setFetchedSalahData([...singleSalahObjArr]);
+  //   setMissedSalahList({ ...missedSalahObj });
+  //   generateStreaks([...singleSalahObjArr]);
+  // };
+
   const handleSalahTrackingDataFromDB = async (
     DBResultAllSalahData: DBResultDataObjType[],
     userStartDate: string,
@@ -717,11 +811,7 @@ const App = () => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
     const missedSalahObj: SalahByDateObjType = {};
     const todaysDate = new Date();
-    // const userStartDateFormattedToDateObject: Date = parse(
-    //   userStartDate,
-    //   "yyyy-MM-dd",
-    //   new Date(),
-    // );
+
     const userStartDateFormattedToDateObject: Date = parse(
       userStartDate,
       "yyyy-MM-dd",
@@ -733,27 +823,6 @@ const App = () => {
       return;
     }
 
-    // console.log("userStartDate:", userStartDate);
-    // console.log("Parsed Start Date:", userStartDateFormattedToDateObject);
-    // console.log(
-    //   "Is Valid:",
-    //   !isNaN(userStartDateFormattedToDateObject.getTime()),
-    // );
-
-    const datesFromStartToToday: string[] = eachDayOfInterval({
-      start: userStartDateFormattedToDateObject,
-      end: todaysDate,
-    })
-      .map((date) => format(date, "yyyy-MM-dd"))
-      .reverse();
-
-    //    if (!DBResultAllSalahData?.length) return
-
-    // type Entry = {
-    //   date:
-    // }
-
-    // const dict: { [date: string]: Entry[] } = {};
     const dict: Record<string, DBResultDataObjType[]> = {};
 
     for (let i = 0; i < DBResultAllSalahData.length; i++) {
@@ -766,9 +835,20 @@ const App = () => {
       dict[currentEntry.date].push(currentEntry);
     }
 
-    for (let j = 0; j < datesFromStartToToday.length; j++) {
+    console.log("DICTIONARY BUILT");
+
+    const totalDays: number =
+      differenceInDays(todaysDate, userStartDateFormattedToDateObject) + 1;
+
+    console.log("TOTAL DAYS GENERATED");
+
+    let currentDate = todaysDate;
+
+    for (let j = 0; j < totalDays; j++) {
+      const currentDateFormatted = format(currentDate, "yyyy-MM-dd");
+
       let singleSalahObj: SalahRecordType = {
-        date: datesFromStartToToday[j],
+        date: currentDateFormatted,
         salahs: {
           Fajr: "",
           Dhuhr: "",
@@ -778,9 +858,7 @@ const App = () => {
         },
       };
 
-      const currentDate = datesFromStartToToday[j];
-
-      const dataForCurrentDate = dict[currentDate] || [];
+      const dataForCurrentDate = dict[currentDateFormatted] || [];
 
       for (let i = 0; i < dataForCurrentDate.length; i++) {
         let salahName: SalahNamesType = dataForCurrentDate[i].salahName;
@@ -797,11 +875,16 @@ const App = () => {
       }
 
       singleSalahObjArr.push(singleSalahObj);
+      currentDate = subDays(currentDate, 1);
     }
+
+    console.log("ALL DATA GENERATED");
 
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
     generateStreaks([...singleSalahObjArr]);
+
+    console.log("STATES UPDATED");
   };
 
   // const [activeLocation, setActiveLocation] = useState();
