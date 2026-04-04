@@ -293,7 +293,7 @@ const App = () => {
 
   useEffect(() => {
     const initializeApp = async () => {
-      // await SplashScreen.hide({ fadeOutDuration: 250 });
+      await SplashScreen.hide({ fadeOutDuration: 250 });
       if (isDatabaseInitialised === true) {
         await fetchDataFromDB();
 
@@ -878,11 +878,17 @@ const App = () => {
       currentDate = subDays(currentDate, 1);
     }
 
+    // ! The above is the bottleneck
+
     console.log("ALL DATA GENERATED");
 
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
     generateStreaks([...singleSalahObjArr]);
+
+    // setFetchedSalahData(singleSalahObjArr);
+    // setMissedSalahList(missedSalahObj);
+    // generateStreaks(singleSalahObjArr);
 
     console.log("STATES UPDATED");
   };
