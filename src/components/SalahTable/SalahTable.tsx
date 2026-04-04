@@ -146,6 +146,8 @@ const SalahTable = ({
     }
   };
 
+  const [scrollIndex, setScrollIndex] = useState(0);
+
   return (
     <section className="salah-table-wrap hide-scrollbar">
       <Joyride
@@ -233,6 +235,7 @@ const SalahTable = ({
               headerHeight={40}
               height={height}
               width={width}
+              scrollToIndex={scrollIndex}
             >
               <Column
                 style={{ marginLeft: "0" }}
@@ -401,6 +404,40 @@ const SalahTable = ({
             </Table>
           )}
         </AutoSizer>
+      </div>
+      <div className="absolute bottom-10">
+        <IonButton
+          className="text-sm"
+          onClick={() => {
+            setScrollIndex((prev) => prev - 365);
+          }}
+        >
+          -1y
+        </IonButton>
+        <IonButton
+          className="text-sm"
+          onClick={() => {
+            setScrollIndex((prev) => prev - 30);
+          }}
+        >
+          -30d
+        </IonButton>
+        <IonButton
+          className="text-sm"
+          onClick={() => {
+            setScrollIndex((prev) => prev + 30);
+          }}
+        >
+          +30d
+        </IonButton>
+        <IonButton
+          className="text-sm"
+          onClick={() => {
+            setScrollIndex((prev) => prev + 365);
+          }}
+        >
+          +1y
+        </IonButton>
       </div>
       <BottomSheetSalahStatus
         setFetchedSalahData={setFetchedSalahData}
