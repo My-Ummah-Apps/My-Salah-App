@@ -65,12 +65,16 @@ const SalahTable = ({
   showUpdateStatusModal,
   generateStreaks,
 }: SalahTableProps) => {
+  const hasMounted = useRef(false);
+
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
   };
   const [showBoxAnimation, setShowBoxAnimation] = useState(false);
   const clonedSelectedSalahAndDate = useRef<SalahByDateObjType>({});
   const [multiEditIconAnimation, setMultiEditIconAnimation] = useState(true);
+  const [scrollIndex, setScrollIndex] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
     clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
@@ -145,8 +149,6 @@ const SalahTable = ({
       // console.log("EXISTING USER FLAG CHANGED TO 1 IN DB");
     }
   };
-
-  const [scrollIndex, setScrollIndex] = useState(0);
 
   return (
     <section className="salah-table-wrap hide-scrollbar">
@@ -224,6 +226,14 @@ const SalahTable = ({
         <AutoSizer>
           {({ height, width }) => (
             <Table
+              onScroll={() => {
+                if (!hasMounted.current) {
+                  hasMounted.current = true;
+                  return;
+                }
+                setIsScrolling(true);
+                console.log("SCROLLING");
+              }}
               style={{
                 textTransform: "none",
                 fontSize: "3rem",
@@ -405,40 +415,42 @@ const SalahTable = ({
           )}
         </AutoSizer>
       </div>
-      <div className="absolute bottom-10">
-        <IonButton
-          className="text-sm"
-          onClick={() => {
-            setScrollIndex((prev) => prev - 365);
-          }}
-        >
-          -1y
-        </IonButton>
-        <IonButton
-          className="text-sm"
-          onClick={() => {
-            setScrollIndex((prev) => prev - 30);
-          }}
-        >
-          -30d
-        </IonButton>
-        <IonButton
-          className="text-sm"
-          onClick={() => {
-            setScrollIndex((prev) => prev + 30);
-          }}
-        >
-          +30d
-        </IonButton>
-        <IonButton
-          className="text-sm"
-          onClick={() => {
-            setScrollIndex((prev) => prev + 365);
-          }}
-        >
-          +1y
-        </IonButton>
-      </div>
+      {isScrolling && (
+        <div className="absolute bottom-10">
+          <IonButton
+            className="text-sm"
+            onClick={() => {
+              setScrollIndex((prev) => prev - 365);
+            }}
+          >
+            -1y
+          </IonButton>
+          <IonButton
+            className="text-sm"
+            onClick={() => {
+              setScrollIndex((prev) => prev - 30);
+            }}
+          >
+            -30d
+          </IonButton>
+          <IonButton
+            className="text-sm"
+            onClick={() => {
+              setScrollIndex((prev) => prev + 30);
+            }}
+          >
+            +30d
+          </IonButton>
+          <IonButton
+            className="text-sm"
+            onClick={() => {
+              setScrollIndex((prev) => prev + 365);
+            }}
+          >
+            +1y
+          </IonButton>
+        </div>
+      )}
       <BottomSheetSalahStatus
         setFetchedSalahData={setFetchedSalahData}
         fetchedSalahData={fetchedSalahData}
