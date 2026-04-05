@@ -232,7 +232,10 @@ const SalahTable = ({
                   return;
                 }
                 setIsScrolling(true);
-                console.log("SCROLLING");
+              }}
+              // scrollToAlignment="center"
+              onRowsRendered={({ startIndex }) => {
+                setScrollIndex(startIndex);
               }}
               style={{
                 textTransform: "none",
@@ -416,38 +419,67 @@ const SalahTable = ({
         </AutoSizer>
       </div>
       {isScrolling && (
-        <div className="absolute bottom-10">
+        <div className="absolute left-1/2 bottom-[10%] -translate-x-1/2 flex gap-0">
           <IonButton
-            className="text-sm"
+            color={"medium"}
+            className="text-xs"
+            style={{ "--margin-start": "0", "--margin-end": "0" }}
             onClick={() => {
-              setScrollIndex((prev) => prev - 365);
+              setScrollIndex((prev) => {
+                const index = prev - 365;
+                const updatedIndex = Math.max(index, 0);
+                console.log("updatedIndex: ", updatedIndex);
+                return updatedIndex;
+              });
             }}
           >
-            -1y
+            -1 Year
           </IonButton>
           <IonButton
-            className="text-sm"
+            color={"medium"}
+            className="text-xs"
+            style={{ "--margin-start": "0", "--margin-end": "0" }}
             onClick={() => {
-              setScrollIndex((prev) => prev - 30);
+              setScrollIndex((prev) => {
+                const index = prev - 30;
+                const updatedIndex = Math.max(index, 0);
+                return updatedIndex;
+              });
             }}
           >
-            -30d
+            -30 Days
           </IonButton>
           <IonButton
-            className="text-sm"
+            color={"medium"}
+            className="text-xs"
             onClick={() => {
-              setScrollIndex((prev) => prev + 30);
+              setScrollIndex((prev) => {
+                const index = prev + 30;
+                const updatedIndex = Math.min(
+                  index,
+                  fetchedSalahData.length - 1,
+                );
+                return updatedIndex;
+              });
             }}
           >
-            +30d
+            +30 Days
           </IonButton>
           <IonButton
-            className="text-sm"
+            color={"medium"}
+            className="text-xs"
             onClick={() => {
-              setScrollIndex((prev) => prev + 365);
+              setScrollIndex((prev) => {
+                const index = prev + 365;
+                const updatedIndex = Math.min(
+                  index,
+                  fetchedSalahData.length - 1,
+                );
+                return updatedIndex;
+              });
             }}
           >
-            +1y
+            +1 Year
           </IonButton>
         </div>
       )}
