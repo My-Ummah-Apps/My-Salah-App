@@ -26,7 +26,8 @@ import {
   showAlert,
   // updateUserPrefs,
 } from "../../utils/helpers";
-import { IonButton } from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
+import { arrowDownOutline, arrowUpOutline } from "ionicons/icons";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -419,26 +420,35 @@ const SalahTable = ({
         </AutoSizer>
       </div>
       {isScrolling && (
-        <div className="absolute left-1/2 bottom-[10%] -translate-x-1/2 flex gap-0">
+        <div className="absolute left-1/2 bottom-[10%] -translate-x-1/2 flex">
           <IonButton
             color={"medium"}
-            className="text-xs"
-            style={{ "--margin-start": "0", "--margin-end": "0" }}
+            className="text-xs border-l border-stone-500 whitespace-nowrap"
+            style={{
+              margin: "0",
+              "--border-radius": "8px 0 0 8px",
+              "--padding-start": "5px",
+              "--padding-end": "5px",
+            }}
             onClick={() => {
               setScrollIndex((prev) => {
                 const index = prev - 365;
                 const updatedIndex = Math.max(index, 0);
-                console.log("updatedIndex: ", updatedIndex);
                 return updatedIndex;
               });
             }}
           >
-            -1 Year
+            <IonIcon icon={arrowDownOutline} /> -1 Year
           </IonButton>
           <IonButton
             color={"medium"}
-            className="text-xs"
-            style={{ "--margin-start": "0", "--margin-end": "0" }}
+            className="text-xs border-l border-stone-500 whitespace-nowrap"
+            style={{
+              margin: "0",
+              "--border-radius": "0px",
+              "--padding-start": "5px",
+              "--padding-end": "5px",
+            }}
             onClick={() => {
               setScrollIndex((prev) => {
                 const index = prev - 30;
@@ -447,11 +457,18 @@ const SalahTable = ({
               });
             }}
           >
+            <IonIcon icon={arrowUpOutline} />
             -30 Days
           </IonButton>
           <IonButton
             color={"medium"}
-            className="text-xs"
+            style={{
+              margin: "0",
+              "--border-radius": "0px",
+              "--padding-start": "5px",
+              "--padding-end": "5px",
+            }}
+            className="text-xs border-l border-stone-500 whitespace-nowrap"
             onClick={() => {
               setScrollIndex((prev) => {
                 const index = prev + 30;
@@ -463,11 +480,19 @@ const SalahTable = ({
               });
             }}
           >
+            {" "}
+            <IonIcon icon={arrowDownOutline} />
             +30 Days
           </IonButton>
           <IonButton
             color={"medium"}
-            className="text-xs"
+            style={{
+              margin: "0",
+              "--border-radius": "0 8px 8px 0",
+              "--padding-start": "5px",
+              "--padding-end": "10px",
+            }}
+            className="text-xs border-l border-stone-500 whitespace-nowrap"
             onClick={() => {
               setScrollIndex((prev) => {
                 const index = prev + 365;
@@ -479,6 +504,7 @@ const SalahTable = ({
               });
             }}
           >
+            <IonIcon icon={arrowDownOutline} />
             +1 Year
           </IonButton>
         </div>
