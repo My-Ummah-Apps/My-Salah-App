@@ -67,6 +67,7 @@ const SalahTable = ({
   generateStreaks,
 }: SalahTableProps) => {
   const showBtnsRef = useRef<number | null>(null);
+  const currentIndexRef = useRef(0);
   const hasMountedRef = useRef(false);
 
   const resetSelectedSalahAndDate = () => {
@@ -89,6 +90,18 @@ const SalahTable = ({
       }
     };
   }, []);
+
+  const hideButtons = (timeout: number) => {
+    if (showBtnsRef.current) {
+      clearTimeout(showBtnsRef.current);
+    }
+
+    setIsScrolling(true);
+
+    showBtnsRef.current = window.setTimeout(() => {
+      setIsScrolling(false);
+    }, timeout);
+  };
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
@@ -242,11 +255,12 @@ const SalahTable = ({
                   return;
                 }
 
-                if (showBtnsRef.current) {
-                  clearTimeout(showBtnsRef.current);
-                }
+                hideButtons(2000);
+                // if (showBtnsRef.current) {
+                //   clearTimeout(showBtnsRef.current);
+                // }
 
-                setIsScrolling(true);
+                // setIsScrolling(true);
 
                 // showBtnsRef.current = window.setTimeout(() => {
                 //   setIsScrolling(false);
@@ -254,7 +268,10 @@ const SalahTable = ({
               }}
               // scrollToAlignment="center"
               onRowsRendered={({ startIndex }) => {
-                setScrollIndex(startIndex);
+                currentIndexRef.current = startIndex;
+                // <setScrollIndex>(startIndex);
+                console.log("ROW RENDERED");
+
                 console.log("startIndex: ", startIndex);
               }}
               style={{
@@ -448,11 +465,14 @@ const SalahTable = ({
               "--border-radius": "8px 0 0 8px",
               "--padding-start": "5px",
               "--padding-end": "5px",
-              "border-left": "0px",
+              borderLeft: "0px",
             }}
             onClick={() => {
+              hideButtons(2000);
+
               setScrollIndex((prev) => {
-                const index = prev - 365;
+                // const index = prev - 365;
+                const index = currentIndexRef.current - 365;
                 const updatedIndex = Math.max(index, 0);
                 return updatedIndex;
               });
@@ -470,8 +490,10 @@ const SalahTable = ({
               "--padding-end": "5px",
             }}
             onClick={() => {
+              hideButtons(2000);
               setScrollIndex((prev) => {
-                const index = prev - 30;
+                // const index = prev - 30;
+                const index = currentIndexRef.current - 30;
                 const updatedIndex = Math.max(index, 0);
                 return updatedIndex;
               });
@@ -490,8 +512,10 @@ const SalahTable = ({
             }}
             className="text-xs border-l border-stone-500 whitespace-nowrap"
             onClick={() => {
+              hideButtons(2000);
               setScrollIndex((prev) => {
-                const index = prev + 30;
+                // const index = prev + 30;
+                const index = currentIndexRef.current + 30;
                 const updatedIndex = Math.min(
                   index,
                   fetchedSalahData.length - 1,
@@ -514,8 +538,10 @@ const SalahTable = ({
             }}
             className="text-xs border-l border-stone-500 whitespace-nowrap"
             onClick={() => {
+              hideButtons(2000);
               setScrollIndex((prev) => {
-                const index = prev + 365;
+                // const index = prev + 365;
+                const index = currentIndexRef.current + 365;
                 const updatedIndex = Math.min(
                   index,
                   fetchedSalahData.length - 1,
