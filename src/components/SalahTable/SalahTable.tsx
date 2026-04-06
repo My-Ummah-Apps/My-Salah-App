@@ -66,7 +66,8 @@ const SalahTable = ({
   showUpdateStatusModal,
   generateStreaks,
 }: SalahTableProps) => {
-  const hasMounted = useRef(false);
+  const showBtnsRef = useRef<number | null>(null);
+  const hasMountedRef = useRef(false);
 
   const resetSelectedSalahAndDate = () => {
     setSelectedSalahAndDate({});
@@ -80,6 +81,14 @@ const SalahTable = ({
   useEffect(() => {
     clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
   }, [selectedSalahAndDate]);
+
+  useEffect(() => {
+    return () => {
+      if (showBtnsRef.current) {
+        clearTimeout(showBtnsRef.current);
+      }
+    };
+  }, []);
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
@@ -228,15 +237,25 @@ const SalahTable = ({
           {({ height, width }) => (
             <Table
               onScroll={() => {
-                if (!hasMounted.current) {
-                  hasMounted.current = true;
+                if (!hasMountedRef.current) {
+                  hasMountedRef.current = true;
                   return;
                 }
+
+                if (showBtnsRef.current) {
+                  clearTimeout(showBtnsRef.current);
+                }
+
                 setIsScrolling(true);
+
+                // showBtnsRef.current = window.setTimeout(() => {
+                //   setIsScrolling(false);
+                // }, 1000);
               }}
               // scrollToAlignment="center"
               onRowsRendered={({ startIndex }) => {
                 setScrollIndex(startIndex);
+                console.log("startIndex: ", startIndex);
               }}
               style={{
                 textTransform: "none",
@@ -429,6 +448,7 @@ const SalahTable = ({
               "--border-radius": "8px 0 0 8px",
               "--padding-start": "5px",
               "--padding-end": "5px",
+              "border-left": "0px",
             }}
             onClick={() => {
               setScrollIndex((prev) => {
