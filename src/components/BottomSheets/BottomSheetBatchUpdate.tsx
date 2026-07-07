@@ -2,7 +2,6 @@ import {
   IonButton,
   IonCheckbox,
   IonContent,
-  IonIcon,
   IonInput,
   IonModal,
   IonTextarea,
@@ -36,7 +35,6 @@ import {
   showToast,
   upperCaseFirstLetter,
 } from "../../utils/helpers";
-import { calendarClearOutline } from "ionicons/icons";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;

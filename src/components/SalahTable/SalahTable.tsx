@@ -2,7 +2,12 @@ import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 import { motion, AnimatePresence } from "framer-motion";
 import Joyride, { CallBackProps, Step } from "react-joyride";
-import { HiOutlineChevronDoubleUp, HiChevronDoubleDown, HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi2";
+import {
+  HiOutlineChevronDoubleUp,
+  HiChevronDoubleDown,
+  HiOutlineChevronDown,
+  HiOutlineChevronUp,
+} from "react-icons/hi2";
 
 import {
   SalahNamesType,
@@ -27,7 +32,7 @@ import {
   showAlert,
   // updateUserPrefs,
 } from "../../utils/helpers";
-import { IonButton, IonIcon } from "@ionic/react";
+import { IonButton } from "@ionic/react";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -76,8 +81,9 @@ const SalahTable = ({
   const [showBoxAnimation, setShowBoxAnimation] = useState(false);
   const clonedSelectedSalahAndDate = useRef<SalahByDateObjType>({});
   const [multiEditIconAnimation, setMultiEditIconAnimation] = useState(true);
-  const [scrollIndex, setScrollIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
+
+  const tableRef = useRef<Table | null>(null);
 
   useEffect(() => {
     clonedSelectedSalahAndDate.current = { ...selectedSalahAndDate };
@@ -100,12 +106,9 @@ const SalahTable = ({
 
     showBtnsRef.current = window.setTimeout(() => {
       setIsScrolling(false);
-    // }, timeout);
-     }, 10000000000);
-
+    }, timeout);
+    //  }, 10000000000);
   };
-
-
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
@@ -253,6 +256,7 @@ const SalahTable = ({
         <AutoSizer>
           {({ height, width }) => (
             <Table
+              ref={tableRef}
               onScroll={() => {
                 if (!hasMountedRef.current) {
                   hasMountedRef.current = true;
@@ -276,8 +280,7 @@ const SalahTable = ({
                 // <setScrollIndex>(startIndex);
                 console.log("ROW RENDERED");
                 console.log("startIndex: ", startIndex);
-                
-                console.log("currentIndex: ", currentIndexRef.current);          
+                console.log("currentIndex: ", currentIndexRef.current);
               }}
               style={{
                 textTransform: "none",
@@ -290,7 +293,6 @@ const SalahTable = ({
               headerHeight={40}
               height={height}
               width={width}
-              scrollToIndex={scrollIndex}
               scrollToAlignment="start"
             >
               <Column
@@ -462,65 +464,52 @@ const SalahTable = ({
         </AutoSizer>
       </div>
       {isScrolling && (
-        <div className="absolute left-1/2 bottom-[5%] -translate-x-1/2 flex bg-[var(--card-bg-color)] border rounded-2xl border-stone-700 p-2 gap-6">
+        <div className="absolute left-1/2 bottom-[5%] -translate-x-1/2 flex bg-[var(--card-bg-color)] border rounded-2xl border-[var(--app-border-color)] py-2 px-4 gap-6">
           <div className="">
-          <button
-            aria-label="Jump down 1 year"
-            color={"medium"}
-            className="flex flex-col items-center text-xs whitespace-nowrap"
-            onClick={() => {
-              hideButtons(2000);
+            <button
+              aria-label="Jump up 1 year"
+              color={"medium"}
+              className="flex flex-col items-center text-xs whitespace-nowrap"
+              onClick={() => {
+                hideButtons(2000);
 
-              setScrollIndex((prev) => {
-                // const index = prev - 365;
-                const index = currentIndexRef.current - 365;
-                const updatedIndex = Math.max(index, 0);
-                return updatedIndex;
-              });
-            }}
-          >
-            <HiOutlineChevronDoubleUp className="mb-1 text-lg " />
-            1 Year
-          </button>
-            
+                const next = Math.max(currentIndexRef.current - 365, 0);
 
+                currentIndexRef.current = next;
+                tableRef.current?.scrollToRow(next);
+              }}
+            >
+              <HiOutlineChevronDoubleUp className="mb-1 text-lg " />1 Year
+            </button>
           </div>
-          <button
-            aria-label="Jump down 30 days"
-            color={"medium"}
-            className="flex flex-col items-center text-xs whitespace-nowrap"
-            onClick={() => {
-
-              hideButtons(20000);
-              setScrollIndex((prev) => {
-                // const index = prev - 30;
-                // const index = currentIndexRef.current - 30;
-                const index = 0;
-                const updatedIndex = Math.max(index, 0);
-                console.log("Updated index: ", index);
-                
-                return updatedIndex;
-              });
-            }}
-          >
-            <HiOutlineChevronUp className="mb-1 text-lg " />
-            30 Days
-          </button>
           <button
             aria-label="Jump up 30 days"
             color={"medium"}
             className="flex flex-col items-center text-xs whitespace-nowrap"
             onClick={() => {
               hideButtons(2000);
-              setScrollIndex((prev) => {
-                // const index = prev + 30;
-                const index = currentIndexRef.current + 30;
-                const updatedIndex = Math.min(
-                  index,
-                  fetchedSalahData.length - 1,
-                );
-                return updatedIndex;
-              });
+              const next = Math.max(currentIndexRef.current - 30, 0);
+
+              currentIndexRef.current = next;
+              tableRef.current?.scrollToRow(next);
+            }}
+          >
+            <HiOutlineChevronUp className="mb-1 text-lg " />
+            30 Days
+          </button>
+          <button
+            aria-label="Jump down 30 days"
+            color={"medium"}
+            className="flex flex-col items-center text-xs whitespace-nowrap"
+            onClick={() => {
+              hideButtons(2000);
+              const next = Math.min(
+                currentIndexRef.current + 30,
+                fetchedSalahData.length - 1,
+              );
+
+              currentIndexRef.current = next;
+              tableRef.current?.scrollToRow(next);
             }}
           >
             {" "}
@@ -533,19 +522,16 @@ const SalahTable = ({
             className="flex flex-col items-center text-xs whitespace-nowrap"
             onClick={() => {
               hideButtons(2000);
-              setScrollIndex((prev) => {
-                // const index = prev + 365;
-                const index = currentIndexRef.current + 365;
-                const updatedIndex = Math.min(
-                  index,
-                  fetchedSalahData.length - 1,
-                );
-                return updatedIndex;
-              });
+              const next = Math.min(
+                currentIndexRef.current + 365,
+                fetchedSalahData.length - 1,
+              );
+
+              currentIndexRef.current = next;
+              tableRef.current?.scrollToRow(next);
             }}
           >
-            <HiChevronDoubleDown className="mb-1 text-lg " />
-            1 Year
+            <HiChevronDoubleDown className="mb-1 text-lg " />1 Year
           </button>
         </div>
       )}
