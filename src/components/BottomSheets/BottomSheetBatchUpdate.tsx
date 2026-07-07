@@ -2,6 +2,7 @@ import {
   IonButton,
   IonCheckbox,
   IonContent,
+  IonIcon,
   IonInput,
   IonModal,
   IonTextarea,
@@ -35,6 +36,7 @@ import {
   showToast,
   upperCaseFirstLetter,
 } from "../../utils/helpers";
+import { calendarClearOutline } from "ionicons/icons";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -221,7 +223,19 @@ const BottomSheetBatchUpdate = ({
         >
           <div className="p-10 pb-5">
             <div className="text-center">
+              <div className="flex justify-between mb-4 text-sm">
+                <p>1. Select date range</p>
+                <p>9000 days selected</p>
+              </div>
+              {/* <div>
+                <IonIcon
+                  data-testid="delete-location-btn"
+                  icon={calendarClearOutline}
+                ></IonIcon>
               <p className="">From</p>
+              
+              </div> */}
+
               <IonInput
                 className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                 placeholder="&#x1F5D3;"
@@ -264,8 +278,8 @@ const BottomSheetBatchUpdate = ({
               ></IonInput>
             </div>
           </div>
-          <section className="flex justify-center gap-2 mx-auto my-5 text-center">
-            <div className="border rounded-lg border-[var(--app-border-color)] py-2 text-center">
+          <section className="mx-4 text-center">
+            <div className="my-5 border rounded-lg border-[var(--app-border-color)] py-2 text-center">
               <p className="mb-2">Which Salahs?</p>
               <div className="px-1">
                 {salahNamesArr.map((salahName) => (
@@ -292,65 +306,70 @@ const BottomSheetBatchUpdate = ({
                 ))}
               </div>
             </div>
-            <div className="border rounded-lg border-[var(--app-border-color)] py-2 text-center">
-              <p className="mb-2">Status</p>
-              <div className="px-1">
-                {statusArr.map((status) => (
-                  <IonCheckbox
-                    style={{
-                      "--size": "16px",
-                      "--border-color": "#888888",
-                      marginBottom: "1rem",
-                    }}
-                    key={status}
-                    checked={batchUpdateObj.status === status}
-                    onIonChange={() => {
-                      setBatchUpdateObj((prev) => ({
-                        ...prev,
-                        status: status,
-                      }));
-                    }}
-                    labelPlacement="stacked"
-                  >
-                    {status === "male-alone"
-                      ? "Alone"
-                      : status === "female-alone"
-                        ? "Prayed"
-                        : status === "group"
-                          ? "In Group"
-                          : upperCaseFirstLetter(status)}
-                  </IonCheckbox>
-                ))}
+            <section>
+              <div className="my-5 border rounded-lg border-[var(--app-border-color)] py-2 text-center">
+                <p className="mb-2">Status</p>
+                <div className="">
+                  {statusArr.map((status) => (
+                    <IonCheckbox
+                      style={{
+                        "--size": "16px",
+                        "--border-color": "#888888",
+                        marginBottom: "1rem",
+                      }}
+                      key={status}
+                      checked={batchUpdateObj.status === status}
+                      onIonChange={() => {
+                        setBatchUpdateObj((prev) => ({
+                          ...prev,
+                          status: status,
+                        }));
+                      }}
+                      labelPlacement="stacked"
+                    >
+                      {status === "male-alone"
+                        ? "Alone"
+                        : status === "female-alone"
+                          ? "Prayed"
+                          : status === "group"
+                            ? "In Group"
+                            : upperCaseFirstLetter(status)}
+                    </IonCheckbox>
+                  ))}
+                </div>
               </div>
-            </div>
+            </section>
           </section>
           {batchUpdateObj.status !== "group" &&
             batchUpdateObj.status !== "excused" &&
             batchUpdateObj.status !== "female-alone" &&
             batchUpdateObj.status !== "" && (
-              <section className="border rounded-lg border-[var(--app-border-color)] mx-2 py-2 text-center">
-                <p className="mb-5 text-center">Reasons</p>
-                {userPreferences.reasons.map((reason) => (
-                  <IonCheckbox
-                    style={{
-                      "--size": "16px",
-                      "--border-color": "#888888",
-                    }}
-                    checked={batchUpdateObj.reasons.includes(reason)}
-                    key={reason}
-                    labelPlacement="stacked"
-                    onIonChange={() => {
-                      setBatchUpdateObj((prev) => ({
-                        ...prev,
-                        reasons: prev.reasons.includes(reason)
-                          ? prev.reasons.filter((r) => r !== reason)
-                          : [...prev.reasons, reason],
-                      }));
-                    }}
-                  >
-                    {reason}
-                  </IonCheckbox>
-                ))}
+              <section className="border rounded-lg border-[var(--app-border-color)] mx-4 py-2 text-center">
+                <p className="w-full mb-5 text-center">Reasons</p>
+                <div className="flex flex-wrap justify-around">
+                  {userPreferences.reasons.map((reason) => (
+                    <IonCheckbox
+                      className="mb-4"
+                      style={{
+                        "--size": "16px",
+                        "--border-color": "#888888",
+                      }}
+                      checked={batchUpdateObj.reasons.includes(reason)}
+                      key={reason}
+                      labelPlacement="stacked"
+                      onIonChange={() => {
+                        setBatchUpdateObj((prev) => ({
+                          ...prev,
+                          reasons: prev.reasons.includes(reason)
+                            ? prev.reasons.filter((r) => r !== reason)
+                            : [...prev.reasons, reason],
+                        }));
+                      }}
+                    >
+                      {reason}
+                    </IonCheckbox>
+                  ))}
+                </div>
               </section>
             )}
           <div className="m-4 text-sm notes-wrap">

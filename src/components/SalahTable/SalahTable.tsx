@@ -2,6 +2,7 @@ import "react-virtualized/styles.css";
 import { Column, Table, AutoSizer } from "react-virtualized";
 import { motion, AnimatePresence } from "framer-motion";
 import Joyride, { CallBackProps, Step } from "react-joyride";
+import { HiOutlineChevronDoubleUp, HiChevronDoubleDown, HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi2";
 
 import {
   SalahNamesType,
@@ -27,7 +28,6 @@ import {
   // updateUserPrefs,
 } from "../../utils/helpers";
 import { IonButton, IonIcon } from "@ionic/react";
-import { arrowDownOutline, arrowUpOutline } from "ionicons/icons";
 
 interface SalahTableProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -100,8 +100,12 @@ const SalahTable = ({
 
     showBtnsRef.current = window.setTimeout(() => {
       setIsScrolling(false);
-    }, timeout);
+    // }, timeout);
+     }, 10000000000);
+
   };
+
+
 
   const handleTableCellClick = (
     salahName: SalahNamesType,
@@ -271,8 +275,9 @@ const SalahTable = ({
                 currentIndexRef.current = startIndex;
                 // <setScrollIndex>(startIndex);
                 console.log("ROW RENDERED");
-
                 console.log("startIndex: ", startIndex);
+                
+                console.log("currentIndex: ", currentIndexRef.current);          
               }}
               style={{
                 textTransform: "none",
@@ -286,6 +291,7 @@ const SalahTable = ({
               height={height}
               width={width}
               scrollToIndex={scrollIndex}
+              scrollToAlignment="start"
             >
               <Column
                 style={{ marginLeft: "0" }}
@@ -456,17 +462,12 @@ const SalahTable = ({
         </AutoSizer>
       </div>
       {isScrolling && (
-        <div className="absolute left-1/2 bottom-[10%] -translate-x-1/2 flex">
-          <IonButton
+        <div className="absolute left-1/2 bottom-[5%] -translate-x-1/2 flex bg-[var(--card-bg-color)] border rounded-2xl border-stone-700 p-2 gap-6">
+          <div className="">
+          <button
+            aria-label="Jump down 1 year"
             color={"medium"}
-            className="text-xs border-l border-stone-500 whitespace-nowrap"
-            style={{
-              margin: "0",
-              "--border-radius": "8px 0 0 8px",
-              "--padding-start": "5px",
-              "--padding-end": "5px",
-              borderLeft: "0px",
-            }}
+            className="flex flex-col items-center text-xs whitespace-nowrap"
             onClick={() => {
               hideButtons(2000);
 
@@ -478,39 +479,37 @@ const SalahTable = ({
               });
             }}
           >
-            <IonIcon icon={arrowDownOutline} /> -1 Year
-          </IonButton>
-          <IonButton
+            <HiOutlineChevronDoubleUp className="mb-1 text-lg " />
+            1 Year
+          </button>
+            
+
+          </div>
+          <button
+            aria-label="Jump down 30 days"
             color={"medium"}
-            className="text-xs border-l border-stone-500 whitespace-nowrap"
-            style={{
-              margin: "0",
-              "--border-radius": "0px",
-              "--padding-start": "5px",
-              "--padding-end": "5px",
-            }}
+            className="flex flex-col items-center text-xs whitespace-nowrap"
             onClick={() => {
-              hideButtons(2000);
+
+              hideButtons(20000);
               setScrollIndex((prev) => {
                 // const index = prev - 30;
-                const index = currentIndexRef.current - 30;
+                // const index = currentIndexRef.current - 30;
+                const index = 0;
                 const updatedIndex = Math.max(index, 0);
+                console.log("Updated index: ", index);
+                
                 return updatedIndex;
               });
             }}
           >
-            <IonIcon icon={arrowUpOutline} />
-            -30 Days
-          </IonButton>
-          <IonButton
+            <HiOutlineChevronUp className="mb-1 text-lg " />
+            30 Days
+          </button>
+          <button
+            aria-label="Jump up 30 days"
             color={"medium"}
-            style={{
-              margin: "0",
-              "--border-radius": "0px",
-              "--padding-start": "5px",
-              "--padding-end": "5px",
-            }}
-            className="text-xs border-l border-stone-500 whitespace-nowrap"
+            className="flex flex-col items-center text-xs whitespace-nowrap"
             onClick={() => {
               hideButtons(2000);
               setScrollIndex((prev) => {
@@ -525,18 +524,13 @@ const SalahTable = ({
             }}
           >
             {" "}
-            <IonIcon icon={arrowDownOutline} />
-            +30 Days
-          </IonButton>
-          <IonButton
+            <HiOutlineChevronDown className="mb-1 text-lg " />
+            30 Days
+          </button>
+          <button
             color={"medium"}
-            style={{
-              margin: "0",
-              "--border-radius": "0 8px 8px 0",
-              "--padding-start": "5px",
-              "--padding-end": "10px",
-            }}
-            className="text-xs border-l border-stone-500 whitespace-nowrap"
+            aria-label="Jump down 1 year"
+            className="flex flex-col items-center text-xs whitespace-nowrap"
             onClick={() => {
               hideButtons(2000);
               setScrollIndex((prev) => {
@@ -550,9 +544,9 @@ const SalahTable = ({
               });
             }}
           >
-            <IonIcon icon={arrowDownOutline} />
-            +1 Year
-          </IonButton>
+            <HiChevronDoubleDown className="mb-1 text-lg " />
+            1 Year
+          </button>
         </div>
       )}
       <BottomSheetSalahStatus
