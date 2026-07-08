@@ -106,8 +106,8 @@ const SalahTable = ({
 
     showBtnsRef.current = window.setTimeout(() => {
       setIsScrolling(false);
-    }, timeout);
-    //  }, 10000000000);
+      // }, timeout);
+    }, 10000000000);
   };
 
   const handleTableCellClick = (
@@ -247,7 +247,7 @@ const SalahTable = ({
                     );
               }}
             >
-              <p className="">Edit</p>
+              <p className="">Update</p>
             </button>
           </motion.section>
         )}
@@ -464,7 +464,12 @@ const SalahTable = ({
         </AutoSizer>
       </div>
       {isScrolling && (
-        <div className="absolute left-1/2 bottom-[5%] -translate-x-1/2 flex bg-[var(--card-bg-color)] border rounded-2xl border-[var(--app-border-color)] py-2 px-4 gap-6">
+        <motion.div
+          initial={{ x: "-50%", y: "100%", scale: 0.5, opacity: 0 }}
+          animate={{ y: "0%", scale: 1, opacity: 1 }}
+          exit={{ y: "100%", scale: 0.5, opacity: 0 }}
+          className="absolute left-1/2 bottom-[5%] -translate-x-1/2 flex bg-[var(--card-bg-color)] border rounded-2xl border-[var(--app-border-color)] py-2 px-4 gap-6"
+        >
           <div className="">
             <button
               aria-label="Jump up 1 year"
@@ -533,7 +538,7 @@ const SalahTable = ({
           >
             <HiChevronDoubleDown className="mb-1 text-lg " />1 Year
           </button>
-        </div>
+        </motion.div>
       )}
       <BottomSheetSalahStatus
         setFetchedSalahData={setFetchedSalahData}
