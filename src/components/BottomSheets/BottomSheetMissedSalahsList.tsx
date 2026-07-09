@@ -15,7 +15,10 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonLabel,
   IonModal,
+  IonSegment,
+  IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
@@ -43,6 +46,9 @@ const MissedSalahsListBottomSheet = ({
 }: MissedSalahsListBottomSheetProps) => {
   const [isClickedItem, setIsClickedItem] = useState<string>();
   const [showCompletedMsg, setShowCompletedMsg] = useState(false);
+  const [salahToShow, setSalahToShow] = useState<
+    Exclude<SalahNamesType, "Asar"> | "All"
+  >("All");
 
   // TODO :Below useEffect was put in place to re-open the DB connection when app came back to the foreground after being put in the background however, while it re-opens the connection, something else is closing it, this will require further investigation
   // useEffect(() => {
@@ -92,6 +98,7 @@ const MissedSalahsListBottomSheet = ({
     missedSalahList[obj].forEach((item) => {
       restructuredMissedSalahList.push({ [obj]: item });
     });
+    console.log("Missed salah list: ", missedSalahList);
   }
 
   const modifySalahStatusInDB = async (
@@ -126,6 +133,12 @@ const MissedSalahsListBottomSheet = ({
     if (restructuredMissedSalahList.length === 0) {
       setShowCompletedMsg(true);
     }
+
+    if (salahToShow == "Fajr") {
+      // We need to change the restructured list here, so only fajr salahs show
+    }
+
+    console.log("TRIGGERED");
 
     // return () => {
     //   setShowCompletedMsg(false);
@@ -165,7 +178,7 @@ const MissedSalahsListBottomSheet = ({
                   : salahStatusColorsHexCodes["missed"],
               transition: "background-color 250ms ease",
             }}
-            className="w-[1.3rem] h-[1.3rem] rounded-md "
+            className="w-[1.3rem] h-[1.3rem] rounded-md"
           />
         </div>
         <div
@@ -231,6 +244,40 @@ const MissedSalahsListBottomSheet = ({
             You have {getMissedSalahCount(missedSalahList)} missed Salah to make
             up
           </h1>
+
+          <section className="px-4 mb-10">
+            <IonSegment
+              mode="ios"
+              value={salahToShow}
+              onIonChange={(e) => {
+                const value =
+                  e.detail.value === "Asar" ? "Asr" : e.detail.value;
+                setSalahToShow(
+                  value as Exclude<SalahNamesType, "Asar"> | "All",
+                );
+              }}
+            >
+              <IonSegmentButton value="All">
+                <IonLabel>All</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="Fajr">
+                <IonLabel>Fajr</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="Dhuhr">
+                <IonLabel>Dhuhr</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="Asr">
+                <IonLabel>Asr</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="Maghrib">
+                <IonLabel>Maghrib</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="Isha">
+                <IonLabel>Isha</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </section>
+
           <div className="px-4">
             <AutoSizer disableHeight>
               {({ width }) => (
