@@ -106,8 +106,8 @@ const SalahTable = ({
 
     showBtnsRef.current = window.setTimeout(() => {
       setIsScrolling(false);
-      // }, timeout);
-    }, 10000000000);
+    }, timeout);
+    // }, 10000000000);
   };
 
   const handleTableCellClick = (
@@ -466,9 +466,9 @@ const SalahTable = ({
       {isScrolling && (
         <motion.div
           initial={{ x: "-50%", y: "100%", scale: 0.5, opacity: 0 }}
-          animate={{ y: "0%", scale: 1, opacity: 1 }}
+          animate={{ y: "-4vh", scale: 1, opacity: 1 }}
           exit={{ y: "100%", scale: 0.5, opacity: 0 }}
-          className="shadow-md absolute left-1/2 bottom-[5%] -translate-x-1/2 flex bg-[var(--card-bg-color)] border rounded-2xl border-[var(--app-border-color)] py-2 px-4 gap-6"
+          className="shadow-md absolute left-1/2 bottom-0 -translate-x-1/2 flex bg-[var(--card-bg-color)] border rounded-2xl border-[var(--app-border-color)] py-2 px-4 gap-6"
         >
           <div className="">
             <button
