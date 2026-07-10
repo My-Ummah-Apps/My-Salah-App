@@ -95,10 +95,25 @@ const MissedSalahsListBottomSheet = ({
 
   const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
   for (let obj in missedSalahList) {
-    missedSalahList[obj].forEach((item) => {
-      restructuredMissedSalahList.push({ [obj]: item });
-    });
-    console.log("Missed salah list: ", missedSalahList);
+    if (salahToShow == "All") {
+      missedSalahList[obj].forEach((item) => {
+        restructuredMissedSalahList.push({ [obj]: item });
+      });
+      console.log("All: ", missedSalahList);
+    } else {
+      missedSalahList[obj].forEach((item) => {
+        console.log(item);
+
+        if (item === salahToShow) {
+          console.log("ITEM IS: ", item);
+
+          restructuredMissedSalahList.push({ [obj]: item });
+        } else if (salahToShow === "Asr" && item == "Asar") {
+          console.log("ITEM IS: ", item);
+          restructuredMissedSalahList.push({ [obj]: item });
+        }
+      });
+    }
   }
 
   const modifySalahStatusInDB = async (
@@ -129,21 +144,34 @@ const MissedSalahsListBottomSheet = ({
     }, 500);
   };
 
-  useEffect(() => {
-    if (restructuredMissedSalahList.length === 0) {
-      setShowCompletedMsg(true);
-    }
+  // const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
+  // useEffect(() => {
+  //   if (restructuredMissedSalahList.length === 0) {
+  //     setShowCompletedMsg(true);
+  //   }
 
-    if (salahToShow == "Fajr") {
-      // We need to change the restructured list here, so only fajr salahs show
-    }
+  //   if (salahToShow == "All") {
+  //     for (let obj in missedSalahList) {
+  //       missedSalahList[obj].forEach((item) => {
+  //         restructuredMissedSalahList.push({ [obj]: item });
+  //       });
+  //       console.log("ALL: ", missedSalahList);
+  //     }
+  //   } else if (salahToShow == "Fajr") {
+  //     // We need to change the restructured list here, so only fajr salahs show
 
-    console.log("TRIGGERED");
+  //     restructuredMissedSalahList.filter;
 
-    // return () => {
-    //   setShowCompletedMsg(false);
-    // };
-  }, [restructuredMissedSalahList]);
+  //     restructuredMissedSalahList.forEach((item) => {
+  //       console.log("FAJR PRAYERS ", Object.values(item)[0]);
+  //       // maybe re-populate the restructured missed salah list here, could have an == "All" check where the restructured list is initialised as opposed to line 96
+  //     });
+  //   }
+
+  //   // return () => {
+  //   //   setShowCompletedMsg(false);
+  //   // };
+  // }, [restructuredMissedSalahList, salahToShow]);
 
   const Row = ({
     index,
