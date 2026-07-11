@@ -9,7 +9,7 @@ import {
 import { salahStatusColorsHexCodes } from "../../utils/constants";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   IonButton,
   IonButtons,
@@ -93,28 +93,23 @@ const MissedSalahsListBottomSheet = ({
     };
   }, [showMissedSalahsSheet]);
 
-  const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
-  for (let obj in missedSalahList) {
-    if (salahToShow == "All") {
-      missedSalahList[obj].forEach((item) => {
-        restructuredMissedSalahList.push({ [obj]: item });
-      });
-      console.log("All: ", missedSalahList);
-    } else {
-      missedSalahList[obj].forEach((item) => {
-        console.log(item);
+  const restructuredMissedSalahList = useMemo(() => {
+    const list: restructuredMissedSalahListProp[] = [];
 
-        if (item === salahToShow) {
-          console.log("ITEM IS: ", item);
-
-          restructuredMissedSalahList.push({ [obj]: item });
-        } else if (salahToShow === "Asr" && item == "Asar") {
-          console.log("ITEM IS: ", item);
-          restructuredMissedSalahList.push({ [obj]: item });
+    for (let date in missedSalahList) {
+      missedSalahList[date].forEach((item) => {
+        if (
+          salahToShow === "All" ||
+          item === salahToShow ||
+          (salahToShow === "Asr" && item === "Asar")
+        ) {
+          list.push({ [date]: item });
         }
       });
     }
-  }
+
+    return list;
+  }, [salahToShow, missedSalahList]);
 
   const modifySalahStatusInDB = async (
     date: string,
@@ -176,18 +171,22 @@ const MissedSalahsListBottomSheet = ({
   const Row = ({
     index,
     style,
+    data,
   }: {
     index: number;
     style: React.CSSProperties;
+    data: restructuredMissedSalahListProp[];
   }) => {
-    const item = restructuredMissedSalahList[index];
+    // const item = restructuredMissedSalahList[index];
+    const item = data[index];
+
     const date = Object.keys(item)[0];
     const salah = Object.values(item)[0];
     const key = `${date}-${salah}`;
 
     return (
       <div
-        key={key}
+        // key={key}
         // style={style}
         style={{
           ...style,
@@ -197,7 +196,7 @@ const MissedSalahsListBottomSheet = ({
         className="bg-[var(--card-bg-color)] px-4 rounded-2xl"
       >
         <div className="flex items-center justify-between text-[var(--ion-text-color)] py-3 border-b border-[var(--app-border-color)]">
-          <p>{salah}</p>
+          <p>{salah === "Asar" ? "Asr" : salah}</p>
           <div
             style={{
               backgroundColor:
@@ -312,6 +311,7 @@ const MissedSalahsListBottomSheet = ({
                 <List
                   height={800}
                   width={width}
+                  itemData={restructuredMissedSalahList}
                   itemCount={restructuredMissedSalahList.length}
                   itemSize={125}
                 >
