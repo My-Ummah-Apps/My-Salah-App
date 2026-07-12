@@ -19,6 +19,9 @@ import {
   IonModal,
   IonSegment,
   IonSegmentButton,
+  IonSelect,
+  IonSelectOption,
+  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
@@ -49,6 +52,7 @@ const MissedSalahsListBottomSheet = ({
   const [salahToShow, setSalahToShow] = useState<
     Exclude<SalahNamesType, "Asar"> | "All"
   >("All");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
 
   // TODO :Below useEffect was put in place to re-open the DB connection when app came back to the foreground after being put in the background however, while it re-opens the connection, something else is closing it, this will require further investigation
   // useEffect(() => {
@@ -251,6 +255,7 @@ const MissedSalahsListBottomSheet = ({
       // className="ion-no-border"
       >
         <IonToolbar>
+          <IonTitle>Missed Salahs</IonTitle>
           <IonButtons slot="end">
             <IonButton
               // strong={true}
@@ -263,14 +268,17 @@ const MissedSalahsListBottomSheet = ({
       </IonHeader>
       <IonContent scrollY={false} className="relative">
         <section className="mt-10 mb-10 text-white">
-          <h1
-            className={`mx-2 my-4 text-lg text-center text-[var(--ion-text-color)] ${
+          <p
+            className={`mx-2 my-4 text-center text-[var(--ion-text-color)] ${
               showCompletedMsg ? "invisible" : "visibile"
             }`}
           >
-            You have {getMissedSalahCount(missedSalahList)} missed Salah to make
-            up
-          </h1>
+            You have{" "}
+            <span className="text-[rgb(230,57,70)]">
+              {getMissedSalahCount(missedSalahList)}
+            </span>{" "}
+            missed Salah to make up
+          </p>
 
           <section className="px-4 mb-10">
             <IonSegment
@@ -303,6 +311,19 @@ const MissedSalahsListBottomSheet = ({
                 <IonLabel>Isha</IonLabel>
               </IonSegmentButton>
             </IonSegment>
+          </section>
+
+          <section>
+            <IonSelect
+              value={sortOrder}
+              aria-label="Sort missed salahs"
+              interface="popover"
+              placeholder="Sort missed salahs"
+              onIonChange={(e) => setSortOrder(e.detail.value)}
+            >
+              <IonSelectOption value="newest">Newest first</IonSelectOption>
+              <IonSelectOption value="oldest">Oldest first</IonSelectOption>
+            </IonSelect>
           </section>
 
           <div className="px-4">
