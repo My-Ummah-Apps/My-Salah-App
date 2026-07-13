@@ -48,7 +48,7 @@ const MissedSalahsListBottomSheet = ({
   missedSalahList,
 }: MissedSalahsListBottomSheetProps) => {
   const [isClickedItem, setIsClickedItem] = useState<string>();
-  const [showCompletedMsg, setShowCompletedMsg] = useState(false);
+  // const [showCompletedMsg, setShowCompletedMsg] = useState(false);
   const [salahToShow, setSalahToShow] = useState<
     Exclude<SalahNamesType, "Asar"> | "All"
   >("All");
@@ -241,11 +241,11 @@ const MissedSalahsListBottomSheet = ({
       // className="modal-height"
       isOpen={showMissedSalahsSheet}
       onWillPresent={() => {
-        setShowCompletedMsg(false);
+        // setShowCompletedMsg(false);
       }}
       onDidDismiss={() => {
         setShowMissedSalahsSheet(false);
-        setShowCompletedMsg(false);
+        // setShowCompletedMsg(false);
         setIsClickedItem("");
       }}
       // initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
@@ -255,7 +255,7 @@ const MissedSalahsListBottomSheet = ({
       // className="ion-no-border"
       >
         <IonToolbar>
-          <IonTitle>Missed Salahs</IonTitle>
+          <IonTitle>Missed Salah</IonTitle>
           <IonButtons slot="end">
             <IonButton
               // strong={true}
@@ -269,9 +269,9 @@ const MissedSalahsListBottomSheet = ({
       <IonContent scrollY={false} className="relative">
         <section className="mt-10 mb-10 text-white">
           <p
-            className={`mx-2 my-4 text-center text-[var(--ion-text-color)] ${
-              showCompletedMsg ? "invisible" : "visible"
-            }`}
+            className={`mx-2 my-4 text-center text-[var(--ion-text-color)] 
+              `}
+            //  ${showCompletedMsg ? "invisible" : "visible"}
           >
             You have{" "}
             <span className="text-[rgb(230,57,70)]">
@@ -280,7 +280,7 @@ const MissedSalahsListBottomSheet = ({
             {salahToShow !== "All" ? salahToShow : ""} Salah to make up
           </p>
 
-          <section className="px-4 mb-10">
+          <section className="px-4 mb-6">
             <IonSegment
               mode="ios"
               value={salahToShow}
@@ -313,17 +313,20 @@ const MissedSalahsListBottomSheet = ({
             </IonSegment>
           </section>
 
-          <section>
-            <IonSelect
-              value={sortOrder}
-              aria-label="Sort missed salahs"
-              interface="popover"
-              placeholder="Sort missed salahs"
-              onIonChange={(e) => setSortOrder(e.detail.value)}
-            >
-              <IonSelectOption value="newest">Newest first</IonSelectOption>
-              <IonSelectOption value="oldest">Oldest first</IonSelectOption>
-            </IonSelect>
+          <section className="mx-4 border border-[var(--app-border-color)] rounded-lg mb-4">
+            <IonLabel>
+              <IonSelect
+                className="pl-2"
+                value={sortOrder}
+                aria-label="Sort missed salahs"
+                interface="popover"
+                placeholder="Sort missed salahs"
+                onIonChange={(e) => setSortOrder(e.detail.value)}
+              >
+                <IonSelectOption value="newest">Newest first</IonSelectOption>
+                <IonSelectOption value="oldest">Oldest first</IonSelectOption>
+              </IonSelect>
+            </IonLabel>
           </section>
 
           <div className="px-4">
@@ -342,7 +345,7 @@ const MissedSalahsListBottomSheet = ({
             </AutoSizer>
           </div>
 
-          {showCompletedMsg && (
+          {/* {showCompletedMsg && (
             <motion.div
               className="text-center center"
               initial={{ opacity: 0, y: 20 }}
@@ -365,7 +368,7 @@ const MissedSalahsListBottomSheet = ({
                 Close
               </IonButton>
             </motion.div>
-          )}
+          )} */}
         </section>{" "}
       </IonContent>
     </IonModal>
