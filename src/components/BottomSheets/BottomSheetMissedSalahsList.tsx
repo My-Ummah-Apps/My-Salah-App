@@ -270,14 +270,14 @@ const MissedSalahsListBottomSheet = ({
         <section className="mt-10 mb-10 text-white">
           <p
             className={`mx-2 my-4 text-center text-[var(--ion-text-color)] ${
-              showCompletedMsg ? "invisible" : "visibile"
+              showCompletedMsg ? "invisible" : "visible"
             }`}
           >
             You have{" "}
             <span className="text-[rgb(230,57,70)]">
-              {getMissedSalahCount(missedSalahList)}
+              {restructuredMissedSalahList.length}{" "}
             </span>{" "}
-            missed Salah to make up
+            {salahToShow !== "All" ? salahToShow : ""} Salah to make up
           </p>
 
           <section className="px-4 mb-10">
