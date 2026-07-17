@@ -309,7 +309,12 @@ const MissedSalahsListBottomSheet = ({
                 placeholder="Sort missed salahs"
                 onIonChange={(e) => setSortOrder(e.detail.value)}
               >
-                {/* <IonIcon icon={swapVerticalOutline} /> */}
+                <IonIcon
+                  className="mr-[5px]"
+                  slot="start"
+                  icon={swapVerticalOutline}
+                  aria-hidden="true"
+                />
                 <IonSelectOption value="newest">Newest first</IonSelectOption>
                 <IonSelectOption value="oldest">Oldest first</IonSelectOption>
               </IonSelect>
