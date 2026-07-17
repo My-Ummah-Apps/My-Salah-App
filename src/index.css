@@ -281,6 +281,17 @@ ion-fab {
   margin-bottom: var(--ion-safe-area-bottom, 0);
 }
 
+/* ion-select.sort-select::part(wrapper) {
+  width: 100% !important;
+}
+
+ion-select.sort-select::part(inner) {
+  width: 100% !important;
+  flex: 1 1 auto;
+  justify-content: space-between;
+} */
+
+
 .action-sheet-title.sc-ion-action-sheet-md,
 .sc-ion-action-sheet-md {
   --color: var(--ion-text-color);

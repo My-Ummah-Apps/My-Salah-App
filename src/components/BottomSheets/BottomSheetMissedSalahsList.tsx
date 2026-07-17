@@ -15,6 +15,7 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonLabel,
   IonModal,
   IonSegment,
@@ -28,6 +29,7 @@ import { toggleDBConnection } from "../../utils/dbUtils";
 import { createLocalisedDate, getMissedSalahCount } from "../../utils/helpers";
 import { AutoSizer } from "react-virtualized";
 import { motion } from "framer-motion";
+import { swapVerticalOutline } from "ionicons/icons";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -100,6 +102,18 @@ const MissedSalahsListBottomSheet = ({
   const restructuredMissedSalahList = useMemo(() => {
     const list: restructuredMissedSalahListProp[] = [];
 
+    let sortedArr = Object.entries(missedSalahList).sort(([dateA], [dateB]) =>
+      sortOrder === "newest"
+        ? dateB.localeCompare(dateA)
+        : dateA.localeCompare(dateB),
+    );
+
+    // sortedArr = sortedArr.fromEntries(sortedArr);
+
+    console.log("Sorted Arr: ", sortedArr);
+
+    console.log("Missed Salah List: ", missedSalahList);
+
     for (let date in missedSalahList) {
       missedSalahList[date].forEach((item) => {
         if (
@@ -113,7 +127,7 @@ const MissedSalahsListBottomSheet = ({
     }
 
     return list;
-  }, [salahToShow, missedSalahList]);
+  }, [salahToShow, missedSalahList, sortOrder]);
 
   const modifySalahStatusInDB = async (
     date: string,
@@ -142,35 +156,6 @@ const MissedSalahsListBottomSheet = ({
       });
     }, 500);
   };
-
-  // const restructuredMissedSalahList: restructuredMissedSalahListProp[] = [];
-  // useEffect(() => {
-  //   if (restructuredMissedSalahList.length === 0) {
-  //     setShowCompletedMsg(true);
-  //   }
-
-  //   if (salahToShow == "All") {
-  //     for (let obj in missedSalahList) {
-  //       missedSalahList[obj].forEach((item) => {
-  //         restructuredMissedSalahList.push({ [obj]: item });
-  //       });
-  //       console.log("ALL: ", missedSalahList);
-  //     }
-  //   } else if (salahToShow == "Fajr") {
-  //     // We need to change the restructured list here, so only fajr salahs show
-
-  //     restructuredMissedSalahList.filter;
-
-  //     restructuredMissedSalahList.forEach((item) => {
-  //       console.log("FAJR PRAYERS ", Object.values(item)[0]);
-  //       // maybe re-populate the restructured missed salah list here, could have an == "All" check where the restructured list is initialised as opposed to line 96
-  //     });
-  //   }
-
-  //   // return () => {
-  //   //   setShowCompletedMsg(false);
-  //   // };
-  // }, [restructuredMissedSalahList, salahToShow]);
 
   const Row = ({
     index,
@@ -316,13 +301,15 @@ const MissedSalahsListBottomSheet = ({
           <section className="mx-4 border border-[var(--app-border-color)] rounded-lg mb-4">
             <IonLabel>
               <IonSelect
-                className="pl-2"
+                className="w-full px-2 pl-2"
                 value={sortOrder}
+                labelPlacement="stacked"
                 aria-label="Sort missed salahs"
                 interface="popover"
                 placeholder="Sort missed salahs"
                 onIonChange={(e) => setSortOrder(e.detail.value)}
               >
+                {/* <IonIcon icon={swapVerticalOutline} /> */}
                 <IonSelectOption value="newest">Newest first</IonSelectOption>
                 <IonSelectOption value="oldest">Oldest first</IonSelectOption>
               </IonSelect>
