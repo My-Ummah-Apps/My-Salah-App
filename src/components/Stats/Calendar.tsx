@@ -1,6 +1,4 @@
 import { useState, useRef } from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
 import { salahStatusColorsHexCodes } from "../../utils/constants";
 
 import {
@@ -25,10 +23,6 @@ import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
 import {
-  HiOutlineChevronDoubleUp,
-  HiChevronDoubleDown,
-  HiOutlineChevronDown,
-  HiOutlineChevronUp,
   HiOutlineChevronDoubleLeft,
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
@@ -168,10 +162,6 @@ const Calendar = ({
             </p>
             <div className="bg-[var(--sheet-option-bg)] rounded-full">
               <button
-                // style={{
-                //   opacity:
-                //     currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
-                // }}
                 onClick={() => {
                   if (currentMonth === formattedMonths.length - 1) return;
                   setCurrentMonth((prev) => prev + 12);
@@ -186,10 +176,6 @@ const Calendar = ({
                 />
               </button>
               <button
-                // style={{
-                //   opacity:
-                //     currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
-                // }}
                 onClick={() => {
                   if (currentMonth === formattedMonths.length - 1) return;
                   setCurrentMonth((prev) => prev + 1);
@@ -205,9 +191,6 @@ const Calendar = ({
               </button>
 
               <button
-                // style={{
-                //   opacity: currentMonth === 0 ? "0.3" : "1",
-                // }}
                 onClick={() => {
                   if (currentMonth === 0) return;
                   setCurrentMonth((prev) => prev - 1);
@@ -221,12 +204,11 @@ const Calendar = ({
                 />
               </button>
               <button
-                // style={{
-                //   opacity:
-                //     currentMonth >= formattedMonths.length - 1 ? "0.3" : "1",
-                // }}
                 onClick={() => {
                   if (currentMonth >= formattedMonths.length - 1) return;
+                  console.log(currentMonth);
+                  console.log(formattedMonths.length - 1);
+
                   setCurrentMonth((prev) => prev - 12);
                 }}
                 className="p-2 m-1"
