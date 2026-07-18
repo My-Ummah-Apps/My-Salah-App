@@ -291,6 +291,20 @@ ion-select.sort-select::part(inner) {
   justify-content: space-between;
 } */
 
+.sort-select {
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  min-height: 0;
+}
+
+.sort-select::part(icon) {
+  align-self: center;
+  width: 16px;
+  height: 16px;
+  margin-block: 0;
+  margin-inline-start: 8px;
+  transform: translateY(2px);
+}
 
 .action-sheet-title.sc-ion-action-sheet-md,
 .sc-ion-action-sheet-md {

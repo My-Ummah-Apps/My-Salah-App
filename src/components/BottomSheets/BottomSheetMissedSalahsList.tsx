@@ -26,9 +26,9 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
-import { createLocalisedDate, getMissedSalahCount } from "../../utils/helpers";
+import { createLocalisedDate } from "../../utils/helpers";
 import { AutoSizer } from "react-virtualized";
-import { motion } from "framer-motion";
+
 import { swapVerticalOutline } from "ionicons/icons";
 
 interface MissedSalahsListBottomSheetProps {
@@ -102,20 +102,16 @@ const MissedSalahsListBottomSheet = ({
   const restructuredMissedSalahList = useMemo(() => {
     const list: restructuredMissedSalahListProp[] = [];
 
-    let sortedArr = Object.entries(missedSalahList).sort(([dateA], [dateB]) =>
-      sortOrder === "newest"
-        ? dateB.localeCompare(dateA)
-        : dateA.localeCompare(dateB),
+    const sortedArr = Object.fromEntries(
+      Object.entries(missedSalahList).sort(([dateA], [dateB]) =>
+        sortOrder === "newest"
+          ? dateB.localeCompare(dateA)
+          : dateA.localeCompare(dateB),
+      ),
     );
 
-    // sortedArr = sortedArr.fromEntries(sortedArr);
-
-    console.log("Sorted Arr: ", sortedArr);
-
-    console.log("Missed Salah List: ", missedSalahList);
-
-    for (let date in missedSalahList) {
-      missedSalahList[date].forEach((item) => {
+    for (let date in sortedArr) {
+      sortedArr[date].forEach((item) => {
         if (
           salahToShow === "All" ||
           item === salahToShow ||
@@ -299,26 +295,24 @@ const MissedSalahsListBottomSheet = ({
           </section>
 
           <section className="mx-4 border border-[var(--app-border-color)] rounded-lg mb-4">
-            <IonLabel>
-              <IonSelect
-                className="w-full px-2 pl-2"
-                value={sortOrder}
-                labelPlacement="stacked"
-                aria-label="Sort missed salahs"
-                interface="popover"
-                placeholder="Sort missed salahs"
-                onIonChange={(e) => setSortOrder(e.detail.value)}
-              >
-                <IonIcon
-                  className="mr-[5px]"
-                  slot="start"
-                  icon={swapVerticalOutline}
-                  aria-hidden="true"
-                />
-                <IonSelectOption value="newest">Newest first</IonSelectOption>
-                <IonSelectOption value="oldest">Oldest first</IonSelectOption>
-              </IonSelect>
-            </IonLabel>
+            <IonSelect
+              className="w-full px-2 pl-2 text-sm sort-select"
+              value={sortOrder}
+              labelPlacement="stacked"
+              aria-label="Sort missed salahs"
+              interface="popover"
+              placeholder="Sort missed salahs"
+              onIonChange={(e) => setSortOrder(e.detail.value)}
+            >
+              <IonIcon
+                className="mr-[5px]"
+                slot="start"
+                icon={swapVerticalOutline}
+                aria-hidden="true"
+              />
+              <IonSelectOption value="newest">Newest first</IonSelectOption>
+              <IonSelectOption value="oldest">Oldest first</IonSelectOption>
+            </IonSelect>
           </section>
 
           <div className="px-4">
