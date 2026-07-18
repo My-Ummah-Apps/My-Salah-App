@@ -24,6 +24,17 @@ import {
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
+import {
+  HiOutlineChevronDoubleUp,
+  HiChevronDoubleDown,
+  HiOutlineChevronDown,
+  HiOutlineChevronUp,
+  HiOutlineChevronDoubleLeft,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+  HiOutlineChevronDoubleRight,
+} from "react-icons/hi2";
+
 interface CalenderProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   userStartDate: string;
@@ -155,32 +166,77 @@ const Calendar = ({
             <p className="font-semibold text-center">
               {formattedMonths[currentMonth]}
             </p>
-            <div>
+            <div className="bg-[var(--sheet-option-bg)] rounded-full">
               <button
-                style={{
-                  opacity:
-                    currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
+                // style={{
+                //   opacity:
+                //     currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
+                // }}
+                onClick={() => {
+                  if (currentMonth === formattedMonths.length - 1) return;
+                  setCurrentMonth((prev) => prev + 12);
                 }}
+                className="p-2 m-1"
+              >
+                <HiOutlineChevronDoubleLeft
+                  style={{
+                    opacity:
+                      currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
+                  }}
+                />
+              </button>
+              <button
+                // style={{
+                //   opacity:
+                //     currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
+                // }}
                 onClick={() => {
                   if (currentMonth === formattedMonths.length - 1) return;
                   setCurrentMonth((prev) => prev + 1);
                 }}
-                className="p-2 m-1 rounded-lg bg-[var(--calendar-arrow-btn-color)]"
+                className="p-2 m-1"
               >
-                <IoIosArrowBack />
+                <HiOutlineChevronLeft
+                  style={{
+                    opacity:
+                      currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
+                  }}
+                />
               </button>
 
               <button
-                style={{
-                  opacity: currentMonth === 0 ? "0.3" : "1",
-                }}
+                // style={{
+                //   opacity: currentMonth === 0 ? "0.3" : "1",
+                // }}
                 onClick={() => {
                   if (currentMonth === 0) return;
                   setCurrentMonth((prev) => prev - 1);
                 }}
-                className="p-2 m-1 rounded-lg bg-[var(--calendar-arrow-btn-color)]"
+                className="p-2 m-1"
               >
-                <IoIosArrowForward />
+                <HiOutlineChevronRight
+                  style={{
+                    opacity: currentMonth === 0 ? "0.3" : "1",
+                  }}
+                />
+              </button>
+              <button
+                // style={{
+                //   opacity:
+                //     currentMonth >= formattedMonths.length - 1 ? "0.3" : "1",
+                // }}
+                onClick={() => {
+                  if (currentMonth >= formattedMonths.length - 1) return;
+                  setCurrentMonth((prev) => prev - 12);
+                }}
+                className="p-2 m-1"
+              >
+                <HiOutlineChevronDoubleRight
+                  style={{
+                    opacity:
+                      currentMonth >= formattedMonths.length - 1 ? "0.3" : "1",
+                  }}
+                />
               </button>
             </div>
           </section>
