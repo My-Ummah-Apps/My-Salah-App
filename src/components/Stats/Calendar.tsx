@@ -163,15 +163,23 @@ const Calendar = ({
             <div className="bg-[var(--sheet-option-bg)] rounded-full">
               <button
                 onClick={() => {
-                  if (currentMonth === formattedMonths.length - 1) return;
-                  setCurrentMonth((prev) => prev + 12);
+                  // if (currentMonth === formattedMonths.length - 1) return;
+                  // setCurrentMonth((prev) => prev + 12);
+                  setCurrentMonth((prev) => {
+                    if (currentMonth + 12 > formattedMonths.length - 1) {
+                      return formattedMonths.length - 1;
+                    }
+                    return prev + 12;
+                  });
                 }}
                 className="p-2 m-1"
               >
                 <HiOutlineChevronDoubleLeft
                   style={{
                     opacity:
-                      currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
+                      currentMonth + 1 > formattedMonths.length - 1
+                        ? "0.3"
+                        : "1",
                   }}
                 />
               </button>
@@ -205,18 +213,31 @@ const Calendar = ({
               </button>
               <button
                 onClick={() => {
-                  if (currentMonth >= formattedMonths.length - 1) return;
-                  console.log(currentMonth);
-                  console.log(formattedMonths.length - 1);
+                  // if (currentMonth >= formattedMonths.length - 1) return;
+                  console.log("currentMonth: ", currentMonth);
+                  console.log(
+                    "formattedMonths length: ",
+                    formattedMonths.length - 1,
+                  );
+                  console.log("Current month - 12: ", currentMonth - 12);
 
-                  setCurrentMonth((prev) => prev - 12);
+                  console.log(
+                    "Is currentMonth - 12 greater than the formatted months length: ",
+                    currentMonth - 12 > formattedMonths.length - 1,
+                  );
+
+                  setCurrentMonth((prev) => {
+                    if (currentMonth - 12 <= 0) {
+                      return 0;
+                    }
+                    return prev - 12;
+                  });
                 }}
                 className="p-2 m-1"
               >
                 <HiOutlineChevronDoubleRight
                   style={{
-                    opacity:
-                      currentMonth >= formattedMonths.length - 1 ? "0.3" : "1",
+                    opacity: currentMonth === 0 ? "0.3" : "1",
                   }}
                 />
               </button>
