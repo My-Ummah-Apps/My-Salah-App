@@ -162,6 +162,7 @@ const Calendar = ({
             </p>
             <div className="bg-[var(--sheet-option-bg)] rounded-full">
               <button
+                className="px-2 border-r border-[var(--app-border-color)] border-solid"
                 onClick={() => {
                   // if (currentMonth === formattedMonths.length - 1) return;
                   // setCurrentMonth((prev) => prev + 12);
@@ -172,7 +173,6 @@ const Calendar = ({
                     return prev + 12;
                   });
                 }}
-                className="p-2 m-1"
               >
                 <HiOutlineChevronDoubleLeft
                   style={{
@@ -188,7 +188,7 @@ const Calendar = ({
                   if (currentMonth === formattedMonths.length - 1) return;
                   setCurrentMonth((prev) => prev + 1);
                 }}
-                className="p-2 m-1"
+                className="px-2 border-r border-[var(--app-border-color)] border-solid"
               >
                 <HiOutlineChevronLeft
                   style={{
@@ -203,7 +203,7 @@ const Calendar = ({
                   if (currentMonth === 0) return;
                   setCurrentMonth((prev) => prev - 1);
                 }}
-                className="p-2 m-1"
+                className="px-2 border-r border-[var(--app-border-color)] border-solid"
               >
                 <HiOutlineChevronRight
                   style={{
