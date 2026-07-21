@@ -164,10 +164,8 @@ const Calendar = ({
               <button
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
                 onClick={() => {
-                  // if (currentMonth === formattedMonths.length - 1) return;
-                  // setCurrentMonth((prev) => prev + 12);
                   setCurrentMonth((prev) => {
-                    if (currentMonth + 12 > formattedMonths.length - 1) {
+                    if (prev + 12 > formattedMonths.length - 1) {
                       return formattedMonths.length - 1;
                     }
                     return prev + 12;
@@ -185,8 +183,12 @@ const Calendar = ({
               </button>
               <button
                 onClick={() => {
-                  if (currentMonth === formattedMonths.length - 1) return;
-                  setCurrentMonth((prev) => prev + 1);
+                  setCurrentMonth((prev) => {
+                    if (prev === formattedMonths.length - 1) {
+                      return prev;
+                    }
+                    return prev + 1;
+                  });
                 }}
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
               >
@@ -200,8 +202,12 @@ const Calendar = ({
 
               <button
                 onClick={() => {
-                  if (currentMonth === 0) return;
-                  setCurrentMonth((prev) => prev - 1);
+                  setCurrentMonth((prev) => {
+                    if (prev === 0) {
+                      return prev;
+                    }
+                    return prev - 1;
+                  });
                 }}
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
               >
@@ -213,21 +219,8 @@ const Calendar = ({
               </button>
               <button
                 onClick={() => {
-                  // if (currentMonth >= formattedMonths.length - 1) return;
-                  console.log("currentMonth: ", currentMonth);
-                  console.log(
-                    "formattedMonths length: ",
-                    formattedMonths.length - 1,
-                  );
-                  console.log("Current month - 12: ", currentMonth - 12);
-
-                  console.log(
-                    "Is currentMonth - 12 greater than the formatted months length: ",
-                    currentMonth - 12 > formattedMonths.length - 1,
-                  );
-
                   setCurrentMonth((prev) => {
-                    if (currentMonth - 12 <= 0) {
+                    if (prev - 12 <= 0) {
                       return 0;
                     }
                     return prev - 12;
