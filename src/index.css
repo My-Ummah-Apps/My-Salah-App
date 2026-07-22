@@ -146,10 +146,14 @@ body:-webkit-scrollbar {
   width: 100%;
 }
 
-input:focus,
-button:focus {
+input:focus{
   outline: none;
   border: none;
+}
+
+button:focus {
+  outline: none;
+  /* border: none; */
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {
@@ -414,6 +418,10 @@ td {
 
 .calendar-single-month-wrap {
   direction: ltr;
+}
+
+.calendar-single-month-wrap button:disabled svg {
+  opacity: 0.3;
 }
 
 .ReactVirtualized__Grid,

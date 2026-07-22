@@ -162,8 +162,13 @@ const Calendar = ({
             </p>
             <div className="bg-[var(--sheet-option-bg)] rounded-full">
               <button
+                type="button"
+                aria-label="Previous year"
+                disabled={currentMonth + 1 > formattedMonths.length - 1}
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
                 onClick={() => {
+                  console.log("CLICKED");
+
                   setCurrentMonth((prev) => {
                     if (prev + 12 > formattedMonths.length - 1) {
                       return formattedMonths.length - 1;
@@ -172,16 +177,12 @@ const Calendar = ({
                   });
                 }}
               >
-                <HiOutlineChevronDoubleLeft
-                  style={{
-                    opacity:
-                      currentMonth + 1 > formattedMonths.length - 1
-                        ? "0.3"
-                        : "1",
-                  }}
-                />
+                <HiOutlineChevronDoubleLeft />
               </button>
               <button
+                type="button"
+                aria-label="Previous month"
+                disabled={currentMonth === formattedMonths.length - 1}
                 onClick={() => {
                   setCurrentMonth((prev) => {
                     if (prev === formattedMonths.length - 1) {
@@ -192,15 +193,13 @@ const Calendar = ({
                 }}
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
               >
-                <HiOutlineChevronLeft
-                  style={{
-                    opacity:
-                      currentMonth === formattedMonths.length - 1 ? "0.3" : "1",
-                  }}
-                />
+                <HiOutlineChevronLeft />
               </button>
 
               <button
+                type="button"
+                aria-label="Next month"
+                disabled={currentMonth === 0}
                 onClick={() => {
                   setCurrentMonth((prev) => {
                     if (prev === 0) {
@@ -211,13 +210,12 @@ const Calendar = ({
                 }}
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
               >
-                <HiOutlineChevronRight
-                  style={{
-                    opacity: currentMonth === 0 ? "0.3" : "1",
-                  }}
-                />
+                <HiOutlineChevronRight />
               </button>
               <button
+                type="button"
+                aria-label="Next year"
+                disabled={currentMonth === 0}
                 onClick={() => {
                   setCurrentMonth((prev) => {
                     if (prev - 12 <= 0) {
@@ -228,11 +226,7 @@ const Calendar = ({
                 }}
                 className="p-2 m-1"
               >
-                <HiOutlineChevronDoubleRight
-                  style={{
-                    opacity: currentMonth === 0 ? "0.3" : "1",
-                  }}
-                />
+                <HiOutlineChevronDoubleRight />
               </button>
             </div>
           </section>
