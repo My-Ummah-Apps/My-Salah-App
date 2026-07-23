@@ -281,19 +281,21 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log("HELLO: ", localStorage.getItem("appVersion"));
+
     if (
       localStorage.getItem("appVersion") &&
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
     ) {
-      setShowChangelogSheet(true);
-      // setShowMajorUpdateOverlay(true);
+      // setShowChangelogSheet(true);
+      setShowMajorUpdateOverlay(true);
       localStorage.setItem("appVersion", LATEST_APP_VERSION);
     }
   }, []);
 
   useEffect(() => {
     const initializeApp = async () => {
-      await SplashScreen.hide({ fadeOutDuration: 250 });
+      // await SplashScreen.hide({ fadeOutDuration: 250 });
       if (isDatabaseInitialised === true) {
         await fetchDataFromDB();
 

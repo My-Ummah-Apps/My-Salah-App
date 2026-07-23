@@ -1,4 +1,5 @@
-import { GoBug, GoClock } from "react-icons/go";
+import { GoBug, GoCalendar, GoClock, GoHome } from "react-icons/go";
+import { LATEST_APP_VERSION } from "../utils/changelog";
 
 interface MajorUpdateOverlayProps {
   setShowMajorUpdateOverlay: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,39 +29,54 @@ const MajorUpdateOverlay = ({
     >
       {/* <img height={100} width={80} src={image}></img> */}
       <section className="flex flex-col justify-center h-full">
-        <p className="mb-2 opacity-70">Version 4.8</p>
-        <p className="bg-[#9332ed] py-2 px-4 rounded-2xl w-fit text-2xl">
-          MAJOR UPDATE
+        {/* <p className="mb-2 opacity-70">Version 4.8</p> */}
+
+        <p className="bg-[#9332ed] py-2 px-2 rounded-2xl w-fit text-lg">
+          {/* MAJOR UPDATE  */}
+          Version {LATEST_APP_VERSION}
         </p>
-        <p className="mt-5 text-2xl">Salah times have now been added</p>
+
+        <p className="mt-5 text-2xl">
+          Date navigation is now faster and easier
+        </p>
 
         <section className="mb-[10rem]">
           <div className="flex items-center mt-5 mb-2">
             <div>
-              <GoClock className="mr-5 text-3xl text-[#c583f1]" />
+              <GoCalendar className="mr-5 text-3xl text-[#c583f1]" />
             </div>
+
             <div>
-              <h2 style={{ color: "#c583f1" }}>Salah Times</h2>
+              <h2 style={{ color: "#c583f1" }}>Calendar Navigation</h2>
+
               <p className="text-sm">
-                {" "}
-                You can now view daily Salah times in the app to help you stay
-                on track throughout the day. Head over to the Salah Times page
-                to get started.
+                Year navigation buttons have been added to the monthly calendar,
+                allowing you to quickly move forwards or backwards by a full
+                year.
               </p>
             </div>
           </div>
 
           <div className="flex items-center mb-2">
             <div>
-              <GoBug className="mr-5 text-3xl text-[#f7cb22]" />
+              <GoHome className="mr-5 text-3xl text-[#f7cb22]" />
             </div>
+
             <div>
-              <h2 style={{ color: "#f7cb22" }}>Bug Fixes</h2>
-              <p className="text-sm"> Fixed several minor bugs.</p>
+              <h2 style={{ color: "#f7cb22" }}>Homepage Navigation</h2>
+
+              <p className="text-sm">
+                Quick navigation buttons have been added to the homepage,
+                allowing you to move forwards or backwards through your Salah
+                history by 30 days or one year. The buttons automatically appear
+                when you scroll.
+              </p>
             </div>
           </div>
         </section>
+
         <button
+          type="button"
           onClick={() => {
             setShowMajorUpdateOverlay(false);
           }}

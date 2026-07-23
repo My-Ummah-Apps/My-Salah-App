@@ -2,11 +2,37 @@
 //  2.Change verisonNum of the first object in changeLogs to a string number (eg "3.0")
 // 3. Add new object to changeLogs Array with its versionNum being the variable LATEST_APP_VERSION
 
-export const LATEST_APP_VERSION = "5.0";
+export const LATEST_APP_VERSION = "5.1";
 
 export const changeLogs = [
   {
     versionNum: LATEST_APP_VERSION,
+    changes: [
+      {
+        heading: "New: Faster Calendar Navigation",
+        text: (
+          <>
+            <strong>Added:</strong> Added year navigation buttons to the monthly
+            calendar, allowing you to quickly move forwards or backwards by a
+            full year.
+          </>
+        ),
+      },
+      {
+        heading: "New: Homepage Date Navigation",
+        text: (
+          <>
+            <strong>Added:</strong> Added quick navigation buttons to the
+            homepage, allowing you to move forwards or backwards through your
+            Salah history by 30 days or one year. The buttons automatically
+            appear when you scroll.
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    versionNum: "5.0",
     changes: [
       {
         heading: "Fix: Notification Timing Issues",

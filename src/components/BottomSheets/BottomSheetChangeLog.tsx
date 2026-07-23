@@ -36,7 +36,7 @@ const BottomSheetChangelog = ({
           {changeLogs.map((item, i) => (
             <section
               key={i}
-              className="mx-6 mt-4 changelog-individual-log  border-b border-[var(--border-form)]"
+              className="mx-6 mt-4 changelog-individual-log  border-b border-[var(--app-border-color)]"
               // style={{ borderColor: i === 0 ? "red" : "" }}
             >
               <p>
