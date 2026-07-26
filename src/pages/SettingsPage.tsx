@@ -450,7 +450,9 @@ const SettingsPage = ({
             )}
             {Capacitor.isNativePlatform() && (
               <SettingIndividual
-                indvidualStyles={"rounded-t-md"}
+                indvidualStyles={
+                  "rounded-t-md border-b border-[var(--app-border-color)]"
+                }
                 headingText={"Share"}
                 subText={"Share application"}
                 onClick={() => {

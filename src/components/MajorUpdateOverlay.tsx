@@ -1,4 +1,4 @@
-import { GoBug, GoCalendar, GoClock, GoHome } from "react-icons/go";
+import { GoCalendar, GoHome } from "react-icons/go";
 import { LATEST_APP_VERSION } from "../utils/changelog";
 
 interface MajorUpdateOverlayProps {
