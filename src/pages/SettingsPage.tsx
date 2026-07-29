@@ -379,11 +379,11 @@ const SettingsPage = ({
                 userPreferences={userPreferences}
                 fetchDataFromDB={fetchDataFromDB}
               />
-              {/* <SettingIndividual
+              <SettingIndividual
                 onClick={() => setShowBatchUpdateModal(true)}
                 headingText={"Batch update Salah"}
                 subText={`Update Salah over multiple dates`}
-              /> */}
+              />
               <BottomSheetBatchUpdate
                 dbConnection={dbConnection}
                 handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}

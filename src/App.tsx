@@ -281,8 +281,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log("HELLO: ", localStorage.getItem("appVersion"));
-
     if (
       localStorage.getItem("appVersion") &&
       localStorage.getItem("appVersion") !== LATEST_APP_VERSION
@@ -498,8 +496,13 @@ const App = () => {
         `SELECT * FROM userPreferencesTable`,
       );
 
+      // const DBResultAllSalahData = await dbConnection.current.query(
+      //   `SELECT * FROM salahDataTable`,
+      // ); // ! <-- This statement here is the issue, getting all salah data is taking too long
+
       const DBResultAllSalahData = await dbConnection.current.query(
-        `SELECT * FROM salahDataTable`,
+        `SELECT date, salahName, salahStatus
+          FROM salahDataTable`,
       );
 
       const DBResultLocations = await dbConnection.current.query(
@@ -711,7 +714,7 @@ const App = () => {
 
     await handleSalahTrackingDataFromDB(DBResultAllSalahData, startDatePref);
   };
-
+  // ! This function is not the issue, as soon as it runs, only takes a couple of seconds for app to render table, its whatever is happening before it
   const handleSalahTrackingDataFromDB = async (
     DBResultAllSalahData: DBResultDataObjType[],
     userStartDate: string,
@@ -743,12 +746,10 @@ const App = () => {
       dict[currentEntry.date].push(currentEntry);
     }
 
-    console.log("DICTIONARY BUILT");
+    // console.log("DICT: ", dict);
 
     const totalDays: number =
       differenceInDays(todaysDate, userStartDateFormattedToDateObject) + 1;
-
-    console.log("TOTAL DAYS GENERATED");
 
     let currentDate = todaysDate;
 
@@ -786,10 +787,6 @@ const App = () => {
       currentDate = subDays(currentDate, 1);
     }
 
-    // ! The above is the bottleneck
-
-    console.log("ALL DATA GENERATED");
-
     setFetchedSalahData([...singleSalahObjArr]);
     setMissedSalahList({ ...missedSalahObj });
     generateStreaks([...singleSalahObjArr]);
@@ -797,8 +794,6 @@ const App = () => {
     // setFetchedSalahData(singleSalahObjArr);
     // setMissedSalahList(missedSalahObj);
     // generateStreaks(singleSalahObjArr);
-
-    console.log("STATES UPDATED");
   };
 
   // const [activeLocation, setActiveLocation] = useState();

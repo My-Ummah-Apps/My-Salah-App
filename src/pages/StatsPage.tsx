@@ -166,8 +166,13 @@ const StatsPage = ({
   const fetchSalahDataFromDB = async () => {
     try {
       await toggleDBConnection(dbConnection, "open");
+      // let DBResultAllSalahData = await dbConnection.current!.query(
+      //   `SELECT * FROM salahDataTable`,
+      // );
+
       let DBResultAllSalahData = await dbConnection.current!.query(
-        `SELECT * FROM salahDataTable`,
+        `SELECT date, salahName, salahStatus, reasons, notes
+          FROM salahDataTable`,
       );
 
       if (!DBResultAllSalahData.values) {
