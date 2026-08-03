@@ -36,7 +36,6 @@ import {
   scheduleAfterIshaDailyNotifications,
 } from "./utils/helpers";
 import {
-  DBResultDataObjType,
   PreferenceObjType,
   userPreferencesType,
   SalahNamesType,
@@ -50,6 +49,7 @@ import {
   nextSalahTimeType,
   salahTimesObjType,
   OnboardingMode,
+  DBResultSalahStatusDataType,
 } from "./types/types";
 
 import { Style } from "@capacitor/status-bar";
@@ -496,11 +496,11 @@ const App = () => {
         `SELECT * FROM userPreferencesTable`,
       );
 
-      // const DBResultAllSalahData = await dbConnection.current.query(
+      // const DBResultSalahStatusData = await dbConnection.current.query(
       //   `SELECT * FROM salahDataTable`,
       // ); // ! <-- This statement here is the issue, getting all salah data is taking too long
 
-      const DBResultAllSalahData = await dbConnection.current.query(
+      const DBResultSalahStatusData = await dbConnection.current.query(
         `SELECT date, salahName, salahStatus
           FROM salahDataTable`,
       );
@@ -516,9 +516,9 @@ const App = () => {
           "DBResultPreferences or DBResultPreferences.values do not exist",
         );
       }
-      if (!DBResultAllSalahData || !DBResultAllSalahData.values) {
+      if (!DBResultSalahStatusData || !DBResultSalahStatusData.values) {
         throw new Error(
-          "DBResultAllSalahData or !DBResultAllSalahData.values do not exist",
+          "DBResultSalahStatusData or !DBResultSalahStatusData.values do not exist",
         );
       }
       if (!DBResultLocations || !DBResultLocations.values) {
@@ -527,7 +527,7 @@ const App = () => {
         );
       }
 
-      // console.log("DBResultAllSalahData: ", DBResultAllSalahData);
+      // console.log("DBResultSalahStatusData: ", DBResultSalahStatusData);
       // console.log("DBResultPreferences: ", DBResultPreferences);
 
       setUserLocations(DBResultLocations.values);
@@ -593,10 +593,10 @@ const App = () => {
         }
         await handleUserPreferencesDataFromDB(
           DBResultPreferences.values as PreferenceObjType[],
-          DBResultAllSalahData.values,
+          DBResultSalahStatusData.values,
         );
 
-        // await handleSalahTrackingDataFromDB(DBResultAllSalahData.values);
+        // await handleSalahTrackingDataFromDB(DBResultSalahStatusData.values);
       } catch (error) {
         console.error(error);
       }
@@ -610,7 +610,7 @@ const App = () => {
 
   const handleUserPreferencesDataFromDB = async (
     DBResultPreferences: PreferenceObjType[],
-    DBResultAllSalahData: DBResultDataObjType[],
+    DBResultSalahStatusData: DBResultSalahStatusDataType[],
   ) => {
     let DBResultPreferencesValues = DBResultPreferences;
 
@@ -712,11 +712,10 @@ const App = () => {
       throw new Error("userStartDate not found in preferences");
     }
 
-    await handleSalahTrackingDataFromDB(DBResultAllSalahData, startDatePref);
+    await handleSalahTrackingDataFromDB(DBResultSalahStatusData, startDatePref);
   };
-  // ! This function is not the issue, as soon as it runs, only takes a couple of seconds for app to render table, its whatever is happening before it
   const handleSalahTrackingDataFromDB = async (
-    DBResultAllSalahData: DBResultDataObjType[],
+    DBResultSalahStatusData: DBResultSalahStatusDataType[],
     userStartDate: string,
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
@@ -734,10 +733,10 @@ const App = () => {
       return;
     }
 
-    const dict: Record<string, DBResultDataObjType[]> = {};
+    const dict: Record<string, DBResultSalahStatusDataType[]> = {};
 
-    for (let i = 0; i < DBResultAllSalahData.length; i++) {
-      const currentEntry = DBResultAllSalahData[i];
+    for (let i = 0; i < DBResultSalahStatusData.length; i++) {
+      const currentEntry = DBResultSalahStatusData[i];
 
       if (!dict[currentEntry.date]) {
         dict[currentEntry.date] = [];

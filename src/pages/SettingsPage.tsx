@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Share } from "@capacitor/share";
 import SettingIndividual from "../components/Settings/SettingIndividual";
 import {
-  DBResultDataObjType,
+  DBResultSalahStatusDataType,
   LocationsDataObjTypeArr,
   themeType,
   userPreferencesType,
@@ -44,7 +44,7 @@ interface SettingsPageProps {
   sqliteConnection: React.MutableRefObject<SQLiteConnection | undefined>;
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   handleSalahTrackingDataFromDB: (
-    DBResultAllSalahData: DBResultDataObjType[],
+    DBResultAllSalahData: DBResultSalahStatusDataType[],
     userStartDate: string,
   ) => Promise<void>;
   isAppActive: boolean;

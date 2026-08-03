@@ -167,7 +167,7 @@ const Calendar = ({
                 disabled={currentMonth + 1 > formattedMonths.length - 1}
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
                 onClick={() => {
-                  console.log("CLICKED");
+                  // console.log("CLICKED");
 
                   setCurrentMonth((prev) => {
                     if (prev + 12 > formattedMonths.length - 1) {

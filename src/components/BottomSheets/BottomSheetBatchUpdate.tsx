@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 
 import {
-  DBResultDataObjType,
+  DBResultSalahStatusDataType,
   SalahNamesType,
   SalahStatusType,
   userPreferencesType,
@@ -39,7 +39,7 @@ import {
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
   handleSalahTrackingDataFromDB: (
-    DBResultAllSalahData: DBResultDataObjType[],
+    DBResultAllSalahData: DBResultSalahStatusDataType[],
     userStartDate: string,
   ) => Promise<void>;
   setShowBatchUpdateModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -122,7 +122,7 @@ const BottomSheetBatchUpdate = ({
       //   }
       // }
 
-      const BATCH_SIZE = 500;
+      const BATCH_SIZE = 100;
 
       if (!dbConnection.current) {
         throw new Error("dbConnection / dbconnection.current does not exist");
@@ -176,12 +176,17 @@ const BottomSheetBatchUpdate = ({
 
       // await dbConnection.current.executeSet(statements);
 
-      const DBResultAllSalahData = await dbConnection.current.query(
-        `SELECT * FROM salahDataTable`,
+      // const DBResultAllSalahData = await dbConnection.current.query(
+      //   `SELECT * FROM salahDataTable`,
+      // ); // ! <- This statement here is causing crashes on certain devices when date goes back quite far, for e.g. 1980
+
+      const DBResultSalahStatusData = await dbConnection.current.query(
+        `SELECT date, salahName, salahStatus
+          FROM salahDataTable`,
       );
 
       await handleSalahTrackingDataFromDB(
-        DBResultAllSalahData.values ?? [],
+        DBResultSalahStatusData.values ?? [],
         userPreferences.userStartDate,
       );
 

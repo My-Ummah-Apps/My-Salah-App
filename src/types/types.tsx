@@ -216,7 +216,11 @@ export type DBResultDataObjType = {
   notes: string;
 };
 
-export type DBResultDataObjArrayType = DBResultDataObjType[];
+export type DBResultSalahStatusDataType = {
+  date: string;
+  salahName: SalahNamesType;
+  salahStatus: SalahStatusType;
+};
 
 export type reasonsToShowType =
   | ""

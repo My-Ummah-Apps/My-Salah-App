@@ -278,9 +278,9 @@ const SalahTable = ({
               onRowsRendered={({ startIndex }) => {
                 currentIndexRef.current = startIndex;
                 // <setScrollIndex>(startIndex);
-                console.log("ROW RENDERED");
-                console.log("startIndex: ", startIndex);
-                console.log("currentIndex: ", currentIndexRef.current);
+                // console.log("ROW RENDERED");
+                // console.log("startIndex: ", startIndex);
+                // console.log("currentIndex: ", currentIndexRef.current);
               }}
               style={{
                 textTransform: "none",
