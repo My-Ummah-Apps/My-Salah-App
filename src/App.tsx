@@ -719,7 +719,7 @@ const App = () => {
     userStartDate: string,
   ) => {
     const singleSalahObjArr: SalahRecordsArrayType = [];
-    const missedSalahObj: SalahByDateObjType = {};
+    // const missedSalahObj: SalahByDateObjType = {};
     const todaysDate = new Date();
 
     const userStartDateFormattedToDateObject: Date = parse(
@@ -773,13 +773,13 @@ const App = () => {
         let salahStatus: SalahStatusType = dataForCurrentDate[i].salahStatus;
         singleSalahObj.salahs[salahName] = salahStatus;
 
-        if (salahStatus === "missed") {
-          if (dataForCurrentDate[i].date in missedSalahObj) {
-            missedSalahObj[dataForCurrentDate[i].date].push(salahName);
-          } else {
-            missedSalahObj[dataForCurrentDate[i].date] = [salahName];
-          }
-        }
+        // if (salahStatus === "missed") {
+        //   if (dataForCurrentDate[i].date in missedSalahObj) {
+        //     missedSalahObj[dataForCurrentDate[i].date].push(salahName);
+        //   } else {
+        //     missedSalahObj[dataForCurrentDate[i].date] = [salahName];
+        //   }
+        // }
       }
 
       singleSalahObjArr.push(singleSalahObj);
@@ -787,7 +787,8 @@ const App = () => {
     }
 
     setFetchedSalahData([...singleSalahObjArr]);
-    setMissedSalahList({ ...missedSalahObj });
+
+    // setMissedSalahList({ ...missedSalahObj });
     generateStreaks([...singleSalahObjArr]);
 
     // setFetchedSalahData(singleSalahObjArr);
