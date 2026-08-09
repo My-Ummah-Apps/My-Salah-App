@@ -2,6 +2,7 @@ import {
   IonButton,
   IonCheckbox,
   IonContent,
+  IonIcon,
   IonInput,
   IonModal,
   IonTextarea,
@@ -35,6 +36,8 @@ import {
   showToast,
   upperCaseFirstLetter,
 } from "../../utils/helpers";
+import { alertCircleOutline, calendarClearOutline } from "ionicons/icons";
+import { MdOutlineChevronRight } from "react-icons/md";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -58,6 +61,7 @@ const BottomSheetBatchUpdate = ({
   userPreferences,
   // fetchDataFromDB,
 }: BottomSheetBatchUpdateProps) => {
+  const [processedRows, setProcessedRows] = useState(0);
   const [presentUpdatingSpinner, dismissUpdatingSpinner] = useIonLoading();
 
   type batchUpdateObj = {
@@ -130,6 +134,8 @@ const BottomSheetBatchUpdate = ({
 
       await toggleDBConnection(dbConnection, "open");
 
+      let rowCount = 0;
+
       for (let i = 0; i < salahsToUpdate.length; i++) {
         for (let x = 0; x < dates.length; x++) {
           statements.push({
@@ -145,7 +151,8 @@ const BottomSheetBatchUpdate = ({
 
           if (statements.length === BATCH_SIZE) {
             await dbConnection.current.executeSet(statements);
-            statements.length = 0; // clear array
+            setProcessedRows((prev) => (prev += statements.length));
+            statements.length = 0;
           }
         }
       }
@@ -224,12 +231,12 @@ const BottomSheetBatchUpdate = ({
         <section
         //  className="flex flex-col justify-center"
         >
-          <div className="p-10 pb-5">
+          <div className="px-4 pt-10 pb-4">
             <div className="text-center">
-              <div className="flex justify-between mb-4 text-sm">
+              {/* <div className="flex justify-between mb-4 text-sm">
                 <p>1. Select date range</p>
                 <p>9000 days selected</p>
-              </div>
+              </div> */}
               {/* <div>
                 <IonIcon
                   data-testid="delete-location-btn"
@@ -238,9 +245,48 @@ const BottomSheetBatchUpdate = ({
               <p className="">From</p>
               
               </div> */}
+              <div className="flex justify-between py-4">
+                <div className="flex items-center gap-4 border-[var(--app-border-color)]">
+                  <div>
+                    {" "}
+                    <IonIcon icon={calendarClearOutline} />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs">From</p>
+                    <p className="text-sm">12 Mar 2021</p>
+                  </div>
+                  <div>
+                    <MdOutlineChevronRight />
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 border-[var(--app-border-color)]">
+                  <div>
+                    {" "}
+                    <IonIcon icon={calendarClearOutline} />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs">To</p>
+                    <p className="text-sm">12 Mar 2021</p>
+                  </div>
+                  <div>
+                    <MdOutlineChevronRight />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex mt-4">
+                <p>
+                  {" "}
+                  <IonIcon className="text-2xl" icon={alertCircleOutline} />
+                </p>
+                <div className="text-xs">
+                  <p className="">Your earliest selectable date is .</p>
+                  <p>Need earlier dates? Change start date. </p>
+                </div>
+              </div>
 
               <IonInput
-                className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                className="hidden text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                 placeholder="&#x1F5D3;"
                 onKeyDown={(e) => {
                   e.preventDefault();
@@ -258,7 +304,7 @@ const BottomSheetBatchUpdate = ({
                 max={new Date().toISOString().split("T")[0]}
               ></IonInput>
             </div>
-            <div className="text-center">
+            <div className="hidden text-center">
               <p className="mt-5">To</p>
               <IonInput
                 className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
@@ -444,7 +490,7 @@ const BottomSheetBatchUpdate = ({
                 }
 
                 await presentUpdatingSpinner({
-                  message: "Batch Updating...",
+                  message: `${processedRows}`,
                   backdropDismiss: false,
                   cssClass: "ion-spinner",
                 });
