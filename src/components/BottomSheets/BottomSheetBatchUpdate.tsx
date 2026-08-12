@@ -1,9 +1,11 @@
 import {
   IonButton,
   IonCheckbox,
+  IonChip,
   IonContent,
   IonIcon,
   IonInput,
+  IonLabel,
   IonModal,
   IonTextarea,
   useIonLoading,
@@ -36,7 +38,11 @@ import {
   showToast,
   upperCaseFirstLetter,
 } from "../../utils/helpers";
-import { alertCircleOutline, calendarClearOutline } from "ionicons/icons";
+import {
+  alertCircleOutline,
+  calendarClearOutline,
+  checkmarkOutline,
+} from "ionicons/icons";
 import { MdOutlineChevronRight } from "react-icons/md";
 
 interface BottomSheetBatchUpdateProps {
@@ -285,6 +291,17 @@ const BottomSheetBatchUpdate = ({
                 </div>
               </div>
 
+              <div className="flex mt-4">
+                <p>
+                  {" "}
+                  <IonIcon className="text-2xl" icon={calendarClearOutline} />
+                </p>
+                <div className="text-xs">
+                  <p className="">This will update x days</p>
+                  <p>25 years, 3 months, 23 days</p>
+                </div>
+              </div>
+
               <IonInput
                 className="hidden text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                 placeholder="&#x1F5D3;"
@@ -327,36 +344,80 @@ const BottomSheetBatchUpdate = ({
               ></IonInput>
             </div>
           </div>
-          <section className="mx-4 text-center">
-            <div className="my-5 border rounded-lg border-[var(--app-border-color)] py-2 text-center">
-              <p className="mb-2">Which Salahs?</p>
-              <div className="px-1">
-                {salahNamesArr.map((salahName) => (
-                  <IonCheckbox
-                    style={{
-                      "--size": "16px",
-                      "--border-color": "#888888",
-                      marginBottom: "1rem",
-                    }}
-                    key={salahName}
-                    checked={batchUpdateObj.salahs.includes(salahName)}
-                    onIonChange={() => {
-                      setBatchUpdateObj((prev) => ({
-                        ...prev,
-                        salahs: prev.salahs.includes(salahName)
-                          ? prev.salahs.filter((s) => s !== salahName)
-                          : [...prev.salahs, salahName],
-                      }));
-                    }}
-                    labelPlacement="stacked"
-                  >
-                    {salahName}
-                  </IonCheckbox>
-                ))}
+          <section className="mx">
+            <div className="py-2 my-5 rounded-lg">
+              <p className="mb-2 text-sm">Select up to 5 prayers</p>
+              <div className=" px-1 text-[var(--ion-text-color)]">
+                {salahNamesArr.map((salahName) => {
+                  const selected = batchUpdateObj.salahs.includes(salahName);
+
+                  return (
+                    <IonChip
+                      className=""
+                      style={{
+                        // "--background": "transparent",
+                        "--color": "var(--ion-text-color)",
+                        backgroundColor: selected
+                          ? "var(--reasons-bg-active-color-status-sheet)"
+                          : undefined,
+                        // margin: "0 6px 0 0",
+                        // padding: "0 6px",
+                        // border: "none",
+                      }}
+                      key={salahName}
+                      onClick={() => {
+                        setBatchUpdateObj((prev) => ({
+                          ...prev,
+                          salahs: prev.salahs.includes(salahName)
+                            ? prev.salahs.filter((s) => s !== salahName)
+                            : [...prev.salahs, salahName],
+                        }));
+                      }}
+                    >
+                      <IonLabel className="text-sm">{salahName}</IonLabel>
+                      <IonIcon
+                        icon={checkmarkOutline}
+                        style={{
+                          visibility: selected ? "visible" : "hidden",
+                          fontSize: "16px",
+                          marginRight: "4px",
+                          color: selected ? "var(--ion-text-color)" : "none",
+                        }}
+                      />
+
+                      {/* <IonIcon icon={calendarClearOutline}></IonIcon> */}
+                      {/* 
+                      <IonCheckbox
+                        className="text-sm"
+                        style={{
+                          "--size": "16px",
+                          "--border-color": "transparent",
+                          "--border-width": "0px",
+                          "--background": "transparent",
+                          "--checkmark-color": "var(--ion-color-primary)",
+                          marginRight: "6px",
+                          marginBottom: "1rem",
+                        }}
+                        checked={batchUpdateObj.salahs.includes(salahName)}
+                        onIonChange={() => {
+                          setBatchUpdateObj((prev) => ({
+                            ...prev,
+                            salahs: prev.salahs.includes(salahName)
+                              ? prev.salahs.filter((s) => s !== salahName)
+                              : [...prev.salahs, salahName],
+                          }));
+                        }}
+                        // labelPlacement="stacked"
+                      >
+                        {salahName}
+                      </IonCheckbox> */}
+                    </IonChip>
+                  );
+                })}
               </div>
             </div>
             <section>
-              <div className="my-5 border rounded-lg border-[var(--app-border-color)] py-2 text-center">
+              <div className="py-2 my-5 text-center rounded-lg">
                 <p className="mb-2">Status</p>
                 <div className="">
                   {statusArr.map((status) => (
