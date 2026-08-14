@@ -16,7 +16,7 @@ import {
   SalahStatusType,
   userPreferencesType,
 } from "../../types/types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -86,6 +86,9 @@ const BottomSheetBatchUpdate = ({
     reasons: [],
     notes: "",
   });
+
+  const fromDateInputRef = useRef<HTMLInputElement>(null);
+  const toDateInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     console.log(batchUpdateObj);
@@ -256,9 +259,14 @@ const BottomSheetBatchUpdate = ({
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
                   </div>
-                  <div className="text-left">
-                    <p className="text-xs">From</p>
-                    <p className="text-sm">12 Mar 2021</p>
+                  <div
+                    onClick={() => fromDateInputRef.current?.click()}
+                    className="text-left"
+                  >
+                    <p className="text-sm">From</p>
+                    <p className="text-xs">
+                      {batchUpdateObj.fromDate || "Select start date"}
+                    </p>
                   </div>
                   <div>
                     <MdOutlineChevronRight />
@@ -269,9 +277,15 @@ const BottomSheetBatchUpdate = ({
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
                   </div>
-                  <div className="text-left">
-                    <p className="text-xs">To</p>
-                    <p className="text-sm">12 Mar 2021</p>
+                  <div
+                    onClick={() => toDateInputRef.current?.click()}
+                    className="text-left"
+                  >
+                    <p className="text-sm">To</p>
+                    <p className="text-xs">
+                      {" "}
+                      {batchUpdateObj.toDate || "Select end date"}
+                    </p>
                   </div>
                   <div>
                     <MdOutlineChevronRight />
@@ -315,16 +329,17 @@ const BottomSheetBatchUpdate = ({
                 </div>
               </div>
 
-              <IonInput
-                className="hidden text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+              <input
+                ref={fromDateInputRef}
+                className="invisible text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                 placeholder="&#x1F5D3;"
                 onKeyDown={(e) => {
                   e.preventDefault();
                 }}
-                onIonChange={(e) => {
+                onChange={(e) => {
                   setBatchUpdateObj((prev) => ({
                     ...prev,
-                    fromDate: e.detail.value ?? "",
+                    fromDate: e.target.value,
                   }));
                 }}
                 type="date"
@@ -332,30 +347,29 @@ const BottomSheetBatchUpdate = ({
                 name="start-date-picker"
                 min={userPreferences.userStartDate}
                 max={new Date().toISOString().split("T")[0]}
-              ></IonInput>
+              ></input>
             </div>
-            <div className="hidden">
-              <p className="mt-5">To</p>
-              <IonInput
-                className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-                placeholder="&#x1F5D3;"
-                onKeyDown={(e) => {
-                  e.preventDefault();
-                }}
-                onIonChange={(e) => {
-                  setBatchUpdateObj((prev) => ({
-                    ...prev,
-                    toDate: e.detail.value ?? "",
-                  }));
-                }}
-                // ref={datePickerRef}
-                type="date"
-                dir="auto"
-                name="start-date-picker"
-                min={userPreferences.userStartDate}
-                max={new Date().toISOString().split("T")[0]}
-              ></IonInput>
-            </div>
+
+            <input
+              ref={toDateInputRef}
+              className="invisible text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+              placeholder="&#x1F5D3;"
+              onKeyDown={(e) => {
+                e.preventDefault();
+              }}
+              onChange={(e) => {
+                setBatchUpdateObj((prev) => ({
+                  ...prev,
+                  toDate: e.target.value,
+                }));
+              }}
+              // ref={datePickerRef}
+              type="date"
+              dir="auto"
+              name="start-date-picker"
+              min={userPreferences.userStartDate}
+              max={new Date().toISOString().split("T")[0]}
+            ></input>
           </div>
           <section className="mx">
             <div className="my-5 rounded-lg">
