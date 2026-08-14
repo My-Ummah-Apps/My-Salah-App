@@ -18,18 +18,22 @@ import {
 
 interface BottomSheetStartDateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  triggerId: string;
+  // triggerId: string;
   setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
   userPreferences: userPreferencesType;
   fetchDataFromDB: () => Promise<void>;
+  setShowStartDateSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  showStartDateSheet: boolean;
 }
 
 const BottomSheetStartDate = ({
   dbConnection,
-  triggerId,
+  // triggerId,
   setUserPreferences,
   userPreferences,
   fetchDataFromDB,
+  setShowStartDateSheet,
+  showStartDateSheet,
 }: BottomSheetStartDateProps) => {
   const datePickerRef = useRef<HTMLInputElement | null>(null);
   const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
@@ -63,11 +67,15 @@ const BottomSheetStartDate = ({
   };
   return (
     <IonModal
+      isOpen={showStartDateSheet}
+      onDidDismiss={() => {
+        setShowStartDateSheet(false);
+      }}
       ref={modal}
       mode="ios"
       expandToScroll={false}
       className="modal-fit-content"
-      trigger={triggerId}
+      // trigger={triggerId}
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
@@ -85,7 +93,7 @@ const BottomSheetStartDate = ({
             className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
             placeholder="&#x1F5D3;"
             onKeyDown={(e) => {
-              e.preventDefault();
+              // e.preventDefault();
             }}
             onChange={(e) => {
               setSelectedStartDate(e.target.value);

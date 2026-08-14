@@ -1,6 +1,5 @@
 import {
   IonButton,
-  IonCheckbox,
   IonChip,
   IonContent,
   IonIcon,
@@ -34,15 +33,12 @@ import {
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { toggleDBConnection } from "../../utils/dbUtils";
 import {
+  createLocalisedDate,
   showAlert,
   showToast,
   upperCaseFirstLetter,
 } from "../../utils/helpers";
-import {
-  alertCircleOutline,
-  calendarClearOutline,
-  checkmarkOutline,
-} from "ionicons/icons";
+import { alertCircleOutline, calendarClearOutline } from "ionicons/icons";
 import { MdOutlineChevronRight } from "react-icons/md";
 
 interface BottomSheetBatchUpdateProps {
@@ -54,6 +50,8 @@ interface BottomSheetBatchUpdateProps {
   setShowBatchUpdateModal: React.Dispatch<React.SetStateAction<boolean>>;
   showBatchUpdateModal: boolean;
   // setUserPreferences: React.Dispatch<React.SetStateAction<userPreferencesType>>;
+  setShowStartDateSheet: React.Dispatch<React.SetStateAction<boolean>>;
+
   userPreferences: userPreferencesType;
   // fetchDataFromDB: () => Promise<void>;
 }
@@ -65,6 +63,7 @@ const BottomSheetBatchUpdate = ({
   showBatchUpdateModal,
   // setUserPreferences,
   userPreferences,
+  setShowStartDateSheet,
   // fetchDataFromDB,
 }: BottomSheetBatchUpdateProps) => {
   const [processedRows, setProcessedRows] = useState(0);
@@ -286,8 +285,22 @@ const BottomSheetBatchUpdate = ({
                   <IonIcon className="text-2xl" icon={alertCircleOutline} />
                 </p>
                 <div className="text-xs">
-                  <p className="">Your earliest selectable date is .</p>
-                  <p>Need earlier dates? Change start date. </p>
+                  <p className="">
+                    Your earliest selectable date is{" "}
+                    {createLocalisedDate(userPreferences.userStartDate)[1]}
+                  </p>
+                  <p>
+                    Need earlier dates?{" "}
+                    <span
+                      className="text-blue-700 underline"
+                      onClick={() => {
+                        setShowStartDateSheet(true);
+                      }}
+                    >
+                      {" "}
+                      Change start date.{" "}
+                    </span>
+                  </p>
                 </div>
               </div>
 
@@ -419,7 +432,7 @@ const BottomSheetBatchUpdate = ({
                             : status === "female-alone"
                               ? "Prayed"
                               : status === "group"
-                                ? "In Group"
+                                ? "In Jamaah"
                                 : upperCaseFirstLetter(status)}
                         </IonLabel>
                       </IonChip>
@@ -511,7 +524,7 @@ const BottomSheetBatchUpdate = ({
                 if (isBefore(fromDate, minDate) || isBefore(toDate, minDate)) {
                   showAlert(
                     "Invalid Date",
-                    `Date cannot be earlier than your start date: ${userPreferences.userStartDate}`,
+                    `Date cannot be earlier than your start date: ${" "} ${createLocalisedDate(userPreferences.userStartDate)[1]}`,
                   );
                   return;
                 }

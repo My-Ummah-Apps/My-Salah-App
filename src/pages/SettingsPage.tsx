@@ -94,6 +94,7 @@ const SettingsPage = ({
     userPreferences.showMissedSalahCount === "0" ? false : true,
   );
   const [showBatchUpdateModal, setShowBatchUpdateModal] = useState(false);
+  const [showStartDateSheet, setShowStartDateSheet] = useState(false);
 
   // const page = useRef(null);
   // const [presentingElement, setPresentingElement] =
@@ -368,13 +369,17 @@ const SettingsPage = ({
             <div className="my-5">
               <SettingIndividual
                 indvidualStyles={"border-b border-[var(--app-border-color)]"}
-                id="open-change-start-date-sheet"
+                // id="open-change-start-date-sheet"
+                onClick={() => setShowStartDateSheet(true)}
                 headingText={"Change Start Date"}
                 subText={`Change app start date`}
               />
               <BottomSheetStartDate
                 dbConnection={dbConnection}
-                triggerId={"open-change-start-date-sheet"}
+                setShowStartDateSheet={setShowStartDateSheet}
+                showStartDateSheet={showStartDateSheet}
+                // triggerId={"open-change-start-date-sheet"}
+
                 setUserPreferences={setUserPreferences}
                 userPreferences={userPreferences}
                 fetchDataFromDB={fetchDataFromDB}
@@ -389,6 +394,7 @@ const SettingsPage = ({
                 handleSalahTrackingDataFromDB={handleSalahTrackingDataFromDB}
                 setShowBatchUpdateModal={setShowBatchUpdateModal}
                 showBatchUpdateModal={showBatchUpdateModal}
+                setShowStartDateSheet={setShowStartDateSheet}
                 userPreferences={userPreferences}
               />
             </div>
