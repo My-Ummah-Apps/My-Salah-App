@@ -252,42 +252,51 @@ const BottomSheetBatchUpdate = ({
               <p className="">From</p>
               
               </div> */}
-              <div className="flex justify-between my-4">
-                <div className="flex p-2 rounded-2xl items-center gap-4 border border-[var(--app-border-color)]">
-                  <div>
+              <div className="flex justify-between gap-4">
+                <div className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
+                  <div className="mr-2">
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
                   </div>
-                  <div
-                    onClick={() => fromDateInputRef.current?.click()}
-                    className="text-left"
-                  >
-                    <p className="text-sm">From</p>
-                    <p className="text-xs">
-                      {batchUpdateObj.fromDate || "Select start date"}
-                    </p>
-                  </div>
-                  <div>
-                    <MdOutlineChevronRight />
+                  <div className="flex items-center justify-between w-full">
+                    <div
+                      onClick={() => fromDateInputRef.current?.click()}
+                      className="text-left"
+                    >
+                      <p className="text-sm opacity-60">From</p>
+                      <p className="text-xs">
+                        {batchUpdateObj.fromDate !== ""
+                          ? createLocalisedDate(batchUpdateObj.fromDate)[1]
+                          : "Select start date"}
+                      </p>
+                    </div>
+                    <div>
+                      <MdOutlineChevronRight />
+                    </div>
                   </div>
                 </div>
-                <div className="flex p-2 rounded-2xl items-center gap-4 border border-[var(--app-border-color)]">
-                  <div>
+                <div className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
+                  <div className="mr-2">
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
                   </div>
-                  <div
-                    onClick={() => toDateInputRef.current?.click()}
-                    className="text-left"
-                  >
-                    <p className="text-sm">To</p>
-                    <p className="text-xs">
-                      {" "}
-                      {batchUpdateObj.toDate || "Select end date"}
-                    </p>
-                  </div>
-                  <div>
-                    <MdOutlineChevronRight />
+                  <div className="flex items-center justify-between w-full">
+                    <div
+                      onClick={() => toDateInputRef.current?.click()}
+                      className="text-left"
+                    >
+                      <p className="text-sm opacity-60">To</p>
+                      <p className="text-xs">
+                        {" "}
+                        {/* {batchUpdateObj.toDate || "Select end date"} */}
+                        {batchUpdateObj.toDate !== ""
+                          ? createLocalisedDate(batchUpdateObj.toDate)[1]
+                          : "Select end date"}
+                      </p>
+                    </div>
+                    <div>
+                      <MdOutlineChevronRight />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -298,11 +307,11 @@ const BottomSheetBatchUpdate = ({
                   <IonIcon className="text-2xl" icon={alertCircleOutline} />
                 </p>
                 <div className="text-xs">
-                  <p className="">
+                  <p className="opacity-60">
                     Your earliest selectable date is{" "}
                     {createLocalisedDate(userPreferences.userStartDate)[1]}
                   </p>
-                  <p>
+                  <p className="opacity-60">
                     Need earlier dates?{" "}
                     <span
                       className="text-blue-700 underline"
@@ -317,7 +326,7 @@ const BottomSheetBatchUpdate = ({
                 </div>
               </div>
 
-              <div className="flex items-center mb-10 border border-[var(--app-border-color)] p-3 rounded-2xl">
+              {/* <div className="flex items-center mb-10 border border-[var(--app-border-color)] p-3 rounded-2xl">
                 <p className="mr-4">
                   {" "}
                   <IonIcon className="text-2xl" icon={calendarClearOutline} />
@@ -326,7 +335,7 @@ const BottomSheetBatchUpdate = ({
                   <p className="">This will update x days</p>
                   <p>25 years, 3 months, 23 days</p>
                 </div>
-              </div>
+              </div> */}
 
               <input
                 ref={fromDateInputRef}
