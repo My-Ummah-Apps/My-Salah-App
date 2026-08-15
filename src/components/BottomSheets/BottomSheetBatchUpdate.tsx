@@ -3,7 +3,6 @@ import {
   IonChip,
   IonContent,
   IonIcon,
-  IonInput,
   IonLabel,
   IonModal,
   IonTextarea,
@@ -254,7 +253,7 @@ const BottomSheetBatchUpdate = ({
               
               </div> */}
               <div className="flex justify-between my-4">
-                <div className="flex items-center gap-4 border-[var(--app-border-color)]">
+                <div className="flex p-2 rounded-2xl items-center gap-4 border border-[var(--app-border-color)]">
                   <div>
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
@@ -272,7 +271,7 @@ const BottomSheetBatchUpdate = ({
                     <MdOutlineChevronRight />
                   </div>
                 </div>
-                <div className="flex items-center gap-4 border-[var(--app-border-color)]">
+                <div className="flex p-2 rounded-2xl items-center gap-4 border border-[var(--app-border-color)]">
                   <div>
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
@@ -293,7 +292,7 @@ const BottomSheetBatchUpdate = ({
                 </div>
               </div>
 
-              <div className="flex items-center my-10">
+              <div className="flex items-center my-5 border border-[var(--app-border-color)] p-3 rounded-2xl">
                 <p className="mr-4">
                   {" "}
                   <IonIcon className="text-2xl" icon={alertCircleOutline} />
@@ -318,7 +317,7 @@ const BottomSheetBatchUpdate = ({
                 </div>
               </div>
 
-              <div className="flex items-center my-10">
+              <div className="flex items-center mb-10 border border-[var(--app-border-color)] p-3 rounded-2xl">
                 <p className="mr-4">
                   {" "}
                   <IonIcon className="text-2xl" icon={calendarClearOutline} />
@@ -331,7 +330,7 @@ const BottomSheetBatchUpdate = ({
 
               <input
                 ref={fromDateInputRef}
-                className="invisible text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                 placeholder="&#x1F5D3;"
                 onKeyDown={(e) => {
                   e.preventDefault();
@@ -352,7 +351,7 @@ const BottomSheetBatchUpdate = ({
 
             <input
               ref={toDateInputRef}
-              className="invisible text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+              className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
               placeholder="&#x1F5D3;"
               onKeyDown={(e) => {
                 e.preventDefault();
@@ -377,7 +376,7 @@ const BottomSheetBatchUpdate = ({
                 <p className="mb-2 ">Select up to 5 prayers</p>
                 <p>{batchUpdateObj.salahs.length} / 5 selected</p>
               </div>
-              <div className="mx-1 my-4 text-[var(--ion-text-color)]">
+              <div className="mx-1 mb-4 mt-1 text-[var(--ion-text-color)]">
                 {salahNamesArr.map((salahName) => {
                   const selected = batchUpdateObj.salahs.includes(salahName);
 
@@ -419,8 +418,8 @@ const BottomSheetBatchUpdate = ({
             </div>
             <section>
               <div className="rounded-lg my-7">
-                <p className="mb-2 text-sm">Choose a status</p>
-                <div className="my-4">
+                <p className="text-sm">Choose a status</p>
+                <div className="mt-2 mb-4">
                   {statusArr.map((status) => {
                     const selected = batchUpdateObj.status === status;
                     return (
@@ -461,7 +460,7 @@ const BottomSheetBatchUpdate = ({
             batchUpdateObj.status !== "female-alone" &&
             batchUpdateObj.status !== "" && (
               <section className="rounded-lg">
-                <p className="w-full mb-5 text-sm">Select reasons (optional)</p>
+                <p className="w-full mb-3 text-sm">Select reasons (optional)</p>
                 <div className="">
                   {userPreferences.reasons.map((reason) => {
                     const selected = batchUpdateObj.reasons.includes(reason);
@@ -491,7 +490,7 @@ const BottomSheetBatchUpdate = ({
                 </div>
               </section>
             )}
-          <div className="my-4 text-sm notes-wrap">
+          <div className="mt-10 mb-5 text-sm notes-wrap">
             <IonTextarea
               aria-label="notes"
               autoGrow={true}
