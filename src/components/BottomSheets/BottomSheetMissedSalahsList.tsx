@@ -54,7 +54,7 @@ const MissedSalahsListBottomSheet = ({
   const [salahToShow, setSalahToShow] = useState<
     Exclude<SalahNamesType, "Asar"> | "All"
   >("All");
-  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("oldest");
 
   // TODO :Below useEffect was put in place to re-open the DB connection when app came back to the foreground after being put in the background however, while it re-opens the connection, something else is closing it, this will require further investigation
   // useEffect(() => {
@@ -248,7 +248,7 @@ const MissedSalahsListBottomSheet = ({
         </IonToolbar>
       </IonHeader>
       <IonContent scrollY={false} className="relative">
-        <section className="mt-10 mb-10 text-white">
+        <section className="mt-10 mb-10">
           <p
             className={`mx-2 my-4 text-center text-[var(--ion-text-color)] 
               `}
