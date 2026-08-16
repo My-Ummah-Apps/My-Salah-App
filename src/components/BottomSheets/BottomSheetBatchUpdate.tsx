@@ -5,8 +5,8 @@ import {
   IonIcon,
   IonLabel,
   IonModal,
+  IonSpinner,
   IonTextarea,
-  useIonLoading,
 } from "@ionic/react";
 
 import {
@@ -66,7 +66,8 @@ const BottomSheetBatchUpdate = ({
   // fetchDataFromDB,
 }: BottomSheetBatchUpdateProps) => {
   const [processedRows, setProcessedRows] = useState(0);
-  const [presentUpdatingSpinner, dismissUpdatingSpinner] = useIonLoading();
+  const [totalRows, setTotalRows] = useState(0);
+  const [isBatchUpdating, setIsBatchUpdating] = useState(false);
 
   type batchUpdateObj = {
     fromDate: string;
@@ -143,6 +144,9 @@ const BottomSheetBatchUpdate = ({
         throw new Error("dbConnection / dbconnection.current does not exist");
       }
 
+      // setProcessedRows(0);
+      setTotalRows(dates.length * salahsToUpdate.length);
+
       await toggleDBConnection(dbConnection, "open");
 
       for (let i = 0; i < salahsToUpdate.length; i++) {
@@ -160,7 +164,10 @@ const BottomSheetBatchUpdate = ({
 
           if (statements.length === BATCH_SIZE) {
             await dbConnection.current.executeSet(statements);
-            setProcessedRows((prev) => (prev += statements.length));
+
+            // setProcessedRows((prev) => (prev += statements.length));
+            const batchSize = statements.length;
+            setProcessedRows((previous) => previous + batchSize);
             statements.length = 0;
           }
         }
@@ -168,7 +175,9 @@ const BottomSheetBatchUpdate = ({
 
       // flush remaining
       if (statements.length > 0) {
+        const batchSize = statements.length;
         await dbConnection.current.executeSet(statements);
+        setProcessedRows((previous) => previous + batchSize);
       }
 
       // await dbConnection.current?.execute("BEGIN TRANSACTION");
@@ -212,8 +221,9 @@ const BottomSheetBatchUpdate = ({
       console.error("Batch update failed: ", error);
       showToast(`Batch Update Failed, please try again - ${error}`, "long");
     } finally {
-      await dismissUpdatingSpinner();
+      // await dismissUpdatingSpinner();
       await toggleDBConnection(dbConnection, "close");
+      setIsBatchUpdating(false);
     }
   };
 
@@ -253,16 +263,16 @@ const BottomSheetBatchUpdate = ({
               
               </div> */}
               <div className="flex justify-between gap-4">
-                <div className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
+                <div
+                  onClick={() => fromDateInputRef.current?.click()}
+                  className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
+                >
                   <div className="mr-2">
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
                   </div>
                   <div className="flex items-center justify-between w-full">
-                    <div
-                      onClick={() => fromDateInputRef.current?.click()}
-                      className="text-left"
-                    >
+                    <div className="text-left">
                       <p className="text-sm opacity-60">From</p>
                       <p className="text-xs">
                         {batchUpdateObj.fromDate !== ""
@@ -275,16 +285,16 @@ const BottomSheetBatchUpdate = ({
                     </div>
                   </div>
                 </div>
-                <div className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
+                <div
+                  onClick={() => toDateInputRef.current?.click()}
+                  className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
+                >
                   <div className="mr-2">
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
                   </div>
                   <div className="flex items-center justify-between w-full">
-                    <div
-                      onClick={() => toDateInputRef.current?.click()}
-                      className="text-left"
-                    >
+                    <div className="text-left">
                       <p className="text-sm opacity-60">To</p>
                       <p className="text-xs">
                         {" "}
@@ -307,11 +317,11 @@ const BottomSheetBatchUpdate = ({
                   <IonIcon className="text-2xl" icon={alertCircleOutline} />
                 </p>
                 <div className="text-xs">
-                  <p className="opacity-60">
+                  <p className="opacity-70">
                     Your earliest selectable date is{" "}
                     {createLocalisedDate(userPreferences.userStartDate)[1]}
                   </p>
-                  <p className="opacity-60">
+                  <p className="opacity-70">
                     Need earlier dates?{" "}
                     <span
                       className="text-blue-700 underline"
@@ -339,7 +349,8 @@ const BottomSheetBatchUpdate = ({
 
               <input
                 ref={fromDateInputRef}
-                className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                // invisible absolute
+                className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                 placeholder="&#x1F5D3;"
                 onKeyDown={(e) => {
                   e.preventDefault();
@@ -360,7 +371,8 @@ const BottomSheetBatchUpdate = ({
 
             <input
               ref={toDateInputRef}
-              className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+              // invisible absolute
+              className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
               placeholder="&#x1F5D3;"
               onKeyDown={(e) => {
                 e.preventDefault();
@@ -382,7 +394,7 @@ const BottomSheetBatchUpdate = ({
           <section className="mx">
             <div className="my-5 rounded-lg">
               <div className="flex flex-row justify-between text-sm">
-                <p className="mb-2 ">Select up to 5 prayers</p>
+                <p className="mb-2">Select up to 5 prayers</p>
                 <p>{batchUpdateObj.salahs.length} / 5 selected</p>
               </div>
               <div className="mx-1 mb-4 mt-1 text-[var(--ion-text-color)]">
@@ -396,7 +408,7 @@ const BottomSheetBatchUpdate = ({
                         "--color": "var(--ion-text-color)",
                         backgroundColor: selected
                           ? "var(--reasons-bg-active-color-status-sheet)"
-                          : undefined,
+                          : "var(--reasons-bg-color-status-sheet)",
                       }}
                       key={salahName}
                       onClick={() => {
@@ -438,7 +450,7 @@ const BottomSheetBatchUpdate = ({
                           "--color": "var(--ion-text-color)",
                           backgroundColor: selected
                             ? "var(--reasons-bg-active-color-status-sheet)"
-                            : undefined,
+                            : "var(--reasons-bg-color-status-sheet)",
                         }}
                         key={status}
                         onClick={() => {
@@ -480,7 +492,7 @@ const BottomSheetBatchUpdate = ({
                           "--color": "var(--ion-text-color)",
                           backgroundColor: selected
                             ? "var(--reasons-bg-active-color-status-sheet)"
-                            : undefined,
+                            : "var(--reasons-bg-color-status-sheet)",
                         }}
                         key={reason}
                         onClick={() => {
@@ -500,12 +512,13 @@ const BottomSheetBatchUpdate = ({
               </section>
             )}
           <div className="mt-10 mb-5 text-sm notes-wrap">
+            <p className="mb-2">Add a note (Optional)</p>
             <IonTextarea
               aria-label="notes"
               autoGrow={true}
               rows={1}
               className="pl-2 rounded-lg text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"
-              placeholder="Notes (optional)"
+              placeholder="Write a note..."
               value={batchUpdateObj.notes}
               onIonInput={(e) => {
                 setBatchUpdateObj((prev) => ({
@@ -567,11 +580,12 @@ const BottomSheetBatchUpdate = ({
                   return;
                 }
 
-                await presentUpdatingSpinner({
-                  message: `${processedRows}`,
-                  backdropDismiss: false,
-                  cssClass: "ion-spinner",
-                });
+                // await presentUpdatingSpinner({
+                //   message: `${processedRows}`,
+                //   backdropDismiss: false,
+                //   cssClass: "ion-spinner",
+                // });
+                setIsBatchUpdating(true);
                 await executeBatchUpdate();
               }}
             >
@@ -580,6 +594,21 @@ const BottomSheetBatchUpdate = ({
           </div>
         </section>
       </IonContent>
+      {isBatchUpdating && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="rounded-lg bg-[var(--ion-background-color)] p-6 text-center">
+            <IonSpinner />
+
+            <p className="mt-3">Updating prayers...</p>
+
+            <p>
+              {processedRows} / {totalRows}
+            </p>
+
+            <p>{Math.round((processedRows / totalRows) * 100)}%</p>
+          </div>
+        </div>
+      )}
     </IonModal>
   );
 };
