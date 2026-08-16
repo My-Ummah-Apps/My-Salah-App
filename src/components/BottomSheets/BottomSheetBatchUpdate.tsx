@@ -314,10 +314,9 @@ const BottomSheetBatchUpdate = ({
               </div>
 
               <div className="flex items-center my-5 border border-[var(--app-border-color)] p-3 rounded-2xl">
-                <p className="mr-4">
-                  {" "}
-                  <IonIcon className="text-2xl" icon={alertCircleOutline} />
-                </p>
+                {/* <p className="mr-2"> */}{" "}
+                <IonIcon className="mr-2 text-2xl" icon={alertCircleOutline} />
+                {/* </p> */}
                 <div className="text-xs">
                   <p className="opacity-70">
                     Your earliest selectable date is{" "}
