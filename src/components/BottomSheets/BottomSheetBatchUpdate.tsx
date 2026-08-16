@@ -5,8 +5,9 @@ import {
   IonIcon,
   IonLabel,
   IonModal,
-  IonSpinner,
+  // IonSpinner,
   IonTextarea,
+  useIonLoading,
 } from "@ionic/react";
 
 import {
@@ -68,6 +69,7 @@ const BottomSheetBatchUpdate = ({
   const [processedRows, setProcessedRows] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
   const [isBatchUpdating, setIsBatchUpdating] = useState(false);
+  const [presentUpdatingSpinner, dismissUpdatingSpinner] = useIonLoading();
 
   type batchUpdateObj = {
     fromDate: string;
@@ -221,7 +223,7 @@ const BottomSheetBatchUpdate = ({
       console.error("Batch update failed: ", error);
       showToast(`Batch Update Failed, please try again - ${error}`, "long");
     } finally {
-      // await dismissUpdatingSpinner();
+      await dismissUpdatingSpinner();
       await toggleDBConnection(dbConnection, "close");
       setIsBatchUpdating(false);
     }
@@ -580,11 +582,11 @@ const BottomSheetBatchUpdate = ({
                   return;
                 }
 
-                // await presentUpdatingSpinner({
-                //   message: `${processedRows}`,
-                //   backdropDismiss: false,
-                //   cssClass: "ion-spinner",
-                // });
+                await presentUpdatingSpinner({
+                  // message: `${processedRows}`,
+                  backdropDismiss: false,
+                  cssClass: "ion-spinner-hidden",
+                });
                 setIsBatchUpdating(true);
                 await executeBatchUpdate();
               }}
@@ -595,9 +597,9 @@ const BottomSheetBatchUpdate = ({
         </section>
       </IonContent>
       {isBatchUpdating && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto bg-black/50">
           <div className="rounded-lg bg-[var(--ion-background-color)] p-6 text-center">
-            <IonSpinner />
+            {/* <IonSpinner /> */}
 
             <p className="mt-3">Updating prayers...</p>
 

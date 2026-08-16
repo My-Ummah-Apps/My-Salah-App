@@ -324,6 +324,10 @@ ion-select.sort-select::part(inner) {
   color: var(--ion-text-color);
 }
 
+.ion-spinner-hidden {
+  opacity: 0;
+}
+
 .action-sheet-group.sc-ion-action-sheet-ios {
   --background: var(--ios-action-sheet-background);
   background: var(--ios-action-sheet-background) !important;
