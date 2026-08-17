@@ -125,93 +125,55 @@ const BottomSheetBatchUpdate = ({
         end: parseISO(batchUpdateObj.toDate),
       }).map((date) => format(date, "yyyy-MM-dd"));
 
-      // console.log("DATES: ", dates);
-
-      // for (let i = 0; i < salahsToUpdate.length; i++) {
-      //   for (let x = 0; x < dates.length; x++) {
-      //     statements.push({
-      //       statement: statement,
-      //       values: [
-      //         dates[x],
-      //         salahsToUpdate[i],
-      //         salahStatus,
-      //         reasonsToInsert,
-      //         batchUpdateObj.notes,
-      //       ],
-      //     });
-      //   }
-      // }
-
-      const BATCH_SIZE = 100;
+      const batchSize = 100;
 
       if (!dbConnection.current) {
         throw new Error("dbConnection / dbconnection.current does not exist");
       }
 
-      // setProcessedRows(0);
       setTotalRows(dates.length * salahsToUpdate.length);
 
       await toggleDBConnection(dbConnection, "open");
 
-      for (let i = 0; i < salahsToUpdate.length; i++) {
-        for (let x = 0; x < dates.length; x++) {
-          statements.push({
-            statement: statement,
-            values: [
-              dates[x],
-              salahsToUpdate[i],
-              salahStatus,
-              reasonsToInsert,
-              batchUpdateObj.notes,
-            ],
-          });
+      try {
+        await dbConnection.current.execute("BEGIN TRANSACTION");
 
-          if (statements.length === BATCH_SIZE) {
-            await dbConnection.current.executeSet(statements);
+        for (let i = 0; i < salahsToUpdate.length; i++) {
+          for (let x = 0; x < dates.length; x++) {
+            statements.push({
+              statement: statement,
+              values: [
+                dates[x],
+                salahsToUpdate[i],
+                salahStatus,
+                reasonsToInsert,
+                batchUpdateObj.notes,
+              ],
+            });
 
-            // setProcessedRows((prev) => (prev += statements.length));
-            const batchSize = statements.length;
-            setProcessedRows((previous) => previous + batchSize);
-            statements.length = 0;
+            if (statements.length === batchSize) {
+              await dbConnection.current.executeSet(statements);
+
+              setProcessedRows((previous) => previous + batchSize);
+              statements.length = 0;
+            }
           }
         }
+
+        if (statements.length > 0) {
+          await dbConnection.current.executeSet(statements);
+          setProcessedRows((previous) => previous + statements.length);
+        }
+
+        await dbConnection.current.execute("COMMIT");
+      } catch (error) {
+        await dbConnection.current.execute("ROLLBACK");
+        throw error;
       }
-
-      // flush remaining
-      if (statements.length > 0) {
-        const batchSize = statements.length;
-        await dbConnection.current.executeSet(statements);
-        setProcessedRows((previous) => previous + batchSize);
-      }
-
-      // await dbConnection.current?.execute("BEGIN TRANSACTION");
-
-      // for (let i = 0; i < salahsToUpdate.length; i++) {
-      //   for (let x = 0; x < dates.length; x++) {
-      //     await dbConnection.current?.run(statement, [
-      //       dates[x],
-      //       salahsToUpdate[i],
-      //       salahStatus,
-      //       reasonsToInsert,
-      //       batchUpdateObj.notes,
-      //     ]);
-      //   }
-      // }
-
-      // await dbConnection.current?.execute("COMMIT");
-
-      // console.log("DATES: ", dates);
-      // console.log("statements: ", statements);
-
-      // await dbConnection.current.executeSet(statements);
-
-      // const DBResultAllSalahData = await dbConnection.current.query(
-      //   `SELECT * FROM salahDataTable`,
-      // ); // ! <- This statement here is causing crashes on certain devices when date goes back quite far, for e.g. 1980
 
       const DBResultSalahStatusData = await dbConnection.current.query(
         `SELECT date, salahName, salahStatus
-          FROM salahDataTable`,
+            FROM salahDataTable`,
       );
 
       await handleSalahTrackingDataFromDB(
@@ -219,8 +181,9 @@ const BottomSheetBatchUpdate = ({
         userPreferences.userStartDate,
       );
 
-      setShowBatchUpdateModal(false);
       showToast(`Batch Update Successful`, "long");
+
+      setShowBatchUpdateModal(false);
     } catch (error) {
       console.error("Batch update failed: ", error);
       showToast(`Batch Update Failed, please try again - ${error}`, "long");
