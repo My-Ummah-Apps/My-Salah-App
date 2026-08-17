@@ -106,9 +106,11 @@ const BottomSheetBatchUpdate = ({
       const statement = `INSERT OR REPLACE INTO salahDataTable(date, salahName, salahStatus, reasons, notes) VALUES  (?, ?, ?, ?, ?)`;
       const statements = [];
 
-      const salahsToUpdate = batchUpdateObj.salahs;
-      const salahStatus = batchUpdateObj.status;
-      const reasons = batchUpdateObj.reasons;
+      const {
+        salahs: salahsToUpdate,
+        status: salahStatus,
+        reasons,
+      } = batchUpdateObj;
 
       const reasonsToInsert =
         reasons.length > 0 &&
