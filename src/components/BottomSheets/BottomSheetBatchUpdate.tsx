@@ -16,7 +16,7 @@ import {
   SalahStatusType,
   userPreferencesType,
 } from "../../types/types";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -92,10 +92,6 @@ const BottomSheetBatchUpdate = ({
   const fromDateInputRef = useRef<HTMLInputElement>(null);
   const toDateInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    console.log(batchUpdateObj);
-  }, [batchUpdateObj]);
-
   const statusArr: SalahStatusType[] =
     userPreferences.userGender === "male"
       ? ["group", "male-alone", "late", "missed"]
@@ -136,7 +132,7 @@ const BottomSheetBatchUpdate = ({
       await toggleDBConnection(dbConnection, "open");
 
       try {
-        await dbConnection.current.execute("BEGIN TRANSACTION");
+        await dbConnection.current.beginTransaction();
 
         for (let i = 0; i < salahsToUpdate.length; i++) {
           for (let x = 0; x < dates.length; x++) {
@@ -152,7 +148,7 @@ const BottomSheetBatchUpdate = ({
             });
 
             if (statements.length === batchSize) {
-              await dbConnection.current.executeSet(statements);
+              await dbConnection.current.executeSet(statements, false);
 
               setProcessedRows((previous) => previous + batchSize);
               statements.length = 0;
@@ -161,13 +157,13 @@ const BottomSheetBatchUpdate = ({
         }
 
         if (statements.length > 0) {
-          await dbConnection.current.executeSet(statements);
+          await dbConnection.current.executeSet(statements, false);
           setProcessedRows((previous) => previous + statements.length);
         }
 
-        await dbConnection.current.execute("COMMIT");
+        await dbConnection.current.commitTransaction();
       } catch (error) {
-        await dbConnection.current.execute("ROLLBACK");
+        await dbConnection.current.rollbackTransaction();
         throw error;
       }
 
@@ -188,6 +184,8 @@ const BottomSheetBatchUpdate = ({
       console.error("Batch update failed: ", error);
       showToast(`Batch Update Failed, please try again - ${error}`, "long");
     } finally {
+      setProcessedRows(0);
+      setTotalRows(0);
       await dismissUpdatingSpinner();
       await toggleDBConnection(dbConnection, "close");
       setIsBatchUpdating(false);
