@@ -281,7 +281,7 @@ const BottomSheetBatchUpdate = ({
                 <IonIcon className="mr-2 text-2xl" icon={alertCircleOutline} />
                 {/* </p> */}
                 <div className="text-xs">
-                  <p className="opacity-70">
+                  <p className="opacity-80">
                     Your earliest selectable date is{" "}
                     {createLocalisedDate(userPreferences.userStartDate)[1]}
                   </p>
@@ -313,8 +313,7 @@ const BottomSheetBatchUpdate = ({
 
               <input
                 ref={fromDateInputRef}
-                // invisible absolute
-                className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                 placeholder="&#x1F5D3;"
                 onKeyDown={(e) => {
                   e.preventDefault();
@@ -335,8 +334,7 @@ const BottomSheetBatchUpdate = ({
 
             <input
               ref={toDateInputRef}
-              // invisible absolute
-              className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+              className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
               placeholder="&#x1F5D3;"
               onKeyDown={(e) => {
                 e.preventDefault();
@@ -569,7 +567,11 @@ const BottomSheetBatchUpdate = ({
               {processedRows} / {totalRows}
             </p>
 
-            <p>{Math.round((processedRows / totalRows) * 100)}%</p>
+            <p>
+              {Math.round((processedRows / totalRows) * 100) < 100
+                ? `${Math.round((processedRows / totalRows) * 100)}%`
+                : "Finishing up..."}
+            </p>
           </div>
         </div>
       )}
