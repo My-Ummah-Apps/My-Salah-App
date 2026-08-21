@@ -177,12 +177,12 @@ const BottomSheetBatchUpdate = ({
         userPreferences.userStartDate,
       );
 
-      showToast(`Batch Update Successful`, "long");
+      showToast(`Bulk Update Successful`, "long");
 
       setShowBatchUpdateModal(false);
     } catch (error) {
-      console.error("Batch update failed: ", error);
-      showToast(`Batch Update Failed, please try again - ${error}`, "long");
+      console.error("Bulk update failed: ", error);
+      showToast(`Bulk Update Failed, please try again - ${error}`, "long");
     } finally {
       setProcessedRows(0);
       setTotalRows(0);
@@ -195,6 +195,7 @@ const BottomSheetBatchUpdate = ({
   return (
     <IonModal
       mode="ios"
+      className="modal-height"
       expandToScroll={false}
       isOpen={showBatchUpdateModal}
       onDidDismiss={() => {
@@ -491,7 +492,7 @@ const BottomSheetBatchUpdate = ({
             ></IonTextarea>
           </div>
           {/*  ${selectedStartDate ? "opacity-100" : "opacity-20"} */}
-          <div className="mb-5">
+          <div className="">
             <IonButton
               disabled={
                 !batchUpdateObj.fromDate ||
@@ -567,11 +568,11 @@ const BottomSheetBatchUpdate = ({
               {processedRows} / {totalRows}
             </p>
 
-            <p>
-              {Math.round((processedRows / totalRows) * 100) < 100
-                ? `${Math.round((processedRows / totalRows) * 100)}%`
-                : "Finishing up..."}
-            </p>
+            {Math.round((processedRows / totalRows) * 100) < 100 ? (
+              <p>{Math.round((processedRows / totalRows) * 100)}% </p>
+            ) : (
+              <p className="animate-pulse">Finishing up... </p>
+            )}
           </div>
         </div>
       )}

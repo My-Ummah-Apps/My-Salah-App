@@ -1,5 +1,5 @@
 import { GoCalendar } from "react-icons/go";
-import { LATEST_APP_VERSION } from "../utils/changelog";
+// import { LATEST_APP_VERSION } from "../utils/changelog";
 import { IoBugOutline } from "react-icons/io5";
 interface MajorUpdateOverlayProps {
   setShowMajorUpdateOverlay: React.Dispatch<React.SetStateAction<boolean>>;

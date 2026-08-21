@@ -386,7 +386,7 @@ const SettingsPage = ({
               />
               <SettingIndividual
                 onClick={() => setShowBatchUpdateModal(true)}
-                headingText={"Batch update Salah"}
+                headingText={"Bulk update Salah"}
                 subText={`Update Salah over multiple dates`}
               />
               <BottomSheetBatchUpdate
