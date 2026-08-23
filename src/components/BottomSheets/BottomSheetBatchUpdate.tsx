@@ -89,9 +89,6 @@ const BottomSheetBatchUpdate = ({
     notes: "",
   });
 
-  // const fromDateInputRef = useRef<HTMLInputElement>(null);
-  // const toDateInputRef = useRef<HTMLInputElement>(null);
-
   const statusArr: SalahStatusType[] =
     userPreferences.userGender === "male"
       ? ["group", "male-alone", "late", "missed"]
@@ -219,23 +216,8 @@ const BottomSheetBatchUpdate = ({
         >
           <div className="mt-10 mb-4">
             <div className="">
-              {/* <div className="flex justify-between mb-4 text-sm">
-                <p>1. Select date range</p>
-                <p>9000 days selected</p>
-              </div> */}
-              {/* <div>
-                <IonIcon
-                  data-testid="delete-location-btn"
-                  icon={calendarClearOutline}
-                ></IonIcon>
-              <p className="">From</p>
-              
-              </div> */}
               <div className="flex justify-between gap-4">
-                <div
-                  // onClick={() => fromDateInputRef.current?.click()}
-                  className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
-                >
+                <div className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
                   <div className="mr-2">
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
@@ -254,8 +236,6 @@ const BottomSheetBatchUpdate = ({
                     </div>
                   </div>
                   <input
-                    // ref={fromDateInputRef}
-                    // invisible absolute
                     className="absolute opacity-0 inset-0 w-full h-full text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                     placeholder="&#x1F5D3;"
                     onKeyDown={(e) => {
@@ -274,10 +254,7 @@ const BottomSheetBatchUpdate = ({
                     max={new Date().toISOString().split("T")[0]}
                   ></input>
                 </div>
-                <div
-                  // onClick={() => toDateInputRef.current?.click()}
-                  className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
-                >
+                <div className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
                   <div className="mr-2">
                     {" "}
                     <IonIcon icon={calendarClearOutline} />
@@ -298,8 +275,6 @@ const BottomSheetBatchUpdate = ({
                     </div>
                   </div>
                   <input
-                    // ref={toDateInputRef}
-                    // invisible absolute
                     className="absolute opacity-0 inset-0 w-full h-full text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
                     placeholder="&#x1F5D3;"
                     onKeyDown={(e) => {
@@ -387,17 +362,6 @@ const BottomSheetBatchUpdate = ({
                       }}
                     >
                       <IonLabel className="text-sm">{salahName}</IonLabel>
-                      {/* <IonIcon
-                        icon={checkmarkOutline}
-                        style={{
-                          visibility: selected ? "visible" : "hidden",
-                          fontSize: "16px",
-                          marginRight: "4px",
-                          color: selected ? "var(--ion-text-color)" : "none",
-                        }}
-                      /> */}
-
-                      {/* <IonIcon icon={calendarClearOutline}></IonIcon> */}
                     </IonChip>
                   );
                 })}
@@ -563,8 +527,6 @@ const BottomSheetBatchUpdate = ({
       {isBatchUpdating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto bg-black/50">
           <div className="rounded-lg bg-[var(--ion-background-color)] p-6 text-center">
-            {/* <IonSpinner /> */}
-
             <p className="mt-3">Updating prayers...</p>
 
             <p>
