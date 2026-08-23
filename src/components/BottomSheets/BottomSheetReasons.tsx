@@ -44,10 +44,10 @@ const BottomSheetReasons = ({
                 status === "male-alone"
                   ? "Praying Salah Alone"
                   : status === "late"
-                  ? "Praying Salah Late"
-                  : status === "missed"
-                  ? "Missing Salah"
-                  : ""
+                    ? "Praying Salah Late"
+                    : status === "missed"
+                      ? "Missing Salah"
+                      : ""
               }`}
             </h1>
             <ReasonsList

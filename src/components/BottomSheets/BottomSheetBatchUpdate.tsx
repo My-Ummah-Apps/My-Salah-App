@@ -89,8 +89,8 @@ const BottomSheetBatchUpdate = ({
     notes: "",
   });
 
-  const fromDateInputRef = useRef<HTMLInputElement>(null);
-  const toDateInputRef = useRef<HTMLInputElement>(null);
+  // const fromDateInputRef = useRef<HTMLInputElement>(null);
+  // const toDateInputRef = useRef<HTMLInputElement>(null);
 
   const statusArr: SalahStatusType[] =
     userPreferences.userGender === "male"
@@ -213,7 +213,10 @@ const BottomSheetBatchUpdate = ({
       breakpoints={MODAL_BREAKPOINTS}
     >
       <IonContent>
-        <section className="mx-4">
+        <section
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+          className="mx-4"
+        >
           <div className="mt-10 mb-4">
             <div className="">
               {/* <div className="flex justify-between mb-4 text-sm">
@@ -230,8 +233,8 @@ const BottomSheetBatchUpdate = ({
               </div> */}
               <div className="flex justify-between gap-4">
                 <div
-                  onClick={() => fromDateInputRef.current?.click()}
-                  className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
+                  // onClick={() => fromDateInputRef.current?.click()}
+                  className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
                 >
                   <div className="mr-2">
                     {" "}
@@ -250,10 +253,30 @@ const BottomSheetBatchUpdate = ({
                       <MdOutlineChevronRight />
                     </div>
                   </div>
+                  <input
+                    // ref={fromDateInputRef}
+                    // invisible absolute
+                    className="absolute opacity-0 inset-0 w-full h-full text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                    placeholder="&#x1F5D3;"
+                    onKeyDown={(e) => {
+                      e.preventDefault();
+                    }}
+                    onChange={(e) => {
+                      setBatchUpdateObj((prev) => ({
+                        ...prev,
+                        fromDate: e.target.value,
+                      }));
+                    }}
+                    type="date"
+                    dir="auto"
+                    name="start-date-picker"
+                    min={userPreferences.userStartDate}
+                    max={new Date().toISOString().split("T")[0]}
+                  ></input>
                 </div>
                 <div
-                  onClick={() => toDateInputRef.current?.click()}
-                  className="flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
+                  // onClick={() => toDateInputRef.current?.click()}
+                  className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full"
                 >
                   <div className="mr-2">
                     {" "}
@@ -274,6 +297,27 @@ const BottomSheetBatchUpdate = ({
                       <MdOutlineChevronRight />
                     </div>
                   </div>
+                  <input
+                    // ref={toDateInputRef}
+                    // invisible absolute
+                    className="absolute opacity-0 inset-0 w-full h-full text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
+                    placeholder="&#x1F5D3;"
+                    onKeyDown={(e) => {
+                      e.preventDefault();
+                    }}
+                    onChange={(e) => {
+                      setBatchUpdateObj((prev) => ({
+                        ...prev,
+                        toDate: e.target.value,
+                      }));
+                    }}
+                    // ref={datePickerRef}
+                    type="date"
+                    dir="auto"
+                    name="start-date-picker"
+                    min={userPreferences.userStartDate}
+                    max={new Date().toISOString().split("T")[0]}
+                  ></input>
                 </div>
               </div>
 
@@ -311,48 +355,7 @@ const BottomSheetBatchUpdate = ({
                   <p>25 years, 3 months, 23 days</p>
                 </div>
               </div> */}
-
-              <input
-                ref={fromDateInputRef}
-                className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-                placeholder="&#x1F5D3;"
-                onKeyDown={(e) => {
-                  e.preventDefault();
-                }}
-                onChange={(e) => {
-                  setBatchUpdateObj((prev) => ({
-                    ...prev,
-                    fromDate: e.target.value,
-                  }));
-                }}
-                type="date"
-                dir="auto"
-                name="start-date-picker"
-                min={userPreferences.userStartDate}
-                max={new Date().toISOString().split("T")[0]}
-              ></input>
             </div>
-
-            <input
-              ref={toDateInputRef}
-              className="invisible absolute text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-              placeholder="&#x1F5D3;"
-              onKeyDown={(e) => {
-                e.preventDefault();
-              }}
-              onChange={(e) => {
-                setBatchUpdateObj((prev) => ({
-                  ...prev,
-                  toDate: e.target.value,
-                }));
-              }}
-              // ref={datePickerRef}
-              type="date"
-              dir="auto"
-              name="start-date-picker"
-              min={userPreferences.userStartDate}
-              max={new Date().toISOString().split("T")[0]}
-            ></input>
           </div>
           <section className="mx">
             <div className="my-5 rounded-lg">
@@ -492,7 +495,7 @@ const BottomSheetBatchUpdate = ({
             ></IonTextarea>
           </div>
           {/*  ${selectedStartDate ? "opacity-100" : "opacity-20"} */}
-          <div className="">
+          <div>
             <IonButton
               disabled={
                 !batchUpdateObj.fromDate ||

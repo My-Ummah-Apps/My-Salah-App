@@ -168,7 +168,10 @@ BottomSheetStartDateProps) => {
           </motion.p>
         )}
 
-        <ul className="pt-3 px-2 bg-[var(--card-bg-color)]">
+        <ul
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+          className="pt-3 px-2 bg-[var(--card-bg-color)]"
+        >
           <AnimatePresence>
             {userPreferences.reasons
               .sort((a, b) => a.localeCompare(b))
