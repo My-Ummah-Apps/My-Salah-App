@@ -16,7 +16,7 @@ import {
   SalahStatusType,
   userPreferencesType,
 } from "../../types/types";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
