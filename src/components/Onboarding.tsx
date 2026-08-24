@@ -33,6 +33,7 @@ import AddLocationOptions from "./AddLocationOptions";
 import { Capacitor } from "@capacitor/core";
 import { adhanLibrarySalahs } from "../utils/constants";
 import { AndroidSettings } from "capacitor-native-settings";
+import { LATEST_APP_VERSION } from "../utils/changelog";
 
 interface OnboardingProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -107,6 +108,8 @@ const Onboarding = ({
         "1",
         setUserPreferences,
       );
+
+      localStorage.setItem("appVersion", LATEST_APP_VERSION);
 
       setShowJoyRideEditIcon(true);
     }
