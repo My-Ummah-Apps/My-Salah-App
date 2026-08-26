@@ -26,7 +26,10 @@ import {
 import {
   IonContent,
   IonHeader,
+  IonLabel,
   IonPage,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -290,6 +293,29 @@ const StatsPage = ({
               userGender={userPreferences.userGender}
             />
             {/* <div className="sticky z-10 top-[56px] bg-white dark:bg-[#121212]"> */}
+            <div className="mb-5">
+              <IonSegment
+                mode="ios"
+                // value={salahToShow}
+                onIonChange={(e) => {
+                  const value = e.detail.value;
+                  // setSalahToShow(
+                  //   value as Exclude<SalahNamesType, "Asar"> | "All",
+                  // );
+                }}
+              >
+                <IonSegmentButton value="All">
+                  <IonLabel>All</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton value="Fajr">
+                  <IonLabel>Month</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton value="Dhuhr">
+                  <IonLabel>Year</IonLabel>
+                </IonSegmentButton>
+              </IonSegment>
+            </div>
+
             <SalahSegmentTabs
               setStatsToShow={setStatsToShow}
               statsToShow={statsToShow}
