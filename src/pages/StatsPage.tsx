@@ -37,6 +37,13 @@ import {
 import { useLocation } from "react-router-dom";
 import SalahSegmentTabs from "../components/Stats/SalahSegmentTabs";
 import { toggleDBConnection } from "../utils/dbUtils";
+import {
+  HiOutlineChevronDoubleLeft,
+  HiOutlineChevronDoubleRight,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+} from "react-icons/hi2";
+import { eachMonthOfInterval, format, parse } from "date-fns";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -71,6 +78,26 @@ const StatsPage = ({
   >("All");
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
+
+  const [clickedDate, setClickedDate] = useState<string>("");
+  const [currentMonth, setCurrentMonth] = useState(0);
+
+  const userStartDateParsed = parse(
+    userPreferences.userStartDate,
+    "yyyy-MM-dd",
+    new Date(),
+  );
+  const todaysDate = new Date();
+
+  const monthsBetween = eachMonthOfInterval({
+    start: userStartDateParsed,
+    end: todaysDate,
+  });
+
+  const formattedMonths = monthsBetween.map((month) =>
+    format(month, "MMMM yyyy"),
+  );
+  formattedMonths.reverse();
 
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
@@ -293,33 +320,81 @@ const StatsPage = ({
               userGender={userPreferences.userGender}
             />
             {/* <div className="sticky z-10 top-[56px] bg-white dark:bg-[#121212]"> */}
-            <div className="mb-5">
-              <IonSegment
-                mode="ios"
-                // value={salahToShow}
-                onIonChange={(e) => {
-                  const value = e.detail.value;
-                  // setSalahToShow(
-                  //   value as Exclude<SalahNamesType, "Asar"> | "All",
-                  // );
-                }}
-              >
-                <IonSegmentButton value="All">
-                  <IonLabel>All</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton value="Fajr">
-                  <IonLabel>Month</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton value="Dhuhr">
-                  <IonLabel>Year</IonLabel>
-                </IonSegmentButton>
-              </IonSegment>
-            </div>
 
             <SalahSegmentTabs
               setStatsToShow={setStatsToShow}
               statsToShow={statsToShow}
             />
+
+            <div className="bg-[var(--sheet-option-bg)] rounded-md flex items-center justify-center my-5">
+              <button
+                type="button"
+                aria-label="Previous year"
+                disabled={currentMonth + 1 > formattedMonths.length - 1}
+                className="px-2 border-r border-[var(--app-border-color)] border-solid"
+                onClick={() => {
+                  console.log("CLICKED");
+                  setCurrentMonth((prev) => {
+                    if (prev + 12 > formattedMonths.length - 1) {
+                      return formattedMonths.length - 1;
+                    }
+                    return prev + 12;
+                  });
+                }}
+              >
+                <HiOutlineChevronDoubleLeft />
+              </button>
+              <button
+                type="button"
+                aria-label="Previous month"
+                disabled={currentMonth === formattedMonths.length - 1}
+                onClick={() => {
+                  setCurrentMonth((prev) => {
+                    if (prev === formattedMonths.length - 1) {
+                      return prev;
+                    }
+                    return prev + 1;
+                  });
+                }}
+                className="px-2 border-r border-[var(--app-border-color)] border-solid"
+              >
+                <HiOutlineChevronLeft />
+              </button>
+              {formattedMonths[currentMonth]}
+              <button
+                type="button"
+                aria-label="Next month"
+                disabled={currentMonth === 0}
+                onClick={() => {
+                  setCurrentMonth((prev) => {
+                    if (prev === 0) {
+                      return prev;
+                    }
+                    return prev - 1;
+                  });
+                }}
+                className="px-2 border-r border-[var(--app-border-color)] border-solid"
+              >
+                <HiOutlineChevronRight />
+              </button>
+              <button
+                type="button"
+                aria-label="Next year"
+                disabled={currentMonth === 0}
+                onClick={() => {
+                  setCurrentMonth((prev) => {
+                    if (prev - 12 <= 0) {
+                      return 0;
+                    }
+                    return prev - 12;
+                  });
+                }}
+                className="p-2 m-1"
+              >
+                <HiOutlineChevronDoubleRight />
+              </button>
+            </div>
+
             {/* </div> */}
             <AnimatePresence mode="wait">
               <motion.section
@@ -341,6 +416,13 @@ const StatsPage = ({
                   userStartDate={userPreferences.userStartDate}
                   fetchedSalahData={fetchedSalahData}
                   statsToShow={statsToShow}
+                  setClickedDate={setClickedDate}
+                  clickedDate={clickedDate}
+                  setCurrentMonth={setCurrentMonth}
+                  currentMonth={currentMonth}
+                  userStartDateParsed={userStartDateParsed}
+                  todaysDate={todaysDate}
+                  formattedMonths={formattedMonths}
                 />{" "}
                 <Swiper
                   className="mt-5"

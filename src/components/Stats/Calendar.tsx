@@ -34,6 +34,13 @@ interface CalenderProps {
   userStartDate: string;
   fetchedSalahData: SalahRecordsArrayType;
   statsToShow: SalahNamesType | "All";
+  setClickedDate: React.Dispatch<React.SetStateAction<string>>;
+  clickedDate: string;
+  setCurrentMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentMonth: number;
+  userStartDateParsed: Date;
+  todaysDate: Date;
+  formattedMonths: string[];
 }
 
 const Calendar = ({
@@ -41,11 +48,16 @@ const Calendar = ({
   fetchedSalahData,
   userStartDate,
   statsToShow,
+  setClickedDate,
+  clickedDate,
+  setCurrentMonth,
+  currentMonth,
+  userStartDateParsed,
+  todaysDate,
+  formattedMonths,
 }: CalenderProps) => {
   const calenderSingleMonthHeightRef = useRef<HTMLDivElement>(null);
   const [showDailySalahDataModal, setShowDailySalahDataModal] = useState(false);
-  const [clickedDate, setClickedDate] = useState<string>("");
-  const [currentMonth, setCurrentMonth] = useState(0);
 
   const isDayInSpecificMonth = (dayToCheck: Date, currentMonth: string) => {
     const parsedCurrentMonth = parse(currentMonth, "MMMM yyyy", new Date());
@@ -55,19 +67,6 @@ const Calendar = ({
       dayMonth.getFullYear() === parsedCurrentMonth.getFullYear()
     );
   };
-
-  const userStartDateParsed = parse(userStartDate, "yyyy-MM-dd", new Date());
-  const todaysDate = new Date();
-
-  const monthsBetween = eachMonthOfInterval({
-    start: userStartDateParsed,
-    end: todaysDate,
-  });
-
-  const formattedMonths = monthsBetween.map((month) =>
-    format(month, "MMMM yyyy"),
-  );
-  formattedMonths.reverse();
 
   let firstDayOfMonth;
   const monthlyDates = (month: string) => {
