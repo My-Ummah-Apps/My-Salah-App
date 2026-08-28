@@ -99,6 +99,8 @@ const StatsPage = ({
   );
   formattedMonths.reverse();
 
+  console.log(formattedMonths[currentMonth]);
+
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
       if (statsToShow === "All") {
@@ -133,20 +135,8 @@ const StatsPage = ({
 
   getAllSalahStatuses();
 
-  const filterSalahStatuses = (salahStatus: SalahStatusType) => {
-    if (statsToShow === "Fajr") {
-      return salahStatusesOverallArr.filter((status) => status === salahStatus);
-    } else if (statsToShow === "Dhuhr") {
-      return salahStatusesOverallArr.filter((status) => status === salahStatus);
-    } else if (statsToShow === "Asr") {
-      return salahStatusesOverallArr.filter((status) => status === salahStatus);
-    } else if (statsToShow === "Maghrib") {
-      return salahStatusesOverallArr.filter((status) => status === salahStatus);
-    } else if (statsToShow === "Isha") {
-      return salahStatusesOverallArr.filter((status) => status === salahStatus);
-    }
-    return salahStatusesOverallArr.filter((status) => status === salahStatus);
-  };
+  const filterSalahStatuses = (salahStatus: SalahStatusType) =>
+    salahStatusesOverallArr.filter((status) => status === salahStatus);
 
   const salahStatusStatistics = {
     salahInGroupDatesOverall: filterSalahStatuses("group").length,
@@ -333,7 +323,6 @@ const StatsPage = ({
                 disabled={currentMonth + 1 > formattedMonths.length - 1}
                 className="px-2 border-r border-[var(--app-border-color)] border-solid"
                 onClick={() => {
-                  console.log("CLICKED");
                   setCurrentMonth((prev) => {
                     if (prev + 12 > formattedMonths.length - 1) {
                       return formattedMonths.length - 1;
