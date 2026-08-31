@@ -25,3 +25,7 @@ dist-ssr
 *.sw?
 
 /Secret
+
+# Claude Code — local only, never committed
+CLAUDE.md
+.claude/
