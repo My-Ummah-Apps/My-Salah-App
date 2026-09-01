@@ -100,6 +100,7 @@ const StatsPage = ({
   formattedMonths.reverse();
 
   console.log(formattedMonths[currentMonth]);
+  // ! formattedMonths and currentMonth seem to be key, both the piechart and reasons components are having stats passed down to them from this page it seems
 
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
