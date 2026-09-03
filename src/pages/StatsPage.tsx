@@ -84,6 +84,7 @@ const StatsPage = ({
 
   const [clickedDate, setClickedDate] = useState<string>("");
   const [currentMonth, setCurrentMonth] = useState(0);
+  const [selectedYear] = useState(new Date().getFullYear());
 
   const userStartDateParsed = parse(
     userPreferences.userStartDate,
@@ -91,6 +92,8 @@ const StatsPage = ({
     new Date(),
   );
   const todaysDate = new Date();
+  const earliestYear = userStartDateParsed.getFullYear();
+  const currentYear = todaysDate.getFullYear();
 
   const monthsBetween = eachMonthOfInterval({
     start: userStartDateParsed,
@@ -406,6 +409,30 @@ const StatsPage = ({
                 <HiOutlineChevronDoubleRight />
               </button>
             </div>}
+
+            {statsPeriod === "yearly" && (
+              <div className="flex items-center justify-between px-6 py-2 my-5">
+                <button
+                  type="button"
+                  aria-label="Previous year"
+                  disabled={selectedYear <= earliestYear}
+                  className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
+                >
+                  <HiOutlineChevronLeft />
+                </button>
+                <span className="text-xl font-semibold tracking-wide">
+                  {selectedYear}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Next year"
+                  disabled={selectedYear >= currentYear}
+                  className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
+                >
+                  <HiOutlineChevronRight />
+                </button>
+              </div>
+            )}
 
             {/* </div> */}
             <AnimatePresence mode="wait">
