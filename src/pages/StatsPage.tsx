@@ -26,7 +26,10 @@ import {
 import {
   IonContent,
   IonHeader,
+  IonLabel,
   IonPage,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -52,6 +55,8 @@ interface StatsPageProps {
   activeStreakCount: number;
 }
 
+type StatsPeriod = "overall" | "monthly" | "yearly";
+
 const StatsPage = ({
   dbConnection,
   userPreferences,
@@ -73,6 +78,7 @@ const StatsPage = ({
   const [statsToShow, setStatsToShow] = useState<
     Exclude<SalahNamesType, "Asar"> | "All"
   >("All");
+  const [statsPeriod, setStatsPeriod] = useState<StatsPeriod>("monthly");
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
 
@@ -314,7 +320,26 @@ const StatsPage = ({
               statsToShow={statsToShow}
             />
 
-            <div className="bg-[var(--sheet-option-bg)] rounded-md flex items-center justify-center my-5">
+            <IonSegment
+              className="mt-5"
+              mode="ios"
+              value={statsPeriod}
+              onIonChange={(e) => {
+                setStatsPeriod(e.detail.value as StatsPeriod);
+              }}
+            >
+              <IonSegmentButton value="monthly">
+                <IonLabel>Monthly</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="yearly">
+                <IonLabel>Yearly</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="overall">
+                <IonLabel>Overall</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+
+            {statsPeriod === "monthly" && <div className="bg-[var(--sheet-option-bg)] rounded-md flex items-center justify-center my-5">
               <button
                 type="button"
                 aria-label="Previous year"
@@ -380,7 +405,7 @@ const StatsPage = ({
               >
                 <HiOutlineChevronDoubleRight />
               </button>
-            </div>
+            </div>}
 
             {/* </div> */}
             <AnimatePresence mode="wait">
@@ -398,7 +423,7 @@ const StatsPage = ({
                     salahStatusStatistics={salahStatusStatistics}
                   />
                 )}
-                <Calendar
+                {statsPeriod === "monthly" && <Calendar
                   dbConnection={dbConnection}
                   fetchedSalahData={fetchedSalahData}
                   statsToShow={statsToShow}
@@ -408,7 +433,17 @@ const StatsPage = ({
                   userStartDateParsed={userStartDateParsed}
                   todaysDate={todaysDate}
                   formattedMonths={formattedMonths}
-                />{" "}
+                />}
+                {statsPeriod === "yearly" && (
+                  <section className="mt-5 text-center">
+                    <p>Yearly statistics will appear here.</p>
+                  </section>
+                )}
+                {statsPeriod === "overall" && (
+                  <section className="mt-5 text-center">
+                    <p>Overall statistics will appear here.</p>
+                  </section>
+                )}
                 <Swiper
                   className="mt-5"
                   spaceBetween={50}
