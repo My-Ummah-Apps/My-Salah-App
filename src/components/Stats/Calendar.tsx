@@ -9,7 +9,6 @@ import {
   endOfMonth,
   endOfWeek,
   startOfWeek,
-  eachMonthOfInterval,
 } from "date-fns";
 
 import {
@@ -22,21 +21,12 @@ import {
 import BottomSheetSingleDateView from "../BottomSheets/BottomSheetSingleDateView";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
-import {
-  HiOutlineChevronDoubleLeft,
-  HiOutlineChevronLeft,
-  HiOutlineChevronRight,
-  HiOutlineChevronDoubleRight,
-} from "react-icons/hi2";
-
 interface CalenderProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
-  userStartDate: string;
   fetchedSalahData: SalahRecordsArrayType;
   statsToShow: SalahNamesType | "All";
   setClickedDate: React.Dispatch<React.SetStateAction<string>>;
   clickedDate: string;
-  setCurrentMonth: React.Dispatch<React.SetStateAction<number>>;
   currentMonth: number;
   userStartDateParsed: Date;
   todaysDate: Date;
@@ -46,11 +36,9 @@ interface CalenderProps {
 const Calendar = ({
   dbConnection,
   fetchedSalahData,
-  userStartDate,
   statsToShow,
   setClickedDate,
   clickedDate,
-  setCurrentMonth,
   currentMonth,
   userStartDateParsed,
   todaysDate,
@@ -159,75 +147,6 @@ const Calendar = ({
             <p className="font-semibold text-center">
               {formattedMonths[currentMonth]}
             </p>
-            <div className="bg-[var(--sheet-option-bg)] rounded-full">
-              <button
-                type="button"
-                aria-label="Previous year"
-                disabled={currentMonth + 1 > formattedMonths.length - 1}
-                className="px-2 border-r border-[var(--app-border-color)] border-solid"
-                onClick={() => {
-                  // console.log("CLICKED");
-
-                  setCurrentMonth((prev) => {
-                    if (prev + 12 > formattedMonths.length - 1) {
-                      return formattedMonths.length - 1;
-                    }
-                    return prev + 12;
-                  });
-                }}
-              >
-                <HiOutlineChevronDoubleLeft />
-              </button>
-              <button
-                type="button"
-                aria-label="Previous month"
-                disabled={currentMonth === formattedMonths.length - 1}
-                onClick={() => {
-                  setCurrentMonth((prev) => {
-                    if (prev === formattedMonths.length - 1) {
-                      return prev;
-                    }
-                    return prev + 1;
-                  });
-                }}
-                className="px-2 border-r border-[var(--app-border-color)] border-solid"
-              >
-                <HiOutlineChevronLeft />
-              </button>
-
-              <button
-                type="button"
-                aria-label="Next month"
-                disabled={currentMonth === 0}
-                onClick={() => {
-                  setCurrentMonth((prev) => {
-                    if (prev === 0) {
-                      return prev;
-                    }
-                    return prev - 1;
-                  });
-                }}
-                className="px-2 border-r border-[var(--app-border-color)] border-solid"
-              >
-                <HiOutlineChevronRight />
-              </button>
-              <button
-                type="button"
-                aria-label="Next year"
-                disabled={currentMonth === 0}
-                onClick={() => {
-                  setCurrentMonth((prev) => {
-                    if (prev - 12 <= 0) {
-                      return 0;
-                    }
-                    return prev - 12;
-                  });
-                }}
-                className="p-2 m-1"
-              >
-                <HiOutlineChevronDoubleRight />
-              </button>
-            </div>
           </section>
           <div className="grid grid-cols-7 px-2 mb-3 place-items-center days-row-wrap">
             {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (

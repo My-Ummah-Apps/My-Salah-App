@@ -26,10 +26,7 @@ import {
 import {
   IonContent,
   IonHeader,
-  IonLabel,
   IonPage,
-  IonSegment,
-  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -403,12 +400,10 @@ const StatsPage = ({
                 )}
                 <Calendar
                   dbConnection={dbConnection}
-                  userStartDate={userPreferences.userStartDate}
                   fetchedSalahData={fetchedSalahData}
                   statsToShow={statsToShow}
                   setClickedDate={setClickedDate}
                   clickedDate={clickedDate}
-                  setCurrentMonth={setCurrentMonth}
                   currentMonth={currentMonth}
                   userStartDateParsed={userStartDateParsed}
                   todaysDate={todaysDate}
