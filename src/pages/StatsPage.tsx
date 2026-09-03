@@ -4,6 +4,7 @@ import { Pagination } from "swiper/modules";
 import { AnimatePresence, motion } from "framer-motion";
 
 import Calendar from "../components/Stats/Calendar";
+import YearlyStats from "../components/Stats/YearlyStats";
 import {
   reasonsToShowType,
   SalahNamesType,
@@ -472,9 +473,7 @@ const StatsPage = ({
                   formattedMonths={formattedMonths}
                 />}
                 {statsPeriod === "yearly" && (
-                  <section className="mt-5 text-center">
-                    <p>Yearly statistics will appear here.</p>
-                  </section>
+                  <YearlyStats selectedYear={selectedYear} />
                 )}
                 {statsPeriod === "overall" && (
                   <section className="mt-5 text-center">
