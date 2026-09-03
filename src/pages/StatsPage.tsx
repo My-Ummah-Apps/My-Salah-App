@@ -84,7 +84,7 @@ const StatsPage = ({
 
   const [clickedDate, setClickedDate] = useState<string>("");
   const [currentMonth, setCurrentMonth] = useState(0);
-  const [selectedYear] = useState(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const userStartDateParsed = parse(
     userPreferences.userStartDate,
@@ -416,6 +416,11 @@ const StatsPage = ({
                   type="button"
                   aria-label="Previous year"
                   disabled={selectedYear <= earliestYear}
+                  onClick={() =>
+                    setSelectedYear((previousYear) =>
+                      Math.max(previousYear - 1, earliestYear),
+                    )
+                  }
                   className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
                 >
                   <HiOutlineChevronLeft />
@@ -427,6 +432,11 @@ const StatsPage = ({
                   type="button"
                   aria-label="Next year"
                   disabled={selectedYear >= currentYear}
+                  onClick={() =>
+                    setSelectedYear((previousYear) =>
+                      Math.min(previousYear + 1, currentYear),
+                    )
+                  }
                   className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
                 >
                   <HiOutlineChevronRight />
