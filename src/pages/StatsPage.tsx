@@ -343,12 +343,12 @@ const StatsPage = ({
               </IonSegmentButton>
             </IonSegment>
 
-            {statsPeriod === "monthly" && <div className="bg-[var(--sheet-option-bg)] rounded-md flex items-center justify-center my-5">
+            {statsPeriod === "monthly" && <div className="flex items-center justify-between py-2 my-5">
               <button
                 type="button"
                 aria-label="Previous year"
                 disabled={currentMonth + 1 > formattedMonths.length - 1}
-                className="px-2 border-r border-[var(--app-border-color)] border-solid"
+                className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
                 onClick={() => {
                   setCurrentMonth((prev) => {
                     if (prev + 12 > formattedMonths.length - 1) {
@@ -372,11 +372,13 @@ const StatsPage = ({
                     return prev + 1;
                   });
                 }}
-                className="px-2 border-r border-[var(--app-border-color)] border-solid"
+                className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
               >
                 <HiOutlineChevronLeft />
               </button>
-              {formattedMonths[currentMonth]}
+              <span className="text-lg font-semibold tracking-wide text-center">
+                {formattedMonths[currentMonth]}
+              </span>
               <button
                 type="button"
                 aria-label="Next month"
@@ -389,7 +391,7 @@ const StatsPage = ({
                     return prev - 1;
                   });
                 }}
-                className="px-2 border-r border-[var(--app-border-color)] border-solid"
+                className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
               >
                 <HiOutlineChevronRight />
               </button>
@@ -405,7 +407,7 @@ const StatsPage = ({
                     return prev - 12;
                   });
                 }}
-                className="p-2 m-1"
+                className="flex items-center justify-center w-10 h-10 text-2xl disabled:opacity-30"
               >
                 <HiOutlineChevronDoubleRight />
               </button>
