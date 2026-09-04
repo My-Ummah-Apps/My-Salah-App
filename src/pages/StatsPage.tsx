@@ -478,6 +478,7 @@ const StatsPage = ({
                   <YearlyStats
                     fetchedSalahData={fetchedSalahData}
                     selectedYear={selectedYear}
+                    statsToShow={statsToShow}
                     userStartDateParsed={userStartDateParsed}
                     todaysDate={todaysDate}
                   />
