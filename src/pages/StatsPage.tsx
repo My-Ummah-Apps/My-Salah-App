@@ -479,6 +479,7 @@ const StatsPage = ({
                     fetchedSalahData={fetchedSalahData}
                     selectedYear={selectedYear}
                     statsToShow={statsToShow}
+                    userGender={userPreferences.userGender}
                     userStartDateParsed={userStartDateParsed}
                     todaysDate={todaysDate}
                   />

@@ -10,12 +10,14 @@ import {
   MonthlySalahStats,
   SalahNamesType,
   SalahRecordsArrayType,
+  SalahStatusType,
 } from "../../types/types";
 
 interface YearlyStatsProps {
   fetchedSalahData: SalahRecordsArrayType;
   selectedYear: number;
   statsToShow: Exclude<SalahNamesType, "Asar"> | "All";
+  userGender: string;
   userStartDateParsed: Date;
   todaysDate: Date;
 }
@@ -39,14 +41,28 @@ const YearlyStats = ({
   fetchedSalahData,
   selectedYear,
   statsToShow,
+  userGender,
   userStartDateParsed,
   todaysDate,
 }: YearlyStatsProps) => {
   const salahName = statsToShow === "Asr" ? "Asar" : statsToShow;
+  const relevantStatuses: Exclude<SalahStatusType, "">[] =
+    userGender === "male"
+      ? ["group", "male-alone", "late", "missed"]
+      : ["female-alone", "excused", "late", "missed"];
 
   const salahStatsByMonth: MonthlySalahStats[] = months.map((month) => ({
     month,
+    totalStatusCount: 0,
     statusCounts: {
+      group: 0,
+      "male-alone": 0,
+      "female-alone": 0,
+      late: 0,
+      missed: 0,
+      excused: 0,
+    },
+    statusPercentages: {
       group: 0,
       "male-alone": 0,
       "female-alone": 0,
@@ -80,6 +96,22 @@ const YearlyStats = ({
       if (status !== "") {
         salahStatsByMonth[monthIndex].statusCounts[status] += 1;
       }
+    });
+  });
+
+  salahStatsByMonth.forEach((item) => {
+    item.totalStatusCount = relevantStatuses.reduce(
+      (total, status) => total + item.statusCounts[status],
+      0,
+    );
+
+    if (item.totalStatusCount === 0) {
+      return;
+    }
+
+    relevantStatuses.forEach((status) => {
+      item.statusPercentages[status] =
+        (item.statusCounts[status] / item.totalStatusCount) * 100;
     });
   });
 
