@@ -1,6 +1,8 @@
-import { endOfMonth, isAfter, isBefore } from "date-fns";
+import { endOfMonth, getYear, isAfter, isBefore, parseISO } from "date-fns";
+import { SalahRecordsArrayType } from "../../types/types";
 
 interface YearlyStatsProps {
+  fetchedSalahData: SalahRecordsArrayType;
   selectedYear: number;
   userStartDateParsed: Date;
   todaysDate: Date;
@@ -22,13 +24,18 @@ const months = [
 ];
 
 const YearlyStats = ({
+  fetchedSalahData,
   selectedYear,
   userStartDateParsed,
   todaysDate,
 }: YearlyStatsProps) => {
+  const selectedYearSalahData = fetchedSalahData.filter(
+    (record) => getYear(parseISO(record.date)) === selectedYear,
+  );
+
   return (
     <section
-      aria-label={`${selectedYear} monthly statistics`}
+      aria-label={`${selectedYear} monthly statistics, ${selectedYearSalahData.length} records`}
       className="grid grid-cols-3 gap-3 mt-5"
     >
       {months.map((month, monthIndex) => {

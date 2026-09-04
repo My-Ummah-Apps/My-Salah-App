@@ -476,6 +476,7 @@ const StatsPage = ({
                 />}
                 {statsPeriod === "yearly" && (
                   <YearlyStats
+                    fetchedSalahData={fetchedSalahData}
                     selectedYear={selectedYear}
                     userStartDateParsed={userStartDateParsed}
                     todaysDate={todaysDate}
