@@ -1,5 +1,16 @@
-import { endOfMonth, getMonth, getYear, isAfter, isBefore, parseISO } from "date-fns";
-import { SalahNamesType, SalahRecordsArrayType, SalahStatusType } from "../../types/types";
+import {
+  endOfMonth,
+  getMonth,
+  getYear,
+  isAfter,
+  isBefore,
+  parseISO,
+} from "date-fns";
+import {
+  MonthlySalahStats,
+  SalahNamesType,
+  SalahRecordsArrayType,
+} from "../../types/types";
 
 interface YearlyStatsProps {
   fetchedSalahData: SalahRecordsArrayType;
@@ -7,11 +18,6 @@ interface YearlyStatsProps {
   statsToShow: Exclude<SalahNamesType, "Asar"> | "All";
   userStartDateParsed: Date;
   todaysDate: Date;
-}
-
-interface MonthlySalahData {
-  month: string;
-  statuses: SalahStatusType[];
 }
 
 const months = [
@@ -36,15 +42,28 @@ const YearlyStats = ({
   userStartDateParsed,
   todaysDate,
 }: YearlyStatsProps) => {
-  const selectedYearSalahData = fetchedSalahData.filter(
-    (item) => getYear(parseISO(item.date)) === selectedYear,
-  );
-
   const salahName = statsToShow === "Asr" ? "Asar" : statsToShow;
 
-  const selectedYearAndSalahData = selectedYearSalahData.map((item) => ({
-    date: item.date,
-    statuses:
+  const salahStatsByMonth: MonthlySalahStats[] = months.map((month) => ({
+    month,
+    statusCounts: {
+      group: 0,
+      "male-alone": 0,
+      "female-alone": 0,
+      late: 0,
+      missed: 0,
+      excused: 0,
+    },
+  }));
+
+  fetchedSalahData.forEach((item) => {
+    const itemDate = parseISO(item.date);
+
+    if (getYear(itemDate) !== selectedYear) {
+      return;
+    }
+
+    const statuses =
       salahName === "All"
         ? [
             item.salahs.Fajr,
@@ -53,25 +72,23 @@ const YearlyStats = ({
             item.salahs.Maghrib,
             item.salahs.Isha,
           ]
-        : [item.salahs[salahName]],
-  }));
+        : [item.salahs[salahName]];
 
-  const salahDataByMonth: MonthlySalahData[] = months.map((month) => ({
-    month,
-    statuses: [],
-  }));
+    const monthIndex = getMonth(itemDate);
 
-  selectedYearAndSalahData.forEach((item) => {
-    const monthIndex = getMonth(parseISO(item.date));
-    salahDataByMonth[monthIndex].statuses.push(...item.statuses);
+    statuses.forEach((status) => {
+      if (status !== "") {
+        salahStatsByMonth[monthIndex].statusCounts[status] += 1;
+      }
+    });
   });
 
   return (
     <section
-      aria-label={`${selectedYear} ${statsToShow} monthly statistics, ${selectedYearAndSalahData.length} records`}
+      aria-label={`${selectedYear} ${statsToShow} monthly statistics`}
       className="grid grid-cols-3 gap-3 mt-5"
     >
-      {salahDataByMonth.map((monthData, monthIndex) => {
+      {salahStatsByMonth.map((monthData, monthIndex) => {
         const monthStart = new Date(selectedYear, monthIndex, 1);
         const monthEnd = endOfMonth(monthStart);
         const isUnavailable =

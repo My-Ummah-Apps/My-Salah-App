@@ -127,6 +127,18 @@ export interface SalahRecordType {
 
 export type SalahRecordsArrayType = SalahRecordType[];
 
+export interface MonthlySalahStats {
+  month: string;
+  statusCounts: {
+    group: number;
+    "male-alone": number;
+    "female-alone": number;
+    late: number;
+    missed: number;
+    excused: number;
+  };
+}
+
 export type SalahDataType = {
   [date: string]: string[];
 };
