@@ -475,7 +475,11 @@ const StatsPage = ({
                   formattedMonths={formattedMonths}
                 />}
                 {statsPeriod === "yearly" && (
-                  <YearlyStats selectedYear={selectedYear} />
+                  <YearlyStats
+                    selectedYear={selectedYear}
+                    userStartDateParsed={userStartDateParsed}
+                    todaysDate={todaysDate}
+                  />
                 )}
                 {statsPeriod === "overall" && (
                   <section className="mt-5 text-center">
