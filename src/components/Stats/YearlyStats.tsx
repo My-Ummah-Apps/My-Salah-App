@@ -1,5 +1,5 @@
-import { endOfMonth, getYear, isAfter, isBefore, parseISO } from "date-fns";
-import { SalahNamesType, SalahRecordsArrayType } from "../../types/types";
+import { endOfMonth, getMonth, getYear, isAfter, isBefore, parseISO } from "date-fns";
+import { SalahNamesType, SalahRecordsArrayType, SalahStatusType } from "../../types/types";
 
 interface YearlyStatsProps {
   fetchedSalahData: SalahRecordsArrayType;
@@ -7,6 +7,11 @@ interface YearlyStatsProps {
   statsToShow: Exclude<SalahNamesType, "Asar"> | "All";
   userStartDateParsed: Date;
   todaysDate: Date;
+}
+
+interface MonthlySalahData {
+  month: string;
+  statuses: SalahStatusType[];
 }
 
 const months = [
@@ -51,12 +56,22 @@ const YearlyStats = ({
         : [item.salahs[salahName]],
   }));
 
+  const salahDataByMonth: MonthlySalahData[] = months.map((month) => ({
+    month,
+    statuses: [],
+  }));
+
+  selectedYearAndSalahData.forEach((item) => {
+    const monthIndex = getMonth(parseISO(item.date));
+    salahDataByMonth[monthIndex].statuses.push(...item.statuses);
+  });
+
   return (
     <section
       aria-label={`${selectedYear} ${statsToShow} monthly statistics, ${selectedYearAndSalahData.length} records`}
       className="grid grid-cols-3 gap-3 mt-5"
     >
-      {months.map((month, monthIndex) => {
+      {salahDataByMonth.map((monthData, monthIndex) => {
         const monthStart = new Date(selectedYear, monthIndex, 1);
         const monthEnd = endOfMonth(monthStart);
         const isUnavailable =
@@ -65,10 +80,10 @@ const YearlyStats = ({
 
         return (
           <div
-            key={month}
+            key={monthData.month}
             className={`min-h-20 p-3 text-left bg-[var(--card-bg-color)] rounded-xl ${isUnavailable ? "opacity-30" : ""}`}
           >
-            <p className="font-semibold">{month}</p>
+            <p className="font-semibold">{monthData.month}</p>
           </div>
         );
       })}
