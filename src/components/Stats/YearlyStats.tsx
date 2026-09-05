@@ -7,16 +7,17 @@ import {
   parseISO,
 } from "date-fns";
 import {
-  MonthlySalahStats,
+  MonthlySalahStatsType,
   SalahNamesType,
   SalahRecordsArrayType,
   SalahStatusType,
 } from "../../types/types";
 import { salahStatusColorsHexCodes } from "../../utils/constants";
 
-interface YearlyStatsProps {
+interface YearlyStatsPropsType {
   fetchedSalahData: SalahRecordsArrayType;
   selectedYear: number;
+  onMonthSelect: (month: Date) => void;
   statsToShow: Exclude<SalahNamesType, "Asar"> | "All";
   userGender: string;
   userStartDateParsed: Date;
@@ -50,18 +51,19 @@ const statusDisplayDetails = {
 const YearlyStats = ({
   fetchedSalahData,
   selectedYear,
+  onMonthSelect,
   statsToShow,
   userGender,
   userStartDateParsed,
   todaysDate,
-}: YearlyStatsProps) => {
+}: YearlyStatsPropsType) => {
   const salahName = statsToShow === "Asr" ? "Asar" : statsToShow;
   const relevantStatuses: Exclude<SalahStatusType, "">[] =
     userGender === "male"
       ? ["group", "male-alone", "late", "missed"]
       : ["female-alone", "excused", "late", "missed"];
 
-  const salahStatsByMonth: MonthlySalahStats[] = months.map((month) => ({
+  const salahStatsByMonth: MonthlySalahStatsType[] = months.map((month) => ({
     month,
     totalStatusCount: 0,
     statusCounts: {
@@ -156,13 +158,17 @@ const YearlyStats = ({
             isAfter(monthStart, todaysDate);
 
           return (
-            <div
+            <button
               key={monthData.month}
+              type="button"
+              aria-label={`View ${monthData.month} ${selectedYear} calendar`}
+              disabled={isUnavailable}
+              onClick={() => onMonthSelect(monthStart)}
               className={`p-3 text-left bg-[var(--card-bg-color)] rounded-xl ${isUnavailable ? "opacity-30" : ""}`}
             >
-              <p className="text-sm font-semibold">{monthData.month}</p>
+              <span className="block text-sm font-semibold">{monthData.month}</span>
 
-              <div className="flex h-2 my-3 overflow-hidden rounded-full bg-[var(--app-border-color)]">
+              <span className="flex h-2 my-3 overflow-hidden rounded-full bg-[var(--app-border-color)]">
                 {relevantStatuses.map((status) => (
                   <span
                     key={status}
@@ -173,11 +179,11 @@ const YearlyStats = ({
                     }}
                   />
                 ))}
-              </div>
+              </span>
 
-              <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px]">
+              <span className="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px]">
                 {relevantStatuses.map((status) => (
-                  <p
+                  <span
                     key={status}
                     className="flex items-center gap-1 font-semibold whitespace-nowrap"
                   >
@@ -194,10 +200,10 @@ const YearlyStats = ({
                     <span>
                       {Math.round(monthData.statusPercentages[status])}%
                     </span>
-                  </p>
+                  </span>
                 ))}
-              </div>
-            </div>
+              </span>
+            </button>
           );
         })}
       </div>

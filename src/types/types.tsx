@@ -127,7 +127,7 @@ export interface SalahRecordType {
 
 export type SalahRecordsArrayType = SalahRecordType[];
 
-export interface MonthlySalahStats {
+export interface MonthlySalahStatsType {
   month: string;
   totalStatusCount: number;
   statusCounts: {

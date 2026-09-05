@@ -56,7 +56,7 @@ interface StatsPageProps {
   activeStreakCount: number;
 }
 
-type StatsPeriod = "overall" | "monthly" | "yearly";
+type StatsPeriodType = "overall" | "monthly" | "yearly";
 
 const StatsPage = ({
   dbConnection,
@@ -79,7 +79,7 @@ const StatsPage = ({
   const [statsToShow, setStatsToShow] = useState<
     Exclude<SalahNamesType, "Asar"> | "All"
   >("All");
-  const [statsPeriod, setStatsPeriod] = useState<StatsPeriod>("monthly");
+  const [statsPeriod, setStatsPeriod] = useState<StatsPeriodType>("monthly");
 
   const salahStatusesOverallArr: SalahStatusType[] = [];
 
@@ -105,6 +105,17 @@ const StatsPage = ({
     format(month, "MMMM yyyy"),
   );
   formattedMonths.reverse();
+
+  const handleMonthSelect = (month: Date) => {
+    const monthIndex = formattedMonths.indexOf(format(month, "MMMM yyyy"));
+
+    if (monthIndex === -1) {
+      return;
+    }
+
+    setCurrentMonth(monthIndex);
+    setStatsPeriod("monthly");
+  };
 
   console.log(formattedMonths[currentMonth]);
   // ! formattedMonths and currentMonth seem to be key, both the piechart and reasons components are having stats passed down to them from this page it seems
@@ -329,7 +340,7 @@ const StatsPage = ({
               mode="ios"
               value={statsPeriod}
               onIonChange={(e) => {
-                setStatsPeriod(e.detail.value as StatsPeriod);
+                setStatsPeriod(e.detail.value as StatsPeriodType);
               }}
             >
               <IonSegmentButton value="monthly">
@@ -478,6 +489,7 @@ const StatsPage = ({
                   <YearlyStats
                     fetchedSalahData={fetchedSalahData}
                     selectedYear={selectedYear}
+                    onMonthSelect={handleMonthSelect}
                     statsToShow={statsToShow}
                     userGender={userPreferences.userGender}
                     userStartDateParsed={userStartDateParsed}
