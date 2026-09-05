@@ -11,6 +11,7 @@ import {
   salahReasonsOverallNumbersType,
   SalahRecordsArrayType,
   SalahStatusType,
+  StatsDateRangeType,
   userPreferencesType,
 } from "../types/types";
 import DonutPieChart from "../components/Stats/DonutPieChart";
@@ -44,7 +45,7 @@ import {
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
 } from "react-icons/hi2";
-import { eachMonthOfInterval, format, parse } from "date-fns";
+import { eachMonthOfInterval, endOfMonth, endOfYear, format, parse } from "date-fns";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -106,6 +107,26 @@ const StatsPage = ({
   );
   formattedMonths.reverse();
 
+  let activeDateRange: StatsDateRangeType | null = null;
+
+  if (statsPeriod === "monthly") {
+    const selectedMonthDate = parse(
+      formattedMonths[currentMonth],
+      "MMMM yyyy",
+      todaysDate,
+    );
+    activeDateRange = {
+      start: selectedMonthDate,
+      end: endOfMonth(selectedMonthDate),
+    };
+  } else if (statsPeriod === "yearly") {
+    const selectedYearDate = new Date(selectedYear, 0, 1);
+    activeDateRange = {
+      start: selectedYearDate,
+      end: endOfYear(selectedYearDate),
+    };
+  }
+
   const handleMonthSelect = (month: Date) => {
     const monthIndex = formattedMonths.indexOf(format(month, "MMMM yyyy"));
 
@@ -117,7 +138,7 @@ const StatsPage = ({
     setStatsPeriod("monthly");
   };
 
-  console.log(formattedMonths[currentMonth]);
+  console.log(formattedMonths[currentMonth], activeDateRange);
   // ! formattedMonths and currentMonth seem to be key, both the piechart and reasons components are having stats passed down to them from this page it seems
 
   const getAllSalahStatuses = () => {
