@@ -110,10 +110,9 @@ const YearlyStats = ({
   });
 
   salahStatsByMonth.forEach((item) => {
-    item.totalStatusCount = relevantStatuses.reduce(
-      (total, status) => total + item.statusCounts[status],
-      0,
-    );
+    relevantStatuses.forEach((status) => {
+      item.totalStatusCount += item.statusCounts[status];
+    });
 
     if (item.totalStatusCount === 0) {
       return;
