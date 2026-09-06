@@ -45,7 +45,16 @@ import {
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
 } from "react-icons/hi2";
-import { eachMonthOfInterval, endOfMonth, endOfYear, format, parse } from "date-fns";
+import {
+  eachMonthOfInterval,
+  endOfMonth,
+  endOfYear,
+  format,
+  isAfter,
+  isBefore,
+  parse,
+  parseISO,
+} from "date-fns";
 
 // import StreakCount from "../components/Stats/StreakCount";
 
@@ -143,6 +152,17 @@ const StatsPage = ({
 
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
+      if (activeDateRange) {
+        const itemDate = parseISO(fetchedSalahData[i].date);
+
+        if (
+          isBefore(itemDate, activeDateRange.start) ||
+          isAfter(itemDate, activeDateRange.end)
+        ) {
+          continue;
+        }
+      }
+
       if (statsToShow === "All") {
         Object.values(fetchedSalahData[i].salahs).forEach((status) => {
           if (status !== "" && typeof status === "string") {
