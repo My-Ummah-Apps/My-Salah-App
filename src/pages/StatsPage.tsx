@@ -148,9 +148,6 @@ const StatsPage = ({
     setStatsPeriod("monthly");
   };
 
-  console.log(formattedMonths[currentMonth], activeDateRange);
-  // ! formattedMonths and currentMonth seem to be key, both the piechart and reasons components are having stats passed down to them from this page it seems
-
   const getAllSalahStatuses = () => {
     for (let i = 0; i < fetchedSalahData.length; i++) {
       if (activeDateRange) {
@@ -541,7 +538,7 @@ const StatsPage = ({
             {/* </div> */}
             <AnimatePresence mode="wait">
               <motion.section
-                key={statsToShow}
+                key={`${statsPeriod}-${statsToShow}`}
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -10, opacity: 0 }}
@@ -575,11 +572,6 @@ const StatsPage = ({
                     userStartDateParsed={userStartDateParsed}
                     todaysDate={todaysDate}
                   />
-                )}
-                {statsPeriod === "overall" && (
-                  <section className="mt-5 text-center">
-                    <p>Overall statistics will appear here.</p>
-                  </section>
                 )}
                 <Swiper
                   className="mt-5"
