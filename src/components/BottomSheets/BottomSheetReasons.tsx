@@ -4,7 +4,7 @@ import {
 } from "../../utils/constants";
 import {
   reasonsToShowType,
-  salahReasonsOverallNumbersType,
+  ReasonCountsByStatusType,
 } from "../../types/types";
 import ReasonsList from "../Stats/ReasonsList";
 import { IonContent, IonModal } from "@ionic/react";
@@ -13,13 +13,13 @@ interface BottomSheetReasonsProps {
   // triggerId: string;
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
   showReasonsSheet: boolean;
-  salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
+  reasonCountsByStatus: ReasonCountsByStatusType;
   status: reasonsToShowType;
 }
 
 const BottomSheetReasons = ({
   // triggerId,
-  salahReasonsOverallNumbers,
+  reasonCountsByStatus,
   status,
   setShowReasonsSheet,
   showReasonsSheet,
@@ -51,7 +51,7 @@ const BottomSheetReasons = ({
               }`}
             </h1>
             <ReasonsList
-              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+              reasonCountsByStatus={reasonCountsByStatus}
               status={status}
               partialOrFull="full"
             />

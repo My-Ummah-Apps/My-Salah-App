@@ -204,7 +204,7 @@ export interface SalahEntryType {
   salahStatus: SalahStatusType;
 }
 
-export type salahReasonsOverallNumbersType = {
+export type ReasonCountsByStatusType = {
   "male-alone": { [reason: string]: number };
   late: { [reason: string]: number };
   missed: { [reason: string]: number };

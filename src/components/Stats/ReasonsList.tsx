@@ -1,30 +1,30 @@
 import { salahStatusColorsHexCodes } from "../../utils/constants";
-import { salahReasonsOverallNumbersType } from "../../types/types";
+import { ReasonCountsByStatusType } from "../../types/types";
 
 interface ReasonsListProps {
-  salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
+  reasonCountsByStatus: ReasonCountsByStatusType;
   status: "male-alone" | "late" | "missed";
   partialOrFull: "partial" | "full";
 }
 
 const ReasonsList = ({
-  salahReasonsOverallNumbers,
+  reasonCountsByStatus,
   status,
   partialOrFull,
 }: ReasonsListProps) => {
-  const reasonsSum = Object.values(salahReasonsOverallNumbers[status]).reduce(
+  const reasonsSum = Object.values(reasonCountsByStatus[status]).reduce(
     (acc, total) => acc + total,
     0
   );
 
   return (
     <section className="px-5">
-      {Object.entries(salahReasonsOverallNumbers[status])
+      {Object.entries(reasonCountsByStatus[status])
         .slice(
           0,
           partialOrFull === "partial"
             ? 3
-            : Object.entries(salahReasonsOverallNumbers[status]).length
+            : Object.entries(reasonCountsByStatus[status]).length
         )
         .map(([key, value], index) => (
           <section className="" key={index}>

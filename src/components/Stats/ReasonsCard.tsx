@@ -1,7 +1,7 @@
 import {
   reasonsToShowType,
   SalahNamesType,
-  salahReasonsOverallNumbersType,
+  ReasonCountsByStatusType,
 } from "../../types/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { salahStatusColorsHexCodes } from "../../utils/constants";
@@ -10,7 +10,7 @@ import ReasonsList from "./ReasonsList";
 interface ReasonsCardProps {
   setReasonsToShow: React.Dispatch<React.SetStateAction<reasonsToShowType>>;
   setShowReasonsSheet: React.Dispatch<React.SetStateAction<boolean>>;
-  salahReasonsOverallNumbers: salahReasonsOverallNumbersType;
+  reasonCountsByStatus: ReasonCountsByStatusType;
   status: "male-alone" | "late" | "missed";
   statsToShow: SalahNamesType | "All";
 }
@@ -18,7 +18,7 @@ interface ReasonsCardProps {
 const ReasonsCard = ({
   setReasonsToShow,
   setShowReasonsSheet,
-  salahReasonsOverallNumbers,
+  reasonCountsByStatus,
   status,
   statsToShow,
 }: ReasonsCardProps) => {
@@ -41,9 +41,9 @@ const ReasonsCard = ({
                   : ""
           }`}
         </h1>
-        {Object.entries(salahReasonsOverallNumbers[status]).length > 0 ? (
+        {Object.entries(reasonCountsByStatus[status]).length > 0 ? (
           <ReasonsList
-            salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+            reasonCountsByStatus={reasonCountsByStatus}
             status={status}
             partialOrFull="partial"
           />
@@ -102,7 +102,7 @@ const ReasonsCard = ({
             setShowReasonsSheet(true);
           }}
           className={`mb-10 pt-2 text-center w-full ${
-            Object.entries(salahReasonsOverallNumbers[status]).length > 3
+            Object.entries(reasonCountsByStatus[status]).length > 3
               ? "visible"
               : "invisible"
           }`}

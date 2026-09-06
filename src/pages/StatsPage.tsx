@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,7 +8,7 @@ import YearlyStats from "../components/Stats/YearlyStats";
 import {
   reasonsToShowType,
   SalahNamesType,
-  salahReasonsOverallNumbersType,
+  ReasonCountsByStatusType,
   SalahRecordsArrayType,
   SalahStatusType,
   StatsDateRangeType,
@@ -77,9 +77,10 @@ const StatsPage = ({
 }: StatsPageProps) => {
   const location = useLocation();
   const isStatsPage = location.pathname === "/StatsPage";
+  const reasonsFetchQueue = useRef<Promise<void>>(Promise.resolve());
 
-  const [salahReasonsOverallNumbers, setSalahReasonsOverallNumbers] =
-    useState<salahReasonsOverallNumbersType>({
+  const [reasonCountsByStatus, setReasonCountsByStatus] =
+    useState<ReasonCountsByStatusType>({
       "male-alone": {},
       late: {},
       missed: {},
@@ -243,16 +244,36 @@ const StatsPage = ({
     },
   ];
 
+  const rangeStartTime = activeDateRange?.start.getTime();
+  const rangeEndTime = activeDateRange?.end.getTime();
+
+  useEffect(() => {
+    if (!isStatsPage) {
+      return;
+    }
+
+    let cancelled = false;
+    setReasonCountsByStatus({ "male-alone": {}, late: {}, missed: {} });
+
   const fetchSalahDataFromDB = async () => {
     try {
       await toggleDBConnection(dbConnection, "open");
-      // let DBResultAllSalahData = await dbConnection.current!.query(
-      //   `SELECT * FROM salahDataTable`,
-      // );
 
-      let DBResultAllSalahData = await dbConnection.current!.query(
-        `SELECT date, salahName, salahStatus, reasons, notes
-          FROM salahDataTable`,
+      let query = `SELECT date, salahName, salahStatus, reasons, notes
+        FROM salahDataTable`;
+      const queryValues: string[] = [];
+
+      if (rangeStartTime !== undefined && rangeEndTime !== undefined) {
+        query += " WHERE date >= ? AND date <= ?";
+        queryValues.push(
+          format(rangeStartTime, "yyyy-MM-dd"),
+          format(rangeEndTime, "yyyy-MM-dd"),
+        );
+      }
+
+      const DBResultAllSalahData = await dbConnection.current!.query(
+        query,
+        queryValues,
       );
 
       if (!DBResultAllSalahData.values) {
@@ -305,8 +326,7 @@ const StatsPage = ({
           }
         }
       }
-      // const obj = { ...salahReasonsOverallNumbers };
-      const obj: salahReasonsOverallNumbersType = {
+      const obj: ReasonCountsByStatusType = {
         "male-alone": {},
         late: {},
         missed: {},
@@ -314,7 +334,7 @@ const StatsPage = ({
 
       const calculateReasonAmounts = (
         arr: string[],
-        status: keyof salahReasonsOverallNumbersType,
+        status: keyof ReasonCountsByStatusType,
       ) => {
         arr.forEach((reason: string) => {
           if (reason === "") return;
@@ -337,7 +357,9 @@ const StatsPage = ({
       calculateReasonAmounts(lateReasonsArr.flat(), "late");
       calculateReasonAmounts(missedReasonsArr.flat(), "missed");
 
-      setSalahReasonsOverallNumbers(obj);
+      if (!cancelled) {
+        setReasonCountsByStatus(obj);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -345,11 +367,19 @@ const StatsPage = ({
     }
   };
 
-  useEffect(() => {
-    if (isStatsPage) {
-      fetchSalahDataFromDB();
-    }
-  }, [fetchedSalahData, statsToShow, location.pathname]);
+    // Finish closing the previous request's connection before starting another.
+    reasonsFetchQueue.current = reasonsFetchQueue.current
+      .then(async () => {
+        if (!cancelled) {
+          await fetchSalahDataFromDB();
+        }
+      })
+      .catch((error) => console.error(error));
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dbConnection, fetchedSalahData, statsToShow, isStatsPage, rangeStartTime, rangeEndTime]);
 
   return (
     <IonPage>
@@ -555,9 +585,7 @@ const StatsPage = ({
                         <ReasonsCard
                           setReasonsToShow={setReasonsToShow}
                           setShowReasonsSheet={setShowReasonsSheet}
-                          salahReasonsOverallNumbers={
-                            salahReasonsOverallNumbers
-                          }
+                          reasonCountsByStatus={reasonCountsByStatus}
                           status={"male-alone"}
                           statsToShow={statsToShow}
                         />
@@ -568,7 +596,7 @@ const StatsPage = ({
                       <ReasonsCard
                         setReasonsToShow={setReasonsToShow}
                         setShowReasonsSheet={setShowReasonsSheet}
-                        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                        reasonCountsByStatus={reasonCountsByStatus}
                         status={"late"}
                         statsToShow={statsToShow}
                       />
@@ -579,7 +607,7 @@ const StatsPage = ({
                       <ReasonsCard
                         setReasonsToShow={setReasonsToShow}
                         setShowReasonsSheet={setShowReasonsSheet}
-                        salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+                        reasonCountsByStatus={reasonCountsByStatus}
                         status={"missed"}
                         statsToShow={statsToShow}
                       />
@@ -592,7 +620,7 @@ const StatsPage = ({
               // triggerId="open-reasons-sheet"
               setShowReasonsSheet={setShowReasonsSheet}
               showReasonsSheet={showReasonsSheet}
-              salahReasonsOverallNumbers={salahReasonsOverallNumbers}
+              reasonCountsByStatus={reasonCountsByStatus}
               status={reasonsToShow}
             />
           </section>
