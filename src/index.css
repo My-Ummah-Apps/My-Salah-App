@@ -30,6 +30,8 @@
   /* --nav-selected-tab-color: #2e004d; */
   --segment-bg-color: rgb(223, 223, 223);
   --segment-active-color: rgb(255, 255, 255);
+  --stats-control-bg-color: var(--card-bg-color);
+  --stats-control-text-color: rgb(74, 74, 74);
   --table-dot-icon-color: rgba(71, 71, 71, 0.9);
   --textarea-bg-color: rgb(206, 206, 206);
   --missed-salah-sheet-btn-color: rgb(206, 206, 206);
@@ -64,6 +66,8 @@ body.dark {
   --ios-action-sheet-background: rgb(36, 36, 36);
   --segment-bg-color: rgb(52, 53, 56);
   --segment-active-color: rgb(100, 103, 112);
+  --stats-control-bg-color: var(--sheet-option-bg);
+  --stats-control-text-color: rgb(174, 174, 174);
   --nav-active-tab-color: white;
   --table-dot-icon-color: rgba(180, 180, 180, 0.9);
   --textarea-bg-color: rgb(38, 38, 38);
@@ -186,6 +190,24 @@ ion-segment {
 ion-segment-button {
   min-width: auto;
   --indicator-color: var(--segment-active-color);
+}
+
+.stats-period-segment {
+  --background: var(--stats-control-bg-color);
+  padding: 0.125rem;
+  border-radius: 0.8125rem;
+}
+
+.stats-period-segment-button {
+  min-height: 2.25rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: none;
+  --border-radius: 0.625rem;
+  --color: var(--stats-control-text-color);
+  --color-checked: white;
+  --indicator-color: #3977db;
 }
 
 ion-modal {

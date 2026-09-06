@@ -401,29 +401,38 @@ const StatsPage = ({
             />
             {/* <div className="sticky z-10 top-[56px] bg-white dark:bg-[#121212]"> */}
 
-            <SalahSegmentTabs
-              setStatsToShow={setStatsToShow}
-              statsToShow={statsToShow}
-            />
-
             <IonSegment
-              className="mt-5"
+              className="stats-period-segment mt-5"
               mode="ios"
               value={statsPeriod}
               onIonChange={(e) => {
                 setStatsPeriod(e.detail.value as StatsPeriodType);
               }}
             >
-              <IonSegmentButton value="monthly">
+              <IonSegmentButton
+                className="stats-period-segment-button"
+                value="monthly"
+              >
                 <IonLabel>Monthly</IonLabel>
               </IonSegmentButton>
-              <IonSegmentButton value="yearly">
+              <IonSegmentButton
+                className="stats-period-segment-button"
+                value="yearly"
+              >
                 <IonLabel>Yearly</IonLabel>
               </IonSegmentButton>
-              <IonSegmentButton value="overall">
+              <IonSegmentButton
+                className="stats-period-segment-button"
+                value="overall"
+              >
                 <IonLabel>Overall</IonLabel>
               </IonSegmentButton>
             </IonSegment>
+
+            <SalahSegmentTabs
+              setStatsToShow={setStatsToShow}
+              statsToShow={statsToShow}
+            />
 
             {statsPeriod === "monthly" && <div className="flex items-center justify-between py-2 my-5">
               <button

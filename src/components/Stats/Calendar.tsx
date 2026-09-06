@@ -81,9 +81,9 @@ const Calendar = ({
       return colors;
     }
 
-    let formattedDate = format(date, "yyyy-MM-dd");
+    const formattedDate = format(date, "yyyy-MM-dd");
 
-    for (let key in fetchedSalahData) {
+    for (const key in fetchedSalahData) {
       // console.log("KEY: ", fetchedSalahData[key].salahs);
       if (fetchedSalahData[key].date === formattedDate) {
         const matchedData = fetchedSalahData[key].salahs;

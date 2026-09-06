@@ -1,44 +1,57 @@
-import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/react";
 import { SalahNamesType } from "../../types/types";
 
 interface SalahSegmentTabsProps {
   setStatsToShow: React.Dispatch<Exclude<SalahNamesType, "Asar"> | "All">;
-  statsToShow: SalahNamesType | "All";
+  statsToShow: Exclude<SalahNamesType, "Asar"> | "All";
 }
+
+const salahOptions: (Exclude<SalahNamesType, "Asar"> | "All")[] = [
+  "All",
+  "Fajr",
+  "Dhuhr",
+  "Asr",
+  "Maghrib",
+  "Isha",
+];
 
 const SalahSegmentTabs = ({
   setStatsToShow,
   statsToShow,
 }: SalahSegmentTabsProps) => {
   return (
-    <IonSegment
-      mode="ios"
-      value={statsToShow}
-      onIonChange={(e) => {
-        // setStatsToShow(e.detail.value as SalahNamesType | "All");
-        const value = e.detail.value === "Asar" ? "Asr" : e.detail.value;
-        setStatsToShow(value as Exclude<SalahNamesType, "Asar"> | "All");
-      }}
-    >
-      <IonSegmentButton value="All">
-        <IonLabel>All</IonLabel>
-      </IonSegmentButton>
-      <IonSegmentButton value="Fajr">
-        <IonLabel>Fajr</IonLabel>
-      </IonSegmentButton>
-      <IonSegmentButton value="Dhuhr">
-        <IonLabel>Dhuhr</IonLabel>
-      </IonSegmentButton>
-      <IonSegmentButton value="Asr">
-        <IonLabel>Asr</IonLabel>
-      </IonSegmentButton>
-      <IonSegmentButton value="Maghrib">
-        <IonLabel>Maghrib</IonLabel>
-      </IonSegmentButton>
-      <IonSegmentButton value="Isha">
-        <IonLabel>Isha</IonLabel>
-      </IonSegmentButton>
-    </IonSegment>
+    <section className="mt-5">
+      <p
+        id="salah-filter-label"
+        className="mb-2 text-xs font-semibold tracking-[0.15em] opacity-60"
+      >
+        SALAH
+      </p>
+      <div
+        role="group"
+        aria-labelledby="salah-filter-label"
+        className="grid grid-cols-6 gap-1"
+      >
+        {salahOptions.map((salah) => (
+          <button
+            key={salah}
+            type="button"
+            aria-pressed={statsToShow === salah}
+            onClick={() => setStatsToShow(salah)}
+            className="h-11 min-w-0"
+          >
+            <span
+              className={`flex h-8 w-full items-center justify-center whitespace-nowrap rounded-full text-[10px] font-semibold min-[375px]:text-xs ${
+                statsToShow === salah
+                  ? "bg-[#3977db] text-white"
+                  : "bg-[var(--stats-control-bg-color)] text-[var(--stats-control-text-color)]"
+              }`}
+            >
+              {salah}
+            </span>
+          </button>
+        ))}
+      </div>
+    </section>
   );
 };
 
