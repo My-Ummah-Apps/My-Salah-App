@@ -516,17 +516,6 @@ td {
   overflow: hidden;
 }
 
-/* .streaks-list-excused-text:before */
-
-.donut-pie-chart-text:before {
-  content: "";
-  display: inline-block;
-  margin-right: 0.3rem;
-  border-radius: 0.15rem;
-  width: 10px;
-  height: 10px;
-}
-
 .setting-bottom-border section:not(:last-of-type) {
   border-bottom: 1px solid var(--settings-page-borders);
 }

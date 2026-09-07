@@ -1,121 +1,61 @@
-import { useState } from "react";
-import { salahStatusColorsHexCodes } from "../../utils/constants";
-import { PieChart } from "react-minimal-pie-chart";
-
 const DonutPieChart = ({
   donutPieChartData,
-  salahStatusStatistics,
-  userGender,
 }: {
-  salahStatusStatistics: {
-    salahInGroupDatesOverall: number;
-    salahMaleAloneDatesOverall: number;
-    salahFemaleAloneDatesOverall: number;
-    salahExcusedDatesOverall: number;
-    salahMissedDatesOverall: number;
-    salahLateDatesOverall: number;
-  };
   donutPieChartData: { title: string; value: number; color: string }[];
-  userGender: string;
 }) => {
-  const [toggleValues, setToggleValues] = useState<"percentage" | "amount">(
-    "amount"
+  const totalStatusCount = donutPieChartData.reduce(
+    (total, item) => total + item.value,
+    0,
   );
 
+  const statusData = donutPieChartData.map((item) => ({
+    ...item,
+    percentage: (item.value / totalStatusCount) * 100,
+  }));
+
   return (
-    <div className="mt-5 flex w-[100%] justify-around items-center donut-pie-chart-wrapper bg-[var(--card-bg-color)] rounded-2xl py-2">
-      <section
-        className="w-1/2 my-2"
-        onClick={() => {
-          setToggleValues(toggleValues === "amount" ? "percentage" : "amount");
-        }}
+    <section className="px-4 pb-4 pt-1 mt-5 bg-[var(--card-bg-color)] rounded-2xl">
+      <h2 className="text-base font-semibold">Status breakdown</h2>
+
+      <div
+        role="img"
+        aria-label={statusData
+          .map((item) => `${item.title}: ${Math.round(item.percentage)}%`)
+          .join(", ")}
+        className="flex h-3 mt-4 overflow-hidden rounded-full bg-[var(--app-border-color)]"
       >
-        <PieChart
-          // animate={true}
-          rounded={true}
-          lineWidth={30}
-          label={({ dataEntry }) => {
-            if (dataEntry.value === 0) return;
-            return toggleValues === "percentage"
-              ? `${dataEntry.percentage.toFixed(1)}%`
-              : `${Math.round(dataEntry.value)}`;
-          }}
-          labelStyle={(index) => ({
-            fontSize: "6px",
-            fill: donutPieChartData[index].color,
-          })}
-          labelPosition={55}
-          data={donutPieChartData}
-        />
-      </section>
-      <div className="justify-center">
-        {salahStatusStatistics.salahFemaleAloneDatesOverall > 0 ||
-        salahStatusStatistics.salahInGroupDatesOverall > 0 ? (
-          <p
-            style={
-              {
-                "--group-color": salahStatusColorsHexCodes.group,
-              } as React.CSSProperties
-            }
-            className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--group-color)]"
-          >
-            {userGender === "male" ? "In Jamaah" : "Prayed"}
-          </p>
-        ) : null}
-
-        {salahStatusStatistics.salahExcusedDatesOverall > 0 ||
-        salahStatusStatistics.salahMaleAloneDatesOverall > 0 ? (
-          userGender === "male" ? (
-            <p
-              style={
-                {
-                  "--male-alone-color": salahStatusColorsHexCodes["male-alone"],
-                } as React.CSSProperties
-              }
-              className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--male-alone-color)]"
-            >
-              Alone
-            </p>
-          ) : (
-            <p
-              style={
-                {
-                  "--excused-color": salahStatusColorsHexCodes.excused,
-                } as React.CSSProperties
-              }
-              className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--excused-color)]"
-            >
-              Excused
-            </p>
-          )
-        ) : null}
-
-        {salahStatusStatistics.salahLateDatesOverall > 0 && (
-          <p
-            style={
-              {
-                "--late-color": salahStatusColorsHexCodes.late,
-              } as React.CSSProperties
-            }
-            className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--late-color)]"
-          >
-            Late
-          </p>
-        )}
-        {salahStatusStatistics.salahMissedDatesOverall > 0 && (
-          <p
-            style={
-              {
-                "--missed-color": salahStatusColorsHexCodes.missed,
-              } as React.CSSProperties
-            }
-            className="donut-pie-chart-text pb-1 text-sm before:bg-[var(--missed-color)]"
-          >
-            Missed
-          </p>
-        )}
+        {statusData.map((item) => (
+          <span
+            key={item.title}
+            aria-hidden="true"
+            style={{
+              width: `${item.percentage}%`,
+              backgroundColor: item.color,
+            }}
+          />
+        ))}
       </div>
-    </div>
+
+      <div className="grid grid-cols-4 gap-1 mt-4">
+        {statusData.map((item) => (
+          <div key={item.title} className="min-w-0">
+            <div className="flex items-center gap-1">
+              <span
+                aria-hidden="true"
+                className="w-2 h-2 rounded-[0.15rem] shrink-0"
+                style={{ backgroundColor: item.color }}
+              />
+              <span className="text-[10px] truncate min-[375px]:text-xs">
+                {item.title}
+              </span>
+            </div>
+            <p className="pl-3 mt-1 text-xs font-semibold">
+              {Math.round(item.percentage)}%
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 };
 

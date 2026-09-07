@@ -547,8 +547,6 @@ const StatsPage = ({
                 {Object.values(donutPieChartData).some((obj) => obj.value) && (
                   <DonutPieChart
                     donutPieChartData={donutPieChartData}
-                    userGender={userPreferences.userGender}
-                    salahStatusStatistics={salahStatusStatistics}
                   />
                 )}
                 {statsPeriod === "monthly" && <Calendar
