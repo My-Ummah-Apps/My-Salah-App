@@ -153,6 +153,12 @@ export interface MonthlySalahStatsType {
   };
 }
 
+export interface BestMonthStatsType {
+  monthIndex: number;
+  percentage: number;
+  relevantStatusCount: number;
+}
+
 export type SalahDataType = {
   [date: string]: string[];
 };
