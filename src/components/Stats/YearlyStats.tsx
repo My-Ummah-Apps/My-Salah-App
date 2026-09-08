@@ -126,6 +126,10 @@ const YearlyStats = ({
     });
   });
 
+  const isMonthUnavailable = (monthStart: Date) =>
+    isBefore(endOfMonth(monthStart), userStartDateParsed) ||
+    isAfter(monthStart, todaysDate);
+
   return (
     <section
       aria-label={`${selectedYear} ${statsToShow} monthly statistics`}
@@ -152,10 +156,7 @@ const YearlyStats = ({
       <div className="grid grid-cols-3 gap-3">
         {salahStatsByMonth.map((monthData, monthIndex) => {
           const monthStart = new Date(selectedYear, monthIndex, 1);
-          const monthEnd = endOfMonth(monthStart);
-          const isUnavailable =
-            isBefore(monthEnd, userStartDateParsed) ||
-            isAfter(monthStart, todaysDate);
+          const isUnavailable = isMonthUnavailable(monthStart);
 
           return (
             <button
