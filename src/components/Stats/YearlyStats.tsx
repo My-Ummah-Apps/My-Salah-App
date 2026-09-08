@@ -4,6 +4,7 @@ import {
   getYear,
   isAfter,
   isBefore,
+  isSameMonth,
   parseISO,
 } from "date-fns";
 import {
@@ -155,6 +156,19 @@ const YearlyStats = ({
   };
 
   let bestMonth: BestMonthStatsType | null = null;
+
+  salahStatsByMonth.forEach((monthData, monthIndex) => {
+    const monthStart = new Date(selectedYear, monthIndex, 1);
+    const monthPerformance = getMonthPerformance(monthData);
+
+    if (
+      monthPerformance === null ||
+      isMonthUnavailable(monthStart) ||
+      isSameMonth(monthStart, todaysDate)
+    ) {
+      return;
+    }
+  });
 
   return (
     <section
