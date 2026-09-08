@@ -7,6 +7,7 @@ import {
   parseISO,
 } from "date-fns";
 import {
+  BestMonthStatsType,
   MonthlySalahStatsType,
   SalahNamesType,
   SalahRecordsArrayType,
@@ -129,6 +130,31 @@ const YearlyStats = ({
   const isMonthUnavailable = (monthStart: Date) =>
     isBefore(endOfMonth(monthStart), userStartDateParsed) ||
     isAfter(monthStart, todaysDate);
+
+  const getMonthPerformance = (monthData: MonthlySalahStatsType) => {
+    const relevantStatusCount =
+      userGender === "male"
+        ? monthData.totalStatusCount
+        : monthData.statusCounts["female-alone"] +
+          monthData.statusCounts.late +
+          monthData.statusCounts.missed;
+
+    if (relevantStatusCount === 0) {
+      return null;
+    }
+
+    const successfulStatusCount =
+      userGender === "male"
+        ? monthData.statusCounts.group
+        : monthData.statusCounts["female-alone"];
+
+    return {
+      percentage: (successfulStatusCount / relevantStatusCount) * 100,
+      relevantStatusCount,
+    };
+  };
+
+  let bestMonth: BestMonthStatsType | null = null;
 
   return (
     <section
