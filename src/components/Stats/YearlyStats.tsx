@@ -1,4 +1,5 @@
 import {
+  differenceInCalendarDays,
   endOfMonth,
   getMonth,
   getYear,
@@ -15,6 +16,7 @@ import {
   SalahStatusType,
 } from "../../types/types";
 import { salahStatusColorsHexCodes } from "../../utils/constants";
+import BestMonthCard from "./BestMonthCard";
 
 interface YearlyStatsPropsType {
   fetchedSalahData: SalahRecordsArrayType;
@@ -40,6 +42,8 @@ const months = [
   "Nov",
   "Dec",
 ];
+
+const minimumLoggingCoverage = 0.7;
 
 const statusDisplayDetails = {
   group: { label: "Jamaah" },
@@ -157,8 +161,8 @@ const YearlyStats = ({
 
   let bestMonth: BestMonthStatsType | null = null;
 
-  salahStatsByMonth.forEach((monthData, monthIndex) => {
-    const monthStart = new Date(selectedYear, monthIndex, 1);
+  salahStatsByMonth.forEach((monthData, i) => {
+    const monthStart = new Date(selectedYear, i, 1);
     const monthPerformance = getMonthPerformance(monthData);
 
     if (
@@ -167,6 +171,33 @@ const YearlyStats = ({
       isSameMonth(monthStart, todaysDate)
     ) {
       return;
+    }
+
+    const firstEligibleDate = isSameMonth(monthStart, userStartDateParsed)
+      ? userStartDateParsed
+      : monthStart;
+    const eligibleDayCount =
+      differenceInCalendarDays(endOfMonth(monthStart), firstEligibleDate) + 1;
+    const possibleSalahEntries =
+      eligibleDayCount * (salahName === "All" ? 5 : 1);
+    const loggingCoverage =
+      monthData.totalStatusCount / possibleSalahEntries;
+
+    if (loggingCoverage < minimumLoggingCoverage) {
+      return;
+    }
+
+    if (
+      bestMonth === null ||
+      monthPerformance.percentage > bestMonth.percentage ||
+      (monthPerformance.percentage === bestMonth.percentage &&
+        monthPerformance.relevantStatusCount > bestMonth.relevantStatusCount)
+    ) {
+      bestMonth = {
+        monthIndex: i,
+        percentage: monthPerformance.percentage,
+        relevantStatusCount: monthPerformance.relevantStatusCount,
+      };
     }
   });
 
@@ -180,7 +211,15 @@ const YearlyStats = ({
         Each bar shows all four Salah statuses
       </p>
 
-      <div className="grid grid-cols-4 gap-2 px-3 py-3 mb-4 text-[10px] bg-[var(--card-bg-color)] rounded-xl">
+      {bestMonth && (
+        <BestMonthCard
+          bestMonth={bestMonth}
+          selectedYear={selectedYear}
+          userGender={userGender}
+        />
+      )}
+
+      {/* <div className="grid grid-cols-4 gap-2 px-3 py-3 mb-4 text-[10px] bg-[var(--card-bg-color)] rounded-xl">
         {relevantStatuses.map((status) => (
           <div key={status} className="flex items-center gap-1 whitespace-nowrap">
             <span
@@ -191,11 +230,11 @@ const YearlyStats = ({
             <span>{statusDisplayDetails[status].label}</span>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-3 gap-3">
-        {salahStatsByMonth.map((monthData, monthIndex) => {
-          const monthStart = new Date(selectedYear, monthIndex, 1);
+        {salahStatsByMonth.map((monthData, i) => {
+          const monthStart = new Date(selectedYear, i, 1);
           const isUnavailable = isMonthUnavailable(monthStart);
 
           return (
@@ -207,7 +246,9 @@ const YearlyStats = ({
               onClick={() => onMonthSelect(monthStart)}
               className={`p-3 text-left bg-[var(--card-bg-color)] rounded-xl ${isUnavailable ? "opacity-30" : ""}`}
             >
-              <span className="block text-sm font-semibold">{monthData.month}</span>
+              <span className="block text-sm font-semibold">
+                {monthData.month}
+              </span>
 
               <span className="flex h-2 my-3 overflow-hidden rounded-full bg-[var(--app-border-color)]">
                 {relevantStatuses.map((status) => (
@@ -236,7 +277,7 @@ const YearlyStats = ({
                       }}
                     />
                     <span className="sr-only">
-                      {statusDisplayDetails[status].label}: {" "}
+                      {statusDisplayDetails[status].label}:{" "}
                     </span>
                     <span>
                       {Math.round(monthData.statusPercentages[status])}%
