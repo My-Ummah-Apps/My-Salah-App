@@ -318,7 +318,7 @@ const AddLocationOptions = ({
 
         const result = await addUserLocation(
           dbConnection,
-          locationName,
+          locationNameTrimmed,
           coords.latitude,
           coords.longitude,
           isSelected,
