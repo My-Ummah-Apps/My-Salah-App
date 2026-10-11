@@ -39,7 +39,7 @@ const allCities = cities.map(
   },
 );
 const fieldStyles =
-  "rounded-lg border border-[color:var(--sheet-input-border-color)] !bg-[var(--sheet-bg-color)] text-[var(--ion-text-color)] ![--padding-start:1rem] ![--padding-end:1rem] ![--placeholder-color:var(--sheet-secondary-text-color)] ![--placeholder-opacity:1]";
+  "rounded-lg border border-[color:var(--sheet-input-border-color)] !bg-[var(--sheet-bg-color)] ![--padding-start:1rem] ![--padding-end:1rem] ![--placeholder-color:var(--sheet-secondary-text-color)] ![--placeholder-opacity:1]";
 
 interface AddLocationOptionsProps {
   // setShowSalahTimesSettingsSheet?: React.Dispatch<
@@ -427,7 +427,7 @@ const AddLocationOptions = ({
           >
             <IonButton
               fill="clear"
-              className="-ml-1 m-0 h-11 min-h-0 text-base normal-case tracking-normal [--color:var(--ion-text-color)] [--padding-end:0] [--padding-start:0]"
+              className="-ml-1 m-0 h-11 min-h-0 text-base [--color:var(--ion-text-color)] [--padding-end:0] [--padding-start:0]"
               onClick={handleInputPromptDismissed}
             >
               <IonIcon
@@ -456,7 +456,7 @@ const AddLocationOptions = ({
                     icon={searchOutline}
                   />
                   <IonInput
-                    className="min-w-0 flex-1 !bg-transparent text-[var(--ion-text-color)] ![--padding-start:0] ![--placeholder-color:var(--sheet-secondary-text-color)] ![--placeholder-opacity:1]"
+                    className="min-w-0 flex-1 !bg-transparent ![--placeholder-color:var(--sheet-secondary-text-color)] ![--placeholder-opacity:1]"
                     aria-label="Search for a city"
                     type="text"
                     // disabled={isCityNameClicked ? true : false}
@@ -476,7 +476,7 @@ const AddLocationOptions = ({
                     <IonButton
                       fill="clear"
                       aria-label="Clear selected city"
-                      className="m-0 size-11 min-h-0 text-xl [--color:var(--sheet-secondary-text-color)] [--padding-end:0] [--padding-start:0]"
+                      className="m-0 size-11 [--color:var(--sheet-secondary-text-color)]"
                       onClick={() => {
                         setLocationName("");
                         setIsCityNameClicked(false);
@@ -626,7 +626,7 @@ const AddLocationOptions = ({
             )}
             <IonButton
               expand="block"
-              className="mx-0 mb-0 mt-6 min-h-0 text-[0.9375rem] font-semibold normal-case tracking-normal [--border-radius:0.5rem] [--box-shadow:none] [--padding-bottom:0.75rem] [--padding-top:0.75rem]"
+              className="mx-0 mb-0 mt-6 min-h-0 text-[0.9375rem] font-semibold [--border-radius:0.5rem] [--padding-bottom:0.75rem] [--padding-top:0.75rem]"
               onClick={handleSave}
             >
               Save location
