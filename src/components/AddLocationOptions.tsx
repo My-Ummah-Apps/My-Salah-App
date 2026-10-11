@@ -88,6 +88,7 @@ const AddLocationOptions = ({
     latitude: null,
     longitude: null,
   });
+  const [coordsText, setCoordsText] = useState({ latitude: "", longitude: "" });
   const [isCityNameClicked, setIsCityNameClicked] = useState(false);
   const [mode, setMode] = useState<modeType>(null);
   const [
@@ -125,6 +126,7 @@ const AddLocationOptions = ({
     setShowAddLocationForm(false);
     setLocationName("");
     setCoords({ latitude: null, longitude: null });
+    setCoordsText({ latitude: "", longitude: "" });
     setShowError({
       emptyLocationError: false,
       duplicateLocationError: false,
@@ -134,6 +136,23 @@ const AddLocationOptions = ({
     setMode(null);
     setIsDefaultLocationCheckBoxChecked(false);
     setIsCityNameClicked(false);
+  };
+
+  const handleCoordInput = (
+    key: "latitude" | "longitude",
+    text: string,
+    input: HTMLIonInputElement,
+  ) => {
+    if (!/^-?\d*\.?\d*$/.test(text)) {
+      input.value = coordsText[key];
+      return;
+    }
+    const value = parseFloat(text);
+    setCoordsText((prev) => ({ ...prev, [key]: text }));
+    setCoords((prev) => ({
+      ...prev,
+      [key]: Number.isNaN(value) ? null : value,
+    }));
   };
 
   const handleGrantedPermission = async () => {
@@ -551,13 +570,14 @@ const AddLocationOptions = ({
                       aria-label="Latitude"
                       type="text"
                       placeholder="e.g. 51.5074"
-                      value={coords.latitude}
-                      onIonInput={(e) => {
-                        setCoords((prev) => ({
-                          ...prev,
-                          latitude: Number(e.detail.value) || null,
-                        }));
-                      }}
+                      value={coordsText.latitude}
+                      onIonInput={(e) =>
+                        handleCoordInput(
+                          "latitude",
+                          e.detail.value ?? "",
+                          e.target,
+                        )
+                      }
                     ></IonInput>
                     {showError.emptyLatitudeError && (
                       <p className="mt-1.5 text-xs text-red-500">
@@ -570,13 +590,14 @@ const AddLocationOptions = ({
                       aria-label="Longitude"
                       type="text"
                       placeholder="e.g. -0.1278"
-                      value={coords.longitude}
-                      onIonInput={(e) => {
-                        setCoords((prev) => ({
-                          ...prev,
-                          longitude: Number(e.detail.value) || null,
-                        }));
-                      }}
+                      value={coordsText.longitude}
+                      onIonInput={(e) =>
+                        handleCoordInput(
+                          "longitude",
+                          e.detail.value ?? "",
+                          e.target,
+                        )
+                      }
                     ></IonInput>
                     {showError.emptyLongitudeError && (
                       <p className="mt-1.5 text-xs text-red-500">
