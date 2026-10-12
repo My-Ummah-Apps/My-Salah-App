@@ -27,7 +27,7 @@ import {
 
 import { isToday, isYesterday, parse } from "date-fns";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { IonModal, IonTextarea } from "@ionic/react";
+import { IonButton, IonModal, IonTextarea } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
 import {
   createLocalisedDate,
@@ -635,7 +635,9 @@ const BottomSheetSalahStatus = ({
               }}
             ></IonTextarea>
           </div>
-          <button
+          <IonButton
+            expand="block"
+            disabled={!salahStatus}
             onClick={async () => {
               if (salahStatus) {
                 await addOrModifySalah();
@@ -644,12 +646,12 @@ const BottomSheetSalahStatus = ({
                 onSheetCloseCleanup();
               }
             }}
-            className={`mt-3 w-full rounded-lg bg-[var(--ion-color-primary)] px-4 py-3 text-[0.9375rem] font-semibold text-[var(--ion-color-primary-contrast)] transition-opacity duration-300 ${
+            className={`mx-0 mb-0 mt-3 min-h-0 text-[0.9375rem] font-semibold transition-opacity duration-300 [--border-radius:0.5rem] [--padding-bottom:0.75rem] [--padding-top:0.75rem] ${
               salahStatus ? "" : "opacity-20"
             }`}
           >
             Save
-          </button>
+          </IonButton>
         </section>
       </IonModal>
 
