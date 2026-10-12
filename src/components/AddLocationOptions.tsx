@@ -647,7 +647,7 @@ const AddLocationOptions = ({
             )}
             <IonButton
               expand="block"
-              className="mx-0 mb-0 mt-6 min-h-0 text-[0.9375rem] font-semibold [--border-radius:0.5rem] [--padding-bottom:0.75rem] [--padding-top:0.75rem]"
+              className="mx-0 mb-0 mt-6 text-[0.9375rem] font-semibold"
               onClick={handleSave}
             >
               Save location

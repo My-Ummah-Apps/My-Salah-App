@@ -646,7 +646,7 @@ const BottomSheetSalahStatus = ({
                 onSheetCloseCleanup();
               }
             }}
-            className={`mx-0 mb-0 mt-3 min-h-0 text-[0.9375rem] font-semibold transition-opacity duration-300 [--border-radius:0.5rem] [--padding-bottom:0.75rem] [--padding-top:0.75rem] ${
+            className={`mx-0 mb-0 mt-3 text-[0.9375rem] font-semibold transition-opacity duration-300 ${
               salahStatus ? "" : "opacity-20"
             }`}
           >
