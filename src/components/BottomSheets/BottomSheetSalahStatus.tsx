@@ -635,11 +635,7 @@ const BottomSheetSalahStatus = ({
               }}
             ></IonTextarea>
           </div>
-          <motion.button
-            animate={{
-              opacity: salahStatus ? 1 : 0.2,
-            }}
-            transition={{ duration: 0.3 }}
+          <button
             onClick={async () => {
               if (salahStatus) {
                 await addOrModifySalah();
@@ -648,12 +644,12 @@ const BottomSheetSalahStatus = ({
                 onSheetCloseCleanup();
               }
             }}
-            className={`mt-3 w-full rounded-lg bg-[var(--ion-color-primary)] px-4 py-3 text-[0.9375rem] font-semibold text-[var(--ion-color-primary-contrast)] ${
-              salahStatus ? "opacity-100" : "opacity-20"
+            className={`mt-3 w-full rounded-lg bg-[var(--ion-color-primary)] px-4 py-3 text-[0.9375rem] font-semibold text-[var(--ion-color-primary-contrast)] transition-opacity duration-300 ${
+              salahStatus ? "" : "opacity-20"
             }`}
           >
             Save
-          </motion.button>
+          </button>
         </section>
       </IonModal>
 
