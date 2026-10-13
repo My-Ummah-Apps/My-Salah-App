@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { SalahNamesType } from "../../types/types";
 import {
   salahStatusColorsHexCodes,
-  reasonsStyles,
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
@@ -44,7 +43,7 @@ const BottomSheetSingleDateView = ({
 
   const formatDateWithOrdinal = (clickedDate: string) => {
     const date = new Date(clickedDate);
-    const formattedDate = format(date, "do MMMM yyyy");
+    const formattedDate = format(date, "EEEE, do MMMM yyyy");
     return formattedDate;
   };
 
@@ -119,9 +118,9 @@ const BottomSheetSingleDateView = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonContent>
-        <section className="mx-5 text-white mb-14 sheet-content-wrap">
-          <h1 className="py-5 text-2xl text-center text-[var(--ion-text-color)]">
+      <IonContent className="[--background:var(--sheet-bg-color)]">
+        <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+          <h1 className="mb-2 font-bold leading-tight">
             {clickedDate ? formatDateWithOrdinal(clickedDate) : null}
           </h1>
 
@@ -129,63 +128,52 @@ const BottomSheetSingleDateView = ({
             return (
               <div
                 key={item.date + item.salahName}
-                className="p-2 mb-5 border-[var(--app-border-color)] border-b"
+                className="border-b border-[var(--sheet-divider-color)] py-3 last:border-b-0"
               >
-                <div className="flex items-center justify-between my-5">
-                  <div
-                    style={{
-                      borderLeft: `3px solid ${
-                        salahStatusColorsHexCodes[item.salahStatus]
-                      }`,
-                    }}
-                    className="w-1/2 px-2 py-1 text-lg text-[var(--ion-text-color)]"
-                  >
+                <div className="grid grid-cols-2 items-center">
+                  <p className="text-[1.0625rem] font-semibold">
                     {item.salahName === "Asar" ? "Asr" : item.salahName}
-                  </div>
-                  <div
-                    style={{
-                      backgroundColor:
-                        salahStatusColorsHexCodes[item.salahStatus],
-                    }}
-                    className={
-                      "capitalize-first-letter w-4/12 rounded-3xl p-2 text-center"
-                    }
-                  >
-                    {item.salahStatus === "group"
-                      ? "In Jamaah"
-                      : item.salahStatus === "male-alone"
-                        ? "On Time"
-                        : item.salahStatus === "female-alone"
-                          ? "prayed"
-                          : item.salahStatus || "No Data"}
+                  </p>
+                  <div className="flex min-h-9 gap-3">
+                    <span
+                      style={{
+                        backgroundColor:
+                          salahStatusColorsHexCodes[item.salahStatus],
+                      }}
+                      className="w-1.5 shrink-0 rounded-full"
+                    />
+                    <div className="min-w-0 self-center">
+                      <p className="capitalize-first-letter text-[1.0625rem] font-semibold">
+                        {item.salahStatus === "group"
+                          ? "In Jamaah"
+                          : item.salahStatus === "male-alone"
+                            ? "On Time"
+                            : item.salahStatus === "female-alone"
+                              ? "prayed"
+                              : item.salahStatus || "No data"}
+                      </p>
+                      {item.reasons.length > 0 && (
+                        <p className="text-[0.9375rem] text-[var(--sheet-secondary-text-color)]">
+                          {item.reasons.split(",").length > 1
+                            ? "Reasons: "
+                            : "Reason: "}
+                          {item.reasons
+                            .split(",")
+                            .filter((reason) => reason.length > 0)
+                            .sort()
+                            .join(", ")}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-                {item.reasons.length > 0 && (
-                  <div className="flex flex-wrap items-center text-[var(--ion-text-color)]">
-                    <p className="pr-2 my-3 text-sm">
-                      {item.reasons.split(",").length > 1
-                        ? "Reasons: "
-                        : "Reason: "}{" "}
-                    </p>
-                    {item.reasons
-                      .split(",")
-                      .filter((reason) => reason.length > 0)
-                      .sort()
-                      .map((reason) => (
-                        <p
-                          key={reason}
-                          className={`${reasonsStyles} "bg-red-500"`}
-                        >
-                          {reason}
-                        </p>
-                      ))}
-                  </div>
-                )}
 
                 {item.notes.length > 0 && (
-                  <div className="flex pb-3 my-5 text-sm text-[var(--ion-text-color)]">
-                    <p className="pr-2">Notes: </p>
-                    <p className="max-w-full break-words">{item.notes}</p>
+                  <div className="mt-3">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--sheet-secondary-text-color)]">
+                      Note
+                    </p>
+                    <p className="mt-1">{item.notes}</p>
                   </div>
                 )}
               </div>
