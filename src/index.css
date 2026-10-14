@@ -541,10 +541,6 @@ td {
   /* justify-content: start !important; */
 }
 
-.ReactVirtualized__Grid__innerScrollContainer {
-  overflow-x: scroll !important;
-}
-
 .salah-table-wrap {
   position: static !important;
   height: 100%;
