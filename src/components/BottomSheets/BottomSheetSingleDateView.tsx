@@ -153,12 +153,12 @@ const BottomSheetSingleDateView = ({
                               : item.salahStatus || "No data"}
                       </p>
                       {item.reasons.length > 0 && (
-                        <p className="text-[0.9375rem] text-[var(--sheet-secondary-text-color)]">
+                        <p className="text-[0.9375rem] text-[var(--secondary-text-color)]">
                           {item.reasons.split(",").length > 1
                             ? "Reasons: "
                             : "Reason: "}
                           {item.reasons
-                            .split(",")
+                            .split(", ")
                             .filter((reason) => reason.length > 0)
                             .sort()
                             .join(", ")}
@@ -170,7 +170,7 @@ const BottomSheetSingleDateView = ({
 
                 {item.notes.length > 0 && (
                   <div className="mt-3">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--sheet-secondary-text-color)]">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--secondary-text-color)]">
                       Note
                     </p>
                     <p className="mt-1">{item.notes}</p>

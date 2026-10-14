@@ -26,8 +26,8 @@ import {
 // import { TbEdit } from "react-icons/tb";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { useEffect, useRef, useState } from "react";
+import { format, parse } from "date-fns";
 import {
-  createLocalisedDate,
   salahTableIndividualSquareStyles,
   showAlert,
   // updateUserPrefs,
@@ -289,7 +289,7 @@ const SalahTable = ({
               className="text-center"
               rowCount={fetchedSalahData.length}
               rowGetter={({ index }) => fetchedSalahData[index]}
-              rowHeight={100}
+              rowHeight={72}
               headerHeight={40}
               height={height}
               width={width}
@@ -331,14 +331,20 @@ const SalahTable = ({
                   </IonButton>
                 )}
                 cellRenderer={({ rowData }) => {
-                  const [day, formattedParsedDate] = createLocalisedDate(
+                  const parsedDate = parse(
                     rowData.date,
+                    "yyyy-MM-dd",
+                    new Date(),
                   );
 
                   return (
                     <section className="">
-                      <p className="text-sm">{formattedParsedDate}</p>
-                      <p className="text-sm">{day}</p>
+                      <p className="text-[0.9375rem] font-semibold leading-tight">
+                        {format(parsedDate, "EEE")}
+                      </p>
+                      <p className="text-[0.8125rem] leading-tight text-[var(--secondary-text-color)]">
+                        {format(parsedDate, "d MMM ’yy")}
+                      </p>
                     </section>
                   );
                 }}
@@ -376,7 +382,7 @@ const SalahTable = ({
                                   ? "white"
                                   : "",
                             }}
-                            className={`${salahTableIndividualSquareStyles} ${
+                            className={`${salahTableIndividualSquareStyles} fill-current [stroke-width:3] ${
                               showJoyRideEditIcon && salahName === "Asar"
                                 ? "single-table-cell animate-bounce"
                                 : ""

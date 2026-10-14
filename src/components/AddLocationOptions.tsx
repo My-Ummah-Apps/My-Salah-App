@@ -39,7 +39,7 @@ const allCities = cities.map(
   },
 );
 const fieldStyles =
-  "rounded-lg border border-[color:var(--sheet-input-border-color)] !bg-[var(--sheet-bg-color)] ![--padding-start:1rem] ![--padding-end:1rem] ![--placeholder-color:var(--sheet-secondary-text-color)] ![--placeholder-opacity:1]";
+  "rounded-lg border border-[color:var(--sheet-input-border-color)] !bg-[var(--sheet-bg-color)] ![--padding-start:1rem] ![--padding-end:1rem] ![--placeholder-color:var(--secondary-text-color)] ![--placeholder-opacity:1]";
 
 interface AddLocationOptionsProps {
   // setShowSalahTimesSettingsSheet?: React.Dispatch<
@@ -461,7 +461,7 @@ const AddLocationOptions = ({
               {formTitle}
             </h2>
             {formSubtitle && (
-              <p className="mt-1 text-[0.9375rem] leading-relaxed text-[var(--sheet-secondary-text-color)]">
+              <p className="mt-1 text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
                 {formSubtitle}
               </p>
             )}
@@ -471,11 +471,11 @@ const AddLocationOptions = ({
                 <div className="flex items-center gap-2 rounded-lg border border-[color:var(--sheet-input-border-color)] bg-[var(--sheet-bg-color)] pl-3">
                   <IonIcon
                     aria-hidden="true"
-                    className="text-xl text-[var(--sheet-secondary-text-color)]"
+                    className="text-xl text-[var(--secondary-text-color)]"
                     icon={searchOutline}
                   />
                   <IonInput
-                    className="min-w-0 flex-1 !bg-transparent ![--placeholder-color:var(--sheet-secondary-text-color)] ![--placeholder-opacity:1]"
+                    className="min-w-0 flex-1 !bg-transparent ![--placeholder-color:var(--secondary-text-color)] ![--placeholder-opacity:1]"
                     aria-label="Search for a city"
                     type="text"
                     // disabled={isCityNameClicked ? true : false}
@@ -495,7 +495,7 @@ const AddLocationOptions = ({
                     <IonButton
                       fill="clear"
                       aria-label="Clear selected city"
-                      className="m-0 size-11 [--color:var(--sheet-secondary-text-color)]"
+                      className="m-0 size-11 [--color:var(--secondary-text-color)]"
                       onClick={() => {
                         setLocationName("");
                         setIsCityNameClicked(false);
@@ -514,7 +514,7 @@ const AddLocationOptions = ({
                 {nameError}
                 {cityResults.length > 0 && (
                   <>
-                    <p className="mb-2 mt-5 text-sm font-semibold text-[var(--sheet-secondary-text-color)]">
+                    <p className="mb-2 mt-5 text-sm font-semibold text-[var(--secondary-text-color)]">
                       Results
                     </p>
                     <ul className="sheet-group">
@@ -544,13 +544,13 @@ const AddLocationOptions = ({
                               <span className="font-semibold leading-snug">
                                 {obj.city}
                               </span>
-                              <span className="mt-0.5 block text-sm leading-snug text-[var(--sheet-secondary-text-color)]">
+                              <span className="mt-0.5 block text-sm leading-snug text-[var(--secondary-text-color)]">
                                 {obj.country}
                               </span>
                             </span>
                             <IonIcon
                               aria-hidden="true"
-                              className="text-lg text-[var(--sheet-secondary-text-color)]"
+                              className="text-lg text-[var(--secondary-text-color)]"
                               icon={chevronForwardOutline}
                             />
                           </button>
@@ -604,7 +604,7 @@ const AddLocationOptions = ({
                         {"Please enter longitude"}
                       </p>
                     )}
-                    <p className="mt-1.5 text-xs text-[var(--sheet-secondary-text-color)]">
+                    <p className="mt-1.5 text-xs text-[var(--secondary-text-color)]">
                       South and west use a minus sign.
                     </p>
                   </>
@@ -664,7 +664,7 @@ const AddLocationOptions = ({
                 Add location
               </h2>
             )}
-            <p className="text-[0.9375rem] leading-relaxed text-[var(--sheet-secondary-text-color)]">
+            <p className="text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
               Prayer times are calculated from this location.
             </p>
             <section className="sheet-group mt-5" aria-label="Location methods">
@@ -703,13 +703,13 @@ const AddLocationOptions = ({
                       Most accurate
                     </span>
                   </span>
-                  <span className="mt-0.5 block text-sm leading-snug text-[var(--sheet-secondary-text-color)]">
+                  <span className="mt-0.5 block text-sm leading-snug text-[var(--secondary-text-color)]">
                     Asks for location permission
                   </span>
                 </span>
                 <IonIcon
                   aria-hidden="true"
-                  className="text-lg text-[var(--sheet-secondary-text-color)]"
+                  className="text-lg text-[var(--secondary-text-color)]"
                   icon={chevronForwardOutline}
                 />
               </button>
@@ -733,13 +733,13 @@ const AddLocationOptions = ({
                   <span className="font-semibold leading-snug">
                     Search for a city
                   </span>
-                  <span className="mt-0.5 block text-sm leading-snug text-[var(--sheet-secondary-text-color)]">
+                  <span className="mt-0.5 block text-sm leading-snug text-[var(--secondary-text-color)]">
                     Built-in list, works offline
                   </span>
                 </span>
                 <IonIcon
                   aria-hidden="true"
-                  className="text-lg text-[var(--sheet-secondary-text-color)]"
+                  className="text-lg text-[var(--secondary-text-color)]"
                   icon={chevronForwardOutline}
                 />
               </button>
@@ -763,18 +763,18 @@ const AddLocationOptions = ({
                   <span className="font-semibold leading-snug">
                     Enter coordinates
                   </span>
-                  <span className="mt-0.5 block text-sm leading-snug text-[var(--sheet-secondary-text-color)]">
+                  <span className="mt-0.5 block text-sm leading-snug text-[var(--secondary-text-color)]">
                     Exact latitude and longitude
                   </span>
                 </span>
                 <IonIcon
                   aria-hidden="true"
-                  className="text-lg text-[var(--sheet-secondary-text-color)]"
+                  className="text-lg text-[var(--secondary-text-color)]"
                   icon={chevronForwardOutline}
                 />
               </button>
             </section>
-            <p className="mt-4 flex items-center gap-2 px-1 text-xs leading-relaxed text-[var(--sheet-secondary-text-color)]">
+            <p className="mt-4 flex items-center gap-2 px-1 text-xs leading-relaxed text-[var(--secondary-text-color)]">
               <IonIcon
                 aria-hidden="true"
                 className="shrink-0 text-[0.9375rem]"
