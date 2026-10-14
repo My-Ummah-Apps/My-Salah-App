@@ -434,13 +434,6 @@ ion-select.sort-select::part(inner) {
   margin: 1rem;
 }
 
-.checkbox-wrap {
-  position: absolute;
-  width: 100%;
-  left: 50%;
-  transform: translate(-50%, 50%);
-}
-
 textarea {
   resize: none !important;
 }
@@ -505,23 +498,10 @@ td {
   opacity: 0.3;
 }
 
-.ReactVirtualized__Grid,
-.ReactVirtualized__Table__Grid,
-.ReactVirtualized__Grid__innerScrollContainerm,
-.ReactVirtualized__Table__row,
-.ReactVirtualized__Table__headerRow {
-  width: 95vw !important;
-  max-width: var(--max-width);
-}
-
-.ReactVirtualized__Grid__innerScrollContainer {
-  max-width: 95vw !important;
-}
-
 .ReactVirtualized__Table__headerRow {
   text-transform: none;
-  font-weight: 400;
-  font-size: 0.9rem;
+  font-weight: 500;
+  font-size: 0.8125rem;
 }
 
 .ReactVirtualized__Table__headerColumn:first-of-type {

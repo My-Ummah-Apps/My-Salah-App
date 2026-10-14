@@ -434,7 +434,7 @@ const SalahTable = ({
                         <AnimatePresence>
                           {isMultiEditMode && (
                             <motion.div
-                              className={`checkbox-wrap`}
+                              className="absolute inset-0"
                               initial={{
                                 opacity: 0,
                               }}
@@ -445,9 +445,10 @@ const SalahTable = ({
                                 opacity: 0,
                               }}
                             >
-                              <label className="p-5">
+                              <label className="absolute inset-0 before:absolute before:left-1/2 before:top-1/2 before:size-9 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-lg has-[:checked]:before:border-2 has-[:checked]:before:border-[dodgerblue]">
                                 <input
                                   type="checkbox"
+                                  className="absolute left-[calc(50%+1rem)] top-[calc(50%-1rem)] -translate-x-1/2 -translate-y-1/2 opacity-0 checked:opacity-100"
                                   checked={isChecked}
                                   onChange={() => {
                                     handleTableCellClick(
