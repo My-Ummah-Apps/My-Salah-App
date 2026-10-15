@@ -41,6 +41,9 @@
   --stats-control-bg-color: var(--card-bg-color);
   --stats-control-text-color: rgb(74, 74, 74);
   --table-dot-icon-color: #8490a0;
+  --multi-edit-tile-color: #ffffff;
+  --multi-edit-tile-border-color: #dcdcdc;
+  --multi-edit-accent-color: #0054e9;
   --textarea-bg-color: rgb(206, 206, 206);
   --sheet-input-border-color: #b5bbc4;
   --secondary-text-color: #566476;
@@ -91,6 +94,9 @@ body.dark {
   --stats-control-text-color: rgb(174, 174, 174);
   --nav-active-tab-color: white;
   --table-dot-icon-color: #7d889f;
+  --multi-edit-tile-color: #232325;
+  --multi-edit-tile-border-color: transparent;
+  --multi-edit-accent-color: #1e90ff;
   --textarea-bg-color: rgb(38, 38, 38);
   --sheet-input-border-color: #555b63;
   --secondary-text-color: #aebbd0;

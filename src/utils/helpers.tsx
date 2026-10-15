@@ -40,7 +40,7 @@ export const showToast = async (text: string, duration: "short" | "long") => {
   });
 };
 
-export const salahTableIndividualSquareStyles = `w-[1.5rem] h-[1.5rem] rounded-md`;
+export const salahTableIndividualSquareStyles = `pointer-events-none relative z-[1] w-[1.5rem] h-[1.5rem] rounded-md`;
 
 export const getMissedSalahCount = (missedSalahList: SalahByDateObjType) => {
   return Object.values(missedSalahList).flat().length;
