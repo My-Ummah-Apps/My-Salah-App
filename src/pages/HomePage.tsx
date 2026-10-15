@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import SalahTable from "../components/SalahTable/SalahTable";
 import MissedSalahCounter from "../components/Stats/MissedSalahCounter";
 import { Dialog } from "@capacitor/dialog";
+import { TbEdit } from "react-icons/tb";
 
 import {
   SalahRecordsArrayType,
@@ -64,6 +65,7 @@ const HomePage = ({
   const [animateStreakCounter, setAnimateStreakCounter] =
     useState<boolean>(false);
   const prevActiveStreakCount = useRef<number>(0);
+  const selectedSalahCount = Object.values(selectedSalahAndDate).flat().length;
 
   // const page = useRef(null);
 
@@ -194,6 +196,33 @@ const HomePage = ({
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        {isMultiEditMode && (
+          <div className="px-4 pb-3">
+            <div className="flex items-center gap-3 rounded-2xl bg-[var(--multi-edit-strip-color)] px-3 py-2.5">
+              <span className="flex size-9 items-center justify-center rounded-full bg-[var(--multi-edit-accent-color)] text-white">
+                <TbEdit aria-hidden="true" className="text-lg" />
+              </span>
+              <div className="min-w-0 flex-1 leading-tight">
+                <p className="text-[0.9375rem] font-semibold">Select prayers</p>
+                <p className="text-[0.8125rem] text-[var(--secondary-text-color)]">
+                  Tap prayers to update
+                </p>
+              </div>
+              <p
+                aria-live="polite"
+                className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${
+                  selectedSalahCount > 0
+                    ? "bg-[var(--multi-edit-chip-color)] text-[var(--multi-edit-chip-text-color)]"
+                    : "bg-[var(--multi-edit-chip-muted-color)] text-[var(--secondary-text-color)]"
+                }`}
+              >
+                {selectedSalahCount > 0
+                  ? `${selectedSalahCount} selected`
+                  : "None yet"}
+              </p>
+            </div>
+          </div>
+        )}
       </IonHeader>
       <IonContent>
         <motion.section

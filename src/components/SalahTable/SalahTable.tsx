@@ -305,6 +305,7 @@ const SalahTable = ({
                   <IonButton
                     fill="clear"
                     size="large"
+                    className={isMultiEditMode ? "invisible" : ""}
                     onClick={() => {
                       if (isMultiEditMode) return;
                       setIsMultiEditMode(true);

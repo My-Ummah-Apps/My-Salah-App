@@ -44,6 +44,10 @@
   --multi-edit-tile-color: #ffffff;
   --multi-edit-tile-border-color: #dcdcdc;
   --multi-edit-accent-color: #0054e9;
+  --multi-edit-strip-color: #e7f0ff;
+  --multi-edit-chip-color: rgba(0, 84, 233, 0.12);
+  --multi-edit-chip-text-color: #0054e9;
+  --multi-edit-chip-muted-color: rgba(0, 0, 0, 0.06);
   --textarea-bg-color: rgb(206, 206, 206);
   --sheet-input-border-color: #b5bbc4;
   --secondary-text-color: #566476;
@@ -97,6 +101,10 @@ body.dark {
   --multi-edit-tile-color: #232325;
   --multi-edit-tile-border-color: transparent;
   --multi-edit-accent-color: #1e90ff;
+  --multi-edit-strip-color: #151e2e;
+  --multi-edit-chip-color: rgba(30, 144, 255, 0.18);
+  --multi-edit-chip-text-color: #7cbcff;
+  --multi-edit-chip-muted-color: rgba(255, 255, 255, 0.08);
   --textarea-bg-color: rgb(38, 38, 38);
   --sheet-input-border-color: #555b63;
   --secondary-text-color: #aebbd0;
