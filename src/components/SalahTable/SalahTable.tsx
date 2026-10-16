@@ -396,36 +396,22 @@ const SalahTable = ({
                             ></motion.div>
                           </AnimatePresence>
                         )}
-                        <AnimatePresence>
-                          {isMultiEditMode && (
-                            <motion.div
-                              className="absolute inset-0"
-                              initial={{
-                                opacity: 0,
+                        <div
+                          className={`absolute inset-0 transition-[opacity,visibility] duration-300 ${
+                            isMultiEditMode ? "" : "invisible opacity-0"
+                          }`}
+                        >
+                          <label className="absolute inset-0 before:absolute before:left-1/2 before:top-1/2 before:size-10 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-xl before:border before:border-[var(--multi-edit-tile-border-color)] before:bg-[var(--multi-edit-tile-color)] has-[:checked]:before:border-2 has-[:checked]:before:border-[var(--multi-edit-accent-color)]">
+                            <input
+                              type="checkbox"
+                              className="absolute left-[calc(50%+1.1rem)] top-[calc(50%-1.1rem)] -translate-x-1/2 -translate-y-1/2 opacity-0 checked:!text-[var(--multi-edit-accent-color)] checked:opacity-100"
+                              checked={isChecked}
+                              onChange={() => {
+                                handleTableCellClick(salahName, rowData.date);
                               }}
-                              animate={{
-                                opacity: 1,
-                              }}
-                              exit={{
-                                opacity: 0,
-                              }}
-                            >
-                              <label className="absolute inset-0 before:absolute before:left-1/2 before:top-1/2 before:size-10 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-xl before:border before:border-[var(--multi-edit-tile-border-color)] before:bg-[var(--multi-edit-tile-color)] has-[:checked]:before:border-2 has-[:checked]:before:border-[var(--multi-edit-accent-color)]">
-                                <input
-                                  type="checkbox"
-                                  className="absolute left-[calc(50%+1.1rem)] top-[calc(50%-1.1rem)] -translate-x-1/2 -translate-y-1/2 opacity-0 checked:!text-[var(--multi-edit-accent-color)] checked:opacity-100"
-                                  checked={isChecked}
-                                  onChange={() => {
-                                    handleTableCellClick(
-                                      salahName,
-                                      rowData.date,
-                                    );
-                                  }}
-                                ></input>
-                              </label>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+                            ></input>
+                          </label>
+                        </div>
                       </section>
                     );
                   }}

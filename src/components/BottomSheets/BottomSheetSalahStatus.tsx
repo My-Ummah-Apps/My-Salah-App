@@ -336,6 +336,12 @@ const BottomSheetSalahStatus = ({
         }}
         onDidDismiss={() => {
           setShowUpdateStatusModal(false);
+          if (isMultiEditMode) {
+            setSalahStatus("");
+            setSelectedReasons([]);
+            setNotes("");
+            return;
+          }
           onSheetCloseCleanup();
         }}
         isOpen={showUpdateStatusModal}
