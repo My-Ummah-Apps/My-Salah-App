@@ -29,7 +29,6 @@ import { useEffect, useRef, useState } from "react";
 import { format, parse } from "date-fns";
 import {
   salahTableIndividualSquareStyles,
-  showAlert,
   // updateUserPrefs,
 } from "../../utils/helpers";
 import { IonButton } from "@ionic/react";
@@ -217,41 +216,6 @@ const SalahTable = ({
           },
         }}
       />
-      <AnimatePresence>
-        {isMultiEditMode && (
-          <motion.section
-            initial={{ x: "-50%", y: "100%", scale: 0.5, opacity: 0 }}
-            animate={{ y: "-15vh", scale: 1, opacity: 1 }}
-            exit={{ y: "100%", scale: 0.5, opacity: 0 }}
-            // transition={{ type: "ease-out" }}
-            className="absolute bottom-0 z-10 flex shadow-2xl text-sm text-white border border-stone-500 transform -translate-x-1/2 rounded-2xl bg-[#414141] left-1/2"
-          >
-            <button
-              className="py-4 pl-4 pr-2 mr-1 text-white"
-              onClick={() => {
-                setIsMultiEditMode(false);
-                resetSelectedSalahAndDate();
-              }}
-            >
-              <p className="">Cancel</p>
-            </button>
-            <button
-              className="p-2 py-4 pr-4 text-white"
-              onClick={() => {
-                const dateArrLength = Object.keys(selectedSalahAndDate).length;
-                dateArrLength > 0
-                  ? setShowUpdateStatusModal(true)
-                  : showAlert(
-                      "No Salah Selected",
-                      "Please select atleast one Salah",
-                    );
-              }}
-            >
-              <p className="">Update</p>
-            </button>
-          </motion.section>
-        )}
-      </AnimatePresence>
       <div className="h-[95%]">
         <AutoSizer>
           {({ height, width }) => (

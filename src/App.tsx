@@ -1059,7 +1059,11 @@ const App = () => {
             />
           </IonRouterOutlet>
 
-          <IonTabBar id="nav-bar" slot="bottom">
+          <IonTabBar
+            id="nav-bar"
+            slot="bottom"
+            className={isMultiEditMode ? "hidden" : ""}
+          >
             <IonTabButton tab="HomePage" href="/HomePage">
               <IonIcon icon={homeOutline} />
               <IonLabel>Home</IonLabel>

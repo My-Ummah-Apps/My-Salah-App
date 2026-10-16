@@ -17,6 +17,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonPage,
   IonTitle,
@@ -256,6 +257,45 @@ const HomePage = ({
           </section>
         </motion.section>
       </IonContent>
+      <AnimatePresence>
+        {isMultiEditMode && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <IonFooter
+              mode="ios"
+              className="ion-no-border border-t border-[var(--table-row-border-color)]"
+            >
+              <IonToolbar className="[--background:var(--primary-color)] [--padding-end:1rem] [--padding-start:1rem]">
+                <div className="flex items-center gap-3">
+                  <IonButton
+                    className="m-0 flex-1 text-[0.9375rem] font-semibold [--background:var(--multi-edit-cancel-color)] [--color:var(--ion-text-color)]"
+                    onClick={() => {
+                      setIsMultiEditMode(false);
+                      setSelectedSalahAndDate({});
+                    }}
+                  >
+                    Cancel
+                  </IonButton>
+                  <span className="h-8 w-px bg-[var(--multi-edit-divider-color)]" />
+                  <IonButton
+                    className="m-0 flex-[2] text-[0.9375rem] font-semibold"
+                    disabled={selectedSalahCount === 0}
+                    onClick={() => setShowUpdateStatusModal(true)}
+                  >
+                    {selectedSalahCount > 0
+                      ? `Set status for ${selectedSalahCount}`
+                      : "Set status"}
+                  </IonButton>
+                </div>
+              </IonToolbar>
+            </IonFooter>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </IonPage>
   );
 };
