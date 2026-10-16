@@ -269,7 +269,7 @@ const SalahTable = ({
                   <IonButton
                     fill="clear"
                     size="large"
-                    className={isMultiEditMode ? "invisible" : ""}
+                    className={`size-8 min-h-0 [--background:var(--table-pencil-bg-color)] [--border-radius:9999px] [--padding-end:0] [--padding-start:0] ${isMultiEditMode ? "invisible" : ""}`}
                     onClick={() => {
                       if (isMultiEditMode) return;
                       setIsMultiEditMode(true);
