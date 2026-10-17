@@ -100,7 +100,9 @@ const HomePage = ({
     // ref={page}
     >
       <IonHeader className="ion-no-border">
-        <IonToolbar className="page-header-toolbar">
+        <IonToolbar
+          className={`page-header-toolbar ${isMultiEditMode ? "hidden" : ""}`}
+        >
           <IonTitle>Home</IonTitle>
           <IonButtons slot="secondary">
             <IonButton
@@ -198,17 +200,14 @@ const HomePage = ({
           </IonButtons>
         </IonToolbar>
         {isMultiEditMode && (
-          <div className="px-4 pb-3">
-            <div className="flex items-center gap-3 rounded-2xl bg-[var(--multi-edit-strip-color)] px-3 py-2.5">
-              <span className="flex size-9 items-center justify-center rounded-full bg-[var(--multi-edit-accent-color)] text-white">
-                <TbEdit aria-hidden="true" className="text-lg" />
+          <IonToolbar className="page-header-toolbar">
+            <div className="flex items-center gap-3 px-2">
+              <span className="flex size-8 items-center justify-center rounded-full bg-[var(--multi-edit-accent-color)] text-white">
+                <TbEdit aria-hidden="true" />
               </span>
-              <div className="min-w-0 flex-1 leading-tight">
-                <p className="text-[0.9375rem] font-semibold">Select prayers</p>
-                <p className="text-[0.8125rem] text-[var(--secondary-text-color)]">
-                  Tap prayers to update
-                </p>
-              </div>
+              <p className="flex-1 text-[1.0625rem] font-semibold">
+                Select prayers
+              </p>
               <p
                 aria-live="polite"
                 className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${
@@ -222,7 +221,7 @@ const HomePage = ({
                   : "None yet"}
               </p>
             </div>
-          </div>
+          </IonToolbar>
         )}
       </IonHeader>
       <IonContent>
@@ -257,45 +256,42 @@ const HomePage = ({
           </section>
         </motion.section>
       </IonContent>
-      <AnimatePresence>
-        {isMultiEditMode && (
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+      {isMultiEditMode && (
+        <motion.div
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+        >
+          <IonFooter
+            mode="ios"
+            className="ion-no-border border-t border-[var(--table-row-border-color)]"
           >
-            <IonFooter
-              mode="ios"
-              className="ion-no-border border-t border-[var(--table-row-border-color)]"
-            >
-              <IonToolbar className="[--background:var(--primary-color)] [--padding-end:1rem] [--padding-start:1rem]">
-                <div className="flex items-center gap-3">
-                  <IonButton
-                    className="m-0 flex-1 text-[0.9375rem] font-semibold [--background:var(--multi-edit-cancel-color)] [--color:var(--ion-text-color)]"
-                    onClick={() => {
-                      setIsMultiEditMode(false);
-                      setSelectedSalahAndDate({});
-                    }}
-                  >
-                    Cancel
-                  </IonButton>
-                  <span className="h-8 w-px bg-[var(--multi-edit-divider-color)]" />
-                  <IonButton
-                    className="m-0 flex-[2] text-[0.9375rem] font-semibold"
-                    disabled={selectedSalahCount === 0}
-                    onClick={() => setShowUpdateStatusModal(true)}
-                  >
-                    {selectedSalahCount > 0
-                      ? `Set status for ${selectedSalahCount}`
-                      : "Set status"}
-                  </IonButton>
-                </div>
-              </IonToolbar>
-            </IonFooter>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <IonToolbar className="[--background:var(--primary-color)] [--padding-end:1rem] [--padding-start:1rem]">
+              <div className="flex items-center gap-3">
+                <IonButton
+                  className="m-0 flex-1 text-[0.9375rem] font-semibold [--background:var(--multi-edit-cancel-color)] [--color:var(--ion-text-color)]"
+                  onClick={() => {
+                    setIsMultiEditMode(false);
+                    setSelectedSalahAndDate({});
+                  }}
+                >
+                  Cancel
+                </IonButton>
+                <span className="h-8 w-px bg-[var(--multi-edit-divider-color)]" />
+                <IonButton
+                  className="m-0 flex-[2] text-[0.9375rem] font-semibold"
+                  disabled={selectedSalahCount === 0}
+                  onClick={() => setShowUpdateStatusModal(true)}
+                >
+                  {selectedSalahCount > 0
+                    ? `Set status for ${selectedSalahCount}`
+                    : "Set status"}
+                </IonButton>
+              </div>
+            </IonToolbar>
+          </IonFooter>
+        </motion.div>
+      )}
     </IonPage>
   );
 };
