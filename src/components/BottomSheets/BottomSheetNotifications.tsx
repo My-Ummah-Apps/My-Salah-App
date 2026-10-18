@@ -24,9 +24,8 @@ import {
 } from "../../utils/helpers";
 import {
   IonButton,
+  IonIcon,
   IonInput,
-  IonItem,
-  IonList,
   IonModal,
   IonRadio,
   IonRadioGroup,
@@ -42,6 +41,7 @@ import {
   MODAL_BREAKPOINTS,
 } from "../../utils/constants";
 import { Capacitor } from "@capacitor/core";
+import { chevronExpand } from "ionicons/icons";
 
 const BottomSheetNotifications = ({
   dbConnection,
@@ -235,9 +235,15 @@ const BottomSheetNotifications = ({
         await getBatteryOptimizationStatus();
       }}
     >
-      <section className="mb-10">
-        <div className="flex items-center justify-between p-3 mt-10 notification-text-and-toggle-wrap">
-          <p>Turn on Daily Notification</p>{" "}
+      <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <h1 className="mb-4 font-bold leading-tight">Notifications</h1>
+        <section className="flex items-center gap-3 px-4 py-3 sheet-group">
+          <span className="flex-1 min-w-0">
+            <span className="font-semibold leading-snug">Daily reminder</span>
+            <span className="mt-0.5 block text-sm leading-snug text-[var(--secondary-text-color)]">
+              A gentle reminder to log your salah
+            </span>
+          </span>
           <IonToggle
             mode={isPlatform("android") ? "md" : "ios"}
             style={{ "--track-background": "#555" }}
@@ -261,18 +267,16 @@ const BottomSheetNotifications = ({
               // );
             }}
           ></IonToggle>
-        </div>
+        </section>
 
         {dailyNotificationToggle && (
           <div
           // className="flex flex-col py-3 border-b border-[var(--app-border-color)]"
           >
-            <IonList
-              style={{
-                "--background": "transparent",
-                background: "transparent",
-              }}
-            >
+            <p className="mb-2 mt-5 text-sm font-semibold text-[var(--secondary-text-color)]">
+              Reminder time
+            </p>
+            <section className="sheet-group">
               <IonRadioGroup
                 value={selectedDailyNotificationOption}
                 onIonChange={async (e) => {
@@ -289,24 +293,42 @@ const BottomSheetNotifications = ({
                   await scheduleFixedOrAfterIshaDailyNotifications(eventValue);
                 }}
               >
-                <IonItem
-                  style={{
-                    "--background": "transparent",
-                    background: "transparent",
-                  }}
-                  lines="none"
+                <IonRadio
+                  mode={isPlatform("ios") ? "ios" : "md"}
+                  labelPlacement="start"
+                  justify="space-between"
+                  value="fixedTime"
+                  color="primary"
+                  className="w-full px-4 py-3 [--color:var(--secondary-text-color)]"
                 >
-                  <IonRadio
-                    mode="ios"
-                    slot="start"
-                    labelPlacement="end"
-                    value="fixedTime"
-                    color="primary"
-                  >
-                    At fixed time
-                  </IonRadio>
+                  Fixed time
+                </IonRadio>
+
+                {/* {userPreferences.prayerCalculationMethod !== "" &&
+                  userLocations.length > 0 && ( */}
+                <IonRadio
+                  mode={isPlatform("ios") ? "ios" : "md"}
+                  labelPlacement="start"
+                  justify="space-between"
+                  value="afterIsha"
+                  color="primary"
+                  disabled={
+                    // userPreferences.prayerCalculationMethod === "" ||
+                    // userLocations.length === 0
+                    !isAfterIshaOptionEnabled
+                  }
+                  className="w-full border-t border-[color:var(--sheet-divider-color)] px-4 py-3 [--color:var(--secondary-text-color)]"
+                >
+                  After Isha
+                </IonRadio>
+                {/* )} */}
+              </IonRadioGroup>
+              {selectedDailyNotificationOption === "fixedTime" ? (
+                <div className="flex items-center justify-between gap-3 px-4 py-3">
+                  <span className="text-[var(--secondary-text-color)]">
+                    Remind me at
+                  </span>
                   <IonInput
-                    slot="end"
                     onIonChange={async (e) => {
                       e.stopPropagation();
                       await handleTimeChange(e);
@@ -316,9 +338,7 @@ const BottomSheetNotifications = ({
                         // "--background": "var(--card-bg-color)",
                       }
                     }
-                    className={`${
-                      dailyNotificationToggle === true ? "slideUp" : ""
-                    } focus:outline-none focus:ring-0 focus:border-transparent w-[auto] time-input`}
+                    className="w-auto rounded-xl !bg-[var(--sheet-pill-bg)] [--padding-end:0.875rem] [--padding-start:0.875rem]"
                     type="time"
                     dir="auto"
                     id="appt"
@@ -327,41 +347,30 @@ const BottomSheetNotifications = ({
                     max="18:00"
                     value={userPreferences.dailyNotificationTime}
                     required
-                  />
-                </IonItem>
-
-                {/* {userPreferences.prayerCalculationMethod !== "" &&
-                  userLocations.length > 0 && ( */}
-                <IonItem
-                  style={{
-                    "--background": "transparent",
-                    background: "transparent",
-                  }}
-                  lines="none"
-                >
-                  <IonRadio
-                    mode="ios"
-                    slot="start"
-                    labelPlacement="end"
-                    value="afterIsha"
-                    color="primary"
-                    disabled={
-                      // userPreferences.prayerCalculationMethod === "" ||
-                      // userLocations.length === 0
-                      !isAfterIshaOptionEnabled
-                    }
                   >
-                    After Isha
-                  </IonRadio>
+                    <IonIcon
+                      slot="end"
+                      aria-hidden="true"
+                      icon={chevronExpand}
+                      className="pointer-events-none text-[1.125rem] text-[#595959]"
+                    />
+                  </IonInput>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between gap-3 px-4 py-3">
+                  <span className="text-[var(--secondary-text-color)] text-sm">
+                    Remind me {userPreferences.dailyNotificationAfterIshaDelay}{" "}
+                    minutes after Isha
+                  </span>
                   <IonSelect
-                    slot="end"
                     label=""
                     disabled={
                       !isAfterIshaOptionEnabled
                       // userPreferences.prayerCalculationMethod === "" ||
                       // userLocations.length === 0
                     }
-                    placeholder={`${userPreferences.dailyNotificationAfterIshaDelay} minutes`}
+                    placeholder={`${userPreferences.dailyNotificationAfterIshaDelay} min`}
+                    className="w-auto [--background:var(--sheet-pill-bg)] [&::part(label)]:hidden [--border-radius:0.75rem] [--padding-end:0.875rem] [--padding-start:0.875rem] [--placeholder-color:var(--ion-text-color)] [--placeholder-opacity:1]"
                     onIonChange={async (e) => {
                       e.stopPropagation();
                       const delay = e.detail.value;
@@ -385,116 +394,115 @@ const BottomSheetNotifications = ({
                         <IonSelectOption
                           key={min}
                           value={min}
-                        >{`${min} minutes`}</IonSelectOption>
+                        >{`${min} min`}</IonSelectOption>
                       );
                     })}
                   </IonSelect>
-                </IonItem>
-                {!isAfterIshaOptionEnabled && (
-                  <p className="mx-4 mt-2 text-xs text-center opacity-70">
-                    Please set up salah times to use the 'After Isha' option
-                  </p>
-                )}
-                {/* )} */}
-              </IonRadioGroup>
-            </IonList>
+                </div>
+              )}
+            </section>
+            {!isAfterIshaOptionEnabled && (
+              <p className="mt-2 text-sm leading-snug text-[var(--secondary-text-color)]">
+                Please set up salah times to use the 'After Isha' option
+              </p>
+            )}
           </div>
         )}
         {userPreferences.prayerCalculationMethod !== "" &&
           userLocations.length > 0 && (
-            <section className="px-3 mt-5">
-              <div className="flex items-center justify-between notification-text-and-toggle-wrap">
-                <p>Turn on Salah Notifications</p>{" "}
-                <IonToggle
-                  mode={isPlatform("android") ? "md" : "ios"}
-                  style={{ "--track-background": "#555" }}
-                  checked={notificationToggle}
-                  onIonChange={async () => {
-                    if (!notificationToggle) {
-                      setNotificationToggle(true);
+            <section className="flex items-center gap-3 px-4 py-3 mt-5 sheet-group">
+              <span className="flex-1 min-w-0">
+                <span className="font-semibold leading-snug">
+                  Prayer time alerts
+                </span>
+                <span className="mt-0.5 block text-sm leading-snug text-[var(--secondary-text-color)]">
+                  Turns on alerts for all five prayers. Change each one on the
+                  Salah Times page.
+                </span>
+              </span>
+              <IonToggle
+                mode={isPlatform("android") ? "md" : "ios"}
+                style={{ "--track-background": "#555" }}
+                checked={notificationToggle}
+                onIonChange={async () => {
+                  if (!notificationToggle) {
+                    setNotificationToggle(true);
 
-                      const salahs = adhanLibrarySalahs;
+                    const salahs = adhanLibrarySalahs;
 
-                      for (const salah of salahs) {
-                        if (salah === "sunrise") continue;
-                        await scheduleSalahNotifications(
-                          userLocations,
-                          salah,
-                          userPreferences,
-                          "on",
-                        );
-                      }
-
-                      for (const salah of adhanLibrarySalahs) {
-                        await updateUserPrefs(
-                          dbConnection,
-                          `${salah}Notification`,
-                          "on",
-                          setUserPreferences,
-                        );
-                      }
-                    } else {
-                      setNotificationToggle(false);
-
-                      for (const salah of adhanLibrarySalahs) {
-                        await cancelNotifications(salah);
-                      }
-                      for (const salah of adhanLibrarySalahs) {
-                        await updateUserPrefs(
-                          dbConnection,
-                          `${salah}Notification`,
-                          "off",
-                          setUserPreferences,
-                        );
-                      }
+                    for (const salah of salahs) {
+                      if (salah === "sunrise") continue;
+                      await scheduleSalahNotifications(
+                        userLocations,
+                        salah,
+                        userPreferences,
+                        "on",
+                      );
                     }
-                  }}
-                ></IonToggle>
-              </div>
-              <p className="mt-3 text-sm opacity-50">
-                Turn this on to receive all Salah reminders. You can also manage
-                individual reminders on the Salah Times page.
-              </p>
+
+                    for (const salah of adhanLibrarySalahs) {
+                      await updateUserPrefs(
+                        dbConnection,
+                        `${salah}Notification`,
+                        "on",
+                        setUserPreferences,
+                      );
+                    }
+                  } else {
+                    setNotificationToggle(false);
+
+                    for (const salah of adhanLibrarySalahs) {
+                      await cancelNotifications(salah);
+                    }
+                    for (const salah of adhanLibrarySalahs) {
+                      await updateUserPrefs(
+                        dbConnection,
+                        `${salah}Notification`,
+                        "off",
+                        setUserPreferences,
+                      );
+                    }
+                  }
+                }}
+              ></IonToggle>
             </section>
           )}
         {Capacitor.getPlatform() === "android" && (
-          <section className="p-3 mt-10 mb-10">
-            <div className="flex items-center justify-between notification-text-and-toggle-wrap">
-              <p>
-                Battery Optimisation Is Currently:{" "}
+          <section className="flex items-center gap-3 px-4 py-3 mt-5 sheet-group">
+            <span className="flex-1 min-w-0">
+              <span className="font-semibold leading-snug">
+                Battery optimisation
+              </span>
+              <span className="mt-0.5 block text-sm leading-snug text-[var(--secondary-text-color)]">
                 <span
-                  className={`${isBatteryOptEnabled ? "text-red-500" : "text-green-500"}`}
-                >{`${isBatteryOptEnabled ? "Enabled" : "Disabled"}`}</span>
-              </p>{" "}
-            </div>
+                  className={`font-semibold ${isBatteryOptEnabled ? "text-red-500" : "text-green-500"}`}
+                >
+                  {isBatteryOptEnabled ? "On" : "Off"}
+                </span>
+                {isBatteryOptEnabled
+                  ? ", may delay alerts"
+                  : ", alerts arrive on time"}
+              </span>
+            </span>
 
             {isBatteryOptEnabled && (
-              <>
-                <p className="mt-3 mb-5 text-sm opacity-50">
-                  {`Battery optimization for this app is currently on, which may delay notifications. To ensure timely alerts, you can turn it off in Settings:`}
-                </p>{" "}
-                <IonButton
-                  className="text-xs"
-                  onClick={async () => {
-                    // const res = await requestIgnoreBatteryOptimization();
-                    // console.log("res: ", res);
-                    // await getBatteryOptimizationStatus();
+              <IonButton
+                fill="clear"
+                className="m-0"
+                onClick={async () => {
+                  // const res = await requestIgnoreBatteryOptimization();
+                  // console.log("res: ", res);
+                  // await getBatteryOptimizationStatus();
 
-                    await promptToOpenDeviceSettings(
-                      "Disable Battery Optimization",
-                      "To ensure notifications arrive on time, please turn off battery optimization for this app.",
-                      AndroidSettings.BatteryOptimization,
-                    );
-                  }}
-                >
-                  Turn off battery optimisation
-                </IonButton>
-              </>
-            )}
-            {!isBatteryOptEnabled && (
-              <p className="mt-3 text-sm opacity-50">
-                {`Battery optimization is off, so notifications should arrive promptly.`}
-              </p>
+                  await promptToOpenDeviceSettings(
+                    "Disable Battery Optimization",
+                    "To ensure notifications arrive on time, please turn off battery optimization for this app.",
+                    AndroidSettings.BatteryOptimization,
+                  );
+                }}
+              >
+                Turn off
+              </IonButton>
             )}
           </section>
         )}
