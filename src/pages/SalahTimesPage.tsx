@@ -528,7 +528,7 @@ const SalahTimesPage = ({
       <Toast
         isOpen={showLocationDeletedToast}
         message="Location deleted successfully"
-        setShow={setShowLocationAddedToast}
+        setShow={setShowLocationDeletedToast}
         testId={"location-successfully-deleted-toast"}
       />
     </IonPage>
