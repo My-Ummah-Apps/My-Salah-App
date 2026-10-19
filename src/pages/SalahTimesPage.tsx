@@ -118,7 +118,9 @@ const SalahTimesPage = ({
       : "";
   const timeUntilNextSalah = [hoursText, minsText].filter(Boolean).join(" ");
 
-  const relativeDayLabel = isSameDay(dateToShow, new Date())
+  const isShowingToday = isSameDay(dateToShow, new Date());
+
+  const relativeDayLabel = isShowingToday
     ? "Today"
     : isSameDay(addDays(new Date(), -1), dateToShow)
       ? "Yesterday"
@@ -407,6 +409,7 @@ const SalahTimesPage = ({
               <div
                 // border-[var(--ion-text-color)]
                 className={`relative flex h-14 items-center justify-between border-b border-[color:var(--table-row-border-color)] pl-4 ${
+                  isShowingToday &&
                   name === nextSalahNameAndTime.currentSalah &&
                   name !== "sunrise"
                     ? "before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-[var(--current-salah-color)]"
@@ -420,6 +423,7 @@ const SalahTimesPage = ({
                 <div className="flex items-center">
                   <p
                     className={`text-[1.0625rem] ${
+                      isShowingToday &&
                       name === nextSalahNameAndTime.currentSalah &&
                       name !== "sunrise"
                         ? "font-bold text-[var(--current-salah-color)]"
