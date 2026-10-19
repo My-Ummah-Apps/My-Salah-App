@@ -24,10 +24,11 @@ import {
   chevronBackOutline,
   chevronDown,
   chevronForwardOutline,
-  megaphone,
-  navigate,
-  notifications,
-  notificationsOff,
+  locationOutline,
+  megaphoneOutline,
+  notificationsOffOutline,
+  notificationsOutline,
+  timeOutline,
 } from "ionicons/icons";
 
 import { useState } from "react";
@@ -40,7 +41,7 @@ import {
 import BottomSheetLocationsList from "../components/BottomSheets/SalahTimesSheets/BottomSheetLocationsList";
 import BottomSheetAddLocation from "../components/BottomSheets/SalahTimesSheets/BottomSheetAddLocation";
 import BottomSheetPerSalahNotifications from "../components/BottomSheets/SalahTimesSheets/BottomSheetPerSalahNotifications";
-import { addDays, isSameDay } from "date-fns";
+import { addDays, format, isSameDay } from "date-fns";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -107,6 +108,24 @@ const SalahTimesPage = ({
     setDateToShow(new Date());
   });
 
+  const hoursText =
+    nextSalahNameAndTime.hoursRemaining > 0
+      ? `${nextSalahNameAndTime.hoursRemaining}h`
+      : "";
+  const minsText =
+    nextSalahNameAndTime.minsRemaining > 0
+      ? `${nextSalahNameAndTime.minsRemaining}m`
+      : "";
+  const timeUntilNextSalah = [hoursText, minsText].filter(Boolean).join(" ");
+
+  const relativeDayLabel = isSameDay(dateToShow, new Date())
+    ? "Today"
+    : isSameDay(addDays(new Date(), -1), dateToShow)
+      ? "Yesterday"
+      : isSameDay(addDays(new Date(), 1), dateToShow)
+        ? "Tomorrow"
+        : "";
+
   return (
     <IonPage>
       <IonHeader className="ion-no-border">
@@ -118,25 +137,19 @@ const SalahTimesPage = ({
         {/* bg-[var(--card-bg-color)]  */}
         <section className="salah-times-page-components-wrap">
           {userLocations?.map((location) => (
-            <section className="w-full text-center" key={location.id}>
+            <section key={location.id}>
               {location.isSelected === 1 ? (
-                <div
+                <button
                   key={location.id}
-                  className="p-2 text-sm inline-flex items-center justify-center py-2 mb-4 border-[var(--ion-text-color)] border rounded-2xl"
+                  className="mb-6 flex items-center gap-2 py-1 text-[1.0625rem]"
                   onClick={() => {
                     setShowLocationsListSheet(true);
                   }}
                 >
-                  <IonIcon
-                    className="text-[var(--ion-text-color)] mr-1"
-                    icon={navigate}
-                  />
-                  <p>{location.locationName}</p>
-                  <IonIcon
-                    className="text-[var(--ion-text-color)] mr-1 ml-2"
-                    icon={chevronDown}
-                  />
-                </div>
+                  <IonIcon className="text-xl" icon={locationOutline} />
+                  <span>{location.locationName}</span>
+                  <IonIcon className="text-base" icon={chevronDown} />
+                </button>
               ) : (
                 ""
               )}
@@ -146,13 +159,13 @@ const SalahTimesPage = ({
             userLocations?.length !== 0 && (
               <>
                 {nextSalahNameAndTime.nextSalah !== "dhuhr" && (
-                  <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
+                  <section className="rounded-2xl bg-[var(--card-bg-color)] p-5">
                     {nextSalahNameAndTime.currentSalah !== "sunrise" && (
                       <div>
-                        <p className="mb-1 text-lg text-center opacity-80">
+                        <p className="text-[1.375rem] font-bold leading-tight">
                           Current Salah
                         </p>
-                        <p className="text-6xl font-bold text-center text-blue-500">
+                        <p className="text-[2.75rem] font-bold leading-tight text-[var(--current-salah-color)]">
                           {upperCaseFirstLetter(
                             nextSalahNameAndTime.currentSalah === "none"
                               ? "isha"
@@ -161,102 +174,102 @@ const SalahTimesPage = ({
                         </p>
                       </div>
                     )}
-                    <div
-                      className={`${nextSalahNameAndTime.currentSalah === "fajr" || nextSalahNameAndTime.currentSalah === "maghrib" ? "mt-3" : "mt-1"}`}
-                    >
-                      {nextSalahNameAndTime.hoursRemaining > 0 && (
-                        <p className="text-center opacity-90">
-                          {nextSalahNameAndTime.hoursRemaining === 1
-                            ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`
-                            : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go until" : ""}`}{" "}
-                        </p>
-                      )}
-                      {nextSalahNameAndTime.minsRemaining > 0 && (
-                        <p className="text-center opacity-90">
-                          {nextSalahNameAndTime.minsRemaining === 1
-                            ? `${nextSalahNameAndTime.minsRemaining} minute to go until`
-                            : `${nextSalahNameAndTime.minsRemaining} minutes to go until`}
-                        </p>
-                      )}
-                      <p className="mt-1 mb-2 text-2xl text-center">
-                        {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
-                      </p>
-                    </div>
+                    <p className="mt-1 text-[1.0625rem] text-[var(--secondary-text-color)]">
+                      {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
+                      {timeUntilNextSalah && ` in ${timeUntilNextSalah}`}
+                    </p>
                   </section>
                 )}
                 {nextSalahNameAndTime.nextSalah === "dhuhr" &&
                   nextSalahNameAndTime.currentSalah === "sunrise" && (
-                    <section className="p-4 rounded-lg bg-[var(--card-bg-color)]">
-                      <div>
-                        <p className="mb-1 text-lg text-center opacity-80">
-                          Upcoming Salah
+                    <section className="rounded-2xl bg-[var(--card-bg-color)] p-5">
+                      <p className="text-[1.375rem] font-bold leading-tight">
+                        Upcoming Salah
+                      </p>
+                      <p className="text-[2.75rem] font-bold leading-tight">
+                        {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
+                      </p>
+                      {timeUntilNextSalah && (
+                        <p className="mt-1 text-[1.0625rem] text-[var(--secondary-text-color)]">
+                          Starts in {timeUntilNextSalah}
                         </p>
-                        <p className="text-6xl font-bold text-center">
-                          {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
-                        </p>
-                      </div>
-                      <div>
-                        {nextSalahNameAndTime.hoursRemaining > 0 && (
-                          <p className={`text-center opacity-90`}>
-                            {nextSalahNameAndTime.hoursRemaining === 1
-                              ? `${nextSalahNameAndTime.hoursRemaining} hour ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : ""}`
-                              : `${nextSalahNameAndTime.hoursRemaining} hours ${nextSalahNameAndTime.minsRemaining === 0 ? "to go" : "and"}`}{" "}
-                          </p>
-                        )}
-                        {nextSalahNameAndTime.minsRemaining > 0 && (
-                          <p className="text-center opacity-90">
-                            {nextSalahNameAndTime.minsRemaining === 1
-                              ? `${nextSalahNameAndTime.minsRemaining} minute to go`
-                              : `${nextSalahNameAndTime.minsRemaining} minutes to go`}
-                          </p>
-                        )}
-                      </div>
+                      )}
                     </section>
                   )}
               </>
             )}
           <>
             <section
-              className="text-center"
-              // className="flex flex-col items-center justify-center h-full text-center"
+            // className="flex flex-col items-center justify-center h-full text-center"
             >
-              {userPreferences.prayerCalculationMethod === "" && (
-                <h4>Salah Times Not Set</h4>
+              {(userPreferences.prayerCalculationMethod === "" ||
+                userLocations.length === 0) && (
+                <div className="flex flex-col items-center pt-4 text-center">
+                  <IonIcon
+                    className="text-[4.5rem] text-[var(--secondary-text-color)]"
+                    icon={timeOutline}
+                  />
+                  <h2 className="mt-3 text-[1.375rem] font-bold leading-tight">
+                    Set up Salah times
+                  </h2>
+                  {userPreferences.prayerCalculationMethod === "" &&
+                    userLocations.length === 0 && (
+                      <>
+                        <p className="mt-2 text-[var(--secondary-text-color)]">
+                          Add a location and calculation method to see local
+                          times.
+                        </p>
+                        <IonButton
+                          mode="ios"
+                          expand="block"
+                          onClick={() => {
+                            setOnboardingMode("salahTimes");
+                            // setOnboardingMode(true);
+                          }}
+                          className="mx-0 mb-0 mt-6 w-full text-[0.9375rem] font-semibold"
+                        >
+                          Set up Salah times
+                        </IonButton>
+                      </>
+                    )}
+                  {userPreferences.prayerCalculationMethod === "" &&
+                    userLocations.length > 0 && (
+                      <>
+                        <p className="mt-2 text-[var(--secondary-text-color)]">
+                          Choose a calculation method to see local times.
+                        </p>
+                        <IonButton
+                          mode="ios"
+                          expand="block"
+                          onClick={() => {
+                            setShowCalcMethodsSheet(true);
+                          }}
+                          className="mx-0 mb-0 mt-6 w-full text-[0.9375rem] font-semibold"
+                        >
+                          Select calculation method
+                        </IonButton>
+                      </>
+                    )}
+                  {userPreferences.prayerCalculationMethod !== "" &&
+                    userLocations.length === 0 && (
+                      <>
+                        <p className="mt-2 text-[var(--secondary-text-color)]">
+                          Add a location to see local times.
+                        </p>
+                        <IonButton
+                          mode="ios"
+                          expand="block"
+                          onClick={() => {
+                            setShowAddLocationSheet(true);
+                          }}
+                          className="mx-0 mb-0 mt-6 w-full text-[0.9375rem] font-semibold"
+                        >
+                          Add location
+                        </IonButton>
+                      </>
+                    )}
+                </div>
               )}
-              {userPreferences.prayerCalculationMethod === "" &&
-                userLocations.length === 0 && (
-                  <IonButton
-                    onClick={() => {
-                      setOnboardingMode("salahTimes");
-                      // setOnboardingMode(true);
-                    }}
-                    className="w-1/2"
-                  >
-                    Set Up Salah Times
-                  </IonButton>
-                )}
-              {userPreferences.prayerCalculationMethod === "" &&
-                userLocations.length > 0 && (
-                  <IonButton
-                    onClick={() => {
-                      setShowCalcMethodsSheet(true);
-                    }}
-                    className="w-1/2"
-                  >
-                    Select Calculation Method
-                  </IonButton>
-                )}
-              {userPreferences.prayerCalculationMethod !== "" &&
-                userLocations.length === 0 && (
-                  <IonButton
-                    onClick={() => {
-                      setShowAddLocationSheet(true);
-                    }}
-                    className="w-1/2"
-                  >
-                    Add Location
-                  </IonButton>
-                )}
 
               <BottomSheetAddLocation
                 setShowAddLocationSheet={setShowAddLocationSheet}
@@ -314,12 +327,12 @@ const SalahTimesPage = ({
           </>
           {/* ))} */}
           <section
-            className={` ${
+            className={`mt-5 flex items-center justify-between ${
               userLocations?.length === 0 ||
               userPreferences.prayerCalculationMethod === ""
                 ? "opacity-50"
-                : "opacity-100"
-            } flex items-center justify-between w-5/6 mx-auto mt-5`}
+                : ""
+            }`}
           >
             {" "}
             <IonButton
@@ -347,14 +360,14 @@ const SalahTimesPage = ({
                 icon={chevronBackOutline}
               />
             </IonButton>
-            <p>
-              {isSameDay(dateToShow, new Date())
-                ? "Today"
-                : isSameDay(addDays(new Date(), -1), dateToShow)
-                  ? "Yesterday"
-                  : isSameDay(addDays(new Date(), 1), dateToShow)
-                    ? "Tomorrow"
-                    : dateToShow.toLocaleDateString()}
+            <p className="text-[1.0625rem]">
+              {relativeDayLabel && (
+                <>
+                  <span className="font-semibold">{relativeDayLabel}</span>
+                  {" · "}
+                </>
+              )}
+              {format(dateToShow, "EEE d MMM")}
             </p>
             <IonButton
               fill="clear"
@@ -381,11 +394,11 @@ const SalahTimesPage = ({
             </IonButton>
           </section>
           <section
-            className={` rounded-lg   ${
+            className={`mt-3 border-t border-[color:var(--table-row-border-color)] ${
               userLocations?.length === 0 ||
               userPreferences.prayerCalculationMethod === ""
                 ? "opacity-50"
-                : "opacity-100"
+                : ""
             }`}
           >
             {(
@@ -393,17 +406,26 @@ const SalahTimesPage = ({
             ).map(([name, time]) => (
               <div
                 // border-[var(--ion-text-color)]
-                className={`bg-[var(--card-bg-color)] flex items-center justify-between py-1 text-sm rounded-lg mb-2 ${
+                className={`relative flex h-14 items-center justify-between border-b border-[color:var(--table-row-border-color)] pl-4 ${
                   name === nextSalahNameAndTime.currentSalah &&
                   name !== "sunrise"
-                    ? "my-2 rounded-lg shadow-md scale-102 border-blue-500 border-2 font-bold text-blue-500"
-                    : "opacity-80"
+                    ? "before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-[var(--current-salah-color)]"
+                    : ""
                 }`}
                 key={name + time}
               >
-                <p className="ml-2">{upperCaseFirstLetter(name)}</p>
+                <p className="text-[1.0625rem] font-semibold">
+                  {upperCaseFirstLetter(name)}
+                </p>
                 <div className="flex items-center">
-                  <p>
+                  <p
+                    className={`text-[1.0625rem] ${
+                      name === nextSalahNameAndTime.currentSalah &&
+                      name !== "sunrise"
+                        ? "font-bold text-[var(--current-salah-color)]"
+                        : ""
+                    }`}
+                  >
                     {time === "Invalid Date" ||
                     userLocations?.length === 0 ||
                     userPreferences.prayerCalculationMethod === ""
@@ -432,19 +454,14 @@ const SalahTimesPage = ({
                     size="small"
                   >
                     <IonIcon
-                      className={`text-[var(--ion-text-color)] ${
-                        name === nextSalahNameAndTime.currentSalah &&
-                        name !== "sunrise"
-                          ? "rounded-lg shadow-md scale-102 font-bold text-blue-500"
-                          : "opacity-80"
-                      }`}
+                      className="text-[1.375rem] text-[var(--ion-text-color)]"
                       icon={
                         userPreferences[`${name}Notification`] === "off"
-                          ? notificationsOff
+                          ? notificationsOffOutline
                           : userPreferences[`${name}Notification`] === "on"
-                            ? notifications
+                            ? notificationsOutline
                             : userPreferences[`${name}Notification`] === "adhan"
-                              ? megaphone
+                              ? megaphoneOutline
                               : ""
                       }
                     />
@@ -456,18 +473,15 @@ const SalahTimesPage = ({
           </section>
           {userPreferences.prayerCalculationMethod !== "" &&
             userLocations?.length > 0 && (
-              <p className="mx-5 my-5 text-xs text-center opacity-50 text-[var(--ion-text-color)]">
-                Note: These times have been calculated using the
-                <span className="font-bold">
-                  {" "}
-                  {
-                    prayerCalculationMethodLabels[
-                      userPreferences.prayerCalculationMethod
-                    ]
-                  }{" "}
-                </span>
-                method with Fajr Angle {userPreferences.fajrAngle}° and Isha
-                Angle {userPreferences.ishaAngle}°, your local mosque times may
+              <p className="mt-5 text-[0.8125rem] leading-snug text-[var(--secondary-text-color)]">
+                Calculated with{" "}
+                {
+                  prayerCalculationMethodLabels[
+                    userPreferences.prayerCalculationMethod
+                  ]
+                }{" "}
+                (Fajr {userPreferences.fajrAngle}°, Isha{" "}
+                {userPreferences.ishaAngle}°). Your local mosque times may
                 differ.
               </p>
             )}
