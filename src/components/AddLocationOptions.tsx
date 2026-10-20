@@ -517,12 +517,12 @@ const AddLocationOptions = ({
                     <p className="mb-2 mt-5 text-sm font-semibold text-[var(--secondary-text-color)]">
                       Results
                     </p>
-                    <ul className="sheet-group">
+                    <ul className="divide-y divide-[color:var(--sheet-divider-color)]">
                       {cityResults.map((obj) => (
                         <li key={obj.latitude + obj.longitude}>
                           <button
                             type="button"
-                            className="flex w-full items-center gap-3 px-3 py-3 text-left"
+                            className="flex w-full items-center gap-3 py-3 text-left"
                             onClick={() => {
                               setLocationName(`${obj.city} - ${obj.country}`);
                               setCoords({
@@ -665,12 +665,15 @@ const AddLocationOptions = ({
               </h2>
             )}
             <p className="text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
-              Prayer times are calculated from this location.
+              Salah times are calculated from this location.
             </p>
-            <section className="sheet-group mt-5" aria-label="Location methods">
+            <section
+              className="mt-5 divide-y divide-solid divide-[color:var(--sheet-divider-color)]"
+              aria-label="Location methods"
+            >
               <button
                 type="button"
-                className="flex w-full items-center gap-3 px-3 py-[0.9375rem] text-left"
+                className="flex w-full items-center gap-3 py-[0.9375rem] text-left"
                 onClick={async () => {
                   if (showAddLocationForm) return;
 
@@ -715,7 +718,7 @@ const AddLocationOptions = ({
               </button>
               <button
                 type="button"
-                className="flex w-full items-center gap-3 px-3 py-[0.9375rem] text-left"
+                className="flex w-full items-center gap-3 py-[0.9375rem] text-left"
                 onClick={() => {
                   if (showAddLocationForm) return;
                   setShowAddLocationForm(true);
@@ -745,7 +748,7 @@ const AddLocationOptions = ({
               </button>
               <button
                 type="button"
-                className="flex w-full items-center gap-3 px-3 py-[0.9375rem] text-left"
+                className="flex w-full items-center gap-3 py-[0.9375rem] text-left"
                 onClick={() => {
                   if (showAddLocationForm) return;
                   setMode("manualCoords");
