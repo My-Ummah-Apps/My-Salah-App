@@ -573,7 +573,7 @@ const BottomSheetSalahStatus = ({
               </div>
             )}
             {Array.isArray(userPreferences.reasons) && (
-              <div className="flex flex-wrap gap-2 text-[var(--ion-text-color)]">
+              <div className="flex flex-wrap gap-x-2.5 gap-y-2 text-[var(--ion-text-color)]">
                 <AnimatePresence>
                   {[
                     ...new Set([
@@ -587,13 +587,12 @@ const BottomSheetSalahStatus = ({
                       <motion.p
                         // layout="position"
                         initial={{
-                          backgroundColor:
-                            "var(--reasons-bg-color-status-sheet)",
+                          backgroundColor: "var(--sheet-pill-bg)",
                         }}
                         animate={{
                           backgroundColor: selectedReasons.includes(item)
                             ? "var(--reasons-bg-active-color-status-sheet)"
-                            : "var(--reasons-bg-color-status-sheet)",
+                            : "var(--sheet-pill-bg)",
                         }}
                         transition={{ duration: 0.3 }}
                         exit={{ scale: [1, 1.2, 0], opacity: 0 }}
@@ -679,7 +678,7 @@ const BottomSheetSalahStatus = ({
         </div>
 
         {Array.isArray(userPreferences.reasons) && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-x-2.5 gap-y-2">
             {[...new Set([...selectedReasons, ...userPreferences.reasons])]
               .sort((a, b) => a.localeCompare(b))
               .map((item) => (

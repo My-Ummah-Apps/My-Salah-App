@@ -150,7 +150,7 @@ BottomSheetStartDateProps) => {
                 .sort((a, b) => a.localeCompare(b))
                 .map((reason) => (
                   <motion.li
-                    className="flex h-9 items-center gap-1.5 rounded-full border border-[color:var(--sheet-divider-color)] bg-[var(--sheet-pill-bg)] pl-4 text-[0.9375rem]"
+                    className="flex h-8 items-center gap-1 rounded-full border border-[color:var(--sheet-divider-color)] bg-[var(--sheet-pill-bg)] pl-3.5 text-sm"
                     layout
                     initial={{ x: 0 }}
                     animate={{ x: 0 }}
@@ -165,7 +165,7 @@ BottomSheetStartDateProps) => {
                     <p>{reason}</p>
                     <button
                       aria-label={`Remove ${reason}`}
-                      className="flex size-8 items-center justify-center"
+                      className="flex size-7 items-center justify-center"
                       onClick={async () => {
                         const modifiedReasons = userPreferences.reasons.filter(
                           (item) => item !== reason,
@@ -178,8 +178,8 @@ BottomSheetStartDateProps) => {
                         );
                       }}
                     >
-                      <span className="flex size-5 items-center justify-center rounded-full bg-[var(--sheet-group-bg)]">
-                        <LuX className="text-[1.125rem]" />
+                      <span className="flex size-[1.125rem] items-center justify-center rounded-full bg-[var(--sheet-group-bg)]">
+                        <LuX className="text-base" />
                       </span>
                     </button>
                   </motion.li>
