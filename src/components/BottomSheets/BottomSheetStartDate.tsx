@@ -8,7 +8,8 @@ import {
 import { userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
 import { isAfter, isBefore, parseISO, startOfDay } from "date-fns";
-import { IonModal } from "@ionic/react";
+import { IonButton, IonIcon, IonModal } from "@ionic/react";
+import { calendarOutline } from "ionicons/icons";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   INITIAL_MODAL_BREAKPOINT,
@@ -79,19 +80,17 @@ const BottomSheetStartDate = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <div className="p-10">
-        <section className="mb-10 text-center">
-          <p className="mb-2">Current Start Date:</p>
-          <p className="font-extrabold">
-            {/* {createLocalisedDate(userPreferences.userStartDate)[1]} */}
-            {createLocalisedDate(currentStartDate)[1]}
-          </p>
-        </section>
-        <section className="text-center">
-          <p className="mb-2">Select New Start Date</p>
+      <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <h1 className="mb-5 font-bold leading-tight">Change Start Date</h1>
+        <p className="mb-2 font-semibold">Current start date</p>
+        <p className="rounded-xl bg-[var(--sheet-pill-bg)] px-4 py-3 text-[var(--secondary-text-color)]">
+          {/* {createLocalisedDate(userPreferences.userStartDate)[1]} */}
+          {createLocalisedDate(currentStartDate)[1]}
+        </p>
+        <p className="mb-2 mt-5 font-semibold">New start date</p>
+        <div className="relative rounded-xl border border-[color:var(--sheet-input-border-color)] bg-[var(--sheet-bg-color)]">
           <input
-            className="text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-            placeholder="&#x1F5D3;"
+            className="h-12 w-full appearance-none rounded-xl bg-transparent px-4 text-[var(--ion-text-color)] [color-scheme:var(--input-color-scheme)] [&::-webkit-calendar-picker-indicator]:hidden"
             onKeyDown={(e) => {
               e.preventDefault();
             }}
@@ -105,42 +104,53 @@ const BottomSheetStartDate = ({
             min={MIN_START_DATE}
             max={new Date().toISOString().split("T")[0]}
           ></input>
-        </section>
-      </div>
-      <button
-        className={`text-base border-none rounded-xl bg-[#3880ff] text-white w-[90%] p-3 mx-auto mb-[7%] ${
-          selectedStartDate ? "opacity-100" : "opacity-20"
-        }`}
-        onClick={async () => {
-          if (selectedStartDate) {
-            const todaysDate = startOfDay(new Date());
-            // const selectedDate = startOfDay(new Date(selectedStartDate));
-            const selectedDate = startOfDay(parseISO(selectedStartDate));
-            const minDate = startOfDay(parseISO(MIN_START_DATE));
+          <IonIcon
+            aria-hidden="true"
+            icon={calendarOutline}
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xl text-[var(--secondary-text-color)]"
+          />
+        </div>
+        <p className="mt-2 text-sm leading-snug text-[var(--secondary-text-color)]">
+          Moving it earlier adds older days to log. Moving it later hides the
+          days before it, but nothing is deleted.
+        </p>
+        <IonButton
+          expand="block"
+          disabled={!selectedStartDate}
+          onClick={async () => {
+            if (selectedStartDate) {
+              const todaysDate = startOfDay(new Date());
+              // const selectedDate = startOfDay(new Date(selectedStartDate));
+              const selectedDate = startOfDay(parseISO(selectedStartDate));
+              const minDate = startOfDay(parseISO(MIN_START_DATE));
 
-            if (isBefore(selectedDate, minDate)) {
-              showAlert(
-                "Invalid Date",
-                `Date cannot be earlier than ${createLocalisedDate(MIN_START_DATE)[1]}`,
-              );
-              return;
-            }
+              if (isBefore(selectedDate, minDate)) {
+                showAlert(
+                  "Invalid Date",
+                  `Date cannot be earlier than ${createLocalisedDate(MIN_START_DATE)[1]}`,
+                );
+                return;
+              }
 
-            if (isAfter(selectedDate, todaysDate)) {
-              showAlert(
-                "Invalid Date",
-                "Please select a date that is not in the future",
-              );
-              return;
+              if (isAfter(selectedDate, todaysDate)) {
+                showAlert(
+                  "Invalid Date",
+                  "Please select a date that is not in the future",
+                );
+                return;
+              }
+              modal.current?.dismiss();
+              setSelectedStartDate(null);
+              await handleStartDateChange();
             }
-            modal.current?.dismiss();
-            setSelectedStartDate(null);
-            await handleStartDateChange();
-          }
-        }}
-      >
-        Save
-      </button>
+          }}
+          className={`mx-0 mb-0 mt-6 text-[0.9375rem] font-semibold transition-opacity duration-300 ${
+            selectedStartDate ? "" : "opacity-20"
+          }`}
+        >
+          Save
+        </IonButton>
+      </section>
     </IonModal>
   );
 };

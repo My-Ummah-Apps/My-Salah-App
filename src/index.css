@@ -20,6 +20,7 @@
   --card-bg-color: rgb(247, 247, 247);
   --sheet-bg-color: #FEFEFE;
   --sheet-bg-rgb: 254, 254, 254;
+  --input-color-scheme: light;
   --sheet-icon-bg-color: #e7f0ff;
   --sheet-divider-color: #e3e7ed;
   --sheet-group-bg: #f4f6f9;
@@ -83,6 +84,7 @@ body.dark {
   --card-bg-color: rgb(27, 27, 28);
   --sheet-bg-color: #1A1C1E;
   --sheet-bg-rgb: 26, 28, 30;
+  --input-color-scheme: dark;
   --sheet-icon-bg-color: #212c39;
   --sheet-divider-color: #34363a;
   --sheet-group-bg: #232528;
