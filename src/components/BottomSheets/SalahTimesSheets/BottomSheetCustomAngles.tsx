@@ -1,11 +1,9 @@
 import {
-  IonHeader,
   IonModal,
   IonPicker,
   IonPickerColumn,
   IonPickerColumnOption,
-  IonTitle,
-  IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -65,33 +63,34 @@ const BottomSheetCustomAngles = ({
         setShowCustomAnglesSheet(false);
       }}
     >
-      <IonHeader className="ion-no-border">
-        <IonToolbar
-          style={{
-            "--background": "transparent",
-          }}
-        >
-          <IonTitle>
-            {customAngleSalah === "fajrAngle" ? "Fajr Angle" : "Isha Angle"}
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonPicker className="">
-        <IonPickerColumn
-          value={increment}
-          onIonChange={({ detail }) => {
-            setIncrement(String(detail.value));
-          }}
-        >
-          {angleOptions.map((item) => {
-            return (
-              <IonPickerColumnOption key={item} value={item}>
-                {item}°
-              </IonPickerColumnOption>
-            );
-          })}
-        </IonPickerColumn>
-      </IonPicker>
+      <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <h1 className="mb-1 font-bold leading-tight">
+          {customAngleSalah === "fajrAngle" ? "Fajr angle" : "Isha angle"}
+        </h1>
+        <p className="mb-4 text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
+          The sun's angle below the horizon used for{" "}
+          {customAngleSalah === "fajrAngle" ? "Fajr" : "Isha"}.
+        </p>
+        <IonPicker mode={isPlatform("ios") ? "ios" : "md"}>
+          <IonPickerColumn
+            value={increment}
+            onIonChange={({ detail }) => {
+              setIncrement(String(detail.value));
+            }}
+          >
+            {angleOptions.map((item) => {
+              return (
+                <IonPickerColumnOption key={item} value={item}>
+                  {item}°
+                </IonPickerColumnOption>
+              );
+            })}
+          </IonPickerColumn>
+        </IonPicker>
+        <p className="mt-4 text-center text-sm text-[var(--secondary-text-color)]">
+          Saved when you close this sheet.
+        </p>
+      </section>
     </IonModal>
   );
 };

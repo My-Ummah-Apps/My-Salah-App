@@ -1,11 +1,9 @@
 import {
-  IonHeader,
   IonModal,
   IonPicker,
   IonPickerColumn,
   IonPickerColumnOption,
-  IonTitle,
-  IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -53,11 +51,11 @@ const BottomSheetSalahTimeCustomAdjustments = ({
   );
 
   const salahMap = {
-    fajrAdjustment: "Fajr Adjustment",
-    dhuhrAdjustment: "Dhuhr Adjustment",
-    asrAdjustment: "Asr Adjustment",
-    maghribAdjustment: "Maghrib Adjustment",
-    ishaAdjustment: "Isha Adjustment",
+    fajrAdjustment: "Fajr",
+    dhuhrAdjustment: "Dhuhr",
+    asrAdjustment: "Asr",
+    maghribAdjustment: "Maghrib",
+    ishaAdjustment: "Isha",
   };
 
   const customAdjustmentsArr = [];
@@ -99,42 +97,45 @@ const BottomSheetSalahTimeCustomAdjustments = ({
         setShowCustomAdjustmentsSheet(false);
       }}
     >
-      <IonHeader className="ion-no-border">
-        <IonToolbar
-          style={{
-            "--background": "transparent",
-          }}
-        >
-          <IonTitle>{salahMap[customAdjustmentSalah]}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonPicker className="">
-        <IonPickerColumn
-          value={totalAdjustedValue}
-          onIonChange={({ detail }) => {
-            const userAdjustedValue =
-              Number(detail.value) -
-              getDefaultAdjustments()[customAdjustmentSalah];
+      <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <h1 className="mb-1 font-bold leading-tight">
+          {salahMap[customAdjustmentSalah]} adjustment
+        </h1>
+        <p className="mb-4 text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
+          Minutes added to or taken off the calculated{" "}
+          {salahMap[customAdjustmentSalah]} time.
+        </p>
+        <IonPicker mode={isPlatform("ios") ? "ios" : "md"}>
+          <IonPickerColumn
+            value={totalAdjustedValue}
+            onIonChange={({ detail }) => {
+              const userAdjustedValue =
+                Number(detail.value) -
+                getDefaultAdjustments()[customAdjustmentSalah];
 
-            setTotalAdjustedValue(
-              String(
-                userAdjustedValue +
-                  getDefaultAdjustments()[customAdjustmentSalah],
-              ),
-            );
+              setTotalAdjustedValue(
+                String(
+                  userAdjustedValue +
+                    getDefaultAdjustments()[customAdjustmentSalah],
+                ),
+              );
 
-            setUserAdjustedValue(userAdjustedValue);
-          }}
-        >
-          {customAdjustmentsArr.map((item) => {
-            return (
-              <IonPickerColumnOption key={item} value={item}>
-                {formatNumberWithSign(Number(item))}
-              </IonPickerColumnOption>
-            );
-          })}
-        </IonPickerColumn>
-      </IonPicker>
+              setUserAdjustedValue(userAdjustedValue);
+            }}
+          >
+            {customAdjustmentsArr.map((item) => {
+              return (
+                <IonPickerColumnOption key={item} value={item}>
+                  {formatNumberWithSign(Number(item))} min
+                </IonPickerColumnOption>
+              );
+            })}
+          </IonPickerColumn>
+        </IonPicker>
+        <p className="mt-4 text-center text-sm text-[var(--secondary-text-color)]">
+          Saved when you close this sheet.
+        </p>
+      </section>
     </IonModal>
   );
 };

@@ -19,6 +19,7 @@
   --ion-text-color: rgb(0, 0, 0);
   --card-bg-color: rgb(247, 247, 247);
   --sheet-bg-color: #FEFEFE;
+  --sheet-bg-rgb: 254, 254, 254;
   --sheet-icon-bg-color: #e7f0ff;
   --sheet-divider-color: #e3e7ed;
   --sheet-group-bg: #f4f6f9;
@@ -81,6 +82,7 @@ body.dark {
   --ion-text-color: rgb(255, 255, 255);
   --card-bg-color: rgb(27, 27, 28);
   --sheet-bg-color: #1A1C1E;
+  --sheet-bg-rgb: 26, 28, 30;
   --sheet-icon-bg-color: #212c39;
   --sheet-divider-color: #34363a;
   --sheet-group-bg: #232528;
@@ -335,10 +337,9 @@ ion-button:not(.button-disabled):hover {
 }
 
 ion-picker {
-  --highlight-background: var(--primary-color);
-  filter: brightness(0.8);
-  --fade-background-rgb: var(--card-bg-color) !important;
-  /* --highlight-border-radius: 50px; */
+  --highlight-background: var(--sheet-pill-bg);
+  --highlight-border-radius: 0.75rem;
+  --fade-background-rgb: var(--sheet-bg-rgb);
 }
 
 ion-checkbox::part(container) {
