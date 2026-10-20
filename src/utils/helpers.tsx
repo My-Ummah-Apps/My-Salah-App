@@ -653,6 +653,7 @@ export const getNextSalah = async (
   // console.log("NEXT SALAH TIME: ", allSalahTimes.timeForPrayer(next));
 
   let nextSalahTime: Date | null = null;
+  let currentSalahStartTime: Date | null = null;
   let currentSalah:
     | "none"
     | "fajr"
@@ -666,6 +667,8 @@ export const getNextSalah = async (
   // console.log("sunnahTimes: ", sunnahTimes);
 
   if (next === "none") {
+    currentSalahStartTime = allSalahTimes.isha;
+
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -679,9 +682,14 @@ export const getNextSalah = async (
     next = "sunrise";
     nextSalahTime = allSalahTimes.timeForPrayer(next);
     currentSalah = "fajr";
+    currentSalahStartTime = allSalahTimes.fajr;
   } else {
     nextSalahTime = allSalahTimes.timeForPrayer(next);
     currentSalah = allSalahTimes.currentPrayer();
+    currentSalahStartTime =
+      currentSalah === "none"
+        ? new PrayerTimes(coordinates, addDays(todaysDate, -1), params).isha
+        : allSalahTimes.timeForPrayer(currentSalah);
   }
 
   if (nextSalahTime === null) {
@@ -704,6 +712,7 @@ export const getNextSalah = async (
 
   return {
     currentSalah: currentSalah,
+    currentSalahStartTime: currentSalahStartTime,
     nextSalah: next,
     nextSalahTime: nextSalahTime,
     hoursRemaining: hours,

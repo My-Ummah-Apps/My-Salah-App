@@ -161,6 +161,7 @@ const App = () => {
   const [nextSalahNameAndTime, setNextSalahNameAndTime] =
     useState<nextSalahTimeType>({
       currentSalah: "",
+      currentSalahStartTime: null,
       nextSalah: "",
       nextSalahTime: null as Date | null,
       hoursRemaining: 0,
@@ -235,6 +236,7 @@ const App = () => {
 
     const {
       currentSalah,
+      currentSalahStartTime,
       nextSalah,
       nextSalahTime,
       hoursRemaining,
@@ -242,6 +244,7 @@ const App = () => {
     } = result;
     setNextSalahNameAndTime({
       currentSalah: currentSalah,
+      currentSalahStartTime: currentSalahStartTime,
       nextSalah: nextSalah,
       nextSalahTime: nextSalahTime,
       hoursRemaining: hoursRemaining,

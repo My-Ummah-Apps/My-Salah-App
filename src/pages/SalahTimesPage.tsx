@@ -118,6 +118,30 @@ const SalahTimesPage = ({
       : "";
   const timeUntilNextSalah = [hoursText, minsText].filter(Boolean).join(" ");
 
+  const salahStart = nextSalahNameAndTime.currentSalahStartTime;
+  const salahEnd = nextSalahNameAndTime.nextSalahTime;
+  let salahTimeLeftPercent: number | null = null;
+  if (salahStart && salahEnd) {
+    const remaining = salahEnd.getTime() - Date.now();
+    const total = salahEnd.getTime() - salahStart.getTime();
+    salahTimeLeftPercent = Math.min(
+      100,
+      Math.max(0, (remaining / total) * 100),
+    );
+  }
+
+  const salahProgressBar = salahTimeLeftPercent !== null && (
+    <div
+      aria-hidden="true"
+      className="mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--sheet-pill-bg)]"
+    >
+      <div
+        className="h-full rounded-full bg-[var(--current-salah-color)]"
+        style={{ width: `${salahTimeLeftPercent}%` }}
+      />
+    </div>
+  );
+
   const isShowingToday = isSameDay(dateToShow, new Date());
 
   const relativeDayLabel = isShowingToday
@@ -180,6 +204,7 @@ const SalahTimesPage = ({
                       {upperCaseFirstLetter(nextSalahNameAndTime.nextSalah)}
                       {timeUntilNextSalah && ` in ${timeUntilNextSalah}`}
                     </p>
+                    {salahProgressBar}
                   </section>
                 )}
                 {nextSalahNameAndTime.nextSalah === "dhuhr" &&
@@ -196,6 +221,7 @@ const SalahTimesPage = ({
                           Starts in {timeUntilNextSalah}
                         </p>
                       )}
+                      {salahProgressBar}
                     </section>
                   )}
               </>
