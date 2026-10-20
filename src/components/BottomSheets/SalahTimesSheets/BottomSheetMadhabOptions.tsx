@@ -1,4 +1,4 @@
-import { IonHeader, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { IonModal } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../../../types/types";
@@ -36,21 +36,14 @@ const BottomSheetMadhabOptions = ({
       // style={{ "--height": "95vh" }}
       // expandToScroll={false}
     >
-      <IonHeader className="ion-no-border">
-        <IonToolbar
-          style={{
-            "--background": "transparent",
-          }}
-        >
-          <IonTitle>Madhab</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <MadhabOptions
-        dbConnection={dbConnection}
-        setUserPreferences={setUserPreferences}
-        userPreferences={userPreferences}
-      />
+      <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <h1 className="mb-4 font-bold leading-tight">Madhab</h1>
+        <MadhabOptions
+          dbConnection={dbConnection}
+          setUserPreferences={setUserPreferences}
+          userPreferences={userPreferences}
+        />
+      </section>
     </IonModal>
   );
 };

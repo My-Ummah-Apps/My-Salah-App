@@ -1,10 +1,4 @@
-import {
-  IonHeader,
-  IonIcon,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonModal, IonRadio, IonRadioGroup, isPlatform } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../../../types/types";
@@ -12,7 +6,6 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
 } from "../../../utils/constants";
-import { checkmarkCircle } from "ionicons/icons";
 import { updateUserPrefs } from "../../../utils/helpers";
 
 // import { CalculationMethod } from "adhan";
@@ -41,125 +34,96 @@ const BottomSheetLatitudeRules = ({
       // presentingElement={presentingElement!}
       // expandToScroll={false}
     >
-      <IonHeader className="ion-no-border">
-        <IonToolbar
-          style={{
-            "--background": "transparent",
-          }}
-        >
-          <IonTitle>High Latitude Rule</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       {/* <IonContent> */}
-      <section className="mx-4">
-        <div
-          onClick={async () => {
-            await updateUserPrefs(
-              dbConnection,
-              "highLatitudeRule",
-              "middleofthenight",
-              setUserPreferences,
-            );
-          }}
-          className={`options-wrap ${
-            userPreferences.highLatitudeRule === "middleofthenight"
-              ? "border-blue-500"
-              : "border-transparent"
-          }`}
-        >
-          <div className="mr-2">
-            <IonIcon
-              color="primary"
-              className={` ${
-                userPreferences.highLatitudeRule === "middleofthenight"
-                  ? "opacity-100"
-                  : "opacity-0"
-              }`}
-              icon={checkmarkCircle}
-            />
+      <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <h1 className="mb-4 font-bold leading-tight">High latitude rule</h1>
+        <IonRadioGroup value={userPreferences.highLatitudeRule}>
+          <div className="divide-y divide-[color:var(--sheet-divider-color)]">
+            <div
+              onClick={async () => {
+                await updateUserPrefs(
+                  dbConnection,
+                  "highLatitudeRule",
+                  "middleofthenight",
+                  setUserPreferences,
+                );
+              }}
+            >
+              <IonRadio
+                mode={isPlatform("ios") ? "ios" : "md"}
+                value="middleofthenight"
+                labelPlacement="start"
+                justify="space-between"
+                className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+              >
+                <span>
+                  Middle of the night
+                  <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                    Fajr will never be earlier than the middle of the night and
+                    Isha will never be later than the middle of the night.
+                  </span>
+                </span>
+              </IonRadio>
+            </div>
+            <div
+              onClick={async () => {
+                await updateUserPrefs(
+                  dbConnection,
+                  "highLatitudeRule",
+                  "seventhofthenight",
+                  setUserPreferences,
+                );
+              }}
+            >
+              <IonRadio
+                mode={isPlatform("ios") ? "ios" : "md"}
+                value="seventhofthenight"
+                labelPlacement="start"
+                justify="space-between"
+                className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+              >
+                <span>
+                  Seventh of the night
+                  <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                    Fajr will never be earlier than the beginning of the last
+                    seventh of the night and Isha will never be later than the
+                    end of the first seventh of the night. This is recommended
+                    to use for locations above 48° latitude to prevent Salah
+                    times that would be difficult to perform.
+                  </span>
+                </span>
+              </IonRadio>
+            </div>
+            <div
+              onClick={async () => {
+                await updateUserPrefs(
+                  dbConnection,
+                  "highLatitudeRule",
+                  "twilightangle",
+                  setUserPreferences,
+                );
+              }}
+            >
+              <IonRadio
+                mode={isPlatform("ios") ? "ios" : "md"}
+                value="twilightangle"
+                labelPlacement="start"
+                justify="space-between"
+                className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+              >
+                <span>
+                  Twilight angle
+                  <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                    The night is divided into portions of roughly 1/3. The exact
+                    value is derived by dividing the fajr/isha angles by 60.
+                    This can be used to prevent difficult fajr and isha times at
+                    certain locations.
+                  </span>
+                </span>
+              </IonRadio>
+            </div>
           </div>
-
-          <div>
-            <p className="mt-0">Middle Of The Night</p>
-            <p className="text-xs">
-              Fajr will never be earlier than the middle of the night and Isha
-              will never be later than the middle of the night.
-            </p>
-          </div>
-        </div>
-        <div
-          onClick={async () => {
-            await updateUserPrefs(
-              dbConnection,
-              "highLatitudeRule",
-              "seventhofthenight",
-              setUserPreferences,
-            );
-          }}
-          className={`options-wrap  ${
-            userPreferences.highLatitudeRule === "seventhofthenight"
-              ? "border-blue-500"
-              : "border-transparent"
-          }`}
-        >
-          <div className="mr-2">
-            <IonIcon
-              color="primary"
-              className={` ${
-                userPreferences.highLatitudeRule === "seventhofthenight"
-                  ? "opacity-100"
-                  : "opacity-0"
-              }`}
-              icon={checkmarkCircle}
-            />{" "}
-          </div>
-          <div>
-            <p className="mt-0">Seventh Of The Night</p>
-            <p className="text-xs">
-              Fajr will never be earlier than the beginning of the last seventh
-              of the night and Isha will never be later than the end of the
-              first seventh of the night. This is recommended to use for
-              locations above 48° latitude to prevent Salah times that would be
-              difficult to perform.
-            </p>
-          </div>
-        </div>
-        <div
-          onClick={async () => {
-            await updateUserPrefs(
-              dbConnection,
-              "highLatitudeRule",
-              "twilightangle",
-              setUserPreferences,
-            );
-          }}
-          className={`options-wrap ${
-            userPreferences.highLatitudeRule === "twilightangle"
-              ? "border-blue-500"
-              : "border-transparent"
-          }`}
-        >
-          <div className="mr-2">
-            <IonIcon
-              color="primary"
-              className={`${
-                userPreferences.highLatitudeRule === "twilightangle"
-                  ? "opacity-100"
-                  : "opacity-0"
-              }`}
-              icon={checkmarkCircle}
-            />{" "}
-          </div>
-          <div>
-            <p className="mt-0">Twilight Angle</p>
-            <p className="text-xs">
-              The night is divided into portions of roughly 1/3. The exact value
-              is derived by dividing the fajr/isha angles by 60. This can be
-              used to prevent difficult fajr and isha times at certain
-              locations.
-            </p>
-          </div>
-        </div>
+        </IonRadioGroup>
       </section>
       {/* </IonContent> */}
     </IonModal>

@@ -1,8 +1,7 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { userPreferencesType } from "../types/types";
 import { updateUserPrefs } from "../utils/helpers";
-import { checkmarkCircle } from "ionicons/icons";
-import { IonIcon } from "@ionic/react";
+import { IonRadio, IonRadioGroup, isPlatform } from "@ionic/react";
 
 interface MadhabOptionsProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -20,71 +19,62 @@ const MadhabOptions = ({
   // switchToNextPage,
 }: MadhabOptionsProps) => {
   return (
-    <section className="mx-4">
-      <div
-        onClick={async () => {
-          // if (switchToNextPage && onboardingMode) switchToNextPage();
-          await updateUserPrefs(
-            dbConnection,
-            "madhab",
-            "shafi",
-            setUserPreferences,
-          );
-        }}
-        className={`options-wrap ${
-          userPreferences.madhab === "shafi"
-            ? "border-blue-500"
-            : "border-transparent"
-        }`}
-      >
-        <div className="mr-2">
-          <IonIcon
-            color="primary"
-            className={` ${
-              userPreferences.madhab === "shafi" ? "opacity-100" : "opacity-0"
-            }`}
-            icon={checkmarkCircle}
-          />
+    <IonRadioGroup value={userPreferences.madhab}>
+      <section className="divide-y divide-[color:var(--sheet-divider-color)]">
+        <div
+          onClick={async () => {
+            // if (switchToNextPage && onboardingMode) switchToNextPage();
+            await updateUserPrefs(
+              dbConnection,
+              "madhab",
+              "shafi",
+              setUserPreferences,
+            );
+          }}
+        >
+          <IonRadio
+            mode={isPlatform("ios") ? "ios" : "md"}
+            value="shafi"
+            labelPlacement="start"
+            justify="space-between"
+            className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+          >
+            <span>
+              Shafi'i, Maliki & Hanbali
+              <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                Earlier Asr time
+              </span>
+            </span>
+          </IonRadio>
         </div>
-
-        <div>
-          <p className="mt-0">Shafi'i, Maliki & Hanbali</p>
-          <p className="text-xs">Earlier Asr time</p>
+        <div
+          onClick={async () => {
+            // if (switchToNextPage && onboardingMode) switchToNextPage();
+            await updateUserPrefs(
+              dbConnection,
+              "madhab",
+              "hanafi",
+              setUserPreferences,
+            );
+          }}
+        >
+          <IonRadio
+            mode={isPlatform("ios") ? "ios" : "md"}
+            value="hanafi"
+            labelPlacement="start"
+            justify="space-between"
+            className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+          >
+            <span>
+              Hanafi
+              <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                Later Asr time
+              </span>
+            </span>
+          </IonRadio>
         </div>
-      </div>
-
-      <div
-        onClick={async () => {
-          // if (switchToNextPage && onboardingMode) switchToNextPage();
-          await updateUserPrefs(
-            dbConnection,
-            "madhab",
-            "hanafi",
-            setUserPreferences,
-          );
-        }}
-        className={`options-wrap   ${
-          userPreferences.madhab === "hanafi"
-            ? "border-blue-500"
-            : "border-transparent"
-        }`}
-      >
-        <div className="mr-2">
-          <IonIcon
-            color="primary"
-            className={` ${
-              userPreferences.madhab === "hanafi" ? "opacity-100" : "opacity-0"
-            }`}
-            icon={checkmarkCircle}
-          />{" "}
-        </div>
-
-        <div>
-          <p className="mt-0">Hanafi</p>
-          <p className="text-xs">Later Asr time</p>
-        </div>
-      </div>
-    </section>
+      </section>
+    </IonRadioGroup>
   );
 };
 
