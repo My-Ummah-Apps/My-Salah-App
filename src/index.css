@@ -213,16 +213,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-.options-wrap {
-  padding: 0.5rem;
-  margin-bottom: 1.25rem;
-  display: flex;
-  background-color: var(--sheet-option-bg);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 0.5rem;
-}
-
 ion-title {
   /* color: #fff; */
 }

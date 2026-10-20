@@ -1,10 +1,4 @@
-import {
-  IonHeader,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-  isPlatform,
-} from "@ionic/react";
+import { IonModal, isPlatform } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 
@@ -49,17 +43,6 @@ const BottomSheetCalculationMethods = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonHeader>
-        <IonToolbar
-          style={{
-            "--background": "transparent",
-            "--border-width": "0",
-          }}
-        >
-          <IonTitle>Calculation Methods</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
       <CalculationMethodOptions
         dbConnection={dbConnection}
         setSegmentOption={setSegmentOption}
@@ -67,7 +50,12 @@ const BottomSheetCalculationMethods = ({
         setUserPreferences={setUserPreferences}
         userPreferences={userPreferences}
         userLocations={userLocations}
-      />
+      >
+        <h1 className="mb-1 font-bold leading-tight">Calculation method</h1>
+        <p className="mb-5 text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
+          Choose how your daily Salah times are calculated.
+        </p>
+      </CalculationMethodOptions>
     </IonModal>
   );
 };

@@ -1,12 +1,14 @@
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
   IonContent,
-  IonIcon,
   IonLabel,
+  IonRadio,
+  IonRadioGroup,
   IonSegment,
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
+  isPlatform,
 } from "@ionic/react";
 import {
   calculationMethod,
@@ -16,7 +18,6 @@ import {
   userPreferencesType,
 } from "../types/types";
 import { prayerCalculationMethodLabels } from "../utils/constants";
-import { checkmarkCircle } from "ionicons/icons";
 import { setAdhanLibraryDefaults, updateUserPrefs } from "../utils/helpers";
 
 interface CalculationMethodOptionsProps {
@@ -26,6 +27,7 @@ interface CalculationMethodOptionsProps {
   userLocations: LocationsDataObjTypeArr;
   setSegmentOption: React.Dispatch<React.SetStateAction<"manual" | "country">>;
   segmentOption: "manual" | "country";
+  children?: React.ReactNode;
 }
 
 const CalculationMethodOptions = ({
@@ -35,6 +37,7 @@ const CalculationMethodOptions = ({
   userLocations,
   userPreferences,
   setUserPreferences,
+  children,
 }: CalculationMethodOptionsProps) => {
   const countryOptions: countryOptionsType[] = [
     "Canada",
@@ -61,7 +64,7 @@ const CalculationMethodOptions = ({
     {
       calculationMethod: "Dubai",
       description:
-        "Used in the UAE. Slightly earlier Fajr time and slightly later sha time with angles of 18.2° for Fajr and Isha in addition to 3 minute offsets for sunrise, Dhuhr, Asr, and Maghrib.",
+        "Used in the UAE. Slightly earlier Fajr time and slightly later Isha time with angles of 18.2° for Fajr and Isha in addition to 3 minute offsets for sunrise, Dhuhr, Asr, and Maghrib.",
     },
     {
       calculationMethod: "Egyptian",
@@ -81,7 +84,7 @@ const CalculationMethodOptions = ({
     {
       calculationMethod: "MoonsightingCommittee",
       description:
-        "Uses standard 18° angles for Fajr and Isha in addition to easonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude.",
+        "Uses standard 18° angles for Fajr and Isha in addition to seasonal adjustment values. This method automatically applies the 1/7 approximation rule for locations above 55° latitude.",
     },
     {
       calculationMethod: "MuslimWorldLeague",
@@ -139,157 +142,154 @@ const CalculationMethodOptions = ({
   };
 
   return (
-    <IonContent
-      style={{
-        "--background": "var(--card-bg-color)",
-      }}
-    >
-      <div className="mb-10">
-        {" "}
+    <IonContent className="[--background:var(--sheet-bg-color)]">
+      <section
+        className={`px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] ${children ? "pt-8" : ""}`}
+      >
+        {children}
         <IonSegment
-          className="w-4/5 mx-auto"
+          className="stats-period-segment ![--background:var(--sheet-pill-bg)]"
           mode="ios"
           value={segmentOption}
           onIonChange={(e) => {
             setSegmentOption(e.detail.value as "country" | "manual");
           }}
         >
-          <IonSegmentButton value="country">
-            <IonLabel>Based on Country</IonLabel>
+          <IonSegmentButton
+            className="stats-period-segment-button"
+            value="country"
+          >
+            <IonLabel>By country</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton value="manual">
-            <IonLabel>Manual</IonLabel>
+          <IonSegmentButton
+            className="stats-period-segment-button"
+            value="manual"
+          >
+            <IonLabel>Choose method</IonLabel>
           </IonSegmentButton>
         </IonSegment>
-      </div>
-      {segmentOption === "country" && (
-        <section className="mx-4">
-          <IonSelect
-            style={{ "--ion-text-color": "white" }}
-            placeholder="Select Country"
-            value={userPreferences.country || undefined}
-            label="Select Country"
-            onIonChange={async (e) => {
-              const selectedCountry: countryOptionsType = e.detail.value;
+        {segmentOption === "country" && (
+          <section className="mt-6">
+            <div className="sheet-group px-4">
+              <IonSelect
+                placeholder="Select country"
+                value={userPreferences.country || undefined}
+                label="Country"
+                onIonChange={async (e) => {
+                  const selectedCountry: countryOptionsType = e.detail.value;
 
-              const method = countryToMethod[selectedCountry];
+                  const method = countryToMethod[selectedCountry];
 
-              if (!method) {
-                console.error("No option selected");
-                return;
-              }
+                  if (!method) {
+                    console.error("No option selected");
+                    return;
+                  }
 
-              await setAdhanLibraryDefaults(
-                dbConnection,
-                method,
-                setUserPreferences,
-                userPreferences,
-                userLocations,
-              );
-              // await updateUserPrefs(
-              //   dbConnection,
-              //   "prayerCalculationMethod",
-              //   countryToMethod[selectedCountry],
-              //   setUserPreferences,
-              // );
-              await updateUserPrefs(
-                dbConnection,
-                "country",
-                selectedCountry,
-                setUserPreferences,
-              );
-            }}
-          >
-            {countryOptions.map((country) => (
-              <IonSelectOption
-                // style={{ color: "red" }}
-                key={country}
-                value={country}
+                  await setAdhanLibraryDefaults(
+                    dbConnection,
+                    method,
+                    setUserPreferences,
+                    userPreferences,
+                    userLocations,
+                  );
+                  // await updateUserPrefs(
+                  //   dbConnection,
+                  //   "prayerCalculationMethod",
+                  //   countryToMethod[selectedCountry],
+                  //   setUserPreferences,
+                  // );
+                  await updateUserPrefs(
+                    dbConnection,
+                    "country",
+                    selectedCountry,
+                    setUserPreferences,
+                  );
+                }}
               >
-                {country}
-              </IonSelectOption>
-            ))}
-          </IonSelect>
-          {userPreferences.country !== "" && (
-            <div>
-              <p>
-                <span className="font-bold">Using: </span>
-                <span className="text-blue-500">
+                {countryOptions.map((country) => (
+                  <IonSelectOption
+                    // style={{ color: "red" }}
+                    key={country}
+                    value={country}
+                  >
+                    {country}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </div>
+            {userPreferences.country !== "" && (
+              <div className="mt-4 rounded-2xl border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] p-4">
+                <p className="text-sm font-semibold text-[var(--secondary-text-color)]">
+                  Calculation method
+                </p>
+                <p className="mt-1 text-[1.0625rem] font-semibold leading-snug">
                   {
                     prayerCalculationMethodLabels[
                       userPreferences.prayerCalculationMethod
                     ]
                   }
-                </span>
-              </p>
-              <p className="mt-2 text-sm text-[var(--ion-text-color)] opacity-50">
-                {userPreferences.country === "Not listed"
-                  ? "Muslim World League (MWL) has been set as the default method because your country is not listed."
-                  : "This calculation method has been applied based on your selected country."}{" "}
-                If times differ from your local mosque, please confirm the
-                correct settings with a local imam.
-              </p>
-            </div>
-          )}
-        </section>
-      )}
-      {segmentOption === "manual" && (
-        <section className="px-4 mb-[15rem]">
-          {calculationMethodsDetails.map((item, i) => {
-            return (
-              <div
-                key={`${item}${i}`}
-                onClick={async () => {
-                  if (
-                    userPreferences.prayerCalculationMethod ===
-                    item.calculationMethod
-                  ) {
-                    return;
-                  }
-                  await setAdhanLibraryDefaults(
-                    dbConnection,
-                    item.calculationMethod,
-                    setUserPreferences,
-                    userPreferences,
-                    userLocations,
-                  );
-                  await updateUserPrefs(
-                    dbConnection,
-                    "country",
-                    "",
-                    setUserPreferences,
-                  );
-                }}
-                className={`options-wrap  ${
-                  userPreferences.prayerCalculationMethod ===
-                  item.calculationMethod
-                    ? "border-blue-500"
-                    : "border-transparent"
-                }`}
-              >
-                <div className="mr-2">
-                  <IonIcon
-                    color="primary"
-                    className={` ${
-                      userPreferences.prayerCalculationMethod ===
-                      item.calculationMethod
-                        ? "opacity-100"
-                        : "opacity-0"
-                    }`}
-                    icon={checkmarkCircle}
-                  />
-                </div>
-                <div>
-                  <p className="mt-0 font-bold text-md">
-                    {prayerCalculationMethodLabels[item.calculationMethod]}
-                  </p>
-                  <p className="text-xs">{item.description}</p>
-                </div>
+                </p>
+                <p className="mt-2 text-sm leading-snug text-[var(--secondary-text-color)]">
+                  {userPreferences.country === "Not listed"
+                    ? "Muslim World League (MWL) has been set as the default method because your country is not listed."
+                    : `Selected for ${userPreferences.country}.`}{" "}
+                  If times differ from your local mosque, please confirm the
+                  correct settings with a local imam.
+                </p>
               </div>
-            );
-          })}
-        </section>
-      )}
+            )}
+          </section>
+        )}
+        {segmentOption === "manual" && (
+          <IonRadioGroup value={userPreferences.prayerCalculationMethod}>
+            <section className="mt-4 mb-[15rem] divide-y divide-[color:var(--sheet-divider-color)]">
+              {calculationMethodsDetails.map((item, i) => {
+                return (
+                  <div
+                    key={`${item}${i}`}
+                    onClick={async () => {
+                      if (
+                        userPreferences.prayerCalculationMethod ===
+                        item.calculationMethod
+                      ) {
+                        return;
+                      }
+                      await setAdhanLibraryDefaults(
+                        dbConnection,
+                        item.calculationMethod,
+                        setUserPreferences,
+                        userPreferences,
+                        userLocations,
+                      );
+                      await updateUserPrefs(
+                        dbConnection,
+                        "country",
+                        "",
+                        setUserPreferences,
+                      );
+                    }}
+                  >
+                    <IonRadio
+                      mode={isPlatform("ios") ? "ios" : "md"}
+                      value={item.calculationMethod}
+                      labelPlacement="start"
+                      justify="space-between"
+                      className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+                    >
+                      <span>
+                        {prayerCalculationMethodLabels[item.calculationMethod]}
+                        <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                          {item.description}
+                        </span>
+                      </span>
+                    </IonRadio>
+                  </div>
+                );
+              })}
+            </section>
+          </IonRadioGroup>
+        )}
+      </section>
     </IonContent>
   );
 };

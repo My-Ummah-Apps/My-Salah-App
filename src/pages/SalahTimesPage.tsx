@@ -319,16 +319,6 @@ const SalahTimesPage = ({
                 initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
                 breakpoints={MODAL_BREAKPOINTS}
               >
-                <IonHeader>
-                  <IonToolbar
-                    style={{
-                      "--background": "transparent",
-                    }}
-                  >
-                    <IonTitle>Calculation Methods</IonTitle>
-                  </IonToolbar>
-                </IonHeader>
-
                 <CalculationMethodOptions
                   dbConnection={dbConnection}
                   setSegmentOption={setSegmentOption}
@@ -336,7 +326,14 @@ const SalahTimesPage = ({
                   setUserPreferences={setUserPreferences}
                   userPreferences={userPreferences}
                   userLocations={userLocations}
-                />
+                >
+                  <h1 className="mb-1 font-bold leading-tight">
+                    Calculation method
+                  </h1>
+                  <p className="mb-5 text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
+                    Choose how your daily Salah times are calculated.
+                  </p>
+                </CalculationMethodOptions>
               </IonModal>
 
               <Onboarding
