@@ -1,13 +1,10 @@
 import {
   IonContent,
-  IonHeader,
   IonModal,
   IonButton,
-  IonTitle,
-  IonToolbar,
-  IonFab,
-  IonFabButton,
   IonIcon,
+  IonRadio,
+  IonRadioGroup,
   isPlatform,
 } from "@ionic/react";
 
@@ -16,7 +13,6 @@ import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { add, trashOutline } from "ionicons/icons";
 import { useState } from "react";
 
-import { MdCheck } from "react-icons/md";
 import {
   LocationsDataObjTypeArr,
   salahTimesObjType,
@@ -130,92 +126,91 @@ const BottomSheetLocationsList = ({
       breakpoints={MODAL_BREAKPOINTS}
     >
       {/* <IonPage> */}
-      <IonHeader>
-        <IonToolbar
-          style={{
-            "--background": "transparent",
-            "--border-width": "0",
-          }}
-        >
-          <IonTitle>Locations</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent style={{ "--background": "var(--card-bg-color)" }}>
-        <ul>
-          {userLocations?.map((location) => (
-            <li
-              key={location.id}
-              className="flex items-center justify-between mx-4 bg-[var(--card-bg-color)] border-b border-[var(--app-border-color)]"
-              onClick={async () => {
-                try {
-                  await toggleDBConnection(dbConnection, "open");
+      <IonContent className="[--background:var(--sheet-bg-color)]">
+        <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+          <h1 className="mb-1 font-bold leading-tight">Locations</h1>
+          <p className="text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
+            Choose the location used for Salah times.
+          </p>
+          <IonRadioGroup
+            value={
+              userLocations?.find((location) => location.isSelected === 1)?.id
+            }
+          >
+            <ul className="mt-5 divide-y divide-[color:var(--sheet-divider-color)]">
+              {userLocations?.map((location) => (
+                <li
+                  key={location.id}
+                  className="flex items-center"
+                  onClick={async () => {
+                    try {
+                      await toggleDBConnection(dbConnection, "open");
 
-                  await updateActiveLocation(location.id);
+                      await updateActiveLocation(location.id);
 
-                  const { allLocations } =
-                    await fetchAllLocations(dbConnection);
+                      const { allLocations } =
+                        await fetchAllLocations(dbConnection);
 
-                  setUserLocations(allLocations);
-                } catch (error) {
-                  console.error(error);
-                } finally {
-                  // await toggleDBConnection(dbConnection, "close");
+                      setUserLocations(allLocations);
+                    } catch (error) {
+                      console.error(error);
+                    } finally {
+                      // await toggleDBConnection(dbConnection, "close");
 
-                  await setAdhanLibraryDefaults(
-                    dbConnection,
-                    userPreferences.prayerCalculationMethod ||
-                      "MuslimWorldLeague",
-                    setUserPreferences,
-                    userPreferences,
-                    userLocations,
-                  );
-                }
-              }}
-            >
-              <div className="flex items-center">
-                <MdCheck
-                  className={`mx-2
-                    ${location.isSelected === 1 ? "opacity-100" : "opacity-0"}
-                 `}
-                />
-                <p>{location.locationName}</p>
-              </div>
+                      await setAdhanLibraryDefaults(
+                        dbConnection,
+                        userPreferences.prayerCalculationMethod ||
+                          "MuslimWorldLeague",
+                        setUserPreferences,
+                        userPreferences,
+                        userLocations,
+                      );
+                    }
+                  }}
+                >
+                  <IonRadio
+                    mode={isPlatform("ios") ? "ios" : "md"}
+                    value={location.id}
+                    labelPlacement="end"
+                    justify="start"
+                    className="pointer-events-none min-w-0 flex-1 py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+                  >
+                    {location.locationName}
+                  </IonRadio>
 
-              <IonButton
-                className="text-[var(--ion-text-color)]"
-                fill="clear"
-                size="small"
-                aria-label="delete location"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLocationToDeleteId(location.id);
-                  setShowDeleteLocationActionSheet(true);
-                }}
-              >
-                <IonIcon
-                  data-testid="delete-location-btn"
-                  icon={trashOutline}
-                ></IonIcon>
-              </IonButton>
-            </li>
-          ))}
-        </ul>
-        <IonFab
-          onClick={() => {
-            setShowAddLocationSheet(true);
-          }}
-          slot="fixed"
-          vertical="bottom"
-          horizontal="end"
-          data-testid="add-location-btn"
-        >
-          <IonFabButton
+                  <IonButton
+                    className="-mr-3 text-[var(--ion-text-color)]"
+                    fill="clear"
+                    size="small"
+                    aria-label="delete location"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLocationToDeleteId(location.id);
+                      setShowDeleteLocationActionSheet(true);
+                    }}
+                  >
+                    <IonIcon
+                      data-testid="delete-location-btn"
+                      icon={trashOutline}
+                    ></IonIcon>
+                  </IonButton>
+                </li>
+              ))}
+            </ul>
+          </IonRadioGroup>
+          <button
             id="open-location-settings-sheet"
             aria-label="add location"
+            data-testid="add-location-btn"
+            className="mt-4 flex items-center gap-2 py-2 font-semibold text-[var(--ion-color-primary)]"
+            onClick={() => {
+              setShowAddLocationSheet(true);
+            }}
           >
-            <IonIcon icon={add}></IonIcon>
-          </IonFabButton>
-        </IonFab>
+            <IonIcon className="text-2xl" icon={add} />
+            Add location
+          </button>
+        </section>
       </IonContent>
       {/* </IonPage> */}
 
