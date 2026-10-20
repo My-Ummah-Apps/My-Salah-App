@@ -457,7 +457,7 @@ const AddLocationOptions = ({
               />
               Back
             </IonButton>
-            <h2 className="mb-0 mt-2 text-[1.875rem] font-semibold leading-tight">
+            <h2 className="mb-0 mt-2 text-[1.625rem] font-bold leading-tight">
               {formTitle}
             </h2>
             {formSubtitle && (
@@ -660,7 +660,7 @@ const AddLocationOptions = ({
             className={onboardingMode ? "" : "pt-11"}
           >
             {!onboardingMode && (
-              <h2 className="mb-1 mt-0 text-[1.875rem] font-semibold leading-tight">
+              <h2 className="mb-1 mt-0 text-[1.625rem] font-bold leading-tight">
                 Add location
               </h2>
             )}
