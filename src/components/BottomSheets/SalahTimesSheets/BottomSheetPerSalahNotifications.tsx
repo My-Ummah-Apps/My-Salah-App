@@ -1,10 +1,4 @@
-import {
-  IonHeader,
-  IonIcon,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonModal, IonRadio, IonRadioGroup, isPlatform } from "@ionic/react";
 
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import {
@@ -19,12 +13,6 @@ import {
   upperCaseFirstLetter,
 } from "../../../utils/helpers";
 
-import {
-  checkmarkCircle,
-  megaphone,
-  notifications,
-  notificationsOff,
-} from "ionicons/icons";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
@@ -64,170 +52,130 @@ const BottomSheetPerSalahNotifications = ({
       }}
       // style={{ "--height": "80vh" }}
     >
-      <IonHeader className="ion-no-border">
-        <IonToolbar
-          style={{
-            "--background": "transparent",
-          }}
-        >
-          <IonTitle>
-            {upperCaseFirstLetter(selectedSalah)} Notifications
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
       {/* <IonContent > */}
-      <section className="px-4">
-        <div
-          onClick={async () => {
-            await updateUserPrefs(dbConnection, key, "off", setUserPreferences);
-            await cancelNotifications(selectedSalah);
-          }}
-          className={`options-wrap justify-between ${
-            userPreferences[key as keyof userPreferencesType] === "off"
-              ? "border-blue-500"
-              : "border-transparent"
-          }`}
+      <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <h1 className="mb-4 font-bold leading-tight">
+          {upperCaseFirstLetter(selectedSalah)} Notifications
+        </h1>
+        <IonRadioGroup
+          value={userPreferences[key as keyof userPreferencesType]}
         >
-          <div className="flex">
-            <div className="mr-2">
-              <IonIcon
-                color="primary"
-                className={` ${
-                  userPreferences[key as keyof userPreferencesType] === "off"
-                    ? "opacity-100"
-                    : "opacity-0"
-                }`}
-                icon={checkmarkCircle}
-              />
-            </div>
-            <div>
-              <p className="mt-0">Silent</p>
-              <p className="text-xs">No notifications will be sent.</p>
-            </div>
-          </div>
-          <div
-            // className="flex items-center mr-4"
-            className="flex items-center "
-          >
-            <IonIcon icon={notificationsOff} />
-          </div>
-        </div>
-        <div
-          onClick={async () => {
-            if (!userLocations) {
-              console.error("userLocations is undefined");
-              return;
-            }
-
-            await cancelNotifications(selectedSalah);
-
-            await updateUserPrefs(dbConnection, key, "on", setUserPreferences);
-
-            await scheduleSalahNotifications(
-              userLocations,
-              selectedSalah,
-              userPreferences,
-              "on",
-            );
-
-            // await handleBatteryOptimisation();
-          }}
-          className={`options-wrap justify-between  ${
-            userPreferences[key as keyof userPreferencesType] === "on"
-              ? "border-blue-500"
-              : "border-transparent"
-          }`}
-        >
-          <div className="flex">
-            <div className="mr-2">
-              <IonIcon
-                color="primary"
-                className={` ${
-                  userPreferences[key as keyof userPreferencesType] === "on"
-                    ? "opacity-100"
-                    : "opacity-0"
-                }`}
-                icon={checkmarkCircle}
-              />
-            </div>
-            <div>
-              <p className="mt-0">On</p>
-              <p className="text-xs">
-                Banner notification only with default system sound.
-              </p>
-            </div>
-          </div>
-          <div
-            // className="flex items-center mr-4"
-            className="flex items-center "
-          >
-            <IonIcon icon={notifications} />
-          </div>
-        </div>
-        {selectedSalah !== "sunrise" && (
-          <div
-            onClick={async () => {
-              if (!userLocations) {
-                console.error("userLocations is undefined");
-                return;
-              }
-
-              await cancelNotifications(selectedSalah);
-
-              await updateUserPrefs(
-                dbConnection,
-                key,
-                "adhan",
-                setUserPreferences,
-              );
-
-              await scheduleSalahNotifications(
-                userLocations,
-                selectedSalah,
-                userPreferences,
-                "adhan",
-              );
-
-              // await handleBatteryOptimisation();
-            }}
-            className={`options-wrap justify-between ${
-              userPreferences[key as keyof userPreferencesType] === "adhan"
-                ? "border-blue-500"
-                : "border-transparent"
-            }`}
-          >
-            <div className="flex">
-              <div className="mr-2">
-                <IonIcon
-                  color="primary"
-                  className={` ${
-                    userPreferences[key as keyof userPreferencesType] ===
-                    "adhan"
-                      ? "opacity-100"
-                      : "opacity-0"
-                  }`}
-                  icon={checkmarkCircle}
-                />
-              </div>
-              <div>
-                <p className="mt-0">Adhan</p>
-                <p className="text-xs">
-                  Adhan by Mishary Rashid Al-Afasy + banner notification
-                </p>
-              </div>
+          <div className="divide-y divide-[color:var(--sheet-divider-color)]">
+            <div
+              onClick={async () => {
+                await updateUserPrefs(
+                  dbConnection,
+                  key,
+                  "off",
+                  setUserPreferences,
+                );
+                await cancelNotifications(selectedSalah);
+              }}
+            >
+              <IonRadio
+                mode={isPlatform("ios") ? "ios" : "md"}
+                value="off"
+                labelPlacement="start"
+                justify="space-between"
+                className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+              >
+                <span>
+                  Silent
+                  <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                    No notifications
+                  </span>
+                </span>
+              </IonRadio>
             </div>
             <div
-              // className="flex items-center mr-4"
-              className="flex items-center "
+              onClick={async () => {
+                if (!userLocations) {
+                  console.error("userLocations is undefined");
+                  return;
+                }
+
+                await cancelNotifications(selectedSalah);
+
+                await updateUserPrefs(
+                  dbConnection,
+                  key,
+                  "on",
+                  setUserPreferences,
+                );
+
+                await scheduleSalahNotifications(
+                  userLocations,
+                  selectedSalah,
+                  userPreferences,
+                  "on",
+                );
+
+                // await handleBatteryOptimisation();
+              }}
             >
-              <IonIcon icon={megaphone} />
+              <IonRadio
+                mode={isPlatform("ios") ? "ios" : "md"}
+                value="on"
+                labelPlacement="start"
+                justify="space-between"
+                className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+              >
+                <span>
+                  On
+                  <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                    Banner with system sound
+                  </span>
+                </span>
+              </IonRadio>
             </div>
+            {selectedSalah !== "sunrise" && (
+              <div
+                onClick={async () => {
+                  if (!userLocations) {
+                    console.error("userLocations is undefined");
+                    return;
+                  }
+
+                  await cancelNotifications(selectedSalah);
+
+                  await updateUserPrefs(
+                    dbConnection,
+                    key,
+                    "adhan",
+                    setUserPreferences,
+                  );
+
+                  await scheduleSalahNotifications(
+                    userLocations,
+                    selectedSalah,
+                    userPreferences,
+                    "adhan",
+                  );
+
+                  // await handleBatteryOptimisation();
+                }}
+              >
+                <IonRadio
+                  mode={isPlatform("ios") ? "ios" : "md"}
+                  value="adhan"
+                  labelPlacement="start"
+                  justify="space-between"
+                  className="pointer-events-none w-full py-3.5 text-base font-semibold leading-snug [--color:var(--secondary-text-color)] [&::part(label)]:whitespace-normal"
+                >
+                  <span>
+                    Adhan
+                    <span className="mt-1 block text-sm font-normal leading-snug text-[var(--secondary-text-color)]">
+                      Adhan by Mishary Rashid Al-Afasy, with banner
+                    </span>
+                  </span>
+                </IonRadio>
+              </div>
+            )}
           </div>
-        )}
+        </IonRadioGroup>
         {Capacitor.getPlatform() === "ios" && (
-          <p className="mb-10 text-xs text-center opacity-50">
-            Please note: Due to iOS limitations, adhan will only play for 30
-            seconds
+          <p className="mt-4 text-sm leading-snug text-[var(--secondary-text-color)]">
+            On iPhone, the adhan only plays for up to 30 seconds.
           </p>
         )}
       </section>
