@@ -61,7 +61,7 @@ const BottomSheetStartDate = ({
       return;
     }
     showToast(
-      `Start date changed to ${createLocalisedDate(selectedStartDate!)[1]}`,
+      `Start date changed to ${format(parseISO(selectedStartDate!), "do MMMM yyyy")}`,
       "short",
     );
     await fetchDataFromDB();
