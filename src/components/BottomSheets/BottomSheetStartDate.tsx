@@ -7,7 +7,7 @@ import {
 } from "../../utils/helpers";
 import { userPreferencesType } from "../../types/types";
 import { useRef, useState } from "react";
-import { isAfter, isBefore, parseISO, startOfDay } from "date-fns";
+import { format, isAfter, isBefore, parseISO, startOfDay } from "date-fns";
 import { IonButton, IonIcon, IonModal } from "@ionic/react";
 import { calendarOutline } from "ionicons/icons";
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
@@ -85,9 +85,9 @@ const BottomSheetStartDate = ({
         <p className="mb-2 font-semibold">Current start date</p>
         <p className="rounded-xl bg-[var(--sheet-pill-bg)] px-4 py-3 text-[var(--secondary-text-color)]">
           {/* {createLocalisedDate(userPreferences.userStartDate)[1]} */}
-          {createLocalisedDate(currentStartDate)[1]}
+          {format(parseISO(currentStartDate), "do MMMM yyyy")}
         </p>
-        <p className="mb-2 mt-5 font-semibold">New start date</p>
+        <p className="mt-5 mb-2 font-semibold">New start date</p>
         <div className="relative rounded-xl border border-[color:var(--sheet-input-border-color)] bg-[var(--sheet-bg-color)]">
           <input
             className="h-12 w-full appearance-none rounded-xl bg-transparent px-4 text-[var(--ion-text-color)] [color-scheme:var(--input-color-scheme)] [&::-webkit-calendar-picker-indicator]:hidden"
@@ -111,8 +111,8 @@ const BottomSheetStartDate = ({
           />
         </div>
         <p className="mt-2 text-sm leading-snug text-[var(--secondary-text-color)]">
-          Moving it earlier adds older days to log. Moving it later hides the
-          days before it, but nothing is deleted.
+          Your Salah history starts from this date. Changing it never deletes
+          any entries.
         </p>
         <IonButton
           expand="block"
