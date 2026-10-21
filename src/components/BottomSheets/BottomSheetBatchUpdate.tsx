@@ -38,8 +38,7 @@ import {
   showToast,
   upperCaseFirstLetter,
 } from "../../utils/helpers";
-import { alertCircleOutline, calendarClearOutline } from "ionicons/icons";
-import { MdOutlineChevronRight } from "react-icons/md";
+import { calendarOutline } from "ionicons/icons";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -209,116 +208,120 @@ const BottomSheetBatchUpdate = ({
       initialBreakpoint={INITIAL_MODAL_BREAKPOINT}
       breakpoints={MODAL_BREAKPOINTS}
     >
-      <IonContent>
-        <section
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-          className="mx-4"
-        >
-          <div className="mt-10 mb-4">
+      <IonContent className="[--background:var(--sheet-bg-color)]">
+        <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+          <h1 className="mb-1 font-bold leading-tight">Bulk update Salah</h1>
+          <p className="text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
+            Apply one status across selected dates and Salah.
+          </p>
+          <div className="mt-6 mb-4">
             <div className="">
-              <div className="flex justify-between gap-4">
-                <div className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
-                  <div className="mr-2">
-                    {" "}
-                    <IonIcon icon={calendarClearOutline} />
-                  </div>
-                  <div className="flex items-center justify-between w-full">
-                    <div className="text-left">
-                      <p className="text-sm opacity-60">From</p>
-                      <p className="text-xs">
-                        {batchUpdateObj.fromDate !== ""
-                          ? createLocalisedDate(batchUpdateObj.fromDate)[1]
-                          : "Select start date"}
-                      </p>
-                    </div>
-                    <div>
-                      <MdOutlineChevronRight />
-                    </div>
-                  </div>
-                  <input
-                    className="absolute opacity-0 inset-0 w-full h-full text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-                    placeholder="&#x1F5D3;"
-                    onKeyDown={(e) => {
-                      e.preventDefault();
-                    }}
-                    onChange={(e) => {
-                      setBatchUpdateObj((prev) => ({
-                        ...prev,
-                        fromDate: e.target.value,
-                      }));
-                    }}
-                    type="date"
-                    dir="auto"
-                    name="start-date-picker"
-                    min={userPreferences.userStartDate}
-                    max={new Date().toISOString().split("T")[0]}
-                  ></input>
-                </div>
-                <div className="relative flex p-2 rounded-2xl items-center border border-[var(--app-border-color)] w-full">
-                  <div className="mr-2">
-                    {" "}
-                    <IonIcon icon={calendarClearOutline} />
-                  </div>
-                  <div className="flex items-center justify-between w-full">
-                    <div className="text-left">
-                      <p className="text-sm opacity-60">To</p>
-                      <p className="text-xs">
-                        {" "}
-                        {/* {batchUpdateObj.toDate || "Select end date"} */}
-                        {batchUpdateObj.toDate !== ""
-                          ? createLocalisedDate(batchUpdateObj.toDate)[1]
-                          : "Select end date"}
-                      </p>
-                    </div>
-                    <div>
-                      <MdOutlineChevronRight />
-                    </div>
-                  </div>
-                  <input
-                    className="absolute opacity-0 inset-0 w-full h-full text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)] rounded-[0.3rem] border-none [color-scheme:dark] p-[0.3rem]"
-                    placeholder="&#x1F5D3;"
-                    onKeyDown={(e) => {
-                      e.preventDefault();
-                    }}
-                    onChange={(e) => {
-                      setBatchUpdateObj((prev) => ({
-                        ...prev,
-                        toDate: e.target.value,
-                      }));
-                    }}
-                    // ref={datePickerRef}
-                    type="date"
-                    dir="auto"
-                    name="start-date-picker"
-                    min={userPreferences.userStartDate}
-                    max={new Date().toISOString().split("T")[0]}
-                  ></input>
-                </div>
-              </div>
-
-              <div className="flex items-center my-5 border border-[var(--app-border-color)] p-3 rounded-2xl">
-                {/* <p className="mr-2"> */}{" "}
-                <IonIcon className="mr-2 text-2xl" icon={alertCircleOutline} />
-                {/* </p> */}
-                <div className="text-xs">
-                  <p className="opacity-80">
-                    Your earliest selectable date is{" "}
-                    {createLocalisedDate(userPreferences.userStartDate)[1]}
+              <p className="mb-3 font-semibold">Date range</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="mb-1.5 text-sm text-[var(--secondary-text-color)]">
+                    From
                   </p>
-                  <p className="opacity-70">
-                    Need earlier dates?{" "}
+                  <div className="relative flex h-12 items-center justify-between gap-1.5 rounded-xl border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] px-3.5 text-[0.9375rem]">
                     <span
-                      className="text-blue-700 underline"
-                      onClick={() => {
-                        setShowStartDateSheet(true);
-                      }}
+                      className={
+                        batchUpdateObj.fromDate !== ""
+                          ? ""
+                          : "text-[var(--secondary-text-color)]"
+                      }
                     >
-                      {" "}
-                      Change start date.{" "}
+                      {batchUpdateObj.fromDate !== ""
+                        ? format(
+                            parseISO(batchUpdateObj.fromDate),
+                            "do MMM yyyy",
+                          )
+                        : "Select date"}
                     </span>
+                    <IonIcon
+                      aria-hidden="true"
+                      icon={calendarOutline}
+                      className="shrink-0 text-lg text-[var(--secondary-text-color)] max-[359px]:hidden"
+                    />
+                    <input
+                      className="absolute inset-0 h-full w-full opacity-0 [color-scheme:var(--input-color-scheme)]"
+                      onKeyDown={(e) => {
+                        e.preventDefault();
+                      }}
+                      onChange={(e) => {
+                        setBatchUpdateObj((prev) => ({
+                          ...prev,
+                          fromDate: e.target.value,
+                        }));
+                      }}
+                      type="date"
+                      dir="auto"
+                      name="start-date-picker"
+                      min={userPreferences.userStartDate}
+                      max={new Date().toISOString().split("T")[0]}
+                    ></input>
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-1.5 text-sm text-[var(--secondary-text-color)]">
+                    To
                   </p>
+                  <div className="relative flex h-12 items-center justify-between gap-1.5 rounded-xl border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] px-3.5 text-[0.9375rem]">
+                    <span
+                      className={
+                        batchUpdateObj.toDate !== ""
+                          ? ""
+                          : "text-[var(--secondary-text-color)]"
+                      }
+                    >
+                      {/* {batchUpdateObj.toDate || "Select end date"} */}
+                      {batchUpdateObj.toDate !== ""
+                        ? format(parseISO(batchUpdateObj.toDate), "do MMM yyyy")
+                        : "Select date"}
+                    </span>
+                    <IonIcon
+                      aria-hidden="true"
+                      icon={calendarOutline}
+                      className="shrink-0 text-lg text-[var(--secondary-text-color)] max-[359px]:hidden"
+                    />
+                    <input
+                      className="absolute inset-0 h-full w-full opacity-0 [color-scheme:var(--input-color-scheme)]"
+                      onKeyDown={(e) => {
+                        e.preventDefault();
+                      }}
+                      onChange={(e) => {
+                        setBatchUpdateObj((prev) => ({
+                          ...prev,
+                          toDate: e.target.value,
+                        }));
+                      }}
+                      // ref={datePickerRef}
+                      type="date"
+                      dir="auto"
+                      name="start-date-picker"
+                      min={userPreferences.userStartDate}
+                      max={new Date().toISOString().split("T")[0]}
+                    ></input>
+                  </div>
                 </div>
               </div>
+              {/* <p className="mr-2"> */}
+              {/* </p> */}
+              <p className="mt-2 text-sm leading-snug text-[var(--secondary-text-color)]">
+                Your earliest selectable date is{" "}
+                {format(
+                  parseISO(userPreferences.userStartDate),
+                  "do MMMM yyyy",
+                )}
+                . Need earlier dates?{" "}
+                <button
+                  className="text-[var(--current-salah-color)]"
+                  onClick={() => {
+                    setShowStartDateSheet(true);
+                  }}
+                >
+                  Change start date.
+                </button>
+              </p>
 
               {/* <div className="flex items-center mb-10 border border-[var(--app-border-color)] p-3 rounded-2xl">
                 <p className="mr-4">

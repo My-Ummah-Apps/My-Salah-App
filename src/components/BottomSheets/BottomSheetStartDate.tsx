@@ -88,7 +88,7 @@ const BottomSheetStartDate = ({
           {format(parseISO(currentStartDate), "do MMMM yyyy")}
         </p>
         <p className="mt-5 mb-2 font-semibold">New start date</p>
-        <div className="relative rounded-xl border border-[color:var(--sheet-input-border-color)] bg-[var(--sheet-bg-color)]">
+        <div className="relative rounded-xl border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)]">
           <input
             className="h-12 w-full appearance-none rounded-xl bg-transparent px-4 text-[var(--ion-text-color)] [color-scheme:var(--input-color-scheme)] [&::-webkit-calendar-picker-indicator]:hidden"
             onKeyDown={(e) => {
