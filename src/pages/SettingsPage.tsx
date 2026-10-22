@@ -22,6 +22,7 @@ import {
   //  pageTransitionStyles,
   showToast,
   showAlert,
+  upperCaseFirstLetter,
 } from "../utils/helpers";
 import BottomSheetStartDate from "../components/BottomSheets/BottomSheetStartDate";
 import BottomSheetEditReasons from "../components/BottomSheets/BottomSheetEditReasons";
@@ -274,34 +275,47 @@ const SettingsPage = ({
           className={`settings-page-wrap`}
         >
           <div className="settings-page-options-wrap">
-            <div
-              className={`flex items-center justify-between individual-setting-wrap bg-[var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
-              id="open-notification-options-sheet"
-            >
-              <div className="mx-2">
-                <p className="pt-[0.3rem] pb-[0.1rem] text-lg">Notifications</p>
-                <p className="pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-                  Toggle Notifications
-                </p>
+            <p className="mb-0.5 ml-3 text-xs font-semibold uppercase leading-4 tracking-wide text-[var(--secondary-text-color)]">
+              Preferences
+            </p>
+            <div className="rounded-lg bg-[var(--card-bg-color)]">
+              <div
+                className="group pl-[1.125rem]"
+                id="open-notification-options-sheet"
+              >
+                <div className="flex items-center justify-between gap-3 border-t border-[color:var(--sheet-divider-color)] py-3 pr-[1.125rem] group-first:border-t-0">
+                  <div>
+                    <p className="text-base font-medium leading-snug">
+                      Notifications
+                    </p>
+                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-[var(--secondary-text-color)]">
+                      Daily reminder and Salah alerts
+                    </p>
+                  </div>
+                  <MdOutlineChevronRight
+                    aria-hidden="true"
+                    className="shrink-0 text-xl text-[var(--secondary-text-color)]"
+                  />
+                </div>
+                <BottomSheetNotifications
+                  dbConnection={dbConnection}
+                  triggerId="open-notification-options-sheet"
+                  isAppActive={isAppActive}
+                  setUserPreferences={setUserPreferences}
+                  userPreferences={userPreferences}
+                  userLocations={userLocations}
+                />
               </div>
-              <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
-              <BottomSheetNotifications
-                dbConnection={dbConnection}
-                triggerId="open-notification-options-sheet"
-                isAppActive={isAppActive}
-                setUserPreferences={setUserPreferences}
-                userPreferences={userPreferences}
-                userLocations={userLocations}
-              />
-            </div>{" "}
-            <div className="my-5 rounded-md">
               <SettingIndividual
                 id="open-theme-options-sheet"
                 headingText={"Theme"}
-                subText={`Change theme`}
+                subText={upperCaseFirstLetter(userPreferences.theme)}
               />
             </div>
-            <div className="my-5 rounded-md">
+            <p className="mb-0.5 ml-3 mt-4 text-xs font-semibold uppercase leading-4 tracking-wide text-[var(--secondary-text-color)]">
+              Salah
+            </p>
+            <div className="rounded-lg bg-[var(--card-bg-color)]">
               <SettingIndividual
                 onClick={() => {
                   if (userLocations.length === 0) {
@@ -314,7 +328,7 @@ const SettingsPage = ({
                   setShowSalahTimesSettingsSheet(true);
                 }}
                 headingText={"Salah Times Settings"}
-                subText={`Adjust how Salah times are calculated for your location`}
+                subText={`Calculation method, adjustments`}
               />
               <BottomSheetSalahTimesSettings
                 setShowSalahTimesSettingsSheet={setShowSalahTimesSettingsSheet}
@@ -324,40 +338,36 @@ const SettingsPage = ({
                 userPreferences={userPreferences}
                 userLocations={userLocations}
               />
-            </div>
-            <BottomSheetThemeOptions
-              dbConnection={dbConnection}
-              triggerId={"open-theme-options-sheet"}
-              setUserPreferences={setUserPreferences}
-              userPreferencesTheme={userPreferences.theme}
-              handleTheme={handleTheme}
-            />
-            <div
-              className={`flex items-center justify-between individual-setting-wrap bg-[var(--card-bg-color)] mx-auto py-3 px-1 mb-5 rounded-md`}
-            >
-              <div className="mx-2">
-                <p className="pt-[0.3rem] pb-[0.1rem] text-lg">
-                  {"Missed Salah Counter"}
-                </p>
-                <p className=" pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-                  {"Display missed salah counter (when applicable) on homepage"}
-                </p>
+              <BottomSheetThemeOptions
+                dbConnection={dbConnection}
+                triggerId={"open-theme-options-sheet"}
+                setUserPreferences={setUserPreferences}
+                userPreferencesTheme={userPreferences.theme}
+                handleTheme={handleTheme}
+              />
+              <div className="group pl-[1.125rem]">
+                <div className="flex items-center justify-between gap-3 border-t border-[color:var(--sheet-divider-color)] py-3 pr-[1.125rem] group-first:border-t-0">
+                  <div>
+                    <p className="text-base font-medium leading-snug">
+                      {"Missed Salah Counter"}
+                    </p>
+                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-[var(--secondary-text-color)]">
+                      {"Show the missed Salah counter on Home"}
+                    </p>
+                  </div>
+                  <IonToggle
+                    className="[--track-background:var(--sheet-input-border-color)]"
+                    checked={isMissedSalahCounterOptionChecked}
+                    onIonChange={async () => {
+                      setIsMissedSalahCounterOptionChecked((prev) => !prev);
+                    }}
+                  ></IonToggle>
+                </div>
               </div>
-              <section className="pl-4 pr-2">
-                <IonToggle
-                  style={{ "--track-background": "#555" }}
-                  checked={isMissedSalahCounterOptionChecked}
-                  onIonChange={async () => {
-                    setIsMissedSalahCounterOptionChecked((prev) => !prev);
-                  }}
-                ></IonToggle>
-              </section>
-            </div>{" "}
-            <div>
               <SettingIndividual
                 id="open-edit-reasons-sheet"
                 headingText={"Edit Reasons"}
-                subText={`Add or remove reasons`}
+                subText={`Manage your reasons`}
               />
               <BottomSheetEditReasons
                 dbConnection={dbConnection}
@@ -366,14 +376,11 @@ const SettingsPage = ({
                 userPreferences={userPreferences}
                 // presentingElement={presentingElement}
               />
-            </div>
-            <div className="my-5">
               <SettingIndividual
-                indvidualStyles={"border-b border-[var(--app-border-color)]"}
                 // id="open-change-start-date-sheet"
                 onClick={() => setShowStartDateSheet(true)}
                 headingText={"Change Start Date"}
-                subText={`Change app start date`}
+                subText={`Set the date to start tracking`}
               />
               <BottomSheetStartDate
                 dbConnection={dbConnection}
@@ -388,7 +395,7 @@ const SettingsPage = ({
               <SettingIndividual
                 onClick={() => setShowBatchUpdateModal(true)}
                 headingText={"Bulk update Salah"}
-                subText={`Update Salah over multiple dates`}
+                subText={`Update multiple days at once`}
               />
               <BottomSheetBatchUpdate
                 dbConnection={dbConnection}
@@ -399,16 +406,18 @@ const SettingsPage = ({
                 userPreferences={userPreferences}
               />
             </div>
-            <div className="my-5">
+            <p className="mb-0.5 ml-3 mt-4 text-xs font-semibold uppercase leading-4 tracking-wide text-[var(--secondary-text-color)]">
+              Data
+            </p>
+            <div className="rounded-lg bg-[var(--card-bg-color)]">
               <SettingIndividual
-                indvidualStyles={"border-b border-[var(--app-border-color)]"}
                 headingText={"Import Data"}
-                subText={"Supports backups exported by this app"}
+                subText={"Restore from a backup file"}
                 onClick={triggerInput}
               />
               <SettingIndividual
                 headingText={"Export Data"}
-                subText={"Generates a file that contains all your data"}
+                subText={"Create a backup file"}
                 onClick={async () => {
                   await handleDBExport();
                 }}
@@ -436,73 +445,66 @@ const SettingsPage = ({
                 <span id="backup-loading-message">{loadingMessage}</span>
               </div>
             </dialog>
-            {Capacitor.getPlatform() === "android" && (
-              <SettingIndividual
-                indvidualStyles={
-                  "rounded-t-md, border-b border-[var(--app-border-color)]"
-                }
-                headingText={"Review"}
-                subText={"Rate the app on the Google Play Store"}
-                onClick={() => {
-                  link(
-                    "https://play.google.com/store/apps/details?id=com.mysalahapp.app",
-                  );
-                }}
-              />
-            )}
-            {Capacitor.getPlatform() === "ios" && (
-              <SettingIndividual
-                indvidualStyles={"rounded-t-md"}
-                headingText={"Review"}
-                subText={"Rate the app on the App Store"}
-                onClick={() => {
-                  link(
-                    "https://apps.apple.com/gb/app/my-salah-app/id6478277078",
-                  );
-                }}
-              />
-            )}
-            {Capacitor.isNativePlatform() && (
-              <SettingIndividual
-                indvidualStyles={
-                  "rounded-t-md border-b border-[var(--app-border-color)]"
-                }
-                headingText={"Share"}
-                subText={"Share application"}
-                onClick={() => {
-                  if (Capacitor.getPlatform() === "android") {
-                    shareThisAppLink(
+            <p className="mb-0.5 ml-3 mt-4 text-xs font-semibold uppercase leading-4 tracking-wide text-[var(--secondary-text-color)]">
+              More
+            </p>
+            <div className="rounded-lg bg-[var(--card-bg-color)]">
+              {Capacitor.getPlatform() === "android" && (
+                <SettingIndividual
+                  headingText={"Review"}
+                  subText={"Rate the app on the Google Play Store"}
+                  onClick={() => {
+                    link(
                       "https://play.google.com/store/apps/details?id=com.mysalahapp.app",
                     );
-                  } else if (Capacitor.getPlatform() === "ios") {
-                    shareThisAppLink(
+                  }}
+                />
+              )}
+              {Capacitor.getPlatform() === "ios" && (
+                <SettingIndividual
+                  headingText={"Review"}
+                  subText={"Rate the app on the App Store"}
+                  onClick={() => {
+                    link(
                       "https://apps.apple.com/gb/app/my-salah-app/id6478277078",
                     );
-                  }
+                  }}
+                />
+              )}
+              {Capacitor.isNativePlatform() && (
+                <SettingIndividual
+                  headingText={"Share"}
+                  subText={"Share application"}
+                  onClick={() => {
+                    if (Capacitor.getPlatform() === "android") {
+                      shareThisAppLink(
+                        "https://play.google.com/store/apps/details?id=com.mysalahapp.app",
+                      );
+                    } else if (Capacitor.getPlatform() === "ios") {
+                      shareThisAppLink(
+                        "https://apps.apple.com/gb/app/my-salah-app/id6478277078",
+                      );
+                    }
+                  }}
+                />
+              )}
+              <SettingIndividual
+                onClick={() => {
+                  setShowChangelogSheet(true);
+                }}
+                headingText={"Changelog"}
+                subText={"See what's new"}
+              />
+              <SettingIndividual
+                headingText={"Feedback"}
+                subText={"Send feedback or suggestions"}
+                onClick={() => {
+                  link(
+                    "mailto: mohammed@mohammedpatel.dev?subject=My Salah App Feedback",
+                  );
                 }}
               />
-            )}
-            <SettingIndividual
-              indvidualStyles={
-                "rounded-t-md border-b border-[var(--app-border-color)]"
-              }
-              onClick={() => {
-                setShowChangelogSheet(true);
-              }}
-              headingText={"Changelog"}
-              subText={"View Changelog"}
-            />
-            <SettingIndividual
-              indvidualStyles={"border-b border-[var(--app-border-color)]"}
-              headingText={"Feedback"}
-              subText={"Report Bugs / Request Features"}
-              onClick={() => {
-                link(
-                  "mailto: mohammed@mohammedpatel.dev?subject=My Salah App Feedback",
-                );
-              }}
-            />
-            {/* <SettingIndividual
+              {/* <SettingIndividual
               indvidualStyles={"border-b border-[var(--app-border-color)]"}
               headingText={"Website"}
               subText={"Visit website"}
@@ -510,30 +512,29 @@ const SettingsPage = ({
 
               }}
             /> */}
-            <SettingIndividual
-              indvidualStyles={"border-b border-[var(--app-border-color)]"}
-              headingText={"Privacy Policy"}
-              subText={"View Privacy Policy"}
-              onClick={() => {
-                link(
-                  "https://sites.google.com/view/my-salah-app-privacy-policy/home",
-                );
-              }}
-            />
-            <SettingIndividual
-              indvidualStyles={"border-b border-[var(--app-border-color)]"}
-              headingText={"Source Code"}
-              subText={"View Source Code"}
-              onClick={() => {
-                link("https://github.com/My-Ummah-Apps/My-Salah-App");
-              }}
-            />
-            {/* <SettingIndividual
+              <SettingIndividual
+                headingText={"Privacy Policy"}
+                subText={"Read our privacy policy"}
+                onClick={() => {
+                  link(
+                    "https://sites.google.com/view/my-salah-app-privacy-policy/home",
+                  );
+                }}
+              />
+              <SettingIndividual
+                headingText={"Source Code"}
+                subText={"View on GitHub"}
+                onClick={() => {
+                  link("https://github.com/My-Ummah-Apps/My-Salah-App");
+                }}
+              />
+              {/* <SettingIndividual
               id="open-about-us-sheet"
               headingText={"About"}
               subText={"About Us"}
             /> */}
-            {/* <BottomSheetAboutUs triggerId="open-about-us-sheet" /> */}
+              {/* <BottomSheetAboutUs triggerId="open-about-us-sheet" /> */}
+            </div>
           </div>
         </motion.section>
       </IonContent>

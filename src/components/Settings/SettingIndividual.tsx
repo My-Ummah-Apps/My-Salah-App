@@ -4,32 +4,27 @@ const SettingIndividual = ({
   id,
   headingText,
   subText,
-  indvidualStyles,
   onClick,
 }: {
   id?: string;
   headingText: string;
   subText: string;
-  indvidualStyles?: string;
   onClick?: () => void;
 }) => {
   return (
-    <div
-      id={id}
-      style={{ borderTopRightRadius: indvidualStyles }}
-      className={`flex items-center justify-between py-2 shadow-sm individual-setting-wrap bg-[var(--card-bg-color)] mx-auto p-0.5 ${indvidualStyles}`}
-      onClick={onClick}
-    >
-      <div className="mx-2">
-        <p className="support-main-text-heading pt-[0.3rem] pb-[0.1rem] text-lg">
-          {headingText}
-        </p>
-        <p className="support-sub-text pt-[0.3rem]  pb-[0.1rem] text-[0.8rem] font-light">
-          {subText}
-        </p>
+    <div id={id} className="group pl-[1.125rem]" onClick={onClick}>
+      <div className="flex items-center justify-between gap-3 border-t border-[color:var(--sheet-divider-color)] py-3 pr-[1.125rem] group-first:border-t-0">
+        <div>
+          <p className="text-base font-medium leading-snug">{headingText}</p>
+          <p className="mt-0.5 text-[0.8125rem] leading-snug text-[var(--secondary-text-color)]">
+            {subText}
+          </p>
+        </div>
+        <MdOutlineChevronRight
+          aria-hidden="true"
+          className="shrink-0 text-xl text-[var(--secondary-text-color)]"
+        />
       </div>
-
-      <MdOutlineChevronRight className="chevron text-[#b5b5b5]" />
     </div>
   );
 };
