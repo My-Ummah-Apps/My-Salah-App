@@ -443,7 +443,7 @@ const BottomSheetBatchUpdate = ({
             batchUpdateObj.status !== "excused" &&
             batchUpdateObj.status !== "female-alone" &&
             batchUpdateObj.status !== "" && (
-              <section className="mt-4 mb-5">
+              <section className="mt-4 mb-4">
                 {userPreferences.reasons.length > 0 && (
                   <div>
                     <h2 className="mb-3 text-sm font-semibold text-start text-[var(--ion-text-color)]">
@@ -486,14 +486,14 @@ const BottomSheetBatchUpdate = ({
                 </div>
               </section>
             )}
-          <div className="mt-10 mb-5 text-sm notes-wrap">
-            <p className="mb-2">Add a note (Optional)</p>
+          <div className="mt-4">
+            <p className="mb-1 text-sm font-semibold">Notes (optional)</p>
             <IonTextarea
               aria-label="notes"
               autoGrow={true}
               rows={1}
-              className="pl-2 rounded-lg text-[var(--ion-text-color)] bg-[var(--textarea-bg-color)]"
-              placeholder="Write a note..."
+              className="rounded-md border border-[color:var(--sheet-divider-color)] bg-[var(--sheet-group-bg)] text-[0.8125rem] text-[var(--ion-text-color)] ![--padding-start:0.875rem] ![--padding-end:0.875rem] ![--padding-top:0.8125rem] ![--padding-bottom:0.8125rem] ![--placeholder-color:var(--secondary-text-color)] ![--placeholder-opacity:1]"
+              placeholder="Add a note..."
               value={batchUpdateObj.notes}
               onIonInput={(e) => {
                 setBatchUpdateObj((prev) => ({
@@ -504,84 +504,87 @@ const BottomSheetBatchUpdate = ({
             ></IonTextarea>
           </div>
           {/*  ${selectedStartDate ? "opacity-100" : "opacity-20"} */}
-          <div>
-            <IonButton
-              disabled={
-                !batchUpdateObj.fromDate ||
-                !batchUpdateObj.toDate ||
-                !batchUpdateObj.salahs.length ||
-                !batchUpdateObj.status
+          <IonButton
+            expand="block"
+            disabled={
+              !batchUpdateObj.fromDate ||
+              !batchUpdateObj.toDate ||
+              !batchUpdateObj.salahs.length ||
+              !batchUpdateObj.status
+            }
+            className="mx-0 mb-0 mt-3 text-[0.9375rem] font-semibold transition-opacity duration-300 aria-disabled:opacity-20"
+            onClick={async () => {
+              const fromDate = startOfDay(parseISO(batchUpdateObj.fromDate));
+              const toDate = startOfDay(parseISO(batchUpdateObj.toDate));
+              const minDate = startOfDay(
+                parseISO(userPreferences.userStartDate),
+              );
+
+              if (!batchUpdateObj.fromDate || !batchUpdateObj.toDate) {
+                showAlert("No Dates Selected", "Please select dates");
+                return;
               }
-              className="w-full"
-              onClick={async () => {
-                const fromDate = startOfDay(parseISO(batchUpdateObj.fromDate));
-                const toDate = startOfDay(parseISO(batchUpdateObj.toDate));
-                const minDate = startOfDay(
-                  parseISO(userPreferences.userStartDate),
+
+              const todaysDate = startOfDay(new Date());
+              // const fromDate = startOfDay(
+              //   new Date(batchUpdateObj.fromDate),
+              // );
+              // const toDate = startOfDay(new Date(batchUpdateObj.toDate));
+
+              if (isBefore(fromDate, minDate) || isBefore(toDate, minDate)) {
+                showAlert(
+                  "Invalid Date",
+                  `Date cannot be earlier than your start date: ${" "} ${createLocalisedDate(userPreferences.userStartDate)[1]}`,
                 );
+                return;
+              }
 
-                if (!batchUpdateObj.fromDate || !batchUpdateObj.toDate) {
-                  showAlert("No Dates Selected", "Please select dates");
-                  return;
-                }
+              if (isAfter(fromDate, toDate)) {
+                showAlert(
+                  "Invalid Date Range",
+                  "Please select a valid date range",
+                );
+                return;
+              }
 
-                const todaysDate = startOfDay(new Date());
-                // const fromDate = startOfDay(
-                //   new Date(batchUpdateObj.fromDate),
-                // );
-                // const toDate = startOfDay(new Date(batchUpdateObj.toDate));
+              if (
+                isAfter(fromDate, todaysDate) ||
+                isAfter(toDate, todaysDate)
+              ) {
+                showAlert("Invalid Date", "Dates cannot be in the future");
+                return;
+              }
 
-                if (isBefore(fromDate, minDate) || isBefore(toDate, minDate)) {
-                  showAlert(
-                    "Invalid Date",
-                    `Date cannot be earlier than your start date: ${" "} ${createLocalisedDate(userPreferences.userStartDate)[1]}`,
-                  );
-                  return;
-                }
-
-                if (isAfter(fromDate, toDate)) {
-                  showAlert(
-                    "Invalid Date Range",
-                    "Please select a valid date range",
-                  );
-                  return;
-                }
-
-                if (
-                  isAfter(fromDate, todaysDate) ||
-                  isAfter(toDate, todaysDate)
-                ) {
-                  showAlert("Invalid Date", "Dates cannot be in the future");
-                  return;
-                }
-
-                await presentUpdatingSpinner({
-                  // message: `${processedRows}`,
-                  backdropDismiss: false,
-                  cssClass: "ion-spinner-hidden",
-                });
-                setIsBatchUpdating(true);
-                await executeBatchUpdate();
-              }}
-            >
-              Update
-            </IonButton>
-          </div>
+              await presentUpdatingSpinner({
+                // message: `${processedRows}`,
+                backdropDismiss: false,
+                cssClass: "ion-spinner-hidden",
+              });
+              setIsBatchUpdating(true);
+              await executeBatchUpdate();
+            }}
+          >
+            Update selected Salah
+          </IonButton>
         </section>
       </IonContent>
       {isBatchUpdating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto bg-black/50">
-          <div className="rounded-lg bg-[var(--ion-background-color)] p-6 text-center">
-            <p className="mt-3">Updating prayers...</p>
+          <div className="min-w-56 rounded-2xl bg-[var(--sheet-bg-color)] px-6 py-5 text-center">
+            <p className="font-semibold">Updating Salah...</p>
 
-            <p>
+            <p className="mt-1 text-sm text-[var(--secondary-text-color)]">
               {processedRows} / {totalRows}
             </p>
 
             {Math.round((processedRows / totalRows) * 100) < 100 ? (
-              <p>{Math.round((processedRows / totalRows) * 100)}% </p>
+              <p className="text-sm text-[var(--secondary-text-color)]">
+                {Math.round((processedRows / totalRows) * 100)}%{" "}
+              </p>
             ) : (
-              <p className="animate-pulse">Finishing up... </p>
+              <p className="animate-pulse text-sm text-[var(--secondary-text-color)]">
+                Finishing up...{" "}
+              </p>
             )}
           </div>
         </div>
