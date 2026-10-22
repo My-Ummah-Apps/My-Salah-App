@@ -219,10 +219,10 @@ const BottomSheetBatchUpdate = ({
           </p>
           <div className="mt-[18px] mb-4">
             <div className="">
-              <p className="mb-0.5 text-sm font-semibold">Date range</p>
+              <p className="mb-1.5 text-sm font-semibold">Date range</p>
               <div className="grid grid-cols-2 gap-3.5">
                 <div>
-                  <p className="text-[11px] leading-3 text-[var(--secondary-text-color)]">
+                  <p className="mb-1 text-[11px] leading-3 text-[var(--secondary-text-color)]">
                     From
                   </p>
                   <div className="relative flex h-10 items-center justify-between gap-1.5 rounded-md border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] pl-3.5 pr-3 text-sm">
@@ -265,7 +265,7 @@ const BottomSheetBatchUpdate = ({
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] leading-3 text-[var(--secondary-text-color)]">
+                  <p className="mb-1 text-[11px] leading-3 text-[var(--secondary-text-color)]">
                     To
                   </p>
                   <div className="relative flex h-10 items-center justify-between gap-1.5 rounded-md border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] pl-3.5 pr-3 text-sm">
@@ -309,7 +309,7 @@ const BottomSheetBatchUpdate = ({
               </div>
               {/* <p className="mr-2"> */}
               {/* </p> */}
-              <p className="mt-2 text-sm leading-snug text-[var(--secondary-text-color)]">
+              <p className="mt-2 text-[0.8125rem] leading-snug text-[var(--secondary-text-color)]">
                 Your earliest selectable date is{" "}
                 {format(
                   parseISO(userPreferences.userStartDate),

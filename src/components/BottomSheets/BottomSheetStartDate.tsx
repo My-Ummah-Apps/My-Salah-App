@@ -83,14 +83,14 @@ const BottomSheetStartDate = ({
       <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
         <h1 className="mb-5 font-bold leading-tight">Change Start Date</h1>
         <p className="mb-2 font-semibold">Current start date</p>
-        <p className="rounded-xl bg-[var(--sheet-pill-bg)] px-4 py-3 text-[var(--secondary-text-color)]">
+        <p className="flex h-10 items-center rounded-md bg-[var(--sheet-pill-bg)] pl-3.5 pr-3 text-sm text-[var(--secondary-text-color)]">
           {/* {createLocalisedDate(userPreferences.userStartDate)[1]} */}
           {format(parseISO(currentStartDate), "do MMMM yyyy")}
         </p>
         <p className="mt-5 mb-2 font-semibold">New start date</p>
-        <div className="relative rounded-xl border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)]">
+        <div className="relative rounded-md border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)]">
           <input
-            className="h-12 w-full appearance-none rounded-xl bg-transparent px-4 text-[var(--ion-text-color)] [color-scheme:var(--input-color-scheme)] [&::-webkit-calendar-picker-indicator]:hidden"
+            className="h-10 w-full appearance-none rounded-md bg-transparent pl-3.5 pr-3 text-sm text-[var(--ion-text-color)] [color-scheme:var(--input-color-scheme)] [&::-webkit-calendar-picker-indicator]:hidden"
             onKeyDown={(e) => {
               e.preventDefault();
             }}
@@ -107,7 +107,7 @@ const BottomSheetStartDate = ({
           <IonIcon
             aria-hidden="true"
             icon={calendarOutline}
-            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xl text-[var(--secondary-text-color)]"
+            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-base text-[var(--secondary-text-color)]"
           />
         </div>
         <p className="mt-2 text-sm leading-snug text-[var(--secondary-text-color)]">
