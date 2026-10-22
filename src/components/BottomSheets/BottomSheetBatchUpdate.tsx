@@ -1,9 +1,7 @@
 import {
   IonButton,
-  IonChip,
   IonContent,
   IonIcon,
-  IonLabel,
   IonModal,
   // IonSpinner,
   IonTextarea,
@@ -17,9 +15,11 @@ import {
   userPreferencesType,
 } from "../../types/types";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
+  reasonsStyles,
   salahNamesArr,
   salahStatusColorsHexCodes,
 } from "../../utils/constants";
@@ -368,7 +368,7 @@ const BottomSheetBatchUpdate = ({
               </div>
             </div>
             <section>
-              <div className="mb-7">
+              <div className="mb-4">
                 <p className="mb-1 text-sm font-semibold">Select status</p>
                 <div className="grid grid-cols-2 gap-1.5">
                   {statusArr.map((status) => {
@@ -443,34 +443,46 @@ const BottomSheetBatchUpdate = ({
             batchUpdateObj.status !== "excused" &&
             batchUpdateObj.status !== "female-alone" &&
             batchUpdateObj.status !== "" && (
-              <section className="rounded-lg">
-                <p className="w-full mb-3 text-sm">Select reasons (optional)</p>
-                <div className="">
-                  {userPreferences.reasons.map((reason) => {
-                    const selected = batchUpdateObj.reasons.includes(reason);
-                    return (
-                      <IonChip
-                        className="mt-2"
-                        style={{
-                          "--color": "var(--ion-text-color)",
-                          backgroundColor: selected
-                            ? "var(--reasons-bg-active-color-status-sheet)"
-                            : "var(--reasons-bg-color-status-sheet)",
-                        }}
-                        key={reason}
-                        onClick={() => {
-                          setBatchUpdateObj((prev) => ({
-                            ...prev,
-                            reasons: prev.reasons.includes(reason)
-                              ? prev.reasons.filter((r) => r !== reason)
-                              : [...prev.reasons, reason],
-                          }));
-                        }}
-                      >
-                        <IonLabel className="text-xs">{reason}</IonLabel>
-                      </IonChip>
-                    );
-                  })}
+              <section className="mt-4 mb-5">
+                {userPreferences.reasons.length > 0 && (
+                  <div>
+                    <h2 className="mb-3 text-sm font-semibold text-start text-[var(--ion-text-color)]">
+                      Reasons (optional)
+                    </h2>
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-x-2.5 gap-y-2 text-[var(--ion-text-color)]">
+                  {[...userPreferences.reasons]
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((reason) => {
+                      const selected = batchUpdateObj.reasons.includes(reason);
+                      return (
+                        <motion.p
+                          initial={{
+                            backgroundColor: "var(--sheet-pill-bg)",
+                          }}
+                          animate={{
+                            backgroundColor: selected
+                              ? "var(--reasons-bg-active-color-status-sheet)"
+                              : "var(--sheet-pill-bg)",
+                          }}
+                          transition={{ duration: 0.3 }}
+                          data-selected={selected}
+                          className={reasonsStyles}
+                          key={reason}
+                          onClick={() => {
+                            setBatchUpdateObj((prev) => ({
+                              ...prev,
+                              reasons: prev.reasons.includes(reason)
+                                ? prev.reasons.filter((r) => r !== reason)
+                                : [...prev.reasons, reason],
+                            }));
+                          }}
+                        >
+                          {reason}
+                        </motion.p>
+                      );
+                    })}
                 </div>
               </section>
             )}
