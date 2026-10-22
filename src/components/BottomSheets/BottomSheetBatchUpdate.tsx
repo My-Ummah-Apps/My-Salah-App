@@ -21,6 +21,7 @@ import {
   INITIAL_MODAL_BREAKPOINT,
   MODAL_BREAKPOINTS,
   salahNamesArr,
+  salahStatusColorsHexCodes,
 } from "../../utils/constants";
 import {
   eachDayOfInterval,
@@ -39,6 +40,8 @@ import {
   upperCaseFirstLetter,
 } from "../../utils/helpers";
 import { calendarOutline } from "ionicons/icons";
+import { GoClock, GoPeople, GoPerson, GoSkip } from "react-icons/go";
+import { PiFlower } from "react-icons/pi";
 
 interface BottomSheetBatchUpdateProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -214,15 +217,15 @@ const BottomSheetBatchUpdate = ({
           <p className="text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
             Apply one status across selected dates and Salah.
           </p>
-          <div className="mt-6 mb-4">
+          <div className="mt-[18px] mb-4">
             <div className="">
               <p className="mb-0.5 text-sm font-semibold">Date range</p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3.5">
                 <div>
-                  <p className="mb-1.5 text-sm text-[var(--secondary-text-color)]">
+                  <p className="text-[11px] leading-3 text-[var(--secondary-text-color)]">
                     From
                   </p>
-                  <div className="relative flex h-12 items-center justify-between gap-1.5 rounded-xl border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] px-3.5 text-[0.9375rem]">
+                  <div className="relative flex h-10 items-center justify-between gap-1.5 rounded-md border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] pl-3.5 pr-3 text-sm">
                     <span
                       className={
                         batchUpdateObj.fromDate !== ""
@@ -240,7 +243,7 @@ const BottomSheetBatchUpdate = ({
                     <IonIcon
                       aria-hidden="true"
                       icon={calendarOutline}
-                      className="shrink-0 text-lg text-[var(--secondary-text-color)] max-[359px]:hidden"
+                      className="shrink-0 text-base text-[var(--secondary-text-color)] max-[359px]:hidden"
                     />
                     <input
                       className="absolute inset-0 h-full w-full opacity-0 [color-scheme:var(--input-color-scheme)]"
@@ -262,10 +265,10 @@ const BottomSheetBatchUpdate = ({
                   </div>
                 </div>
                 <div>
-                  <p className="mb-1.5 text-sm text-[var(--secondary-text-color)]">
+                  <p className="text-[11px] leading-3 text-[var(--secondary-text-color)]">
                     To
                   </p>
-                  <div className="relative flex h-12 items-center justify-between gap-1.5 rounded-xl border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] px-3.5 text-[0.9375rem]">
+                  <div className="relative flex h-10 items-center justify-between gap-1.5 rounded-md border border-[color:var(--sheet-group-border)] bg-[var(--sheet-group-bg)] pl-3.5 pr-3 text-sm">
                     <span
                       className={
                         batchUpdateObj.toDate !== ""
@@ -281,7 +284,7 @@ const BottomSheetBatchUpdate = ({
                     <IonIcon
                       aria-hidden="true"
                       icon={calendarOutline}
-                      className="shrink-0 text-lg text-[var(--secondary-text-color)] max-[359px]:hidden"
+                      className="shrink-0 text-base text-[var(--secondary-text-color)] max-[359px]:hidden"
                     />
                     <input
                       className="absolute inset-0 h-full w-full opacity-0 [color-scheme:var(--input-color-scheme)]"
@@ -335,8 +338,8 @@ const BottomSheetBatchUpdate = ({
               </div> */}
             </div>
           </div>
-          <section className="mx">
-            <div className="mt-6 mb-5">
+          <section>
+            <div className="mt-6 mb-4">
               <p className="mb-1.5 text-sm font-semibold">Select Salah</p>
               <div className="flex gap-1">
                 {salahNamesArr.map((salahName) => {
@@ -365,20 +368,34 @@ const BottomSheetBatchUpdate = ({
               </div>
             </div>
             <section>
-              <div className="rounded-lg my-7">
-                <p className="text-sm">Choose a status</p>
-                <div className="mt-2 mb-4">
+              <div className="mb-7">
+                <p className="mb-1 text-sm font-semibold">Select status</p>
+                <div className="grid grid-cols-2 gap-1.5">
                   {statusArr.map((status) => {
                     const selected = batchUpdateObj.status === status;
+                    const StatusIcon =
+                      status === "group"
+                        ? GoPeople
+                        : status === "excused"
+                          ? PiFlower
+                          : status === "late"
+                            ? GoClock
+                            : status === "missed"
+                              ? GoSkip
+                              : GoPerson;
                     return (
-                      <IonChip
-                        className="mt-2"
-                        style={{
-                          "--color": "var(--ion-text-color)",
-                          backgroundColor: selected
-                            ? "var(--reasons-bg-active-color-status-sheet)"
-                            : "var(--reasons-bg-color-status-sheet)",
-                        }}
+                      <button
+                        type="button"
+                        aria-pressed={selected}
+                        data-selected={selected}
+                        className="group flex items-center gap-4 rounded-xl border border-solid border-[color:var(--status-tile-border)] bg-[var(--status-tile-bg)] py-[13px] pl-5 pr-3.5 text-left max-[389px]:pl-3.5 data-[selected=true]:border-transparent data-[selected=true]:bg-[var(--status-color)]"
+                        style={
+                          {
+                            "--status-color": salahStatusColorsHexCodes[status],
+                            "--status-foreground":
+                              status === "excused" ? "#fff" : "#111",
+                          } as React.CSSProperties
+                        }
                         key={status}
                         onClick={() => {
                           setBatchUpdateObj((prev) => ({
@@ -387,16 +404,35 @@ const BottomSheetBatchUpdate = ({
                           }));
                         }}
                       >
-                        <IonLabel className="text-sm">
-                          {status === "male-alone"
-                            ? "Alone"
-                            : status === "female-alone"
-                              ? "Prayed"
-                              : status === "group"
-                                ? "In Jamaah"
-                                : upperCaseFirstLetter(status)}
-                        </IonLabel>
-                      </IonChip>
+                        <StatusIcon
+                          aria-hidden="true"
+                          className="shrink-0 text-[1.875rem] text-[color:var(--status-color)] group-data-[selected=true]:text-[color:var(--status-foreground)]"
+                        />
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold leading-5 text-[var(--ion-text-color)] group-data-[selected=true]:text-[color:var(--status-foreground)]">
+                            {status === "male-alone"
+                              ? "On Time"
+                              : status === "female-alone"
+                                ? "Prayed"
+                                : status === "group"
+                                  ? "In Jamaah"
+                                  : upperCaseFirstLetter(status)}
+                          </span>
+                          <span className="mt-[3px] block text-[11px] leading-4 text-[var(--secondary-text-color)] group-data-[selected=true]:text-[color:var(--status-foreground)]">
+                            {status === "group"
+                              ? "In congregation"
+                              : status === "male-alone"
+                                ? "Alone, on time"
+                                : status === "female-alone"
+                                  ? "Prayer completed"
+                                  : status === "excused"
+                                    ? "Prayer excused"
+                                    : status === "late"
+                                      ? "After its time"
+                                      : "Not prayed"}
+                          </span>
+                        </span>
+                      </button>
                     );
                   })}
                 </div>
