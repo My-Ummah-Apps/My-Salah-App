@@ -216,7 +216,7 @@ const BottomSheetBatchUpdate = ({
           </p>
           <div className="mt-6 mb-4">
             <div className="">
-              <p className="mb-3 font-semibold">Date range</p>
+              <p className="mb-0.5 text-sm font-semibold">Date range</p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <p className="mb-1.5 text-sm text-[var(--secondary-text-color)]">
@@ -336,24 +336,18 @@ const BottomSheetBatchUpdate = ({
             </div>
           </div>
           <section className="mx">
-            <div className="my-5 rounded-lg">
-              <div className="flex flex-row justify-between text-sm">
-                <p className="mb-2">Select up to 5 prayers</p>
-                <p>{batchUpdateObj.salahs.length} / 5 selected</p>
-              </div>
-              <div className="mx-1 mb-4 mt-1 text-[var(--ion-text-color)]">
+            <div className="mt-6 mb-5">
+              <p className="mb-1.5 text-sm font-semibold">Select Salah</p>
+              <div className="flex gap-1">
                 {salahNamesArr.map((salahName) => {
                   const selected = batchUpdateObj.salahs.includes(salahName);
 
                   return (
-                    <IonChip
-                      className="mt-2"
-                      style={{
-                        "--color": "var(--ion-text-color)",
-                        backgroundColor: selected
-                          ? "var(--reasons-bg-active-color-status-sheet)"
-                          : "var(--reasons-bg-color-status-sheet)",
-                      }}
+                    <button
+                      type="button"
+                      aria-pressed={selected}
+                      data-selected={selected}
+                      className="h-8 flex-1 rounded-xl border border-solid border-[color:var(--sheet-input-border-color)] px-2 text-xs text-[var(--secondary-text-color)] data-[selected=true]:border-transparent data-[selected=true]:bg-[var(--ion-color-primary)] data-[selected=true]:font-semibold data-[selected=true]:text-white"
                       key={salahName}
                       onClick={() => {
                         setBatchUpdateObj((prev) => ({
@@ -364,8 +358,8 @@ const BottomSheetBatchUpdate = ({
                         }));
                       }}
                     >
-                      <IonLabel className="text-sm">{salahName}</IonLabel>
-                    </IonChip>
+                      {salahName === "Asar" ? "Asr" : salahName}
+                    </button>
                   );
                 })}
               </div>
