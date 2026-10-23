@@ -148,7 +148,7 @@ const MissedSalahsListBottomSheet = ({
         }
         return copy;
       });
-    }, 500);
+    }, 1000);
   };
 
   const Row = ({
