@@ -15,18 +15,17 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonLabel,
   IonModal,
   IonSegment,
   IonSegmentButton,
-  IonSelect,
-  IonSelectOption,
   IonToolbar,
 } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
 import { format, parse } from "date-fns";
 import { LuCheck } from "react-icons/lu";
-import { chevronDown } from "ionicons/icons";
+import { swapVerticalOutline } from "ionicons/icons";
 import { AutoSizer } from "react-virtualized";
 
 interface MissedSalahsListBottomSheetProps {
@@ -317,19 +316,22 @@ const MissedSalahsListBottomSheet = ({
               </IonSegment>
 
               <section className="mb-1 mt-2 flex justify-end">
-                <IonSelect
-                  className="sort-select !w-28 text-[0.8125rem] font-medium text-[var(--current-salah-color)] [&::part(icon)]:text-[color:var(--current-salah-color)] [&::part(icon)]:opacity-100 [&::part(container)]:justify-end [&::part(text)]:flex-none"
-                  toggleIcon={chevronDown}
-                  value={sortOrder}
-                  labelPlacement="stacked"
-                  aria-label="Sort missed salahs"
-                  interface="popover"
-                  placeholder="Sort missed salahs"
-                  onIonChange={(e) => setSortOrder(e.detail.value)}
+                <button
+                  type="button"
+                  className="flex h-8 items-center gap-1 text-[0.8125rem] font-medium text-[var(--current-salah-color)]"
+                  onClick={() =>
+                    setSortOrder((prev) =>
+                      prev === "newest" ? "oldest" : "newest",
+                    )
+                  }
                 >
-                  <IonSelectOption value="newest">Newest first</IonSelectOption>
-                  <IonSelectOption value="oldest">Oldest first</IonSelectOption>
-                </IonSelect>
+                  <IonIcon
+                    aria-hidden="true"
+                    icon={swapVerticalOutline}
+                    className="text-base"
+                  />
+                  {sortOrder === "newest" ? "Newest first" : "Oldest first"}
+                </button>
               </section>
             </>
           )}
