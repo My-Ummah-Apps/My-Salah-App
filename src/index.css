@@ -57,7 +57,7 @@
   --textarea-bg-color: rgb(206, 206, 206);
   --sheet-input-border-color: #b5bbc4;
   --secondary-text-color: #566476;
-  --missed-salah-sheet-btn-color: rgb(206, 206, 206);
+  --missed-salah-sheet-btn-color: rgba(0, 84, 233, 0.09);
   --wreath-color: #000000;
   --reasons-bg-color-status-sheet: #FBFCFC;
   --reasons-bg-active-color-status-sheet: #e7f0ff;
@@ -120,7 +120,7 @@ body.dark {
   --textarea-bg-color: rgb(38, 38, 38);
   --sheet-input-border-color: #555b63;
   --secondary-text-color: #aebbd0;
-  --missed-salah-sheet-btn-color: rgb(50, 50, 50);
+  --missed-salah-sheet-btn-color: rgba(30, 144, 255, 0.14);
   --wreath-color: #e9e9e9;
   --reasons-bg-color-status-sheet: #191b1d;
   --reasons-bg-active-color-status-sheet: #27313f;

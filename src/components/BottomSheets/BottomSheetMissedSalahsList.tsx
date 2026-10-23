@@ -15,21 +15,19 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonLabel,
   IonModal,
   IonSegment,
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { toggleDBConnection } from "../../utils/dbUtils";
-import { createLocalisedDate } from "../../utils/helpers";
+import { format, parse } from "date-fns";
+import { LuCheck } from "react-icons/lu";
+import { chevronDown } from "ionicons/icons";
 import { AutoSizer } from "react-virtualized";
-
-import { swapVerticalOutline } from "ionicons/icons";
 
 interface MissedSalahsListBottomSheetProps {
   dbConnection: React.MutableRefObject<SQLiteDBConnection | undefined>;
@@ -173,45 +171,48 @@ const MissedSalahsListBottomSheet = ({
       <div
         // key={key}
         // style={style}
-        style={{
-          ...style,
-          height: (style.height as number) - 12,
-          top: (style.top as number) + 6,
-        }}
-        className="bg-[var(--card-bg-color)] px-4 rounded-2xl"
+        style={style}
+        className="flex items-center gap-3 border-b border-[color:var(--sheet-divider-color)] text-[var(--ion-text-color)]"
       >
-        <div className="flex items-center justify-between text-[var(--ion-text-color)] py-3 border-b border-[var(--app-border-color)]">
-          <p>{salah === "Asar" ? "Asr" : salah}</p>
-          <div
-            style={{
-              backgroundColor:
-                isClickedItem === key
-                  ? salahStatusColorsHexCodes["late"]
-                  : salahStatusColorsHexCodes["missed"],
-              transition: "background-color 250ms ease",
-            }}
-            className="w-[1.3rem] h-[1.3rem] rounded-md"
-          />
-        </div>
+        <div
+          style={{
+            backgroundColor:
+              isClickedItem === key
+                ? salahStatusColorsHexCodes["late"]
+                : salahStatusColorsHexCodes["missed"],
+            transition: "background-color 250ms ease",
+          }}
+          className="h-9 w-1 shrink-0 rounded-full"
+        />
         <div
           // style={{ borderBottom: "1px solid var(--app-border-color)" }}
-          className="flex items-center justify-between text-[var(--ion-text-color)] py-3"
+          className="min-w-0 flex-1"
         >
-          <p className="text-sm opacity-80">{createLocalisedDate(date)[1]}</p>
-          <button
-            className="rounded-full bg-[var(--missed-salah-sheet-btn-color)]"
-            onClick={async () => {
-              setIsClickedItem(key);
-              // TODO: Below toggle has been put in place as DB connection was being closed if app went to the background then came back to the foreground, this toggle ensures DB connection is opened before DB operations take place, a better solution is needed in the future, could just open and close DB connection each time users clicks on 'mark as done' as opposed to opening/closing connection when sheet is opened/closed
-              await toggleDBConnection(dbConnection, "open");
-              await modifySalahStatusInDB(date, salah);
-            }}
-          >
-            <section className="flex items-center justify-between w-full px-3 py-2 text-sm">
-              <p>Mark As Done</p>
-            </section>
-          </button>
+          <p className="text-base font-medium leading-snug">
+            {salah === "Asar" ? "Asr" : salah}
+          </p>
+          <p className="mt-0.5 text-[0.8125rem] text-[var(--secondary-text-color)]">
+            {format(parse(date, "yyyy-MM-dd", new Date()), "EEE d MMM ’yy")}
+          </p>
         </div>
+        <button
+          data-done={isClickedItem === key}
+          style={
+            {
+              "--late-color": salahStatusColorsHexCodes["late"],
+            } as React.CSSProperties
+          }
+          className="flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-[var(--missed-salah-sheet-btn-color)] pl-2.5 pr-3 text-[0.8125rem] font-semibold text-[var(--current-salah-color)] transition-colors duration-[250ms] data-[done=true]:bg-[var(--late-color)] data-[done=true]:text-[#111]"
+          onClick={async () => {
+            setIsClickedItem(key);
+            // TODO: Below toggle has been put in place as DB connection was being closed if app went to the background then came back to the foreground, this toggle ensures DB connection is opened before DB operations take place, a better solution is needed in the future, could just open and close DB connection each time users clicks on 'mark as done' as opposed to opening/closing connection when sheet is opened/closed
+            await toggleDBConnection(dbConnection, "open");
+            await modifySalahStatusInDB(date, salah);
+          }}
+        >
+          <LuCheck aria-hidden="true" className="text-sm" />
+          {isClickedItem === key ? "Made up" : "Done"}
+        </button>
       </div>
     );
   };
@@ -233,8 +234,7 @@ const MissedSalahsListBottomSheet = ({
       // breakpoints={MODAL_BREAKPOINTS}
     >
       <IonHeader className="ion-no-border">
-        <IonToolbar>
-          <IonTitle>Missed Salah</IonTitle>
+        <IonToolbar className="[--background:var(--sheet-bg-color)]">
           <IonButtons slot="end">
             <IonButton
               // strong={true}
@@ -245,89 +245,123 @@ const MissedSalahsListBottomSheet = ({
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent scrollY={false} className="relative">
-        <section className="mt-10 mb-10">
-          <p
-            className={`mx-2 my-4 text-center text-[var(--ion-text-color)] 
+      <IonContent
+        scrollY={false}
+        className="relative [--background:var(--sheet-bg-color)]"
+      >
+        <section className="px-5">
+          <h1 className="mb-1 mt-0 font-bold leading-tight">Missed Salah</h1>
+          {!(
+            restructuredMissedSalahList.length === 0 && salahToShow === "All"
+          ) && (
+            <>
+              <p
+                className={`text-[0.9375rem] text-[var(--secondary-text-color)]
               `}
-            //  ${showCompletedMsg ? "invisible" : "visible"}
-          >
-            You have{" "}
-            <span className="text-[rgb(230,57,70)]">
-              {restructuredMissedSalahList.length}{" "}
-            </span>{" "}
-            {salahToShow !== "All" ? salahToShow : ""} Salah to make up
-          </p>
+                //  ${showCompletedMsg ? "invisible" : "visible"}
+              >
+                <span className="font-semibold text-[var(--ion-text-color)]">
+                  {restructuredMissedSalahList.length}
+                </span>{" "}
+                {salahToShow !== "All" ? `${salahToShow} ` : ""}Salah to make up
+              </p>
 
-          <section className="px-4 mb-6">
-            <IonSegment
-              mode="ios"
-              value={salahToShow}
-              onIonChange={(e) => {
-                const value =
-                  e.detail.value === "Asar" ? "Asr" : e.detail.value;
-                setSalahToShow(
-                  value as Exclude<SalahNamesType, "Asar"> | "All",
-                );
-              }}
-            >
-              <IonSegmentButton value="All">
-                <IonLabel>All</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="Fajr">
-                <IonLabel>Fajr</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="Dhuhr">
-                <IonLabel>Dhuhr</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="Asr">
-                <IonLabel>Asr</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="Maghrib">
-                <IonLabel>Maghrib</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="Isha">
-                <IonLabel>Isha</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
-          </section>
-
-          <section className="mx-4 border border-[var(--app-border-color)] rounded-lg mb-4">
-            <IonSelect
-              className="w-full px-2 pl-2 text-sm sort-select"
-              value={sortOrder}
-              labelPlacement="stacked"
-              aria-label="Sort missed salahs"
-              interface="popover"
-              placeholder="Sort missed salahs"
-              onIonChange={(e) => setSortOrder(e.detail.value)}
-            >
-              <IonIcon
-                className="mr-[5px]"
-                slot="start"
-                icon={swapVerticalOutline}
-                aria-hidden="true"
-              />
-              <IonSelectOption value="newest">Newest first</IonSelectOption>
-              <IonSelectOption value="oldest">Oldest first</IonSelectOption>
-            </IonSelect>
-          </section>
-
-          <div className="px-4">
-            <AutoSizer disableHeight>
-              {({ width }) => (
-                <List
-                  height={800}
-                  width={width}
-                  itemData={restructuredMissedSalahList}
-                  itemCount={restructuredMissedSalahList.length}
-                  itemSize={125}
+              <IonSegment
+                mode="ios"
+                className="stats-period-segment mt-5"
+                value={salahToShow}
+                onIonChange={(e) => {
+                  const value =
+                    e.detail.value === "Asar" ? "Asr" : e.detail.value;
+                  setSalahToShow(
+                    value as Exclude<SalahNamesType, "Asar"> | "All",
+                  );
+                }}
+              >
+                <IonSegmentButton
+                  className="stats-period-segment-button"
+                  value="All"
                 >
-                  {Row}
-                </List>
-              )}
-            </AutoSizer>
-          </div>
+                  <IonLabel>All</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton
+                  className="stats-period-segment-button"
+                  value="Fajr"
+                >
+                  <IonLabel>Fajr</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton
+                  className="stats-period-segment-button"
+                  value="Dhuhr"
+                >
+                  <IonLabel>Dhuhr</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton
+                  className="stats-period-segment-button"
+                  value="Asr"
+                >
+                  <IonLabel>Asr</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton
+                  className="stats-period-segment-button"
+                  value="Maghrib"
+                >
+                  <IonLabel>Maghrib</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton
+                  className="stats-period-segment-button"
+                  value="Isha"
+                >
+                  <IonLabel>Isha</IonLabel>
+                </IonSegmentButton>
+              </IonSegment>
+
+              <section className="mb-1 mt-2 flex justify-end">
+                <IonSelect
+                  className="sort-select !w-28 text-[0.8125rem] font-medium text-[var(--current-salah-color)] [&::part(icon)]:text-[color:var(--current-salah-color)] [&::part(icon)]:opacity-100 [&::part(container)]:justify-end [&::part(text)]:flex-none"
+                  toggleIcon={chevronDown}
+                  value={sortOrder}
+                  labelPlacement="stacked"
+                  aria-label="Sort missed salahs"
+                  interface="popover"
+                  placeholder="Sort missed salahs"
+                  onIonChange={(e) => setSortOrder(e.detail.value)}
+                >
+                  <IonSelectOption value="newest">Newest first</IonSelectOption>
+                  <IonSelectOption value="oldest">Oldest first</IonSelectOption>
+                </IonSelect>
+              </section>
+            </>
+          )}
+
+          {restructuredMissedSalahList.length > 0 ? (
+            <div>
+              <AutoSizer disableHeight>
+                {({ width }) => (
+                  <List
+                    height={800}
+                    width={width}
+                    itemData={restructuredMissedSalahList}
+                    itemCount={restructuredMissedSalahList.length}
+                    itemSize={68}
+                  >
+                    {Row}
+                  </List>
+                )}
+              </AutoSizer>
+            </div>
+          ) : (
+            <div className="mt-28 flex flex-col items-center text-center">
+              <div className="flex size-16 items-center justify-center rounded-full bg-[var(--missed-salah-sheet-btn-color)] text-[var(--current-salah-color)]">
+                <LuCheck aria-hidden="true" className="text-[1.875rem]" />
+              </div>
+              <p className="mt-4 text-xl font-semibold">All caught up</p>
+              <p className="mt-1.5 text-[0.9375rem] text-[var(--secondary-text-color)]">
+                No missed {salahToShow !== "All" ? `${salahToShow} ` : ""}Salah
+                to make up.
+              </p>
+            </div>
+          )}
 
           {/* {showCompletedMsg && (
             <motion.div
@@ -353,7 +387,7 @@ const MissedSalahsListBottomSheet = ({
               </IonButton>
             </motion.div>
           )} */}
-        </section>{" "}
+        </section>
       </IonContent>
     </IonModal>
   );
