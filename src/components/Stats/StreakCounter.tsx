@@ -1,4 +1,3 @@
-import { createLocalisedDate } from "../../utils/helpers";
 import { SalahRecordsArrayType, streakDatesObjType } from "../../types/types";
 import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
@@ -80,21 +79,13 @@ const StreakCounter = ({
             }}
           />
         </div>
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 mt-1">
           <div className="min-w-0 text-xs text-[var(--stats-control-text-color)]">
             {activeStreakObj && activeStreakObj.days > 0 && (
               <p className="">
-                {`${
-                  createLocalisedDate(
-                    format(activeStreakObj.startDate, "yyyy-MM-dd"),
-                  )[1]
-                } ${
+                {`${format(activeStreakObj.startDate, "d MMM ’yy")} ${
                   !isSameDay(activeStreakObj.startDate, activeStreakObj.endDate)
-                    ? `- ${
-                        createLocalisedDate(
-                          format(activeStreakObj.endDate, "yyyy-MM-dd"),
-                        )[1]
-                      }`
+                    ? `– ${format(activeStreakObj.endDate, "d MMM ’yy")}`
                     : ""
                 }`}
               </p>
