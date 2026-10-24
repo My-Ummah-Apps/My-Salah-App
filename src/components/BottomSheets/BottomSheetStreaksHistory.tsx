@@ -83,8 +83,10 @@ const BottomSheetStreaksHistory = ({
         <section className="px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
           <h1 className="mb-1 font-bold leading-tight">Streaks</h1>
           <p className="mb-4 text-[0.9375rem] leading-relaxed text-[var(--secondary-text-color)]">
-            Longest streak: {longestStreakDays}{" "}
-            {longestStreakDays !== 1 ? "days" : "day"}
+            Longest streak:{" "}
+            <span className="font-semibold text-[var(--ion-text-color)]">
+              {longestStreakDays} {longestStreakDays !== 1 ? "days" : "day"}
+            </span>
           </p>
 
           {/* {filteredStreakDatesObjectsArr.slice(1).map((item, i) => { */}
