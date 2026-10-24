@@ -416,6 +416,7 @@ const StatsPage = ({
               streakDatesObjectsArr={streakDatesObjectsArr}
               activeStreakCount={activeStreakCount}
               userGender={userPreferences.userGender}
+              fetchedSalahData={fetchedSalahData}
             />
             {/* <div className="sticky z-10 top-[56px] bg-white dark:bg-[#121212]"> */}
 

@@ -1,5 +1,5 @@
 import { createLocalisedDate } from "../../utils/helpers";
-import { streakDatesObjType } from "../../types/types";
+import { SalahRecordsArrayType, streakDatesObjType } from "../../types/types";
 import { format, isSameDay } from "date-fns";
 import { GoInfo } from "react-icons/go";
 import { HiOutlineChevronRight } from "react-icons/hi2";
@@ -12,12 +12,14 @@ interface StreakCounterProps {
   streakDatesObjectsArr: streakDatesObjType[];
   activeStreakCount: number;
   userGender: string;
+  fetchedSalahData: SalahRecordsArrayType;
 }
 
 const StreakCounter = ({
   streakDatesObjectsArr,
   activeStreakCount,
   userGender,
+  fetchedSalahData,
 }: StreakCounterProps) => {
   const [showStreakHistorySheet, setShowStreakHistorySheet] = useState(false);
   const activeStreakObj = streakDatesObjectsArr.filter(
@@ -117,6 +119,8 @@ const StreakCounter = ({
         setShowStreakHistorySheet={setShowStreakHistorySheet}
         showStreakHistorySheet={showStreakHistorySheet}
         filteredStreakDatesObjectsArr={filteredStreakDatesObjectsArr}
+        fetchedSalahData={fetchedSalahData}
+        userGender={userGender}
       />
     </>
   );

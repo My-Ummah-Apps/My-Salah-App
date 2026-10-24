@@ -36,6 +36,7 @@
   --toast-text-color: #fff;
   --table-row-border-color: rgb(227, 227, 227);
   --current-salah-color: #0054e9;
+  --tag-blue-bg: rgba(0, 84, 233, 0.09);
   --nav-tab-color: #373737;
   --nav-active-tab-color: #3880ff;
   --ios-action-sheet-background: #f9f9f9;
@@ -100,6 +101,7 @@ body.dark {
   --toast-text-color: #000000;
   --table-row-border-color: rgb(38, 38, 38);
   --current-salah-color: #1e90ff;
+  --tag-blue-bg: rgba(30, 144, 255, 0.14);
   --nav-tab-color: grey;
   --ios-action-sheet-background: rgb(36, 36, 36);
   --segment-bg-color: rgb(52, 53, 56);
